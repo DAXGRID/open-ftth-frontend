@@ -1,0 +1,14 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+}
+
+.description {
+  line-height: 1.5;
+  font-size: 1.5rem;
+}
