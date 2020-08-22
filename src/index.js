@@ -4,12 +4,12 @@ import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import { ApolloProvider } from "@apollo/client";
 import Client from "./apolloClient";
-import Routes from "./routes/Routes";
+import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={Client}>
-      <Routes />
+      <App />
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")

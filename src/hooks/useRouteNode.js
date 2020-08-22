@@ -14,12 +14,12 @@ const GET_ROUTE_NODE = gql`
   }
 `;
 
-const useRouteNode = (nodeId) => {
+function useRouteNode(nodeId) {
   return useQuery(GET_ROUTE_NODE, {
     variables: {
       nodeId,
     },
   });
-};
+}
 
 export default useRouteNode;
