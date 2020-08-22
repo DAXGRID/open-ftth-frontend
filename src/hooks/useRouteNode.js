@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 
-const GET_ROUTE_FEATURES = gql`
+const GET_ROUTE_NODE = gql`
   query($nodeId: ID!) {
     routeNetwork {
       routeNode(id: $nodeId) {
@@ -14,10 +14,12 @@ const GET_ROUTE_FEATURES = gql`
   }
 `;
 
-export default (nodeId) => {
-  return useQuery(GET_ROUTE_FEATURES, {
+const useRouteNode = (nodeId) => {
+  return useQuery(GET_ROUTE_NODE, {
     variables: {
       nodeId,
     },
   });
 };
+
+export default useRouteNode;
