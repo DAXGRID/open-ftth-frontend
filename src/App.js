@@ -1,10 +1,14 @@
 import React from "react";
 import Routes from "./routes/Routes";
+import TopMenu from "./components/TopMenu";
 
 function App() {
   return (
     <div>
-      <Routes />
+      <TopMenu />
+      <main class="main-container">
+        <Routes />
+      </main>
     </div>
   );
 }
