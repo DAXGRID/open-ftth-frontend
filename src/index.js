@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./global-styles/reset.scss";
+import "./global-styles/index.scss";
 import * as serviceWorker from "./serviceWorker";
 import { ApolloProvider } from "@apollo/client";
 import Client from "./apolloClient";

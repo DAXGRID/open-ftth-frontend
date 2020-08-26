@@ -5,7 +5,9 @@ import TopMenu from "./components/TopMenu";
 function App() {
   return (
     <div>
-      <TopMenu />
+      <header>
+        <TopMenu />
+      </header>
       <main class="main-container">
         <Routes />
       </main>

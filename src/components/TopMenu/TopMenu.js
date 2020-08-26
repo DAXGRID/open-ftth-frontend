@@ -2,9 +2,9 @@ import React from "react";
 
 function TopMenu() {
   return (
-    <header>
-      <h2>Header</h2>
-    </header>
+    <div className="top-menu">
+      <h2>OpenFTTH</h2>
+    </div>
   );
 }
 
