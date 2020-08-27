@@ -1,9 +1,10 @@
 import React from "react";
+import NamingInfo from "../components/NamingInfo";
 
 function IndexPage() {
   return (
     <div>
-      <h1>IndexPage</h1>
+      <NamingInfo />
     </div>
   );
 }
