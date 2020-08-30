@@ -1,10 +1,13 @@
 import React from "react";
 import NamingInfo from "../components/NamingInfo";
+import FormSection from "../components/FormSection";
 
 function IndexPage() {
   return (
     <div>
-      <NamingInfo />
+      <FormSection>
+        <NamingInfo />
+      </FormSection>
     </div>
   );
 }
