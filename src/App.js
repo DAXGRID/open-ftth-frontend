@@ -8,7 +8,7 @@ function App() {
       <header>
         <TopMenu />
       </header>
-      <main class="main-container">
+      <main className="main-container">
         <Routes />
       </main>
     </div>
