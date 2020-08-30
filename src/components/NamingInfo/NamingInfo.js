@@ -3,7 +3,7 @@ import FormInput from "../FormInput";
 
 function NamingInfo() {
   return (
-    <div class="naming-info">
+    <div className="naming-info">
       <h2>Identification</h2>
       <FormInput name="naming_info_name" />
       <FormInput name="naming_info_description" />
