@@ -1,6 +1,4 @@
 import React from "react";
-import NamingInfo from "../components/NamingInfo";
-import FormSection from "../components/FormSection";
 import { gql, useSubscription } from "@apollo/client";
 
 const SUBSCRIBE_GEOGRAPHICAL_AREA_UPDATED_EVENTS = gql`
@@ -27,16 +25,7 @@ function IndexPage() {
     }
   }
 
-  return (
-    <div>
-      <FormSection>
-        <NamingInfo />
-      </FormSection>
-      <p>
-        {!loading && data.geographicalAreaUpdatedEvents.eventSequenceNumber}
-      </p>
-    </div>
-  );
+  return <div></div>;
 }
 
 export default IndexPage;
