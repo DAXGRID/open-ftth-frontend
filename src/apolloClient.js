@@ -4,11 +4,11 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import { WebSocketLink } from "@apollo/client/link/ws";
 
 const httpLink = new HttpLink({
-  uri: `ws://${process.env.REACT_APP_GRAPHQL_SERVER}/graphql`,
+  uri: `http://51.145.94.152/graphql`,
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://${process.env.REACT_APP_GRAPHQL_SERVER}/graphql`,
+  uri: `ws://51.124.94.152/graphql`,
   options: {
     reconnect: true,
   },
