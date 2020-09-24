@@ -1,12 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { createClient, Provider } from "urql";
+import { Client, defaultExchanges, subscriptionExchange, Provider } from "urql";
+import Transport from "subscriptions-transport-ws";
+
 import "./global-styles/reset.css";
 import "./global-styles/index.css";
 
-const client = createClient({
-  url: "http://10.108.221.139",
+const subscriptionClient = new Transport.SubscriptionClient(
+  "ws://10.98.164.194/graphql",
+  { reconnect: true }
+);
+
+const client = new Client({
+  url: "http://10.98.164.194/graphql",
+  exchanges: [
+    ...defaultExchanges,
+    subscriptionExchange({
+      forwardSubscription(operation) {
+        return subscriptionClient.request(operation);
+      },
+    }),
+  ],
 });
 
 ReactDOM.render(
