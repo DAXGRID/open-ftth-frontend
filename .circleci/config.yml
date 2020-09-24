@@ -47,7 +47,6 @@ jobs:
            docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
            docker push $IMAGE_NAME:latest
            docker push $IMAGE_NAME:$IMAGE_TAG
-
   update-helm-chart:
     executor: alpine-git
     steps:
@@ -76,7 +75,6 @@ jobs:
              git add .
              git commit -m "upgrades $IMAGE_NAME to version $IMAGE_TAG"
              git push
-
 workflows:
   build-test-upload_image:
     jobs:
