@@ -10,7 +10,7 @@ const Routes = () => {
         <Route exact path="/">
           <IndexPage />
         </Route>
-        <Route exact path="/route-network">
+        <Route exact path="/route-segment">
           <RouteSegmentPage />
         </Route>
       </Switch>
