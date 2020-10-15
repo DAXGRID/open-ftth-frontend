@@ -11,7 +11,8 @@
     "graphql": "^15.3.0",
     "react-router-dom": "^5.2.0",
     "subscriptions-transport-ws": "^0.9.18",
-    "urql": "^1.10.1"
+    "urql": "^1.10.1",
+    "websocket": "^1.0.32"
   },
   "devDependencies": {
     "vite": "^1.0.0-rc.1",
