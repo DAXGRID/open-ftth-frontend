@@ -4,16 +4,16 @@ import App from "./App";
 import { Client, defaultExchanges, subscriptionExchange, Provider } from "urql";
 import Transport from "subscriptions-transport-ws";
 
-import "./global-styles/reset.css";
-import "./global-styles/index.css";
+import "./global-styles/reset.scss";
+import "./global-styles/index.scss";
 
 const subscriptionClient = new Transport.SubscriptionClient(
-  "ws://10.101.247.65/graphql",
+  "ws://10.103.73.176/graphql",
   { reconnect: true }
 );
 
 const client = new Client({
-  url: "http://10.101.247.65/graphql",
+  url: "http://10.103.73.176/graphql",
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({

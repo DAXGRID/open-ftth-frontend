@@ -1,4 +1,4 @@
 import ListView from "./ListView";
-import "./ListView.css";
+import "./ListView.scss";
 
 export default ListView;
