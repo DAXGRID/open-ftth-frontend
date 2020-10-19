@@ -1,0 +1,24 @@
+.side-menu {
+  display: none;
+  background-color: white;
+
+  &.show {
+    width: 250px;
+    margin-right: 20px;
+    height: calc(100vh - 62px);
+    display: inline-block;
+  }
+
+  .menu-list {
+    li {
+      padding: 15px;
+      span {
+        padding-right: 20px;
+      }
+
+      p {
+        display: inline-block;
+      }
+    }
+  }
+}
