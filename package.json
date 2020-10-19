@@ -9,6 +9,7 @@
     "@pika/react": "^16.13.1",
     "@pika/react-dom": "^16.13.1",
     "graphql": "^15.3.0",
+    "react-icons": "^3.11.0",
     "react-router-dom": "^5.2.0",
     "subscriptions-transport-ws": "^0.9.18",
     "urql": "^1.10.1",
