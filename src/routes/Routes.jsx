@@ -5,16 +5,14 @@ import RouteSegmentPage from "../pages/RouteSegmentPage";
 
 const Routes = () => {
   return (
-    <div>
-      <Switch>
-        <Route exact path="/">
-          <IndexPage />
-        </Route>
-        <Route exact path="/route-segment">
-          <RouteSegmentPage />
-        </Route>
-      </Switch>
-    </div>
+    <Switch>
+      <Route exact path="/">
+        <IndexPage />
+      </Route>
+      <Route exact path="/route-segment">
+        <RouteSegmentPage />
+      </Route>
+    </Switch>
   );
 };
 
