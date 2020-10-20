@@ -1,6 +1,5 @@
 import React from "react";
 import { useSubscription } from "urql";
-import Loading from "../components/Loading";
 
 const SUBSCRIBE_GEOGRAPHICAL_AREA_UPDATED_EVENTS = `
   subscription GeographicalAreaUpdatedSub{

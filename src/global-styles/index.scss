@@ -12,6 +12,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f9f9f9;
+  overflow-x: hidden;
 }
 
 .main-container {
@@ -23,6 +24,7 @@ body {
   &.side-menu-open {
     transition: all 0.3s linear;
     transform: translateX(250px);
+    width: calc(100% - 250px);
   }
 }
 
