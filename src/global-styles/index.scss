@@ -17,6 +17,13 @@ body {
 .main-container {
   padding: 20px 20px;
   display: inline-block;
+  transition: all 0.3s linear;
+  transform: translateX(0px);
+
+  &.side-menu-open {
+    transition: all 0.3s linear;
+    transform: translateX(250px);
+  }
 }
 
 h1 {

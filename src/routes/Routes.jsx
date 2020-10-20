@@ -1,11 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import IndexPage from "../pages/IndexPage";
 import RouteSegmentPage from "../pages/RouteSegmentPage";
 
 const Routes = () => {
   return (
-    <Router>
+    <div>
       <Switch>
         <Route exact path="/">
           <IndexPage />
@@ -14,7 +14,7 @@ const Routes = () => {
           <RouteSegmentPage />
         </Route>
       </Switch>
-    </Router>
+    </div>
   );
 };
 

@@ -8,12 +8,12 @@ import "./global-styles/reset.scss";
 import "./global-styles/index.scss";
 
 const subscriptionClient = new Transport.SubscriptionClient(
-  "ws://10.103.73.176/graphql",
+  "ws://10.109.134.174/graphql",
   { reconnect: true }
 );
 
 const client = new Client({
-  url: "http://10.103.73.176/graphql",
+  url: "http://10.109.134.174/graphql",
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({
