@@ -23,7 +23,7 @@
   justify-content: space-between;
   padding: 0 22px;
   font-size: 20px;
-  color: #3b3b3b;
+  color: $dark-grey;
   height: 60px;
   line-height: 60px;
   background: #ffffff;
@@ -74,7 +74,7 @@
 
 .menu-option.selected {
   color: #ffffff;
-  background-color: $fourth;
+  background-color: $dark-grey;
 }
 
 .arrow {
@@ -96,13 +96,13 @@
 .arrow::before {
   left: -5px;
   transform: rotate(45deg);
-  background-color: #394a6d;
+  background-color: $dark-grey;
 }
 
 .arrow::after {
   left: 5px;
   transform: rotate(-45deg);
-  background-color: #394a6d;
+  background-color: $dark-grey;
 }
 
 .open .arrow::before {
