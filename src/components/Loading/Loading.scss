@@ -1,0 +1,13 @@
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+
+  img {
+    width: 150px;
+  }
+}

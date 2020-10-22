@@ -1,0 +1,17 @@
+@import "../../global-styles/colors";
+
+.default-button {
+  max-width: 250px;
+  width: 100%;
+  background-color: white;
+  border-radius: 0;
+  border: none;
+  padding: 15px 20px;
+  font-size: 18px;
+  border: 1px solid $border-color;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $hover-color;
+  }
+}

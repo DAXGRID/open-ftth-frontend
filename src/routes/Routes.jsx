@@ -1,16 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import IndexPage from "../pages/IndexPage";
+import PlaceTubesPage from "../pages/PlaceTubesPage";
 
 const Routes = () => {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <IndexPage />
-        </Route>
-      </Switch>
-    </Router>
+    <Switch>
+      <Route exact path="/">
+        <IndexPage />
+      </Route>
+      <Route exact path="/place-tubes">
+        <PlaceTubesPage />
+      </Route>
+    </Switch>
   );
 };
 

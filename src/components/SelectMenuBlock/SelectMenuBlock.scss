@@ -1,0 +1,9 @@
+.select-menu-block {
+  display: flex;
+  flex: 1;
+
+  .select-menu-block__label {
+    padding-right: 25px;
+    align-self: center;
+  }
+}
