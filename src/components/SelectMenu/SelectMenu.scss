@@ -21,8 +21,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 22px;
-  font-size: 20px;
+  padding: 0 18px;
+  font-size: 18px;
   color: $dark-grey;
   height: 60px;
   line-height: 60px;
@@ -58,18 +58,18 @@
 .menu-option {
   position: relative;
   display: block;
-  padding: 0 22px 0 22px;
+  padding: 0 18px 0 18px;
   font-size: 22px;
   color: #3b3b3b;
   line-height: 60px;
   cursor: pointer;
   transition: all 0.2s;
+  font-size: 18px;
 }
 
 .menu-option:hover {
   cursor: pointer;
-  background-color: #707a7d;
-  color: white;
+  background-color: $hover-color;
 }
 
 .menu-option.selected {

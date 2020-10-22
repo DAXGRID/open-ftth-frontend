@@ -3,9 +3,11 @@ import React from "react";
 function ListView({ title, headerItems, bodyItems }) {
   return (
     <div className="list-view">
-      <div className="list-view-title">
-        <h2>{title}</h2>
-      </div>
+      {title && (
+        <div className="list-view-title">
+          <h2>{title}</h2>
+        </div>
+      )}
 
       <div className="list-view-content">
         <div className="list-view-header">
