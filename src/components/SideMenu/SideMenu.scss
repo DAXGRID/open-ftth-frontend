@@ -10,6 +10,10 @@
   transition: all 0.3s linear;
   transform: translateX(-$side-menu-size);
 
+  .side-menu__label {
+    flex: 1;
+  }
+
   &.show {
     transition: all 0.3s linear;
     transform: translateX($side-menu-size);
