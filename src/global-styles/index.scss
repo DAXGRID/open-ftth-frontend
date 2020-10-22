@@ -1,4 +1,5 @@
 @import "./colors";
+@import "./settings";
 
 *,
 *:before,
@@ -25,8 +26,8 @@ body {
 
   &.side-menu-open {
     transition: all 0.3s linear;
-    transform: translateX(250px);
-    width: calc(100% - 250px);
+    transform: translateX($side-menu-size);
+    width: calc(100% - #{$side-menu-size});
   }
 }
 

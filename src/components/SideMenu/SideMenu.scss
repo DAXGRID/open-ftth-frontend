@@ -1,17 +1,18 @@
 @import "../../global-styles/colors";
+@import "../../global-styles/settings";
 
 .side-menu {
   background-color: white;
   height: 100vh;
   position: fixed;
-  width: 250px;
-  left: -250px;
+  width: $side-menu-size;
+  left: -$side-menu-size;
   transition: all 0.3s linear;
-  transform: translateX(-250px);
+  transform: translateX(-$side-menu-size);
 
   &.show {
     transition: all 0.3s linear;
-    transform: translateX(250px);
+    transform: translateX($side-menu-size);
   }
 
   .side-menu-item {
