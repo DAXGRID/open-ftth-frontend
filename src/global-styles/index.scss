@@ -30,8 +30,21 @@ body {
   }
 }
 
-.container-page {
+.page-container {
+  display: flex;
+  flex-wrap: wrap;
   flex: 1;
+}
+
+.full-row {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+}
+
+.justify-end {
+  justify-content: end;
 }
 
 h1 {

@@ -30,8 +30,8 @@ const SideMenu = ({ open }) => {
       <ul>
         <SideMenuItem path="/" linkText="Home" icon={faHome} />
         <SideMenuItem
-          path="/route-segment"
-          linkText="Route segment"
+          path="/place-tubes"
+          linkText="Place tubes"
           icon={faProjectDiagram}
         />
       </ul>

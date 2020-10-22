@@ -3,6 +3,7 @@
 .list-view {
   display: flex;
   flex-wrap: wrap;
+  flex: 1;
 
   .list-view-title {
     flex: 1;
