@@ -12,20 +12,36 @@ function CustomOption({ text, value, triggerSelected, selected }) {
   );
 }
 
-function SelectMenu({ options }) {
+function SelectMenu({ options, enablePlaceHolder }) {
   const [toggled, setToggled] = useState(false);
   const [selected, setSelected] = useState({});
+  const [selectOptions, setSelectOptions] = useState(options);
 
   useEffect(() => {
-    const option = options.find((option) => option.selected === true);
+    const option = selectOptions.find((option) => option.selected === true);
     setSelected(option);
-  }, []);
+    options = selectOptions;
+  }, [selectOptions]);
 
   const triggerSelected = (selectedValue) => {
-    options.forEach((option) => (option.selected = false));
-    const option = options.find((option) => option.value === selectedValue);
+    selectOptions.forEach((option) => (option.selected = false));
+    const option = selectOptions.find(
+      (option) => option.value === selectedValue
+    );
     option.selected = true;
-    setSelected(option);
+    setSelectOptions([...selectOptions]);
+
+    if (enablePlaceHolder && selectedValue !== -1) {
+      removePlaceHolder();
+    }
+  };
+
+  const removePlaceHolder = () => {
+    const newOptions = selectOptions.filter((option) => {
+      return option.value !== -1;
+    });
+
+    setSelectOptions([...newOptions]);
   };
 
   return (
@@ -36,7 +52,7 @@ function SelectMenu({ options }) {
           <div className="arrow"></div>
         </div>
         <div className="menu-options">
-          {options.map((option) => {
+          {selectOptions.map((option) => {
             return (
               <CustomOption
                 key={option.value}
