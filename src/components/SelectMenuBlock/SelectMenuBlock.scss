@@ -1,9 +1,17 @@
 .select-menu-block {
   display: flex;
   flex: 1;
+  flex-wrap: wrap;
 
   .select-menu-block__label {
     padding-right: 25px;
     align-self: center;
+    flex-basis: 100%;
+    padding-bottom: 10px;
+    font-size: 18px;
+  }
+
+  .select-menu {
+    flex-basis: 100%;
   }
 }
