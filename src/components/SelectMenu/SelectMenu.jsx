@@ -12,7 +12,7 @@ function CustomOption({ text, value, triggerSelected, selected }) {
   );
 }
 
-function SelectMenu({ options, enablePlaceHolder }) {
+function SelectMenu({ options, removePlaceHolderOnSelect }) {
   const [toggled, setToggled] = useState(false);
   const [selected, setSelected] = useState({});
   const [selectOptions, setSelectOptions] = useState(options);

@@ -1,5 +1,5 @@
 import React from "react";
-import SelectMenu from "../SelectMenu";
+import SelectMenu from "../../components/SelectMenu";
 
 function SelectMenuBlock({ options, labelText }) {
   return (
