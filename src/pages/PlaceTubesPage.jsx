@@ -26,7 +26,7 @@ function PlaceTubesPage() {
             { text: "Blue", value: 2, selected: false },
             { text: "Yellow", value: 3, selected: false },
           ]}
-          enablePlaceHolder={true}
+          removePlaceHolderOnSelect={true}
         />
       </div>
 

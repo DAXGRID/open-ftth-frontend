@@ -31,7 +31,7 @@ function SelectMenu({ options, enablePlaceHolder }) {
     option.selected = true;
     setSelectOptions([...selectOptions]);
 
-    if (enablePlaceHolder && selectedValue !== -1) {
+    if (removePlaceHolderOnSelect && selectedValue !== -1) {
       removePlaceHolder();
     }
   };
