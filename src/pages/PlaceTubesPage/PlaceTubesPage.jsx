@@ -1,7 +1,7 @@
 import React from "react";
-import ListView from "../components/ListView";
-import SelectMenu from "../components/SelectMenu";
-import DefaultButton from "../components/DefaultButton";
+import ListView from "../../components/ListView";
+import SelectMenu from "../../components/SelectMenu";
+import DefaultButton from "../../components/DefaultButton";
 
 function PlaceTubesPage() {
   return (
@@ -30,7 +30,7 @@ function PlaceTubesPage() {
         />
       </div>
 
-      <div className="full-row justify-end">
+      <div className="full-row">
         <DefaultButton innerText="Place tubes" />
       </div>
     </div>
