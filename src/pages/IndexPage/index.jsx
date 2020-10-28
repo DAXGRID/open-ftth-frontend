@@ -1,4 +1,4 @@
 import IndexPage from "./IndexPage";
-import "IndexPage.scss";
+import "./IndexPage.scss";
 
 export default IndexPage;
