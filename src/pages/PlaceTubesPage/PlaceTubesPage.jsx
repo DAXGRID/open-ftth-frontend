@@ -1,7 +1,7 @@
 import React from "react";
-import ListView from "../components/ListView";
-import SelectMenuBlock from "../components/SelectMenuBlock";
-import DefaultButton from "../components/DefaultButton";
+import ListView from "../../components/ListView";
+import SelectMenu from "../../components/SelectMenu";
+import DefaultButton from "../../components/DefaultButton";
 
 function PlaceTubesPage() {
   return (
@@ -19,17 +19,15 @@ function PlaceTubesPage() {
       </div>
 
       <div className="full-row">
-        <SelectMenuBlock
+        <SelectMenu
           options={[
-            { text: "Red", value: 1, selected: true },
+            { text: "Pick color marking", value: -1, selected: true },
+            { text: "Red", value: 1, selected: false },
             { text: "Blue", value: 2, selected: false },
             { text: "Yellow", value: 3, selected: false },
           ]}
-          labelText="Markering"
+          removePlaceHolderOnSelect={true}
         />
-      </div>
-
-      <div className="full-row justify-end">
         <DefaultButton innerText="Place tubes" />
       </div>
     </div>

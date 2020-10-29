@@ -20,15 +20,12 @@ body {
 .main-container {
   display: flex;
   padding: 20px 20px;
-  transition: all 0.3s linear;
   transform: translateX(0px);
   color: $text-primary;
   justify-content: center;
 
   &.side-menu-open {
-    transition: all 0.3s linear;
-    transform: translateX($side-menu-size);
-    width: calc(100% - #{$side-menu-size});
+    width: 100%;
   }
 }
 
@@ -44,6 +41,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 20px;
+  gap: 10px;
 }
 
 .justify-end {
@@ -60,4 +58,15 @@ h2 {
 
 h3 {
   font-size: 16px;
+}
+
+@media only screen and (min-width: 768px) {
+  .main-container {
+    transition: all 0.3s linear;
+    &.side-menu-open {
+      transition: all 0.3s linear;
+      transform: translateX($side-menu-size);
+      width: calc(100% - #{$side-menu-size});
+    }
+  }
 }
