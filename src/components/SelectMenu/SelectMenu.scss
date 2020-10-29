@@ -1,9 +1,11 @@
 @import "../../global-styles/colors";
+@import "../../global-styles/settings";
 
 .select-menu-wrapper {
   position: relative;
   user-select: none;
   flex: 1;
+  min-width: 300px;
 }
 
 .menu-select {
@@ -23,13 +25,17 @@
   padding: 0 18px;
   font-size: 18px;
   color: $dark-grey;
-  height: 60px;
-  line-height: 60px;
+  height: $basic-height;
+  line-height: $basic-height;
   background: #ffffff;
   cursor: pointer;
   border-width: 1px 0 1px 0;
   border-style: solid;
   border-color: $border-color;
+
+  &:hover {
+    background-color: $hover-color;
+  }
 }
 
 .menu-options {

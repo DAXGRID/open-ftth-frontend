@@ -28,9 +28,6 @@ function PlaceTubesPage() {
           ]}
           removePlaceHolderOnSelect={true}
         />
-      </div>
-
-      <div className="full-row">
         <DefaultButton innerText="Place tubes" />
       </div>
     </div>
