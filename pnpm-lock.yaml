@@ -5,6 +5,8 @@ dependencies:
   '@pika/react': 16.13.1
   '@pika/react-dom': 16.13.1
   graphql: 15.3.0
+  i18next: 19.8.3
+  react-i18next: 11.7.3_i18next@19.8.3
   react-router-dom: 5.2.0
   subscriptions-transport-ws: 0.9.18_graphql@15.3.0
   urql: 1.10.1_graphql@15.3.0
@@ -13,7 +15,7 @@ devDependencies:
   sass: 1.27.0
   vite: 1.0.0-rc.4
   vite-plugin-react: 3.0.2_vite@1.0.0-rc.4
-lockfileVersion: 5.1
+lockfileVersion: 5.2
 packages:
   /@babel/code-frame/7.10.4:
     dependencies:
@@ -151,6 +153,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-TeWkU52so0mPtDcaCTxNBI/IHiz0pZgr8VEFqXFtZWpYD08ZB6FaSwVAS8MKRQAP3bYKiVjwysOJgMFY28o6Tw==
+  /@babel/runtime/7.12.1:
+    dependencies:
+      regenerator-runtime: 0.13.7
+    dev: false
+    resolution:
+      integrity: sha512-J5AIf3vPj3UwXaAzb5j1xM4WAQDX3EMgemF8rjCP3SoW09LfRKAXQKt6CoVYl230P6iWdRcBbnLDDdnqWxZSCA==
   /@babel/template/7.10.4:
     dependencies:
       '@babel/code-frame': 7.10.4
@@ -1267,6 +1275,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
+  /html-parse-stringify2/2.0.1:
+    dependencies:
+      void-elements: 2.0.1
+    dev: false
+    resolution:
+      integrity: sha1-3FZwtyksoVi3vJFsmmc1rIhyg0o=
   /http-assert/1.4.1:
     dependencies:
       deep-equal: 1.0.1
@@ -1336,6 +1350,12 @@ packages:
       node: '>=8.12.0'
     resolution:
       integrity: sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==
+  /i18next/19.8.3:
+    dependencies:
+      '@babel/runtime': 7.12.1
+    dev: false
+    resolution:
+      integrity: sha512-eVrqAw2gGGYYJaJMYw4VM1FNFawLD4b84IsoTZMVXeWHaxAM2gyTa34j2Sip15UkBz/LrSxdFJj0Jhlrz7EvHA==
   /icss-replace-symbols/1.1.0:
     dev: true
     resolution:
@@ -2070,6 +2090,17 @@ packages:
     dev: true
     resolution:
       integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==
+  /react-i18next/11.7.3_i18next@19.8.3:
+    dependencies:
+      '@babel/runtime': 7.12.1
+      html-parse-stringify2: 2.0.1
+      i18next: 19.8.3
+    dev: false
+    peerDependencies:
+      i18next: '>= 19.0.0'
+      react: '>= 16.8.0'
+    resolution:
+      integrity: sha512-7sYZqVZgdaS9Z0ZH6nuJFErCD0zz5wK3jR4/xCrWjZcxHHF3GRu7BXdicbSPprZV4ZYz7LJzxxMHO7dg5Qb70A==
   /react-is/16.13.1:
     dev: false
     resolution:
@@ -2600,6 +2631,12 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-D9gpKKaE2U0YpIxNrSn+nlFPBT0sfg68Y1EReYW8YHMhbNFcxwS7RZIa1W/8Pq6yDfVRAhbOZNijv1mLG5pCEg==
+  /void-elements/2.0.1:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
   /vue/3.0.0:
     dependencies:
       '@vue/compiler-dom': 3.0.0
@@ -2687,6 +2724,8 @@ specifiers:
   '@pika/react': ^16.13.1
   '@pika/react-dom': ^16.13.1
   graphql: ^15.3.0
+  i18next: ^19.8.3
+  react-i18next: ^11.7.3
   react-router-dom: ^5.2.0
   sass: ^1.27.0
   subscriptions-transport-ws: ^0.9.18

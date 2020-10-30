@@ -1,5 +1,6 @@
 import React from "react";
 import { useSubscription } from "urql";
+import { useTranslation } from "react-i18next";
 
 const SUBSCRIBE_GEOGRAPHICAL_AREA_UPDATED_EVENTS = `
   subscription GeographicalAreaUpdatedSub{
@@ -37,9 +38,11 @@ const Messages = () => {
 };
 
 function IndexPage() {
+  const { t } = useTranslation();
+
   return (
     <div>
-      <h1>Index Page</h1>
+      <h1>{t("Welcome to OpenFTTH")}</h1>
       <Messages />
     </div>
   );

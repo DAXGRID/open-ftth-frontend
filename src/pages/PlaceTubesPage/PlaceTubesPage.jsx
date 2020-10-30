@@ -2,13 +2,16 @@ import React from "react";
 import ListView from "../../components/ListView";
 import SelectMenu from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
+import { useTranslation } from "react-i18next";
 
 function PlaceTubesPage() {
+  const { t } = useTranslation();
+
   return (
     <div className="page-container">
       <div className="full-row">
         <ListView
-          headerItems={["Manufacturer", "Type"]}
+          headerItems={[t("Manufacturer"), t("Product model")]}
           bodyItems={[
             ["GM Plast", "Oe50 7x16"],
             ["Plast GM", "Oe40 16x7"],
@@ -21,14 +24,14 @@ function PlaceTubesPage() {
       <div className="full-row">
         <SelectMenu
           options={[
-            { text: "Pick color marking", value: -1, selected: true },
+            { text: t("Pick color marking"), value: -1, selected: true },
             { text: "Red", value: 1, selected: false },
             { text: "Blue", value: 2, selected: false },
             { text: "Yellow", value: 3, selected: false },
           ]}
           removePlaceHolderOnSelect={true}
         />
-        <DefaultButton innerText="Place tubes" />
+        <DefaultButton innerText={t("Place conduit")} />
       </div>
     </div>
   );
