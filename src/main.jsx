@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { Client, defaultExchanges, subscriptionExchange, Provider } from "urql";
 import Transport from "subscriptions-transport-ws";
+import "./translation/i18n";
 
 import "./global-styles/reset.scss";
 import "./global-styles/index.scss";
