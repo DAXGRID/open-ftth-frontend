@@ -42,7 +42,7 @@ function IndexPage() {
 
   return (
     <div>
-      <h1>{t("Welcome to React")}</h1>
+      <h1>{t("Welcome to OpenFTTH")}</h1>
       <Messages />
     </div>
   );

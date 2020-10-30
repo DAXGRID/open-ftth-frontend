@@ -1,0 +1,20 @@
+{
+  "en": {
+    "translation": {
+      "Welcome to OpenFTTH": "Welcome to OpenFTTH",
+      "Place conduit": "Place conduit",
+      "Manufacturer": "Manufacturer",
+      "Product model": "Product model",
+      "Pick color marking": "Pick color marking"
+    }
+  },
+  "dk": {
+    "translation": {
+      "Welcome to OpenFTTH": "Velkommen til OpenFTTH",
+      "Place conduit": "Læg rør",
+      "Manufacturer": "Fabrikant",
+      "Product model": "Produkt model",
+      "Pick color marking": "Vælg farvekode"
+    }
+  }
+}

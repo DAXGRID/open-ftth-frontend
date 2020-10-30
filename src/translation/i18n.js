@@ -1,32 +1,17 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import translation from "./translation.json";
 
-// the translations
 // (tip move them in a JSON file and import them)
-const resources = {
-  en: {
-    translation: {
-      "Welcome to React": "Welcome to React and OpenFTTH",
-    },
+const resources = translation;
+
+i18n.use(initReactI18next).init({
+  resources,
+  lng: "en",
+  keySeparator: false,
+  interpolation: {
+    escapeValue: false,
   },
-  dk: {
-    translation: {
-      "Welcome to React": "Velkommen til React og OpenFTTH",
-    },
-  },
-};
-
-i18n
-  .use(initReactI18next) // passes i18n down to react-i18next
-  .init({
-    resources,
-    lng: "en",
-
-    keySeparator: false, // we do not use keys in form messages.welcome
-
-    interpolation: {
-      escapeValue: false, // react already safes from xss
-    },
-  });
+});
 
 export default i18n;
