@@ -1,5 +1,5 @@
 import React from "react";
-import ListView from "../../components/ListView";
+import SelectListView from "../../components/SelectListView";
 import SelectMenu from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,7 @@ function PlaceTubesPage() {
   return (
     <div className="page-container">
       <div className="full-row">
-        <ListView
+        <SelectListView
           headerItems={[t("Manufacturer"), t("Product model")]}
           bodyItems={[
             ["GM Plast", "Oe50 7x16"],
