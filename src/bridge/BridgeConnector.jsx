@@ -1,9 +1,15 @@
 import React, { useEffect } from "react";
 import WebSocket from "websocket";
 
+let client;
+
+function send(eventMsg) {
+  client.send(JSON.stringify(eventMsg));
+}
+
 function BridgeConnector() {
   useEffect(() => {
-    let client = new WebSocket.w3cwebsocket("ws://127.0.0.1:5000");
+    client = new WebSocket.w3cwebsocket("ws://127.0.0.1:5000");
     client.onopen = () => {
       console.log("WebSocket client connected");
     };
@@ -21,7 +27,8 @@ function BridgeConnector() {
     };
   }, []);
 
-  return <div></div>;
+  return <React.Fragment></React.Fragment>;
 }
 
 export default BridgeConnector;
+export { send };

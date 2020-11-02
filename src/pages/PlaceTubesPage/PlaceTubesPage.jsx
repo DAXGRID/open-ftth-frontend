@@ -3,9 +3,15 @@ import SelectListView from "../../components/SelectListView";
 import SelectMenu from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
 import { useTranslation } from "react-i18next";
+import { send } from "../../bridge/BridgeConnector";
 
 function PlaceTubesPage() {
   const { t } = useTranslation();
+
+  const placeConduit = () => {
+    send("Test");
+    console.log("test");
+  };
 
   return (
     <div className="page-container">
@@ -31,7 +37,7 @@ function PlaceTubesPage() {
           ]}
           removePlaceHolderOnSelect={true}
         />
-        <DefaultButton innerText={t("Place conduit")} />
+        <DefaultButton innerText={t("Place conduit")} onClick={placeConduit} />
       </div>
     </div>
   );
