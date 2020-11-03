@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SelectListView from "../../components/SelectListView";
 import SelectMenu from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
 import { useTranslation } from "react-i18next";
 import useBridgeConnector from "../../bridge/UseBridgeConnector";
+import PubSub from "pubsub-js";
 
 function PlaceTubesPage() {
   const { t } = useTranslation();
   const [retrieveSelected] = useBridgeConnector();
 
+  useEffect(() => {
+    const token = PubSub.subscribe("RetrieveSelectedResponse", (msg, data) => {
+      console.log(data);
+    });
+
+    return () => {
+      PubSub.unsubscribe(token);
+    };
+  }, []);
+
   const placeConduit = () => {
-    const response = retrieveSelected();
-    console.log(response);
+    retrieveSelected();
   };
 
   return (

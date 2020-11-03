@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import WebSocket from "websocket";
+import PubSub from "pubsub-js";
 
 let client;
 
@@ -15,7 +16,8 @@ function BridgeConnector() {
     };
 
     client.onmessage = (message) => {
-      console.log(message.data);
+      const event = JSON.parse(message.data);
+      PubSub.publish(event.eventType, event);
     };
 
     client.onclose = () => {

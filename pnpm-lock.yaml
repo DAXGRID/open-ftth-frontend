@@ -6,6 +6,7 @@ dependencies:
   '@pika/react-dom': 16.13.1
   graphql: 15.3.0
   i18next: 19.8.3
+  pubsub-js: 1.9.0
   react-i18next: 11.7.3_i18next@19.8.3
   react-router-dom: 5.2.0
   subscriptions-transport-ws: 0.9.18_graphql@15.3.0
@@ -2077,6 +2078,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
+  /pubsub-js/1.9.0:
+    dev: false
+    resolution:
+      integrity: sha512-bBGaOnAdkn3jhZC71mhjNB4mxQAOM99GTh/NoVuf/VXWUuQAZJGWIkEJlkXi0ACdKx3z65u5qilWaE5G4mMQOw==
   /pump/3.0.0:
     dependencies:
       end-of-stream: 1.4.4
@@ -2725,6 +2730,7 @@ specifiers:
   '@pika/react-dom': ^16.13.1
   graphql: ^15.3.0
   i18next: ^19.8.3
+  pubsub-js: ^1.9.0
   react-i18next: ^11.7.3
   react-router-dom: ^5.2.0
   sass: ^1.27.0
