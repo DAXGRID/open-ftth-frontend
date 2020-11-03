@@ -3,11 +3,11 @@ import SelectListView from "../../components/SelectListView";
 import SelectMenu from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
 import { useTranslation } from "react-i18next";
-import { useBridgeConnector } from "../../bridge/UseBridgeConnector";
+import useBridgeConnector from "../../bridge/UseBridgeConnector";
 
 function PlaceTubesPage() {
   const { t } = useTranslation();
-  const { retrieveSelected } = useBridgeConnector();
+  const [retrieveSelected] = useBridgeConnector();
 
   const placeConduit = () => {
     const response = retrieveSelected();
