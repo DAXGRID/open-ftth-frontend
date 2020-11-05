@@ -5,7 +5,9 @@
       "Place conduit": "Place conduit",
       "Manufacturer": "Manufacturer",
       "Product model": "Product model",
-      "Pick color marking": "Pick color marking"
+      "Pick color marking": "Pick color marking",
+      "Error": "Error",
+      "No segments selected": "No segments selected"
     }
   },
   "dk": {
@@ -14,7 +16,9 @@
       "Place conduit": "Læg rør",
       "Manufacturer": "Fabrikant",
       "Product model": "Produkt model",
-      "Pick color marking": "Vælg farvekode"
+      "Pick color marking": "Vælg farvekode",
+      "Error": "Fejl",
+      "No segments selected": "Der er ingen selekterede rør"
     }
   }
 }
