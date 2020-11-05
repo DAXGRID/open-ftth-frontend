@@ -6,8 +6,10 @@
       "Manufacturer": "Manufacturer",
       "Product model": "Product model",
       "Pick color marking": "Pick color marking",
+      "Success": "Success",
       "Error": "Error",
-      "No segments selected": "No segments selected"
+      "No segments selected": "No segments selected",
+      "Conduit(s) are now placed": "Conduits(s) are now placed"
     }
   },
   "dk": {
@@ -17,8 +19,10 @@
       "Manufacturer": "Fabrikant",
       "Product model": "Produkt model",
       "Pick color marking": "Vælg farvekode",
+      "Success": "Success",
       "Error": "Fejl",
-      "No segments selected": "Der er ingen selekterede rør"
+      "No segments selected": "Der er ingen selekterede rør",
+      "Conduit(s) are now placed": "Rør er blevet lagt"
     }
   }
 }

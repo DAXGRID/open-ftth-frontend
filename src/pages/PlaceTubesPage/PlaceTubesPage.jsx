@@ -18,7 +18,13 @@ function PlaceTubesPage() {
         setValidation({
           type: "error",
           headerText: t("Error"),
-          bodyText: "No segments selected",
+          bodyText: t("No segments selected"),
+        });
+      } else {
+        setValidation({
+          type: "success",
+          headerText: t("Success"),
+          bodyText: t("Conduit(s) are now placed"),
         });
       }
     });

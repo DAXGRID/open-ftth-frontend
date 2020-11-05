@@ -20,6 +20,12 @@
     border: none;
   }
 
+  &.success {
+    background-color: $success-color;
+    color: white;
+    border: none;
+  }
+
   .notification-header {
     flex: 1;
     flex-basis: 100%;
