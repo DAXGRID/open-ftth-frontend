@@ -1,0 +1,49 @@
+@import "../../global-styles/colors";
+
+.notification {
+  flex: 1;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  background-color: white;
+  padding: 10px;
+  border: 1px solid $border-color;
+  display: none;
+  text-align: center;
+
+  &.show {
+    display: flex;
+  }
+
+  &.error {
+    background-color: $error-color;
+    color: white;
+    border: none;
+  }
+
+  &.success {
+    background-color: $success-color;
+    color: white;
+    border: none;
+  }
+
+  .notification-header {
+    flex: 1;
+    flex-basis: 100%;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+
+    .notification__title {
+      font-size: 18px;
+    }
+  }
+
+  .notification-body {
+    flex: 1;
+    flex-basis: 100%;
+
+    .notification-body__text {
+      font-size: 16px;
+      line-height: 1.75;
+    }
+  }
+}

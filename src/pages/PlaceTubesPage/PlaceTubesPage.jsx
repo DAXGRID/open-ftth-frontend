@@ -1,23 +1,69 @@
-import React from "react";
-import ListView from "../../components/ListView";
+import React, { useEffect, useState } from "react";
+import SelectListView from "../../components/SelectListView";
 import SelectMenu from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
+import Notification from "../../components/Notification";
 import { useTranslation } from "react-i18next";
+import useBridgeConnector from "../../bridge/UseBridgeConnector";
+import PubSub from "pubsub-js";
 
 function PlaceTubesPage() {
   const { t } = useTranslation();
+  const [retrieveSelected] = useBridgeConnector();
+  const [validation, setValidation] = useState({});
+  const [conduits, setConduits] = useState([
+    { rows: ["GM Plast One", "Oe50 7x16"], id: 1, selected: false },
+    { rows: ["GM Plast Two", "Oe50 7x16"], id: 2, selected: false },
+    { rows: ["GM Plast Three", "Oe50 7x16"], id: 3, selected: false },
+    { rows: ["GM Plast Four", "Oe50 7x16"], id: 4, selected: false },
+  ]);
+
+  useEffect(() => {
+    const token = PubSub.subscribe("RetrieveSelectedResponse", (msg, data) => {
+      if (data.selectedFeaturesMrid.length === 0) {
+        setValidation({
+          type: "error",
+          headerText: t("Error"),
+          bodyText: t("No segments selected"),
+        });
+      } else {
+        setValidation({
+          type: "success",
+          headerText: t("Success"),
+          bodyText: t("Conduit(s) are now placed"),
+        });
+      }
+    });
+
+    return () => {
+      PubSub.unsubscribe(token);
+    };
+  }, []);
+
+  const placeConduit = () => {
+    retrieveSelected();
+  };
+
+  const selectItem = (selectedItem) => {
+    conduits.forEach((x) => (x.selected = false));
+    selectedItem.selected = true;
+    setConduits([...conduits]);
+  };
 
   return (
     <div className="page-container">
       <div className="full-row">
-        <ListView
+        <Notification
+          type={validation.type}
+          headerText={validation.headerText}
+          bodyText={validation.bodyText}
+        />
+      </div>
+      <div className="full-row">
+        <SelectListView
           headerItems={[t("Manufacturer"), t("Product model")]}
-          bodyItems={[
-            ["GM Plast", "Oe50 7x16"],
-            ["Plast GM", "Oe40 16x7"],
-            ["Plast GM", "Oe50 20x7"],
-            ["GM Plast", "Oe70 7x16"],
-          ]}
+          bodyItems={conduits}
+          selectItem={selectItem}
         />
       </div>
 
@@ -31,7 +77,7 @@ function PlaceTubesPage() {
           ]}
           removePlaceHolderOnSelect={true}
         />
-        <DefaultButton innerText={t("Place conduit")} />
+        <DefaultButton innerText={t("Place conduit")} onClick={placeConduit} />
       </div>
     </div>
   );
