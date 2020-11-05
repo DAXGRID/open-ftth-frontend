@@ -1,6 +1,6 @@
 import React from "react";
 
-function SelectListView({ title, headerItems, bodyItems }) {
+function SelectListView({ title, headerItems, bodyItems, selectItem }) {
   return (
     <div className="select-list-view">
       {title && (
@@ -22,9 +22,17 @@ function SelectListView({ title, headerItems, bodyItems }) {
           {bodyItems.map((row, index) => {
             return (
               <div key={index} className="select-list-view-body-row">
-                {row.map((item, index) => {
+                {row.rows.map((item, index) => {
                   return (
-                    <div key={index} className="select-list-view-body-item">
+                    <div
+                      key={index}
+                      className={
+                        row.selected
+                          ? "select-list-view-body-item selected"
+                          : "select-list-view-body-item"
+                      }
+                      onClick={() => selectItem(row)}
+                    >
                       <p>{item}</p>
                     </div>
                   );
