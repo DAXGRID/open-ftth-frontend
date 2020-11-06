@@ -8,13 +8,12 @@ function Diagram() {
 
   useLayoutEffect(() => {
     if (mapContainer) {
-      console.log(import.meta.env);
       mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
 
       const map = new mapboxgl.Map({
         container: mapContainer,
-        style: "mapbox://styles/mapbox/streets-v11",
-        center: [-74.5, 40],
+        style: import.meta.env.VITE_STYLE_URL,
+        center: [0, 0],
         zoom: 2,
       });
 
