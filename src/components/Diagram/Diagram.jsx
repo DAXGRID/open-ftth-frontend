@@ -8,7 +8,8 @@ function Diagram() {
 
   useLayoutEffect(() => {
     if (mapContainer) {
-      mapboxgl.accessToken = "";
+      console.log(import.meta.env);
+      mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
 
       const map = new mapboxgl.Map({
         container: mapContainer,
