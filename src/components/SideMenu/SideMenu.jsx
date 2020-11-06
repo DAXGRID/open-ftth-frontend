@@ -17,7 +17,7 @@ function SideMenuItem({ path, linkText, icon }) {
     >
       <Link to={path}>
         <span className="side-menu-item-icon">
-          <FontAwesomeIcon icon={icon} />{" "}
+          <FontAwesomeIcon icon={icon} />
         </span>
         {linkText}
       </Link>

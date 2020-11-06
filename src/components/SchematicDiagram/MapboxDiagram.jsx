@@ -1,22 +1,16 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-function Diagram() {
+function MapboxDiagram({ config }) {
   const [map, setMap] = useState();
   const [mapContainer, setMapContainer] = useState();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (mapContainer) {
+      config.container = mapContainer;
       mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
-
-      const map = new mapboxgl.Map({
-        container: mapContainer,
-        style: import.meta.env.VITE_STYLE_URL,
-        center: [0, 0],
-        zoom: 2,
-      });
-
+      const map = new mapboxgl.Map(config);
       setMap(map);
     }
   }, [mapContainer]);
@@ -28,4 +22,4 @@ function Diagram() {
   );
 }
 
-export default Diagram;
+export default MapboxDiagram;

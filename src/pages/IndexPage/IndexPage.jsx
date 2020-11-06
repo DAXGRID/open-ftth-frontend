@@ -1,10 +1,10 @@
 import React from "react";
-import Diagram from "../../components/Diagram";
+import SchematicDiagram from "../../components/SchematicDiagram";
 
 function IndexPage() {
   return (
     <div className="index-page">
-      <Diagram />
+      <SchematicDiagram />
     </div>
   );
 }
