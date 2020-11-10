@@ -6,7 +6,7 @@ function SchematicDiagram() {
     center: [0.012, 0.012],
     zoom: 13,
     minZoom: 12,
-    style: import.meta.env.VITE_MAP_STYLE_URL,
+    style: "mapbox://styles/openftth-dev/ckh61vsf00t9u19k6anx4k7pt",
   };
 
   return (
