@@ -1,14 +1,13 @@
 import colorMap from "./colors";
 
-export const diagramFeatureLayer = (featureType, layerID) => {
+export const diagramFeatureLayer = (source, featureType, layerId) => {
   let layer = {
-    id: layerID,
+    id: layerId,
     order: 0,
-    source: layerID,
-    filter: ["==", "$type", featureType],
+    source: source,
   };
 
-  let styleProps = layerPropsForStyle[layerID];
+  let styleProps = layerPropsForStyle[featureType];
   if (!styleProps) {
     styleProps = layerPropsForStyle["default"];
   }

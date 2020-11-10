@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { diagramFeatureLayer } from "./parseFeatures";
+import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -7,6 +8,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 function MapboxDiagram({ config }) {
   const [map, setMap] = useState();
   const [mapContainer, setMapContainer] = useState();
+  const [diagramObjects, setDiagramObjects] = useState(RouteNodeDiagramObjects);
 
   useEffect(() => {
     if (mapContainer) {
@@ -20,10 +22,16 @@ function MapboxDiagram({ config }) {
   useEffect(() => {
     if (map) {
       map.on("load", () => {
-        const source = getSource();
-        map.addSource("DF_InnerConduitOrange", source);
-        let layer = diagramFeatureLayer("Polygon", "DF_InnerConduitOrange");
-        map.addLayer(layer);
+        diagramObjects.data.diagramService.buildRouteNodeDiagram.diagramObjects.map(
+          (diagramObject, index) => {
+            let layer = diagramFeatureLayer(
+              getSource(diagramObject),
+              `DF_${diagramObject.style}`,
+              index.toString()
+            );
+            map.addLayer(layer);
+          }
+        );
       });
     }
   }, [map]);
@@ -35,7 +43,7 @@ function MapboxDiagram({ config }) {
   );
 }
 
-function getSource() {
+function getSource(feature) {
   return {
     type: "geojson",
     data: {
@@ -43,19 +51,10 @@ function getSource() {
       features: [
         {
           type: "Feature",
-          properties: {},
-          geometry: {
-            type: "Polygon",
-            coordinates: [
-              [
-                [0.004, 0.0152],
-                [0.034, 0.0152],
-                [0.034, 0.016],
-                [0.004, 0.016],
-                [0.004, 0.0152],
-              ],
-            ],
+          properties: {
+            label: feature.label,
           },
+          geometry: feature.geometry,
         },
       ],
     },
