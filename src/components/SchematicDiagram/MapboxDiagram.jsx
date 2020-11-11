@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { diagramFeatureLayer } from "./parseFeatures";
+import { diagramFeatureLayer, createSource } from "./parseFeatures";
 import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
-
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -25,8 +24,8 @@ function MapboxDiagram({ config }) {
         diagramObjects.data.diagramService.buildRouteNodeDiagram.diagramObjects.map(
           (diagramObject, index) => {
             let layer = diagramFeatureLayer(
-              getSource(diagramObject),
-              `DF_${diagramObject.style}`,
+              createSource(diagramObject),
+              diagramObject.style,
               index.toString()
             );
             map.addLayer(layer);
@@ -41,24 +40,6 @@ function MapboxDiagram({ config }) {
       <div className="diagram-container" ref={(el) => setMapContainer(el)} />
     </div>
   );
-}
-
-function getSource(feature) {
-  return {
-    type: "geojson",
-    data: {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: {
-            label: feature.label,
-          },
-          geometry: feature.geometry,
-        },
-      ],
-    },
-  };
 }
 
 export default MapboxDiagram;

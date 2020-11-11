@@ -1,6 +1,6 @@
 import colorMap from "./colors";
 
-export const diagramFeatureLayer = (source, featureType, layerId) => {
+export function diagramFeatureLayer(source, featureType, layerId) {
   let layer = {
     id: layerId,
     order: 0,
@@ -18,10 +18,28 @@ export const diagramFeatureLayer = (source, featureType, layerId) => {
   };
 
   return layer;
-};
+}
+
+export function createSource(feature) {
+  return {
+    type: "geojson",
+    data: {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            label: feature.label,
+          },
+          geometry: feature.geometry,
+        },
+      ],
+    },
+  };
+}
 
 const layerPropsForStyle = {
-  DF_Well: {
+  Well: {
     type: "line",
     order: 0,
     paint: {
@@ -29,14 +47,14 @@ const layerPropsForStyle = {
       "line-color": "#555",
     },
   },
-  DF_WellFill: {
+  WellFill: {
     type: "fill",
     order: 0,
     paint: {
       "fill-color": "#ccc",
     },
   },
-  DF_MultiConduitOrange: {
+  MultiConduitOrange: {
     type: "fill",
     order: 1,
     paint: {
@@ -44,7 +62,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_MultiConduitRed: {
+  MultiConduitRed: {
     type: "fill",
     order: 1,
     paint: {
@@ -52,7 +70,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_BigConduitRed: {
+  BigConduitRed: {
     type: "fill",
     order: 1,
     paint: {
@@ -60,7 +78,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_InnerConduitBlue: {
+  InnerConduitBlue: {
     type: "fill",
     order: 2,
     paint: {
@@ -68,7 +86,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_InnerConduitOrange: {
+  InnerConduitOrange: {
     type: "fill",
     order: 2,
     paint: {
@@ -76,7 +94,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_InnerConduitGreen: {
+  InnerConduitGreen: {
     type: "fill",
     order: 2,
     paint: {
@@ -84,7 +102,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_InnerConduitBrown: {
+  InnerConduitBrown: {
     type: "fill",
     order: 2,
     paint: {
@@ -92,7 +110,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_InnerConduitGrey: {
+  InnerConduitGrey: {
     type: "fill",
     order: 2,
     paint: {
@@ -100,7 +118,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_InnerConduitWhite: {
+  InnerConduitWhite: {
     type: "fill",
     order: 2,
     paint: {
@@ -108,7 +126,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_InnerConduitRed: {
+  InnerConduitRed: {
     type: "fill",
     order: 2,
     paint: {
@@ -116,7 +134,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_InnerConduitBlack: {
+  InnerConduitBlack: {
     type: "fill",
     order: 2,
     paint: {
@@ -124,7 +142,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_InnerConduitYellow: {
+  InnerConduitYellow: {
     type: "fill",
     order: 2,
     paint: {
@@ -132,7 +150,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_InnerConduitViolet: {
+  InnerConduitViolet: {
     type: "fill",
     order: 2,
     paint: {
@@ -140,7 +158,7 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  DF_CableInsideWell: {
+  CableInsideWell: {
     type: "line",
     order: 3,
     paint: {
@@ -148,7 +166,7 @@ const layerPropsForStyle = {
       "line-color": "#000",
     },
   },
-  DF_CableOutsideWell: {
+  CableOutsideWell: {
     type: "line",
     order: 3,
     paint: {
@@ -156,7 +174,7 @@ const layerPropsForStyle = {
       "line-color": "#000",
     },
   },
-  DF_CableOutsideWellLabel: {
+  CableOutsideWellLabel: {
     type: "symbol",
     order: 4,
     paint: {
@@ -173,7 +191,7 @@ const layerPropsForStyle = {
       "icon-padding": 0,
     },
   },
-  DF_CableInsideWellLabel: {
+  CableInsideWellLabel: {
     type: "symbol",
     order: 4,
     paint: {
@@ -188,7 +206,7 @@ const layerPropsForStyle = {
       "text-field": ["get", "label"],
     },
   },
-  DF_LabelMediumText: {
+  LabelMediumText: {
     type: "symbol",
     order: 4,
     paint: {
@@ -205,7 +223,7 @@ const layerPropsForStyle = {
       "icon-padding": 0,
     },
   },
-  DF_LabelNormalText: {
+  LabelNormalText: {
     type: "symbol",
     order: 4,
     paint: {
@@ -222,7 +240,7 @@ const layerPropsForStyle = {
       "icon-padding": 0,
     },
   },
-  DF_LabelBigText: {
+  LabelBigText: {
     type: "symbol",
     order: 4,
     paint: {
