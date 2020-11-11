@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { diagramFeatureLayer, createSource } from "./parseFeatures";
 import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
+
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
