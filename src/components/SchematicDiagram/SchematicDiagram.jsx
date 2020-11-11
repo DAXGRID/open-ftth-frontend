@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import useMapbox from "./useMapbox.js";
+import { diagramFeatureLayer, createSource } from "./parseFeatures";
+import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 
 function SchematicDiagram() {
   const [mapContainer, setMapContainer] = useState();
-  const [setConfig] = useMapbox();
+  const { setConfig, addLayer, loaded, destroyMap } = useMapbox(addLayers);
 
   useEffect(() => {
     if (mapContainer) {
@@ -17,9 +19,32 @@ function SchematicDiagram() {
     }
   }, [mapContainer]);
 
+  useEffect(() => {
+    if (loaded) {
+      addLayers();
+    }
+  }, [loaded]);
+
+  function addLayers() {
+    RouteNodeDiagramObjects.data.diagramService.buildRouteNodeDiagram.diagramObjects.map(
+      (diagramObject, index) => {
+        const layer = diagramFeatureLayer(
+          createSource(diagramObject),
+          diagramObject.style,
+          index.toString()
+        );
+
+        addLayer(layer);
+      }
+    );
+  }
+
   return (
-    <div className="diagram">
-      <div className="diagram-container" ref={(el) => setMapContainer(el)} />
+    <div className="schematic-diagram">
+      <div
+        className="schematic-diagram-container"
+        ref={(el) => setMapContainer(el)}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
 import SchematicDiagram from "./SchematicDiagram";
-import "./MapboxDiagram.scss";
+import "./SchematicDiagram.scss";
 
 export default SchematicDiagram;
