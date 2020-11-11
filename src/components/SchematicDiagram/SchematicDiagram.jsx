@@ -8,6 +8,12 @@ function SchematicDiagram() {
   const { setConfig, addLayer, loaded, destroyMap } = useMapbox(addLayers);
 
   useEffect(() => {
+    return () => {
+      destroyMap();
+    };
+  }, []);
+
+  useEffect(() => {
     if (mapContainer) {
       setConfig({
         center: [0.012, 0.012],
