@@ -5,13 +5,7 @@ import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 
 function SchematicDiagram() {
   const [mapContainer, setMapContainer] = useState();
-  const { setConfig, addLayer, loaded, destroyMap } = useMapbox(addLayers);
-
-  useEffect(() => {
-    return () => {
-      destroyMap();
-    };
-  }, []);
+  const { setConfig, addLayer, loaded, setOnClicked } = useMapbox();
 
   useEffect(() => {
     if (mapContainer) {
@@ -28,6 +22,7 @@ function SchematicDiagram() {
   useEffect(() => {
     if (loaded) {
       addLayers();
+      setOnClicked();
     }
   }, [loaded]);
 

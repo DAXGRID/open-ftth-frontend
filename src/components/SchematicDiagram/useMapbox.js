@@ -8,38 +8,36 @@ function useMapbox() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (config) {
-      mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
-      const newMap = new mapboxgl.Map(config);
-      newMap.on("load", () => {
-        setLoaded(true);
-      });
+    if (!config) return;
 
-      setMap(newMap);
-    }
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
+    const newMap = new mapboxgl.Map(config);
+    newMap.on("load", () => {
+      setLoaded(true);
+    });
 
-    return () => {
-      setMap(null);
-    };
+    setMap(newMap);
   }, [config]);
 
-  function addLayer(layer) {
-    if (map) {
-      map.addLayer(layer);
-    }
+  function setOnClicked() {
+    if (!map && !loaded) return;
+
+    map.on("click", () => {
+      console.log("test");
+    });
   }
 
-  function destroyMap() {
-    if (map) {
-      map.remove();
-    }
+  function addLayer(layer) {
+    if (!map && loaded) return;
+
+    map.addLayer(layer);
   }
 
   return {
     setConfig,
     addLayer,
     loaded,
-    destroyMap,
+    setOnClicked,
   };
 }
 
