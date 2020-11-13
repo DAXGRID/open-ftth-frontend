@@ -30,7 +30,9 @@ function useMapbox() {
   }
 
   function destroyMap() {
-    map.remove();
+    if (map) {
+      map.remove();
+    }
   }
 
   return {
