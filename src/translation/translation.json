@@ -1,6 +1,7 @@
 {
   "en": {
     "translation": {
+      "Home": "Home",
       "Welcome to OpenFTTH": "Welcome to OpenFTTH",
       "Place conduit": "Place conduit",
       "Manufacturer": "Manufacturer",
@@ -14,6 +15,7 @@
   },
   "dk": {
     "translation": {
+      "Home": "Hjem",
       "Welcome to OpenFTTH": "Velkommen til OpenFTTH",
       "Place conduit": "Læg rør",
       "Manufacturer": "Fabrikant",
