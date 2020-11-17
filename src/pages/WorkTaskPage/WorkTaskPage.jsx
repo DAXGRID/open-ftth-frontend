@@ -76,6 +76,14 @@ function WorkTaskPage() {
     setWorkTasks([...workTasks]);
   };
 
+  const pickWorkTask = () => {
+    console.log("Pick work task");
+  };
+
+  const panToAddress = () => {
+    console.log("Pan to address");
+  };
+
   return (
     <div>
       <div className="full-row">
@@ -99,12 +107,12 @@ function WorkTaskPage() {
         <DefaultButton
           maxWidth="400px"
           innerText={t("Pick work task")}
-          onClick={() => {}}
+          onClick={pickWorkTask}
         />
         <DefaultButton
           maxWidth="400px"
           innerText={t("Pan/Zoom to address")}
-          onClick={() => {}}
+          onClick={panToAddress}
         />
       </div>
     </div>
