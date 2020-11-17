@@ -38,7 +38,6 @@ function WorkTaskPage() {
   useEffect(() => {
     if (fetching) return;
 
-    setWorkTasks();
     const { data } = result;
     const projects = data.workService.projectsAndWorkTasks;
 
@@ -51,15 +50,16 @@ function WorkTaskPage() {
           id: 0,
           selected: false,
         };
-        selectListItem.rows.push(w.mRID);
-        selectListItem.rows.push("BRED");
-        selectListItem.rows.push("FP-0101");
-        selectListItem.rows.push("SP-1020");
 
-        selectListItem.rows.push("PON");
-        selectListItem.rows.push("PRIVAT");
-        selectListItem.rows.push("Laerkegade 12");
-        selectListItem.rows.push("Ok");
+        selectListItem.rows.push(w.name);
+        selectListItem.rows.push(w.centralOfficeArea);
+        selectListItem.rows.push(w.flexPointArea);
+        selectListItem.rows.push(w.splicePointArea);
+        selectListItem.rows.push(w.technology);
+        selectListItem.rows.push(w.workTaskType);
+        selectListItem.rows.push(w.addressString);
+        selectListItem.rows.push(w.status);
+
         newWorkTasks.push(selectListItem);
       });
     });
@@ -71,9 +71,9 @@ function WorkTaskPage() {
   if (error) return <p>Oh no... {error.message}</p>;
 
   const selectItem = (selectedItem) => {
-    conduits.forEach((x) => (x.selected = false));
+    workTasks.forEach((x) => (x.selected = false));
     selectedItem.selected = true;
-    setConduits([...conduits]);
+    setWorkTasks([...workTasks]);
   };
 
   return (
