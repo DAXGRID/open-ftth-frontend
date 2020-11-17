@@ -12,7 +12,8 @@
       "No segments selected": "No segments selected",
       "Conduit(s) are now placed": "Conduits(s) are now placed",
       "Work tasks": "Work tasks",
-      "Pan/Zoom to address": "Pan/Zoom to address"
+      "Pan/Zoom to address": "Pan/Zoom to address",
+      "Pick work task": "Pick work task"
     }
   },
   "dk": {
@@ -28,7 +29,8 @@
       "No segments selected": "Der er ingen selekterede rør",
       "Conduit(s) are now placed": "Rør er blevet lagt",
       "Work tasks": "Opgaveliste",
-      "Pan/Zoom to address": "Pan/Zoom til adresse"
+      "Pan/Zoom to address": "Pan/Zoom til adresse",
+      "Pick work task": "Vælg opgave"
     }
   }
 }

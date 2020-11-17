@@ -1,96 +1,74 @@
-import React, { useState } from "react";
-import SelectListView from "../../components/SelectListView";
+import React, { useState, useEffect } from "react";
+import { useQuery } from "urql";
 import { useTranslation } from "react-i18next";
+import SelectListView from "../../components/SelectListView";
 import DefaultButton from "../../components/DefaultButton";
+
+const workOrders = `query {
+  workService {
+    projectsAndWorkTasks {
+      mRID
+      name
+      workTasks {
+        mRID
+        workTaskType
+        name
+        status
+        addressString
+        centralOfficeArea
+        flexPointArea
+        splicePointArea
+        installationId
+        technology
+        geometry {
+          coordinates
+          type
+        }
+      }
+    }
+  }
+}`;
 
 function WorkTaskPage() {
   const { t } = useTranslation();
-  const [worktasks, setWorkTasks] = useState([
-    {
-      rows: [
-        "GM Plast One",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-      ],
-      id: 1,
-      selected: false,
-    },
-    {
-      rows: [
-        "GM Plast One",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-      ],
-      id: 1,
-      selected: false,
-    },
-    {
-      rows: [
-        "GM Plast One",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-      ],
-      id: 1,
-      selected: false,
-    },
-    {
-      rows: [
-        "GM Plast One",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-      ],
-      id: 1,
-      selected: false,
-    },
-    {
-      rows: [
-        "GM Plast One",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-      ],
-      id: 1,
-      selected: false,
-    },
-    {
-      rows: [
-        "GM Plast One",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-        "Oe50 7x16",
-      ],
-      id: 1,
-      selected: false,
-    },
-  ]);
+  const [workTasks, setWorkTasks] = useState();
+  const [result] = useQuery({ query: workOrders });
+  const { fetching, error } = result;
+
+  useEffect(() => {
+    if (fetching) return;
+
+    setWorkTasks();
+    const { data } = result;
+    const projects = data.workService.projectsAndWorkTasks;
+
+    const newWorkTasks = [];
+
+    projects.forEach((p) => {
+      p.workTasks.forEach((w) => {
+        const selectListItem = {
+          rows: [],
+          id: 0,
+          selected: false,
+        };
+        selectListItem.rows.push(w.mRID);
+        selectListItem.rows.push("BRED");
+        selectListItem.rows.push("FP-0101");
+        selectListItem.rows.push("SP-1020");
+
+        selectListItem.rows.push("PON");
+        selectListItem.rows.push("PRIVAT");
+        selectListItem.rows.push("Laerkegade 12");
+        selectListItem.rows.push("Ok");
+        newWorkTasks.push(selectListItem);
+      });
+    });
+
+    setWorkTasks(newWorkTasks);
+  }, [result]);
+
+  if (fetching) return <p>Loading...</p>;
+  if (error) return <p>Oh no... {error.message}</p>;
 
   const selectItem = (selectedItem) => {
     conduits.forEach((x) => (x.selected = false));
@@ -112,12 +90,17 @@ function WorkTaskPage() {
             t("Address"),
             t("Status"),
           ]}
-          bodyItems={worktasks}
+          bodyItems={workTasks}
           selectItem={selectItem}
         />
       </div>
 
       <div className="full-row">
+        <DefaultButton
+          maxWidth="400px"
+          innerText={t("Pick work task")}
+          onClick={() => {}}
+        />
         <DefaultButton
           maxWidth="400px"
           innerText={t("Pan/Zoom to address")}

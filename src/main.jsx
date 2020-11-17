@@ -14,7 +14,7 @@ const subscriptionClient = new Transport.SubscriptionClient(
 );
 
 const client = new Client({
-  url: `http://{import.meta.env.VITE_API_GATEWAY_URI}/graphql`,
+  url: `http://${import.meta.env.VITE_API_GATEWAY_URI}/graphql`,
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({
