@@ -71,7 +71,7 @@
         border-right: 1px solid $border-color;
 
         &.selected {
-          background-color: $hover-color;
+          background-color: $select-color;
         }
 
         &:last-of-type {
