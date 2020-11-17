@@ -13,7 +13,15 @@
       "Conduit(s) are now placed": "Conduits(s) are now placed",
       "Work tasks": "Work tasks",
       "Pan/Zoom to address": "Pan/Zoom to address",
-      "Pick work task": "Pick work task"
+      "Pick work task": "Pick work task",
+      "Name": "Name",
+      "Central office area": "Central office area",
+      "Flex point area": "Flex point area",
+      "Splice point area": "Splice point area",
+      "Technology": "Technology",
+      "Work task type": "Work task type",
+      "Address": "Adresse",
+      "Status": "Status"
     }
   },
   "dk": {
@@ -30,7 +38,15 @@
       "Conduit(s) are now placed": "Rør er blevet lagt",
       "Work tasks": "Opgaveliste",
       "Pan/Zoom to address": "Pan/Zoom til adresse",
-      "Pick work task": "Vælg opgave"
+      "Pick work task": "Vælg opgave",
+      "Name": "Navn",
+      "Central office area": "Central office area",
+      "Flex point area": "Flex point area",
+      "Splice point area": "Splice point area",
+      "Technology": "Technology",
+      "Work task type": "Work task type",
+      "Address": "Adresse" ,
+      "Status": "Status"
     }
   }
 }

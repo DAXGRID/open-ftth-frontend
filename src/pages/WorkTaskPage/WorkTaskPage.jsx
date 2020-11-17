@@ -89,7 +89,7 @@ function WorkTaskPage() {
       <div className="full-row">
         <SelectListView
           headerItems={[
-            t("Installation Id"),
+            t("Name"),
             t("Central office area"),
             t("Flex point area"),
             t("Splice point area"),
