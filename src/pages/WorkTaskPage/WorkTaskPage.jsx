@@ -4,14 +4,14 @@ import { useTranslation } from "react-i18next";
 import SelectListView from "../../components/SelectListView";
 import DefaultButton from "../../components/DefaultButton";
 import SelectMenu from "../../components/SelectMenu";
-import { workOrders } from "../../qgl/workOrders";
+import { projectsAndWorkTasks } from "../../qgl/WorkOrders";
 
 function WorkTaskPage() {
   const { t } = useTranslation();
   const [workTasks, setWorkTasks] = useState([]);
   const [selectProject, setSelectProject] = useState();
   const [selectedProject, setSelectedProject] = useState({ value: "" });
-  const [result] = useQuery({ query: workOrders });
+  const [result] = useQuery({ query: projectsAndWorkTasks });
   const { fetching, error } = result;
 
   useEffect(() => {

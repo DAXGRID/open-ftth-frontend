@@ -1,4 +1,4 @@
-export const workOrders = `query {
+export const projectsAndWorkTasks = `query {
   workService {
     projectsAndWorkTasks {
       mRID
