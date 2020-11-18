@@ -12,7 +12,12 @@ function CustomOption({ text, value, triggerSelected, selected }) {
   );
 }
 
-function SelectMenu({ options, removePlaceHolderOnSelect, onSelected }) {
+function SelectMenu({
+  options,
+  removePlaceHolderOnSelect,
+  onSelected,
+  maxWidth,
+}) {
   if (!options || options.length === 0) return <div></div>;
 
   const [toggled, setToggled] = useState(false);
@@ -53,7 +58,11 @@ function SelectMenu({ options, removePlaceHolderOnSelect, onSelected }) {
   };
 
   return (
-    <div className="select-menu-wrapper" onClick={() => setToggled(!toggled)}>
+    <div
+      style={{ maxWidth: maxWidth }}
+      className="select-menu-wrapper"
+      onClick={() => setToggled(!toggled)}
+    >
       <div className={toggled ? "menu-select open" : "menu-select"}>
         <div className="menu-select__trigger">
           <span>{selected.text}</span>

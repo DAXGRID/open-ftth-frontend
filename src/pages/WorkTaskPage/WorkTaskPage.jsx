@@ -89,7 +89,11 @@ function WorkTaskPage() {
   return (
     <div>
       <div className="full-row">
-        <SelectMenu options={selectProject} onSelected={onSelected} />
+        <SelectMenu
+          maxWidth="400px"
+          options={selectProject}
+          onSelected={onSelected}
+        />
       </div>
       <div className="full-row">
         <SelectListView
