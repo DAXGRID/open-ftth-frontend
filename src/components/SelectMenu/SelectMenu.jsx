@@ -12,7 +12,9 @@ function CustomOption({ text, value, triggerSelected, selected }) {
   );
 }
 
-function SelectMenu({ options, removePlaceHolderOnSelect }) {
+function SelectMenu({ options, removePlaceHolderOnSelect, onSelected }) {
+  if (!options || options.length === 0) return <div></div>;
+
   const [toggled, setToggled] = useState(false);
   const [selected, setSelected] = useState({});
   const [selectOptions, setSelectOptions] = useState(options);
@@ -22,6 +24,12 @@ function SelectMenu({ options, removePlaceHolderOnSelect }) {
     setSelected(option);
     options = selectOptions;
   }, [selectOptions]);
+
+  useEffect(() => {
+    if (onSelected) {
+      onSelected(selected);
+    }
+  }, [selected]);
 
   const triggerSelected = (selectedValue) => {
     selectOptions.forEach((option) => (option.selected = false));
