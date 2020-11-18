@@ -40,11 +40,11 @@
       "Pan/Zoom to address": "Pan/Zoom til adresse",
       "Pick work task": "Vælg opgave",
       "Name": "Navn",
-      "Central office area": "Central office area",
-      "Flex point area": "Flex point area",
-      "Splice point area": "Splice point area",
-      "Technology": "Technology",
-      "Work task type": "Work task type",
+      "Central office area": "Teknikhus",
+      "Flex point area": "Flexpunkt",
+      "Splice point area": "Splidsepunkt",
+      "Technology": "Teknologi",
+      "Work task type": "Splidsepunkt",
       "Address": "Adresse" ,
       "Status": "Status"
     }
