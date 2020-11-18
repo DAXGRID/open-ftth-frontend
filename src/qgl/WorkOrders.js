@@ -1,4 +1,4 @@
-export const projectsAndWorkTasks = `query {
+export const ProjectsAndWorkTasks = `query {
   workService {
     projectsAndWorkTasks {
       mRID
@@ -19,6 +19,16 @@ export const projectsAndWorkTasks = `query {
           type
         }
       }
+    }
+  }
+}`;
+
+export const SetCurrentWorkTask = `mutation ($userName: String!, $workTaskId: ID!) {
+  userContext {
+    setCurrentWorkTask(userName: $userName, workTaskId: $workTaskId)
+    {
+      currentWorkTask
+      userName
     }
   }
 }`;

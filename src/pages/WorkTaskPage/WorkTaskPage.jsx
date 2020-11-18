@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useQuery } from "urql";
+import { useQuery, useMutation } from "urql";
 import { useTranslation } from "react-i18next";
 import SelectListView from "../../components/SelectListView";
 import DefaultButton from "../../components/DefaultButton";
 import SelectMenu from "../../components/SelectMenu";
-import { projectsAndWorkTasks } from "../../qgl/WorkOrders";
+import { ProjectsAndWorkTasks, SetCurrentWorkTask } from "../../qgl/WorkOrders";
 
 function WorkTaskPage() {
   const { t } = useTranslation();
   const [workTasks, setWorkTasks] = useState([]);
   const [selectProject, setSelectProject] = useState();
   const [selectedProject, setSelectedProject] = useState({ value: "" });
-  const [result] = useQuery({ query: projectsAndWorkTasks });
+  const [currentWorkTaskResult, setCurrentWorkTask] = useMutation(
+    SetCurrentWorkTask
+  );
+  const [result] = useQuery({ query: ProjectsAndWorkTasks });
   const { fetching, error } = result;
 
   useEffect(() => {
@@ -73,7 +76,18 @@ function WorkTaskPage() {
   };
 
   const pickWorkTask = () => {
-    console.log("Pick work task");
+    const selectedWorkTask = workTasks.find((x) => x.selected);
+
+    if (!selectedWorkTask) {
+      alert("No work task selected");
+      return;
+    }
+
+    const variables = {
+      userName: "notation",
+      workTaskId: selectedWorkTask.id,
+    };
+    setCurrentWorkTask(variables);
   };
 
   const panToAddress = () => {
@@ -82,7 +96,6 @@ function WorkTaskPage() {
 
   const onSelected = (selected) => {
     if (!selected) return;
-
     setSelectedProject(selected);
   };
 
