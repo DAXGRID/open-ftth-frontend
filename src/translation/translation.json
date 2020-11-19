@@ -21,7 +21,9 @@
       "Technology": "Technology",
       "Work task type": "Work task type",
       "Address": "Adresse",
-      "Status": "Status"
+      "Status": "Status",
+      "Please select a work task": "Please select a work task",
+      "Work task is now added to user": "Work task is now added to user"
     }
   },
   "dk": {
@@ -46,7 +48,9 @@
       "Technology": "Teknologi",
       "Work task type": "Splidsepunkt",
       "Address": "Adresse" ,
-      "Status": "Status"
+      "Status": "Status",
+      "Please select a work task": "Vælg en opgave",
+      "Work task is now added to user": "Opgaven er nu tilknyttet brugeren"
     }
   }
 }

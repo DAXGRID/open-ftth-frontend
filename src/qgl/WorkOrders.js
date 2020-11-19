@@ -27,7 +27,9 @@ export const SetCurrentWorkTask = `mutation ($userName: String!, $workTaskId: ID
   userContext {
     setCurrentWorkTask(userName: $userName, workTaskId: $workTaskId)
     {
-      currentWorkTask
+      currentWorkTask {
+        __typename
+      }
       userName
     }
   }

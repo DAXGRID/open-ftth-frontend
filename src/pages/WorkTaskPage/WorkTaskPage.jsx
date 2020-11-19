@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import SelectListView from "../../components/SelectListView";
 import DefaultButton from "../../components/DefaultButton";
 import SelectMenu from "../../components/SelectMenu";
+import Notification from "../../components/Notification";
 import { ProjectsAndWorkTasks, SetCurrentWorkTask } from "../../qgl/WorkOrders";
 
 function WorkTaskPage() {
@@ -11,6 +12,7 @@ function WorkTaskPage() {
   const [workTasks, setWorkTasks] = useState([]);
   const [selectProject, setSelectProject] = useState();
   const [selectedProject, setSelectedProject] = useState({ value: "" });
+  const [validation, setValidation] = useState({});
   const [currentWorkTaskResult, setCurrentWorkTask] = useMutation(
     SetCurrentWorkTask
   );
@@ -79,7 +81,12 @@ function WorkTaskPage() {
     const selectedWorkTask = workTasks.find((x) => x.selected);
 
     if (!selectedWorkTask) {
-      alert("No work task selected");
+      setValidation({
+        type: "error",
+        headerText: t("Error"),
+        bodyText: t("Please select a work task"),
+      });
+
       return;
     }
 
@@ -87,7 +94,15 @@ function WorkTaskPage() {
       userName: "notation",
       workTaskId: selectedWorkTask.id,
     };
-    setCurrentWorkTask(variables);
+    setCurrentWorkTask(variables).then((r) => {
+      setValidation({
+        type: "success",
+        headerText: t("Success"),
+        bodyText:
+          t("Work task is now added to user") +
+          `: ${r.data.userContext.setCurrentWorkTask.userName}`,
+      });
+    });
   };
 
   const panToAddress = () => {
@@ -96,11 +111,19 @@ function WorkTaskPage() {
 
   const onSelected = (selected) => {
     if (!selected) return;
+
     setSelectedProject(selected);
   };
 
   return (
     <div>
+      <div className="full-row">
+        <Notification
+          type={validation.type}
+          headerText={validation.headerText}
+          bodyText={validation.bodyText}
+        />
+      </div>
       <div className="full-row">
         <SelectMenu
           maxWidth="400px"
