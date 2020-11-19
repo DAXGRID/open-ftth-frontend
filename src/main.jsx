@@ -9,7 +9,7 @@ import "./global-styles/reset.scss";
 import "./global-styles/index.scss";
 
 const subscriptionClient = new Transport.SubscriptionClient(
-  `ws://${import.meta.env.VITE_DESKTOP_BRIDGE_URI}`,
+  `ws://${import.meta.env.VITE_API_GATEWAY_URI}`,
   { reconnect: true }
 );
 
