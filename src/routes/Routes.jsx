@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import IndexPage from "../pages/IndexPage";
 import PlaceTubesPage from "../pages/PlaceTubesPage";
 import SchematicDiagramPage from "../pages/SchematicDiagramPage";
+import WorkTaskPage from "../pages/WorkTaskPage";
 
 const Routes = () => {
   return (
@@ -15,6 +16,9 @@ const Routes = () => {
       </Route>
       <Route exact path="/schematic-diagram">
         <SchematicDiagramPage />
+      </Route>
+      <Route exact path="/work-task">
+        <WorkTaskPage />
       </Route>
     </Switch>
   );

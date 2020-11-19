@@ -1,6 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faProjectDiagram } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHome,
+  faProjectDiagram,
+  faTasks,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -36,6 +40,11 @@ const SideMenu = ({ open }) => {
           path="/place-tubes"
           linkText={t("Place conduit")}
           icon={faProjectDiagram}
+        />
+        <SideMenuItem
+          path="/work-task"
+          linkText={t("Work tasks")}
+          icon={faTasks}
         />
       </ul>
     </div>

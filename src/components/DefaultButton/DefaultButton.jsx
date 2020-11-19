@@ -1,8 +1,12 @@
 import React from "react";
 
-function DefaultButton({ onClick, innerText }) {
+function DefaultButton({ onClick, innerText, maxWidth }) {
   return (
-    <button className="default-button" onClick={() => onClick()}>
+    <button
+      style={{ maxWidth: maxWidth }}
+      className="default-button"
+      onClick={() => onClick()}
+    >
       {innerText}
     </button>
   );

@@ -10,7 +10,20 @@
       "Success": "Success",
       "Error": "Error",
       "No segments selected": "No segments selected",
-      "Conduit(s) are now placed": "Conduits(s) are now placed"
+      "Conduit(s) are now placed": "Conduits(s) are now placed",
+      "Work tasks": "Work tasks",
+      "Pan/Zoom to address": "Pan/Zoom to address",
+      "Pick work task": "Pick work task",
+      "Name": "Name",
+      "Central office area": "Central office area",
+      "Flex point area": "Flex point area",
+      "Splice point area": "Splice point area",
+      "Technology": "Technology",
+      "Work task type": "Work task type",
+      "Address": "Adresse",
+      "Status": "Status",
+      "Please select a work task": "Please select a work task",
+      "Work task is now added to user": "Work task is now added to user"
     }
   },
   "dk": {
@@ -24,7 +37,20 @@
       "Success": "Success",
       "Error": "Fejl",
       "No segments selected": "Der er ingen selekterede rør",
-      "Conduit(s) are now placed": "Rør er blevet lagt"
+      "Conduit(s) are now placed": "Rør er blevet lagt",
+      "Work tasks": "Opgaveliste",
+      "Pan/Zoom to address": "Pan/Zoom til adresse",
+      "Pick work task": "Vælg opgave",
+      "Name": "Navn",
+      "Central office area": "Teknikhus",
+      "Flex point area": "Flexpunkt",
+      "Splice point area": "Splidsepunkt",
+      "Technology": "Teknologi",
+      "Work task type": "Splidsepunkt",
+      "Address": "Adresse" ,
+      "Status": "Status",
+      "Please select a work task": "Vælg en opgave",
+      "Work task is now added to user": "Opgaven er nu tilknyttet brugeren"
     }
   }
 }

@@ -1,6 +1,8 @@
 import React from "react";
 
 function SelectListView({ title, headerItems, bodyItems, selectItem }) {
+  if (!bodyItems) return <div></div>;
+
   return (
     <div className="select-list-view">
       {title && (

@@ -9,12 +9,12 @@ import "./global-styles/reset.scss";
 import "./global-styles/index.scss";
 
 const subscriptionClient = new Transport.SubscriptionClient(
-  "ws://10.109.134.174/graphql",
+  `ws://${import.meta.env.VITE_DESKTOP_BRIDGE_URI}`,
   { reconnect: true }
 );
 
 const client = new Client({
-  url: "http://10.109.134.174/graphql",
+  url: `http://${import.meta.env.VITE_API_GATEWAY_URI}/graphql`,
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({
