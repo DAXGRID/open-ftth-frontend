@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Routes from "./routes/Routes";
 import TopMenu from "./components/TopMenu";
 import BridgeConnector from "./bridge/BridgeConnector";
