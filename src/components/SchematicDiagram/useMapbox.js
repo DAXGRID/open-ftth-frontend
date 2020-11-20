@@ -28,9 +28,16 @@ function useMapbox() {
   }
 
   function addLayer(layer) {
-    if (!map && loaded) return;
+    if (!map && !loaded) return;
 
     map.addLayer(layer);
+  }
+
+  function resize() {
+    if (!map && !loaded) return;
+
+    console.log(map);
+    map.resize();
   }
 
   return {
@@ -38,6 +45,7 @@ function useMapbox() {
     addLayer,
     loaded,
     setOnClicked,
+    resize,
   };
 }
 

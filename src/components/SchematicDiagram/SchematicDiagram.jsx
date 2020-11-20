@@ -5,18 +5,22 @@ import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 
 function SchematicDiagram() {
   const [mapContainer, setMapContainer] = useState();
-  const { setConfig, addLayer, loaded, setOnClicked } = useMapbox();
+  const { setConfig, addLayer, loaded, setOnClicked, resize } = useMapbox();
 
   useEffect(() => {
     if (mapContainer) {
       setConfig({
-        center: [0.012, 0.012],
-        zoom: 13,
+        center: [0.019, 0.01],
+        zoom: 15,
         minZoom: 12,
         style: "mapbox://styles/openftth-dev/ckh61vsf00t9u19k6anx4k7pt",
         container: mapContainer,
       });
     }
+
+    window.addEventListener("resize", () => {
+      resize();
+    });
   }, [mapContainer]);
 
   useEffect(() => {

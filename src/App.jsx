@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Routes from "./routes/Routes";
 import TopMenu from "./components/TopMenu";
 import BridgeConnector from "./bridge/BridgeConnector";
+import BridgeRouter from "./bridge/BridgeRouter";
 import SideMenu from "./components/SideMenu";
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -15,6 +16,7 @@ function App() {
   return (
     <Router>
       <BridgeConnector />
+      <BridgeRouter />
       <header>
         <TopMenu toggleSideMenu={toggleSideMenu} />
       </header>
