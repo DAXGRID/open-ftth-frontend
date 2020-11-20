@@ -4,6 +4,7 @@ import IndexPage from "../pages/IndexPage";
 import PlaceTubesPage from "../pages/PlaceTubesPage";
 import SchematicDiagramPage from "../pages/SchematicDiagramPage";
 import WorkTaskPage from "../pages/WorkTaskPage";
+import IdentifyFeaturesPage from "../pages/IdentifyFeaturePage";
 
 const Routes = () => {
   return (
@@ -19,6 +20,9 @@ const Routes = () => {
       </Route>
       <Route exact path="/work-task">
         <WorkTaskPage />
+      </Route>
+      <Route exact path="/identify-feature/:id">
+        <IdentifyFeaturesPage />
       </Route>
     </Switch>
   );
