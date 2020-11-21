@@ -48,6 +48,7 @@ function WorkTaskPage() {
           id: 0,
           selected: false,
           collectionId: 0,
+          data: w,
         };
 
         selectListItem.rows.push(w.name);
@@ -93,7 +94,7 @@ function WorkTaskPage() {
     }
 
     const variables = {
-      userName: "notation",
+      userName: "user",
       workTaskId: selectedWorkTask.id,
     };
     setCurrentWorkTask(variables).then((r) => {
@@ -108,7 +109,13 @@ function WorkTaskPage() {
   };
 
   const panToAddress = () => {
-    panToCoordinate();
+    const selectedWorkTask = workTasks.find((x) => x.selected);
+
+    if (selectedWorkTask.data.geometry);
+    {
+      const coordinate = selectedWorkTask.data.geometry.coordinates;
+      panToCoordinate(coordinate);
+    }
   };
 
   const onSelected = (selected) => {

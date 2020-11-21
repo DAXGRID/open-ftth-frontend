@@ -6,8 +6,13 @@ function useBridgeConnector() {
     send(message);
   }
 
-  function panToCoordinate() {
-    const message = { eventType: "PanToCoordinate", username: "user" };
+  function panToCoordinate(coordinate) {
+    const message = {
+      eventType: "PanToCoordinate",
+      username: "user",
+      coordinate: JSON.parse(coordinate),
+    };
+
     send(message);
   }
 
