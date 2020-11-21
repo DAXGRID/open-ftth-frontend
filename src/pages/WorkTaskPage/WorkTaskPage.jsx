@@ -17,6 +17,7 @@ function WorkTaskPage() {
   const [currentWorkTaskResult, setCurrentWorkTask] = useMutation(
     SetCurrentWorkTask
   );
+
   const [result] = useQuery({ query: ProjectsAndWorkTasks });
   const { fetching, error } = result;
   const { panToCoordinate } = useBridgeConnector();
@@ -111,11 +112,16 @@ function WorkTaskPage() {
   const panToAddress = () => {
     const selectedWorkTask = workTasks.find((x) => x.selected);
 
-    if (selectedWorkTask.data.geometry);
-    {
-      const coordinate = selectedWorkTask.data.geometry.coordinates;
-      panToCoordinate(coordinate);
+    if (!selectedWorkTask.data.geometry) {
+      setValidation({
+        type: "error",
+        headerText: t("Error"),
+        bodyText: t("The work task has no coordinates"),
+      });
     }
+
+    const coordinate = selectedWorkTask.data.geometry.coordinates;
+    panToCoordinate(coordinate);
   };
 
   const onSelected = (selected) => {
