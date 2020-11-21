@@ -9,7 +9,7 @@ import PubSub from "pubsub-js";
 
 function PlaceTubesPage() {
   const { t } = useTranslation();
-  const [retrieveSelected] = useBridgeConnector();
+  const { retrieveSelected } = useBridgeConnector();
   const [validation, setValidation] = useState({});
   const [conduits, setConduits] = useState([
     { rows: ["GM Plast One", "Oe50 7x16"], id: 1, selected: false },
