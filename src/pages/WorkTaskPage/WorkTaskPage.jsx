@@ -6,6 +6,7 @@ import DefaultButton from "../../components/DefaultButton";
 import SelectMenu from "../../components/SelectMenu";
 import Notification from "../../components/Notification";
 import { ProjectsAndWorkTasks, SetCurrentWorkTask } from "../../qgl/WorkOrders";
+import useBridgeConnector from "../../bridge/UseBridgeConnector";
 
 function WorkTaskPage() {
   const { t } = useTranslation();
@@ -16,8 +17,10 @@ function WorkTaskPage() {
   const [currentWorkTaskResult, setCurrentWorkTask] = useMutation(
     SetCurrentWorkTask
   );
+
   const [result] = useQuery({ query: ProjectsAndWorkTasks });
   const { fetching, error } = result;
+  const { panToCoordinate } = useBridgeConnector();
 
   useEffect(() => {
     if (fetching) return;
@@ -46,6 +49,7 @@ function WorkTaskPage() {
           id: 0,
           selected: false,
           collectionId: 0,
+          data: w,
         };
 
         selectListItem.rows.push(w.name);
@@ -91,7 +95,7 @@ function WorkTaskPage() {
     }
 
     const variables = {
-      userName: "notation",
+      userName: "user",
       workTaskId: selectedWorkTask.id,
     };
     setCurrentWorkTask(variables).then((r) => {
@@ -106,7 +110,18 @@ function WorkTaskPage() {
   };
 
   const panToAddress = () => {
-    console.log("Pan to address");
+    const selectedWorkTask = workTasks.find((x) => x.selected);
+
+    if (!selectedWorkTask.data.geometry) {
+      setValidation({
+        type: "error",
+        headerText: t("Error"),
+        bodyText: t("The work task has no coordinates"),
+      });
+    }
+
+    const coordinate = selectedWorkTask.data.geometry.coordinates;
+    panToCoordinate(coordinate);
   };
 
   const onSelected = (selected) => {
