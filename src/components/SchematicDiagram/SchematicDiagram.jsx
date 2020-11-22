@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import useMapbox from "./useMapbox.js";
 import { diagramFeatureLayer, createSource } from "./parseFeatures";
 import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
+import Config from "../../config";
 
 function SchematicDiagram() {
   const [mapContainer, setMapContainer] = useState();
@@ -10,10 +11,10 @@ function SchematicDiagram() {
   useEffect(() => {
     if (mapContainer) {
       setConfig({
-        center: [0.019, 0.01],
-        zoom: 15,
+        center: [0.012, 0.012],
+        zoom: 14,
         minZoom: 12,
-        style: "mapbox://styles/openftth-dev/ckh61vsf00t9u19k6anx4k7pt",
+        style: Config.MAPBOX_STYLE_URI,
         container: mapContainer,
       });
     }
