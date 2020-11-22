@@ -3,18 +3,19 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { Client, defaultExchanges, subscriptionExchange, Provider } from "urql";
 import Transport from "subscriptions-transport-ws";
-import "./translation/i18n";
+import Config from "./config";
 
+import "./translation/i18n";
 import "./global-styles/reset.scss";
 import "./global-styles/index.scss";
 
 const subscriptionClient = new Transport.SubscriptionClient(
-  `ws://${import.meta.env.VITE_API_GATEWAY_URI}/graphql`,
+  `ws://${Config.API_GATEWAY_URI}/graphql`,
   { reconnect: true }
 );
 
 const client = new Client({
-  url: `http://${import.meta.env.VITE_API_GATEWAY_URI}/graphql`,
+  url: `http://${Config.API_GATEWAY_URI}/graphql`,
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({

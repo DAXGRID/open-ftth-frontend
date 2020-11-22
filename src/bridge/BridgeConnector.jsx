@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import WebSocket from "websocket";
 import PubSub from "pubsub-js";
+import Config from "../config";
 
 let client;
 
@@ -10,7 +11,7 @@ function send(eventMsg) {
 
 function BridgeConnector() {
   useEffect(() => {
-    client = new WebSocket.w3cwebsocket("ws://127.0.0.1:5000");
+    client = new WebSocket.w3cwebsocket(`ws://${Config.DESKTOP_BRIDGE_URI}`);
     client.onopen = () => {
       console.log("WebSocket client connected");
     };
