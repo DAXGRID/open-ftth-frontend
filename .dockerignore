@@ -2,3 +2,4 @@ node_modules
 build
 .dockerignore
 Dockerfile
+public/config-env_copy.js
