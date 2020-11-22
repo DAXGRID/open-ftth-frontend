@@ -12,10 +12,12 @@ function PlaceTubesPage() {
   const { retrieveSelected } = useBridgeConnector();
   const [validation, setValidation] = useState({});
   const [conduits, setConduits] = useState([
-    { rows: ["GM Plast One", "Oe50 7x16"], id: 1, selected: false },
-    { rows: ["GM Plast Two", "Oe50 7x16"], id: 2, selected: false },
-    { rows: ["GM Plast Three", "Oe50 7x16"], id: 3, selected: false },
-    { rows: ["GM Plast Four", "Oe50 7x16"], id: 4, selected: false },
+    { rows: ["Emtelle", "ø40 tomrør"], id: 1, selected: false },
+    { rows: ["Emtelle", "ø50 tomrør"], id: 2, selected: false },
+    { rows: ["Emtelle", "ø110 tomrør"], id: 3, selected: false },
+    { rows: ["Emtelle", "ø40 5x10/8"], id: 4, selected: false },
+    { rows: ["Emtelle", "ø40 6x10/8"], id: 5, selected: false },
+    { rows: ["Emtelle", "ø50 10x10/8"], id: 6, selected: false },
   ]);
 
   useEffect(() => {
