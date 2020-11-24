@@ -6,7 +6,13 @@ import Config from "../../config";
 
 function SchematicDiagram() {
   const [mapContainer, setMapContainer] = useState();
-  const { setConfig, addLayer, loaded, setOnClicked, resize } = useMapbox();
+  const {
+    setConfig,
+    addLayer,
+    loaded,
+    setOnClicked,
+    enableResize,
+  } = useMapbox();
 
   useEffect(() => {
     if (mapContainer) {
@@ -18,16 +24,13 @@ function SchematicDiagram() {
         container: mapContainer,
       });
     }
-
-    window.addEventListener("resize", () => {
-      resize();
-    });
   }, [mapContainer]);
 
   useEffect(() => {
     if (loaded) {
       addLayers();
       setOnClicked();
+      enableResize();
     }
   }, [loaded]);
 

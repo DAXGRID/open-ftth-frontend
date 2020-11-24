@@ -34,11 +34,14 @@ function useMapbox() {
     map.addLayer(layer);
   }
 
-  function resize() {
-    if (!map && !loaded) return;
-
-    console.log(map);
-    map.resize();
+  function enableResize() {
+    window.addEventListener("resize", () => {
+      // Hack to handle resize of mapcanvas because
+      // the event gets called to early, so we have to queue it up
+      setTimeout(() => {
+        map.resize();
+      }, 1);
+    });
   }
 
   return {
@@ -46,7 +49,7 @@ function useMapbox() {
     addLayer,
     loaded,
     setOnClicked,
-    resize,
+    enableResize,
   };
 }
 

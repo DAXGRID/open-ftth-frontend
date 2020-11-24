@@ -11,6 +11,8 @@ function App() {
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);
+    // Hack to allow rezing of some components
+    window.dispatchEvent(new Event("resize"));
   };
 
   return (
