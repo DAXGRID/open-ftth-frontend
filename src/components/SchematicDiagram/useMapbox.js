@@ -21,16 +21,12 @@ function useMapbox() {
   }, [config]);
 
   function setOnClicked() {
-    if (!map && !loaded) return;
-
     map.on("click", () => {
       console.log("test");
     });
   }
 
   function addLayer(layer) {
-    if (!map && !loaded) return;
-
     map.addLayer(layer);
   }
 
