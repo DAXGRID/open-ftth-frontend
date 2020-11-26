@@ -30,6 +30,15 @@ function useMapbox() {
     map.addLayer(layer);
   }
 
+  function addSource(name, source) {
+    const mapSource = map.getSource(name);
+    if (!mapSource) {
+      map.addSource(name, source);
+    } else {
+      mapSource.setData(source.data);
+    }
+  }
+
   function enableResize() {
     window.addEventListener("resize", () => {
       // Hack to handle resize of mapcanvas because
@@ -43,6 +52,7 @@ function useMapbox() {
   return {
     setConfig,
     addLayer,
+    addSource,
     loaded,
     setOnClicked,
     enableResize,

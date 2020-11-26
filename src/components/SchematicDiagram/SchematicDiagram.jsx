@@ -9,6 +9,7 @@ function SchematicDiagram() {
   const {
     setConfig,
     addLayer,
+    addSource,
     loaded,
     setOnClicked,
     enableResize,
@@ -35,15 +36,19 @@ function SchematicDiagram() {
   }, [loaded]);
 
   function addLayers() {
-    RouteNodeDiagramObjects.data.diagramService.buildRouteNodeDiagram.diagramObjects.map(
-      (diagramObject, index) => {
-        const layer = diagramFeatureLayer(
-          createSource(diagramObject),
-          diagramObject.style,
-          index.toString()
-        );
+    const layersAdded = [];
 
-        addLayer(layer);
+    RouteNodeDiagramObjects.data.diagramService.buildRouteNodeDiagram.diagramObjects.map(
+      (diagramObject) => {
+        const source = createSource(diagramObject);
+
+        addSource(diagramObject.style, source);
+
+        if (!layersAdded.includes(diagramObject.style)) {
+          const layer = diagramFeatureLayer(diagramObject.style);
+          layersAdded.push(diagramObject.style);
+          addLayer(layer);
+        }
       }
     );
   }

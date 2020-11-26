@@ -1,10 +1,10 @@
 import colorMap from "./colors";
 
-export function diagramFeatureLayer(source, featureType, layerId) {
+export function diagramFeatureLayer(featureType) {
   let layer = {
-    id: layerId,
+    id: featureType,
     order: 0,
-    source: source,
+    source: featureType,
   };
 
   let styleProps = layerPropsForStyle[featureType];
