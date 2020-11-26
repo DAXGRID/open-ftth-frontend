@@ -21,17 +21,23 @@ function useMapbox() {
   }, [config]);
 
   function setOnClicked() {
-    if (!map && !loaded) return;
-
     map.on("click", () => {
       console.log("test");
     });
   }
 
   function addLayer(layer) {
-    if (!map && !loaded) return;
-
+    if (map.getLayer(layer.id)) return;
     map.addLayer(layer);
+  }
+
+  function addSource(name, source) {
+    const mapSource = map.getSource(name);
+    if (!mapSource) {
+      map.addSource(name, source);
+    } else {
+      mapSource.setData(source.data);
+    }
   }
 
   function enableResize() {
@@ -47,6 +53,7 @@ function useMapbox() {
   return {
     setConfig,
     addLayer,
+    addSource,
     loaded,
     setOnClicked,
     enableResize,
