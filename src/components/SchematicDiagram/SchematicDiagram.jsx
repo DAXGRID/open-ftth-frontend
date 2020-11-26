@@ -29,28 +29,40 @@ function SchematicDiagram() {
 
   useEffect(() => {
     if (loaded) {
-      addLayers();
+      addData();
       setOnClicked();
       enableResize();
     }
   }, [loaded]);
 
-  function addLayers() {
-    const layersAdded = [];
+  function addData() {
+    const sourcesToAdd = {};
+    const layersToAdd = [];
 
     RouteNodeDiagramObjects.data.diagramService.buildRouteNodeDiagram.diagramObjects.map(
       (diagramObject) => {
         const source = createSource(diagramObject);
 
-        addSource(diagramObject.style, source);
+        if (!sourcesToAdd[diagramObject.style]) {
+          sourcesToAdd[diagramObject.style] = source;
+        } else {
+          sourcesToAdd[diagramObject.style].data.features.push(
+            ...source.data.features
+          );
+        }
 
-        if (!layersAdded.includes(diagramObject.style)) {
+        if (!layersToAdd.includes(diagramObject.style)) {
           const layer = diagramFeatureLayer(diagramObject.style);
-          layersAdded.push(diagramObject.style);
-          addLayer(layer);
+          layersToAdd.push(layer);
         }
       }
     );
+
+    for (const source in sourcesToAdd) {
+      addSource(source, sourcesToAdd[source]);
+    }
+
+    layersToAdd.forEach((x) => addLayer(x));
   }
 
   return (

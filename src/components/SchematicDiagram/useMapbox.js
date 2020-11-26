@@ -27,6 +27,7 @@ function useMapbox() {
   }
 
   function addLayer(layer) {
+    if (map.getLayer(layer.id)) return;
     map.addLayer(layer);
   }
 
