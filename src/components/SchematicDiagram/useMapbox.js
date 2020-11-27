@@ -21,8 +21,12 @@ function useMapbox() {
   }, [config]);
 
   function setOnClicked() {
-    map.on("click", () => {
-      console.log("test");
+    map.on("click", (e) => {
+      var bbox = [
+        [e.point.x - 5, e.point.y - 5],
+        [e.point.x + 5, e.point.y + 5],
+      ];
+      var features = map.queryRenderedFeatures(bbox);
     });
   }
 

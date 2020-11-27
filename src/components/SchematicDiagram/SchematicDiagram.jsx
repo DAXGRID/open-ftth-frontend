@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useMapbox from "./useMapbox.js";
-import { diagramFeatureLayer, createSource } from "./parseFeatures";
+import { createLayer, createSource } from "./parseFeatures";
 import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 import Config from "../../config";
 
@@ -52,7 +52,7 @@ function SchematicDiagram() {
         }
 
         if (!layersToAdd.includes(diagramObject.style)) {
-          const layer = diagramFeatureLayer(diagramObject.style);
+          const layer = createLayer(diagramObject.style);
           layersToAdd.push(layer);
         }
       }

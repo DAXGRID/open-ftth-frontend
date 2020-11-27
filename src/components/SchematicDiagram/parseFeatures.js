@@ -1,6 +1,6 @@
 import colorMap from "./colors";
 
-export function diagramFeatureLayer(featureType) {
+export function createLayer(featureType) {
   let layer = {
     id: featureType,
     order: 0,
