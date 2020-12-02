@@ -35,6 +35,8 @@ function SchematicDiagram() {
     }
   }, [loaded]);
 
+  let hoveredStateId = null;
+
   function highlight() {
     map.on("click", (e) => {
       var bbox = [
@@ -43,6 +45,38 @@ function SchematicDiagram() {
       ];
       var features = map.queryRenderedFeatures(bbox);
       console.log(features[0]);
+    });
+
+    map.on("mousemove", "InnerConduit", function (e) {
+      map.getCanvas().style.cursor = "pointer";
+      var bbox = [
+        [e.point.x - 5, e.point.y - 5],
+        [e.point.x + 5, e.point.y + 5],
+      ];
+      var features = map.queryRenderedFeatures(bbox);
+      if (features.length > 0) {
+        if (hoveredStateId) {
+          map.setFeatureState(
+            { source: "InnerConduit", id: hoveredStateId },
+            { hover: false }
+          );
+        }
+        hoveredStateId = features[0].id;
+        map.setFeatureState(
+          { source: "InnerConduit", id: hoveredStateId },
+          { hover: true }
+        );
+      }
+    });
+
+    map.on("mouseleave", "InnerConduit", function () {
+      map.getCanvas().style.cursor = "";
+      if (hoveredStateId) {
+        map.setFeatureState(
+          { source: "InnerConduit", id: hoveredStateId },
+          { hover: false }
+        );
+      }
     });
   }
 
@@ -61,6 +95,10 @@ function SchematicDiagram() {
           sourcesToAdd[style] = source;
         } else {
           sourcesToAdd[style].data.features.push(...source.data.features);
+          // Adds ids to each feature to make it possible to hover over them
+          sourcesToAdd[style].data.features.forEach((f, i) => {
+            f.id = i + 1;
+          });
         }
 
         if (!layersToAdd.includes(style)) {
@@ -75,6 +113,22 @@ function SchematicDiagram() {
     }
 
     layersToAdd.forEach((x) => addLayer(x));
+
+    map.addLayer({
+      id: "inner-conduit-fills",
+      type: "fill",
+      source: "InnerConduit",
+      layout: {},
+      paint: {
+        "fill-color": "#ccc",
+        "fill-opacity": [
+          "case",
+          ["boolean", ["feature-state", "hover"], false],
+          0.9,
+          0,
+        ],
+      },
+    });
   }
 
   return (
