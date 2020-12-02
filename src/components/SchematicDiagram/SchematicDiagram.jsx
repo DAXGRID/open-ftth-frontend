@@ -7,18 +7,18 @@ import Config from "../../config";
 function SchematicDiagram() {
   const [mapContainer, setMapContainer] = useState();
   const {
+    map,
     setConfig,
     addLayer,
     addSource,
     loaded,
-    setOnClicked,
     enableResize,
   } = useMapbox();
 
   useEffect(() => {
     if (mapContainer) {
       setConfig({
-        center: [0.012, 0.012],
+        center: [0.014, 0.014],
         zoom: 14,
         minZoom: 12,
         style: Config.MAPBOX_STYLE_URI,
@@ -30,10 +30,21 @@ function SchematicDiagram() {
   useEffect(() => {
     if (loaded) {
       addData();
-      setOnClicked();
       enableResize();
+      highlight();
     }
   }, [loaded]);
+
+  function highlight() {
+    map.on("click", (e) => {
+      var bbox = [
+        [e.point.x - 5, e.point.y - 5],
+        [e.point.x + 5, e.point.y + 5],
+      ];
+      var features = map.queryRenderedFeatures(bbox);
+      console.log(features[0]);
+    });
+  }
 
   function addData() {
     const sourcesToAdd = {};
@@ -43,16 +54,17 @@ function SchematicDiagram() {
       (diagramObject) => {
         const source = createSource(diagramObject);
 
-        if (!sourcesToAdd[diagramObject.style]) {
-          sourcesToAdd[diagramObject.style] = source;
+        let style = diagramObject.style;
+        if (style.includes("InnerConduit")) style = "InnerConduit";
+
+        if (!sourcesToAdd[style]) {
+          sourcesToAdd[style] = source;
         } else {
-          sourcesToAdd[diagramObject.style].data.features.push(
-            ...source.data.features
-          );
+          sourcesToAdd[style].data.features.push(...source.data.features);
         }
 
-        if (!layersToAdd.includes(diagramObject.style)) {
-          const layer = createLayer(diagramObject.style);
+        if (!layersToAdd.includes(style)) {
+          const layer = createLayer(style);
           layersToAdd.push(layer);
         }
       }

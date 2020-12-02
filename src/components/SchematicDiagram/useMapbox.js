@@ -20,16 +20,6 @@ function useMapbox() {
     setMap(newMap);
   }, [config]);
 
-  function setOnClicked() {
-    map.on("click", (e) => {
-      var bbox = [
-        [e.point.x - 5, e.point.y - 5],
-        [e.point.x + 5, e.point.y + 5],
-      ];
-      var features = map.queryRenderedFeatures(bbox);
-    });
-  }
-
   function addLayer(layer) {
     if (map.getLayer(layer.id)) return;
     map.addLayer(layer);
@@ -55,11 +45,11 @@ function useMapbox() {
   }
 
   return {
+    map,
     setConfig,
     addLayer,
     addSource,
     loaded,
-    setOnClicked,
     enableResize,
   };
 }

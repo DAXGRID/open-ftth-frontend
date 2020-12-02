@@ -30,6 +30,8 @@ export function createSource(feature) {
           type: "Feature",
           properties: {
             label: feature.label,
+            type: feature.style,
+            refId: feature.refId,
           },
           geometry: feature.geometry,
         },
@@ -78,83 +80,35 @@ const layerPropsForStyle = {
       "fill-outline-color": "#555",
     },
   },
-  InnerConduitBlue: {
+  InnerConduit: {
     type: "fill",
     order: 2,
     paint: {
-      "fill-color": colorMap["BLUE"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitOrange: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["ORANGE"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitGreen: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["GREEN"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitBrown: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["BROWN"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitGrey: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["GREY"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitWhite: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["WHITE"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitRed: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["RED"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitBlack: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["BLACK"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitYellow: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["YELLOW"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitViolet: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["VIOLET"],
+      "fill-color": [
+        "match",
+        ["get", "type"],
+        "InnerConduitBlue",
+        colorMap["BLUE"],
+        "InnerConduitOrange",
+        colorMap["ORANGE"],
+        "InnerConduitGreen",
+        colorMap["GREEN"],
+        "InnerConduitBrown",
+        colorMap["BROWN"],
+        "InnerConduitGrey",
+        colorMap["GREY"],
+        "InnerConduitWhite",
+        colorMap["WHITE"],
+        "InnerConduitRed",
+        colorMap["RED"],
+        "InnerConduitBlack",
+        colorMap["BLACK"],
+        "InnerConduitYellow",
+        colorMap["YELLOW"],
+        "InnerConduitViolet",
+        colorMap["VIOLET"],
+        "#ccc",
+      ],
       "fill-outline-color": "#555",
     },
   },
