@@ -35,9 +35,8 @@ function SchematicDiagram() {
     }
   }, [loaded]);
 
-  let hoveredStateId = null;
-
   function highlight() {
+    let hoveredId = null;
     map.on("click", (e) => {
       var bbox = [
         [e.point.x - 5, e.point.y - 5],
@@ -55,15 +54,15 @@ function SchematicDiagram() {
       ];
       var features = map.queryRenderedFeatures(bbox);
       if (features.length > 0) {
-        if (hoveredStateId) {
+        if (hoveredId) {
           map.setFeatureState(
-            { source: "InnerConduit", id: hoveredStateId },
+            { source: "InnerConduit", id: hoveredId },
             { hover: false }
           );
         }
-        hoveredStateId = features[0].id;
+        hoveredId = features[0].id;
         map.setFeatureState(
-          { source: "InnerConduit", id: hoveredStateId },
+          { source: "InnerConduit", id: hoveredId },
           { hover: true }
         );
       }
@@ -71,9 +70,9 @@ function SchematicDiagram() {
 
     map.on("mouseleave", "InnerConduit", function () {
       map.getCanvas().style.cursor = "";
-      if (hoveredStateId) {
+      if (hoveredId) {
         map.setFeatureState(
-          { source: "InnerConduit", id: hoveredStateId },
+          { source: "InnerConduit", id: hoveredId },
           { hover: false }
         );
       }
@@ -124,7 +123,7 @@ function SchematicDiagram() {
         "fill-opacity": [
           "case",
           ["boolean", ["feature-state", "hover"], false],
-          0.9,
+          1.0,
           0,
         ],
       },
