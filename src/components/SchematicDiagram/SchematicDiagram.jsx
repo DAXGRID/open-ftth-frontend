@@ -55,15 +55,12 @@ function SchematicDiagram() {
 
         let style = diagramObject.style;
         if (style.includes("InnerConduit")) style = "InnerConduit";
+        else if (style.includes("MultiConduit")) style = "MultiConduit";
 
         if (!sourcesToAdd[style]) {
           sourcesToAdd[style] = source;
         } else {
           sourcesToAdd[style].data.features.push(...source.data.features);
-          // Adds ids to each feature to make it possible to hover over them
-          sourcesToAdd[style].data.features.forEach((f, i) => {
-            f.id = i + 1;
-          });
         }
 
         if (!layersToAdd.includes(style)) {
@@ -74,6 +71,10 @@ function SchematicDiagram() {
     );
 
     for (const source in sourcesToAdd) {
+      // Adds ids to each feature to make it possible to hover over them
+      sourcesToAdd[source].data.features.forEach((f, i) => {
+        f.id = i + 1;
+      });
       addSource(source, sourcesToAdd[source]);
     }
 

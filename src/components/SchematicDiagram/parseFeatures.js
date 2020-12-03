@@ -42,15 +42,40 @@ export function createSource(feature) {
 
 export const innerConduitHighlight = {
   id: "inner-conduit-highlight",
-  type: "line",
+  type: "fill",
   source: "InnerConduit",
   layout: {},
   paint: {
-    "line-color": "#000",
-    "line-width": [
+    "fill-outline-color": "#555",
+    "fill-color": [
+      "match",
+      ["get", "type"],
+      "InnerConduitWhite",
+      colorMap["DARK_WHITE"],
+      "InnerConduitBrown",
+      colorMap["DARK_BROWN"],
+      "InnerConduitRed",
+      colorMap["DARK_RED"],
+      "InnerConduitYellow",
+      colorMap["DARK_YELLOW"],
+      "InnerConduitBlue",
+      colorMap["DARK_BLUE"],
+      "InnerConduitOrange",
+      colorMap["DARK_ORANGE"],
+      "InnerConduitGreen",
+      colorMap["DARK_GREEN"],
+      "InnerConduitBlack",
+      colorMap["LIGHT_BLACK"],
+      "InnerConduitGrey",
+      colorMap["DARK_GREY"],
+      "InnerConduitViolet",
+      colorMap["DARK_VIOLET"],
+      "#000",
+    ],
+    "fill-opacity": [
       "case",
       ["boolean", ["feature-state", "hover"], false],
-      3,
+      1,
       0,
     ],
   },
@@ -72,28 +97,20 @@ const layerPropsForStyle = {
       "fill-color": "#ccc",
     },
   },
-  MultiConduitOrange: {
+  MultiConduit: {
     type: "fill",
     order: 1,
     paint: {
-      "fill-color": colorMap["ORANGE"],
       "fill-outline-color": "#555",
-    },
-  },
-  MultiConduitRed: {
-    type: "fill",
-    order: 1,
-    paint: {
-      "fill-color": colorMap["RED"],
-      "fill-outline-color": "#555",
-    },
-  },
-  BigConduitRed: {
-    type: "fill",
-    order: 1,
-    paint: {
-      "fill-color": colorMap["RED"],
-      "fill-outline-color": "#555",
+      "fill-color": [
+        "match",
+        ["get", "type"],
+        "MultiConduitOrange",
+        colorMap["LIGHT_ORANGE"],
+        "MultiConduitRed",
+        colorMap["LIGHT_RED"],
+        "#ccc",
+      ],
     },
   },
   InnerConduit: {
