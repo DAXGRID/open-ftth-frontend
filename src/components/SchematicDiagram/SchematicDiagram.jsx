@@ -12,7 +12,6 @@ import Config from "../../config";
 function SchematicDiagram() {
   const [mapContainer, setMapContainer] = useState();
   const {
-    map,
     setConfig,
     addLayer,
     addSource,
