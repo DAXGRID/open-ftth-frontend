@@ -4,6 +4,7 @@ import {
   createLayer,
   createSource,
   innerConduitHighlight,
+  multiConduitHighlight,
 } from "./parseFeatures";
 import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 import Config from "../../config";
@@ -37,8 +38,12 @@ function SchematicDiagram() {
     if (loaded) {
       insertSchematicDiagramData();
       enableResize();
-      hoverHighlight("InnerConduit");
+
       addLayer(innerConduitHighlight);
+      addLayer(multiConduitHighlight, "InnerConduit");
+      hoverHighlight("InnerConduit");
+      hoverHighlight("MultiConduit");
+
       mapClick((features) => {
         console.log(features);
       });
@@ -70,10 +75,12 @@ function SchematicDiagram() {
       }
     );
 
+    let counter = 1;
     for (const source in sourcesToAdd) {
       // Adds ids to each feature to make it possible to hover over them
-      sourcesToAdd[source].data.features.forEach((f, i) => {
-        f.id = i + 1;
+      sourcesToAdd[source].data.features.forEach((f) => {
+        f.id = counter;
+        counter++;
       });
       addSource(source, sourcesToAdd[source]);
     }

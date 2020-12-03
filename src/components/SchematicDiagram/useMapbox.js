@@ -20,9 +20,14 @@ function useMapbox() {
     setMap(newMap);
   }, [config]);
 
-  function addLayer(layer) {
+  function addLayer(layer, layerName) {
     if (map.getLayer(layer.id)) return;
-    map.addLayer(layer);
+
+    if (layerName) {
+      map.addLayer(layer, layerName);
+    } else {
+      map.addLayer(layer);
+    }
   }
 
   function addSource(name, source) {
@@ -47,7 +52,6 @@ function useMapbox() {
 
   function hoverHighlight(featureName) {
     let hoveredId = null;
-
     map.on("mousemove", featureName, function (e) {
       map.getCanvas().style.cursor = "pointer";
       var bbox = [

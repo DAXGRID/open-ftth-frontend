@@ -44,7 +44,6 @@ export const innerConduitHighlight = {
   id: "inner-conduit-highlight",
   type: "fill",
   source: "InnerConduit",
-  layout: {},
   paint: {
     "fill-outline-color": "#555",
     "fill-color": [
@@ -70,6 +69,30 @@ export const innerConduitHighlight = {
       colorMap["DARK_GREY"],
       "InnerConduitViolet",
       colorMap["DARK_VIOLET"],
+      "#000",
+    ],
+    "fill-opacity": [
+      "case",
+      ["boolean", ["feature-state", "hover"], false],
+      1,
+      0,
+    ],
+  },
+};
+
+export const multiConduitHighlight = {
+  id: "multi-conduit-highlight",
+  type: "fill",
+  source: "MultiConduit",
+  paint: {
+    "fill-outline-color": "#555",
+    "fill-color": [
+      "match",
+      ["get", "type"],
+      "MultiConduitOrange",
+      colorMap["DARK_ORANGE"],
+      "MultiConduitRed",
+      colorMap["DARK_RED"],
       "#000",
     ],
     "fill-opacity": [
@@ -117,6 +140,7 @@ const layerPropsForStyle = {
     type: "fill",
     order: 2,
     paint: {
+      "fill-outline-color": "#555",
       "fill-color": [
         "match",
         ["get", "type"],
@@ -142,7 +166,6 @@ const layerPropsForStyle = {
         colorMap["VIOLET"],
         "#ccc",
       ],
-      "fill-outline-color": "#555",
     },
   },
   CableInsideWell: {
