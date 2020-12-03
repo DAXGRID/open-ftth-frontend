@@ -40,6 +40,22 @@ export function createSource(feature) {
   };
 }
 
+export const innerConduitHighlight = {
+  id: "inner-conduit-highlight",
+  type: "line",
+  source: "InnerConduit",
+  layout: {},
+  paint: {
+    "line-color": "#000",
+    "line-width": [
+      "case",
+      ["boolean", ["feature-state", "hover"], false],
+      3,
+      0,
+    ],
+  },
+};
+
 const layerPropsForStyle = {
   Well: {
     type: "line",

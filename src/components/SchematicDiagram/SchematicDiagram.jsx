@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import useMapbox from "./useMapbox.js";
-import { createLayer, createSource } from "./parseFeatures";
+import {
+  createLayer,
+  createSource,
+  innerConduitHighlight,
+} from "./parseFeatures";
 import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 import Config from "../../config";
 
@@ -13,6 +17,8 @@ function SchematicDiagram() {
     addSource,
     loaded,
     enableResize,
+    mapClick,
+    hoverHighlight,
   } = useMapbox();
 
   useEffect(() => {
@@ -29,57 +35,17 @@ function SchematicDiagram() {
 
   useEffect(() => {
     if (loaded) {
-      addData();
+      insertSchematicDiagramData();
       enableResize();
-      highlight();
+      hoverHighlight("InnerConduit");
+      addLayer(innerConduitHighlight);
+      mapClick((features) => {
+        console.log(features);
+      });
     }
   }, [loaded]);
 
-  function highlight() {
-    let hoveredId = null;
-    map.on("click", (e) => {
-      var bbox = [
-        [e.point.x - 5, e.point.y - 5],
-        [e.point.x + 5, e.point.y + 5],
-      ];
-      var features = map.queryRenderedFeatures(bbox);
-      console.log(features[0]);
-    });
-
-    map.on("mousemove", "InnerConduit", function (e) {
-      map.getCanvas().style.cursor = "pointer";
-      var bbox = [
-        [e.point.x - 5, e.point.y - 5],
-        [e.point.x + 5, e.point.y + 5],
-      ];
-      var features = map.queryRenderedFeatures(bbox);
-      if (features.length > 0) {
-        if (hoveredId) {
-          map.setFeatureState(
-            { source: "InnerConduit", id: hoveredId },
-            { hover: false }
-          );
-        }
-        hoveredId = features[0].id;
-        map.setFeatureState(
-          { source: "InnerConduit", id: hoveredId },
-          { hover: true }
-        );
-      }
-    });
-
-    map.on("mouseleave", "InnerConduit", function () {
-      map.getCanvas().style.cursor = "";
-      if (hoveredId) {
-        map.setFeatureState(
-          { source: "InnerConduit", id: hoveredId },
-          { hover: false }
-        );
-      }
-    });
-  }
-
-  function addData() {
+  function insertSchematicDiagramData() {
     const sourcesToAdd = {};
     const layersToAdd = [];
 
@@ -112,22 +78,6 @@ function SchematicDiagram() {
     }
 
     layersToAdd.forEach((x) => addLayer(x));
-
-    map.addLayer({
-      id: "inner-conduit-highlight",
-      type: "line",
-      source: "InnerConduit",
-      layout: {},
-      paint: {
-        "line-color": "#000",
-        "line-width": [
-          "case",
-          ["boolean", ["feature-state", "hover"], false],
-          3,
-          0,
-        ],
-      },
-    });
   }
 
   return (

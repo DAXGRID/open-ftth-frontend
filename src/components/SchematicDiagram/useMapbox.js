@@ -34,6 +34,53 @@ function useMapbox() {
     }
   }
 
+  function mapClick(callback) {
+    map.on("click", (e) => {
+      var bbox = [
+        [e.point.x - 5, e.point.y - 5],
+        [e.point.x + 5, e.point.y + 5],
+      ];
+      var features = map.queryRenderedFeatures(bbox);
+      callback(features);
+    });
+  }
+
+  function hoverHighlight(featureName) {
+    let hoveredId = null;
+
+    map.on("mousemove", featureName, function (e) {
+      map.getCanvas().style.cursor = "pointer";
+      var bbox = [
+        [e.point.x - 5, e.point.y - 5],
+        [e.point.x + 5, e.point.y + 5],
+      ];
+      var features = map.queryRenderedFeatures(bbox);
+      if (features.length > 0) {
+        if (hoveredId) {
+          map.setFeatureState(
+            { source: featureName, id: hoveredId },
+            { hover: false }
+          );
+        }
+        hoveredId = features[0].id;
+        map.setFeatureState(
+          { source: featureName, id: hoveredId },
+          { hover: true }
+        );
+      }
+    });
+
+    map.on("mouseleave", featureName, function () {
+      map.getCanvas().style.cursor = "";
+      if (hoveredId) {
+        map.setFeatureState(
+          { source: featureName, id: hoveredId },
+          { hover: false }
+        );
+      }
+    });
+  }
+
   function enableResize() {
     window.addEventListener("resize", () => {
       // Hack to handle resize of mapcanvas because
@@ -51,6 +98,8 @@ function useMapbox() {
     addSource,
     loaded,
     enableResize,
+    mapClick,
+    hoverHighlight,
   };
 }
 
