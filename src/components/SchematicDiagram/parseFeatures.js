@@ -1,6 +1,6 @@
 import colorMap from "./colors";
 
-export function diagramFeatureLayer(featureType) {
+export function createLayer(featureType) {
   let layer = {
     id: featureType,
     order: 0,
@@ -30,6 +30,8 @@ export function createSource(feature) {
           type: "Feature",
           properties: {
             label: feature.label,
+            type: feature.style,
+            refId: feature.refId,
           },
           geometry: feature.geometry,
         },
@@ -37,6 +39,70 @@ export function createSource(feature) {
     },
   };
 }
+
+export const innerConduitHighlight = {
+  id: "inner-conduit-highlight",
+  type: "fill",
+  source: "InnerConduit",
+  paint: {
+    "fill-outline-color": "#555",
+    "fill-color": [
+      "match",
+      ["get", "type"],
+      "InnerConduitWhite",
+      colorMap["DARK_WHITE"],
+      "InnerConduitBrown",
+      colorMap["DARK_BROWN"],
+      "InnerConduitRed",
+      colorMap["DARK_RED"],
+      "InnerConduitYellow",
+      colorMap["DARK_YELLOW"],
+      "InnerConduitBlue",
+      colorMap["DARK_BLUE"],
+      "InnerConduitOrange",
+      colorMap["DARK_ORANGE"],
+      "InnerConduitGreen",
+      colorMap["DARK_GREEN"],
+      "InnerConduitBlack",
+      colorMap["LIGHT_BLACK"],
+      "InnerConduitGrey",
+      colorMap["DARK_GREY"],
+      "InnerConduitViolet",
+      colorMap["DARK_VIOLET"],
+      "#000",
+    ],
+    "fill-opacity": [
+      "case",
+      ["boolean", ["feature-state", "hover"], false],
+      1,
+      0,
+    ],
+  },
+};
+
+export const multiConduitHighlight = {
+  id: "multi-conduit-highlight",
+  type: "fill",
+  source: "MultiConduit",
+  paint: {
+    "fill-outline-color": "#555",
+    "fill-color": [
+      "match",
+      ["get", "type"],
+      "MultiConduitOrange",
+      colorMap["DARK_ORANGE"],
+      "MultiConduitRed",
+      colorMap["DARK_RED"],
+      "#000",
+    ],
+    "fill-opacity": [
+      "case",
+      ["boolean", ["feature-state", "hover"], false],
+      1,
+      0,
+    ],
+  },
+};
 
 const layerPropsForStyle = {
   Well: {
@@ -54,108 +120,52 @@ const layerPropsForStyle = {
       "fill-color": "#ccc",
     },
   },
-  MultiConduitOrange: {
+  MultiConduit: {
     type: "fill",
     order: 1,
     paint: {
-      "fill-color": colorMap["ORANGE"],
       "fill-outline-color": "#555",
+      "fill-color": [
+        "match",
+        ["get", "type"],
+        "MultiConduitOrange",
+        colorMap["LIGHT_ORANGE"],
+        "MultiConduitRed",
+        colorMap["LIGHT_RED"],
+        "#ccc",
+      ],
     },
   },
-  MultiConduitRed: {
-    type: "fill",
-    order: 1,
-    paint: {
-      "fill-color": colorMap["RED"],
-      "fill-outline-color": "#555",
-    },
-  },
-  BigConduitRed: {
-    type: "fill",
-    order: 1,
-    paint: {
-      "fill-color": colorMap["RED"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitBlue: {
+  InnerConduit: {
     type: "fill",
     order: 2,
     paint: {
-      "fill-color": colorMap["BLUE"],
       "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitOrange: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["ORANGE"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitGreen: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["GREEN"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitBrown: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["BROWN"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitGrey: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["GREY"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitWhite: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["WHITE"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitRed: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["RED"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitBlack: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["BLACK"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitYellow: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["YELLOW"],
-      "fill-outline-color": "#555",
-    },
-  },
-  InnerConduitViolet: {
-    type: "fill",
-    order: 2,
-    paint: {
-      "fill-color": colorMap["VIOLET"],
-      "fill-outline-color": "#555",
+      "fill-color": [
+        "match",
+        ["get", "type"],
+        "InnerConduitBlue",
+        colorMap["BLUE"],
+        "InnerConduitOrange",
+        colorMap["ORANGE"],
+        "InnerConduitGreen",
+        colorMap["GREEN"],
+        "InnerConduitBrown",
+        colorMap["BROWN"],
+        "InnerConduitGrey",
+        colorMap["GREY"],
+        "InnerConduitWhite",
+        colorMap["WHITE"],
+        "InnerConduitRed",
+        colorMap["RED"],
+        "InnerConduitBlack",
+        colorMap["BLACK"],
+        "InnerConduitYellow",
+        colorMap["YELLOW"],
+        "InnerConduitViolet",
+        colorMap["VIOLET"],
+        "#ccc",
+      ],
     },
   },
   CableInsideWell: {

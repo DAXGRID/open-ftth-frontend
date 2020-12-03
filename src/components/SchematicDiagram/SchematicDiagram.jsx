@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import useMapbox from "./useMapbox.js";
-import { diagramFeatureLayer, createSource } from "./parseFeatures";
+import {
+  createLayer,
+  createSource,
+  innerConduitHighlight,
+  multiConduitHighlight,
+} from "./parseFeatures";
 import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 import Config from "../../config";
 
@@ -11,14 +16,15 @@ function SchematicDiagram() {
     addLayer,
     addSource,
     loaded,
-    setOnClicked,
     enableResize,
+    mapClick,
+    hoverHighlight,
   } = useMapbox();
 
   useEffect(() => {
     if (mapContainer) {
       setConfig({
-        center: [0.012, 0.012],
+        center: [0.014, 0.014],
         zoom: 14,
         minZoom: 12,
         style: Config.MAPBOX_STYLE_URI,
@@ -29,13 +35,21 @@ function SchematicDiagram() {
 
   useEffect(() => {
     if (loaded) {
-      addData();
-      setOnClicked();
+      insertSchematicDiagramData();
       enableResize();
+
+      addLayer(innerConduitHighlight);
+      addLayer(multiConduitHighlight, "InnerConduit");
+      hoverHighlight("InnerConduit");
+      hoverHighlight("MultiConduit");
+
+      mapClick((features) => {
+        console.log(features);
+      });
     }
   }, [loaded]);
 
-  function addData() {
+  function insertSchematicDiagramData() {
     const sourcesToAdd = {};
     const layersToAdd = [];
 
@@ -43,22 +57,30 @@ function SchematicDiagram() {
       (diagramObject) => {
         const source = createSource(diagramObject);
 
-        if (!sourcesToAdd[diagramObject.style]) {
-          sourcesToAdd[diagramObject.style] = source;
+        let style = diagramObject.style;
+        if (style.includes("InnerConduit")) style = "InnerConduit";
+        else if (style.includes("MultiConduit")) style = "MultiConduit";
+
+        if (!sourcesToAdd[style]) {
+          sourcesToAdd[style] = source;
         } else {
-          sourcesToAdd[diagramObject.style].data.features.push(
-            ...source.data.features
-          );
+          sourcesToAdd[style].data.features.push(...source.data.features);
         }
 
-        if (!layersToAdd.includes(diagramObject.style)) {
-          const layer = diagramFeatureLayer(diagramObject.style);
+        if (!layersToAdd.includes(style)) {
+          const layer = createLayer(style);
           layersToAdd.push(layer);
         }
       }
     );
 
+    let counter = 1;
     for (const source in sourcesToAdd) {
+      // Adds ids to each feature to make it possible to hover over them
+      sourcesToAdd[source].data.features.forEach((f) => {
+        f.id = counter;
+        counter++;
+      });
       addSource(source, sourcesToAdd[source]);
     }
 

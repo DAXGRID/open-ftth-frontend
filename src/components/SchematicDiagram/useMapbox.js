@@ -20,15 +20,14 @@ function useMapbox() {
     setMap(newMap);
   }, [config]);
 
-  function setOnClicked() {
-    map.on("click", () => {
-      console.log("test");
-    });
-  }
-
-  function addLayer(layer) {
+  function addLayer(layer, layerName) {
     if (map.getLayer(layer.id)) return;
-    map.addLayer(layer);
+
+    if (layerName) {
+      map.addLayer(layer, layerName);
+    } else {
+      map.addLayer(layer);
+    }
   }
 
   function addSource(name, source) {
@@ -38,6 +37,52 @@ function useMapbox() {
     } else {
       mapSource.setData(source.data);
     }
+  }
+
+  function mapClick(callback) {
+    map.on("click", (e) => {
+      var bbox = [
+        [e.point.x - 5, e.point.y - 5],
+        [e.point.x + 5, e.point.y + 5],
+      ];
+      var features = map.queryRenderedFeatures(bbox);
+      callback(features);
+    });
+  }
+
+  function hoverHighlight(featureName) {
+    let hoveredId = null;
+    map.on("mousemove", featureName, function (e) {
+      map.getCanvas().style.cursor = "pointer";
+      var bbox = [
+        [e.point.x - 5, e.point.y - 5],
+        [e.point.x + 5, e.point.y + 5],
+      ];
+      var features = map.queryRenderedFeatures(bbox);
+      if (features.length > 0) {
+        if (hoveredId) {
+          map.setFeatureState(
+            { source: featureName, id: hoveredId },
+            { hover: false }
+          );
+        }
+        hoveredId = features[0].id;
+        map.setFeatureState(
+          { source: featureName, id: hoveredId },
+          { hover: true }
+        );
+      }
+    });
+
+    map.on("mouseleave", featureName, function () {
+      map.getCanvas().style.cursor = "";
+      if (hoveredId) {
+        map.setFeatureState(
+          { source: featureName, id: hoveredId },
+          { hover: false }
+        );
+      }
+    });
   }
 
   function enableResize() {
@@ -51,12 +96,14 @@ function useMapbox() {
   }
 
   return {
+    map,
     setConfig,
     addLayer,
     addSource,
     loaded,
-    setOnClicked,
     enableResize,
+    mapClick,
+    hoverHighlight,
   };
 }
 
