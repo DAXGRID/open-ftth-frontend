@@ -6,7 +6,7 @@ import DefaultButton from "../../components/DefaultButton";
 import SelectMenu from "../../components/SelectMenu";
 import Notification from "../../components/Notification";
 import { ProjectsAndWorkTasks, SetCurrentWorkTask } from "../../qgl/WorkOrders";
-import useBridgeConnector from "../../bridge/UseBridgeConnector";
+import useBridgeConnector from "../../bridge/useBridgeConnector";
 
 function WorkTaskPage() {
   const { t } = useTranslation();

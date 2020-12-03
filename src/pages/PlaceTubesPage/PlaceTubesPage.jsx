@@ -4,7 +4,7 @@ import SelectMenu from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
 import Notification from "../../components/Notification";
 import { useTranslation } from "react-i18next";
-import useBridgeConnector from "../../bridge/UseBridgeConnector";
+import useBridgeConnector from "../../bridge/useBridgeConnector";
 import PubSub from "pubsub-js";
 
 function PlaceTubesPage() {
