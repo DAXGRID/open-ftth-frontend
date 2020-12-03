@@ -114,16 +114,16 @@ function SchematicDiagram() {
     layersToAdd.forEach((x) => addLayer(x));
 
     map.addLayer({
-      id: "inner-conduit-fills",
-      type: "fill",
+      id: "inner-conduit-highlight",
+      type: "line",
       source: "InnerConduit",
       layout: {},
       paint: {
-        "fill-color": "#ccc",
-        "fill-opacity": [
+        "line-color": "#000",
+        "line-width": [
           "case",
           ["boolean", ["feature-state", "hover"], false],
-          1.0,
+          3,
           0,
         ],
       },
