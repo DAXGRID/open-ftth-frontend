@@ -8,22 +8,22 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
-    "@fortawesome/react-fontawesome": "^0.1.11",
+    "@fortawesome/react-fontawesome": "^0.1.13",
     "@pika/react": "^16.13.1",
     "@pika/react-dom": "^16.13.1",
-    "graphql": "^15.3.0",
-    "i18next": "^19.8.3",
-    "mapbox-gl": "^1.12.0",
-    "pubsub-js": "^1.9.0",
-    "react-i18next": "^11.7.3",
+    "graphql": "^15.4.0",
+    "i18next": "^19.8.4",
+    "mapbox-gl": "^1.13.0",
+    "pubsub-js": "^1.9.1",
+    "react-i18next": "^11.7.4",
     "react-router-dom": "^5.2.0",
     "subscriptions-transport-ws": "^0.9.18",
-    "urql": "^1.10.1",
+    "urql": "^1.11.4",
     "websocket": "^1.0.32"
   },
   "devDependencies": {
-    "sass": "^1.27.0",
-    "vite": "^1.0.0-rc.1",
-    "vite-plugin-react": "^3.0.0"
+    "sass": "^1.29.0",
+    "vite": "^1.0.0-rc.13",
+    "vite-plugin-react": "^3.0.2"
   }
 }
