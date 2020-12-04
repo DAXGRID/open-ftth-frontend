@@ -5,6 +5,8 @@ import {
   createSource,
   innerConduitHighlight,
   multiConduitHighlight,
+  innerConduitSelect,
+  multiConduitSelect,
 } from "./parseFeatures";
 import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 import Config from "../../config";
@@ -12,12 +14,12 @@ import Config from "../../config";
 function SchematicDiagram() {
   const [mapContainer, setMapContainer] = useState();
   const {
+    clickHighlight,
     setConfig,
     addLayer,
     addSource,
     loaded,
     enableResize,
-    mapClick,
     hoverHighlight,
   } = useMapbox();
 
@@ -37,15 +39,14 @@ function SchematicDiagram() {
     if (loaded) {
       insertSchematicDiagramData();
       enableResize();
-
       addLayer(innerConduitHighlight);
-      addLayer(multiConduitHighlight, "InnerConduit");
       hoverHighlight("InnerConduit");
+      addLayer(multiConduitHighlight, "InnerConduit");
       hoverHighlight("MultiConduit");
-
-      mapClick((features) => {
-        console.log(features);
-      });
+      addLayer(innerConduitSelect);
+      clickHighlight("InnerConduit");
+      addLayer(multiConduitSelect);
+      clickHighlight("MultiConduit");
     }
   }, [loaded]);
 
