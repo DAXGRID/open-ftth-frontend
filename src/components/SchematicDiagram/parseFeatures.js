@@ -40,6 +40,22 @@ export function createSource(feature) {
   };
 }
 
+export const innerConduitSelect = {
+  id: "inner-conduit-select",
+  type: "line",
+  source: "InnerConduit",
+  paint: {
+    "line-width": 3,
+    "line-color": "#71D3FC",
+    "line-opacity": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      1,
+      0,
+    ],
+  },
+};
+
 export const innerConduitHighlight = {
   id: "inner-conduit-highlight",
   type: "fill",
@@ -74,6 +90,22 @@ export const innerConduitHighlight = {
     "fill-opacity": [
       "case",
       ["boolean", ["feature-state", "hover"], false],
+      1,
+      0,
+    ],
+  },
+};
+
+export const multiConduitSelect = {
+  id: "multi-conduit-select",
+  type: "line",
+  source: "MultiConduit",
+  paint: {
+    "line-width": 3,
+    "line-color": "#71D3FC",
+    "line-opacity": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
       1,
       0,
     ],

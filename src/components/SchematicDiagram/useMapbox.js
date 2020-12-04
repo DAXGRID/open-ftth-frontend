@@ -50,9 +50,28 @@ function useMapbox() {
     });
   }
 
+  function clickHighlight(featureName) {
+    map.on("click", featureName, (e) => {
+      var bbox = [
+        [e.point.x - 5, e.point.y - 5],
+        [e.point.x + 5, e.point.y + 5],
+      ];
+
+      var features = map.queryRenderedFeatures(bbox);
+      const selectedId = features[0].id;
+
+      if (selectedId) {
+        map.setFeatureState(
+          { source: featureName, id: selectedId },
+          { selected: !features[0].state.selected }
+        );
+      }
+    });
+  }
+
   function hoverHighlight(featureName) {
     let hoveredId = null;
-    map.on("mousemove", featureName, function (e) {
+    map.on("mousemove", featureName, (e) => {
       map.getCanvas().style.cursor = "pointer";
       var bbox = [
         [e.point.x - 5, e.point.y - 5],
@@ -74,7 +93,7 @@ function useMapbox() {
       }
     });
 
-    map.on("mouseleave", featureName, function () {
+    map.on("mouseleave", featureName, () => {
       map.getCanvas().style.cursor = "";
       if (hoveredId) {
         map.setFeatureState(
@@ -104,6 +123,7 @@ function useMapbox() {
     enableResize,
     mapClick,
     hoverHighlight,
+    clickHighlight,
   };
 }
 
