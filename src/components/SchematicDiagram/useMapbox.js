@@ -5,20 +5,32 @@ import Config from "../../config";
 
 function useMapbox() {
   const map = useRef(null);
+  const selectedFeatures = useRef([]);
   const [config, setConfig] = useState();
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (!config) return;
 
+    if (map.current) {
+      map.current.remove();
+      map.current = null;
+    }
+
     mapboxgl.accessToken = Config.MAPBOX_API_KEY;
     const newMap = new mapboxgl.Map(config);
-    newMap.on("load", () => {
-      setLoaded(true);
-    });
+    newMap.on("load", mapLoaded);
 
     map.current = newMap;
+
+    return () => {
+      map.current.off("load", mapLoaded);
+    };
   }, [config]);
+
+  function mapLoaded() {
+    setLoaded(true);
+  }
 
   function addLayer(layer, layerName) {
     if (map.current.getLayer(layer.id)) return;
@@ -39,7 +51,7 @@ function useMapbox() {
     }
   }
 
-  function clickHighlight(featureName, callback) {
+  function clickHighlight(featureName) {
     map.current.on("click", featureName, (e) => {
       var bbox = [
         [e.point.x - 5, e.point.y - 5],
@@ -47,15 +59,27 @@ function useMapbox() {
       ];
 
       var feature = map.current.queryRenderedFeatures(bbox)[0];
+      if (feature.source !== featureName) return;
+
       const featureSelected = feature.state.selected;
+
+      updateSelectedFeatures(feature);
 
       map.current.setFeatureState(
         { source: featureName, id: feature.id },
         { selected: !featureSelected }
       );
-
-      if (callback) callback(feature, !featureSelected);
     });
+  }
+
+  function updateSelectedFeatures(feature) {
+    if (!feature.state.selected) {
+      selectedFeatures.current = [...selectedFeatures.current, feature];
+    } else {
+      selectedFeatures.current = selectedFeatures.current.filter(
+        (x) => x.id !== feature.id
+      );
+    }
   }
 
   function hoverHighlight(featureName) {
@@ -112,6 +136,7 @@ function useMapbox() {
     enableResize,
     hoverHighlight,
     clickHighlight,
+    selectedFeatures: selectedFeatures.current,
   };
 }
 
