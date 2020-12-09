@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import useMapbox from "./useMapbox.js";
 import {
   createLayer,
@@ -12,7 +12,7 @@ import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 import Config from "../../config";
 
 function SchematicDiagram() {
-  const [mapContainer, setMapContainer] = useState();
+  const mapContainer = useRef(null);
   const {
     clickHighlight,
     setConfig,
@@ -24,15 +24,19 @@ function SchematicDiagram() {
   } = useMapbox();
 
   useEffect(() => {
-    if (mapContainer) {
+    if (mapContainer.current) {
       setConfig({
         center: [0.014, 0.014],
         zoom: 14,
         minZoom: 12,
         style: Config.MAPBOX_STYLE_URI,
-        container: mapContainer,
+        container: mapContainer.current,
       });
     }
+
+    return () => {
+      mapContainer.current = null;
+    };
   }, [mapContainer]);
 
   useEffect(() => {
@@ -82,6 +86,7 @@ function SchematicDiagram() {
         f.id = counter;
         counter++;
       });
+
       addSource(source, sourcesToAdd[source]);
     }
 
@@ -90,10 +95,7 @@ function SchematicDiagram() {
 
   return (
     <div className="schematic-diagram">
-      <div
-        className="schematic-diagram-container"
-        ref={(el) => setMapContainer(el)}
-      />
+      <div className="schematic-diagram-container" ref={mapContainer} />
     </div>
   );
 }
