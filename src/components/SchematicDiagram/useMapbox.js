@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Config from "../../config";
 
 function useMapbox() {
-  const [map, setMap] = useState();
+  const map = useRef(null);
   const [config, setConfig] = useState();
   const [loaded, setLoaded] = useState(false);
 
@@ -17,86 +17,75 @@ function useMapbox() {
       setLoaded(true);
     });
 
-    setMap(newMap);
+    map.current = newMap;
   }, [config]);
 
   function addLayer(layer, layerName) {
-    if (map.getLayer(layer.id)) return;
+    if (map.current.getLayer(layer.id)) return;
 
     if (layerName) {
-      map.addLayer(layer, layerName);
+      map.current.addLayer(layer, layerName);
     } else {
-      map.addLayer(layer);
+      map.current.addLayer(layer);
     }
   }
 
   function addSource(name, source) {
-    const mapSource = map.getSource(name);
+    const mapSource = map.current.getSource(name);
     if (!mapSource) {
-      map.addSource(name, source);
+      map.current.addSource(name, source);
     } else {
       mapSource.setData(source.data);
     }
   }
 
-  function mapClick(callback) {
-    map.on("click", (e) => {
-      var bbox = [
-        [e.point.x - 5, e.point.y - 5],
-        [e.point.x + 5, e.point.y + 5],
-      ];
-      var features = map.queryRenderedFeatures(bbox);
-      callback(features);
-    });
-  }
-
-  function clickHighlight(featureName) {
-    map.on("click", featureName, (e) => {
+  function clickHighlight(featureName, callback) {
+    map.current.on("click", featureName, (e) => {
       var bbox = [
         [e.point.x - 5, e.point.y - 5],
         [e.point.x + 5, e.point.y + 5],
       ];
 
-      var features = map.queryRenderedFeatures(bbox);
-      const selectedId = features[0].id;
+      var feature = map.current.queryRenderedFeatures(bbox)[0];
+      const featureSelected = feature.state.selected;
 
-      if (selectedId) {
-        map.setFeatureState(
-          { source: featureName, id: selectedId },
-          { selected: !features[0].state.selected }
-        );
-      }
+      map.current.setFeatureState(
+        { source: featureName, id: feature.id },
+        { selected: !featureSelected }
+      );
+
+      if (callback) callback(feature, !featureSelected);
     });
   }
 
   function hoverHighlight(featureName) {
     let hoveredId = null;
-    map.on("mousemove", featureName, (e) => {
-      map.getCanvas().style.cursor = "pointer";
+    map.current.on("mousemove", featureName, (e) => {
+      map.current.getCanvas().style.cursor = "pointer";
       var bbox = [
         [e.point.x - 5, e.point.y - 5],
         [e.point.x + 5, e.point.y + 5],
       ];
-      var features = map.queryRenderedFeatures(bbox);
+      var features = map.current.queryRenderedFeatures(bbox);
       if (features.length > 0) {
         if (hoveredId) {
-          map.setFeatureState(
+          map.current.setFeatureState(
             { source: featureName, id: hoveredId },
             { hover: false }
           );
         }
         hoveredId = features[0].id;
-        map.setFeatureState(
+        map.current.setFeatureState(
           { source: featureName, id: hoveredId },
           { hover: true }
         );
       }
     });
 
-    map.on("mouseleave", featureName, () => {
-      map.getCanvas().style.cursor = "";
+    map.current.on("mouseleave", featureName, () => {
+      map.current.getCanvas().style.cursor = "";
       if (hoveredId) {
-        map.setFeatureState(
+        map.current.setFeatureState(
           { source: featureName, id: hoveredId },
           { hover: false }
         );
@@ -115,13 +104,12 @@ function useMapbox() {
   }
 
   return {
-    map,
+    map: map.current,
     setConfig,
     addLayer,
     addSource,
     loaded,
     enableResize,
-    mapClick,
     hoverHighlight,
     clickHighlight,
   };
