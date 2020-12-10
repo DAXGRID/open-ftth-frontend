@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-import Config from "../../config";
+import { useState, useEffect, useRef } from 'react';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import Config from '../../config';
 
 function useMapbox() {
   const map = useRef(null);
@@ -19,12 +19,12 @@ function useMapbox() {
 
     mapboxgl.accessToken = Config.MAPBOX_API_KEY;
     const newMap = new mapboxgl.Map(config);
-    newMap.on("load", mapLoaded);
+    newMap.on('load', mapLoaded);
 
     map.current = newMap;
 
     return () => {
-      map.current.off("load", mapLoaded);
+      map.current.off('load', mapLoaded);
     };
   }, [config]);
 
@@ -52,13 +52,13 @@ function useMapbox() {
   }
 
   function clickHighlight(featureName) {
-    map.current.on("click", featureName, (e) => {
-      var bbox = [
+    map.current.on('click', featureName, (e) => {
+      const bbox = [
         [e.point.x - 5, e.point.y - 5],
         [e.point.x + 5, e.point.y + 5],
       ];
 
-      var feature = map.current.queryRenderedFeatures(bbox)[0];
+      const feature = map.current.queryRenderedFeatures(bbox)[0];
       if (feature.source !== featureName) return;
 
       const featureSelected = feature.state.selected;
@@ -67,7 +67,7 @@ function useMapbox() {
 
       map.current.setFeatureState(
         { source: featureName, id: feature.id },
-        { selected: !featureSelected }
+        { selected: !featureSelected },
       );
     });
   }
@@ -77,48 +77,48 @@ function useMapbox() {
       selectedFeatures.current = [...selectedFeatures.current, feature];
     } else {
       selectedFeatures.current = selectedFeatures.current.filter(
-        (x) => x.id !== feature.id
+        (x) => x.id !== feature.id,
       );
     }
   }
 
   function hoverHighlight(featureName) {
     let hoveredId = null;
-    map.current.on("mousemove", featureName, (e) => {
-      map.current.getCanvas().style.cursor = "pointer";
-      var bbox = [
+    map.current.on('mousemove', featureName, (e) => {
+      map.current.getCanvas().style.cursor = 'pointer';
+      const bbox = [
         [e.point.x - 5, e.point.y - 5],
         [e.point.x + 5, e.point.y + 5],
       ];
-      var features = map.current.queryRenderedFeatures(bbox);
+      const features = map.current.queryRenderedFeatures(bbox);
       if (features.length > 0) {
         if (hoveredId) {
           map.current.setFeatureState(
             { source: featureName, id: hoveredId },
-            { hover: false }
+            { hover: false },
           );
         }
         hoveredId = features[0].id;
         map.current.setFeatureState(
           { source: featureName, id: hoveredId },
-          { hover: true }
+          { hover: true },
         );
       }
     });
 
-    map.current.on("mouseleave", featureName, () => {
-      map.current.getCanvas().style.cursor = "";
+    map.current.on('mouseleave', featureName, () => {
+      map.current.getCanvas().style.cursor = '';
       if (hoveredId) {
         map.current.setFeatureState(
           { source: featureName, id: hoveredId },
-          { hover: false }
+          { hover: false },
         );
       }
     });
   }
 
   function enableResize() {
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       // Hack to handle resize of mapcanvas because
       // the event gets called to early, so we have to queue it up
       setTimeout(() => {

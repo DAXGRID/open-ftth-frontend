@@ -1,9 +1,11 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 function DefaultButton({ onClick, innerText, maxWidth }) {
   return (
     <button
-      style={{ maxWidth: maxWidth }}
+      type="button"
+      style={{ maxWidth }}
       className="default-button"
       onClick={() => onClick()}
     >
@@ -11,5 +13,11 @@ function DefaultButton({ onClick, innerText, maxWidth }) {
     </button>
   );
 }
+
+DefaultButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  innerText: PropTypes.string.isRequired,
+  maxWidth: PropTypes.string.isRequired,
+};
 
 export default DefaultButton;

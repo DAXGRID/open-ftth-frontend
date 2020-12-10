@@ -1,4 +1,4 @@
-import TopMenu from "./TopMenu";
-import "./TopMenu.scss";
+import TopMenu from './TopMenu';
+import './TopMenu.scss';
 
 export default TopMenu;

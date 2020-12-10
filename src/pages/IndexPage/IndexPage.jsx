@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 function IndexPage() {
-  return <div className="index-page"></div>;
+  return <div className="index-page" />;
 }
 
 export default IndexPage;

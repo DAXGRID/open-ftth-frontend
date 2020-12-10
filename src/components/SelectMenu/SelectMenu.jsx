@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-function CustomOption({ text, value, triggerSelected, selected }) {
+function CustomOption({
+  text, value, triggerSelected, selected,
+}) {
   return (
     <span
-      className={selected ? "menu-option selected" : "menu-option"}
+      className={selected ? 'menu-option selected' : 'menu-option'}
       data-value={value}
       onClick={() => triggerSelected(value)}
     >
@@ -18,7 +20,7 @@ function SelectMenu({
   onSelected,
   maxWidth,
 }) {
-  if (!options || options.length === 0) return <div></div>;
+  if (!options || options.length === 0) return <div />;
 
   const [toggled, setToggled] = useState(false);
   const [selected, setSelected] = useState({});
@@ -39,7 +41,7 @@ function SelectMenu({
   const triggerSelected = (selectedValue) => {
     selectOptions.forEach((option) => (option.selected = false));
     const option = selectOptions.find(
-      (option) => option.value === selectedValue
+      (option) => option.value === selectedValue,
     );
     option.selected = true;
     setSelectOptions([...selectOptions]);
@@ -50,36 +52,32 @@ function SelectMenu({
   };
 
   const removePlaceHolder = () => {
-    const newOptions = selectOptions.filter((option) => {
-      return option.value !== -1;
-    });
+    const newOptions = selectOptions.filter((option) => option.value !== -1);
 
     setSelectOptions([...newOptions]);
   };
 
   return (
     <div
-      style={{ maxWidth: maxWidth }}
+      style={{ maxWidth }}
       className="select-menu-wrapper"
       onClick={() => setToggled(!toggled)}
     >
-      <div className={toggled ? "menu-select open" : "menu-select"}>
+      <div className={toggled ? 'menu-select open' : 'menu-select'}>
         <div className="menu-select__trigger">
           <span>{selected.text}</span>
-          <div className="arrow"></div>
+          <div className="arrow" />
         </div>
         <div className="menu-options">
-          {selectOptions.map((option) => {
-            return (
-              <CustomOption
-                key={option.value}
-                text={option.text}
-                triggerSelected={triggerSelected}
-                selected={option.selected}
-                value={option.value}
-              />
-            );
-          })}
+          {selectOptions.map((option) => (
+            <CustomOption
+              key={option.value}
+              text={option.text}
+              triggerSelected={triggerSelected}
+              selected={option.selected}
+              value={option.value}
+            />
+          ))}
         </div>
       </div>
     </div>

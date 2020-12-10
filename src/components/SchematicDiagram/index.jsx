@@ -1,4 +1,4 @@
-import SchematicDiagram from "./SchematicDiagram";
-import "./SchematicDiagram.scss";
+import SchematicDiagram from './SchematicDiagram';
+import './SchematicDiagram.scss';
 
 export default SchematicDiagram;
