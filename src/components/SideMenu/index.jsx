@@ -1,4 +1,4 @@
-import SideMenu from "./SideMenu";
-import "./SideMenu.scss";
+import SideMenu from './SideMenu';
+import './SideMenu.scss';
 
 export default SideMenu;

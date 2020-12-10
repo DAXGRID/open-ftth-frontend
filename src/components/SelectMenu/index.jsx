@@ -1,4 +1,4 @@
-import SelectMenu from "./SelectMenu";
-import "./SelectMenu.scss";
+import SelectMenu from './SelectMenu';
+import './SelectMenu.scss';
 
 export default SelectMenu;

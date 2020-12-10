@@ -1,4 +1,4 @@
-import * as data from "../mock/RouteNodeDiagramObjectsExample.json";
+import * as data from '../mock/RouteNodeDiagramObjectsExample.json';
 
 function DiagramService() {
   return data;

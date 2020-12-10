@@ -4,11 +4,11 @@ export default {
       buildRouteNodeDiagram: {
         diagramObjects: [
           {
-            style: "MultiConduitOrange",
-            refId: "0fa25196-1f7c-99ee-35af-baa1d63e4079",
+            style: 'MultiConduitOrange',
+            refId: '0fa25196-1f7c-99ee-35af-baa1d63e4079',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.002],
@@ -21,11 +21,11 @@ export default {
             },
           },
           {
-            style: "InnerConduitBlue",
-            refId: "5c059243-73f7-4a2e-a6b3-50ed07d5c32a",
+            style: 'InnerConduitBlue',
+            refId: '5c059243-73f7-4a2e-a6b3-50ed07d5c32a',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.003],
@@ -38,11 +38,11 @@ export default {
             },
           },
           {
-            style: "InnerConduitOrange",
-            refId: "f58cdf70-90c6-4f3a-b579-0353dbccd5e4",
+            style: 'InnerConduitOrange',
+            refId: 'f58cdf70-90c6-4f3a-b579-0353dbccd5e4',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.004],
@@ -55,11 +55,11 @@ export default {
             },
           },
           {
-            style: "InnerConduitGreen",
-            refId: "90757f7e-3f0a-4b4e-bc95-10ff07643a23",
+            style: 'InnerConduitGreen',
+            refId: '90757f7e-3f0a-4b4e-bc95-10ff07643a23',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.005],
@@ -72,11 +72,11 @@ export default {
             },
           },
           {
-            style: "InnerConduitBrown",
-            refId: "7d77e4a9-6b0c-462e-b76b-2a7e82609831",
+            style: 'InnerConduitBrown',
+            refId: '7d77e4a9-6b0c-462e-b76b-2a7e82609831',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.006],
@@ -89,11 +89,11 @@ export default {
             },
           },
           {
-            style: "InnerConduitGrey",
-            refId: "1644b8ca-c11c-46de-9cac-ae33e3a35bbf",
+            style: 'InnerConduitGrey',
+            refId: '1644b8ca-c11c-46de-9cac-ae33e3a35bbf',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.007],
@@ -106,11 +106,11 @@ export default {
             },
           },
           {
-            style: "InnerConduitWhite",
-            refId: "6a55accd-892d-430e-a674-b9a40bdfd509",
+            style: 'InnerConduitWhite',
+            refId: '6a55accd-892d-430e-a674-b9a40bdfd509',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.008],
@@ -123,11 +123,11 @@ export default {
             },
           },
           {
-            style: "InnerConduitRed",
-            refId: "3a4e2799-8ff8-46f8-a950-ce3e739a5253",
+            style: 'InnerConduitRed',
+            refId: '3a4e2799-8ff8-46f8-a950-ce3e739a5253',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.009],
@@ -140,11 +140,11 @@ export default {
             },
           },
           {
-            style: "InnerConduitBlack",
-            refId: "4222d8b4-5973-4314-bb04-12a514e9d8d4",
+            style: 'InnerConduitBlack',
+            refId: '4222d8b4-5973-4314-bb04-12a514e9d8d4',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.01],
@@ -157,11 +157,11 @@ export default {
             },
           },
           {
-            style: "InnerConduitYellow",
-            refId: "7d1d9de4-6773-487f-9499-21d000f2e2c5",
+            style: 'InnerConduitYellow',
+            refId: '7d1d9de4-6773-487f-9499-21d000f2e2c5',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.011],
@@ -174,11 +174,11 @@ export default {
             },
           },
           {
-            style: "InnerConduitViolet",
-            refId: "2fe11d3a-de61-4216-bc85-1eb3131d1516",
+            style: 'InnerConduitViolet',
+            refId: '2fe11d3a-de61-4216-bc85-1eb3131d1516',
             label: null,
             geometry: {
-              type: "Polygon",
+              type: 'Polygon',
               coordinates: [
                 [
                   [0.004, 0.012],
@@ -191,11 +191,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "BR109",
+            label: 'BR109',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.0, 0.0034],
                 [0.004, 0.0034],
@@ -203,11 +203,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "BR109",
+            label: 'BR109',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.0, 0.0044],
                 [0.004, 0.0044],
@@ -215,11 +215,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "BR109",
+            label: 'BR109',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.0, 0.0054],
                 [0.004, 0.0054],
@@ -227,11 +227,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "BR109",
+            label: 'BR109',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.0, 0.0064],
                 [0.004, 0.0064],
@@ -239,11 +239,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "BR109",
+            label: 'BR109',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.0, 0.0074],
                 [0.004, 0.0074],
@@ -251,11 +251,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "BR109",
+            label: 'BR109',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.0, 0.0084],
                 [0.004, 0.0084],
@@ -263,11 +263,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "BR109",
+            label: 'BR109',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.0, 0.0094],
                 [0.004, 0.0094],
@@ -275,11 +275,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "BR109",
+            label: 'BR109',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.0, 0.0104],
                 [0.004, 0.0104],
@@ -287,11 +287,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "BR109",
+            label: 'BR109',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.0, 0.0114],
                 [0.004, 0.0114],
@@ -299,11 +299,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "BR109",
+            label: 'BR109',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.0, 0.0124],
                 [0.004, 0.0124],
@@ -311,11 +311,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "G3575",
+            label: 'G3575',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.034, 0.0034],
                 [0.038, 0.0034],
@@ -323,11 +323,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "G3575",
+            label: 'G3575',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.034, 0.0044],
                 [0.038, 0.0044],
@@ -335,11 +335,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "G3575",
+            label: 'G3575',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.034, 0.0054],
                 [0.038, 0.0054],
@@ -347,11 +347,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "G3575",
+            label: 'G3575',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.034, 0.0064],
                 [0.038, 0.0064],
@@ -359,11 +359,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "G3575",
+            label: 'G3575',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.034, 0.0074],
                 [0.038, 0.0074],
@@ -371,11 +371,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "G3575",
+            label: 'G3575',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.034, 0.0084],
                 [0.038, 0.0084],
@@ -383,11 +383,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "G3575",
+            label: 'G3575',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.034, 0.0094],
                 [0.038, 0.0094],
@@ -395,11 +395,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "G3575",
+            label: 'G3575',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.034, 0.0104],
                 [0.038, 0.0104],
@@ -407,11 +407,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "G3575",
+            label: 'G3575',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.034, 0.0114],
                 [0.038, 0.0114],
@@ -419,11 +419,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "G3575",
+            label: 'G3575',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.034, 0.0124],
                 [0.038, 0.0124],
@@ -431,11 +431,11 @@ export default {
             },
           },
           {
-            style: "LabelMediumText",
+            style: 'LabelMediumText',
             refId: null,
-            label: "Emtelle Ø50 10x10/8 (Rød markering)",
+            label: 'Emtelle Ø50 10x10/8 (Rød markering)',
             geometry: {
-              type: "LineString",
+              type: 'LineString',
               coordinates: [
                 [0.004, 0.0143],
                 [0.034, 0.0143],

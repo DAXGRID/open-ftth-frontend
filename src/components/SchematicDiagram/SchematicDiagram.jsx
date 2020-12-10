@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from "react";
-import useMapbox from "./useMapbox.js";
+import React, { useRef, useEffect } from 'react';
+import useMapbox from './useMapbox.js';
 import {
   createLayer,
   createSource,
@@ -7,9 +7,9 @@ import {
   multiConduitHighlight,
   innerConduitSelect,
   multiConduitSelect,
-} from "./parseFeatures";
-import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
-import Config from "../../config";
+} from './parseFeatures';
+import RouteNodeDiagramObjects from '../../mock/RouteNodeDiagramObjects';
+import Config from '../../config';
 
 function SchematicDiagram() {
   const mapContainer = useRef(null);
@@ -44,13 +44,13 @@ function SchematicDiagram() {
       insertSchematicDiagramData();
       enableResize();
       addLayer(innerConduitHighlight);
-      hoverHighlight("InnerConduit");
-      addLayer(multiConduitHighlight, "InnerConduit");
-      hoverHighlight("MultiConduit");
+      hoverHighlight('InnerConduit');
+      addLayer(multiConduitHighlight, 'InnerConduit');
+      hoverHighlight('MultiConduit');
       addLayer(innerConduitSelect);
-      clickHighlight("InnerConduit");
+      clickHighlight('InnerConduit');
       addLayer(multiConduitSelect);
-      clickHighlight("MultiConduit");
+      clickHighlight('MultiConduit');
     }
   }, [loaded]);
 
@@ -58,13 +58,13 @@ function SchematicDiagram() {
     const sourcesToAdd = {};
     const layersToAdd = [];
 
-    RouteNodeDiagramObjects.data.diagramService.buildRouteNodeDiagram.diagramObjects.map(
+    RouteNodeDiagramObjects.data.diagramService.buildRouteNodeDiagram.diagramObjects.forEach(
       (diagramObject) => {
         const source = createSource(diagramObject);
 
-        let style = diagramObject.style;
-        if (style.includes("InnerConduit")) style = "InnerConduit";
-        else if (style.includes("MultiConduit")) style = "MultiConduit";
+        let { style } = diagramObject;
+        if (style.includes('InnerConduit')) style = 'InnerConduit';
+        else if (style.includes('MultiConduit')) style = 'MultiConduit';
 
         if (!sourcesToAdd[style]) {
           sourcesToAdd[style] = source;
@@ -76,7 +76,7 @@ function SchematicDiagram() {
           const layer = createLayer(style);
           layersToAdd.push(layer);
         }
-      }
+      },
     );
 
     let counter = 1;

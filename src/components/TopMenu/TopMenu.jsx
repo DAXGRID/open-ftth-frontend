@@ -1,6 +1,6 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 function TopMenu({ toggleSideMenu }) {
   return (
@@ -11,7 +11,7 @@ function TopMenu({ toggleSideMenu }) {
       <div className="top-menu-icon">
         <p>OpenFTTH</p>
       </div>
-      <div className="top-menu-body"></div>
+      <div className="top-menu-body" />
     </div>
   );
 }
