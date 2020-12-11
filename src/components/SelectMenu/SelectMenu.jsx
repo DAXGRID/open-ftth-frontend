@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
-function CustomOption({
-  text, value, triggerSelected, selected,
-}) {
+function CustomOption({ text, value, triggerSelected, selected }) {
   return (
     <span
       role="button"
       tabIndex={0}
-      className={selected ? 'menu-option selected' : 'menu-option'}
+      className={selected ? "menu-option selected" : "menu-option"}
       data-value={value}
       onClick={() => triggerSelected(value)}
-      onKeyPress={(e) => (e.key === 'Enter' ? triggerSelected(value) : () => {})}
+      onKeyPress={(e) =>
+        e.key === "Enter" ? triggerSelected(value) : () => {}
+      }
     >
       {text}
     </span>
@@ -20,10 +20,7 @@ function CustomOption({
 
 CustomOption.propTypes = {
   text: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   triggerSelected: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
 };
@@ -59,7 +56,9 @@ function SelectMenu({
     });
 
     if (removePlaceHolderOnSelect && selectedValue !== -1) {
-      selectOptionsCopy = selectOptionsCopy.filter((option) => option.value !== -1);
+      selectOptionsCopy = selectOptionsCopy.filter(
+        (option) => option.value !== -1
+      );
     }
 
     setSelectOptions([...selectOptionsCopy]);
@@ -72,9 +71,9 @@ function SelectMenu({
       style={{ maxWidth }}
       className="select-menu-wrapper"
       onClick={() => setToggled(!toggled)}
-      onKeyPress={(e) => (e.key === 'Enter' ? setToggled(!toggled) : () => {})}
+      onKeyPress={(e) => (e.key === "Enter" ? setToggled(!toggled) : () => {})}
     >
-      <div className={toggled ? 'menu-select open' : 'menu-select'}>
+      <div className={toggled ? "menu-select open" : "menu-select"}>
         <div className="menu-select__trigger">
           <span>{selected.text}</span>
           <div className="arrow" />
@@ -96,14 +95,14 @@ function SelectMenu({
 }
 
 SelectMenu.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
-    selected: PropTypes.bool.isRequired,
-  })).isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
+      selected: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
   removePlaceHolderOnSelect: PropTypes.bool,
   onSelected: PropTypes.func,
   maxWidth: PropTypes.string,
@@ -112,7 +111,7 @@ SelectMenu.propTypes = {
 SelectMenu.defaultProps = {
   removePlaceHolderOnSelect: false,
   onSelected: () => {},
-  maxWidth: '',
+  maxWidth: "",
 };
 
 export default SelectMenu;

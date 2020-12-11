@@ -1,19 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {
-  Client, defaultExchanges, subscriptionExchange, Provider,
-} from 'urql';
-import Transport from 'subscriptions-transport-ws';
-import App from './App';
-import Config from './config';
-
-import './translation/i18n';
-import './global-styles/reset.scss';
-import './global-styles/index.scss';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Client, defaultExchanges, subscriptionExchange, Provider } from "urql";
+import Transport from "subscriptions-transport-ws";
+import App from "./App";
+import Config from "./config";
+import "./translation/i18n";
+import "./global-styles/reset.scss";
+import "./global-styles/index.scss";
 
 const subscriptionClient = new Transport.SubscriptionClient(
   `ws://${Config.API_GATEWAY_URI}/graphql`,
-  { reconnect: true },
+  { reconnect: true }
 );
 
 const client = new Client({
@@ -34,5 +31,5 @@ ReactDOM.render(
       <App />
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root'),
+  document.getElementById("root")
 );
