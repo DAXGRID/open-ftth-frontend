@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import useMapbox from './useMapbox.js';
+import useMapbox from './useMapbox';
 import {
   createLayer,
   createSource,

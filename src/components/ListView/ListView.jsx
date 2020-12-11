@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function ListView({ title, headerItems, bodyItems }) {
   return (
@@ -10,8 +11,8 @@ function ListView({ title, headerItems, bodyItems }) {
       )}
       <div className="list-view-content">
         <div className="list-view-header">
-          {headerItems.map((name, index) => (
-            <div key={index} className="list-view-header-item">
+          {headerItems.map((name) => (
+            <div key={name} className="list-view-header-item">
               <p>{name}</p>
             </div>
           ))}
@@ -31,5 +32,11 @@ function ListView({ title, headerItems, bodyItems }) {
     </div>
   );
 }
+
+ListView.propTypes = {
+  title: PropTypes.string.isRequired,
+  headerItems: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  bodyItems: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+};
 
 export default ListView;

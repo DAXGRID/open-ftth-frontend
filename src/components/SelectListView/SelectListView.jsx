@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function SelectListView({
   title, headerItems, bodyItems, selectItem,
@@ -14,15 +15,15 @@ function SelectListView({
       )}
       <div className="select-list-view-content">
         <div className="select-list-view-header">
-          {headerItems.map((name, index) => (
-            <div key={index} className="select-list-view-header-item">
+          {headerItems.map((name) => (
+            <div key={name} className="select-list-view-header-item">
               <p>{name}</p>
             </div>
           ))}
         </div>
         <div className="select-list-view-body">
-          {bodyItems.map((row, index) => (
-            <div key={index} className="select-list-view-body-row">
+          {bodyItems.map((row) => (
+            <div key={row.id} className="select-list-view-body-row">
               {row.rows.map((item, index) => (
                 <div
                   key={index}
@@ -43,5 +44,20 @@ function SelectListView({
     </div>
   );
 }
+
+SelectListView.propTypes = {
+  title: PropTypes.string,
+  headerItems: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  bodyItems: PropTypes.arrayOf(PropTypes.shape({
+    rows: PropTypes.arrayOf(PropTypes.string),
+    id: PropTypes.number,
+    selected: PropTypes.bool,
+  })).isRequired,
+  selectItem: PropTypes.func.isRequired,
+};
+
+SelectListView.defaultProps = {
+  title: '',
+};
 
 export default SelectListView;
