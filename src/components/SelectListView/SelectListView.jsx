@@ -26,13 +26,16 @@ function SelectListView({
             <div key={row.id} className="select-list-view-body-row">
               {row.rows.map((item, index) => (
                 <div
-                  key={index}
+                  role="button"
+                  key={item}
                   className={
                         row.selected
                           ? 'select-list-view-body-item selected'
                           : 'select-list-view-body-item'
                       }
                   onClick={() => selectItem(row)}
+                  onKeyPress={() => selectItem(row)}
+                  tabIndex={index}
                 >
                   <p>{item}</p>
                 </div>

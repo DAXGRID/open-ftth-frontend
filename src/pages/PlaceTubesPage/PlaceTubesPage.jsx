@@ -21,7 +21,7 @@ function PlaceTubesPage() {
   ]);
 
   useEffect(() => {
-    const token = PubSub.subscribe('RetrieveSelectedResponse', (msg, data) => {
+    const token = PubSub.subscribe('RetrieveSelectedResponse', (_msg, data) => {
       if (data.selectedFeaturesMrid.length === 0) {
         setValidation({
           type: 'error',

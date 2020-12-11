@@ -1,18 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 function CustomOption({
   text, value, triggerSelected, selected,
 }) {
   return (
     <span
+      role="button"
+      tabIndex={0}
       className={selected ? 'menu-option selected' : 'menu-option'}
       data-value={value}
       onClick={() => triggerSelected(value)}
+      onKeyPress={(e) => (e.key === 'Enter' ? triggerSelected(value) : () => {})}
     >
       {text}
     </span>
   );
 }
+
+CustomOption.propTypes = {
+  text: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
+  triggerSelected: PropTypes.func.isRequired,
+  selected: PropTypes.bool.isRequired,
+};
 
 function SelectMenu({
   options,
@@ -27,7 +41,7 @@ function SelectMenu({
   const [selectOptions, setSelectOptions] = useState(options);
 
   useEffect(() => {
-    const option = selectOptions.find((option) => option.selected === true);
+    const option = selectOptions.find((o) => o.selected === true);
     setSelected(option);
     options = selectOptions;
   }, [selectOptions]);
@@ -39,29 +53,26 @@ function SelectMenu({
   }, [selected]);
 
   const triggerSelected = (selectedValue) => {
-    selectOptions.forEach((option) => (option.selected = false));
-    const option = selectOptions.find(
-      (option) => option.value === selectedValue,
-    );
-    option.selected = true;
-    setSelectOptions([...selectOptions]);
+    let selectOptionsCopy = selectOptions.map((o) => {
+      const option = { ...o, selected: o.value === selectedValue };
+      return option;
+    });
 
     if (removePlaceHolderOnSelect && selectedValue !== -1) {
-      removePlaceHolder();
+      selectOptionsCopy = selectOptionsCopy.filter((option) => option.value !== -1);
     }
-  };
 
-  const removePlaceHolder = () => {
-    const newOptions = selectOptions.filter((option) => option.value !== -1);
-
-    setSelectOptions([...newOptions]);
+    setSelectOptions([...selectOptionsCopy]);
   };
 
   return (
     <div
+      tabIndex={0}
+      role="button"
       style={{ maxWidth }}
       className="select-menu-wrapper"
       onClick={() => setToggled(!toggled)}
+      onKeyPress={(e) => (e.key === 'Enter' ? setToggled(!toggled) : () => {})}
     >
       <div className={toggled ? 'menu-select open' : 'menu-select'}>
         <div className="menu-select__trigger">
@@ -83,5 +94,25 @@ function SelectMenu({
     </div>
   );
 }
+
+SelectMenu.propTypes = {
+  options: PropTypes.arrayOf(PropTypes.shape({
+    text: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]).isRequired,
+    selected: PropTypes.bool.isRequired,
+  })).isRequired,
+  removePlaceHolderOnSelect: PropTypes.bool,
+  onSelected: PropTypes.func,
+  maxWidth: PropTypes.string,
+};
+
+SelectMenu.defaultProps = {
+  removePlaceHolderOnSelect: false,
+  onSelected: () => {},
+  maxWidth: '',
+};
 
 export default SelectMenu;
