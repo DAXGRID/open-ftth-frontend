@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import WebSocket from 'websocket';
-import PubSub from 'pubsub-js';
-import Config from '../config';
+import React, { useEffect } from "react";
+import WebSocket from "websocket";
+import PubSub from "pubsub-js";
+import Config from "../config";
 
 let client;
 

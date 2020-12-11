@@ -1,4 +1,4 @@
-import PlaceTubesPage from './PlaceTubesPage';
-import './PlaceTubesPage.scss';
+import PlaceTubesPage from "./PlaceTubesPage";
+import "./PlaceTubesPage.scss";
 
 export default PlaceTubesPage;

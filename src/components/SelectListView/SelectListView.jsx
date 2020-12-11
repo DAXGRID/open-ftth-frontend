@@ -1,9 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-function SelectListView({
-  title, headerItems, bodyItems, selectItem,
-}) {
+function SelectListView({ title, headerItems, bodyItems, selectItem }) {
   if (!bodyItems) return <div />;
 
   return (
@@ -29,10 +27,10 @@ function SelectListView({
                   role="button"
                   key={item}
                   className={
-                        row.selected
-                          ? 'select-list-view-body-item selected'
-                          : 'select-list-view-body-item'
-                      }
+                    row.selected
+                      ? "select-list-view-body-item selected"
+                      : "select-list-view-body-item"
+                  }
                   onClick={() => selectItem(row)}
                   onKeyPress={() => selectItem(row)}
                   tabIndex={index}
@@ -51,16 +49,18 @@ function SelectListView({
 SelectListView.propTypes = {
   title: PropTypes.string,
   headerItems: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  bodyItems: PropTypes.arrayOf(PropTypes.shape({
-    rows: PropTypes.arrayOf(PropTypes.string),
-    id: PropTypes.number,
-    selected: PropTypes.bool,
-  })).isRequired,
+  bodyItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      rows: PropTypes.arrayOf(PropTypes.string),
+      id: PropTypes.number,
+      selected: PropTypes.bool,
+    })
+  ).isRequired,
   selectItem: PropTypes.func.isRequired,
 };
 
 SelectListView.defaultProps = {
-  title: '',
+  title: "",
 };
 
 export default SelectListView;

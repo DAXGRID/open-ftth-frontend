@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 function DefaultButton({ onClick, innerText, maxWidth }) {
   return (
@@ -21,7 +21,7 @@ DefaultButton.propTypes = {
 };
 
 DefaultButton.defaultProps = {
-  maxWidth: '',
+  maxWidth: "",
 };
 
 export default DefaultButton;

@@ -1,15 +1,15 @@
-import React, { useRef, useEffect } from 'react';
-import useMapbox from './useMapbox';
-import { createLayer, createSource } from './parseFeatures';
+import React, { useRef, useEffect } from "react";
+import useMapbox from "./useMapbox";
+import { createLayer, createSource } from "./parseFeatures";
 import {
   innerConduitHighlight,
   multiConduitHighlight,
   innerConduitSelect,
   multiConduitSelect,
-} from './diagramStyles';
+} from "./diagramStyles";
 
-import RouteNodeDiagramObjects from '../../mock/RouteNodeDiagramObjects';
-import Config from '../../config';
+import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
+import Config from "../../config";
 
 function SchematicDiagram() {
   const mapContainer = useRef(null);
@@ -48,8 +48,8 @@ function SchematicDiagram() {
         const source = createSource(diagramObject);
 
         let { style } = diagramObject;
-        if (style.includes('InnerConduit')) style = 'InnerConduit';
-        else if (style.includes('MultiConduit')) style = 'MultiConduit';
+        if (style.includes("InnerConduit")) style = "InnerConduit";
+        else if (style.includes("MultiConduit")) style = "MultiConduit";
 
         if (!sourcesToAdd[style]) {
           sourcesToAdd[style] = source;
@@ -61,7 +61,7 @@ function SchematicDiagram() {
           const layer = createLayer(style);
           layersToAdd.push(layer);
         }
-      },
+      }
     );
 
     let counter = 1;
@@ -83,13 +83,13 @@ function SchematicDiagram() {
       insertSchematicDiagramData();
       enableResize();
       addLayer(innerConduitHighlight);
-      hoverHighlight('InnerConduit');
-      addLayer(multiConduitHighlight, 'InnerConduit');
-      hoverHighlight('MultiConduit');
+      hoverHighlight("InnerConduit");
+      addLayer(multiConduitHighlight, "InnerConduit");
+      hoverHighlight("MultiConduit");
       addLayer(innerConduitSelect);
-      clickHighlight('InnerConduit');
+      clickHighlight("InnerConduit");
       addLayer(multiConduitSelect);
-      clickHighlight('MultiConduit');
+      clickHighlight("MultiConduit");
     }
   }, [loaded]);
 

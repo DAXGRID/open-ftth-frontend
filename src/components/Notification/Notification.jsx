@@ -1,19 +1,20 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faExclamationCircle,
   faCheckCircle,
   faQuestionCircle,
-} from '@fortawesome/free-solid-svg-icons';
-import PropTypes from 'prop-types';
+} from "@fortawesome/free-solid-svg-icons";
+import PropTypes from "prop-types";
 
 function Notification({ headerText, bodyText, type }) {
-  const show = () => (headerText && bodyText ? 'show' : '');
+  const show = () => (headerText && bodyText ? "show" : "");
 
   const icon = () => {
-    if (type === 'success') {
+    if (type === "success") {
       return faCheckCircle;
-    } if (type === 'error') {
+    }
+    if (type === "error") {
       return faExclamationCircle;
     }
     return faQuestionCircle;
@@ -23,9 +24,7 @@ function Notification({ headerText, bodyText, type }) {
     <div className={`notification ${type} ${show()}`}>
       <div className="notification-header">
         <p className="notification-header__title">
-          <FontAwesomeIcon icon={icon()} />
-          {' '}
-          {headerText}
+          <FontAwesomeIcon icon={icon()} /> {headerText}
         </p>
       </div>
       <div className="notification-body">
@@ -42,9 +41,9 @@ Notification.propTypes = {
 };
 
 Notification.defaultProps = {
-  headerText: '',
-  bodyText: '',
-  type: '',
+  headerText: "",
+  bodyText: "",
+  type: "",
 };
 
 export default Notification;

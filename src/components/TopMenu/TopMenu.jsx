@@ -1,7 +1,7 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-import PropTypes from 'prop-types';
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import PropTypes from "prop-types";
 
 function TopMenu({ toggleSideMenu }) {
   return (
@@ -11,7 +11,7 @@ function TopMenu({ toggleSideMenu }) {
         role="button"
         tabIndex={0}
         onClick={toggleSideMenu}
-        onKeyPress={(e) => (e.key === 'Enter' ? { toggleSideMenu } : () => {})}
+        onKeyPress={(e) => (e.key === "Enter" ? { toggleSideMenu } : () => {})}
       >
         <FontAwesomeIcon icon={faBars} />
       </div>

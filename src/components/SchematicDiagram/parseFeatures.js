@@ -1,4 +1,4 @@
-import { schematicDiagramLayers } from './diagramStyles';
+import { schematicDiagramLayers } from "./diagramStyles";
 
 export function createLayer(featureType) {
   let layer = {
@@ -22,12 +22,12 @@ export function createLayer(featureType) {
 
 export function createSource(feature) {
   return {
-    type: 'geojson',
+    type: "geojson",
     data: {
-      type: 'FeatureCollection',
+      type: "FeatureCollection",
       features: [
         {
-          type: 'Feature',
+          type: "Feature",
           properties: {
             label: feature.label,
             type: feature.style,
