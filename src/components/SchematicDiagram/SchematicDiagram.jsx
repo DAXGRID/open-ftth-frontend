@@ -39,21 +39,6 @@ function SchematicDiagram() {
     };
   }, [mapContainer]);
 
-  useEffect(() => {
-    if (loaded) {
-      insertSchematicDiagramData();
-      enableResize();
-      addLayer(innerConduitHighlight);
-      hoverHighlight('InnerConduit');
-      addLayer(multiConduitHighlight, 'InnerConduit');
-      hoverHighlight('MultiConduit');
-      addLayer(innerConduitSelect);
-      clickHighlight('InnerConduit');
-      addLayer(multiConduitSelect);
-      clickHighlight('MultiConduit');
-    }
-  }, [loaded]);
-
   function insertSchematicDiagramData() {
     const sourcesToAdd = {};
     const layersToAdd = [];
@@ -92,6 +77,21 @@ function SchematicDiagram() {
 
     layersToAdd.forEach((x) => addLayer(x));
   }
+
+  useEffect(() => {
+    if (loaded) {
+      insertSchematicDiagramData();
+      enableResize();
+      addLayer(innerConduitHighlight);
+      hoverHighlight('InnerConduit');
+      addLayer(multiConduitHighlight, 'InnerConduit');
+      hoverHighlight('MultiConduit');
+      addLayer(innerConduitSelect);
+      clickHighlight('InnerConduit');
+      addLayer(multiConduitSelect);
+      clickHighlight('MultiConduit');
+    }
+  }, [loaded]);
 
   return (
     <div className="schematic-diagram">
