@@ -1,13 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import useMapbox from './useMapbox';
+import { createLayer, createSource } from './parseFeatures';
 import {
-  createLayer,
-  createSource,
   innerConduitHighlight,
   multiConduitHighlight,
   innerConduitSelect,
   multiConduitSelect,
-} from './parseFeatures';
+} from './diagramStyles';
+
 import RouteNodeDiagramObjects from '../../mock/RouteNodeDiagramObjects';
 import Config from '../../config';
 

@@ -19,7 +19,7 @@ function useMapbox() {
 
     mapboxgl.accessToken = Config.MAPBOX_API_KEY;
     const newMap = new mapboxgl.Map(config);
-    newMap.on('load', setLoaded(true));
+    newMap.on('load', () => setLoaded(true));
 
     map.current = newMap;
   }, [config]);
