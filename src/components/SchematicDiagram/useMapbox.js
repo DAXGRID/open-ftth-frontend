@@ -19,18 +19,10 @@ function useMapbox() {
 
     mapboxgl.accessToken = Config.MAPBOX_API_KEY;
     const newMap = new mapboxgl.Map(config);
-    newMap.on('load', mapLoaded);
+    newMap.on('load', () => setLoaded(true));
 
     map.current = newMap;
-
-    return () => {
-      map.current.off('load', mapLoaded);
-    };
   }, [config]);
-
-  function mapLoaded() {
-    setLoaded(true);
-  }
 
   function addLayer(layer, layerName) {
     if (map.current.getLayer(layer.id)) return;
@@ -48,6 +40,16 @@ function useMapbox() {
       map.current.addSource(name, source);
     } else {
       mapSource.setData(source.data);
+    }
+  }
+
+  function updateSelectedFeatures(feature) {
+    if (!feature.state.selected) {
+      selectedFeatures.current = [...selectedFeatures.current, feature];
+    } else {
+      selectedFeatures.current = selectedFeatures.current.filter(
+        (x) => x.id !== feature.id,
+      );
     }
   }
 
@@ -70,16 +72,6 @@ function useMapbox() {
         { selected: !featureSelected },
       );
     });
-  }
-
-  function updateSelectedFeatures(feature) {
-    if (!feature.state.selected) {
-      selectedFeatures.current = [...selectedFeatures.current, feature];
-    } else {
-      selectedFeatures.current = selectedFeatures.current.filter(
-        (x) => x.id !== feature.id,
-      );
-    }
   }
 
   function hoverHighlight(featureName) {

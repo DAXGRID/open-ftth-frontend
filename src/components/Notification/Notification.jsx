@@ -5,6 +5,7 @@ import {
   faCheckCircle,
   faQuestionCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 
 function Notification({ headerText, bodyText, type }) {
   const show = () => (headerText && bodyText ? 'show' : '');
@@ -33,5 +34,17 @@ function Notification({ headerText, bodyText, type }) {
     </div>
   );
 }
+
+Notification.propTypes = {
+  headerText: PropTypes.string,
+  bodyText: PropTypes.string,
+  type: PropTypes.string,
+};
+
+Notification.defaultProps = {
+  headerText: '',
+  bodyText: '',
+  type: '',
+};
 
 export default Notification;

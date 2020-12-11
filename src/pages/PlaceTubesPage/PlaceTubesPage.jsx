@@ -21,7 +21,7 @@ function PlaceTubesPage() {
   ]);
 
   useEffect(() => {
-    const token = PubSub.subscribe('RetrieveSelectedResponse', (msg, data) => {
+    const token = PubSub.subscribe('RetrieveSelectedResponse', (_msg, data) => {
       if (data.selectedFeaturesMrid.length === 0) {
         setValidation({
           type: 'error',
@@ -47,9 +47,15 @@ function PlaceTubesPage() {
   };
 
   const selectItem = (selectedItem) => {
-    conduits.forEach((x) => (x.selected = false));
-    selectedItem.selected = true;
-    setConduits([...conduits]);
+    const uConduits = conduits.map((x) => {
+      const conduit = { ...x, selected: false };
+      return conduit;
+    });
+
+    const item = uConduits.find((x) => x.id === selectedItem.id);
+    item.selected = true;
+
+    setConduits(uConduits);
   };
 
   return (

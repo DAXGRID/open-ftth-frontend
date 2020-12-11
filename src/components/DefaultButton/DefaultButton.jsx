@@ -17,7 +17,11 @@ function DefaultButton({ onClick, innerText, maxWidth }) {
 DefaultButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   innerText: PropTypes.string.isRequired,
-  maxWidth: PropTypes.string.isRequired,
+  maxWidth: PropTypes.string,
+};
+
+DefaultButton.defaultProps = {
+  maxWidth: '',
 };
 
 export default DefaultButton;

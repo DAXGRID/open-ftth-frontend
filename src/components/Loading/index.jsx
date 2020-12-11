@@ -1,4 +1,4 @@
-import Loading from "./Loading.jsx";
-import "./Loading.scss";
+import Loading from './Loading';
+import './Loading.scss';
 
 export default Loading;

@@ -1,13 +1,13 @@
 import React, { useRef, useEffect } from 'react';
-import useMapbox from './useMapbox.js';
+import useMapbox from './useMapbox';
+import { createLayer, createSource } from './parseFeatures';
 import {
-  createLayer,
-  createSource,
   innerConduitHighlight,
   multiConduitHighlight,
   innerConduitSelect,
   multiConduitSelect,
-} from './parseFeatures';
+} from './diagramStyles';
+
 import RouteNodeDiagramObjects from '../../mock/RouteNodeDiagramObjects';
 import Config from '../../config';
 
@@ -38,21 +38,6 @@ function SchematicDiagram() {
       mapContainer.current = null;
     };
   }, [mapContainer]);
-
-  useEffect(() => {
-    if (loaded) {
-      insertSchematicDiagramData();
-      enableResize();
-      addLayer(innerConduitHighlight);
-      hoverHighlight('InnerConduit');
-      addLayer(multiConduitHighlight, 'InnerConduit');
-      hoverHighlight('MultiConduit');
-      addLayer(innerConduitSelect);
-      clickHighlight('InnerConduit');
-      addLayer(multiConduitSelect);
-      clickHighlight('MultiConduit');
-    }
-  }, [loaded]);
 
   function insertSchematicDiagramData() {
     const sourcesToAdd = {};
@@ -92,6 +77,21 @@ function SchematicDiagram() {
 
     layersToAdd.forEach((x) => addLayer(x));
   }
+
+  useEffect(() => {
+    if (loaded) {
+      insertSchematicDiagramData();
+      enableResize();
+      addLayer(innerConduitHighlight);
+      hoverHighlight('InnerConduit');
+      addLayer(multiConduitHighlight, 'InnerConduit');
+      hoverHighlight('MultiConduit');
+      addLayer(innerConduitSelect);
+      clickHighlight('InnerConduit');
+      addLayer(multiConduitSelect);
+      clickHighlight('MultiConduit');
+    }
+  }, [loaded]);
 
   return (
     <div className="schematic-diagram">
