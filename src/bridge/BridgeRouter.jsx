@@ -6,7 +6,7 @@ function BridgeRouter() {
   const history = useHistory();
 
   useEffect(() => {
-    const token = PubSub.subscribe("IdentifyNetworkElement", (msg, data) => {
+    const token = PubSub.subscribe("IdentifyNetworkElement", (_msg, data) => {
       history.push(`/identify-feature/${data.identifiedFeatureId}`);
     });
 
