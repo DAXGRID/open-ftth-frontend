@@ -18,10 +18,10 @@ function ListView({ title, headerItems, bodyItems }) {
           ))}
         </div>
         <div className="list-view-body">
-          {bodyItems.map((row, index) => (
-            <div key={index} className="list-view-body-row">
-              {row.map((item, index) => (
-                <div key={index} className="list-view-body-item">
+          {bodyItems.map((row) => (
+            <div key={row.id} className="list-view-body-row">
+              {row.map((item) => (
+                <div key={item} className="list-view-body-item">
                   <p>{item}</p>
                 </div>
               ))}
@@ -36,7 +36,12 @@ function ListView({ title, headerItems, bodyItems }) {
 ListView.propTypes = {
   title: PropTypes.string.isRequired,
   headerItems: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  bodyItems: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+  bodyItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      rows: PropTypes.arrayOf(PropTypes.string).isRequired,
+      id: PropTypes.number.isRequired,
+    })
+  ).isRequired,
 };
 
 export default ListView;

@@ -24,7 +24,8 @@ function Notification({ headerText, bodyText, type }) {
     <div className={`notification ${type} ${show()}`}>
       <div className="notification-header">
         <p className="notification-header__title">
-          <FontAwesomeIcon icon={icon()} /> {headerText}
+          <FontAwesomeIcon icon={icon()} />
+          {headerText}
         </p>
       </div>
       <div className="notification-body">
