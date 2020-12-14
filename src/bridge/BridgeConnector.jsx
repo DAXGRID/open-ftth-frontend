@@ -11,7 +11,7 @@ function send(eventMsg) {
 
 function BridgeConnector() {
   useEffect(() => {
-    client = new WebSocket.w3cwebsocket(`ws://${Config.DESKTOP_BRIDGE_URI}`);
+    client = new WebSocket.w3cwebsocket(`ws://${Config.DESKTOP_BRIDGE_URI}`); // eslint-disable-line new-cap
 
     client.onmessage = (message) => {
       const event = JSON.parse(message.data);

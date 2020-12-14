@@ -51,9 +51,9 @@ SelectListView.propTypes = {
   headerItems: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   bodyItems: PropTypes.arrayOf(
     PropTypes.shape({
-      rows: PropTypes.arrayOf(PropTypes.string),
-      id: PropTypes.number,
-      selected: PropTypes.bool,
+      rows: PropTypes.arrayOf(PropTypes.string).isRequired,
+      id: PropTypes.number.isRequired,
+      selected: PropTypes.bool.isRequired,
     })
   ).isRequired,
   selectItem: PropTypes.func.isRequired,

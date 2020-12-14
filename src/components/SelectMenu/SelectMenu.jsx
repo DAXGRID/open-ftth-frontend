@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 function CustomOption({ text, value, triggerSelected, selected }) {
+  function keyPress(triggerValue) {
+    triggerSelected(triggerValue);
+  }
+
   return (
     <span
       role="button"
@@ -9,9 +13,7 @@ function CustomOption({ text, value, triggerSelected, selected }) {
       className={selected ? "menu-option selected" : "menu-option"}
       data-value={value}
       onClick={() => triggerSelected(value)}
-      onKeyPress={(e) =>
-        e.key === "Enter" ? triggerSelected(value) : () => {}
-      }
+      onKeyPress={(e) => (e.key === "Enter" ? keyPress(value) : () => {})}
     >
       {text}
     </span>

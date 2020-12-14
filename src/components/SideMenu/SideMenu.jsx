@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 
 function SideMenuItem({ path, linkText, icon }) {
   const location = useLocation();
@@ -29,6 +30,16 @@ function SideMenuItem({ path, linkText, icon }) {
   );
 }
 
+SideMenuItem.propTypes = {
+  path: PropTypes.string.isRequired,
+  linkText: PropTypes.string.isRequired,
+  icon: PropTypes.string,
+};
+
+SideMenuItem.defaultProps = {
+  icon: "",
+};
+
 const SideMenu = ({ open }) => {
   const { t } = useTranslation();
 
@@ -49,6 +60,10 @@ const SideMenu = ({ open }) => {
       </ul>
     </div>
   );
+};
+
+SideMenu.propTypes = {
+  open: PropTypes.bool.isRequired,
 };
 
 export default SideMenu;
