@@ -33,11 +33,13 @@ function SideMenuItem({ path, linkText, icon }) {
 SideMenuItem.propTypes = {
   path: PropTypes.string.isRequired,
   linkText: PropTypes.string.isRequired,
-  icon: PropTypes.string,
-};
-
-SideMenuItem.defaultProps = {
-  icon: "",
+  icon: PropTypes.shape(
+    PropTypes.shape({
+      icon: PropTypes.arrayOf(PropTypes.array),
+      iconName: PropTypes.string,
+      prefix: PropTypes.string,
+    }).isRequired
+  ).isRequired,
 };
 
 const SideMenu = ({ open }) => {

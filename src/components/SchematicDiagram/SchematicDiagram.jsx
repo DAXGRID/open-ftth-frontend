@@ -65,12 +65,15 @@ function SchematicDiagram() {
     );
 
     let counter = 1;
+    // eslint is disabled here because the syntax was needed in this
+    /* eslint-disable no-restricted-syntax, guard-for-in */
     for (const source in sourcesToAdd) {
       // Adds ids to each feature to make it possible to hover over them
-      sourcesToAdd[source].data.features.forEach((f) => {
-        f.id = counter;
-        counter++;
-      });
+      for (let i = 0; i < sourcesToAdd[source].data.features.length; i += 1) {
+        const feature = sourcesToAdd[source].data.features[i];
+        feature.id = counter;
+        counter += 1;
+      }
 
       addSource(source, sourcesToAdd[source]);
     }
