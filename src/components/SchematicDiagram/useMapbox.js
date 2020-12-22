@@ -114,7 +114,7 @@ function useMapbox() {
       // Hack to handle resize of mapcanvas because
       // the event gets called to early, so we have to queue it up
       setTimeout(() => {
-        map.resize();
+        map.current.resize();
       }, 1);
     });
   }
