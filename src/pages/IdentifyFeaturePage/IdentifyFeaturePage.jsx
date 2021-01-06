@@ -11,7 +11,7 @@ function IdentifyFeaturePage() {
   }, []);
 
   return (
-    <div style={{ width: "100%" }}>
+    <div className="identify-feature-page">
       <DiagramMenu />
       <SchematicDiagram />
     </div>
