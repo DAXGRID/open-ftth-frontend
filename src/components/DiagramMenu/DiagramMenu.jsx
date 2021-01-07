@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,8 +8,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function ToggleButton({ icon }) {
+  const [toggled, setToggled] = useState(false);
+
   return (
-    <span className="icon-toggle-button">
+    <span
+      role="button"
+      tabIndex="0"
+      onKeyPress={() => setToggled(!toggled)}
+      onClick={() => setToggled(!toggled)}
+      className={toggled ? "icon-toggle-button toggled" : "icon-toggle-button"}
+    >
       <FontAwesomeIcon icon={icon} />
     </span>
   );
@@ -28,9 +36,11 @@ ToggleButton.propTypes = {
 function DiagramMenu() {
   return (
     <div className="diagram-menu">
-      <ToggleButton icon={faSearchLocation} />
-      <ToggleButton icon={faHighlighter} />
-      <ToggleButton icon={faCut} />
+      <div className="diagram-menu-container">
+        <ToggleButton icon={faSearchLocation} />
+        <ToggleButton icon={faHighlighter} />
+        <ToggleButton icon={faCut} />
+      </div>
     </div>
   );
 }

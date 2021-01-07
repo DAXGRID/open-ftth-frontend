@@ -1,24 +1,31 @@
+@import "../../global-styles/colors";
+
 .diagram-menu {
   display: flex;
-  background-color: white;
-  padding: 5px 5px;
-  border: 2px solid #eee;
   justify-content: center;
-  font-size: 25px;
+
+  .diagram-menu-container {
+    display: flex;
+    padding: 5px 5px;
+    justify-content: center;
+    font-size: 25px;
+  }
 
   .icon-toggle-button {
-    border: 2px solid #ccc;
+    border: 2px solid #e3e3e3;
     border-radius: 4px;
     padding: 7px;
     margin: 0px 5px;
 
-    &:toggled {
-      background-color: #eee;
+    &.toggled {
+      background-color: $dark-grey;
+      border-color: $dark-grey;
+      color: white;
     }
 
     &:hover {
       cursor: pointer;
-      border: 2px solid turquoise;
+      border: 2px solid $hover-colorful;
     }
   }
 }
