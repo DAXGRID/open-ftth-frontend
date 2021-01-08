@@ -1,0 +1,13 @@
+@import "../../global-styles/colors";
+
+.diagram-menu {
+  display: flex;
+  justify-content: center;
+
+  .diagram-menu-container {
+    display: flex;
+    padding: 5px 5px;
+    justify-content: center;
+    font-size: 25px;
+  }
+}

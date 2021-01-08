@@ -53,7 +53,7 @@ function useMapbox() {
     }
   }
 
-  function clickHighlight(featureName) {
+  function clickHighlight(featureName, callback) {
     map.current.on("click", featureName, (e) => {
       const bbox = [
         [e.point.x - 5, e.point.y - 5],
@@ -71,6 +71,8 @@ function useMapbox() {
         { source: featureName, id: feature.id },
         { selected: !featureSelected }
       );
+
+      if (callback) callback(featureSelected);
     });
   }
 

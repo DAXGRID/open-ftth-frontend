@@ -7,7 +7,7 @@ import {
   innerConduitSelect,
   multiConduitSelect,
 } from "./diagramStyles";
-
+import useBridgeConnector from "../../bridge/useBridgeConnector";
 import RouteNodeDiagramObjects from "../../mock/RouteNodeDiagramObjects";
 import Config from "../../config";
 
@@ -22,6 +22,7 @@ function SchematicDiagram() {
     enableResize,
     hoverHighlight,
   } = useMapbox();
+  const { highlightFeatures } = useBridgeConnector();
 
   useEffect(() => {
     if (mapContainer.current) {
@@ -89,8 +90,11 @@ function SchematicDiagram() {
       hoverHighlight("InnerConduit");
       addLayer(multiConduitHighlight, "InnerConduit");
       hoverHighlight("MultiConduit");
+
       addLayer(innerConduitSelect);
-      clickHighlight("InnerConduit");
+      clickHighlight("InnerConduit", () => {
+        highlightFeatures();
+      });
       addLayer(multiConduitSelect);
       clickHighlight("MultiConduit");
     }
