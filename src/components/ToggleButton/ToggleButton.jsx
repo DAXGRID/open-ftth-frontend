@@ -2,12 +2,13 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
-function ToggleButton({ toggled, icon, toggle }) {
+function ToggleButton({ toggled, icon, toggle, id }) {
   return (
     <div
       role="button"
       tabIndex="0"
-      onKeyPress={() => toggle()}
+      onClick={() => toggle(id)}
+      onKeyPress={() => toggle(id)}
       className={toggled ? "toggle-button toggled" : "toggle-button"}
     >
       <FontAwesomeIcon icon={icon} />
@@ -25,6 +26,7 @@ ToggleButton.propTypes = {
   ).isRequired,
   toggled: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 export default ToggleButton;
