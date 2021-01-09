@@ -52,14 +52,14 @@ function WorkTaskPage() {
           data: w,
         };
 
-        selectListItem.rows.push(w.name);
-        selectListItem.rows.push(w.centralOfficeArea);
-        selectListItem.rows.push(w.flexPointArea);
-        selectListItem.rows.push(w.splicePointArea);
-        selectListItem.rows.push(w.technology);
-        selectListItem.rows.push(w.workTaskType);
-        selectListItem.rows.push(w.addressString);
-        selectListItem.rows.push(w.status);
+        selectListItem.rows.push({ id: 0, value: w.name });
+        selectListItem.rows.push({ id: 1, value: w.centralOfficeArea });
+        selectListItem.rows.push({ id: 2, value: w.flexPointArea });
+        selectListItem.rows.push({ id: 3, value: w.splicePointArea });
+        selectListItem.rows.push({ id: 4, value: w.technology });
+        selectListItem.rows.push({ id: 5, value: w.workTaskType });
+        selectListItem.rows.push({ id: 6, value: w.addressString });
+        selectListItem.rows.push({ id: 7, value: w.status });
         selectListItem.id = w.mRID;
         selectListItem.collectionId = p.mRID;
 
@@ -133,7 +133,6 @@ function WorkTaskPage() {
 
   const onSelected = (selected) => {
     if (!selected) return;
-
     setSelectedProject(selected);
   };
 
