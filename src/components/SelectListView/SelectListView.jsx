@@ -25,7 +25,7 @@ function SelectListView({ title, headerItems, bodyItems, selectItem }) {
               {row.rows.map((item, index) => (
                 <div
                   role="button"
-                  key={item}
+                  key={item.id}
                   className={
                     row.selected
                       ? "select-list-view-body-item selected"
@@ -35,7 +35,7 @@ function SelectListView({ title, headerItems, bodyItems, selectItem }) {
                   onKeyPress={() => selectItem(row)}
                   tabIndex={index}
                 >
-                  <p>{item}</p>
+                  <p>{item.value}</p>
                 </div>
               ))}
             </div>
@@ -51,8 +51,14 @@ SelectListView.propTypes = {
   headerItems: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   bodyItems: PropTypes.arrayOf(
     PropTypes.shape({
-      rows: PropTypes.arrayOf(PropTypes.string).isRequired,
-      id: PropTypes.number.isRequired,
+      rows: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+            .isRequired,
+          value: PropTypes.string,
+        })
+      ).isRequired,
+      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
       selected: PropTypes.bool.isRequired,
     })
   ).isRequired,
