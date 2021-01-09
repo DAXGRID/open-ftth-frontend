@@ -5,3 +5,4 @@ dist
 
 # Temporary env files
 /public/config-env.js
+.log
