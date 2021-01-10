@@ -104,13 +104,14 @@ SelectMenu.propTypes = {
         .isRequired,
       selected: PropTypes.bool.isRequired,
     })
-  ).isRequired,
+  ),
   removePlaceHolderOnSelect: PropTypes.bool,
   onSelected: PropTypes.func,
   maxWidth: PropTypes.string,
 };
 
 SelectMenu.defaultProps = {
+  options: undefined,
   removePlaceHolderOnSelect: false,
   onSelected: () => {},
   maxWidth: "",
