@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Client, defaultExchanges, subscriptionExchange, Provider } from "urql";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
 import Transport from "subscriptions-transport-ws";
 import App from "./App";
 import Config from "./config";
 import "./translation/i18n";
 import "./global-styles/reset.scss";
 import "./global-styles/index.scss";
+import keycloak from "./keycloak";
 
 const subscriptionClient = new Transport.SubscriptionClient(
   `ws://${Config.API_GATEWAY_URI}/graphql`,
@@ -27,9 +29,11 @@ const client = new Client({
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider value={client}>
-      <App />
-    </Provider>
+    <ReactKeycloakProvider authClient={keycloak}>
+      <Provider value={client}>
+        <App />
+      </Provider>
+    </ReactKeycloakProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
