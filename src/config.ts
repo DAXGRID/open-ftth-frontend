@@ -1,3 +1,12 @@
+declare global {
+  interface Window {
+    config_MAPBOX_API_KEY: string;
+    config_MAPBOX_STYLE_URL: string;
+    config_API_GATEWAY_URI: string;
+    config_DESKTOP_BRIDGE_URI: string;
+  }
+}
+
 const settings = {
   MAPBOX_API_KEY: window.config_MAPBOX_API_KEY,
   MAPBOX_STYLE_URI: window.config_MAPBOX_STYLE_URL,
