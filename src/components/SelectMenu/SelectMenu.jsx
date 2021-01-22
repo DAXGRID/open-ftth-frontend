@@ -33,14 +33,12 @@ function SelectMenu({
   onSelected,
   maxWidth,
 }) {
-  if (!options || options.length === 0) return <div />;
-
   const [toggled, setToggled] = useState(false);
   const [selected, setSelected] = useState({});
   const [selectOptions, setSelectOptions] = useState(options);
 
   useEffect(() => {
-    const option = selectOptions.find((o) => o.selected === true);
+    const option = selectOptions?.find((o) => o.selected === true);
     setSelected(option);
     options = selectOptions;
   }, [selectOptions]);
@@ -77,11 +75,11 @@ function SelectMenu({
     >
       <div className={toggled ? "menu-select open" : "menu-select"}>
         <div className="menu-select__trigger">
-          <span>{selected.text}</span>
+          <span>{selected?.text}</span>
           <div className="arrow" />
         </div>
         <div className="menu-options">
-          {selectOptions.map((option) => (
+          {selectOptions?.map((option) => (
             <CustomOption
               key={option.value}
               text={option.text}
