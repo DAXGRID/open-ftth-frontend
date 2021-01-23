@@ -6,9 +6,12 @@ function BridgeRouter() {
   const history = useHistory();
 
   useEffect(() => {
-    const token = PubSub.subscribe("IdentifyNetworkElement", (_msg, data) => {
-      history.push(`/identify-feature/${data.identifiedFeatureId}`);
-    });
+    const token = PubSub.subscribe(
+      "IdentifyNetworkElement",
+      (_msg: string, data: any) => {
+        history.push(`/identify-feature/${data.identifiedFeatureId}`);
+      }
+    );
 
     return () => {
       PubSub.unsubscribe(token);

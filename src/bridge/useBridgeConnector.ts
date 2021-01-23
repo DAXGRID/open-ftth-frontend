@@ -9,7 +9,7 @@ function useBridgeConnector() {
   function panToCoordinate(coordinate: string) {
     const message = {
       eventType: "PanToCoordinate",
-      username: "user",
+      username: "notation",
       coordinate: JSON.parse(coordinate),
     };
 
