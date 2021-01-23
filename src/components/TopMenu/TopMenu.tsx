@@ -1,17 +1,20 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import PropTypes from "prop-types";
 
-function TopMenu({ toggleSideMenu }) {
+type TopMenuProps = {
+  toggleSideMenu: () => void;
+}
+
+function TopMenu({ toggleSideMenu }: TopMenuProps) {
   return (
     <div className="top-menu">
       <div
         className="side-menu-icon"
         role="button"
         tabIndex={0}
-        onClick={toggleSideMenu}
-        onKeyPress={(e) => (e.key === "Enter" ? { toggleSideMenu } : () => {})}
+        onClick={() => toggleSideMenu()}
+        onKeyPress={(e) => (e.key === "Enter" ? { toggleSideMenu } : () => { })}
       >
         <FontAwesomeIcon icon={faBars} />
       </div>
@@ -22,9 +25,5 @@ function TopMenu({ toggleSideMenu }) {
     </div>
   );
 }
-
-TopMenu.propTypes = {
-  toggleSideMenu: PropTypes.func.isRequired,
-};
 
 export default TopMenu;
