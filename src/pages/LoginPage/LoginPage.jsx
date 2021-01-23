@@ -1,6 +1,6 @@
-import React from "react";
 import { Redirect, useLocation } from "react-router-dom";
 import { useKeycloak } from "@react-keycloak/web";
+import Loading from "../../components/Loading";
 
 const LoginPage = () => {
   const location = useLocation();
@@ -10,7 +10,7 @@ const LoginPage = () => {
 
   const { keycloak, initialized } = useKeycloak();
 
-  if (!initialized) return <div>Loading</div>;
+  if (!initialized) return <Loading />;
 
   if (keycloak.authenticated)
     return <Redirect to={currentLocationState.from} />;
