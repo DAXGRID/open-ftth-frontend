@@ -55,21 +55,24 @@ function PlaceTubesPage() {
   ]);
 
   useEffect(() => {
-    const token = PubSub.subscribe("RetrieveSelectedResponse", (_msg, data) => {
-      if (data.selectedFeaturesMrid.length === 0) {
-        setValidation({
-          type: "error",
-          headerText: t("Error"),
-          bodyText: t("No segments selected"),
-        });
-      } else {
-        setValidation({
-          type: "success",
-          headerText: t("Success"),
-          bodyText: t("Conduit(s) are now placed"),
-        });
+    const token = PubSub.subscribe(
+      "RetrieveSelectedResponse",
+      (_msg: string, data: any) => {
+        if (data.selectedFeaturesMrid.length === 0) {
+          setValidation({
+            type: "error",
+            headerText: t("Error"),
+            bodyText: t("No segments selected"),
+          });
+        } else {
+          setValidation({
+            type: "success",
+            headerText: t("Success"),
+            bodyText: t("Conduit(s) are now placed"),
+          });
+        }
       }
-    });
+    );
 
     return () => {
       PubSub.unsubscribe(token);
@@ -80,7 +83,7 @@ function PlaceTubesPage() {
     retrieveSelected();
   };
 
-  const selectItem = (selectedItem) => {
+  const selectItem = (selectedItem: any) => {
     const uConduits = conduits.map((x) => {
       const conduit = { ...x, selected: false };
       return conduit;
