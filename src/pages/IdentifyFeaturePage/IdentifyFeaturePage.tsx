@@ -10,7 +10,7 @@ import SchematicDiagram from "../../components/SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
 
 function IdentifyFeaturePage() {
-  const { id } = useParams();
+  const { id }: { id: string } = useParams();
   const [toggleButtons, setToggleButtons] = useState([
     { icon: faCut, toggled: false, id: 1 },
     { icon: faSearchLocation, toggled: false, id: 2 },
@@ -19,9 +19,9 @@ function IdentifyFeaturePage() {
 
   useEffect(() => {
     document.title = id;
-  }, []);
+  }, [id]);
 
-  function toggle(buttonId) {
+  function toggle(buttonId: number) {
     setToggleButtons(
       toggleButtons.map((button) =>
         button.id === buttonId
