@@ -1,7 +1,27 @@
-import React from "react";
-import PropTypes from "prop-types";
+type Row = {
+  id: string | number;
+  value: string;
+};
 
-function SelectListView({ title, headerItems, bodyItems, selectItem }) {
+type BodyItem = {
+  rows: Row[];
+  id: number | string;
+  selected: boolean;
+};
+
+type SelectListViewProps = {
+  title?: string;
+  headerItems: string[];
+  bodyItems: BodyItem[];
+  selectItem: (selected: BodyItem) => void;
+};
+
+function SelectListView({
+  title,
+  headerItems,
+  bodyItems,
+  selectItem,
+}: SelectListViewProps) {
   if (!bodyItems) return <div />;
 
   return (
@@ -45,28 +65,5 @@ function SelectListView({ title, headerItems, bodyItems, selectItem }) {
     </div>
   );
 }
-
-SelectListView.propTypes = {
-  title: PropTypes.string,
-  headerItems: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  bodyItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      rows: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-            .isRequired,
-          value: PropTypes.string,
-        })
-      ).isRequired,
-      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-      selected: PropTypes.bool.isRequired,
-    })
-  ).isRequired,
-  selectItem: PropTypes.func.isRequired,
-};
-
-SelectListView.defaultProps = {
-  title: "",
-};
 
 export default SelectListView;
