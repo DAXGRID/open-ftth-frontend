@@ -9,8 +9,10 @@ import {
 type NotificationProps = {
   headerText?: string;
   bodyText?: string;
-  type?: string;
+  type?: NotificationType;
 };
+
+type NotificationType = "success" | "error";
 
 function Notification({ headerText, bodyText, type }: NotificationProps) {
   const show = () => (headerText && bodyText ? "show" : "");
@@ -40,4 +42,5 @@ function Notification({ headerText, bodyText, type }: NotificationProps) {
   );
 }
 
+export type { NotificationType };
 export default Notification;

@@ -4,11 +4,11 @@ import PubSub from "pubsub-js";
 import SelectListView from "../../components/SelectListView";
 import SelectMenu from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
-import Notification from "../../components/Notification";
+import Notification, { NotificationType } from "../../components/Notification";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
 
 type Validation = {
-  type: string | undefined;
+  type: NotificationType;
   headerText: string | undefined;
   bodyText: string | undefined;
 };

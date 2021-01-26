@@ -3,7 +3,7 @@ type Row = {
   value: string;
 };
 
-type BodyItem = {
+declare type BodyItem = {
   rows: Row[];
   id: number | string;
   selected: boolean;
