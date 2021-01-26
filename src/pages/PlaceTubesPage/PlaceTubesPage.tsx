@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PubSub from "pubsub-js";
-import SelectListView from "../../components/SelectListView";
+import SelectListView, { BodyItem } from "../../components/SelectListView";
 import SelectMenu from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
 import Notification, { NotificationType } from "../../components/Notification";
@@ -17,7 +17,7 @@ function PlaceTubesPage() {
   const { t } = useTranslation();
   const { retrieveSelected } = useBridgeConnector();
   const [validation, setValidation] = useState<Validation | undefined>();
-  const [conduits, setConduits] = useState([
+  const [conduits, setConduits] = useState<BodyItem[]>([
     {
       rows: [
         { id: 0, value: "Emtelle" },
@@ -90,13 +90,17 @@ function PlaceTubesPage() {
   };
 
   const selectItem = (selectedItem: any) => {
-    const uConduits = conduits.map((x) => {
-      const conduit = { ...x, selected: false };
-      return conduit;
+    const uConduits = conduits.map<BodyItem>((x) => {
+      return { ...x, selected: false };
     });
 
-    const item: any = uConduits.find((x) => x.id === selectedItem.id);
-    item.selected = true;
+    const item: BodyItem | undefined = uConduits.find(
+      (x) => x.id === selectedItem.id
+    );
+
+    if (item) {
+      item.selected = true;
+    }
 
     setConduits(uConduits);
   };
@@ -117,7 +121,6 @@ function PlaceTubesPage() {
           selectItem={selectItem}
         />
       </div>
-
       <div className="full-row">
         <SelectMenu
           options={[

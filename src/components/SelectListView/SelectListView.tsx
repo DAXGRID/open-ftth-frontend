@@ -3,7 +3,7 @@ type Row = {
   value: string;
 };
 
-declare type BodyItem = {
+type BodyItem = {
   rows: Row[];
   id: number | string;
   selected: boolean;
@@ -66,4 +66,5 @@ function SelectListView({
   );
 }
 
+export type { BodyItem, Row };
 export default SelectListView;
