@@ -1,30 +1,17 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
+import CustomOption from "./CustomOption";
 
-function CustomOption({ text, value, triggerSelected, selected }) {
-  function keyPress(triggerValue) {
-    triggerSelected(triggerValue);
-  }
+type SelectOption = {
+  text: string;
+  value: string | number;
+  selected: boolean;
+};
 
-  return (
-    <span
-      role="button"
-      tabIndex={0}
-      className={selected ? "menu-option selected" : "menu-option"}
-      data-value={value}
-      onClick={() => triggerSelected(value)}
-      onKeyPress={(e) => (e.key === "Enter" ? keyPress(value) : () => {})}
-    >
-      {text}
-    </span>
-  );
-}
-
-CustomOption.propTypes = {
-  text: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  triggerSelected: PropTypes.func.isRequired,
-  selected: PropTypes.bool.isRequired,
+type SelectMenuProps = {
+  options: SelectOption[];
+  removePlaceHolderOnSelect: boolean;
+  onSelected: (selected: SelectOption | undefined) => void;
+  maxWidth: string;
 };
 
 function SelectMenu({
@@ -32,9 +19,9 @@ function SelectMenu({
   removePlaceHolderOnSelect,
   onSelected,
   maxWidth,
-}) {
+}: SelectMenuProps) {
   const [toggled, setToggled] = useState(false);
-  const [selected, setSelected] = useState({});
+  const [selected, setSelected] = useState<SelectOption>();
   const [selectOptions, setSelectOptions] = useState(options);
 
   useEffect(() => {
@@ -49,7 +36,7 @@ function SelectMenu({
     }
   }, [selected]);
 
-  const triggerSelected = (selectedValue) => {
+  const triggerSelected = (selectedValue: string | number) => {
     let selectOptionsCopy = selectOptions.map((o) => {
       const option = { ...o, selected: o.value === selectedValue };
       return option;
@@ -93,26 +80,5 @@ function SelectMenu({
     </div>
   );
 }
-
-SelectMenu.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      text: PropTypes.string.isRequired,
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-        .isRequired,
-      selected: PropTypes.bool.isRequired,
-    })
-  ),
-  removePlaceHolderOnSelect: PropTypes.bool,
-  onSelected: PropTypes.func,
-  maxWidth: PropTypes.string,
-};
-
-SelectMenu.defaultProps = {
-  options: undefined,
-  removePlaceHolderOnSelect: false,
-  onSelected: () => {},
-  maxWidth: "",
-};
 
 export default SelectMenu;
