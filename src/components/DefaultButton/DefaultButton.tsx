@@ -3,7 +3,7 @@ import React from "react";
 type DefaultButtonProps = {
   onClick: () => void;
   innerText: string | undefined;
-  maxWidth: string | undefined;
+  maxWidth?: string;
 };
 
 function DefaultButton({ onClick, innerText, maxWidth }: DefaultButtonProps) {

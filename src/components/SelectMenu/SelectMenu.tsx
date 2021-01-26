@@ -11,7 +11,7 @@ type SelectMenuProps = {
   options: SelectOption[];
   removePlaceHolderOnSelect: boolean;
   onSelected: (selected: SelectOption | undefined) => void;
-  maxWidth: string;
+  maxWidth?: string;
 };
 
 function SelectMenu({

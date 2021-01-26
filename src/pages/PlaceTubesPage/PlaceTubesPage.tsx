@@ -7,10 +7,16 @@ import DefaultButton from "../../components/DefaultButton";
 import Notification from "../../components/Notification";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
 
+type Validation = {
+  type: string | undefined;
+  headerText: string | undefined;
+  bodyText: string | undefined;
+};
+
 function PlaceTubesPage() {
   const { t } = useTranslation();
   const { retrieveSelected } = useBridgeConnector();
-  const [validation, setValidation] = useState({});
+  const [validation, setValidation] = useState<Validation | undefined>();
   const [conduits, setConduits] = useState([
     {
       rows: [
@@ -77,7 +83,7 @@ function PlaceTubesPage() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, []);
+  }, [t]);
 
   const placeConduit = () => {
     retrieveSelected();
@@ -89,7 +95,7 @@ function PlaceTubesPage() {
       return conduit;
     });
 
-    const item = uConduits.find((x) => x.id === selectedItem.id);
+    const item: any = uConduits.find((x) => x.id === selectedItem.id);
     item.selected = true;
 
     setConduits(uConduits);
@@ -99,9 +105,9 @@ function PlaceTubesPage() {
     <div className="page-container">
       <div className="full-row">
         <Notification
-          type={validation.type}
-          headerText={validation.headerText}
-          bodyText={validation.bodyText}
+          type={validation?.type}
+          headerText={validation?.headerText}
+          bodyText={validation?.bodyText}
         />
       </div>
       <div className="full-row">
@@ -121,6 +127,9 @@ function PlaceTubesPage() {
             { text: "Yellow", value: 3, selected: false },
           ]}
           removePlaceHolderOnSelect
+          onSelected={(selected) => {
+            console.log(selected);
+          }}
         />
         <DefaultButton innerText={t("Place conduit")} onClick={placeConduit} />
       </div>
