@@ -1,4 +1,37 @@
-export const ProjectsAndWorkTasks = `query {
+interface Geometry {
+  coordinates: string[];
+  type: string;
+}
+
+export interface WorkTask {
+  mRID: string;
+  workTaskType: string;
+  name?: string;
+  status?: string;
+  addressString?: string;
+  centralOfficeArea?: string;
+  flexPointArea?: string;
+  splicePointArea?: string;
+  installationId?: string;
+  technology?: string;
+  geometry?: Geometry;
+}
+
+interface ProjectAndWorkTasks {
+  mRID?: string;
+  name?: string;
+  workTasks: WorkTask[];
+}
+
+interface WorkService {
+  projectsAndWorkTasks: ProjectAndWorkTasks[];
+}
+
+export interface ProjectAndWorkTasksData {
+  workService: WorkService;
+}
+
+export const PROJECT_AND_WORK_TASKS = `query {
   workService {
     projectsAndWorkTasks {
       mRID
@@ -23,7 +56,7 @@ export const ProjectsAndWorkTasks = `query {
   }
 }`;
 
-export const SetCurrentWorkTask = `mutation ($userName: String!, $workTaskId: ID!) {
+export const SET_CURRENT_WORK_TASK = `mutation ($userName: String!, $workTaskId: ID!) {
   userContext {
     setCurrentWorkTask(userName: $userName, workTaskId: $workTaskId)
     {

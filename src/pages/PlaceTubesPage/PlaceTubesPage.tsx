@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PubSub from "pubsub-js";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
-import SelectMenu from "../../components/SelectMenu";
+import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
 import Notification, { NotificationType } from "../../components/Notification";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
@@ -17,6 +17,12 @@ function PlaceTubesPage() {
   const { t } = useTranslation();
   const { retrieveSelected } = useBridgeConnector();
   const [validation, setValidation] = useState<Validation | undefined>();
+  const [options] = useState<SelectOption[]>([
+    { text: t("Pick color marking"), value: -1, selected: true },
+    { text: "Red", value: 1, selected: false },
+    { text: "Blue", value: 2, selected: false },
+    { text: "Yellow", value: 3, selected: false },
+  ]);
   const [conduits, setConduits] = useState<BodyItem[]>([
     {
       rows: [
@@ -89,7 +95,7 @@ function PlaceTubesPage() {
     retrieveSelected();
   };
 
-  const selectItem = (selectedItem: any) => {
+  const selectItem = (selectedItem: BodyItem) => {
     const uConduits = conduits.map<BodyItem>((x) => {
       return { ...x, selected: false };
     });
@@ -123,16 +129,9 @@ function PlaceTubesPage() {
       </div>
       <div className="full-row">
         <SelectMenu
-          options={[
-            { text: t("Pick color marking"), value: -1, selected: true },
-            { text: "Red", value: 1, selected: false },
-            { text: "Blue", value: 2, selected: false },
-            { text: "Yellow", value: 3, selected: false },
-          ]}
+          options={options}
           removePlaceHolderOnSelect
-          onSelected={(selected) => {
-            console.log(selected);
-          }}
+          onSelected={() => {}}
         />
         <DefaultButton innerText={t("Place conduit")} onClick={placeConduit} />
       </div>

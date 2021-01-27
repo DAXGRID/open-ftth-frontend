@@ -42,5 +42,5 @@ function Notification({ headerText, bodyText, type }: NotificationProps) {
   );
 }
 
-export type { NotificationType };
+export type { NotificationType, NotificationProps };
 export default Notification;

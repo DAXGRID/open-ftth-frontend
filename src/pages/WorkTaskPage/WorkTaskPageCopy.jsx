@@ -5,7 +5,10 @@ import SelectListView from "../../components/SelectListView";
 import DefaultButton from "../../components/DefaultButton";
 import SelectMenu from "../../components/SelectMenu";
 import Notification from "../../components/Notification";
-import { ProjectsAndWorkTasks, SetCurrentWorkTask } from "../../qgl/WorkOrders";
+import {
+  PROJECT_AND_WORK_TASKS,
+  SetCurrentWorkTask,
+} from "../../qgl/WorkOrders";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
 
 function WorkTaskPage() {
@@ -18,7 +21,7 @@ function WorkTaskPage() {
     SetCurrentWorkTask
   );
 
-  const [result] = useQuery({ query: ProjectsAndWorkTasks });
+  const [result] = useQuery({ query: PROJECT_AND_WORK_TASKS });
   const { fetching, error } = result;
   const { panToCoordinate } = useBridgeConnector();
 

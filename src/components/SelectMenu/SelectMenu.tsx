@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import CustomOption from "./CustomOption";
 
-type SelectOption = {
+interface SelectOption {
   text: string;
   value: string | number;
   selected: boolean;
-};
+}
 
 type SelectMenuProps = {
   options: SelectOption[];
-  removePlaceHolderOnSelect: boolean;
+  removePlaceHolderOnSelect?: boolean;
   onSelected: (selected: SelectOption | undefined) => void;
   maxWidth?: string;
 };
@@ -23,6 +23,10 @@ function SelectMenu({
   const [toggled, setToggled] = useState(false);
   const [selected, setSelected] = useState<SelectOption>();
   const [selectOptions, setSelectOptions] = useState(options);
+
+  useEffect(() => {
+    setSelectOptions(options);
+  }, [options]);
 
   useEffect(() => {
     const option = selectOptions?.find((o) => o.selected === true);
@@ -81,4 +85,5 @@ function SelectMenu({
   );
 }
 
+export type { SelectOption };
 export default SelectMenu;

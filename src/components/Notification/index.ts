@@ -1,5 +1,8 @@
-import Notification, { NotificationType } from "./Notification";
+import Notification, {
+  NotificationType,
+  NotificationProps,
+} from "./Notification";
 import "./Notification.scss";
 
-export type { NotificationType };
+export type { NotificationType, NotificationProps };
 export default Notification;
