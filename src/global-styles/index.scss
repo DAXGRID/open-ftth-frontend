@@ -11,6 +11,12 @@
   outline: 0;
 }
 
+html,
+body,
+#root {
+  height: 100vh;
+}
+
 body {
   margin: 0;
   font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
@@ -27,6 +33,7 @@ body {
   transform: translateX(0px);
   color: $text-primary;
   justify-content: center;
+  min-height: calc(100% - 67px);
 
   &.side-menu-open {
     width: 100%;
@@ -34,9 +41,6 @@ body {
 }
 
 .page-container {
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1;
   max-width: 1300px;
 }
 
