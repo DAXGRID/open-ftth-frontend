@@ -25,6 +25,7 @@ function WorkTaskPage() {
   const [selectedProject, setSelectedProject] = useState<SelectOption>();
   const [workTasks, setWorkTasks] = useState<WorkTaskBodyItem[]>([]);
   const [validation, setValidation] = useState<NotificationProps>({});
+  const { panToCoordinate } = useBridgeConnector();
   const [currentWorkTaskResult, setCurrentWorkTask] = useMutation(
     SET_CURRENT_WORK_TASK
   );
@@ -96,7 +97,16 @@ function WorkTaskPage() {
       });
     });
 
-    selectableProjects[0].selected = true;
+    // if project is already selected reselect it.
+    if (selectedProject) {
+      const p = selectableProjects.find(
+        (x) => x.value == selectedProject.value
+      );
+      if (p) p.selected = true;
+    } else {
+      selectableProjects[0].selected = true;
+    }
+
     setProjects(selectableProjects);
     setWorkTasks(selectableWorkTasks);
   }, [result]);
@@ -140,6 +150,23 @@ function WorkTaskPage() {
         headerText: t("Error"),
         bodyText: result.error.message,
       });
+    }
+  };
+
+  const panToAddress = () => {
+    const selectedWorkTask = workTasks.find((x) => x.selected);
+
+    if (!selectedWorkTask?.workTask.geometry) {
+      setValidation({
+        type: "error",
+        headerText: t("Error"),
+        bodyText: t("The work task has no coordinates"),
+      });
+    }
+
+    const coordinate = selectedWorkTask?.workTask?.geometry?.coordinates;
+    if (coordinate) {
+      panToCoordinate(coordinate);
     }
   };
 
@@ -190,7 +217,7 @@ function WorkTaskPage() {
         <DefaultButton
           maxWidth="400px"
           innerText={t("Pan/Zoom to address")}
-          onClick={() => {}}
+          onClick={panToAddress}
         />
       </div>
     </div>

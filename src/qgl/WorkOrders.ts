@@ -1,5 +1,5 @@
 interface Geometry {
-  coordinates: string[];
+  coordinates: string;
   type: string;
 }
 
