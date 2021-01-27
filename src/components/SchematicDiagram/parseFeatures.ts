@@ -1,6 +1,6 @@
 import { schematicDiagramLayers } from "./diagramStyles";
 
-export function createLayer(featureType) {
+export function createLayer(featureType: any) {
   let layer = {
     id: featureType,
     order: 0,
@@ -20,7 +20,7 @@ export function createLayer(featureType) {
   return layer;
 }
 
-export function createSource(feature) {
+export function createSource(feature: any) {
   return {
     type: "geojson",
     data: {

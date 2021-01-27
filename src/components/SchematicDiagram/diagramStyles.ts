@@ -1,6 +1,6 @@
 import colorMap from "./colors";
 
-export const schematicDiagramLayers = {
+export const schematicDiagramLayers: any = {
   Well: {
     type: "line",
     order: 0,

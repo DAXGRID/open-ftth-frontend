@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import useMapbox from "./useMapbox";
 import { createLayer, createSource } from "./parseFeatures";
 import {
@@ -38,7 +38,7 @@ function SchematicDiagram() {
     return () => {
       mapContainer.current = null;
     };
-  }, [mapContainer]);
+  }, [mapContainer, setConfig]);
 
   function insertSchematicDiagramData() {
     const sourcesToAdd = {};

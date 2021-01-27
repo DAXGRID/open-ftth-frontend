@@ -100,7 +100,7 @@ function WorkTaskPage() {
     // if project is already selected reselect it.
     if (selectedProject) {
       const p = selectableProjects.find(
-        (x) => x.value == selectedProject.value
+        (x) => x.value === selectedProject.value
       );
       if (p) p.selected = true;
     } else {

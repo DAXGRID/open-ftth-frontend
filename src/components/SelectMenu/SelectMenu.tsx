@@ -31,14 +31,13 @@ function SelectMenu({
   useEffect(() => {
     const option = selectOptions?.find((o) => o.selected === true);
     setSelected(option);
-    options = selectOptions;
   }, [selectOptions]);
 
   useEffect(() => {
     if (onSelected) {
       onSelected(selected);
     }
-  }, [selected]);
+  }, [selected, onSelected]);
 
   const triggerSelected = (selectedValue: string | number) => {
     let selectOptionsCopy = selectOptions.map((o) => {
