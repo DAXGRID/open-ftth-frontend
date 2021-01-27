@@ -1,4 +1,4 @@
-export default {
+const data = {
   data: {
     diagramService: {
       buildRouteNodeDiagram: {
@@ -447,3 +447,5 @@ export default {
     },
   },
 };
+
+export default data;
