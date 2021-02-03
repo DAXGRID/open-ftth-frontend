@@ -5,12 +5,18 @@ executors:
     environment:
       IMAGE_NAME: openftth/frontend
     docker:
-      - image: circleci/buildpack-deps:stretch
+    - image: circleci/buildpack-deps:stretch
+      auth:
+        username: $DOCKER_LOGIN
+        password: $DOCKER_ACCESSTOKEN
   alpine-git:
     environment:
       IMAGE_NAME: openftth/frontend
     docker:
     - image: alpine/git
+      auth:
+        username: $DOCKER_LOGIN
+        password: $DOCKER_ACCESSTOKEN
 
 jobs:
   build-docker-image:
@@ -83,6 +89,7 @@ workflows:
   build-test-upload_image:
     jobs:
       - build-docker-image:
+          context: docker
           filters:
             tags:
               only: /^v.*/
@@ -98,6 +105,7 @@ workflows:
             branches:
               ignore: /.*/
       - update-helm-chart:
+          context: docker
           requires:
            - docker-publish-image
           filters:
