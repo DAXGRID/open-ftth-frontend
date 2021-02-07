@@ -11,12 +11,14 @@ import "./global-styles/reset.scss";
 import "./global-styles/index.scss";
 
 const subscriptionClient = new SubscriptionClient(
-  `ws://${Config.API_GATEWAY_URI}/graphql`, {
-  reconnect: true
-});
+  `${Config.API_GATEWAY_WS_URI}/graphql`,
+  {
+    reconnect: true,
+  }
+);
 
 const client = new Client({
-  url: `http://${Config.API_GATEWAY_URI}/graphql`,
+  url: `${Config.API_GATEWAY_HTTP_URI}/graphql`,
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({
@@ -35,5 +37,5 @@ ReactDOM.render(
       </Provider>
     </ReactKeycloakProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
