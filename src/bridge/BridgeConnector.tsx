@@ -11,7 +11,7 @@ function send(eventMsg: any) {
 
 function BridgeConnector() {
   useEffect(() => {
-    client = new w3cwebsocket(`ws://${Config.DESKTOP_BRIDGE_URI}`);
+    client = new w3cwebsocket(Config.DESKTOP_BRIDGE_URI);
 
     client.onmessage = (message: any) => {
       const event = JSON.parse(message.data);
