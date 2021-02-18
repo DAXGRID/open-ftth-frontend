@@ -5,9 +5,15 @@ import TopMenu from "./components/TopMenu";
 import BridgeConnector from "./bridge/BridgeConnector";
 import BridgeRouter from "./bridge/BridgeRouter";
 import SideMenu from "./components/SideMenu";
+import Loading from "./components/Loading";
+import { useKeycloak } from "@react-keycloak/web";
 
 function App() {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
+
+  const { initialized } = useKeycloak();
+
+  if (!initialized) return <Loading />;
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);
