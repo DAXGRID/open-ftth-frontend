@@ -1,15 +1,21 @@
 import { send } from "./BridgeConnector";
+import { useKeycloak } from "@react-keycloak/web";
 
 function useBridgeConnector() {
+  const { keycloak } = useKeycloak();
+
   function retrieveSelected() {
-    const message = { eventType: "RetrieveSelected", username: "user" };
+    const message = {
+      eventType: "RetrieveSelected",
+      username: keycloak.profile?.username,
+    };
     send(message);
   }
 
   function panToCoordinate(coordinate: string) {
     const message = {
       eventType: "PanToCoordinate",
-      username: "notation",
+      username: keycloak.profile?.username,
       coordinate: JSON.parse(coordinate),
     };
 
@@ -24,7 +30,7 @@ function useBridgeConnector() {
         "b92d9f91-1a08-4f49-932a-e64f9cef756b",
       ],
       featureType: "RouteSegment",
-      username: "user",
+      username: keycloak.profile?.username,
     };
 
     send(message);
