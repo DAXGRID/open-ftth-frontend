@@ -11,9 +11,11 @@ import { useKeycloak } from "@react-keycloak/web";
 function App() {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
 
-  const { initialized } = useKeycloak();
+  const { initialized, keycloak } = useKeycloak();
 
   if (!initialized) return <Loading />;
+
+  keycloak.loadUserProfile();
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);
