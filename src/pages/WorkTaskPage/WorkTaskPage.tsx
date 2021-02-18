@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "urql";
 import { useTranslation } from "react-i18next";
+import useBridgeConnector from "../../bridge/useBridgeConnector";
+import { useKeycloak } from "@react-keycloak/web";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import DefaultButton from "../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
@@ -11,7 +13,6 @@ import {
   ProjectAndWorkTasksData,
   WorkTask,
 } from "../../qgl/WorkOrders";
-import useBridgeConnector from "../../bridge/useBridgeConnector";
 import Loading from "../../components/Loading";
 
 interface WorkTaskBodyItem extends BodyItem {
@@ -21,6 +22,7 @@ interface WorkTaskBodyItem extends BodyItem {
 
 function WorkTaskPage() {
   const { t } = useTranslation();
+  const { keycloak } = useKeycloak();
   const [projects, setProjects] = useState<SelectOption[]>([]);
   const [selectedProject, setSelectedProject] = useState<SelectOption>();
   const [workTasks, setWorkTasks] = useState<WorkTaskBodyItem[]>([]);
@@ -131,7 +133,7 @@ function WorkTaskPage() {
     }
 
     const parameters = {
-      userName: "user",
+      userName: keycloak.profile?.username,
       workTaskId: selectedWorkTask.id,
     };
 
