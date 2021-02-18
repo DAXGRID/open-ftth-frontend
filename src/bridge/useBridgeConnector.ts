@@ -5,7 +5,10 @@ function useBridgeConnector() {
   const { keycloak } = useKeycloak();
 
   function retrieveSelected() {
-    const message = { eventType: "RetrieveSelected", username: "user" };
+    const message = {
+      eventType: "RetrieveSelected",
+      username: keycloak.profile?.username,
+    };
     send(message);
   }
 
