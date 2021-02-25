@@ -1,87 +1,42 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PubSub from "pubsub-js";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
-import Notification, { NotificationType } from "../../components/Notification";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
-
-type Validation = {
-  type: NotificationType;
-  headerText: string | undefined;
-  bodyText: string | undefined;
-};
+import Loading from "../../components/Loading";
+import { useQuery } from "urql";
+import {
+  UtilityNetworkResponse,
+  SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
+} from "./PlaceTubesPageGql";
 
 function PlaceTubesPage() {
   const { t } = useTranslation();
   const { retrieveSelected } = useBridgeConnector();
-  const [validation, setValidation] = useState<Validation | undefined>();
   const [options] = useState<SelectOption[]>([
     { text: t("Pick color marking"), value: -1, selected: true },
     { text: "Red", value: 1, selected: false },
     { text: "Blue", value: 2, selected: false },
     { text: "Yellow", value: 3, selected: false },
   ]);
-  const [conduits, setConduits] = useState<BodyItem[]>([
-    {
-      rows: [
-        { id: 0, value: "Emtelle" },
-        { id: 1, value: "ø40 tomrør" },
-      ],
-      id: 1,
-      selected: false,
-    },
-    {
-      rows: [
-        { id: 0, value: "Emtelle" },
-        { id: 1, value: "ø50 tomrør" },
-      ],
-      id: 2,
-      selected: false,
-    },
-    {
-      rows: [
-        { id: 0, value: "Emtelle" },
-        { id: 1, value: "ø110 tomrør" },
-      ],
-      id: 3,
-      selected: false,
-    },
-    {
-      rows: [
-        { id: 0, value: "Emtelle" },
-        { id: 1, value: "ø40 tomrør" },
-      ],
-      id: 4,
-      selected: false,
-    },
-    {
-      rows: [
-        { id: 0, value: "Emtelle" },
-        { id: 1, value: "ø50 10x10/8" },
-      ],
-      id: 5,
-      selected: false,
-    },
-  ]);
+  const [spanEquipments, setSpanEquipments] = useState<BodyItem[]>([]);
+  const [manufacturer, setManufacturer] = useState<BodyItem[]>([]);
+
+  const [spanEquipmentResult] = useQuery<UtilityNetworkResponse>({
+    query: SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
+  });
+  const { fetching } = spanEquipmentResult;
 
   useEffect(() => {
     const token = PubSub.subscribe(
       "RetrieveSelectedResponse",
       (_msg: string, data: any) => {
         if (data.selectedFeaturesMrid.length === 0) {
-          setValidation({
-            type: "error",
-            headerText: t("Error"),
-            bodyText: t("No segments selected"),
-          });
+          // Error
         } else {
-          setValidation({
-            type: "success",
-            headerText: t("Success"),
-            bodyText: t("Conduit(s) are now placed"),
-          });
+          // Success
         }
       }
     );
@@ -91,40 +46,65 @@ function PlaceTubesPage() {
     };
   }, [t]);
 
+  useEffect(() => {
+    if (fetching) return;
+
+    const spanEquipments =
+      spanEquipmentResult.data?.utilityNetwork.spanEquipmentSpecifications;
+    const manufacturer = spanEquipmentResult.data?.utilityNetwork.manufacturer;
+
+    if (!spanEquipments || !manufacturer) return;
+
+    const spanEquipmentBodyItems = spanEquipments.map<BodyItem>((x) => {
+      return {
+        rows: [{ id: 0, value: x.name }],
+        id: x.id,
+        selected: false,
+      };
+    });
+
+    const manufacturerBodyItems = manufacturer.map<BodyItem>((x) => {
+      return {
+        rows: [{ id: 0, value: x.name }],
+        id: x.id,
+        selected: false,
+      };
+    });
+
+    setSpanEquipments(spanEquipmentBodyItems);
+    setManufacturer(manufacturerBodyItems);
+  }, [spanEquipmentResult]);
+
   const placeConduit = () => {
     retrieveSelected();
   };
 
-  const selectItem = (selectedItem: BodyItem) => {
-    const uConduits = conduits.map<BodyItem>((x) => {
-      return { ...x, selected: false };
+  const selectSpanEquipment = (selectedItem: BodyItem) => {
+    const updatedSpanEquipments = spanEquipments.map<BodyItem>((x) => {
+      return { ...x, selected: x.id === selectedItem.id ? true : false };
     });
 
-    const item: BodyItem | undefined = uConduits.find(
-      (x) => x.id === selectedItem.id
-    );
-
-    if (item) {
-      item.selected = true;
-    }
-
-    setConduits(uConduits);
+    setSpanEquipments(updatedSpanEquipments);
   };
+
+  if (fetching) {
+    return <Loading />;
+  }
 
   return (
     <div className="page-container">
       <div className="full-row">
-        <Notification
-          type={validation?.type}
-          headerText={validation?.headerText}
-          bodyText={validation?.bodyText}
+        <SelectListView
+          headerItems={[t("Product model")]}
+          bodyItems={spanEquipments}
+          selectItem={selectSpanEquipment}
         />
       </div>
       <div className="full-row">
         <SelectListView
-          headerItems={[t("Manufacturer"), t("Product model")]}
-          bodyItems={conduits}
-          selectItem={selectItem}
+          headerItems={[t("Manufacturer")]}
+          bodyItems={manufacturer}
+          selectItem={selectSpanEquipment}
         />
       </div>
       <div className="full-row">
