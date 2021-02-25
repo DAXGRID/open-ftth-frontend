@@ -22,16 +22,18 @@ function PlaceTubesPage() {
     { text: "Yellow", value: 3, selected: false },
   ]);
   const [spanEquipments, setSpanEquipments] = useState<BodyItem[]>([]);
-  const [manufacturer, setManufacturer] = useState<BodyItem[]>([]);
+  const [manufacturers, setManufacturer] = useState<BodyItem[]>([]);
 
   const [spanEquipmentResult] = useQuery<UtilityNetworkResponse>({
     query: SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
   });
+
   const { fetching } = spanEquipmentResult;
 
   useEffect(() => {
     const token = PubSub.subscribe(
       "RetrieveSelectedResponse",
+      // TODO set type instead of any
       (_msg: string, data: any) => {
         if (data.selectedFeaturesMrid.length === 0) {
           // Error
@@ -47,21 +49,24 @@ function PlaceTubesPage() {
   }, [t]);
 
   useEffect(() => {
-    if (fetching) return;
+    if (fetching || !spanEquipmentResult.data) return;
 
-    const spanEquipments =
-      spanEquipmentResult.data?.utilityNetwork.spanEquipmentSpecifications;
-    const manufacturer = spanEquipmentResult.data?.utilityNetwork.manufacturer;
+    const {
+      spanEquipmentSpecifications,
+      manufacturer,
+    } = spanEquipmentResult.data.utilityNetwork;
 
     if (!spanEquipments || !manufacturer) return;
 
-    const spanEquipmentBodyItems = spanEquipments.map<BodyItem>((x) => {
-      return {
-        rows: [{ id: 0, value: x.name }],
-        id: x.id,
-        selected: false,
-      };
-    });
+    const spanEquipmentBodyItems = spanEquipmentSpecifications.map<BodyItem>(
+      (x) => {
+        return {
+          rows: [{ id: 0, value: x.name }],
+          id: x.id,
+          selected: false,
+        };
+      }
+    );
 
     const manufacturerBodyItems = manufacturer.map<BodyItem>((x) => {
       return {
@@ -75,8 +80,12 @@ function PlaceTubesPage() {
     setManufacturer(manufacturerBodyItems);
   }, [spanEquipmentResult]);
 
-  const placeConduit = () => {
+  const placeSpanEquipment = () => {
     retrieveSelected();
+  };
+
+  const filteredManufacturers = () => {
+    return manufacturers;
   };
 
   const selectSpanEquipment = (selectedItem: BodyItem) => {
@@ -103,7 +112,7 @@ function PlaceTubesPage() {
       <div className="full-row">
         <SelectListView
           headerItems={[t("Manufacturer")]}
-          bodyItems={manufacturer}
+          bodyItems={filteredManufacturers}
           selectItem={selectSpanEquipment}
         />
       </div>
@@ -113,7 +122,10 @@ function PlaceTubesPage() {
           removePlaceHolderOnSelect
           onSelected={() => {}}
         />
-        <DefaultButton innerText={t("Place conduit")} onClick={placeConduit} />
+        <DefaultButton
+          innerText={t("Place conduit")}
+          onClick={placeSpanEquipment}
+        />
       </div>
     </div>
   );

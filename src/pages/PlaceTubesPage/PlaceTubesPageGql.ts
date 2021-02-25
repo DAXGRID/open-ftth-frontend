@@ -4,7 +4,7 @@ export interface UtilityNetworkResponse {
 
 interface UtilityNetwork {
   spanEquipmentSpecifications: SpanEquipmentSpecification[];
-  manufacturer: Manufacturer[];
+  manufacturers: Manufacturer[];
 }
 
 interface SpanEquipmentSpecification {
