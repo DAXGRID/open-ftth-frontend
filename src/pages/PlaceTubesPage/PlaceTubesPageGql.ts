@@ -7,7 +7,7 @@ interface UtilityNetwork {
   manufacturers: Manufacturer[];
 }
 
-interface SpanEquipmentSpecification {
+export interface SpanEquipmentSpecification {
   id: string;
   category: string;
   name: string;
@@ -15,7 +15,7 @@ interface SpanEquipmentSpecification {
   manufacturerRefs: string[];
 }
 
-interface Manufacturer {
+export interface Manufacturer {
   id: string;
   name: string;
   description: string;
@@ -33,7 +33,7 @@ query {
       deprecated
       manufacturerRefs
     },
-    manufacturer {
+    manufacturers {
       id
       name
       description

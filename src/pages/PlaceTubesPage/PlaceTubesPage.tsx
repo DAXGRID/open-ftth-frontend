@@ -10,6 +10,8 @@ import { useQuery } from "urql";
 import {
   UtilityNetworkResponse,
   SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
+  Manufacturer,
+  SpanEquipmentSpecification,
 } from "./PlaceTubesPageGql";
 
 function PlaceTubesPage() {
@@ -21,8 +23,17 @@ function PlaceTubesPage() {
     { text: "Blue", value: 2, selected: false },
     { text: "Yellow", value: 3, selected: false },
   ]);
-  const [spanEquipments, setSpanEquipments] = useState<BodyItem[]>([]);
-  const [manufacturers, setManufacturer] = useState<BodyItem[]>([]);
+  const [spanEquipmentsBodyItems, setSpanEquipmentsBodyItems] = useState<
+    BodyItem[]
+  >([]);
+  const [manufacturerBodyItems, setManufacturerBodyItems] = useState<
+    BodyItem[]
+  >([]);
+
+  const [spanEquipments, setSpanEquipments] = useState<
+    SpanEquipmentSpecification[]
+  >([]);
+  const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
 
   const [spanEquipmentResult] = useQuery<UtilityNetworkResponse>({
     query: SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
@@ -49,26 +60,25 @@ function PlaceTubesPage() {
   }, [t]);
 
   useEffect(() => {
-    if (fetching || !spanEquipmentResult.data) return;
+    if (fetching || !spanEquipmentResult.data) {
+      return;
+    }
 
     const {
       spanEquipmentSpecifications,
-      manufacturer,
+      manufacturers,
     } = spanEquipmentResult.data.utilityNetwork;
 
-    if (!spanEquipments || !manufacturer) return;
+    if (!spanEquipmentsBodyItems || !manufacturers) {
+      return;
+    }
 
-    const spanEquipmentBodyItems = spanEquipmentSpecifications.map<BodyItem>(
-      (x) => {
-        return {
-          rows: [{ id: 0, value: x.name }],
-          id: x.id,
-          selected: false,
-        };
-      }
-    );
+    setManufacturers(manufacturers);
+    setSpanEquipments(spanEquipmentSpecifications);
+  }, [spanEquipmentResult]);
 
-    const manufacturerBodyItems = manufacturer.map<BodyItem>((x) => {
+  useEffect(() => {
+    const bodyItems = manufacturers.map<BodyItem>((x) => {
       return {
         rows: [{ id: 0, value: x.name }],
         id: x.id,
@@ -76,24 +86,49 @@ function PlaceTubesPage() {
       };
     });
 
-    setSpanEquipments(spanEquipmentBodyItems);
-    setManufacturer(manufacturerBodyItems);
-  }, [spanEquipmentResult]);
+    setManufacturerBodyItems(bodyItems);
+  }, [manufacturers]);
+
+  useEffect(() => {
+    const bodyItems = spanEquipments.map<BodyItem>((x) => {
+      return {
+        rows: [{ id: 0, value: x.name }],
+        id: x.id,
+        selected: false,
+      };
+    });
+
+    setSpanEquipmentsBodyItems(bodyItems);
+  }, [spanEquipments]);
 
   const placeSpanEquipment = () => {
     retrieveSelected();
   };
 
+  const selectedSpanEquipment = (): BodyItem | undefined => {
+    return spanEquipmentsBodyItems.find((x) => x.selected);
+  };
+
   const filteredManufacturers = () => {
-    return manufacturers;
+    console.log(selectedSpanEquipment());
+
+    return manufacturerBodyItems;
   };
 
   const selectSpanEquipment = (selectedItem: BodyItem) => {
-    const updatedSpanEquipments = spanEquipments.map<BodyItem>((x) => {
+    const updatedSpanEquipments = spanEquipmentsBodyItems.map<BodyItem>((x) => {
       return { ...x, selected: x.id === selectedItem.id ? true : false };
     });
 
-    setSpanEquipments(updatedSpanEquipments);
+    setSpanEquipmentsBodyItems(updatedSpanEquipments);
+  };
+
+  const selectManufacturer = (selectedItem: BodyItem) => {
+    const updatedManufacturers = manufacturerBodyItems.map<BodyItem>((x) => {
+      return { ...x, selected: x.id === selectedItem.id ? true : false };
+    });
+
+    setManufacturerBodyItems(updatedManufacturers);
   };
 
   if (fetching) {
@@ -105,15 +140,15 @@ function PlaceTubesPage() {
       <div className="full-row">
         <SelectListView
           headerItems={[t("Product model")]}
-          bodyItems={spanEquipments}
+          bodyItems={spanEquipmentsBodyItems}
           selectItem={selectSpanEquipment}
         />
       </div>
       <div className="full-row">
         <SelectListView
           headerItems={[t("Manufacturer")]}
-          bodyItems={filteredManufacturers}
-          selectItem={selectSpanEquipment}
+          bodyItems={filteredManufacturers()}
+          selectItem={selectManufacturer}
         />
       </div>
       <div className="full-row">
