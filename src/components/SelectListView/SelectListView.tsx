@@ -22,7 +22,7 @@ function SelectListView({
   bodyItems,
   selectItem,
 }: SelectListViewProps) {
-  if (!bodyItems) return <div />;
+  if (!bodyItems || bodyItems.length === 0) return <div></div>;
 
   return (
     <div className="select-list-view">

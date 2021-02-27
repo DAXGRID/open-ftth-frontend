@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import CustomOption from "./CustomOption";
 
 interface SelectOption {
@@ -28,12 +28,12 @@ function SelectMenu({
     setSelectOptions(options);
   }, [options]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const option = selectOptions?.find((o) => o.selected === true);
     setSelected(option);
   }, [selectOptions]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (onSelected) {
       onSelected(selected);
     }
@@ -53,6 +53,8 @@ function SelectMenu({
 
     setSelectOptions([...selectOptionsCopy]);
   };
+
+  if (!selectOptions || selectOptions.length === 0) return <div></div>;
 
   return (
     <div

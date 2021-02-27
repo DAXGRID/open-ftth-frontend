@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PubSub from "pubsub-js";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
@@ -17,12 +17,13 @@ import {
 function PlaceTubesPage() {
   const { t } = useTranslation();
   const { retrieveSelected } = useBridgeConnector();
-  const [options] = useState<SelectOption[]>([
+  const [colorMarkingOptions] = useState<SelectOption[]>([
     { text: t("Pick color marking"), value: -1, selected: true },
     { text: "Red", value: 1, selected: false },
     { text: "Blue", value: 2, selected: false },
     { text: "Yellow", value: 3, selected: false },
   ]);
+  const [categoryOptions] = useState<SelectOption[]>([]);
   const [spanEquipmentsBodyItems, setSpanEquipmentsBodyItems] = useState<
     BodyItem[]
   >([]);
@@ -77,7 +78,7 @@ function PlaceTubesPage() {
     setSpanEquipments(spanEquipmentSpecifications);
   }, [spanEquipmentResult]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const bodyItems = manufacturers.map<BodyItem>((x) => {
       return {
         rows: [{ id: 0, value: x.name }],
@@ -89,7 +90,7 @@ function PlaceTubesPage() {
     setManufacturerBodyItems(bodyItems);
   }, [manufacturers]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const bodyItems = spanEquipments.map<BodyItem>((x) => {
       return {
         rows: [{ id: 0, value: x.name }],
@@ -107,6 +108,10 @@ function PlaceTubesPage() {
 
   const selectedSpanEquipment = (): BodyItem | undefined => {
     return spanEquipmentsBodyItems.find((x) => x.selected);
+  };
+
+  const filteredSpanEquipments = () => {
+    return spanEquipmentsBodyItems;
   };
 
   const filteredManufacturers = () => {
@@ -155,9 +160,16 @@ function PlaceTubesPage() {
   return (
     <div className="page-container">
       <div className="full-row">
+        <SelectMenu
+          options={categoryOptions}
+          removePlaceHolderOnSelect
+          onSelected={() => {}}
+        />
+      </div>
+      <div className="full-row">
         <SelectListView
           headerItems={[t("Product model")]}
-          bodyItems={spanEquipmentsBodyItems}
+          bodyItems={filteredSpanEquipments()}
           selectItem={selectSpanEquipment}
         />
       </div>
@@ -170,7 +182,7 @@ function PlaceTubesPage() {
       </div>
       <div className="full-row">
         <SelectMenu
-          options={options}
+          options={colorMarkingOptions}
           removePlaceHolderOnSelect
           onSelected={() => {}}
         />

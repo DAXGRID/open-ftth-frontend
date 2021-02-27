@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useQuery, useMutation } from "urql";
 import { useTranslation } from "react-i18next";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
@@ -41,7 +41,7 @@ function WorkTaskPage() {
     setSelectedProject(selected);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const { data } = result;
     if (!data) return;
     const projects = data.workService.projectsAndWorkTasks;
