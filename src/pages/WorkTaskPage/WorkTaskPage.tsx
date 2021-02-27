@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { useQuery, useMutation } from "urql";
 import { useTranslation } from "react-i18next";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
