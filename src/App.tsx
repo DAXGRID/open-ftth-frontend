@@ -10,7 +10,6 @@ import { useKeycloak } from "@react-keycloak/web";
 
 function App() {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
-
   const { initialized, keycloak } = useKeycloak();
 
   if (!initialized) return <Loading />;
