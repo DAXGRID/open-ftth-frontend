@@ -201,6 +201,13 @@ function PlaceTubesPage() {
         <DefaultButton
           innerText={t("Place span equipment")}
           onClick={placeSpanEquipment}
+          disabled={
+            selectedColorMarking?.value === -1 ||
+            !selectedManufacturer ||
+            !selectedSpanEquipment
+              ? true
+              : false
+          }
         />
       </div>
     </div>
