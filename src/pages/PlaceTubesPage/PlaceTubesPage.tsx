@@ -32,14 +32,17 @@ function PlaceTubesPage() {
   const [spanEquipmentsBodyItems, setSpanEquipmentsBodyItems] = useState<
     BodyItem[]
   >([]);
-  const [manufacturerBodyItems, setManufacturerBodyItems] = useState<
-    BodyItem[]
-  >([]);
 
   const [spanEquipments, setSpanEquipments] = useState<
     SpanEquipmentSpecification[]
   >([]);
+  const [selectedSpanEquipment, setSelectedSpanEquipment] = useState<string>();
+
+  const [manufacturerBodyItems, setManufacturerBodyItems] = useState<
+    BodyItem[]
+  >([]);
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
+  const [selectedManufacturer, setSelectedManufacturer] = useState<string>();
 
   const [spanEquipmentResult] = useQuery<UtilityNetworkResponse>({
     query: SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
@@ -88,7 +91,6 @@ function PlaceTubesPage() {
       return {
         rows: [{ id: 0, value: x.name }],
         id: x.id,
-        selected: false,
       };
     });
 
@@ -100,7 +102,6 @@ function PlaceTubesPage() {
       return {
         rows: [{ id: 0, value: x.name }],
         id: x.id,
-        selected: false,
       };
     });
 
@@ -122,6 +123,15 @@ function PlaceTubesPage() {
     setCategoryOptions(categoryOptions);
   }, [spanEquipments, t]);
 
+  useLayoutEffect(() => {
+    setSelectedSpanEquipment(undefined);
+    setSelectedManufacturer(undefined);
+  }, [selectedCategory]);
+
+  useLayoutEffect(() => {
+    setSelectedManufacturer(undefined);
+  }, [selectedSpanEquipment]);
+
   const placeSpanEquipment = () => {
     retrieveSelected();
   };
@@ -137,52 +147,20 @@ function PlaceTubesPage() {
   };
 
   const filteredManufacturers = () => {
-    const selectedSpanEquipment = spanEquipmentsBodyItems.find(
-      (x) => x.selected
-    );
-    if (!selectedSpanEquipment) {
-      return [];
-    }
+    if (!selectedSpanEquipment) return [];
 
     const spanEquipment = spanEquipments.find(
-      (x) => x.id === selectedSpanEquipment.id
+      (x) => x.id === selectedSpanEquipment
     );
     if (!spanEquipment) {
       throw new Error(
-        `Could not find SpanEquipment on id ${selectedSpanEquipment.id}`
+        `Could not find SpanEquipment on id ${selectedSpanEquipment}`
       );
     }
 
     return manufacturerBodyItems.filter((x) => {
       return spanEquipment.manufacturerRefs.includes(x.id.toString());
     });
-  };
-
-  const selectSpanEquipment = (selectedItem: BodyItem) => {
-    const updatedSpanEquipments = spanEquipmentsBodyItems.map<BodyItem>((x) => {
-      return x.id === selectedItem.id
-        ? { ...x, selected: true }
-        : { ...x, selected: false };
-    });
-
-    const resetSelectedManufacturers = manufacturerBodyItems.map<BodyItem>(
-      (x) => {
-        return { ...x, selected: false };
-      }
-    );
-
-    setManufacturerBodyItems(resetSelectedManufacturers);
-    setSpanEquipmentsBodyItems(updatedSpanEquipments);
-  };
-
-  const selectManufacturer = (selectedItem: BodyItem) => {
-    const updatedManufacturers = manufacturerBodyItems.map<BodyItem>((x) => {
-      return x.id === selectedItem.id
-        ? { ...x, selected: true }
-        : { ...x, selected: false };
-    });
-
-    setManufacturerBodyItems(updatedManufacturers);
   };
 
   if (fetching) {
@@ -195,23 +173,23 @@ function PlaceTubesPage() {
         <SelectMenu
           options={categoryOptions}
           removePlaceHolderOnSelect
-          onSelected={(x) => {
-            setSelectedCategory(x);
-          }}
+          onSelected={(x) => setSelectedCategory(x)}
         />
       </div>
       <div className="full-row">
         <SelectListView
           headerItems={[t("Specification")]}
           bodyItems={filteredSpanEquipments()}
-          selectItem={selectSpanEquipment}
+          selectItem={(x) => setSelectedSpanEquipment(x.id.toString())}
+          selected={selectedSpanEquipment}
         />
       </div>
       <div className="full-row">
         <SelectListView
           headerItems={[t("Manufacturer")]}
           bodyItems={filteredManufacturers()}
-          selectItem={selectManufacturer}
+          selectItem={(x) => setSelectedManufacturer(x.id.toString())}
+          selected={selectedManufacturer}
         />
       </div>
       <div className="full-row">

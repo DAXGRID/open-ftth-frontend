@@ -6,7 +6,8 @@ type Row = {
 type BodyItem = {
   rows: Row[];
   id: number | string;
-  selected: boolean;
+  // TODO remove after refactor
+  selected?: boolean;
 };
 
 type SelectListViewProps = {
@@ -14,6 +15,7 @@ type SelectListViewProps = {
   headerItems: string[];
   bodyItems: BodyItem[];
   selectItem: (selected: BodyItem) => void;
+  selected?: number | string;
 };
 
 function SelectListView({
@@ -21,6 +23,7 @@ function SelectListView({
   headerItems,
   bodyItems,
   selectItem,
+  selected,
 }: SelectListViewProps) {
   if (!bodyItems || bodyItems.length === 0) return <div></div>;
 
@@ -47,7 +50,7 @@ function SelectListView({
                   role="button"
                   key={item.id}
                   className={
-                    row.selected
+                    row.id === selected
                       ? "select-list-view-body-item selected"
                       : "select-list-view-body-item"
                   }
