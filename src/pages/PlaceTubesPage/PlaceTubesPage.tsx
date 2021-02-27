@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PubSub from "pubsub-js";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
@@ -86,7 +86,7 @@ function PlaceTubesPage() {
     setSpanEquipments(spanEquipmentSpecifications);
   }, [spanEquipmentResult]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const bodyItems = manufacturers.map<BodyItem>((x) => {
       return {
         rows: [{ id: 0, value: x.name }],
@@ -97,7 +97,7 @@ function PlaceTubesPage() {
     setManufacturerBodyItems(bodyItems);
   }, [manufacturers]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const seBodyItems = spanEquipments.map<BodyItem>((x) => {
       return {
         rows: [{ id: 0, value: x.name }],
@@ -123,12 +123,12 @@ function PlaceTubesPage() {
     setCategoryOptions(categoryOptions);
   }, [spanEquipments, t]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setSelectedSpanEquipment(undefined);
     setSelectedManufacturer(undefined);
   }, [selectedCategory]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setSelectedManufacturer(undefined);
   }, [selectedSpanEquipment]);
 
