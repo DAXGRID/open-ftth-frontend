@@ -110,9 +110,19 @@ function PlaceTubesPage() {
   };
 
   const filteredManufacturers = () => {
-    console.log(selectedSpanEquipment());
+    const selected = selectedSpanEquipment();
+    if (!selected) {
+      return manufacturerBodyItems;
+    }
 
-    return manufacturerBodyItems;
+    const spanEquipment = spanEquipments.find((x) => x.id === selected.id);
+    if (!spanEquipment) {
+      throw new Error(`Could not find SpanEquipment on id ${selected.id}`);
+    }
+
+    return manufacturerBodyItems.filter((x) => {
+      return spanEquipment.manufacturerRefs.includes(x.id.toString());
+    });
   };
 
   const selectSpanEquipment = (selectedItem: BodyItem) => {
@@ -120,6 +130,13 @@ function PlaceTubesPage() {
       return { ...x, selected: x.id === selectedItem.id ? true : false };
     });
 
+    const resetSelectedManufacturers = manufacturerBodyItems.map<BodyItem>(
+      (x) => {
+        return { ...x, selected: false };
+      }
+    );
+
+    setManufacturerBodyItems(resetSelectedManufacturers);
     setSpanEquipmentsBodyItems(updatedSpanEquipments);
   };
 
