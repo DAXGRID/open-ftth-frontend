@@ -1,27 +1,33 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { v4 as uuidv4 } from "uuid";
 import PubSub from "pubsub-js";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
-import useBridgeConnector from "../../bridge/useBridgeConnector";
+import useBridgeConnector, {
+  RetrieveSelectedSpanEquipmentsResponse,
+} from "../../bridge/useBridgeConnector";
 import Loading from "../../components/Loading";
-import { useQuery } from "urql";
+import { useQuery, useMutation } from "urql";
 import {
   UtilityNetworkResponse,
   SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
   Manufacturer,
   SpanEquipmentSpecification,
+  PlaceSpanEquipmentParameters,
+  PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK,
+  PlaceSpanEquipmentResponse,
 } from "./PlaceTubesPageGql";
 
 function PlaceTubesPage() {
   const { t } = useTranslation();
-  const { retrieveSelected } = useBridgeConnector();
+  const { retrieveSelectedSpanEquipments } = useBridgeConnector();
   const [colorMarkingOptions] = useState<SelectOption[]>([
     { text: t("Pick color marking"), value: -1, selected: true },
-    { text: "Red", value: 1, selected: false },
-    { text: "Blue", value: 2, selected: false },
-    { text: "Yellow", value: 3, selected: false },
+    { text: "Red", value: "Red", selected: false },
+    { text: "Blue", value: "Blue", selected: false },
+    { text: "Yellow", value: "Yellow", selected: false },
   ]);
   const [
     selectedColorMarking,
@@ -43,22 +49,32 @@ function PlaceTubesPage() {
   >([]);
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [selectedManufacturer, setSelectedManufacturer] = useState<string>();
+  const [
+    retrievedSelectedRouteSegments,
+    setRetrievedSelectedRouteSegments,
+  ] = useState<string[]>();
 
   const [spanEquipmentResult] = useQuery<UtilityNetworkResponse>({
     query: SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
   });
+
+  const [
+    placeSpanEquipmentMutationResult,
+    placeSpanEquipmentMutation,
+  ] = useMutation<PlaceSpanEquipmentResponse>(
+    PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK
+  );
 
   const { fetching } = spanEquipmentResult;
 
   useEffect(() => {
     const token = PubSub.subscribe(
       "RetrieveSelectedResponse",
-      // TODO set type instead of any
-      (_msg: string, data: any) => {
+      async (_msg: string, data: RetrieveSelectedSpanEquipmentsResponse) => {
         if (data.selectedFeaturesMrid.length === 0) {
-          // Error
+          setRetrievedSelectedRouteSegments(undefined);
         } else {
-          // Success
+          setRetrievedSelectedRouteSegments(data.selectedFeaturesMrid);
         }
       }
     );
@@ -67,6 +83,31 @@ function PlaceTubesPage() {
       PubSub.unsubscribe(token);
     };
   }, [t]);
+
+  useEffect(() => {
+    if (!retrievedSelectedRouteSegments) return;
+
+    const parameters: PlaceSpanEquipmentParameters = {
+      spanEquipmentId: uuidv4(),
+      spanEquipmentSpecificationId: selectedSpanEquipment as string,
+      routeSegmentIds: retrievedSelectedRouteSegments,
+      markingColor: selectedColorMarking?.value
+        ? (selectedColorMarking.value as string)
+        : undefined,
+    };
+
+    const fetchData = async () => {
+      const result = await placeSpanEquipmentMutation(parameters);
+      setRetrievedSelectedRouteSegments(undefined);
+    };
+
+    fetchData();
+  }, [
+    retrievedSelectedRouteSegments,
+    selectedSpanEquipment,
+    placeSpanEquipmentMutation,
+    selectedColorMarking?.value,
+  ]);
 
   useEffect(() => {
     if (!spanEquipmentResult.data) {
@@ -132,10 +173,6 @@ function PlaceTubesPage() {
     setSelectedManufacturer(undefined);
   }, [selectedSpanEquipment]);
 
-  const placeSpanEquipment = () => {
-    retrieveSelected();
-  };
-
   const filteredSpanEquipments = () => {
     return spanEquipmentsBodyItems.filter((x) => {
       return (
@@ -200,7 +237,7 @@ function PlaceTubesPage() {
         />
         <DefaultButton
           innerText={t("Place span equipment")}
-          onClick={placeSpanEquipment}
+          onClick={() => retrieveSelectedSpanEquipments()}
           disabled={
             selectedColorMarking?.value === -1 ||
             !selectedManufacturer ||

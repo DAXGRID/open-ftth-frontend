@@ -1,14 +1,19 @@
 import { send } from "./BridgeConnector";
 import { useKeycloak } from "@react-keycloak/web";
 
+export interface RetrieveSelectedSpanEquipmentsResponse {
+  selectedFeaturesMrid: string[];
+}
+
 function useBridgeConnector() {
   const { keycloak } = useKeycloak();
 
-  function retrieveSelected() {
+  function retrieveSelectedSpanEquipments() {
     const message = {
       eventType: "RetrieveSelected",
       username: keycloak.profile?.username,
     };
+
     send(message);
   }
 
@@ -36,7 +41,7 @@ function useBridgeConnector() {
     send(message);
   }
 
-  return { retrieveSelected, panToCoordinate, highlightFeatures };
+  return { retrieveSelectedSpanEquipments, panToCoordinate, highlightFeatures };
 }
 
 export default useBridgeConnector;

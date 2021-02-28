@@ -41,3 +41,60 @@ query {
     }
   }
 }`;
+
+export interface PlaceSpanEquipmentParameters {
+  spanEquipmentId: string;
+  spanEquipmentSpecificationId: string;
+  routeSegmentIds?: string[];
+  manufacturerId?: string;
+  markingColor?: string;
+  markingText?: string;
+  namingInfo?: string;
+  description?: string;
+}
+
+export interface PlaceSpanEquipmentResponse {
+  spanEquipment: {
+    placSpanEquipmentInRouteNetwork: {
+      errorCode?: string;
+      isSuccess: boolean;
+      errorMesssage?: string;
+    };
+  };
+}
+
+export const PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK = `
+mutation (
+ $spanEquipmentId: ID!,
+ $spanEquipmentSpecificationId: ID!,
+ $routeSegmentIds: [ID!]!,
+ $manufacturerId: ID,
+ $markingColor: String,
+ $markingText: String,
+ $namingInfoName: String,
+ $namingInfoDescription: String)
+{
+  spanEquipment
+  {
+    placSpanEquipmentInRouteNetwork(
+      spanEquipmentId: $spanEquipmentId,
+      spanEquipmentSpecificationId: $spanEquipmentSpecificationId,
+      routeSegmentIds: $routeSegmentIds,
+      manufacturerId: $manufacturerId,
+      markingInfo: {
+        markingColor: $markingColor,
+        markingText: $markingText
+      },
+      namingInfo: {
+        name: $namingInfoName,
+        description: $namingInfoDescription
+      }
+    )
+    {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}
+`;
