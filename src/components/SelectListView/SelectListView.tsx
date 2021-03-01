@@ -6,8 +6,6 @@ type Row = {
 type BodyItem = {
   rows: Row[];
   id: number | string;
-  // TODO remove after refactor
-  selected?: boolean;
 };
 
 type SelectListViewProps = {

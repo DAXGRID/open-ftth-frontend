@@ -39,9 +39,10 @@ function PlaceTubesPage() {
     BodyItem[]
   >([]);
 
-  const [spanEquipments, setSpanEquipments] = useState<
-    SpanEquipmentSpecification[]
-  >([]);
+  const [
+    spanEquipments,
+    setSpanEquipmentssetSpanEquipmentSpecifications,
+  ] = useState<SpanEquipmentSpecification[]>([]);
   const [
     selectedSpanEquipmentSpecitifcation,
     setSelectedSpanEquipmentSpecification,
@@ -127,7 +128,9 @@ function PlaceTubesPage() {
     }
 
     setManufacturers(manufacturers);
-    setSpanEquipments(spanEquipmentSpecifications);
+    setSpanEquipmentssetSpanEquipmentSpecifications(
+      spanEquipmentSpecifications
+    );
   }, [spanEquipmentResult]);
 
   useEffect(() => {
