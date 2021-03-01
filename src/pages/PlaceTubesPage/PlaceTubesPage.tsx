@@ -42,7 +42,10 @@ function PlaceTubesPage() {
   const [spanEquipments, setSpanEquipments] = useState<
     SpanEquipmentSpecification[]
   >([]);
-  const [selectedSpanEquipment, setSelectedSpanEquipment] = useState<string>();
+  const [
+    selectedSpanEquipmentSpecitifcation,
+    setSelectedSpanEquipmentSpecification,
+  ] = useState<string>();
 
   const [manufacturerBodyItems, setManufacturerBodyItems] = useState<
     BodyItem[]
@@ -82,14 +85,14 @@ function PlaceTubesPage() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [t]);
+  }, []);
 
   useEffect(() => {
     if (!retrievedSelectedRouteSegments) return;
 
     const parameters: PlaceSpanEquipmentParameters = {
       spanEquipmentId: uuidv4(),
-      spanEquipmentSpecificationId: selectedSpanEquipment as string,
+      spanEquipmentSpecificationId: selectedSpanEquipmentSpecitifcation as string,
       routeSegmentIds: retrievedSelectedRouteSegments,
       markingColor: selectedColorMarking?.value
         ? (selectedColorMarking.value as string)
@@ -104,7 +107,7 @@ function PlaceTubesPage() {
     fetchData();
   }, [
     retrievedSelectedRouteSegments,
-    selectedSpanEquipment,
+    selectedSpanEquipmentSpecitifcation,
     placeSpanEquipmentMutation,
     selectedColorMarking?.value,
   ]);
@@ -165,15 +168,11 @@ function PlaceTubesPage() {
   }, [spanEquipments, t]);
 
   useEffect(() => {
-    setSelectedSpanEquipment(undefined);
+    setSelectedSpanEquipmentSpecification(undefined);
     setSelectedManufacturer(undefined);
   }, [selectedCategory]);
 
-  useEffect(() => {
-    setSelectedManufacturer(undefined);
-  }, [selectedSpanEquipment]);
-
-  const filteredSpanEquipments = () => {
+  const filteredSpanEquipmentSpecifications = () => {
     return spanEquipmentsBodyItems.filter((x) => {
       return (
         spanEquipments.find((y) => {
@@ -183,15 +182,20 @@ function PlaceTubesPage() {
     });
   };
 
+  const selectSpanEquipmentSpecification = (specificationId: string) => {
+    setSelectedSpanEquipmentSpecification(specificationId);
+    setSelectedManufacturer(undefined);
+  };
+
   const filteredManufacturers = () => {
-    if (!selectedSpanEquipment) return [];
+    if (!selectedSpanEquipmentSpecitifcation) return [];
 
     const spanEquipment = spanEquipments.find(
-      (x) => x.id === selectedSpanEquipment
+      (x) => x.id === selectedSpanEquipmentSpecitifcation
     );
     if (!spanEquipment) {
       throw new Error(
-        `Could not find SpanEquipment on id ${selectedSpanEquipment}`
+        `Could not find SpanEquipment on id ${selectedSpanEquipmentSpecitifcation}`
       );
     }
 
@@ -210,15 +214,15 @@ function PlaceTubesPage() {
         <SelectMenu
           options={categoryOptions}
           removePlaceHolderOnSelect
-          onSelected={(x) => setSelectedCategory(x)}
+          onSelected={setSelectedCategory}
         />
       </div>
       <div className="full-row">
         <SelectListView
           headerItems={[t("Specification")]}
-          bodyItems={filteredSpanEquipments()}
-          selectItem={(x) => setSelectedSpanEquipment(x.id.toString())}
-          selected={selectedSpanEquipment}
+          bodyItems={filteredSpanEquipmentSpecifications()}
+          selectItem={(x) => selectSpanEquipmentSpecification(x.id.toString())}
+          selected={selectedSpanEquipmentSpecitifcation}
         />
       </div>
       <div className="full-row">
@@ -241,7 +245,7 @@ function PlaceTubesPage() {
           disabled={
             selectedColorMarking?.value === -1 ||
             !selectedManufacturer ||
-            !selectedSpanEquipment
+            !selectedSpanEquipmentSpecitifcation
               ? true
               : false
           }
