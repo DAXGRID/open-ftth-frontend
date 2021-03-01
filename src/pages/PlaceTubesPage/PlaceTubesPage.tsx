@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 import PubSub from "pubsub-js";
@@ -134,7 +134,7 @@ function PlaceTubesPage() {
     );
   }, [spanEquipmentResult]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const bodyItems = manufacturers.map<BodyItem>((x) => {
       return {
         rows: [{ id: 0, value: x.name }],
@@ -173,11 +173,6 @@ function PlaceTubesPage() {
     }
   }, [spanEquipments, t]);
 
-  useEffect(() => {
-    setSelectedSpanEquipmentSpecification(undefined);
-    setSelectedManufacturer(undefined);
-  }, [selectedCategory]);
-
   const filteredSpanEquipmentSpecifications = () => {
     return spanEquipmentsBodyItems.filter((x) => {
       return (
@@ -188,7 +183,17 @@ function PlaceTubesPage() {
     });
   };
 
+  const selectCategory = (categoryId: string | number | undefined) => {
+    if (selectedCategory === categoryId || selectCategory === undefined) return;
+
+    setSelectedCategory(categoryId);
+    setSelectedSpanEquipmentSpecification(undefined);
+    setSelectedManufacturer(undefined);
+  };
+
   const selectSpanEquipmentSpecification = (specificationId: string) => {
+    if (selectedSpanEquipmentSpecitifcation === specificationId) return;
+
     setSelectedSpanEquipmentSpecification(specificationId);
     setSelectedManufacturer(undefined);
   };
@@ -220,7 +225,7 @@ function PlaceTubesPage() {
         <SelectMenu
           options={categoryOptions}
           removePlaceHolderOnSelect
-          onSelected={setSelectedCategory}
+          onSelected={selectCategory}
           selected={selectedCategory}
         />
       </div>

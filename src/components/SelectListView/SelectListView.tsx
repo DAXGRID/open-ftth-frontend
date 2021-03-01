@@ -23,8 +23,6 @@ function SelectListView({
   selectItem,
   selected,
 }: SelectListViewProps) {
-  if (!bodyItems || bodyItems.length === 0) return <div></div>;
-
   return (
     <div className="select-list-view">
       {title && (
