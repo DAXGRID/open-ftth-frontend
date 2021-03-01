@@ -32,13 +32,9 @@ function PlaceTubesPage() {
   const [selectedColorMarking, setSelectedColorMarking] = useState<
     string | number | undefined
   >(-1);
-  const [categoryOptions, setCategoryOptions] = useState<SelectOption[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<
     string | number | undefined
   >();
-  const [spanEquipmentsBodyItems, setSpanEquipmentsBodyItems] = useState<
-    BodyItem[]
-  >([]);
 
   const [
     spanEquipments,
@@ -49,9 +45,6 @@ function PlaceTubesPage() {
     setSelectedSpanEquipmentSpecification,
   ] = useState<string>();
 
-  const [manufacturerBodyItems, setManufacturerBodyItems] = useState<
-    BodyItem[]
-  >([]);
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [selectedManufacturer, setSelectedManufacturer] = useState<string>();
   const [
@@ -134,27 +127,7 @@ function PlaceTubesPage() {
     );
   }, [spanEquipmentResult]);
 
-  useLayoutEffect(() => {
-    const bodyItems = manufacturers.map<BodyItem>((x) => {
-      return {
-        rows: [{ id: 0, value: x.name }],
-        id: x.id,
-      };
-    });
-
-    setManufacturerBodyItems(bodyItems);
-  }, [manufacturers]);
-
-  useEffect(() => {
-    const seBodyItems = spanEquipments.map<BodyItem>((x) => {
-      return {
-        rows: [{ id: 0, value: x.name }],
-        id: x.id,
-      };
-    });
-
-    setSpanEquipmentsBodyItems(seBodyItems);
-
+  const categorySelectOptions = () => {
     const categoryOptions = spanEquipments
       .map((x) => {
         return x.category;
@@ -167,14 +140,23 @@ function PlaceTubesPage() {
         };
       });
 
-    setCategoryOptions(categoryOptions);
-    if (categoryOptions.length > 0) {
+    // If none is selected - select the first select option
+    if (categoryOptions.length > 0 && !selectedCategory) {
       setSelectedCategory(categoryOptions[0].value);
     }
-  }, [spanEquipments, t]);
+
+    return categoryOptions;
+  };
 
   const filteredSpanEquipmentSpecifications = () => {
-    return spanEquipmentsBodyItems.filter((x) => {
+    const bodyItems = spanEquipments.map<BodyItem>((x) => {
+      return {
+        rows: [{ id: 0, value: x.name }],
+        id: x.id,
+      };
+    });
+
+    return bodyItems.filter((x) => {
       return (
         spanEquipments.find((y) => {
           return y.id === x.id;
@@ -199,7 +181,19 @@ function PlaceTubesPage() {
   };
 
   const filteredManufacturers = () => {
-    if (!selectedSpanEquipmentSpecitifcation) return [];
+    if (
+      !manufacturers ||
+      manufacturers.length === 0 ||
+      !selectedSpanEquipmentSpecitifcation
+    )
+      return [];
+
+    const bodyItems = manufacturers.map<BodyItem>((x) => {
+      return {
+        rows: [{ id: 0, value: x.name }],
+        id: x.id,
+      };
+    });
 
     const spanEquipment = spanEquipments.find(
       (x) => x.id === selectedSpanEquipmentSpecitifcation
@@ -210,7 +204,7 @@ function PlaceTubesPage() {
       );
     }
 
-    return manufacturerBodyItems.filter((x) => {
+    return bodyItems.filter((x) => {
       return spanEquipment.manufacturerRefs.includes(x.id.toString());
     });
   };
@@ -223,7 +217,7 @@ function PlaceTubesPage() {
     <div className="page-container">
       <div className="full-row">
         <SelectMenu
-          options={categoryOptions}
+          options={categorySelectOptions()}
           removePlaceHolderOnSelect
           onSelected={selectCategory}
           selected={selectedCategory}
