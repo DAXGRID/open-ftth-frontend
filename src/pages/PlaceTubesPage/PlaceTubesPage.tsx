@@ -24,17 +24,18 @@ function PlaceTubesPage() {
   const { t } = useTranslation();
   const { retrieveSelectedSpanEquipments } = useBridgeConnector();
   const [colorMarkingOptions] = useState<SelectOption[]>([
-    { text: t("Pick color marking"), value: -1, selected: true },
-    { text: "Red", value: "Red", selected: false },
-    { text: "Blue", value: "Blue", selected: false },
-    { text: "Yellow", value: "Yellow", selected: false },
+    { text: t("Pick color marking"), value: -1 },
+    { text: "Red", value: "Red" },
+    { text: "Blue", value: "Blue" },
+    { text: "Yellow", value: "Yellow" },
   ]);
-  const [
-    selectedColorMarking,
-    setSelectedColorMarking,
-  ] = useState<SelectOption>();
+  const [selectedColorMarking, setSelectedColorMarking] = useState<
+    string | number | undefined
+  >(-1);
   const [categoryOptions, setCategoryOptions] = useState<SelectOption[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<SelectOption>();
+  const [selectedCategory, setSelectedCategory] = useState<
+    string | number | undefined
+  >();
   const [spanEquipmentsBodyItems, setSpanEquipmentsBodyItems] = useState<
     BodyItem[]
   >([]);
@@ -95,8 +96,8 @@ function PlaceTubesPage() {
       spanEquipmentId: uuidv4(),
       spanEquipmentSpecificationId: selectedSpanEquipmentSpecitifcation as string,
       routeSegmentIds: retrievedSelectedRouteSegments,
-      markingColor: selectedColorMarking?.value
-        ? (selectedColorMarking.value as string)
+      markingColor: selectedColorMarking
+        ? (selectedColorMarking as string)
         : undefined,
     };
 
@@ -110,7 +111,7 @@ function PlaceTubesPage() {
     retrievedSelectedRouteSegments,
     selectedSpanEquipmentSpecitifcation,
     placeSpanEquipmentMutation,
-    selectedColorMarking?.value,
+    selectedColorMarking,
   ]);
 
   useEffect(() => {
@@ -159,15 +160,17 @@ function PlaceTubesPage() {
         return x.category;
       })
       .filter((v, i, a) => a.indexOf(v) === i)
-      .map<SelectOption>((x, i) => {
+      .map<SelectOption>((x) => {
         return {
           text: t(x),
           value: x,
-          selected: i === 0 ? true : false,
         };
       });
 
     setCategoryOptions(categoryOptions);
+    if (categoryOptions.length > 0) {
+      setSelectedCategory(categoryOptions[0].value);
+    }
   }, [spanEquipments, t]);
 
   useEffect(() => {
@@ -180,7 +183,7 @@ function PlaceTubesPage() {
       return (
         spanEquipments.find((y) => {
           return y.id === x.id;
-        })?.category === selectedCategory?.value
+        })?.category === selectedCategory
       );
     });
   };
@@ -218,6 +221,7 @@ function PlaceTubesPage() {
           options={categoryOptions}
           removePlaceHolderOnSelect
           onSelected={setSelectedCategory}
+          selected={selectedCategory}
         />
       </div>
       <div className="full-row">
@@ -241,12 +245,13 @@ function PlaceTubesPage() {
           options={colorMarkingOptions}
           removePlaceHolderOnSelect
           onSelected={(x) => setSelectedColorMarking(x)}
+          selected={selectedColorMarking}
         />
         <DefaultButton
           innerText={t("Place span equipment")}
           onClick={() => retrieveSelectedSpanEquipments()}
           disabled={
-            selectedColorMarking?.value === -1 ||
+            selectedColorMarking === -1 ||
             !selectedManufacturer ||
             !selectedSpanEquipmentSpecitifcation
               ? true
