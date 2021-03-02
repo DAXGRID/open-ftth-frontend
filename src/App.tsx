@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./routes/Routes";
 import TopMenu from "./components/TopMenu";
@@ -15,15 +15,19 @@ function App() {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const { initialized, keycloak } = useKeycloak();
 
-  if (!initialized) return <Loading />;
+  useEffect(() => {
+    if (!initialized) return;
 
-  keycloak.loadUserProfile();
+    keycloak.loadUserProfile();
+  }, [initialized, keycloak]);
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);
     // Hack to allow rezing of some components
     window.dispatchEvent(new Event("resize"));
   };
+
+  if (!initialized) return <Loading />;
 
   return (
     <MapProvider>
