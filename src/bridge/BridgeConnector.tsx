@@ -1,7 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useContext, useState } from "react";
 import { w3cwebsocket } from "websocket";
 import PubSub from "pubsub-js";
 import Config from "../config";
+import useBridgeConnector, {
+  RetrieveSelectedSpanEquipmentsResponse,
+} from "../bridge/useBridgeConnector";
+import { MapContext } from "../contexts/MapContext";
 
 let client: w3cwebsocket | null;
 
@@ -10,6 +14,10 @@ function send(eventMsg: any) {
 }
 
 function BridgeConnector() {
+  const { retrieveSelectedSpanEquipments } = useBridgeConnector();
+  const { setSelectedSegments } = useContext(MapContext);
+  const [connected, setConnected] = useState(false);
+
   useEffect(() => {
     function setup() {
       client = new w3cwebsocket(Config.DESKTOP_BRIDGE_URI);
@@ -20,11 +28,13 @@ function BridgeConnector() {
       };
 
       client.onopen = () => {
+        setConnected(true);
         console.log("Connected to BridgeConnector");
       };
 
       client.onclose = () => {
         console.log("Disconnected from BridgeConnector");
+        setConnected(false);
         reconnect();
       };
 
@@ -44,9 +54,27 @@ function BridgeConnector() {
     setup();
 
     return () => {
+      setConnected(false);
       client = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (!connected || !client || client.readyState !== 1) return;
+
+    const token = PubSub.subscribe(
+      "RetrieveSelectedResponse",
+      async (_msg: string, data: RetrieveSelectedSpanEquipmentsResponse) => {
+        setSelectedSegments(data.selectedFeaturesMrid);
+      }
+    );
+
+    retrieveSelectedSpanEquipments();
+
+    return () => {
+      PubSub.unsubscribe(token);
+    };
+  }, [connected, setSelectedSegments]);
 
   return <></>;
 }

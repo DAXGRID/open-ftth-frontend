@@ -3,9 +3,10 @@
     "translation": {
       "Home": "Home",
       "Welcome to OpenFTTH": "Welcome to OpenFTTH",
-      "Place conduit": "Place conduit",
+      "Place span equipment": "Place span equipment",
+      "Place span equipments": "Place span equipments",
       "Manufacturer": "Manufacturer",
-      "Product model": "Product model",
+      "Specification": "Specification",
       "Pick color marking": "Pick color marking",
       "Success": "Success",
       "Error": "Error",
@@ -24,16 +25,20 @@
       "Status": "Status",
       "Please select a work task": "Please select a work task",
       "Work task is now added to user": "Work task is now added to user",
-      "The work task has no coordinates": "The work task has no coordinates"
+      "The work task has no coordinates": "The work task has no coordinates",
+      "Conduit": "Conduit",
+      "Span equipment placed": "Span equipment placed",
+      "Unspecified": "Unspecified"
     }
   },
   "dk": {
     "translation": {
       "Home": "Hjem",
       "Welcome to OpenFTTH": "Velkommen til OpenFTTH",
-      "Place conduit": "Læg rør",
+      "Place span equipment": "Placer ledning",
+      "Place span equipments": "Placer ledninger",
       "Manufacturer": "Fabrikant",
-      "Product model": "Produkt model",
+      "Specification": "Specifikation",
       "Pick color marking": "Vælg farvekode",
       "Success": "Success",
       "Error": "Fejl",
@@ -52,7 +57,10 @@
       "Status": "Status",
       "Please select a work task": "Vælg en opgave",
       "Work task is now added to user": "Opgaven er nu tilknyttet brugeren",
-      "The work task has no coordinates": "Opgaven har ingen tilknyttede koordinater"
+      "The work task has no coordinates": "Opgaven har ingen tilknyttede koordinater",
+      "Conduit": "Rør",
+      "Span equipment placed": "Ledning placeret",
+      "Unspecified": "Uspecificeret"
     }
   }
 }

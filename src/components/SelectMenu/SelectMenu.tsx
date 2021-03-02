@@ -1,58 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import CustomOption from "./CustomOption";
 
 interface SelectOption {
   text: string;
   value: string | number;
-  selected: boolean;
 }
 
 type SelectMenuProps = {
   options: SelectOption[];
   removePlaceHolderOnSelect?: boolean;
-  onSelected: (selected: SelectOption | undefined) => void;
+  onSelected: (selected: number | string | undefined) => void;
   maxWidth?: string;
+  selected: string | number | undefined;
 };
 
 function SelectMenu({
   options,
-  removePlaceHolderOnSelect,
   onSelected,
   maxWidth,
+  selected,
 }: SelectMenuProps) {
   const [toggled, setToggled] = useState(false);
-  const [selected, setSelected] = useState<SelectOption>();
-  const [selectOptions, setSelectOptions] = useState(options);
-
-  useEffect(() => {
-    setSelectOptions(options);
-  }, [options]);
-
-  useEffect(() => {
-    const option = selectOptions?.find((o) => o.selected === true);
-    setSelected(option);
-  }, [selectOptions]);
-
-  useEffect(() => {
-    if (onSelected) {
-      onSelected(selected);
-    }
-  }, [selected, onSelected]);
-
-  const triggerSelected = (selectedValue: string | number) => {
-    let selectOptionsCopy = selectOptions.map((o) => {
-      const option = { ...o, selected: o.value === selectedValue };
-      return option;
-    });
-
-    if (removePlaceHolderOnSelect && selectedValue !== -1) {
-      selectOptionsCopy = selectOptionsCopy.filter(
-        (option) => option.value !== -1
-      );
-    }
-
-    setSelectOptions([...selectOptionsCopy]);
-  };
 
   return (
     <div
@@ -65,16 +33,16 @@ function SelectMenu({
     >
       <div className={toggled ? "menu-select open" : "menu-select"}>
         <div className="menu-select__trigger">
-          <span>{selected?.text}</span>
+          <span>{options.find((x) => x.value === selected)?.text}</span>
           <div className="arrow" />
         </div>
         <div className="menu-options">
-          {selectOptions?.map((option) => (
+          {options?.map((option) => (
             <CustomOption
               key={option.value}
               text={option.text}
-              triggerSelected={triggerSelected}
-              selected={option.selected}
+              triggerSelected={onSelected}
+              isSelected={option.value === selected}
               value={option.value}
             />
           ))}

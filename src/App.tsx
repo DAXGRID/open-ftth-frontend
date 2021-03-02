@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./routes/Routes";
 import TopMenu from "./components/TopMenu";
@@ -6,16 +6,20 @@ import BridgeConnector from "./bridge/BridgeConnector";
 import BridgeRouter from "./bridge/BridgeRouter";
 import SideMenu from "./components/SideMenu";
 import Loading from "./components/Loading";
+import { MapProvider } from "./contexts/MapContext";
 import { useKeycloak } from "@react-keycloak/web";
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
-
   const { initialized, keycloak } = useKeycloak();
 
-  if (!initialized) return <Loading />;
+  useEffect(() => {
+    if (!initialized) return;
 
-  keycloak.loadUserProfile();
+    keycloak.loadUserProfile();
+  }, [initialized, keycloak]);
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);
@@ -23,22 +27,37 @@ function App() {
     window.dispatchEvent(new Event("resize"));
   };
 
+  if (!initialized) return <Loading />;
+
   return (
-    <Router>
-      <BridgeConnector />
-      <BridgeRouter />
-      <header>
-        <TopMenu toggleSideMenu={toggleSideMenu} />
-      </header>
-      <SideMenu open={sideMenuOpen} />
-      <main
-        className={
-          sideMenuOpen ? "main-container side-menu-open" : "main-container"
-        }
-      >
-        <Routes />
-      </main>
-    </Router>
+    <MapProvider>
+      <Router>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar
+          closeOnClick={false}
+          newestOnTop={false}
+          rtl={false}
+          pauseOnFocusLoss
+          transition={Slide}
+          pauseOnHover
+        />
+        <BridgeConnector />
+        <BridgeRouter />
+        <header>
+          <TopMenu toggleSideMenu={toggleSideMenu} />
+        </header>
+        <SideMenu open={sideMenuOpen} />
+        <main
+          className={
+            sideMenuOpen ? "main-container side-menu-open" : "main-container"
+          }
+        >
+          <Routes />
+        </main>
+      </Router>
+    </MapProvider>
   );
 }
 

@@ -1,8 +1,4 @@
-import {
-  faHome,
-  faProjectDiagram,
-  faTasks,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHome, faProjectDiagram } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import SideMenuItem from "./SideMenuItem";
 
@@ -18,14 +14,9 @@ const SideMenu = ({ open }: SideMenuProps) => {
       <ul>
         <SideMenuItem path="/" linkText={t("Home")} icon={faHome} />
         <SideMenuItem
-          path="/place-tubes"
-          linkText={t("Place conduit")}
+          path="/place-span-equipment"
+          linkText={t("Place span equipments")}
           icon={faProjectDiagram}
-        />
-        <SideMenuItem
-          path="/work-task"
-          linkText={t("Work tasks")}
-          icon={faTasks}
         />
       </ul>
     </div>
