@@ -6,6 +6,7 @@ import BridgeConnector from "./bridge/BridgeConnector";
 import BridgeRouter from "./bridge/BridgeRouter";
 import SideMenu from "./components/SideMenu";
 import Loading from "./components/Loading";
+import { MapProvider } from "./contexts/MapContext";
 import { useKeycloak } from "@react-keycloak/web";
 
 function App() {
@@ -23,21 +24,23 @@ function App() {
   };
 
   return (
-    <Router>
-      <BridgeConnector />
-      <BridgeRouter />
-      <header>
-        <TopMenu toggleSideMenu={toggleSideMenu} />
-      </header>
-      <SideMenu open={sideMenuOpen} />
-      <main
-        className={
-          sideMenuOpen ? "main-container side-menu-open" : "main-container"
-        }
-      >
-        <Routes />
-      </main>
-    </Router>
+    <MapProvider>
+      <Router>
+        <BridgeConnector />
+        <BridgeRouter />
+        <header>
+          <TopMenu toggleSideMenu={toggleSideMenu} />
+        </header>
+        <SideMenu open={sideMenuOpen} />
+        <main
+          className={
+            sideMenuOpen ? "main-container side-menu-open" : "main-container"
+          }
+        >
+          <Routes />
+        </main>
+      </Router>
+    </MapProvider>
   );
 }
 

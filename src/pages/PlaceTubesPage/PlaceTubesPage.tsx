@@ -1,13 +1,9 @@
-import { useEffect, useLayoutEffect, useState, useMemo } from "react";
+import { useContext, useLayoutEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
-import PubSub from "pubsub-js";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
-import useBridgeConnector, {
-  RetrieveSelectedSpanEquipmentsResponse,
-} from "../../bridge/useBridgeConnector";
 import Loading from "../../components/Loading";
 import { useQuery, useMutation } from "urql";
 import {
@@ -19,6 +15,7 @@ import {
   PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK,
   PlaceSpanEquipmentResponse,
 } from "./PlaceTubesPageGql";
+import { MapContext } from "../../contexts/MapContext";
 
 const getFilteredSpanEquipmentSpecifications = (
   specifications: SpanEquipmentSpecification[],
@@ -76,7 +73,7 @@ const getFilteredManufacturers = (
 
 function PlaceTubesPage() {
   const { t } = useTranslation();
-  const { retrieveSelectedSpanEquipments } = useBridgeConnector();
+  const { selectedSegments } = useContext(MapContext);
   const [colorMarkingOptions] = useState<SelectOption[]>([
     { text: t("Pick color marking"), value: -1 },
     { text: "Red", value: "Red" },
@@ -99,10 +96,6 @@ function PlaceTubesPage() {
   ] = useState<string>();
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [selectedManufacturer, setSelectedManufacturer] = useState<string>();
-  const [
-    retrievedSelectedRouteSegments,
-    setRetrievedSelectedRouteSegments,
-  ] = useState<string[]>();
 
   const [spanEquipmentResult] = useQuery<UtilityNetworkResponse>({
     query: SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
@@ -138,47 +131,19 @@ function PlaceTubesPage() {
     PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK
   );
 
-  useEffect(() => {
-    const token = PubSub.subscribe(
-      "RetrieveSelectedResponse",
-      async (_msg: string, data: RetrieveSelectedSpanEquipmentsResponse) => {
-        if (data.selectedFeaturesMrid.length === 0) {
-          setRetrievedSelectedRouteSegments(undefined);
-        } else {
-          setRetrievedSelectedRouteSegments(data.selectedFeaturesMrid);
-        }
-      }
-    );
-
-    return () => {
-      PubSub.unsubscribe(token);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!retrievedSelectedRouteSegments) return;
-
+  const placeSpanEquipment = async () => {
     const parameters: PlaceSpanEquipmentParameters = {
       spanEquipmentId: uuidv4(),
       spanEquipmentSpecificationId: selectedSpanEquipmentSpecification as string,
-      routeSegmentIds: retrievedSelectedRouteSegments,
+      routeSegmentIds: selectedSegments,
       markingColor: selectedColorMarking
         ? (selectedColorMarking as string)
         : undefined,
     };
 
-    const fetchData = async () => {
-      const result = await placeSpanEquipmentMutation(parameters);
-      setRetrievedSelectedRouteSegments(undefined);
-    };
-
-    fetchData();
-  }, [
-    retrievedSelectedRouteSegments,
-    selectedSpanEquipmentSpecification,
-    placeSpanEquipmentMutation,
-    selectedColorMarking,
-  ]);
+    const result = await placeSpanEquipmentMutation(parameters);
+    console.log(result);
+  };
 
   useLayoutEffect(() => {
     if (!spanEquipmentResult.data) {
@@ -275,7 +240,7 @@ function PlaceTubesPage() {
         />
         <DefaultButton
           innerText={t("Place span equipment")}
-          onClick={() => retrieveSelectedSpanEquipments()}
+          onClick={() => placeSpanEquipment()}
           disabled={
             selectedColorMarking === -1 ||
             !selectedManufacturer ||
