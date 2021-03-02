@@ -74,7 +74,7 @@ function BridgeConnector() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [connected, setSelectedSegments]);
+  }, [connected, setSelectedSegments, retrieveSelectedSpanEquipments]);
 
   return <></>;
 }

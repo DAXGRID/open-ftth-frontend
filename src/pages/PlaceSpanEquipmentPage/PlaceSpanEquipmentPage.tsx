@@ -131,10 +131,13 @@ function PlaceSpanEquipmentPage() {
       manufacturers,
       selectedSpanEquipmentSpecification,
       spanEquipmentSpecifications,
+      t,
     ]
   );
 
   const [
+    // TODO fix this
+    // eslint-disable-next-line
     placeSpanEquipmentMutationResult,
     placeSpanEquipmentMutation,
   ] = useMutation<PlaceSpanEquipmentResponse>(
