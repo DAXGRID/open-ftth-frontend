@@ -16,6 +16,7 @@ import {
   PlaceSpanEquipmentResponse,
 } from "./PlaceTubesPageGql";
 import { MapContext } from "../../contexts/MapContext";
+import { toast } from "react-toastify";
 
 const getFilteredSpanEquipmentSpecifications = (
   specifications: SpanEquipmentSpecification[],
@@ -141,8 +142,15 @@ function PlaceTubesPage() {
         : undefined,
     };
 
-    const result = await placeSpanEquipmentMutation(parameters);
-    console.log(result);
+    const { data } = await placeSpanEquipmentMutation(parameters);
+
+    if (data?.spanEquipment.placSpanEquipmentInRouteNetwork.isSuccess) {
+      toast.success(t("Span equipment placed"));
+    } else {
+      toast.error(
+        data?.spanEquipment.placSpanEquipmentInRouteNetwork.errorMesssage
+      );
+    }
   };
 
   useLayoutEffect(() => {

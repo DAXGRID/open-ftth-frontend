@@ -25,7 +25,8 @@
       "Please select a work task": "Please select a work task",
       "Work task is now added to user": "Work task is now added to user",
       "The work task has no coordinates": "The work task has no coordinates",
-      "Conduit": "Conduit"
+      "Conduit": "Conduit",
+      "Span equipment placed": "Span equipment placed"
     }
   },
   "dk": {
@@ -54,7 +55,8 @@
       "Please select a work task": "Vælg en opgave",
       "Work task is now added to user": "Opgaven er nu tilknyttet brugeren",
       "The work task has no coordinates": "Opgaven har ingen tilknyttede koordinater",
-      "Conduit": "Rør"
+      "Conduit": "Rør",
+      "Span equipment placed": "Ledning placeret"
     }
   }
 }

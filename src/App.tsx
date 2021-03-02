@@ -8,6 +8,8 @@ import SideMenu from "./components/SideMenu";
 import Loading from "./components/Loading";
 import { MapProvider } from "./contexts/MapContext";
 import { useKeycloak } from "@react-keycloak/web";
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
@@ -37,6 +39,17 @@ function App() {
             sideMenuOpen ? "main-container side-menu-open" : "main-container"
           }
         >
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            transition={Slide}
+            pauseOnHover
+          />
           <Routes />
         </main>
       </Router>
