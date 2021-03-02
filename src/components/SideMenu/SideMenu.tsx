@@ -14,8 +14,8 @@ const SideMenu = ({ open }: SideMenuProps) => {
       <ul>
         <SideMenuItem path="/" linkText={t("Home")} icon={faHome} />
         <SideMenuItem
-          path="/place-tubes"
-          linkText={t("Place conduit")}
+          path="/place-span-equipment"
+          linkText={t("Place span equipments")}
           icon={faProjectDiagram}
         />
       </ul>

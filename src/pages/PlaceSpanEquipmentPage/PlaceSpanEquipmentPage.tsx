@@ -14,7 +14,7 @@ import {
   PlaceSpanEquipmentParameters,
   PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK,
   PlaceSpanEquipmentResponse,
-} from "./PlaceTubesPageGql";
+} from "./PlaceSpanEquipmentGql";
 import { MapContext } from "../../contexts/MapContext";
 import { toast } from "react-toastify";
 
@@ -80,7 +80,7 @@ const getFilteredManufacturers = (
   return [defaultValue, ...filtered];
 };
 
-function PlaceTubesPage() {
+function PlaceSpanEquipmentPage() {
   const { t } = useTranslation();
   const { selectedSegments } = useContext(MapContext);
   const [colorMarkingOptions] = useState<SelectOption[]>([
@@ -272,4 +272,4 @@ function PlaceTubesPage() {
   );
 }
 
-export default PlaceTubesPage;
+export default PlaceSpanEquipmentPage;
