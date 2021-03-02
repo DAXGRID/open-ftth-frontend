@@ -1,5 +1,5 @@
 import { useContext, useLayoutEffect, useState, useMemo } from "react";
-import { useTranslation } from "react-i18next";
+import { TFunction, useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
@@ -41,7 +41,8 @@ const getFilteredSpanEquipmentSpecifications = (
 const getFilteredManufacturers = (
   manufacturers: Manufacturer[],
   selectedSpanEquipmentSpecification: string | number | undefined,
-  spanEquipmentSpecifications: SpanEquipmentSpecification[]
+  spanEquipmentSpecifications: SpanEquipmentSpecification[],
+  t: TFunction<string>
 ) => {
   if (
     !manufacturers ||
@@ -67,23 +68,30 @@ const getFilteredManufacturers = (
     );
   }
 
-  return bodyItems.filter((x) => {
+  const filtered = bodyItems.filter((x) => {
     return spanEquipment.manufacturerRefs.includes(x.id.toString());
   });
+
+  const defaultValue = {
+    rows: [{ id: 0, value: t("Unspecified") }],
+    id: "",
+  };
+
+  return [defaultValue, ...filtered];
 };
 
 function PlaceTubesPage() {
   const { t } = useTranslation();
   const { selectedSegments } = useContext(MapContext);
   const [colorMarkingOptions] = useState<SelectOption[]>([
-    { text: t("Pick color marking"), value: -1 },
+    { text: t("Pick color marking"), value: "" },
     { text: "Red", value: "Red" },
     { text: "Blue", value: "Blue" },
     { text: "Yellow", value: "Yellow" },
   ]);
   const [selectedColorMarking, setSelectedColorMarking] = useState<
     string | number | undefined
-  >(-1);
+  >("");
   const [selectedCategory, setSelectedCategory] = useState<
     string | number | undefined
   >();
@@ -96,7 +104,7 @@ function PlaceTubesPage() {
     setSelectedSpanEquipmentSpecification,
   ] = useState<string>();
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
-  const [selectedManufacturer, setSelectedManufacturer] = useState<string>();
+  const [selectedManufacturer, setSelectedManufacturer] = useState<string>("");
 
   const [spanEquipmentResult] = useQuery<UtilityNetworkResponse>({
     query: SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
@@ -116,7 +124,8 @@ function PlaceTubesPage() {
       getFilteredManufacturers(
         manufacturers,
         selectedSpanEquipmentSpecification,
-        spanEquipmentSpecifications
+        spanEquipmentSpecifications,
+        t
       ),
     [
       manufacturers,
@@ -137,6 +146,7 @@ function PlaceTubesPage() {
       spanEquipmentId: uuidv4(),
       spanEquipmentSpecificationId: selectedSpanEquipmentSpecification as string,
       routeSegmentIds: selectedSegments,
+      manufacturerId: selectedManufacturer ? selectedManufacturer : undefined,
       markingColor: selectedColorMarking
         ? (selectedColorMarking as string)
         : undefined,
@@ -199,14 +209,14 @@ function PlaceTubesPage() {
 
     setSelectedCategory(categoryId);
     setSelectedSpanEquipmentSpecification(undefined);
-    setSelectedManufacturer(undefined);
+    setSelectedManufacturer("");
   };
 
   const selectSpanEquipmentSpecification = (specificationId: string) => {
     if (selectedSpanEquipmentSpecification === specificationId) return;
 
     setSelectedSpanEquipmentSpecification(specificationId);
-    setSelectedManufacturer(undefined);
+    setSelectedManufacturer("");
   };
 
   if (spanEquipmentResult.fetching) {
@@ -250,8 +260,8 @@ function PlaceTubesPage() {
           innerText={t("Place span equipment")}
           onClick={() => placeSpanEquipment()}
           disabled={
-            selectedColorMarking === -1 ||
-            !selectedManufacturer ||
+            selectedColorMarking === undefined ||
+            !selectedManufacturer === undefined ||
             !selectedSpanEquipmentSpecification
               ? true
               : false
