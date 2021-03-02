@@ -148,7 +148,7 @@ function PlaceTubesPage() {
       toast.success(t("Span equipment placed"));
     } else {
       toast.error(
-        data?.spanEquipment.placSpanEquipmentInRouteNetwork.errorMesssage
+        data?.spanEquipment.placSpanEquipmentInRouteNetwork.errorCode
       );
     }
   };

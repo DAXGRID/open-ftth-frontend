@@ -28,6 +28,17 @@ function App() {
   return (
     <MapProvider>
       <Router>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar
+          closeOnClick={false}
+          newestOnTop={false}
+          rtl={false}
+          pauseOnFocusLoss
+          transition={Slide}
+          pauseOnHover
+        />
         <BridgeConnector />
         <BridgeRouter />
         <header>
@@ -39,17 +50,6 @@ function App() {
             sideMenuOpen ? "main-container side-menu-open" : "main-container"
           }
         >
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            transition={Slide}
-            pauseOnHover
-          />
           <Routes />
         </main>
       </Router>
