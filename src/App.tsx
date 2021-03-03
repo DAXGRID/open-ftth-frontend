@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./routes/Routes";
 import TopMenu from "./components/TopMenu";
@@ -15,7 +15,8 @@ function App() {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const { initialized, keycloak } = useKeycloak();
 
-  useEffect(() => {
+  // We use layout effect here to make sure that user is loaded before render
+  useLayoutEffect(() => {
     if (!initialized) return;
 
     keycloak.loadUserProfile();

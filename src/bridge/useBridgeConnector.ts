@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { send } from "./BridgeConnector";
 import { useKeycloak } from "@react-keycloak/web";
 
@@ -8,14 +9,15 @@ export interface RetrieveSelectedSpanEquipmentsResponse {
 function useBridgeConnector() {
   const { keycloak } = useKeycloak();
 
-  function retrieveSelectedSpanEquipments() {
+  const retrieveSelectedEquipments = useCallback(() => {
     const message = {
       eventType: "RetrieveSelected",
       username: keycloak.profile?.username,
     };
 
+    console.log(message);
     send(message);
-  }
+  }, [keycloak.profile?.username]);
 
   function panToCoordinate(coordinate: string) {
     const message = {
@@ -41,7 +43,7 @@ function useBridgeConnector() {
     send(message);
   }
 
-  return { retrieveSelectedSpanEquipments, panToCoordinate, highlightFeatures };
+  return { retrieveSelectedEquipments, panToCoordinate, highlightFeatures };
 }
 
 export default useBridgeConnector;
