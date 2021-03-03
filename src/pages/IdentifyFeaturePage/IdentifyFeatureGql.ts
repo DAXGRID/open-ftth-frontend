@@ -19,6 +19,7 @@ export interface Diagram {
   refClass?: string;
   style: string;
   label?: string;
+  geometry: Geometry;
 }
 
 export interface Geometry {
@@ -47,6 +48,20 @@ query ($routeNetworkElementId: ID!) {
         }
         style
         label
+      }
+    }
+  }
+}
+`;
+
+export const SCHEMATIC_DIAGRAM_UPDATED = `
+subscription ($routeNetworkElementId: ID!) {
+  schematicDiagramUpdated(
+    routeNetworkElementId: $routeNetworkElementId
+  ) {
+    diagramObjects {
+      geometry {
+        coordinates
       }
     }
   }

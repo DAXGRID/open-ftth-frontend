@@ -14,6 +14,7 @@ interface Diagram {
   refClass?: string;
   style: string;
   label?: string;
+  geometry: Geometry;
 }
 
 interface Geometry {
