@@ -15,7 +15,6 @@ function useBridgeConnector() {
       username: keycloak.profile?.username,
     };
 
-    console.log(message);
     send(message);
   }, [keycloak.profile?.username]);
 
