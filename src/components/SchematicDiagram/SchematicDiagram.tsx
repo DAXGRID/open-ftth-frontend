@@ -21,7 +21,7 @@ function SchematicDiagram() {
     });
 
     return () => map.remove();
-  }, []);
+  }, [lng, lat, zoom, minZoom]);
 
   return (
     <div className="schematic-diagram">

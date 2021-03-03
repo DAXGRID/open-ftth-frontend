@@ -3,11 +3,15 @@ import {
   faHighlighter,
   faSearchLocation,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useQuery, useMutation } from "urql";
 import { useParams } from "react-router-dom";
 import DiagramMenu from "../../components/DiagramMenu";
 import SchematicDiagram from "../../components/SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
+import Loading from "../../components/Loading";
+
+import { DiagramQueryResponse, GET_DIAGRAM_QUERY } from "./IdentifyFeatureGql";
 
 function IdentifyFeaturePage() {
   const { id }: { id: string } = useParams();
@@ -16,6 +20,13 @@ function IdentifyFeaturePage() {
     { icon: faSearchLocation, toggled: false, id: 2 },
     { icon: faHighlighter, toggled: false, id: 3 },
   ]);
+
+  const [spanEquipmentResult] = useQuery<DiagramQueryResponse>({
+    query: GET_DIAGRAM_QUERY,
+    variables: {
+      routeNetworkElementId: id,
+    },
+  });
 
   useEffect(() => {
     document.title = id;
@@ -30,6 +41,12 @@ function IdentifyFeaturePage() {
       )
     );
   }
+
+  if (spanEquipmentResult.fetching) {
+    return <Loading />;
+  }
+
+  console.log(spanEquipmentResult.data?.schematic.buildDiagram.envelope);
 
   return (
     <div className="identify-feature-page">
