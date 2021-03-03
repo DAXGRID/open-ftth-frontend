@@ -46,7 +46,14 @@ function IdentifyFeaturePage() {
     return <Loading />;
   }
 
-  console.log(spanEquipmentResult.data?.schematic.buildDiagram.envelope);
+  if (!spanEquipmentResult.data) {
+    throw new Error("SpanEquipmentResult cannot be empty");
+  }
+
+  const {
+    diagramObjects,
+    envelope,
+  } = spanEquipmentResult.data.schematic.buildDiagram;
 
   return (
     <div className="identify-feature-page">
@@ -61,7 +68,10 @@ function IdentifyFeaturePage() {
           />
         ))}
       </DiagramMenu>
-      <SchematicDiagram />
+      <SchematicDiagram
+        diagramObjects={diagramObjects ?? []}
+        envelope={envelope ?? {}}
+      />
     </div>
   );
 }
