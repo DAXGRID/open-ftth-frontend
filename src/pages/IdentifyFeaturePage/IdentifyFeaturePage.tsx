@@ -4,14 +4,18 @@ import {
   faSearchLocation,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { useQuery, useMutation } from "urql";
+import { useQuery, useSubscription } from "urql";
 import { useParams } from "react-router-dom";
 import DiagramMenu from "../../components/DiagramMenu";
 import SchematicDiagram from "../../components/SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
 import Loading from "../../components/Loading";
 
-import { DiagramQueryResponse, GET_DIAGRAM_QUERY } from "./IdentifyFeatureGql";
+import {
+  DiagramQueryResponse,
+  GET_DIAGRAM_QUERY,
+  SCHEMATIC_DIAGRAM_UPDATED,
+} from "./IdentifyFeatureGql";
 
 function IdentifyFeaturePage() {
   const { id }: { id: string } = useParams();
@@ -26,6 +30,11 @@ function IdentifyFeaturePage() {
     variables: {
       routeNetworkElementId: id,
     },
+  });
+
+  const [res] = useSubscription({
+    query: SCHEMATIC_DIAGRAM_UPDATED,
+    variables: { routeNetworkElementId: id },
   });
 
   useEffect(() => {

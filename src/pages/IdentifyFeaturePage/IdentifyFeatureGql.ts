@@ -59,10 +59,21 @@ subscription ($routeNetworkElementId: ID!) {
   schematicDiagramUpdated(
     routeNetworkElementId: $routeNetworkElementId
   ) {
+    envelope {
+      minX
+      maxX
+      minY
+      maxY
+    }
     diagramObjects {
+      refId
+      refClass
       geometry {
+        type
         coordinates
       }
+      style
+      label
     }
   }
 }
