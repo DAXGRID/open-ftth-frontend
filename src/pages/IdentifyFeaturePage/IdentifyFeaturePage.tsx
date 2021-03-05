@@ -53,7 +53,6 @@ function IdentifyFeaturePage() {
 
   useEffect(() => {
     if (!spanEquipmentResult.data) return;
-    console.log("fetch");
 
     const {
       diagramObjects,
@@ -66,7 +65,6 @@ function IdentifyFeaturePage() {
 
   useEffect(() => {
     if (!res.data) return;
-    console.log("sub");
 
     const { diagramObjects, envelope } = res.data.schematicDiagramUpdated;
 

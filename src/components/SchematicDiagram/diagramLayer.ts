@@ -156,104 +156,6 @@ export function getLayer(name: string): AnyLayer {
           "line-color": "#000",
         },
       } as LineLayer;
-    case "CableOutsideWellLabel":
-      return {
-        id: "CableOutsideWellLabel",
-        name: "CableOutsideWellLabel",
-        type: "symbol",
-        order: 4,
-        paint: {
-          "text-halo-width": 2,
-          "text-color": "#444",
-          "text-halo-color": "#fff",
-        },
-        layout: {
-          "symbol-placement": "line-center",
-          "text-size": 10,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
-          "text-field": ["get", "label"],
-          "text-allow-overlap": true,
-          "icon-padding": 0,
-        },
-      } as SymbolLayer;
-    case "CableInsideWellLabel":
-      return {
-        id: "CableInsideWellLabel",
-        source: "CableInsideWellLabel",
-        type: "symbol",
-        order: 4,
-        paint: {
-          "text-halo-width": 2,
-          "text-color": "#444",
-          "text-halo-color": "#fff",
-        },
-        layout: {
-          "symbol-placement": "line-center",
-          "text-size": 10,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
-          "text-field": ["get", "label"],
-        },
-      } as SymbolLayer;
-    case "LabelMediumText":
-      return {
-        id: "LabelMediumText",
-        source: "LabelMediumText",
-        type: "symbol",
-        order: 4,
-        paint: {
-          "text-halo-width": 2,
-          "text-color": "#444",
-          "text-halo-color": "#fff",
-        },
-        layout: {
-          "symbol-placement": "line-center",
-          "text-size": 10,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
-          "text-field": ["get", "label"],
-          "text-allow-overlap": true,
-          "icon-padding": 0,
-        },
-      } as SymbolLayer;
-    case "LabelNormalText":
-      return {
-        id: "LabelNormalText",
-        source: "LabelNormalText",
-        type: "symbol",
-        order: 4,
-        paint: {
-          "text-halo-width": 2,
-          "text-color": "#444",
-          "text-halo-color": "#fff",
-        },
-        layout: {
-          "symbol-placement": "line-center",
-          "text-size": 8,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
-          "text-field": ["get", "label"],
-          "text-allow-overlap": true,
-          "icon-padding": 0,
-        },
-      } as SymbolLayer;
-    case "LabelBigText":
-      return {
-        id: "LabelBigText",
-        source: "LabelBigText",
-        type: "symbol",
-        order: 4,
-        paint: {
-          "text-halo-width": 2,
-          "text-color": "#444",
-          "text-halo-color": "#fff",
-        },
-        layout: {
-          "symbol-placement": "line-center",
-          "text-size": 12,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
-          "text-field": ["get", "label"],
-          "text-allow-overlap": true,
-          "icon-padding": 0,
-        },
-      } as SymbolLayer;
     case "VestTerminalLabel":
       return {
         id: "VestTerminalLabel",
@@ -261,17 +163,16 @@ export function getLayer(name: string): AnyLayer {
         type: "symbol",
         order: 4,
         paint: {
-          "text-halo-width": 2,
           "text-color": "#444",
-          "text-halo-color": "#fff",
         },
         layout: {
-          "symbol-placement": "line-center",
-          "text-size": 8,
+          "text-allow-overlap": true,
+          "text-size": 14,
           "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
           "text-field": ["get", "label"],
-          "text-allow-overlap": true,
-          "icon-padding": 0,
+          "text-anchor": "right",
+          "text-justify": "right",
+          "text-offset": [-0.5, 0],
         },
       } as SymbolLayer;
     case "EastTerminalLabel":
@@ -281,17 +182,56 @@ export function getLayer(name: string): AnyLayer {
         type: "symbol",
         order: 4,
         paint: {
-          "text-halo-width": 2,
           "text-color": "#444",
-          "text-halo-color": "#fff",
         },
         layout: {
-          "symbol-placement": "line-center",
-          "text-size": 8,
+          "text-allow-overlap": true,
+          "text-size": 14,
           "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
           "text-field": ["get", "label"],
+          "text-anchor": "left",
+          "text-justify": "left",
+          "text-offset": [0.5, 0],
+        },
+      } as SymbolLayer;
+    case "SouthTerminalLabel":
+      return {
+        id: "SouthTerminalLabel",
+        source: "SouthTerminalLabel",
+        type: "symbol",
+        order: 4,
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
           "text-allow-overlap": true,
-          "icon-padding": 0,
+          "text-size": 14,
+          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
+          "text-field": ["get", "label"],
+          "text-anchor": "right",
+          "text-justify": "right",
+          "text-rotate": -90,
+          "text-offset": [-0.5, 0],
+        },
+      } as SymbolLayer;
+    case "NorthTerminalLabel":
+      return {
+        id: "NorthTerminalLabel",
+        source: "NorthTerminalLabel",
+        type: "symbol",
+        order: 4,
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
+          "text-allow-overlap": true,
+          "text-size": 14,
+          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
+          "text-field": ["get", "label"],
+          "text-anchor": "left",
+          "text-justify": "left",
+          "text-rotate": -90,
+          "text-offset": [0.5, 0],
         },
       } as SymbolLayer;
     case "SpanEquipmentLabel":
@@ -301,16 +241,14 @@ export function getLayer(name: string): AnyLayer {
         type: "symbol",
         order: 4,
         paint: {
-          "text-halo-width": 2,
           "text-color": "#444",
-          "text-halo-color": "#fff",
         },
         layout: {
+          "text-allow-overlap": true,
           "symbol-placement": "line-center",
           "text-size": 8,
           "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
           "text-field": ["get", "label"],
-          "text-allow-overlap": true,
           "icon-padding": 0,
         },
       } as SymbolLayer;
