@@ -54,6 +54,13 @@ query ($routeNetworkElementId: ID!) {
 }
 `;
 
+export interface DiagramUpdatedResponse {
+  schematicDiagramUpdated: {
+    diagramObjects: Diagram[];
+    envelope: Envelope;
+  };
+}
+
 export const SCHEMATIC_DIAGRAM_UPDATED = `
 subscription ($routeNetworkElementId: ID!) {
   schematicDiagramUpdated(

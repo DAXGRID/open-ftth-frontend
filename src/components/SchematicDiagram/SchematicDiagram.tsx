@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
 import mapboxgl, { Map } from "mapbox-gl";
 import { Feature } from "geojson";
 import Config from "../../config";
@@ -40,6 +40,8 @@ function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
   const map = useRef<Map | null>(null);
 
   useEffect(() => {
+    if (diagramObjects.length === 0) return;
+
     const newMap = new Map({
       container: mapContainer.current ?? "",
       style: Config.MAPBOX_STYLE_URI,
@@ -56,7 +58,7 @@ function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
       newMap.remove();
       map.current = null;
     };
-  }, [lng, lat, zoom, minZoom]);
+  }, [lng, lat, zoom, minZoom, diagramObjects, envelope]);
 
   const loaded = (map: Map) => {
     const t: { [id: string]: Feature[] } = {};

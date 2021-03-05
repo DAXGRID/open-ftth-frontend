@@ -12,7 +12,10 @@ import ToggleButton from "../../components/ToggleButton";
 import Loading from "../../components/Loading";
 
 import {
+  Diagram,
   DiagramQueryResponse,
+  DiagramUpdatedResponse,
+  Envelope,
   GET_DIAGRAM_QUERY,
   SCHEMATIC_DIAGRAM_UPDATED,
 } from "./IdentifyFeatureGql";
@@ -24,6 +27,13 @@ function IdentifyFeaturePage() {
     { icon: faSearchLocation, toggled: false, id: 2 },
     { icon: faHighlighter, toggled: false, id: 3 },
   ]);
+  const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
+  const [envelope, setEnvelope] = useState<Envelope>({
+    maxX: 0,
+    maxY: 0,
+    minX: 0,
+    minY: 0,
+  });
 
   const [spanEquipmentResult] = useQuery<DiagramQueryResponse>({
     query: GET_DIAGRAM_QUERY,
@@ -32,7 +42,7 @@ function IdentifyFeaturePage() {
     },
   });
 
-  const [res] = useSubscription({
+  const [res] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
     variables: { routeNetworkElementId: id },
   });
@@ -40,6 +50,29 @@ function IdentifyFeaturePage() {
   useEffect(() => {
     document.title = id;
   }, [id]);
+
+  useEffect(() => {
+    if (!spanEquipmentResult.data) return;
+    console.log("fetch");
+
+    const {
+      diagramObjects,
+      envelope,
+    } = spanEquipmentResult.data.schematic.buildDiagram;
+
+    setDiagramObjects([...diagramObjects]);
+    setEnvelope({ ...envelope });
+  }, [spanEquipmentResult, setDiagramObjects, setEnvelope]);
+
+  useEffect(() => {
+    if (!res.data) return;
+    console.log("sub");
+
+    const { diagramObjects, envelope } = res.data.schematicDiagramUpdated;
+
+    setDiagramObjects([...diagramObjects]);
+    setEnvelope({ ...envelope });
+  }, [res, setDiagramObjects, setEnvelope]);
 
   function toggle(buttonId: number) {
     setToggleButtons(
@@ -55,15 +88,6 @@ function IdentifyFeaturePage() {
     return <Loading />;
   }
 
-  if (!spanEquipmentResult.data) {
-    throw new Error("SpanEquipmentResult cannot be empty");
-  }
-
-  const {
-    diagramObjects,
-    envelope,
-  } = spanEquipmentResult.data.schematic.buildDiagram;
-
   return (
     <div className="identify-feature-page">
       <DiagramMenu>
@@ -77,10 +101,7 @@ function IdentifyFeaturePage() {
           />
         ))}
       </DiagramMenu>
-      <SchematicDiagram
-        diagramObjects={diagramObjects ?? []}
-        envelope={envelope ?? {}}
-      />
+      <SchematicDiagram diagramObjects={diagramObjects} envelope={envelope} />
     </div>
   );
 }
