@@ -7,7 +7,7 @@ import {
   GeoJSONSourceRaw,
 } from "mapbox-gl";
 
-import { Feature, GeoJsonProperties, Geometry, Position } from "geojson";
+import { Feature, GeoJsonProperties, Geometry } from "geojson";
 
 export function createSource(
   features: Feature<Geometry, GeoJsonProperties>[]
@@ -98,7 +98,6 @@ export function getLayer(name: string): AnyLayer {
     case "InnerConduitYellow":
     case "InnerConduitViolet":
     case "InnerConduitPink":
-    case "InnerConduitSilver":
       return {
         id: "InnerConduit",
         source: "InnerConduit",
