@@ -245,11 +245,33 @@ export function getLayer(name: string): AnyLayer {
         },
         layout: {
           "text-allow-overlap": true,
-          "symbol-placement": "line-center",
-          "text-size": 8,
+          "text-size": 14,
           "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
           "text-field": ["get", "label"],
-          "icon-padding": 0,
+          "text-anchor": "left",
+          "text-justify": "left",
+          "text-rotate": 0,
+          "text-offset": [0, 0],
+        },
+      } as SymbolLayer;
+    case "NodeContainerLabel":
+      return {
+        id: "NodeContainerLabel",
+        source: "NodeContainerLabel",
+        type: "symbol",
+        order: 4,
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
+          "text-allow-overlap": true,
+          "text-size": 14,
+          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
+          "text-field": ["get", "label"],
+          "text-anchor": "left",
+          "text-justify": "left",
+          "text-rotate": 0,
+          "text-offset": [0, 0],
         },
       } as SymbolLayer;
     default:
