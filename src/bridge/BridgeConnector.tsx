@@ -14,9 +14,9 @@ function send(eventMsg: any) {
 }
 
 function BridgeConnector() {
-  const { retrieveSelectedSpanEquipments } = useBridgeConnector();
   const { setSelectedSegments } = useContext(MapContext);
   const [connected, setConnected] = useState(false);
+  const { retrieveSelectedEquipments } = useBridgeConnector();
 
   useEffect(() => {
     function setup() {
@@ -40,12 +40,13 @@ function BridgeConnector() {
 
       client.onerror = () => {
         console.log("Error happend in BridgeConnector");
+        setConnected(false);
         reconnect();
       };
 
       function reconnect() {
         setTimeout(() => {
-          console.log("Reconnecting to BrideConnector");
+          console.log("Reconnecting to BridgeConnector");
           setup();
         }, 5000);
       }
@@ -69,12 +70,12 @@ function BridgeConnector() {
       }
     );
 
-    retrieveSelectedSpanEquipments();
+    retrieveSelectedEquipments();
 
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [connected, setSelectedSegments]);
+  }, [connected, setSelectedSegments, retrieveSelectedEquipments]);
 
   return <></>;
 }

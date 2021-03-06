@@ -3,11 +3,22 @@ import {
   faHighlighter,
   faSearchLocation,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useQuery, useSubscription } from "urql";
 import { useParams } from "react-router-dom";
 import DiagramMenu from "../../components/DiagramMenu";
 import SchematicDiagram from "../../components/SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
+import Loading from "../../components/Loading";
+
+import {
+  Diagram,
+  DiagramQueryResponse,
+  DiagramUpdatedResponse,
+  Envelope,
+  GET_DIAGRAM_QUERY,
+  SCHEMATIC_DIAGRAM_UPDATED,
+} from "./IdentifyFeatureGql";
 
 function IdentifyFeaturePage() {
   const { id }: { id: string } = useParams();
@@ -16,10 +27,50 @@ function IdentifyFeaturePage() {
     { icon: faSearchLocation, toggled: false, id: 2 },
     { icon: faHighlighter, toggled: false, id: 3 },
   ]);
+  const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
+  const [envelope, setEnvelope] = useState<Envelope>({
+    maxX: 0,
+    maxY: 0,
+    minX: 0,
+    minY: 0,
+  });
+
+  const [spanEquipmentResult] = useQuery<DiagramQueryResponse>({
+    query: GET_DIAGRAM_QUERY,
+    variables: {
+      routeNetworkElementId: id,
+    },
+  });
+
+  const [res] = useSubscription<DiagramUpdatedResponse>({
+    query: SCHEMATIC_DIAGRAM_UPDATED,
+    variables: { routeNetworkElementId: id },
+  });
 
   useEffect(() => {
     document.title = id;
   }, [id]);
+
+  useEffect(() => {
+    if (!spanEquipmentResult.data) return;
+
+    const {
+      diagramObjects,
+      envelope,
+    } = spanEquipmentResult.data.schematic.buildDiagram;
+
+    setDiagramObjects([...diagramObjects]);
+    setEnvelope({ ...envelope });
+  }, [spanEquipmentResult, setDiagramObjects, setEnvelope]);
+
+  useEffect(() => {
+    if (!res.data) return;
+
+    const { diagramObjects, envelope } = res.data.schematicDiagramUpdated;
+
+    setDiagramObjects([...diagramObjects]);
+    setEnvelope({ ...envelope });
+  }, [res, setDiagramObjects, setEnvelope]);
 
   function toggle(buttonId: number) {
     setToggleButtons(
@@ -29,6 +80,10 @@ function IdentifyFeaturePage() {
           : button
       )
     );
+  }
+
+  if (spanEquipmentResult.fetching) {
+    return <Loading />;
   }
 
   return (
@@ -44,7 +99,7 @@ function IdentifyFeaturePage() {
           />
         ))}
       </DiagramMenu>
-      <SchematicDiagram />
+      <SchematicDiagram diagramObjects={diagramObjects} envelope={envelope} />
     </div>
   );
 }

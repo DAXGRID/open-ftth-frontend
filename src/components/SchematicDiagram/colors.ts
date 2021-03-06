@@ -21,6 +21,8 @@ const colorMap = {
   DARK_GREY: "#5a5a5a",
   VIOLET: "#7F00FF",
   DARK_VIOLET: "#7200e6",
+  PINK: "#d8a0a6",
+  DARK_PINK: "#cb555d",
 };
 
 export default colorMap;
