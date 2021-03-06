@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import mapboxgl, { Map } from "mapbox-gl";
 import { Feature } from "geojson";
 import Config from "../../config";
@@ -74,10 +74,6 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
 
 function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const [lng] = useState(0.014);
-  const [lat] = useState(0.014);
-  const [zoom] = useState(14);
-  const [minZoom] = useState(12);
   const map = useRef<Map | null>(null);
 
   useEffect(() => {
@@ -86,20 +82,24 @@ function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
     const newMap = new Map({
       container: mapContainer.current ?? "",
       style: Config.MAPBOX_STYLE_URI,
-      center: [lng, lat],
-      zoom: zoom,
-      minZoom: minZoom,
+      minZoom: 12,
+      zoom: 14,
+      center: [0.014, 0.014],
     });
 
     newMap.on("load", () => {
       loadDiagram(newMap, diagramObjects);
+      newMap.fitBounds([
+        [envelope.minX, envelope.minY],
+        [envelope.maxX, envelope.maxY],
+      ]);
     });
 
     return () => {
       newMap.remove();
       map.current = null;
     };
-  }, [lng, lat, zoom, minZoom, diagramObjects, envelope]);
+  }, [diagramObjects, envelope]);
 
   return (
     <div className="schematic-diagram">
