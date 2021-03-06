@@ -3,13 +3,13 @@ import {
   faHighlighter,
   faSearchLocation,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useQuery, useSubscription } from "urql";
-import { useParams } from "react-router-dom";
 import DiagramMenu from "../../components/DiagramMenu";
 import SchematicDiagram from "../../components/SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
 import Loading from "../../components/Loading";
+import { MapContext } from "../../contexts/MapContext";
 
 import {
   Diagram,
@@ -21,7 +21,7 @@ import {
 } from "./IdentifyFeatureGql";
 
 function IdentifyFeaturePage() {
-  const { id }: { id: string } = useParams();
+  const { identifiedFeatureId } = useContext(MapContext);
   const [toggleButtons, setToggleButtons] = useState([
     { icon: faCut, toggled: false, id: 1 },
     { icon: faSearchLocation, toggled: false, id: 2 },
@@ -36,20 +36,17 @@ function IdentifyFeaturePage() {
   });
 
   const [spanEquipmentResult] = useQuery<DiagramQueryResponse>({
+    requestPolicy: "cache-and-network",
     query: GET_DIAGRAM_QUERY,
     variables: {
-      routeNetworkElementId: id,
+      routeNetworkElementId: identifiedFeatureId,
     },
   });
 
   const [res] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
-    variables: { routeNetworkElementId: id },
+    variables: { routeNetworkElementId: identifiedFeatureId },
   });
-
-  useEffect(() => {
-    document.title = id;
-  }, [id]);
 
   useEffect(() => {
     if (!spanEquipmentResult.data) return;
@@ -82,7 +79,7 @@ function IdentifyFeaturePage() {
     );
   }
 
-  if (spanEquipmentResult.fetching) {
+  if (spanEquipmentResult.fetching || !identifiedFeatureId) {
     return <Loading />;
   }
 

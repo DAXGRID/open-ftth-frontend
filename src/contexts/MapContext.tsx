@@ -1,13 +1,19 @@
 import { createContext, ReactNode, useState } from "react";
 
 type MapContextType = {
-  selectedSegments: string[];
-  setSelectedSegments: (selectedSegments: string[]) => void;
+  selectedSegmentIds: string[];
+  setSelectedSegmentIds: (selectedSegments: string[]) => void;
+  identifiedFeatureId: string | undefined;
+  setIdentifiedFeatureId: (identifiedNetworkElement: string) => void;
 };
 
 const MapContext = createContext<MapContextType>({
-  selectedSegments: [],
-  setSelectedSegments: () => {
+  selectedSegmentIds: [],
+  setSelectedSegmentIds: () => {
+    console.warn("no provider set");
+  },
+  identifiedFeatureId: "",
+  setIdentifiedFeatureId: () => {
     console.warn("no provider set");
   },
 });
@@ -18,12 +24,17 @@ type MapProviderProps = {
 
 const MapProvider = ({ children }: MapProviderProps) => {
   const [selectedSegments, setSelectedSegments] = useState<string[]>([]);
+  const [identifiedNetworkElement, setIdentifiedNetworkElement] = useState<
+    string | undefined
+  >();
 
   return (
     <MapContext.Provider
       value={{
-        selectedSegments: selectedSegments,
-        setSelectedSegments: setSelectedSegments,
+        selectedSegmentIds: selectedSegments,
+        setSelectedSegmentIds: setSelectedSegments,
+        identifiedFeatureId: identifiedNetworkElement,
+        setIdentifiedFeatureId: setIdentifiedNetworkElement,
       }}
     >
       {children}

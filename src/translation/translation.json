@@ -28,7 +28,8 @@
       "The work task has no coordinates": "The work task has no coordinates",
       "Conduit": "Conduit",
       "Span equipment placed": "Span equipment placed",
-      "Unspecified": "Unspecified"
+      "Unspecified": "Unspecified",
+      "Schematic diagram": "Schematic diagram"
     }
   },
   "dk": {
@@ -60,7 +61,8 @@
       "The work task has no coordinates": "Opgaven har ingen tilknyttede koordinater",
       "Conduit": "Rør",
       "Span equipment placed": "Ledning placeret",
-      "Unspecified": "Uspecificeret"
+      "Unspecified": "Uspecificeret",
+      "Schematic diagram": "Skematisk diagram"
     }
   }
 }

@@ -82,7 +82,7 @@ const getFilteredManufacturers = (
 
 function PlaceSpanEquipmentPage() {
   const { t } = useTranslation();
-  const { selectedSegments } = useContext(MapContext);
+  const { selectedSegmentIds } = useContext(MapContext);
   const [colorMarkingOptions] = useState<SelectOption[]>([
     { text: t("Pick color marking"), value: "" },
     { text: "Red", value: "Red" },
@@ -148,7 +148,7 @@ function PlaceSpanEquipmentPage() {
     const parameters: PlaceSpanEquipmentParameters = {
       spanEquipmentId: uuidv4(),
       spanEquipmentSpecificationId: selectedSpanEquipmentSpecification as string,
-      routeSegmentIds: selectedSegments,
+      routeSegmentIds: selectedSegmentIds,
       manufacturerId: selectedManufacturer ? selectedManufacturer : undefined,
       markingColor: selectedColorMarking
         ? (selectedColorMarking as string)
