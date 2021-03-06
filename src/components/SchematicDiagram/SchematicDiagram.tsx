@@ -82,17 +82,21 @@ function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
     const newMap = new Map({
       container: mapContainer.current ?? "",
       style: Config.MAPBOX_STYLE_URI,
-      minZoom: 12,
-      zoom: 14,
+      minZoom: 8,
       center: [0.014, 0.014],
     });
 
     newMap.on("load", () => {
       loadDiagram(newMap, diagramObjects);
-      newMap.fitBounds([
-        [envelope.minX, envelope.minY],
-        [envelope.maxX, envelope.maxY],
-      ]);
+      newMap.fitBounds(
+        [
+          [envelope.minX, envelope.minY],
+          [envelope.maxX, envelope.maxY],
+        ],
+        {
+          animate: false,
+        }
+      );
     });
 
     return () => {

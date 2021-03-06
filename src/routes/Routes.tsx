@@ -1,4 +1,3 @@
-import React from "react";
 import { Switch, Route } from "react-router-dom";
 import IndexPage from "../pages/IndexPage";
 import PlaceSpanEquipmentPage from "../pages/PlaceSpanEquipmentPage";
@@ -16,10 +15,10 @@ const Routes = () => (
     />
     <PrivateRoute
       exact
-      path="/identify-feature/:id"
+      path="/schematic-diagram/:id?"
       component={IdentifyFeaturesPage}
     />
-    <Route exact path="/login" component={LoginPage} />
+    <Route exact path="/login" component={LoginPage} title="Login" />
   </Switch>
 );
 

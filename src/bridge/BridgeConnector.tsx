@@ -7,6 +7,13 @@ import useBridgeConnector, {
 } from "../bridge/useBridgeConnector";
 import { MapContext } from "../contexts/MapContext";
 
+type IdentifyNetworkEvent = {
+  eventType: string;
+  identifiedFeatureId: string;
+  selectedType: string;
+  username: string;
+};
+
 let client: w3cwebsocket | null;
 
 function send(eventMsg: any) {
@@ -14,7 +21,9 @@ function send(eventMsg: any) {
 }
 
 function BridgeConnector() {
-  const { setSelectedSegments } = useContext(MapContext);
+  const { setSelectedSegmentIds, setIdentifiedFeatureId } = useContext(
+    MapContext
+  );
   const [connected, setConnected] = useState(false);
   const { retrieveSelectedEquipments } = useBridgeConnector();
 
@@ -66,7 +75,7 @@ function BridgeConnector() {
     const token = PubSub.subscribe(
       "RetrieveSelectedResponse",
       async (_msg: string, data: RetrieveSelectedSpanEquipmentsResponse) => {
-        setSelectedSegments(data.selectedFeaturesMrid);
+        setSelectedSegmentIds(data.selectedFeaturesMrid);
       }
     );
 
@@ -75,7 +84,22 @@ function BridgeConnector() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [connected, setSelectedSegments, retrieveSelectedEquipments]);
+  }, [connected, setSelectedSegmentIds, retrieveSelectedEquipments]);
+
+  useEffect(() => {
+    if (!connected || !client || client.readyState !== 1) return;
+
+    const token = PubSub.subscribe(
+      "IdentifyNetworkElement",
+      (_msg: string, data: IdentifyNetworkEvent) => {
+        setIdentifiedFeatureId(data.identifiedFeatureId);
+      }
+    );
+
+    return () => {
+      PubSub.unsubscribe(token);
+    };
+  }, [connected, setIdentifiedFeatureId]);
 
   return <></>;
 }

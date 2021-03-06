@@ -4,7 +4,11 @@ import Routes from "./routes/Routes";
 import TopMenu from "./components/TopMenu";
 import BridgeConnector from "./bridge/BridgeConnector";
 import SideMenu, { SideMenuItem } from "./components/SideMenu";
-import { faHome, faProjectDiagram } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHome,
+  faProjectDiagram,
+  faDownload,
+} from "@fortawesome/free-solid-svg-icons";
 import Loading from "./components/Loading";
 import { MapProvider } from "./contexts/MapContext";
 import { useKeycloak } from "@react-keycloak/web";
@@ -55,6 +59,11 @@ function App() {
           <SideMenuItem
             path="/place-span-equipment"
             linkText={t("Place span equipments")}
+            icon={faDownload}
+          />
+          <SideMenuItem
+            path="/schematic-diagram"
+            linkText={t("Schematic diagram")}
             icon={faProjectDiagram}
           />
         </SideMenu>
