@@ -3,17 +3,19 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./routes/Routes";
 import TopMenu from "./components/TopMenu";
 import BridgeConnector from "./bridge/BridgeConnector";
-import BridgeRouter from "./bridge/BridgeRouter";
-import SideMenu from "./components/SideMenu";
+import SideMenu, { SideMenuItem } from "./components/SideMenu";
+import { faHome, faProjectDiagram } from "@fortawesome/free-solid-svg-icons";
 import Loading from "./components/Loading";
 import { MapProvider } from "./contexts/MapContext";
 import { useKeycloak } from "@react-keycloak/web";
+import { useTranslation } from "react-i18next";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const { initialized, keycloak } = useKeycloak();
+  const { t } = useTranslation();
 
   // We use layout effect here to make sure that user is loaded before render
   useLayoutEffect(() => {
@@ -45,11 +47,17 @@ function App() {
           pauseOnHover
         />
         <BridgeConnector />
-        <BridgeRouter />
         <header>
           <TopMenu toggleSideMenu={toggleSideMenu} />
         </header>
-        <SideMenu open={sideMenuOpen} />
+        <SideMenu open={sideMenuOpen}>
+          <SideMenuItem path="/" linkText={t("Home")} icon={faHome} />
+          <SideMenuItem
+            path="/place-span-equipment"
+            linkText={t("Place span equipments")}
+            icon={faProjectDiagram}
+          />
+        </SideMenu>
         <main
           className={
             sideMenuOpen ? "main-container side-menu-open" : "main-container"

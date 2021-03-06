@@ -1,24 +1,14 @@
-import { faHome, faProjectDiagram } from "@fortawesome/free-solid-svg-icons";
-import { useTranslation } from "react-i18next";
-import SideMenuItem from "./SideMenuItem";
+import { ReactNode } from "react";
 
 type SideMenuProps = {
   open: boolean;
+  children: ReactNode;
 };
 
-const SideMenu = ({ open }: SideMenuProps) => {
-  const { t } = useTranslation();
-
+const SideMenu = ({ open, children }: SideMenuProps) => {
   return (
     <div className={open ? "side-menu show" : "side-menu"}>
-      <ul>
-        <SideMenuItem path="/" linkText={t("Home")} icon={faHome} />
-        <SideMenuItem
-          path="/place-span-equipment"
-          linkText={t("Place span equipments")}
-          icon={faProjectDiagram}
-        />
-      </ul>
+      <ul>{children}</ul>
     </div>
   );
 };
