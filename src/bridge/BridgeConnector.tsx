@@ -25,7 +25,10 @@ function BridgeConnector() {
     MapContext
   );
   const [connected, setConnected] = useState(false);
-  const { retrieveSelectedEquipments } = useBridgeConnector();
+  const {
+    retrieveSelectedEquipments,
+    retrieveIdentifiedNetworkElement,
+  } = useBridgeConnector();
 
   useEffect(() => {
     function setup() {
@@ -96,10 +99,12 @@ function BridgeConnector() {
       }
     );
 
+    retrieveIdentifiedNetworkElement();
+
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [connected, setIdentifiedFeatureId]);
+  }, [connected, retrieveIdentifiedNetworkElement, setIdentifiedFeatureId]);
 
   return <></>;
 }

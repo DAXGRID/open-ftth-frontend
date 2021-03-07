@@ -15,6 +15,7 @@ import { useKeycloak } from "@react-keycloak/web";
 import { useTranslation } from "react-i18next";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 function App() {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);

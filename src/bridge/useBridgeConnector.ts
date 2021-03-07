@@ -10,8 +10,21 @@ function useBridgeConnector() {
   const { keycloak } = useKeycloak();
 
   const retrieveSelectedEquipments = useCallback(() => {
+    if (!keycloak.profile?.username) return;
+
     const message = {
       eventType: "RetrieveSelected",
+      username: keycloak.profile?.username,
+    };
+
+    send(message);
+  }, [keycloak.profile?.username]);
+
+  const retrieveIdentifiedNetworkElement = useCallback(() => {
+    if (!keycloak.profile?.username) return;
+
+    const message = {
+      eventType: "RetrieveIdentifiedNetworkElement",
       username: keycloak.profile?.username,
     };
 
@@ -42,7 +55,12 @@ function useBridgeConnector() {
     send(message);
   }
 
-  return { retrieveSelectedEquipments, panToCoordinate, highlightFeatures };
+  return {
+    retrieveSelectedEquipments,
+    retrieveIdentifiedNetworkElement,
+    panToCoordinate,
+    highlightFeatures,
+  };
 }
 
 export default useBridgeConnector;
