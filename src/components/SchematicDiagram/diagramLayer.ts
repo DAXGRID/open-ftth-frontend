@@ -83,7 +83,7 @@ export function getLayer(name: string): AnyLayer {
             ["get", "type"],
             "OuterConduitOrange",
             colorMap.LIGHT_ORANGE,
-            "OuterconduitRed",
+            "OuterConduitRed",
             colorMap.LIGHT_RED,
             "#ccc",
           ],
