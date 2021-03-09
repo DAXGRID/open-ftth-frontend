@@ -156,10 +156,10 @@ export function getLayer(name: string): AnyLayer {
           "line-color": "#000",
         },
       } as LineLayer;
-    case "VestTerminalLabel":
+    case "WestTerminalLabel":
       return {
-        id: "VestTerminalLabel",
-        source: "VestTerminalLabel",
+        id: "WestTerminalLabel",
+        source: "WestTerminalLabel",
         type: "symbol",
         order: 4,
         paint: {

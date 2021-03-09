@@ -157,11 +157,11 @@ function PlaceSpanEquipmentPage() {
 
     const { data } = await placeSpanEquipmentMutation(parameters);
 
-    if (data?.spanEquipment.placSpanEquipmentInRouteNetwork.isSuccess) {
+    if (data?.spanEquipment.placeSpanEquipmentInRouteNetwork.isSuccess) {
       toast.success(t("Span equipment placed"));
     } else {
       toast.error(
-        data?.spanEquipment.placSpanEquipmentInRouteNetwork.errorCode
+        data?.spanEquipment.placeSpanEquipmentInRouteNetwork.errorCode
       );
     }
   };
