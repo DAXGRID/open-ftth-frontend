@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import mapboxgl, { Map, PointLike } from "mapbox-gl";
+import mapboxgl, { Map, MapboxGeoJSONFeature, PointLike } from "mapbox-gl";
 import { Feature } from "geojson";
 import Config from "../../config";
 import {
@@ -111,7 +111,11 @@ function enableResize(map: Map) {
   });
 }
 
-function clickHighlight(featureName: string, map: Map) {
+function clickHighlight(
+  featureName: string,
+  map: Map,
+  callback: (feature: MapboxGeoJSONFeature) => void
+) {
   map.on("click", featureName, (e) => {
     const bbox: [PointLike, PointLike] = [
       [e.point.x - 5, e.point.y - 5],
@@ -123,12 +127,14 @@ function clickHighlight(featureName: string, map: Map) {
       return;
     }
 
+    feature.state.selected = !feature.state.selected;
+
     map.setFeatureState(
       { source: featureName, id: feature.id },
-      { selected: !feature.state.selected }
+      { selected: feature.state.selected }
     );
 
-    if (callback) callback(featureSelected);
+    if (callback) callback(feature);
   });
 }
 
@@ -155,8 +161,8 @@ function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
       enableResize(newMap);
       hoverPointer("InnerConduit", newMap);
       hoverPointer("OuterConduit", newMap);
-      clickHighlight("InnerConduit", newMap);
-      clickHighlight("OuterConduit", newMap);
+      clickHighlight("InnerConduit", newMap, (x) => console.log(x));
+      clickHighlight("OuterConduit", newMap, (x) => console.log(x));
     });
 
     return () => {
