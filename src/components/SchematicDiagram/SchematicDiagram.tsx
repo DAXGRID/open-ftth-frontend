@@ -1,8 +1,14 @@
 import { useRef, useEffect } from "react";
-import mapboxgl, { Map } from "mapbox-gl";
+import mapboxgl, { Map, PointLike } from "mapbox-gl";
 import { Feature } from "geojson";
 import Config from "../../config";
-import { getLayer, createFeature, createSource } from "./diagramLayer";
+import {
+  getLayer,
+  createFeature,
+  createSource,
+  innerConduitSelect,
+  multiConduitSelect,
+} from "./diagramLayer";
 
 interface Envelope {
   minX: number;
@@ -34,8 +40,9 @@ mapboxgl.accessToken = Config.MAPBOX_API_KEY;
 const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
   const t: { [id: string]: Feature[] } = {};
 
-  diagramObjects.forEach((x) => {
+  diagramObjects.forEach((x, i) => {
     const feature = createFeature(
+      i,
       x.label ?? "",
       x.geometry.type,
       x.geometry.coordinates,
@@ -72,6 +79,59 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
   });
 };
 
+function mapFitBounds(envelope: Envelope, map: mapboxgl.Map) {
+  map.fitBounds(
+    [
+      [envelope.minX, envelope.minY],
+      [envelope.maxX, envelope.maxY],
+    ],
+    {
+      animate: false,
+    }
+  );
+}
+
+function hoverPointer(featureName: string, map: Map) {
+  map.on("mousemove", featureName, () => {
+    map.getCanvas().style.cursor = "pointer";
+  });
+
+  map.on("mouseleave", featureName, () => {
+    map.getCanvas().style.cursor = "";
+  });
+}
+
+function enableResize(map: Map) {
+  window.addEventListener("resize", () => {
+    // Hack to handle resize of mapcanvas because
+    // the event gets called to early, so we have to queue it up
+    setTimeout(() => {
+      map.resize();
+    }, 1);
+  });
+}
+
+function clickHighlight(featureName: string, map: Map) {
+  map.on("click", featureName, (e) => {
+    const bbox: [PointLike, PointLike] = [
+      [e.point.x - 5, e.point.y - 5],
+      [e.point.x + 5, e.point.y + 5],
+    ];
+
+    const feature = map.queryRenderedFeatures(bbox)[0];
+    if (feature.source !== featureName) {
+      return;
+    }
+
+    map.setFeatureState(
+      { source: featureName, id: feature.id },
+      { selected: !feature.state.selected }
+    );
+
+    if (callback) callback(featureSelected);
+  });
+}
+
 function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<Map | null>(null);
@@ -87,16 +147,16 @@ function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
     });
 
     newMap.on("load", () => {
+      newMap.doubleClickZoom.disable();
       loadDiagram(newMap, diagramObjects);
-      newMap.fitBounds(
-        [
-          [envelope.minX, envelope.minY],
-          [envelope.maxX, envelope.maxY],
-        ],
-        {
-          animate: false,
-        }
-      );
+      newMap.addLayer(innerConduitSelect);
+      newMap.addLayer(multiConduitSelect);
+      mapFitBounds(envelope, newMap);
+      enableResize(newMap);
+      hoverPointer("InnerConduit", newMap);
+      hoverPointer("OuterConduit", newMap);
+      clickHighlight("InnerConduit", newMap);
+      clickHighlight("OuterConduit", newMap);
     });
 
     return () => {
