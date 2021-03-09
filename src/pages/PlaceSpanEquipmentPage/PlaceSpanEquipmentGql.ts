@@ -55,7 +55,7 @@ export interface PlaceSpanEquipmentParameters {
 
 export interface PlaceSpanEquipmentResponse {
   spanEquipment: {
-    placSpanEquipmentInRouteNetwork: {
+    placeSpanEquipmentInRouteNetwork: {
       errorCode?: string;
       isSuccess: boolean;
       errorMesssage?: string;
@@ -76,7 +76,7 @@ mutation (
 {
   spanEquipment
   {
-    placSpanEquipmentInRouteNetwork(
+    placeSpanEquipmentInRouteNetwork(
       spanEquipmentId: $spanEquipmentId,
       spanEquipmentSpecificationId: $spanEquipmentSpecificationId,
       routeSegmentIds: $routeSegmentIds,
