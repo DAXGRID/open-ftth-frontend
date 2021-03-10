@@ -227,7 +227,7 @@ function PlaceSpanEquipmentPage() {
   }
 
   return (
-    <div className="page-container">
+    <div className="place-span-equipment page-container">
       <div className="full-row">
         <SelectMenu
           options={categorySelectOptions()}
