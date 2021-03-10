@@ -15,6 +15,7 @@ import {
   GET_DIAGRAM_QUERY,
   SCHEMATIC_DIAGRAM_UPDATED,
 } from "./IdentifyFeatureGql";
+import AddContainer from "./AddContainer";
 
 import CutConduit from "../../assets/cut-conduit.svg";
 
@@ -69,7 +70,7 @@ function IdentifyFeaturePage() {
   return (
     <div className="identify-feature-page">
       <ModalContainer show={true}>
-        <h1>Test</h1>
+        <AddContainer />
       </ModalContainer>
       <DiagramMenu>
         <ToggleButton
