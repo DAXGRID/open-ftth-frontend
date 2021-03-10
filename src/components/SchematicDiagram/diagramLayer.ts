@@ -24,6 +24,7 @@ export function createSource(
 }
 
 export function createFeature(
+  id: number,
   label: string,
   geometryType: any,
   coordinate: any,
@@ -31,6 +32,7 @@ export function createFeature(
   refId: string
 ): Feature<Geometry, GeoJsonProperties> {
   return {
+    id: id,
     type: "Feature",
     geometry: {
       type: geometryType,
@@ -81,7 +83,7 @@ export function getLayer(name: string): AnyLayer {
             ["get", "type"],
             "OuterConduitOrange",
             colorMap.LIGHT_ORANGE,
-            "OuterconduitRed",
+            "OuterConduitRed",
             colorMap.LIGHT_RED,
             "#ccc",
           ],
@@ -279,13 +281,13 @@ export function getLayer(name: string): AnyLayer {
   }
 }
 
-export const innerConduitSelect = {
+export const innerConduitSelect: LineLayer = {
   id: "inner-conduit-select",
   type: "line",
   source: "InnerConduit",
   paint: {
     "line-width": 3,
-    "line-color": "#71D3FC",
+    "line-color": colorMap.LIGHT_BLUE,
     "line-opacity": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
@@ -295,82 +297,18 @@ export const innerConduitSelect = {
   },
 };
 
-// export const innerConduitHighlight = {
-//   id: "inner-conduit-highlight",
-//   type: "fill",
-//   source: "InnerConduit",
-//   paint: {
-//     "fill-outline-color": "#555",
-//     "fill-color": [
-//       "match",
-//       ["get", "type"],
-//       "InnerConduitWhite",
-//       colorMap.DARK_WHITE,
-//       "InnerConduitBrown",
-//       colorMap.DARK_BROWN,
-//       "InnerConduitRed",
-//       colorMap.DARK_RED,
-//       "InnerConduitYellow",
-//       colorMap.DARK_YELLOW,
-//       "InnerConduitBlue",
-//       colorMap.DARK_BLUE,
-//       "InnerConduitOrange",
-//       colorMap.DARK_ORANGE,
-//       "InnerConduitGreen",
-//       colorMap.DARK_GREEN,
-//       "InnerConduitBlack",
-//       colorMap.LIGHT_BLACK,
-//       "InnerConduitGrey",
-//       colorMap.DARK_GREY,
-//       "InnerConduitViolet",
-//       colorMap.DARK_VIOLET,
-//       "#000",
-//     ],
-//     "fill-opacity": [
-//       "case",
-//       ["boolean", ["feature-state", "hover"], false],
-//       1,
-//       0,
-//     ],
-//   },
-// };
-
-// export const multiConduitSelect = {
-//   id: "multi-conduit-select",
-//   type: "line",
-//   source: "MultiConduit",
-//   paint: {
-//     "line-width": 3,
-//     "line-color": "#71D3FC",
-//     "line-opacity": [
-//       "case",
-//       ["boolean", ["feature-state", "selected"], false],
-//       1,
-//       0,
-//     ],
-//   },
-// };
-
-// export const multiConduitHighlight = {
-//   id: "multi-conduit-highlight",
-//   type: "fill",
-//   source: "MultiConduit",
-//   paint: {
-//     "fill-outline-color": "#555",
-//     "fill-color": [
-//       "match",
-//       ["get", "type"],
-//       "MultiConduitOrange",
-//       colorMap.DARK_ORANGE,
-//       "MultiConduitRed",
-//       colorMap.DARK_RED,
-//       "#000",
-//     ],
-//     "fill-opacity": [
-//       "case",
-//       ["boolean", ["feature-state", "hover"], false],
-//       1,
-//       0,
-//     ],
-//   },
-// };
+export const multiConduitSelect: LineLayer = {
+  id: "outer-conduit-select",
+  type: "line",
+  source: "OuterConduit",
+  paint: {
+    "line-width": 3,
+    "line-color": colorMap.LIGHT_BLUE,
+    "line-opacity": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      1,
+      0,
+    ],
+  },
+};
