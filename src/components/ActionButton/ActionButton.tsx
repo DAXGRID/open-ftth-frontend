@@ -4,26 +4,28 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 type ActionButtonProps = {
   icon: IconProp | string;
   action: () => void;
+  title: string;
 };
 
-function ActionButton({ action, icon }: ActionButtonProps) {
-  function renderIcon(icon: IconProp | string) {
-    if (typeof icon === "string") {
-      return <img src={icon as string} />;
-    } else {
-      return <FontAwesomeIcon icon={icon as IconProp} />;
-    }
+function renderIcon(icon: IconProp | string, altText: string) {
+  if (typeof icon === "string") {
+    return <img src={icon as string} alt={altText} />;
+  } else {
+    return <FontAwesomeIcon icon={icon as IconProp} />;
   }
+}
 
+function ActionButton({ action, icon, title }: ActionButtonProps) {
   return (
     <div
+      title={title}
       role="button"
       tabIndex={0}
       onClick={() => action()}
       onKeyDown={() => action()}
       className="action-button"
     >
-      {renderIcon(icon)}
+      {renderIcon(icon, title)}
     </div>
   );
 }

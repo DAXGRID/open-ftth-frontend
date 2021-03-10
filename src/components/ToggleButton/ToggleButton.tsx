@@ -6,26 +6,28 @@ type ToggleButtonProps = {
   toggled: boolean;
   toggle: (id: string) => void;
   id: string;
+  title: string;
 };
 
-function ToggleButton({ toggled, icon, toggle, id }: ToggleButtonProps) {
-  function renderIcon(icon: IconProp | string) {
-    if (typeof icon === "string") {
-      return <img src={icon as string} />;
-    } else {
-      return <FontAwesomeIcon icon={icon as IconProp} />;
-    }
+function renderIcon(icon: IconProp | string, altText: string) {
+  if (typeof icon === "string") {
+    return <img src={icon as string} alt={altText} />;
+  } else {
+    return <FontAwesomeIcon icon={icon as IconProp} />;
   }
+}
 
+function ToggleButton({ toggled, icon, toggle, id, title }: ToggleButtonProps) {
   return (
     <div
+      title={title}
       role="button"
       tabIndex={0}
       onClick={() => toggle(id)}
       onKeyPress={() => toggle(id)}
       className={toggled ? "toggle-button toggled" : "toggle-button"}
     >
-      {renderIcon(icon)}
+      {renderIcon(icon, title)}
     </div>
   );
 }

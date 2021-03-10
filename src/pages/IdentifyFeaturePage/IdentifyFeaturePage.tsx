@@ -72,9 +72,10 @@ function IdentifyFeaturePage() {
           toggled={false}
           toggle={(x) => console.log(x)}
           id="Edit"
+          title="Edit mode"
         />
-        <ActionButton icon={faCut} action={() => {}} />
-        <ActionButton icon={faPlus} action={() => {}} />
+        <ActionButton icon={faCut} action={() => {}} title="Cut" />
+        <ActionButton icon={faPlus} action={() => {}} title="Add" />
       </DiagramMenu>
       <SchematicDiagram diagramObjects={diagramObjects} envelope={envelope} />
     </div>
