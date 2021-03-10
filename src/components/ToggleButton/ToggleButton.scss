@@ -6,6 +6,11 @@
   padding: 7px;
   margin: 0px 5px;
 
+  img {
+    height: 30px;
+    width: 30px;
+  }
+
   &.toggled {
     background-color: $dark-grey;
     border-color: $dark-grey;
