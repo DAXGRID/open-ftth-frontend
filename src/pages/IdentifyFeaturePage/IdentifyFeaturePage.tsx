@@ -1,7 +1,7 @@
-import { faPen, faCut, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState, useContext } from "react";
 import { useQuery, useSubscription } from "urql";
 import DiagramMenu from "../../components/DiagramMenu";
+import ModalContainer from "../../components/ModalContainer";
 import SchematicDiagram from "../../components/SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
 import ActionButton from "../../components/ActionButton";
@@ -15,6 +15,8 @@ import {
   GET_DIAGRAM_QUERY,
   SCHEMATIC_DIAGRAM_UPDATED,
 } from "./IdentifyFeatureGql";
+
+import CutConduit from "../../assets/cut-conduit.svg";
 
 function IdentifyFeaturePage() {
   const { identifiedFeatureId } = useContext(MapContext);
@@ -66,16 +68,23 @@ function IdentifyFeaturePage() {
 
   return (
     <div className="identify-feature-page">
+      <ModalContainer show={true}>
+        <h1>Test</h1>
+      </ModalContainer>
       <DiagramMenu>
         <ToggleButton
-          icon={faPen}
+          icon={CutConduit}
           toggled={false}
           toggle={(x) => console.log(x)}
           id="Edit"
           title="Edit mode"
         />
-        <ActionButton icon={faCut} action={() => {}} title="Cut" />
-        <ActionButton icon={faPlus} action={() => {}} title="Add" />
+        <ActionButton icon={CutConduit} action={() => {}} title="Cut" />
+        <ActionButton
+          icon={CutConduit}
+          action={() => {}}
+          title="Add node container"
+        />
       </DiagramMenu>
       <SchematicDiagram diagramObjects={diagramObjects} envelope={envelope} />
     </div>
