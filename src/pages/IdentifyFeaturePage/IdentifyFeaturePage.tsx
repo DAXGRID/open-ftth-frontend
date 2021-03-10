@@ -1,16 +1,12 @@
-import {
-  faCut,
-  faHighlighter,
-  faSearchLocation,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPen, faCut, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState, useContext } from "react";
 import { useQuery, useSubscription } from "urql";
 import DiagramMenu from "../../components/DiagramMenu";
 import SchematicDiagram from "../../components/SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
+import ActionButton from "../../components/ActionButton";
 import Loading from "../../components/Loading";
 import { MapContext } from "../../contexts/MapContext";
-
 import {
   Diagram,
   DiagramQueryResponse,
@@ -22,11 +18,6 @@ import {
 
 function IdentifyFeaturePage() {
   const { identifiedFeatureId } = useContext(MapContext);
-  const [toggleButtons, setToggleButtons] = useState([
-    { icon: faCut, toggled: false, id: 1 },
-    { icon: faSearchLocation, toggled: false, id: 2 },
-    { icon: faHighlighter, toggled: false, id: 3 },
-  ]);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [envelope, setEnvelope] = useState<Envelope>({
     maxX: 0,
@@ -69,16 +60,6 @@ function IdentifyFeaturePage() {
     setEnvelope({ ...envelope });
   }, [res, setDiagramObjects, setEnvelope]);
 
-  function toggle(buttonId: number) {
-    setToggleButtons(
-      toggleButtons.map((button) =>
-        button.id === buttonId
-          ? { ...button, toggled: !button.toggled }
-          : button
-      )
-    );
-  }
-
   if (spanEquipmentResult.fetching || !identifiedFeatureId) {
     return <Loading />;
   }
@@ -86,15 +67,14 @@ function IdentifyFeaturePage() {
   return (
     <div className="identify-feature-page">
       <DiagramMenu>
-        {toggleButtons.map((x) => (
-          <ToggleButton
-            key={x.id}
-            icon={x.icon}
-            toggled={x.toggled}
-            toggle={toggle}
-            id={x.id}
-          />
-        ))}
+        <ToggleButton
+          icon={faPen}
+          toggled={false}
+          toggle={(x) => console.log(x)}
+          id="Edit"
+        />
+        <ActionButton icon={faCut} action={() => {}} />
+        <ActionButton icon={faPlus} action={() => {}} />
       </DiagramMenu>
       <SchematicDiagram diagramObjects={diagramObjects} envelope={envelope} />
     </div>

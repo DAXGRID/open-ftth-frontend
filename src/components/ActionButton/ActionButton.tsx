@@ -1,14 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
-type ToggleButtonProps = {
+type ActionButtonProps = {
   icon: IconProp | string;
-  toggled: boolean;
-  toggle: (id: string) => void;
-  id: string;
+  action: () => void;
 };
 
-function ToggleButton({ toggled, icon, toggle, id }: ToggleButtonProps) {
+function ActionButton({ action, icon }: ActionButtonProps) {
   function renderIcon(icon: IconProp | string) {
     if (typeof icon === "string") {
       return <img src={icon as string} />;
@@ -21,13 +19,13 @@ function ToggleButton({ toggled, icon, toggle, id }: ToggleButtonProps) {
     <div
       role="button"
       tabIndex={0}
-      onClick={() => toggle(id)}
-      onKeyPress={() => toggle(id)}
-      className={toggled ? "toggle-button toggled" : "toggle-button"}
+      onClick={() => action()}
+      onKeyDown={() => action()}
+      className="action-button"
     >
       {renderIcon(icon)}
     </div>
   );
 }
 
-export default ToggleButton;
+export default ActionButton;
