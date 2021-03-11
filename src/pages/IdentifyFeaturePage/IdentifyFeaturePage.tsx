@@ -21,6 +21,7 @@ import CutConduit from "../../assets/cut-conduit.svg";
 import Pencil from "../../assets/pencil.svg";
 
 function IdentifyFeaturePage() {
+  const [showAddContainer, setShowAddContainer] = useState(false);
   const { identifiedFeatureId } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [envelope, setEnvelope] = useState<Envelope>({
@@ -70,7 +71,7 @@ function IdentifyFeaturePage() {
 
   return (
     <div className="identify-feature-page">
-      <ModalContainer show={false}>
+      <ModalContainer show={showAddContainer}>
         <AddContainer />
       </ModalContainer>
       <DiagramMenu>
@@ -84,7 +85,7 @@ function IdentifyFeaturePage() {
         <ActionButton icon={CutConduit} action={() => {}} title="Cut" />
         <ActionButton
           icon={CutConduit}
-          action={() => {}}
+          action={() => setShowAddContainer(true)}
           title="Add node container"
         />
       </DiagramMenu>
