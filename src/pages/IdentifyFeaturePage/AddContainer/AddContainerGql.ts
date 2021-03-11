@@ -41,3 +41,43 @@ query {
     }
   }
 }`;
+
+export interface PlaceNodeContainerParameters {
+  routeNodeId: string;
+  nodeContainerId: string;
+  nodeContainerSpecificationId: string;
+  manufacturerId: string;
+}
+
+export interface PlaceNodeContainerResponse {
+  spanEquipment: {
+    placeSpanEquipmentInRouteNetwork: {
+      errorCode?: string;
+      isSuccess: boolean;
+      errorMesssage?: string;
+    };
+  };
+}
+
+export const PLACE_NODE_CONTAINER_IN_ROUTE_NETWORK = `
+mutation (
+  $routeNodeId: ID!,
+  $nodeContainerId: ID!,
+  $nodeContainerSpecificationId: ID!,
+  $manufacturerId: ID!)
+{
+  nodeContainer
+  {
+    placeNodeContainerInRouteNetwork(
+      routeNodeId: $routeNodeId,
+      nodeContainerId: $nodeContainerId,
+      nodeContainerSpecificationId: $nodeContainerSpecificationId,
+      manufacturerId: $manufacturerId
+    )
+    {
+      isSuccess
+      errorCode
+    }
+  }
+}
+`;

@@ -12,6 +12,9 @@ import {
   Manufacturer,
   NodeContainerSpecification,
   NODE_CONTAINER_SPECIFICATIONS_QUERY,
+  PlaceNodeContainerResponse,
+  PLACE_NODE_CONTAINER_IN_ROUTE_NETWORK,
+  PlaceNodeContainerParameters,
 } from "./AddContainerGql";
 import { MapContext } from "../../../contexts/MapContext";
 
@@ -77,9 +80,9 @@ const getFilteredManufacturers = (
   return [defaultValue, ...filtered];
 };
 
-function PlaceSpanEquipmentPage() {
+function AddContainer() {
   const { t } = useTranslation();
-  const { selectedSegmentIds } = useContext(MapContext);
+  const { identifiedFeature } = useContext(MapContext);
   const [selectedCategory, setSelectedCategory] = useState<
     string | number | undefined
   >();
@@ -97,6 +100,15 @@ function PlaceSpanEquipmentPage() {
   const [nodeContainerResult] = useQuery<UtilityNetworkResponse>({
     query: NODE_CONTAINER_SPECIFICATIONS_QUERY,
   });
+
+  const [
+    // TODO fix this
+    // eslint-disable-next-line
+    placeNodeContainerMutationResult,
+    placeNodeContainerMutation,
+  ] = useMutation<PlaceNodeContainerResponse>(
+    PLACE_NODE_CONTAINER_IN_ROUTE_NETWORK
+  );
 
   const filteredSpanEquipmentSpecifications = useMemo(
     () =>
@@ -136,6 +148,25 @@ function PlaceSpanEquipmentPage() {
     setManufacturers(manufacturers);
     setNodeContainerSpecifications(nodeContainerSpecifications);
   }, [nodeContainerResult]);
+
+  const placeNodeContainer = async () => {
+    if (
+      identifiedFeature?.id === null ||
+      identifiedFeature?.type != "RouteNode"
+    ) {
+      throw new Error("Selected feature is either null or not a RouteNode");
+    }
+
+    const parameters: PlaceNodeContainerParameters = {
+      routeNodeId: identifiedFeature.id,
+      manufacturerId: selectedManufacturer,
+      nodeContainerId: uuidv4(),
+      nodeContainerSpecificationId: selectedNodeContainerSpecification ?? "",
+    };
+
+    const result = await placeNodeContainerMutation(parameters);
+    console.log(result.data?.spanEquipment);
+  };
 
   const categorySelectOptions = () => {
     const categoryOptions = nodeContainerSpecifications
@@ -206,7 +237,7 @@ function PlaceSpanEquipmentPage() {
       <div className="full-row">
         <DefaultButton
           innerText={t("Place container")}
-          onClick={() => {}}
+          onClick={() => placeNodeContainer()}
           disabled={
             !selectedManufacturer === undefined ||
             !selectedNodeContainerSpecification
@@ -219,4 +250,4 @@ function PlaceSpanEquipmentPage() {
   );
 }
 
-export default PlaceSpanEquipmentPage;
+export default AddContainer;

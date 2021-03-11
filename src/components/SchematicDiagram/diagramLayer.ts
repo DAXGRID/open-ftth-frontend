@@ -48,25 +48,31 @@ export function createFeature(
 
 export function getLayer(name: string): AnyLayer {
   switch (name) {
-    case "Well":
+    case "NodeContainerSideNorth":
+    case "NodeContainerSideSouth":
+    case "NodeContainerSideEast":
+    case "NodeContainerSideWest":
       return {
-        id: "Well",
-        source: "Well",
+        id: "NodeContainerSide",
+        source: "NodeContainerSide",
         order: 0,
         type: "line",
+        layout: {
+          "line-cap": "round",
+        },
         paint: {
-          "line-width": 3,
-          "line-color": "#555",
+          "line-width": 10,
+          "line-color": "#CDCDCD",
         },
       } as LineLayer;
-    case "WellFill":
+    case "NodeContainer":
       return {
-        id: "WellFill",
-        source: "WellFill",
+        id: "NodeContainer",
+        source: "NodeContainer",
         order: 0,
         type: "fill",
         paint: {
-          "fill-color": "#ccc",
+          "fill-color": "#CDCDCD",
         },
       } as FillLayer;
     case "OuterConduitOrange":
@@ -277,12 +283,31 @@ export function getLayer(name: string): AnyLayer {
         },
       } as SymbolLayer;
     default:
-      throw new Error(`Style is not supported ${name}`);
+      throw new Error(`The following style is not supported '${name}'`);
   }
 }
 
+export const nodeContainerSideSelect: LineLayer = {
+  id: "NodeContainerSideSelect",
+  type: "line",
+  source: "NodeContainerSide",
+  layout: {
+    "line-cap": "round",
+  },
+  paint: {
+    "line-width": 10,
+    "line-color": colorMap.LIGHT_BLUE,
+    "line-opacity": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      1,
+      0,
+    ],
+  },
+};
+
 export const innerConduitSelect: LineLayer = {
-  id: "inner-conduit-select",
+  id: "InnerConduitSelect",
   type: "line",
   source: "InnerConduit",
   paint: {
@@ -297,13 +322,14 @@ export const innerConduitSelect: LineLayer = {
   },
 };
 
-export const multiConduitSelect: LineLayer = {
-  id: "outer-conduit-select",
+export const outerConduitSelect: LineLayer = {
+  id: "OuterConduitSelect",
   type: "line",
   source: "OuterConduit",
   paint: {
     "line-width": 3,
     "line-color": colorMap.LIGHT_BLUE,
+
     "line-opacity": [
       "case",
       ["boolean", ["feature-state", "selected"], false],

@@ -22,7 +22,7 @@ import Pencil from "../../assets/pencil.svg";
 
 function IdentifyFeaturePage() {
   const [showAddContainer, setShowAddContainer] = useState(false);
-  const { identifiedFeatureId } = useContext(MapContext);
+  const { identifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [envelope, setEnvelope] = useState<Envelope>({
     maxX: 0,
@@ -35,13 +35,13 @@ function IdentifyFeaturePage() {
     requestPolicy: "cache-and-network",
     query: GET_DIAGRAM_QUERY,
     variables: {
-      routeNetworkElementId: identifiedFeatureId,
+      routeNetworkElementId: identifiedFeature?.id,
     },
   });
 
   const [res] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
-    variables: { routeNetworkElementId: identifiedFeatureId },
+    variables: { routeNetworkElementId: identifiedFeature?.id },
   });
 
   useEffect(() => {
@@ -65,7 +65,7 @@ function IdentifyFeaturePage() {
     setEnvelope({ ...envelope });
   }, [res, setDiagramObjects, setEnvelope]);
 
-  if (spanEquipmentResult.fetching || !identifiedFeatureId) {
+  if (spanEquipmentResult.fetching || !identifiedFeature?.id) {
     return <Loading />;
   }
 

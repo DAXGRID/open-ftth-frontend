@@ -7,7 +7,8 @@ import {
   createFeature,
   createSource,
   innerConduitSelect,
-  multiConduitSelect,
+  outerConduitSelect,
+  nodeContainerSideSelect,
 } from "./diagramLayer";
 
 interface Envelope {
@@ -55,6 +56,8 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
       styleName = "InnerConduit";
     } else if (styleName.startsWith("OuterConduit")) {
       styleName = "OuterConduit";
+    } else if (styleName.startsWith("NodeContainerSide")) {
+      styleName = "NodeContainerSide";
     }
 
     if (!t[styleName]) {
@@ -155,14 +158,25 @@ function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
     newMap.on("load", () => {
       newMap.doubleClickZoom.disable();
       loadDiagram(newMap, diagramObjects);
-      newMap.addLayer(innerConduitSelect);
-      newMap.addLayer(multiConduitSelect);
       mapFitBounds(envelope, newMap);
       enableResize(newMap);
-      hoverPointer("InnerConduit", newMap);
-      hoverPointer("OuterConduit", newMap);
-      clickHighlight("InnerConduit", newMap, (x) => console.log(x));
-      clickHighlight("OuterConduit", newMap, (x) => console.log(x));
+
+      if (diagramObjects.find((x) => x.style.startsWith("InnerConduit"))) {
+        newMap.addLayer(innerConduitSelect);
+        newMap.addLayer(outerConduitSelect);
+
+        hoverPointer("InnerConduit", newMap);
+        clickHighlight("InnerConduit", newMap, (x) => console.log(x));
+        // if has inner conduit then it also has outer
+        hoverPointer("OuterConduit", newMap);
+        clickHighlight("OuterConduit", newMap, (x) => console.log(x));
+      }
+
+      if (diagramObjects.find((x) => x.style.startsWith("NodeContainerSide"))) {
+        newMap.addLayer(nodeContainerSideSelect);
+        hoverPointer("NodeContainerSide", newMap);
+        clickHighlight("NodeContainerSide", newMap, (x) => console.log(x));
+      }
     });
 
     return () => {
