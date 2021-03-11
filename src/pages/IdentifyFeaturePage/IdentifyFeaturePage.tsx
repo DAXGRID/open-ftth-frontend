@@ -18,6 +18,7 @@ import {
 import AddContainer from "./AddContainer";
 
 import CutConduit from "../../assets/cut-conduit.svg";
+import Pencil from "../../assets/pencil.svg";
 
 function IdentifyFeaturePage() {
   const { identifiedFeatureId } = useContext(MapContext);
@@ -69,12 +70,12 @@ function IdentifyFeaturePage() {
 
   return (
     <div className="identify-feature-page">
-      <ModalContainer show={true}>
+      <ModalContainer show={false}>
         <AddContainer />
       </ModalContainer>
       <DiagramMenu>
         <ToggleButton
-          icon={CutConduit}
+          icon={Pencil}
           toggled={false}
           toggle={(x) => console.log(x)}
           id="Edit"
