@@ -9,8 +9,10 @@ function ModalContainer({ children, show }: ModalContainerProps) {
   return (
     <div className={show ? "modal-container show" : "modal-container"}>
       <div className="modal-content">
-        <span className="close">&times;</span>
-        {children}
+        <div className="modal-header">
+          <span className="close">&times;</span>
+        </div>
+        <div className="modal-body">{children}</div>
       </div>
     </div>
   );
