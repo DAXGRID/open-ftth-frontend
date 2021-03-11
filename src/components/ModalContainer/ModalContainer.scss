@@ -27,23 +27,23 @@
     flex: 1;
     flex-basis: 100%;
     padding-bottom: 30px;
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+
+      &:hover {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    }
   }
 
   .modal-body {
     flex: 1;
     flex-basis: 100%;
-  }
-
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-
-    &:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
   }
 }

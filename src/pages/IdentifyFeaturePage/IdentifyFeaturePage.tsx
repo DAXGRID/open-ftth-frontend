@@ -71,7 +71,10 @@ function IdentifyFeaturePage() {
 
   return (
     <div className="identify-feature-page">
-      <ModalContainer show={showAddContainer}>
+      <ModalContainer
+        show={showAddContainer}
+        closeCallback={() => setShowAddContainer(false)}
+      >
         <AddContainer />
       </ModalContainer>
       <DiagramMenu>
