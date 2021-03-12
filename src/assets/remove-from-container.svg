@@ -15,8 +15,8 @@ viewBox="0 0 10000 10000"
  </defs>
  <g id="Layer_x0020_1">
   <metadata id="CorelCorpID_0Corel-Layer"/>
-  <rect class="fil0 str0" x="1020" y="5110" width="8000" height="3640" rx="1303" ry="593"/>
-  <rect class="fil1" transform="matrix(9.62969E-14 -1.06553 -2.30392 -1.60933E-13 5370 6929.41)" width="3802" height="304"/>
-  <polygon class="fil1" points="5020,1469 4270,2173 3520,2878 5020,2878 6520,2878 5770,2173 "/>
+  <rect class="fil0 str0" x="1020" y="4929" width="8000" height="4000" rx="1303" ry="651"/>
+  <rect class="fil1" transform="matrix(1.2381E-13 -1.27044 -2.96217 -1.91882E-13 5453.76 7557.96)" width="3802" height="304"/>
+  <polygon class="fil1" points="5004,1047 4110,1887 3215,2727 5004,2727 6792,2727 5898,1887 "/>
  </g>
 </svg>
