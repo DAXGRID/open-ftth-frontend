@@ -15,10 +15,10 @@ viewBox="0 0 10000 10000"
  <g id="Layer_x0020_1">
   <metadata id="CorelCorpID_0Corel-Layer"/>
   <rect class="fil0" x="5504" y="5719" width="4496" height="1800"/>
-  <rect class="fil1" x="6726" y="4037" width="3257" height="600"/>
-  <polygon class="fil1" points="5531,4337 6129,4840 6726,5343 6726,4337 6726,3332 6129,3835 "/>
-  <rect class="fil1" x="35" y="4037" width="3289" height="600"/>
-  <polygon class="fil1" points="4531,4337 3928,4840 3324,5343 3324,4337 3324,3332 3928,3835 "/>
   <rect class="fil0" y="5719" width="4496" height="1800"/>
+  <rect class="fil1" x="6699" y="3019" width="3257" height="895"/>
+  <polygon class="fil1" points="5504,3467 6102,4217 6699,4967 6699,3467 6699,1967 6102,2717 "/>
+  <rect class="fil1" y="3019" width="3289" height="895"/>
+  <polygon class="fil1" points="4495,3467 3892,4217 3288,4967 3288,3467 3288,1967 3892,2717 "/>
  </g>
 </svg>

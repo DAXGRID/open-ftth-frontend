@@ -7,17 +7,15 @@ viewBox="0 0 10000 10000"
  <defs>
   <style type="text/css">
    <![CDATA[
-    .str1 {stroke:black;stroke-width:7.62}
-    .str0 {stroke:black;stroke-width:7.62}
-    .fil1 {fill:none}
     .fil0 {fill:black}
    ]]>
   </style>
  </defs>
  <g id="Layer_x0020_1">
   <metadata id="CorelCorpID_0Corel-Layer"/>
-  <rect class="fil0 str0" x="750" y="4250" width="8000" height="1500"/>
-  <rect class="fil0 str0" transform="matrix(2.64845E-14 -1 1 2.64845E-14 4000 9000)" width="8000" height="1500"/>
-  <rect class="fil1 str1" x="-500" width="10500" height="10000"/>
+  <g id="_105748512">
+   <rect class="fil0" x="500" y="4156" width="9000" height="1688"/>
+   <rect class="fil0" transform="matrix(2.97951E-14 -1.125 1.125 2.97951E-14 4156.25 9500)" width="8000" height="1500"/>
+  </g>
  </g>
 </svg>

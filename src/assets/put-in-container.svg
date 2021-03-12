@@ -8,7 +8,6 @@ viewBox="0 0 10000 10000"
   <style type="text/css">
    <![CDATA[
     .str0 {stroke:black;stroke-width:700}
-    .str1 {stroke:#009933;stroke-width:7.62}
     .fil0 {fill:none}
     .fil1 {fill:#009933}
    ]]>
@@ -16,10 +15,8 @@ viewBox="0 0 10000 10000"
  </defs>
  <g id="Layer_x0020_1">
   <metadata id="CorelCorpID_0Corel-Layer"/>
-  <rect class="fil0 str0" x="1020" y="5110" width="8000" height="3640" rx="1303" ry="593"/>
-  <g id="_550003000">
-   <rect class="fil1 str1" transform="matrix(-1.52737E-13 1.06553 2.30392 2.8297E-13 4670.02 2000.11)" width="3802" height="304"/>
-   <polygon class="fil1 str1" points="5020,7461 5770,6756 6520,6052 5020,6052 3520,6052 4270,6756 "/>
-  </g>
+  <rect class="fil0 str0" x="1020" y="4929" width="8000" height="4000" rx="1303" ry="651"/>
+  <rect class="fil1" transform="matrix(1.2381E-13 1.27044 -2.96217 1.91882E-13 5453.74 1046.89)" width="3802" height="304"/>
+  <polygon class="fil1" points="5004,7558 4110,6718 3215,5878 5004,5878 6792,5878 5898,6718 "/>
  </g>
 </svg>
