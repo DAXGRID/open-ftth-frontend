@@ -85,3 +85,42 @@ subscription ($routeNetworkElementId: ID!) {
   }
 }
 `;
+
+export interface AffixSpanEquipmentParams {
+  spanSegmentId: string;
+  nodeContainerId: string;
+  nodeContainerSide: "NORTH" | "SOUTH" | "WEST" | "EAST";
+}
+
+export interface AffixSpanEquipmentResponse {
+  spanEquipment: {
+    affixSpanEquipmentToNodeContainer: {
+      errorCode?: string;
+      isSuccess: boolean;
+      errorMesssage?: string;
+    };
+  };
+}
+
+export const AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER_MUTATION = `
+mutation (
+  $spanSegmentId: ID!,
+  $nodeContainerId: ID!,
+  $nodeContainerSide: NodeContainerSideEnum!
+)
+{
+  spanEquipment
+  {
+    affixSpanEquipmentToNodeContainer(
+      spanSegmentId: $spanSegmentId
+      nodeContainerId: $nodeContainerId
+      nodeContainerSide: $nodeContainerSide
+    )
+    {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}
+`;

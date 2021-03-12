@@ -63,6 +63,7 @@ export function getLayer(name: string): AnyLayer {
         paint: {
           "line-width": 10,
           "line-color": "#CDCDCD",
+          "line-opacity": 0,
         },
       } as LineLayer;
     case "NodeContainer":
@@ -142,28 +143,6 @@ export function getLayer(name: string): AnyLayer {
           ],
         },
       } as FillLayer;
-    case "CableInsideWell":
-      return {
-        id: "CableInsideWell",
-        source: "CableInsideWell",
-        type: "line",
-        order: 3,
-        paint: {
-          "line-width": 2,
-          "line-color": "#000",
-        },
-      } as LineLayer;
-    case "CableOutsideWell":
-      return {
-        id: "CableOutsideWell",
-        name: "CableOutsideWell",
-        type: "line",
-        order: 3,
-        paint: {
-          "line-width": 2,
-          "line-color": "#000",
-        },
-      } as LineLayer;
     case "WestTerminalLabel":
       return {
         id: "WestTerminalLabel",
@@ -292,7 +271,7 @@ export const nodeContainerSideSelect: LineLayer = {
   type: "line",
   source: "NodeContainerSide",
   layout: {
-    "line-cap": "round",
+    "line-cap": "butt",
   },
   paint: {
     "line-width": 10,
