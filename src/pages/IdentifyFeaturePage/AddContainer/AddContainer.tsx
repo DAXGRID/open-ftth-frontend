@@ -17,6 +17,7 @@ import {
   PlaceNodeContainerParameters,
 } from "./AddContainerGql";
 import { MapContext } from "../../../contexts/MapContext";
+import { toast } from "react-toastify";
 
 const getFilteredSpanEquipmentSpecifications = (
   specifications: NodeContainerSpecification[],
@@ -159,13 +160,20 @@ function AddContainer() {
 
     const parameters: PlaceNodeContainerParameters = {
       routeNodeId: identifiedFeature.id,
-      manufacturerId: selectedManufacturer,
+      manufacturerId: selectedManufacturer === "" ? null : selectedManufacturer,
       nodeContainerId: uuidv4(),
       nodeContainerSpecificationId: selectedNodeContainerSpecification ?? "",
     };
 
-    const result = await placeNodeContainerMutation(parameters);
-    console.log(result.data?.spanEquipment);
+    const { data } = await placeNodeContainerMutation(parameters);
+
+    if (data?.nodeContainer.placeNodeContainerInRouteNetwork.isSuccess) {
+      toast.success(t("Container placed"));
+    } else {
+      toast.error(
+        data?.nodeContainer.placeNodeContainerInRouteNetwork.errorCode
+      );
+    }
   };
 
   const categorySelectOptions = () => {

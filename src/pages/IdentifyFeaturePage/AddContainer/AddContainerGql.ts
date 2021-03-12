@@ -46,12 +46,12 @@ export interface PlaceNodeContainerParameters {
   routeNodeId: string;
   nodeContainerId: string;
   nodeContainerSpecificationId: string;
-  manufacturerId: string;
+  manufacturerId: string | null;
 }
 
 export interface PlaceNodeContainerResponse {
-  spanEquipment: {
-    placeSpanEquipmentInRouteNetwork: {
+  nodeContainer: {
+    placeNodeContainerInRouteNetwork: {
       errorCode?: string;
       isSuccess: boolean;
       errorMesssage?: string;
@@ -64,7 +64,7 @@ mutation (
   $routeNodeId: ID!,
   $nodeContainerId: ID!,
   $nodeContainerSpecificationId: ID!,
-  $manufacturerId: ID!)
+  $manufacturerId: ID)
 {
   nodeContainer
   {
