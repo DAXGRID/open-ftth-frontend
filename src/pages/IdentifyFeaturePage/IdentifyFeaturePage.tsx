@@ -69,7 +69,8 @@ function IdentifyFeaturePage() {
 
     setDiagramObjects([...diagramObjects]);
     setEnvelope({ ...envelope });
-  }, [res, setDiagramObjects, setEnvelope]);
+    setShowAddContainer(false);
+  }, [res, setDiagramObjects, setEnvelope, setShowAddContainer]);
 
   if (spanEquipmentResult.fetching || !identifiedFeature?.id) {
     return <Loading />;
