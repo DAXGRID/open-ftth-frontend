@@ -82,45 +82,47 @@ function IdentifyFeaturePage() {
       >
         <AddContainer />
       </ModalContainer>
-      <DiagramMenu>
-        <ToggleButton
-          icon={PencilSvg}
-          toggled={false}
-          toggle={(x) => console.log(x)}
-          id="Edit"
-          title="Edit mode"
-        />
-        <ActionButton
-          icon={CutConduitSvg}
-          action={() => {}}
-          title="Cut conduit"
-        />
-        <ActionButton
-          icon={DisconnectSvg}
-          action={() => {}}
-          title="Disconnect conduit"
-        />
-        <ActionButton
-          icon={ConnectSvg}
-          action={() => {}}
-          title="Connect conduit"
-        />
-        <ActionButton
-          icon={PutInContainerSvg}
-          action={() => {}}
-          title="Attach"
-        />
-        <ActionButton
-          icon={RemoveFromContainerSvg}
-          action={() => {}}
-          title="De-attach"
-        />
-        <ActionButton
-          icon={PlusSvg}
-          action={() => setShowAddContainer(true)}
-          title="Add node container"
-        />
-      </DiagramMenu>
+      {identifiedFeature.type === "RouteNode" && (
+        <DiagramMenu>
+          <ToggleButton
+            icon={PencilSvg}
+            toggled={false}
+            toggle={(x) => console.log(x)}
+            id="Edit"
+            title="Edit mode"
+          />
+          <ActionButton
+            icon={CutConduitSvg}
+            action={() => {}}
+            title="Cut conduit"
+          />
+          <ActionButton
+            icon={DisconnectSvg}
+            action={() => {}}
+            title="Disconnect conduit"
+          />
+          <ActionButton
+            icon={ConnectSvg}
+            action={() => {}}
+            title="Connect conduit"
+          />
+          <ActionButton
+            icon={PutInContainerSvg}
+            action={() => {}}
+            title="Attach"
+          />
+          <ActionButton
+            icon={RemoveFromContainerSvg}
+            action={() => {}}
+            title="De-attach"
+          />
+          <ActionButton
+            icon={PlusSvg}
+            action={() => setShowAddContainer(true)}
+            title="Add node container"
+          />
+        </DiagramMenu>
+      )}
       <SchematicDiagram diagramObjects={diagramObjects} envelope={envelope} />
     </div>
   );
