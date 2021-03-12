@@ -34,6 +34,7 @@ interface Geometry {
 type SchematicDiagramProps = {
   diagramObjects: Diagram[];
   envelope: Envelope;
+  onSelectFeature: (feature: MapboxGeoJSONFeature) => void;
 };
 
 mapboxgl.accessToken = Config.MAPBOX_API_KEY;
@@ -141,7 +142,11 @@ function clickHighlight(
   });
 }
 
-function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
+function SchematicDiagram({
+  diagramObjects,
+  envelope,
+  onSelectFeature,
+}: SchematicDiagramProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<Map | null>(null);
 
@@ -166,16 +171,23 @@ function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
         newMap.addLayer(outerConduitSelect);
 
         hoverPointer("InnerConduit", newMap);
-        clickHighlight("InnerConduit", newMap, (x) => console.log(x));
+        clickHighlight("InnerConduit", newMap, onSelectFeature);
         // if has inner conduit then it also has outer
         hoverPointer("OuterConduit", newMap);
-        clickHighlight("OuterConduit", newMap, (x) => console.log(x));
+        clickHighlight("OuterConduit", newMap, onSelectFeature);
+
+        // Set after OuterConduit
+        newMap.moveLayer("OuterConduit", "InnerConduit");
       }
 
       if (diagramObjects.find((x) => x.style.startsWith("NodeContainerSide"))) {
         newMap.addLayer(nodeContainerSideSelect);
         hoverPointer("NodeContainerSide", newMap);
-        clickHighlight("NodeContainerSide", newMap, (x) => console.log(x));
+        clickHighlight("NodeContainerSide", newMap, onSelectFeature);
+
+        // Set after NodeContainer
+        newMap.moveLayer("NodeContainer", "InnerConduit");
+        newMap.moveLayer("NodeContainer", "OuterConduit");
       }
     });
 
@@ -183,7 +195,7 @@ function SchematicDiagram({ diagramObjects, envelope }: SchematicDiagramProps) {
       newMap.remove();
       map.current = null;
     };
-  }, [diagramObjects, envelope]);
+  }, [diagramObjects, envelope, onSelectFeature]);
 
   return (
     <div className="schematic-diagram">

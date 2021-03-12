@@ -1,5 +1,6 @@
-import { useEffect, useState, useContext } from "react";
-import { useQuery, useSubscription } from "urql";
+import { useEffect, useState, useContext, useRef, useCallback } from "react";
+import { useQuery, useSubscription, useMutation } from "urql";
+import { MapboxGeoJSONFeature } from "mapbox-gl";
 import DiagramMenu from "../../components/DiagramMenu";
 import ModalContainer from "../../components/ModalContainer";
 import SchematicDiagram from "../../components/SchematicDiagram";
@@ -14,6 +15,9 @@ import {
   Envelope,
   GET_DIAGRAM_QUERY,
   SCHEMATIC_DIAGRAM_UPDATED,
+  AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER_MUTATION,
+  AffixSpanEquipmentParams,
+  AffixSpanEquipmentResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
 
@@ -24,8 +28,10 @@ import DisconnectSvg from "../../assets/disconnect.svg";
 import ConnectSvg from "../../assets/connect.svg";
 import PutInContainerSvg from "../../assets/put-in-container.svg";
 import RemoveFromContainerSvg from "../../assets/remove-from-container.svg";
+import { toast } from "react-toastify";
 
 function IdentifyFeaturePage() {
+  const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
   const [showAddContainer, setShowAddContainer] = useState(false);
   const { identifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
@@ -44,6 +50,15 @@ function IdentifyFeaturePage() {
     },
     pause: !identifiedFeature?.id,
   });
+
+  const [
+    // TODO fix this
+    // eslint-disable-next-line
+    affixSpanEquipmentResult,
+    affixSpanEquipmentMutation,
+  ] = useMutation<AffixSpanEquipmentResponse>(
+    AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER_MUTATION
+  );
 
   const [res] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
@@ -69,8 +84,67 @@ function IdentifyFeaturePage() {
 
     setDiagramObjects([...diagramObjects]);
     setEnvelope({ ...envelope });
-    setShowAddContainer(false);
-  }, [res, setDiagramObjects, setEnvelope, setShowAddContainer]);
+  }, [res, setDiagramObjects, setEnvelope]);
+
+  const affixSpanEquipment = async () => {
+    const nodeContainer = selectedFeatures.current.find(
+      (x) => x.layer.source === "NodeContainerSide"
+    );
+
+    const nodeContainerId = nodeContainer?.properties?.refId as string;
+
+    const spanSegmentId = selectedFeatures.current.find(
+      (x) => x.layer.source === "OuterConduit"
+    )?.properties?.refId as string;
+
+    if (!nodeContainerId) {
+      toast.error("No node container selected");
+      return;
+    }
+    if (!spanSegmentId) {
+      toast.error("No segment selected");
+      return;
+    }
+
+    let nodeContainerSide = nodeContainer?.properties?.type as string;
+
+    if (nodeContainerSide.includes("North")) nodeContainerSide = "NORTH";
+    else if (nodeContainerSide.includes("West")) nodeContainerSide = "WEST";
+    else if (nodeContainerSide.includes("East")) nodeContainerSide = "EAST";
+    else if (nodeContainerSide.includes("South")) nodeContainerSide = "SOUTH";
+    else toast.error(`${nodeContainerSide} is not valid`);
+
+    const parameters: AffixSpanEquipmentParams = {
+      nodeContainerId: nodeContainerId,
+      nodeContainerSide: nodeContainerSide as
+        | "NORTH"
+        | "WEST"
+        | "EAST"
+        | "SOUTH",
+      spanSegmentId: spanSegmentId,
+    };
+
+    const { data } = await affixSpanEquipmentMutation(parameters);
+    if (data?.spanEquipment.affixSpanEquipmentToNodeContainer.isSuccess) {
+      toast.success("Affix span equipment successful");
+    } else {
+      toast.error(
+        data?.spanEquipment.affixSpanEquipmentToNodeContainer.errorCode
+      );
+    }
+  };
+
+  const onSelectedFeature = useCallback((feature: MapboxGeoJSONFeature) => {
+    const isSelected = feature.state?.selected as boolean;
+
+    if (isSelected) {
+      selectedFeatures.current = [...selectedFeatures.current, feature];
+    } else {
+      selectedFeatures.current = selectedFeatures.current.filter((x) => {
+        return x.properties?.refId !== feature.properties?.refId;
+      });
+    }
+  }, []);
 
   if (spanEquipmentResult.fetching || !identifiedFeature?.id) {
     return <Loading />;
@@ -110,7 +184,7 @@ function IdentifyFeaturePage() {
           />
           <ActionButton
             icon={PutInContainerSvg}
-            action={() => {}}
+            action={() => affixSpanEquipment()}
             title="Attach"
           />
           <ActionButton
@@ -125,7 +199,11 @@ function IdentifyFeaturePage() {
           />
         </DiagramMenu>
       )}
-      <SchematicDiagram diagramObjects={diagramObjects} envelope={envelope} />
+      <SchematicDiagram
+        diagramObjects={diagramObjects}
+        envelope={envelope}
+        onSelectFeature={onSelectedFeature}
+      />
     </div>
   );
 }

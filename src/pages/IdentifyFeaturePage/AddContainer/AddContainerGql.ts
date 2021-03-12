@@ -77,6 +77,7 @@ mutation (
     {
       isSuccess
       errorCode
+      errorMessage
     }
   }
 }
