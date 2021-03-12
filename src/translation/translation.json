@@ -29,7 +29,11 @@
       "Conduit": "Conduit",
       "Span equipment placed": "Span equipment placed",
       "Unspecified": "Unspecified",
-      "Schematic diagram": "Schematic diagram"
+      "Schematic diagram": "Schematic diagram",
+      "Place container": "Place container",
+      "ConduitClosure": "Conduit closure",
+      "CompressionConduitConnector": "Compression conduit connector",
+      "ManHole": "Man hole"
     }
   },
   "dk": {
@@ -62,7 +66,11 @@
       "Conduit": "Rør",
       "Span equipment placed": "Ledning placeret",
       "Unspecified": "Uspecificeret",
-      "Schematic diagram": "Skematisk diagram"
+      "Schematic diagram": "Skematisk diagram",
+      "Place container": "Placer struktur i tracéknude",
+      "ConduitClosure": "Rørmuffe",
+      "CompressionConduitConnector": "Kompressionsmuffe",
+      "ManHole": "Brønd"
     }
   }
 }

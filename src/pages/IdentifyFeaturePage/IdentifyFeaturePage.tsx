@@ -1,16 +1,12 @@
-import {
-  faCut,
-  faHighlighter,
-  faSearchLocation,
-} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState, useContext } from "react";
 import { useQuery, useSubscription } from "urql";
 import DiagramMenu from "../../components/DiagramMenu";
+import ModalContainer from "../../components/ModalContainer";
 import SchematicDiagram from "../../components/SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
+import ActionButton from "../../components/ActionButton";
 import Loading from "../../components/Loading";
 import { MapContext } from "../../contexts/MapContext";
-
 import {
   Diagram,
   DiagramQueryResponse,
@@ -19,14 +15,19 @@ import {
   GET_DIAGRAM_QUERY,
   SCHEMATIC_DIAGRAM_UPDATED,
 } from "./IdentifyFeatureGql";
+import AddContainer from "./AddContainer";
+
+import CutConduitSvg from "../../assets/cut-conduit.svg";
+import PencilSvg from "../../assets/pencil.svg";
+import PlusSvg from "../../assets/plus.svg";
+import DisconnectSvg from "../../assets/disconnect.svg";
+import ConnectSvg from "../../assets/connect.svg";
+import PutInContainerSvg from "../../assets/put-in-container.svg";
+import RemoveFromContainerSvg from "../../assets/remove-from-container.svg";
 
 function IdentifyFeaturePage() {
-  const { identifiedFeatureId } = useContext(MapContext);
-  const [toggleButtons, setToggleButtons] = useState([
-    { icon: faCut, toggled: false, id: 1 },
-    { icon: faSearchLocation, toggled: false, id: 2 },
-    { icon: faHighlighter, toggled: false, id: 3 },
-  ]);
+  const [showAddContainer, setShowAddContainer] = useState(false);
+  const { identifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [envelope, setEnvelope] = useState<Envelope>({
     maxX: 0,
@@ -39,13 +40,14 @@ function IdentifyFeaturePage() {
     requestPolicy: "cache-and-network",
     query: GET_DIAGRAM_QUERY,
     variables: {
-      routeNetworkElementId: identifiedFeatureId,
+      routeNetworkElementId: identifiedFeature?.id,
     },
+    pause: !identifiedFeature?.id,
   });
 
   const [res] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
-    variables: { routeNetworkElementId: identifiedFeatureId },
+    variables: { routeNetworkElementId: identifiedFeature?.id },
   });
 
   useEffect(() => {
@@ -67,35 +69,62 @@ function IdentifyFeaturePage() {
 
     setDiagramObjects([...diagramObjects]);
     setEnvelope({ ...envelope });
-  }, [res, setDiagramObjects, setEnvelope]);
+    setShowAddContainer(false);
+  }, [res, setDiagramObjects, setEnvelope, setShowAddContainer]);
 
-  function toggle(buttonId: number) {
-    setToggleButtons(
-      toggleButtons.map((button) =>
-        button.id === buttonId
-          ? { ...button, toggled: !button.toggled }
-          : button
-      )
-    );
-  }
-
-  if (spanEquipmentResult.fetching || !identifiedFeatureId) {
+  if (spanEquipmentResult.fetching || !identifiedFeature?.id) {
     return <Loading />;
   }
 
   return (
     <div className="identify-feature-page">
-      <DiagramMenu>
-        {toggleButtons.map((x) => (
+      <ModalContainer
+        show={showAddContainer}
+        closeCallback={() => setShowAddContainer(false)}
+      >
+        <AddContainer />
+      </ModalContainer>
+      {identifiedFeature.type === "RouteNode" && (
+        <DiagramMenu>
           <ToggleButton
-            key={x.id}
-            icon={x.icon}
-            toggled={x.toggled}
-            toggle={toggle}
-            id={x.id}
+            icon={PencilSvg}
+            toggled={false}
+            toggle={(x) => console.log(x)}
+            id="Edit"
+            title="Edit mode"
           />
-        ))}
-      </DiagramMenu>
+          <ActionButton
+            icon={CutConduitSvg}
+            action={() => {}}
+            title="Cut conduit"
+          />
+          <ActionButton
+            icon={DisconnectSvg}
+            action={() => {}}
+            title="Disconnect conduit"
+          />
+          <ActionButton
+            icon={ConnectSvg}
+            action={() => {}}
+            title="Connect conduit"
+          />
+          <ActionButton
+            icon={PutInContainerSvg}
+            action={() => {}}
+            title="Attach"
+          />
+          <ActionButton
+            icon={RemoveFromContainerSvg}
+            action={() => {}}
+            title="De-attach"
+          />
+          <ActionButton
+            icon={PlusSvg}
+            action={() => setShowAddContainer(true)}
+            title="Add node container"
+          />
+        </DiagramMenu>
+      )}
       <SchematicDiagram diagramObjects={diagramObjects} envelope={envelope} />
     </div>
   );

@@ -1,6 +1,6 @@
 @import "../../global-styles/colors";
 
-.toggle-button {
+.action-button {
   border: 2px solid #e3e3e3;
   border-radius: 4px;
   padding: 7px;
@@ -9,12 +9,6 @@
   img {
     height: 30px;
     width: 30px;
-  }
-
-  &.toggled {
-    background-color: $dark-grey;
-    border-color: $dark-grey;
-    color: white;
   }
 
   &:hover {

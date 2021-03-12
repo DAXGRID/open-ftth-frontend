@@ -21,7 +21,7 @@ function send(eventMsg: any) {
 }
 
 function BridgeConnector() {
-  const { setSelectedSegmentIds, setIdentifiedFeatureId } = useContext(
+  const { setSelectedSegmentIds, setIdentifiedFeature } = useContext(
     MapContext
   );
   const [connected, setConnected] = useState(false);
@@ -95,7 +95,17 @@ function BridgeConnector() {
     const token = PubSub.subscribe(
       "IdentifyNetworkElement",
       (_msg: string, data: IdentifyNetworkEvent) => {
-        setIdentifiedFeatureId(data.identifiedFeatureId);
+        if (
+          data.selectedType !== "RouteNode" &&
+          data.selectedType !== "RouteSegment"
+        ) {
+          throw new Error(`${data.selectedType} is not a valid type.`);
+        }
+
+        setIdentifiedFeature({
+          id: data.identifiedFeatureId,
+          type: data.selectedType as "RouteSegment" | "RouteNode",
+        });
       }
     );
 
@@ -104,7 +114,7 @@ function BridgeConnector() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [connected, retrieveIdentifiedNetworkElement, setIdentifiedFeatureId]);
+  }, [connected, retrieveIdentifiedNetworkElement, setIdentifiedFeature]);
 
   return <></>;
 }

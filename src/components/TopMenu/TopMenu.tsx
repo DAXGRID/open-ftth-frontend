@@ -4,7 +4,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 type TopMenuProps = {
   toggleSideMenu: () => void;
-}
+};
 
 function TopMenu({ toggleSideMenu }: TopMenuProps) {
   return (
@@ -14,12 +14,9 @@ function TopMenu({ toggleSideMenu }: TopMenuProps) {
         role="button"
         tabIndex={0}
         onClick={() => toggleSideMenu()}
-        onKeyPress={(e) => (e.key === "Enter" ? { toggleSideMenu } : () => { })}
+        onKeyPress={(e) => (e.key === "Enter" ? { toggleSideMenu } : () => {})}
       >
         <FontAwesomeIcon icon={faBars} />
-      </div>
-      <div className="top-menu-icon">
-        <p>OpenFTTH</p>
       </div>
       <div className="top-menu-body" />
     </div>

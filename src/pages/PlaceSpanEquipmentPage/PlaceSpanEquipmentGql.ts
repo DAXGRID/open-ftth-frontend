@@ -65,14 +65,14 @@ export interface PlaceSpanEquipmentResponse {
 
 export const PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK = `
 mutation (
- $spanEquipmentId: ID!,
- $spanEquipmentSpecificationId: ID!,
- $routeSegmentIds: [ID!]!,
- $manufacturerId: ID,
- $markingColor: String,
- $markingText: String,
- $namingInfoName: String,
- $namingInfoDescription: String)
+  $spanEquipmentId: ID!,
+  $spanEquipmentSpecificationId: ID!,
+  $routeSegmentIds: [ID!]!,
+  $manufacturerId: ID,
+  $markingColor: String,
+  $markingText: String,
+  $namingInfoName: String,
+  $namingInfoDescription: String)
 {
   spanEquipment
   {
