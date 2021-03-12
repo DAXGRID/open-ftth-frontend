@@ -17,14 +17,14 @@ import {
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
 
-import CutConduit from "../../assets/cut-conduit.svg";
-import Pencil from "../../assets/pencil.svg";
-import Plus from "../../assets/plus.svg";
-import Disconnect from "../../assets/disconnect.svg";
-import Connect from "../../assets/connect.svg";
-import PutInContainer from "../../assets/put-in-container.svg";
-import RemoveFromContainer from "../../assets/remove-from-container.svg";
-import Minus from "../../assets/minus.svg";
+import CutConduitSvg from "../../assets/cut-conduit.svg";
+import PencilSvg from "../../assets/pencil.svg";
+import PlusSvg from "../../assets/plus.svg";
+import DisconnectSvg from "../../assets/disconnect.svg";
+import ConnectSvg from "../../assets/connect.svg";
+import PutInContainerSvg from "../../assets/put-in-container.svg";
+import RemoveFromContainerSvg from "../../assets/remove-from-container.svg";
+import MinusSvg from "../../assets/minus.svg";
 
 function IdentifyFeaturePage() {
   const [showAddContainer, setShowAddContainer] = useState(false);
@@ -85,24 +85,24 @@ function IdentifyFeaturePage() {
       </ModalContainer>
       <DiagramMenu>
         <ToggleButton
-          icon={Pencil}
+          icon={PencilSvg}
           toggled={false}
           toggle={(x) => console.log(x)}
           id="Edit"
           title="Edit mode"
         />
-        <ActionButton icon={CutConduit} action={() => {}} title="Cut" />
-        <ActionButton icon={Disconnect} action={() => {}} title="Cut" />
-        <ActionButton icon={Connect} action={() => {}} title="Cut" />
-        <ActionButton icon={PutInContainer} action={() => {}} title="Cut" />
+        <ActionButton icon={CutConduitSvg} action={() => {}} title="Cut" />
+        <ActionButton icon={DisconnectSvg} action={() => {}} title="Cut" />
+        <ActionButton icon={ConnectSvg} action={() => {}} title="Cut" />
+        <ActionButton icon={PutInContainerSvg} action={() => {}} title="Cut" />
         <ActionButton
-          icon={RemoveFromContainer}
+          icon={RemoveFromContainerSvg}
           action={() => {}}
           title="Cut"
         />
-        <ActionButton icon={Minus} action={() => {}} title="Cut" />
+        <ActionButton icon={MinusSvg} action={() => {}} title="Cut" />
         <ActionButton
-          icon={Plus}
+          icon={PlusSvg}
           action={() => setShowAddContainer(true)}
           title="Add node container"
         />
