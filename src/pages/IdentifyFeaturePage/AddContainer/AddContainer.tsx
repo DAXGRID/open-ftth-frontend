@@ -152,7 +152,7 @@ function AddContainer() {
   const placeNodeContainer = async () => {
     if (
       identifiedFeature?.id === null ||
-      identifiedFeature?.type != "RouteNode"
+      identifiedFeature?.type !== "RouteNode"
     ) {
       throw new Error("Selected feature is either null or not a RouteNode");
     }

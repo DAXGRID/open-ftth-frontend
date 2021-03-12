@@ -24,7 +24,6 @@ import DisconnectSvg from "../../assets/disconnect.svg";
 import ConnectSvg from "../../assets/connect.svg";
 import PutInContainerSvg from "../../assets/put-in-container.svg";
 import RemoveFromContainerSvg from "../../assets/remove-from-container.svg";
-import MinusSvg from "../../assets/minus.svg";
 
 function IdentifyFeaturePage() {
   const [showAddContainer, setShowAddContainer] = useState(false);
@@ -91,16 +90,31 @@ function IdentifyFeaturePage() {
           id="Edit"
           title="Edit mode"
         />
-        <ActionButton icon={CutConduitSvg} action={() => {}} title="Cut" />
-        <ActionButton icon={DisconnectSvg} action={() => {}} title="Cut" />
-        <ActionButton icon={ConnectSvg} action={() => {}} title="Cut" />
-        <ActionButton icon={PutInContainerSvg} action={() => {}} title="Cut" />
+        <ActionButton
+          icon={CutConduitSvg}
+          action={() => {}}
+          title="Cut conduit"
+        />
+        <ActionButton
+          icon={DisconnectSvg}
+          action={() => {}}
+          title="Disconnect conduit"
+        />
+        <ActionButton
+          icon={ConnectSvg}
+          action={() => {}}
+          title="Connect conduit"
+        />
+        <ActionButton
+          icon={PutInContainerSvg}
+          action={() => {}}
+          title="Attach"
+        />
         <ActionButton
           icon={RemoveFromContainerSvg}
           action={() => {}}
-          title="Cut"
+          title="De-attach"
         />
-        <ActionButton icon={MinusSvg} action={() => {}} title="Cut" />
         <ActionButton
           icon={PlusSvg}
           action={() => setShowAddContainer(true)}
