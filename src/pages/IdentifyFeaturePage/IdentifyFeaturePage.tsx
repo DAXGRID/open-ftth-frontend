@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext, useRef, useCallback } from "react";
 import { useQuery, useSubscription, useMutation } from "urql";
 import { MapboxGeoJSONFeature } from "mapbox-gl";
 import DiagramMenu from "../../components/DiagramMenu";
@@ -125,10 +125,16 @@ function IdentifyFeaturePage() {
     };
 
     const { data } = await affixSpanEquipmentMutation(parameters);
-    console.log(data);
+    if (data?.spanEquipment.affixSpanEquipmentToNodeContainer.isSuccess) {
+      toast.success("Affix span equipment successful");
+    } else {
+      toast.error(
+        data?.spanEquipment.affixSpanEquipmentToNodeContainer.errorCode
+      );
+    }
   };
 
-  const onSelectedFeature = (feature: MapboxGeoJSONFeature) => {
+  const onSelectedFeature = useCallback((feature: MapboxGeoJSONFeature) => {
     const isSelected = feature.state?.selected as boolean;
 
     if (isSelected) {
@@ -138,7 +144,7 @@ function IdentifyFeaturePage() {
         return x.properties?.refId !== feature.properties?.refId;
       });
     }
-  };
+  }, []);
 
   if (spanEquipmentResult.fetching || !identifiedFeature?.id) {
     return <Loading />;
