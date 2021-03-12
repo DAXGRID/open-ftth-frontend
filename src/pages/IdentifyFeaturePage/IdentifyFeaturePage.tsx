@@ -19,6 +19,12 @@ import AddContainer from "./AddContainer";
 
 import CutConduit from "../../assets/cut-conduit.svg";
 import Pencil from "../../assets/pencil.svg";
+import Plus from "../../assets/plus.svg";
+import Disconnect from "../../assets/disconnect.svg";
+import Connect from "../../assets/connect.svg";
+import PutInContainer from "../../assets/put-in-container.svg";
+import RemoveFromContainer from "../../assets/remove-from-container.svg";
+import Minus from "../../assets/minus.svg";
 
 function IdentifyFeaturePage() {
   const [showAddContainer, setShowAddContainer] = useState(false);
@@ -86,8 +92,17 @@ function IdentifyFeaturePage() {
           title="Edit mode"
         />
         <ActionButton icon={CutConduit} action={() => {}} title="Cut" />
+        <ActionButton icon={Disconnect} action={() => {}} title="Cut" />
+        <ActionButton icon={Connect} action={() => {}} title="Cut" />
+        <ActionButton icon={PutInContainer} action={() => {}} title="Cut" />
         <ActionButton
-          icon={CutConduit}
+          icon={RemoveFromContainer}
+          action={() => {}}
+          title="Cut"
+        />
+        <ActionButton icon={Minus} action={() => {}} title="Cut" />
+        <ActionButton
+          icon={Plus}
           action={() => setShowAddContainer(true)}
           title="Add node container"
         />
