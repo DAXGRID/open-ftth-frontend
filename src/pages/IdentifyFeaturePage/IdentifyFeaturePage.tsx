@@ -18,6 +18,9 @@ import {
   AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER_MUTATION,
   AffixSpanEquipmentParams,
   AffixSpanEquipmentResponse,
+  CUT_SPAN_SEGMENTS,
+  CutSpanSegmentsParameter,
+  CutSpanSegmentsResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
 
@@ -51,10 +54,12 @@ function IdentifyFeaturePage() {
     pause: !identifiedFeature?.id,
   });
 
+  const [, cutSpanSegmentsMutation] = useMutation<CutSpanSegmentsResponse>(
+    CUT_SPAN_SEGMENTS
+  );
+
   const [
-    // TODO fix this
-    // eslint-disable-next-line
-    affixSpanEquipmentResult,
+    ,
     affixSpanEquipmentMutation,
   ] = useMutation<AffixSpanEquipmentResponse>(
     AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER_MUTATION
@@ -132,6 +137,37 @@ function IdentifyFeaturePage() {
         data?.spanEquipment.affixSpanEquipmentToNodeContainer.errorCode
       );
     }
+
+    selectedFeatures.current = [];
+  };
+
+  const cutSpanSegments = async () => {
+    const spanSegmentsToCut = selectedFeatures.current
+      .filter((x) => {
+        return (
+          x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
+        );
+      })
+      .map((x) => x.properties?.refId as string);
+
+    if (!identifiedFeature?.id) {
+      toast.error("No identified feature");
+      return;
+    }
+
+    const parameters: CutSpanSegmentsParameter = {
+      routeNodeId: identifiedFeature.id,
+      spanSegmentsToCut: spanSegmentsToCut,
+    };
+
+    const { data } = await cutSpanSegmentsMutation(parameters);
+    if (data?.spanEquipment.cutSpanSegments.isSuccess) {
+      toast.success("Span segments successfully cut");
+    } else {
+      toast.error(data?.spanEquipment.cutSpanSegments.errorCode);
+    }
+
+    selectedFeatures.current = [];
   };
 
   const onSelectedFeature = useCallback((feature: MapboxGeoJSONFeature) => {
@@ -169,7 +205,7 @@ function IdentifyFeaturePage() {
           />
           <ActionButton
             icon={CutConduitSvg}
-            action={() => {}}
+            action={() => cutSpanSegments()}
             title="Cut conduit"
           />
           <ActionButton
