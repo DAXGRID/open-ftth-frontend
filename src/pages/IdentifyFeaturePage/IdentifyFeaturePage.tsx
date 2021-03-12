@@ -42,6 +42,7 @@ function IdentifyFeaturePage() {
     variables: {
       routeNetworkElementId: identifiedFeature?.id,
     },
+    pause: !identifiedFeature?.id,
   });
 
   const [res] = useSubscription<DiagramUpdatedResponse>({
