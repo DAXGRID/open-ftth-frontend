@@ -124,3 +124,34 @@ mutation (
   }
 }
 `;
+
+export interface CutSpanSegmentsParameter {
+  routeNodeId: string;
+  spanSegmentsToCut: string[];
+}
+
+export interface CutSpanSegmentsResponse {
+  spanEquipment: {
+    cutSpanSegments: {
+      errorCode?: string;
+      isSuccess: boolean;
+    };
+  };
+}
+
+export const CUT_SPAN_SEGMENTS = `
+mutation (
+  $routeNodeId: ID!,
+  $spanSegmentsToCut: [ID!]!,
+) {
+  spanEquipment {
+    cutSpanSegments(
+      routeNodeId: $routeNodeId
+      spanSegmentstoCut: $spanSegmentsToCut
+    ) {
+      isSuccess
+      errorCode
+    }
+  }
+}
+`;
