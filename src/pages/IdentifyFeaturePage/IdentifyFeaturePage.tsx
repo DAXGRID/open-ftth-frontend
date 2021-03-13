@@ -24,6 +24,9 @@ import {
   CONNECT_SPAN_SEGMENTS,
   ConnectSpanSegmentsParameter,
   ConnectSpanSegmentsResponse,
+  DISCONNECT_SPAN_SEGMENTS,
+  DisconnectSpanSegmentsParameter,
+  DisconnectSpanSegmentsResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
 
@@ -72,6 +75,11 @@ function IdentifyFeaturePage() {
     ,
     connectSpanSegmentsMutation,
   ] = useMutation<ConnectSpanSegmentsResponse>(CONNECT_SPAN_SEGMENTS);
+
+  const [
+    ,
+    disconnectSpanSegmentsMutation,
+  ] = useMutation<DisconnectSpanSegmentsResponse>(DISCONNECT_SPAN_SEGMENTS);
 
   const [res] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
@@ -204,6 +212,32 @@ function IdentifyFeaturePage() {
     }
   };
 
+  const disconnectSpanSegments = async () => {
+    const spanSegmentsToDisconnect = selectedFeatures.current
+      .filter((x) => {
+        return x.layer.source === "InnerConduit";
+      })
+      .map((x) => x.properties?.refId as string);
+
+    if (!identifiedFeature?.id) {
+      toast.error("No identified feature");
+      return;
+    }
+
+    const parameters: DisconnectSpanSegmentsParameter = {
+      routeNodeId: identifiedFeature.id,
+      spanSegmentsToDisconnect: spanSegmentsToDisconnect,
+    };
+
+    const { data } = await disconnectSpanSegmentsMutation(parameters);
+    if (data?.spanEquipment.disconnectSpanSegments.isSuccess) {
+      toast.success("Span segments successfully disconnected");
+      selectedFeatures.current = [];
+    } else {
+      toast.error(data?.spanEquipment.disconnectSpanSegments.errorCode);
+    }
+  };
+
   const onSelectedFeature = useCallback((feature: MapboxGeoJSONFeature) => {
     const isSelected = feature.state?.selected as boolean;
 
@@ -244,7 +278,7 @@ function IdentifyFeaturePage() {
           />
           <ActionButton
             icon={DisconnectSvg}
-            action={() => {}}
+            action={() => disconnectSpanSegments()}
             title="Disconnect conduit"
           />
           <ActionButton
