@@ -122,8 +122,8 @@ function clickHighlight(
 ) {
   map.on("click", featureName, (e) => {
     const bbox: [PointLike, PointLike] = [
-      [e.point.x - 5, e.point.y - 5],
-      [e.point.x + 5, e.point.y + 5],
+      [e.point.x - 1, e.point.y - 1],
+      [e.point.x + 1, e.point.y + 1],
     ];
 
     const feature = map.queryRenderedFeatures(bbox)[0];
