@@ -27,7 +27,7 @@ export interface Geometry {
   coordinates: string;
 }
 
-export const GET_DIAGRAM_QUERY = `
+export const GET_DIAGRAM = `
 query ($routeNetworkElementId: ID!) {
   schematic {
     buildDiagram(
@@ -102,7 +102,7 @@ export interface AffixSpanEquipmentResponse {
   };
 }
 
-export const AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER_MUTATION = `
+export const AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER = `
 mutation (
   $spanSegmentId: ID!,
   $nodeContainerId: ID!,
@@ -148,6 +148,37 @@ mutation (
     cutSpanSegments(
       routeNodeId: $routeNodeId
       spanSegmentstoCut: $spanSegmentsToCut
+    ) {
+      isSuccess
+      errorCode
+    }
+  }
+}
+`;
+
+export interface ConnectSpanSegmentsParameter {
+  routeNodeId: string;
+  spanSegmentsToConnect: string[];
+}
+
+export interface ConnectSpanSegmentsResponse {
+  spanEquipment: {
+    connectSpanSegments: {
+      errorCode?: string;
+      isSuccess: boolean;
+    };
+  };
+}
+
+export const CONNECT_SPAN_SEGMENTS = `
+mutation (
+  $routeNodeId: ID!,
+  $spanSegmentsToConnect: [ID!]!,
+) {
+  spanEquipment {
+    connectSpanSegments(
+      routeNodeId: $routeNodeId
+      spanSegmentstoConnect: $spanSegmentsToConnect
     ) {
       isSuccess
       errorCode
