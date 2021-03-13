@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext, useRef, useCallback } from "react";
-import { useQuery, useSubscription, useMutation } from "urql";
+import { useQuery, useSubscription, useMutation, useClient } from "urql";
 import { MapboxGeoJSONFeature } from "mapbox-gl";
 import DiagramMenu from "../../components/DiagramMenu";
 import ModalContainer from "../../components/ModalContainer";
@@ -30,6 +30,8 @@ import {
   DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER,
   DetachSpanEquipmentParameters,
   DetachSpanEquipmentResponse,
+  SPAN_SEGMENT_TRACE,
+  SpanSegmentTraceResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
 
@@ -43,6 +45,7 @@ import RemoveFromContainerSvg from "../../assets/remove-from-container.svg";
 import { toast } from "react-toastify";
 
 function IdentifyFeaturePage() {
+  const client = useClient();
   const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
   const [showAddContainer, setShowAddContainer] = useState(false);
   const { identifiedFeature } = useContext(MapContext);
@@ -284,6 +287,16 @@ function IdentifyFeaturePage() {
 
   const onSelectedFeature = useCallback((feature: MapboxGeoJSONFeature) => {
     const isSelected = feature.state?.selected as boolean;
+    client
+      .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
+        spanSegmentId: feature.properties?.refId,
+      })
+      .toPromise()
+      .then((x) => {
+        console.log(
+          x.data?.utilityNetwork.spanSegmentTrace.routeNetworkSegmentIds
+        );
+      });
 
     if (isSelected) {
       selectedFeatures.current = [...selectedFeatures.current, feature];
