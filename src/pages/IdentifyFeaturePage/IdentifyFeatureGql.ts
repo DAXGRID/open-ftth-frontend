@@ -178,7 +178,38 @@ mutation (
   spanEquipment {
     connectSpanSegments(
       routeNodeId: $routeNodeId
-      spanSegmentstoConnect: $spanSegmentsToConnect
+      spanSegmentsToConnect: $spanSegmentsToConnect
+    ) {
+      isSuccess
+      errorCode
+    }
+  }
+}
+`;
+
+export interface DisconnectSpanSegmentsParameter {
+  routeNodeId: string;
+  spanSegmentsToDisconnect: string[];
+}
+
+export interface DisconnectSpanSegmentsResponse {
+  spanEquipment: {
+    disconnectSpanSegments: {
+      errorCode?: string;
+      isSuccess: boolean;
+    };
+  };
+}
+
+export const DISCONNECT_SPAN_SEGMENTS = `
+mutation (
+  $routeNodeId: ID!,
+  $spanSegmentsToDisconnect: [ID!]!,
+) {
+  spanEquipment {
+    disconnectSpanSegments(
+      routeNodeId: $routeNodeId
+      spanSegmentsToDisconnect: $spanSegmentsToDisconnect
     ) {
       isSuccess
       errorCode
