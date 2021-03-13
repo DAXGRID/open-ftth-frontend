@@ -13,14 +13,17 @@ import {
   DiagramQueryResponse,
   DiagramUpdatedResponse,
   Envelope,
-  GET_DIAGRAM_QUERY,
+  GET_DIAGRAM,
   SCHEMATIC_DIAGRAM_UPDATED,
-  AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER_MUTATION,
+  AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER,
   AffixSpanEquipmentParams,
   AffixSpanEquipmentResponse,
   CUT_SPAN_SEGMENTS,
   CutSpanSegmentsParameter,
   CutSpanSegmentsResponse,
+  CONNECT_SPAN_SEGMENTS,
+  ConnectSpanSegmentsParameter,
+  ConnectSpanSegmentsResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
 
@@ -47,7 +50,7 @@ function IdentifyFeaturePage() {
 
   const [spanEquipmentResult] = useQuery<DiagramQueryResponse>({
     requestPolicy: "cache-and-network",
-    query: GET_DIAGRAM_QUERY,
+    query: GET_DIAGRAM,
     variables: {
       routeNetworkElementId: identifiedFeature?.id,
     },
@@ -62,8 +65,13 @@ function IdentifyFeaturePage() {
     ,
     affixSpanEquipmentMutation,
   ] = useMutation<AffixSpanEquipmentResponse>(
-    AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER_MUTATION
+    AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER
   );
+
+  const [
+    ,
+    connectSpanSegmentsMutation,
+  ] = useMutation<ConnectSpanSegmentsResponse>(CONNECT_SPAN_SEGMENTS);
 
   const [res] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
@@ -132,6 +140,7 @@ function IdentifyFeaturePage() {
     const { data } = await affixSpanEquipmentMutation(parameters);
     if (data?.spanEquipment.affixSpanEquipmentToNodeContainer.isSuccess) {
       toast.success("Affix span equipment successful");
+      selectedFeatures.current = [];
     } else {
       toast.error(
         data?.spanEquipment.affixSpanEquipmentToNodeContainer.errorCode
@@ -163,11 +172,36 @@ function IdentifyFeaturePage() {
     const { data } = await cutSpanSegmentsMutation(parameters);
     if (data?.spanEquipment.cutSpanSegments.isSuccess) {
       toast.success("Span segments successfully cut");
+      selectedFeatures.current = [];
     } else {
       toast.error(data?.spanEquipment.cutSpanSegments.errorCode);
     }
+  };
 
-    selectedFeatures.current = [];
+  const connectSpanSegments = async () => {
+    const spanSegmentsToConnect = selectedFeatures.current
+      .filter((x) => {
+        return x.layer.source === "InnerConduit";
+      })
+      .map((x) => x.properties?.refId as string);
+
+    if (!identifiedFeature?.id) {
+      toast.error("No identified feature");
+      return;
+    }
+
+    const parameters: ConnectSpanSegmentsParameter = {
+      routeNodeId: identifiedFeature.id,
+      spanSegmentsToConnect: spanSegmentsToConnect,
+    };
+
+    const { data } = await connectSpanSegmentsMutation(parameters);
+    if (data?.spanEquipment.connectSpanSegments.isSuccess) {
+      toast.success("Span segments successfully connected");
+      selectedFeatures.current = [];
+    } else {
+      toast.error(data?.spanEquipment.connectSpanSegments.errorCode);
+    }
   };
 
   const onSelectedFeature = useCallback((feature: MapboxGeoJSONFeature) => {
@@ -215,7 +249,9 @@ function IdentifyFeaturePage() {
           />
           <ActionButton
             icon={ConnectSvg}
-            action={() => {}}
+            action={() => {
+              connectSpanSegments();
+            }}
             title="Connect conduit"
           />
           <ActionButton
