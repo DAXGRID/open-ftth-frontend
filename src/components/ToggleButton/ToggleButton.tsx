@@ -24,7 +24,6 @@ function ToggleButton({ toggled, icon, toggle, id, title }: ToggleButtonProps) {
       role="button"
       tabIndex={0}
       onClick={() => toggle(id)}
-      onKeyPress={() => toggle(id)}
       className={toggled ? "toggle-button toggled" : "toggle-button"}
     >
       {renderIcon(icon, title)}

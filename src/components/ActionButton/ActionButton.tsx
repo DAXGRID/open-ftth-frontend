@@ -22,7 +22,6 @@ function ActionButton({ action, icon, title }: ActionButtonProps) {
       role="button"
       tabIndex={0}
       onClick={() => action()}
-      onKeyDown={() => action()}
       className="action-button"
     >
       {renderIcon(icon, title)}
