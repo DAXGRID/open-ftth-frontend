@@ -27,6 +27,9 @@ import {
   DISCONNECT_SPAN_SEGMENTS,
   DisconnectSpanSegmentsParameter,
   DisconnectSpanSegmentsResponse,
+  DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER,
+  DetachSpanEquipmentParameters,
+  DetachSpanEquipmentResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
 
@@ -80,6 +83,13 @@ function IdentifyFeaturePage() {
     ,
     disconnectSpanSegmentsMutation,
   ] = useMutation<DisconnectSpanSegmentsResponse>(DISCONNECT_SPAN_SEGMENTS);
+
+  const [
+    ,
+    detachSpanEquipmentMutation,
+  ] = useMutation<DetachSpanEquipmentResponse>(
+    DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER
+  );
 
   const [res] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
@@ -238,6 +248,40 @@ function IdentifyFeaturePage() {
     }
   };
 
+  const detachSpanEquipment = async () => {
+    const spanSegmentToDetach = selectedFeatures.current
+      .filter((x) => {
+        return (
+          x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
+        );
+      })
+      .map((x) => x.properties?.refId as string);
+
+    if (spanSegmentToDetach.length === 0) {
+      toast.error("No span segments selected");
+    }
+
+    if (!identifiedFeature?.id) {
+      toast.error("No identified feature");
+      return;
+    }
+
+    const parameters: DetachSpanEquipmentParameters = {
+      spanSegmentId: identifiedFeature.id,
+      routeNodeId: spanSegmentToDetach[0],
+    };
+
+    const { data } = await detachSpanEquipmentMutation(parameters);
+    if (data?.spanEquipment.detachSpanEquipmentFromNodeContainer.isSuccess) {
+      toast.success("Span segments successfully disconnected");
+      selectedFeatures.current = [];
+    } else {
+      toast.error(
+        data?.spanEquipment.detachSpanEquipmentFromNodeContainer.errorCode
+      );
+    }
+  };
+
   const onSelectedFeature = useCallback((feature: MapboxGeoJSONFeature) => {
     const isSelected = feature.state?.selected as boolean;
 
@@ -295,7 +339,7 @@ function IdentifyFeaturePage() {
           />
           <ActionButton
             icon={RemoveFromContainerSvg}
-            action={() => {}}
+            action={() => detachSpanEquipment()}
             title="De-attach"
           />
           <ActionButton

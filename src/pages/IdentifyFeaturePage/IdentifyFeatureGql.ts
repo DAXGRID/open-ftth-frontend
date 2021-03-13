@@ -211,8 +211,39 @@ mutation (
       routeNodeId: $routeNodeId
       spanSegmentsToDisconnect: $spanSegmentsToDisconnect
     ) {
-      isSuccess
-      errorCode
+        isSuccess
+        errorCode
+    }
+  }
+}
+`;
+
+export interface DetachSpanEquipmentParameters {
+  spanSegmentId: string;
+  routeNodeId: string;
+}
+
+export interface DetachSpanEquipmentResponse {
+  spanEquipment: {
+    detachSpanEquipmentFromNodeContainer: {
+      errorCode?: string;
+      isSuccess: boolean;
+    };
+  };
+}
+
+export const DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER = `
+mutation (
+  $spanSegmentId: ID!,
+  routeNodeId: ID!,
+) {
+  spanEquipment {
+    detachSpanEquipmentFromNodeContainer(
+      spanSegmentId: $spanSegmentId
+      routeNodeId: $nodeContainerId
+    ) {
+        isSucess
+        errorCode
     }
   }
 }
