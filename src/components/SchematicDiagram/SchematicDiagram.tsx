@@ -135,7 +135,7 @@ function clickHighlight(
 
     feature.state.selected = !feature.state.selected;
 
-    if (editMode) {
+    if (!editMode) {
       const innerConduits = map.querySourceFeatures("InnerConduit", {
         sourceLayer: "InnerConduit",
       });
@@ -202,22 +202,15 @@ function SchematicDiagram({
         // if has inner conduit then it also has outer
         hoverPointer("OuterConduit", newMap);
         clickHighlight("OuterConduit", newMap, onSelectFeature, editMode);
-
-        // Set after OuterConduit
-        newMap.moveLayer("OuterConduit", "InnerConduit");
       }
 
       if (
         diagramObjects.find((x) => x.style.startsWith("NodeContainerSide")) &&
-        !editMode
+        editMode
       ) {
         newMap.addLayer(nodeContainerSideSelect);
         hoverPointer("NodeContainerSide", newMap);
         clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
-
-        // Set after NodeContainer
-        newMap.moveLayer("NodeContainer", "InnerConduit");
-        newMap.moveLayer("NodeContainer", "OuterConduit");
       }
     });
 
