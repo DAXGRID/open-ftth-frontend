@@ -4,6 +4,8 @@ import { useKeycloak } from "@react-keycloak/web";
 
 export interface RetrieveSelectedSpanEquipmentsResponse {
   selectedFeaturesMrid: string[];
+  username: string;
+  eventType: string;
 }
 
 function useBridgeConnector() {
