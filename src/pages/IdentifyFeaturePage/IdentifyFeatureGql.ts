@@ -235,14 +235,14 @@ export interface DetachSpanEquipmentResponse {
 export const DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER = `
 mutation (
   $spanSegmentId: ID!,
-  routeNodeId: ID!,
+  $routeNodeId: ID!,
 ) {
   spanEquipment {
     detachSpanEquipmentFromNodeContainer(
       spanSegmentId: $spanSegmentId
-      routeNodeId: $nodeContainerId
+      routeNodeId: $routeNodeId
     ) {
-        isSucess
+        isSuccess
         errorCode
     }
   }

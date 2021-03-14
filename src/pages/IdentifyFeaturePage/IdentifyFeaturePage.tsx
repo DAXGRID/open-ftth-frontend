@@ -34,6 +34,8 @@ import {
   SpanSegmentTraceResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
+import { toast } from "react-toastify";
+import useBridgeConnector from "../../bridge/useBridgeConnector";
 
 import CutConduitSvg from "../../assets/cut-conduit.svg";
 import PencilSvg from "../../assets/pencil.svg";
@@ -42,10 +44,11 @@ import DisconnectSvg from "../../assets/disconnect.svg";
 import ConnectSvg from "../../assets/connect.svg";
 import PutInContainerSvg from "../../assets/put-in-container.svg";
 import RemoveFromContainerSvg from "../../assets/remove-from-container.svg";
-import { toast } from "react-toastify";
 
 function IdentifyFeaturePage() {
   const client = useClient();
+  const { highlightFeatures } = useBridgeConnector();
+  const [editMode, setEditMode] = useState(false);
   const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
   const [showAddContainer, setShowAddContainer] = useState(false);
   const { identifiedFeature } = useContext(MapContext);
@@ -262,6 +265,7 @@ function IdentifyFeaturePage() {
 
     if (spanSegmentToDetach.length === 0) {
       toast.error("No span segments selected");
+      return;
     }
 
     if (!identifiedFeature?.id) {
@@ -270,8 +274,8 @@ function IdentifyFeaturePage() {
     }
 
     const parameters: DetachSpanEquipmentParameters = {
-      spanSegmentId: identifiedFeature.id,
-      routeNodeId: spanSegmentToDetach[0],
+      routeNodeId: identifiedFeature.id,
+      spanSegmentId: spanSegmentToDetach[0],
     };
 
     const { data } = await detachSpanEquipmentMutation(parameters);
@@ -285,27 +289,38 @@ function IdentifyFeaturePage() {
     }
   };
 
-  const onSelectedFeature = useCallback((feature: MapboxGeoJSONFeature) => {
-    const isSelected = feature.state?.selected as boolean;
-    client
-      .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
-        spanSegmentId: feature.properties?.refId,
-      })
-      .toPromise()
-      .then((x) => {
-        console.log(
-          x.data?.utilityNetwork.spanSegmentTrace.routeNetworkSegmentIds
-        );
-      });
+  const onSelectedFeature = useCallback(
+    (feature: MapboxGeoJSONFeature) => {
+      const isSelected = feature.state?.selected as boolean;
 
-    if (isSelected) {
-      selectedFeatures.current = [...selectedFeatures.current, feature];
-    } else {
-      selectedFeatures.current = selectedFeatures.current.filter((x) => {
-        return x.properties?.refId !== feature.properties?.refId;
-      });
-    }
-  }, []);
+      if (editMode) {
+        if (isSelected) {
+          client
+            .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
+              spanSegmentId: feature.properties?.refId,
+            })
+            .toPromise()
+            .then((x) => {
+              highlightFeatures(
+                x.data?.utilityNetwork.spanSegmentTrace
+                  .routeNetworkSegmentIds ?? []
+              );
+            });
+        } else {
+          highlightFeatures([]);
+        }
+      } else {
+        if (isSelected) {
+          selectedFeatures.current = [...selectedFeatures.current, feature];
+        } else {
+          selectedFeatures.current = selectedFeatures.current.filter((x) => {
+            return x.properties?.refId !== feature.properties?.refId;
+          });
+        }
+      }
+    },
+    [editMode, client, highlightFeatures]
+  );
 
   if (spanEquipmentResult.fetching || !identifiedFeature?.id) {
     return <Loading />;
@@ -323,8 +338,8 @@ function IdentifyFeaturePage() {
         <DiagramMenu>
           <ToggleButton
             icon={PencilSvg}
-            toggled={false}
-            toggle={(x) => console.log(x)}
+            toggled={editMode}
+            toggle={() => setEditMode(!editMode)}
             id="Edit"
             title="Edit mode"
           />
@@ -353,7 +368,7 @@ function IdentifyFeaturePage() {
           <ActionButton
             icon={RemoveFromContainerSvg}
             action={() => detachSpanEquipment()}
-            title="De-attach"
+            title="Detach"
           />
           <ActionButton
             icon={PlusSvg}
@@ -366,6 +381,7 @@ function IdentifyFeaturePage() {
         diagramObjects={diagramObjects}
         envelope={envelope}
         onSelectFeature={onSelectedFeature}
+        editMode={editMode}
       />
     </div>
   );

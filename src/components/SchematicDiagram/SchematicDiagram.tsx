@@ -35,6 +35,7 @@ type SchematicDiagramProps = {
   diagramObjects: Diagram[];
   envelope: Envelope;
   onSelectFeature: (feature: MapboxGeoJSONFeature) => void;
+  editMode: boolean;
 };
 
 mapboxgl.accessToken = Config.MAPBOX_API_KEY;
@@ -118,7 +119,8 @@ function enableResize(map: Map) {
 function clickHighlight(
   featureName: string,
   map: Map,
-  callback: (feature: MapboxGeoJSONFeature) => void
+  callback: (feature: MapboxGeoJSONFeature) => void,
+  editMode: boolean
 ) {
   map.on("click", featureName, (e) => {
     const bbox: [PointLike, PointLike] = [
@@ -133,6 +135,30 @@ function clickHighlight(
 
     feature.state.selected = !feature.state.selected;
 
+    if (editMode) {
+      const innerConduits = map.querySourceFeatures("InnerConduit", {
+        sourceLayer: "InnerConduit",
+      });
+
+      const outerConduits = map.querySourceFeatures("OuterConduit", {
+        sourceLayer: "OuterConduit",
+      });
+
+      innerConduits.forEach((x) => {
+        map.setFeatureState(
+          { source: "InnerConduit", id: x.id },
+          { selected: false }
+        );
+      });
+
+      outerConduits.forEach((x) => {
+        map.setFeatureState(
+          { source: "OuterConduit", id: x.id },
+          { selected: false }
+        );
+      });
+    }
+
     map.setFeatureState(
       { source: featureName, id: feature.id },
       { selected: feature.state.selected }
@@ -146,6 +172,7 @@ function SchematicDiagram({
   diagramObjects,
   envelope,
   onSelectFeature,
+  editMode,
 }: SchematicDiagramProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<Map | null>(null);
@@ -171,19 +198,22 @@ function SchematicDiagram({
         newMap.addLayer(outerConduitSelect);
 
         hoverPointer("InnerConduit", newMap);
-        clickHighlight("InnerConduit", newMap, onSelectFeature);
+        clickHighlight("InnerConduit", newMap, onSelectFeature, editMode);
         // if has inner conduit then it also has outer
         hoverPointer("OuterConduit", newMap);
-        clickHighlight("OuterConduit", newMap, onSelectFeature);
+        clickHighlight("OuterConduit", newMap, onSelectFeature, editMode);
 
         // Set after OuterConduit
         newMap.moveLayer("OuterConduit", "InnerConduit");
       }
 
-      if (diagramObjects.find((x) => x.style.startsWith("NodeContainerSide"))) {
+      if (
+        diagramObjects.find((x) => x.style.startsWith("NodeContainerSide")) &&
+        !editMode
+      ) {
         newMap.addLayer(nodeContainerSideSelect);
         hoverPointer("NodeContainerSide", newMap);
-        clickHighlight("NodeContainerSide", newMap, onSelectFeature);
+        clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
 
         // Set after NodeContainer
         newMap.moveLayer("NodeContainer", "InnerConduit");
@@ -195,7 +225,7 @@ function SchematicDiagram({
       newMap.remove();
       map.current = null;
     };
-  }, [diagramObjects, envelope, onSelectFeature]);
+  }, [diagramObjects, envelope, onSelectFeature, editMode]);
 
   return (
     <div className="schematic-diagram">
