@@ -41,16 +41,19 @@ function useBridgeConnector() {
     send(message);
   }
 
-  function highlightFeatures(featureIds: string[]) {
-    const message = {
-      eventType: "HighlightFeatures",
-      IdentifiedFeatureMrids: featureIds,
-      featureType: "RouteSegment",
-      username: keycloak.profile?.username,
-    };
+  const highlightFeatures = useCallback(
+    (featureIds: string[]) => {
+      const message = {
+        eventType: "HighlightFeatures",
+        IdentifiedFeatureMrids: featureIds,
+        featureType: "RouteSegment",
+        username: keycloak.profile?.username,
+      };
 
-    send(message);
-  }
+      send(message);
+    },
+    [keycloak.profile?.username]
+  );
 
   return {
     retrieveSelectedEquipments,

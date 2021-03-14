@@ -5,6 +5,7 @@ type ActionButtonProps = {
   icon: IconProp | string;
   action: () => void;
   title: string;
+  disabled: boolean;
 };
 
 function renderIcon(icon: IconProp | string, altText: string) {
@@ -15,14 +16,14 @@ function renderIcon(icon: IconProp | string, altText: string) {
   }
 }
 
-function ActionButton({ action, icon, title }: ActionButtonProps) {
+function ActionButton({ action, icon, title, disabled }: ActionButtonProps) {
   return (
     <div
       title={title}
       role="button"
       tabIndex={0}
-      onClick={() => action()}
-      className="action-button"
+      onClick={() => !disabled && action()}
+      className={disabled ? "action-button disabled" : "action-button"}
     >
       {renderIcon(icon, title)}
     </div>

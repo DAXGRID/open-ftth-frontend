@@ -347,11 +347,13 @@ function IdentifyFeaturePage() {
             icon={CutConduitSvg}
             action={() => cutSpanSegments()}
             title="Cut conduit"
+            disabled={editMode}
           />
           <ActionButton
             icon={DisconnectSvg}
             action={() => disconnectSpanSegments()}
             title="Disconnect conduit"
+            disabled={editMode}
           />
           <ActionButton
             icon={ConnectSvg}
@@ -359,21 +361,25 @@ function IdentifyFeaturePage() {
               connectSpanSegments();
             }}
             title="Connect conduit"
+            disabled={editMode}
           />
           <ActionButton
             icon={PutInContainerSvg}
             action={() => affixSpanEquipment()}
             title="Attach"
+            disabled={editMode}
           />
           <ActionButton
             icon={RemoveFromContainerSvg}
             action={() => detachSpanEquipment()}
             title="Detach"
+            disabled={editMode}
           />
           <ActionButton
             icon={PlusSvg}
             action={() => setShowAddContainer(true)}
             title="Add node container"
+            disabled={editMode}
           />
         </DiagramMenu>
       )}
