@@ -125,7 +125,12 @@ function BridgeConnector() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [connected, retrieveIdentifiedNetworkElement, setIdentifiedFeature]);
+  }, [
+    connected,
+    retrieveIdentifiedNetworkElement,
+    setIdentifiedFeature,
+    keycloak.profile?.username,
+  ]);
 
   return <></>;
 }
