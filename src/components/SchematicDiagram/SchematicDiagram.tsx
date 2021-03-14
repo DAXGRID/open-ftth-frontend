@@ -202,6 +202,9 @@ function SchematicDiagram({
         // if has inner conduit then it also has outer
         hoverPointer("OuterConduit", newMap);
         clickHighlight("OuterConduit", newMap, onSelectFeature, editMode);
+
+        // Set after OuterConduit
+        newMap.moveLayer("OuterConduit", "InnerConduit");
       }
 
       if (
@@ -211,6 +214,9 @@ function SchematicDiagram({
         newMap.addLayer(nodeContainerSideSelect);
         hoverPointer("NodeContainerSide", newMap);
         clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
+
+        newMap.moveLayer("NodeContainer", "InnerConduit");
+        newMap.moveLayer("NodeContainer", "OuterConduit");
       }
     });
 
