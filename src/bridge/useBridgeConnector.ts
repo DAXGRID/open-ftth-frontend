@@ -41,13 +41,10 @@ function useBridgeConnector() {
     send(message);
   }
 
-  function highlightFeatures() {
+  function highlightFeatures(featureIds: string[]) {
     const message = {
       eventType: "HighlightFeatures",
-      IdentifiedFeatureMrids: [
-        "b92d9f91-1a08-4f49-932a-e64f9cef756b",
-        "b92d9f91-1a08-4f49-932a-e64f9cef756b",
-      ],
+      IdentifiedFeatureMrids: featureIds,
       featureType: "RouteSegment",
       username: keycloak.profile?.username,
     };

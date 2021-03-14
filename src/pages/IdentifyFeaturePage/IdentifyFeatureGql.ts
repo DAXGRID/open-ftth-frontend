@@ -235,15 +235,33 @@ export interface DetachSpanEquipmentResponse {
 export const DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER = `
 mutation (
   $spanSegmentId: ID!,
-  routeNodeId: ID!,
+  $routeNodeId: ID!,
 ) {
   spanEquipment {
     detachSpanEquipmentFromNodeContainer(
       spanSegmentId: $spanSegmentId
-      routeNodeId: $nodeContainerId
+      routeNodeId: $routeNodeId
     ) {
-        isSucess
+        isSuccess
         errorCode
+    }
+  }
+}
+`;
+
+export interface SpanSegmentTraceResponse {
+  utilityNetwork: {
+    spanSegmentTrace: {
+      routeNetworkSegmentIds: string[];
+    };
+  };
+}
+
+export const SPAN_SEGMENT_TRACE = `
+query ($spanSegmentId: ID!) {
+  utilityNetwork {
+    spanSegmentTrace(spanSegmentId: $spanSegmentId) {
+      routeNetworkSegmentIds
     }
   }
 }

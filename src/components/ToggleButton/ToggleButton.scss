@@ -12,9 +12,7 @@
   }
 
   &.toggled {
-    background-color: $dark-grey;
-    border-color: $dark-grey;
-    color: white;
+    border: 4px solid $success-color;
   }
 
   &:hover {
