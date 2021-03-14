@@ -6,6 +6,7 @@ import useBridgeConnector, {
   RetrieveSelectedSpanEquipmentsResponse,
 } from "../bridge/useBridgeConnector";
 import { MapContext } from "../contexts/MapContext";
+import { useKeycloak } from "@react-keycloak/web";
 
 type IdentifyNetworkEvent = {
   eventType: string;
@@ -29,6 +30,7 @@ function BridgeConnector() {
     retrieveSelectedEquipments,
     retrieveIdentifiedNetworkElement,
   } = useBridgeConnector();
+  const { keycloak } = useKeycloak();
 
   useEffect(() => {
     function setup() {
@@ -78,7 +80,9 @@ function BridgeConnector() {
     const token = PubSub.subscribe(
       "RetrieveSelectedResponse",
       async (_msg: string, data: RetrieveSelectedSpanEquipmentsResponse) => {
-        setSelectedSegmentIds(data.selectedFeaturesMrid);
+        if (data.username === keycloak.profile?.username) {
+          setSelectedSegmentIds(data.selectedFeaturesMrid);
+        }
       }
     );
 
@@ -87,7 +91,12 @@ function BridgeConnector() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [connected, setSelectedSegmentIds, retrieveSelectedEquipments]);
+  }, [
+    connected,
+    setSelectedSegmentIds,
+    retrieveSelectedEquipments,
+    keycloak.profile?.username,
+  ]);
 
   useEffect(() => {
     if (!connected || !client || client.readyState !== 1) return;
@@ -102,10 +111,12 @@ function BridgeConnector() {
           throw new Error(`${data.selectedType} is not a valid type.`);
         }
 
-        setIdentifiedFeature({
-          id: data.identifiedFeatureId,
-          type: data.selectedType as "RouteSegment" | "RouteNode",
-        });
+        if (data.username === keycloak.profile?.username) {
+          setIdentifiedFeature({
+            id: data.identifiedFeatureId,
+            type: data.selectedType as "RouteSegment" | "RouteNode",
+          });
+        }
       }
     );
 
