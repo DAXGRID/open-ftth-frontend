@@ -293,7 +293,7 @@ function IdentifyFeaturePage() {
     (feature: MapboxGeoJSONFeature) => {
       const isSelected = feature.state?.selected as boolean;
 
-      if (editMode) {
+      if (!editMode) {
         if (isSelected) {
           client
             .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
