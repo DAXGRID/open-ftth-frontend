@@ -5,6 +5,19 @@
   border-radius: 4px;
   padding: 7px;
   margin: 0px 5px;
+  user-select: none;
+
+  &.disabled {
+    color: #e3e3e3;
+
+    &:hover {
+      cursor: not-allowed;
+    }
+
+    img {
+      filter: grayscale(100%);
+    }
+  }
 
   img {
     height: 30px;
