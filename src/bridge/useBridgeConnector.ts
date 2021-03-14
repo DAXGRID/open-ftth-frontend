@@ -45,6 +45,8 @@ function useBridgeConnector() {
 
   const highlightFeatures = useCallback(
     (featureIds: string[]) => {
+      if (featureIds.length === 0) return;
+
       const message = {
         eventType: "HighlightFeatures",
         IdentifiedFeatureMrids: featureIds,
