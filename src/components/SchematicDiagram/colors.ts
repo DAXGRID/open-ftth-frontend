@@ -13,6 +13,7 @@ const colorMap = {
   GREY: "#5D6970", // RAL 7031
   VIOLET: "#83639D", // RAL 4005
   PINK: "#E1A6AD", // RAL 3015
+  TURQUOISE: "#7ebab5", // RAL 3015
 };
 
 export default colorMap;
