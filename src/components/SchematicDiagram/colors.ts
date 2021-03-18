@@ -1,19 +1,19 @@
 const colorMap = {
-  WHITE: "#FFFFFF", // RAL9010
-  BROWN: "#5A3A29", // RAL 8011
-  LIGHT_RED: "#FF0000", // RAL 3026
-  RED: "#C1121C", // RAL 3020
-  YELLOW: "#EEC900", // RAL 1021
+  WHITE: "#FFFFFF",
+  BROWN: "#996633",
+  LIGHT_RED: "#FF0000",
+  RED: "#cc0000",
+  YELLOW: "#ffff00",
   LIGHT_BLUE: "#71D3FC",
-  BLUE: "#0000FF", // RAL 5015
-  LIGHT_ORANGE: "#FFAB00", // RAL 1028
-  ORANGE: "#E15501", // RAL 2009
-  GREEN: "#28713E", // RAL 6001
-  BLACK: "#1E1E1E", // RAL 9017
-  GREY: "#5D6970", // RAL 7031
-  VIOLET: "#83639D", // RAL 4005
-  PINK: "#E1A6AD", // RAL 3015
-  TURQUOISE: "#7ebab5", // RAL 3015
+  BLUE: "#0000FF",
+  LIGHT_ORANGE: "#ffc04d",
+  ORANGE: "#ff9900",
+  GREEN: "#00ff00",
+  BLACK: "#000000",
+  GREY: "#808080",
+  VIOLET: "#9900cc",
+  PINK: "#ff99cc",
+  TURQUOISE: "#00ffff",
 };
 
 export default colorMap;
