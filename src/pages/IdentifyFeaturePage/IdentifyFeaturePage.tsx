@@ -103,6 +103,10 @@ function IdentifyFeaturePage() {
   });
 
   useEffect(() => {
+    setEditMode(false);
+  }, [identifiedFeature, setEditMode]);
+
+  useEffect(() => {
     if (!spanEquipmentResult.data) return;
 
     const {
