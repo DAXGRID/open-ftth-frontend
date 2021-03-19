@@ -11,6 +11,7 @@ export interface SpanEquipmentSpecification {
   id: string;
   category: string;
   name: string;
+  description: string;
   deprecated: boolean;
   manufacturerRefs: string[];
 }
