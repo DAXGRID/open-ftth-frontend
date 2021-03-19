@@ -199,9 +199,9 @@ function PlaceSpanEquipmentPage() {
         };
       });
 
-    // If none is selected - select the first select option
+    // If none is selected then select Conduit
     if (categoryOptions.length > 0 && !selectedCategory) {
-      setSelectedCategory(categoryOptions[0].value);
+      setSelectedCategory("Conduit");
     }
 
     return categoryOptions;
