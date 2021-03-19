@@ -32,6 +32,8 @@ import {
   DetachSpanEquipmentResponse,
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
+  QUERY_ROUTE_NETWORK_ELEMENT,
+  QueryRouteNetworkElementResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
 import { toast } from "react-toastify";
@@ -65,6 +67,17 @@ function IdentifyFeaturePage() {
     query: GET_DIAGRAM,
     variables: {
       routeNetworkElementId: identifiedFeature?.id,
+    },
+    pause: !identifiedFeature?.id,
+  });
+
+  const [
+    routeNetworkElementResponse,
+  ] = useQuery<QueryRouteNetworkElementResponse>({
+    requestPolicy: "cache-and-network",
+    query: QUERY_ROUTE_NETWORK_ELEMENT,
+    variables: {
+      routeElementId: identifiedFeature?.id,
     },
     pause: !identifiedFeature?.id,
   });
@@ -339,6 +352,32 @@ function IdentifyFeaturePage() {
       >
         <AddContainer />
       </ModalContainer>
+
+      {identifiedFeature.type === "RouteNode" && (
+        <DiagramMenu>
+          <p>
+            Name:{" "}
+            {
+              routeNetworkElementResponse.data?.routeNetwork.routeElement
+                .namingInfo?.name
+            }
+          </p>
+          <p>
+            Kind:{" "}
+            {
+              routeNetworkElementResponse.data?.routeNetwork.routeElement
+                .routeNodeInfo?.kind
+            }
+          </p>
+          <p>
+            Function:{" "}
+            {
+              routeNetworkElementResponse.data?.routeNetwork.routeElement
+                .routeNodeInfo?.function
+            }
+          </p>
+        </DiagramMenu>
+      )}
       {identifiedFeature.type === "RouteNode" && (
         <DiagramMenu>
           <ToggleButton
