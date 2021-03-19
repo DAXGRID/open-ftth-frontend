@@ -125,7 +125,8 @@ function IdentifyFeaturePage() {
 
     setDiagramObjects([...diagramObjects]);
     setEnvelope({ ...envelope });
-  }, [res, setDiagramObjects, setEnvelope]);
+    setShowAddContainer(false);
+  }, [res, setDiagramObjects, setEnvelope, setShowAddContainer]);
 
   const affixSpanEquipment = async () => {
     const nodeContainer = selectedFeatures.current.find(
