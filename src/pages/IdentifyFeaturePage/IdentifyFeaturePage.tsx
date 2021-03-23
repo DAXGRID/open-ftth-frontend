@@ -38,6 +38,7 @@ import {
 import AddContainer from "./AddContainer";
 import { toast } from "react-toastify";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
+import { useTranslation } from "react-i18next";
 
 import CutConduitSvg from "../../assets/cut-conduit.svg";
 import PencilSvg from "../../assets/pencil.svg";
@@ -49,6 +50,7 @@ import RemoveFromContainerSvg from "../../assets/remove-from-container.svg";
 
 function IdentifyFeaturePage() {
   const client = useClient();
+  const { t } = useTranslation();
   const { highlightFeatures } = useBridgeConnector();
   const [editMode, setEditMode] = useState(false);
   const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
@@ -354,29 +356,28 @@ function IdentifyFeaturePage() {
       </ModalContainer>
 
       {identifiedFeature.type === "RouteNode" && (
-        <DiagramMenu>
-          <p>
-            Name:{" "}
-            {
-              routeNetworkElementResponse.data?.routeNetwork.routeElement
-                .namingInfo?.name
-            }
-          </p>
-          <p>
-            Kind:{" "}
-            {
-              routeNetworkElementResponse.data?.routeNetwork.routeElement
-                .routeNodeInfo?.kind
-            }
-          </p>
-          <p>
-            Function:{" "}
-            {
-              routeNetworkElementResponse.data?.routeNetwork.routeElement
-                .routeNodeInfo?.function
-            }
-          </p>
-        </DiagramMenu>
+        <div className="feature-information-container">
+          <div className="feature-informations">
+            <p>
+              <strong>{t("Name")}</strong>
+              {`: ${routeNetworkElementResponse.data?.routeNetwork.routeElement.namingInfo?.name}`}
+            </p>
+            <p>
+              <strong>{t("Kind")}</strong>
+              {`: ${t(
+                routeNetworkElementResponse.data?.routeNetwork.routeElement
+                  .routeNodeInfo?.kind ?? ""
+              )}`}
+            </p>
+            <p>
+              <strong>{t("Function")}</strong>
+              {`: ${t(
+                routeNetworkElementResponse.data?.routeNetwork.routeElement
+                  .routeNodeInfo?.function ?? ""
+              )}`}
+            </p>
+          </div>
+        </div>
       )}
       {identifiedFeature.type === "RouteNode" && (
         <DiagramMenu>
