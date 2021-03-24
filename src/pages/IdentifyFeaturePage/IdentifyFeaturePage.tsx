@@ -362,7 +362,10 @@ function IdentifyFeaturePage() {
           <div className="feature-informations">
             <p>
               <strong>{t("Name")}</strong>
-              {`: ${routeNetworkElementResponse.data?.routeNetwork.routeElement.namingInfo?.name}`}
+              {`: ${
+                routeNetworkElementResponse.data?.routeNetwork.routeElement
+                  .namingInfo?.name ?? ""
+              }`}
             </p>
             <p>
               <strong>{t("Kind")}</strong>
