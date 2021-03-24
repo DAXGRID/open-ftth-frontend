@@ -38,8 +38,6 @@ type SchematicDiagramProps = {
   editMode: boolean;
 };
 
-mapboxgl.accessToken = Config.MAPBOX_API_KEY;
-
 const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
   const t: { [id: string]: Feature[] } = {};
 
@@ -183,6 +181,7 @@ function SchematicDiagram({
     const newMap = new Map({
       container: mapContainer.current ?? "",
       style: Config.MAPBOX_STYLE_URI,
+      accessToken: Config.MAPBOX_API_KEY,
       minZoom: 8,
       center: [0.014, 0.014],
     });
