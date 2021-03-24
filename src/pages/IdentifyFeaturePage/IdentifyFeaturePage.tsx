@@ -40,13 +40,15 @@ import { toast } from "react-toastify";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
 import { useTranslation } from "react-i18next";
 
-import CutConduitSvg from "../../assets/cut-conduit.svg";
-import PencilSvg from "../../assets/pencil.svg";
-import PlusSvg from "../../assets/plus.svg";
-import DisconnectSvg from "../../assets/disconnect.svg";
-import ConnectSvg from "../../assets/connect.svg";
-import PutInContainerSvg from "../../assets/put-in-container.svg";
-import RemoveFromContainerSvg from "../../assets/remove-from-container.svg";
+import {
+  ConnectSvg,
+  CutConduitSvg,
+  DisconnectSvg,
+  PencilSvg,
+  PlusSvg,
+  PutInContainerSvg,
+  RemoveFromContainerSvg,
+} from "../../assets";
 
 function IdentifyFeaturePage() {
   const client = useClient();
