@@ -36,6 +36,10 @@
       "CompressionConduitConnector": "Compression conduit connector",
       "Kind": "Kind",
       "Function": "Function",
+      "Error has occured": "Error has occured",
+      "No identified feature": "No identified feature",
+      "No span segment selected": "No span segment selected",
+      "No node container selected": "No node container selected",
       "CENTRAL_OFFICE_BIG": "Central office big",
       "CENTRAL_OFFICE_MEDIUM": "Central office medium",
       "CENTRAL_OFFICE_SMALL": "Central office small",
@@ -69,7 +73,21 @@
       "ROAD_CROSSOVER_DUCT_BANK": "Road crossover duct bank",
       "MICRO_TRENCHING": "Micro-trenching",
       "TUNNEL": "Tunnel",
-      "INDOOR": "Indoor"
+      "INDOOR": "Indoor",
+      "SPAN_EQUIPMENT_ALREADY_AFFIXED_TO_NODE_CONTAINER": "Span equipment already affixed to node container",
+      "SPAN_EQUIPMENT_NOT_AFFIXED_TO_NODE_CONTAINER": "Span equipment not affixed to node container",
+      "OUTER_SPAN_IS_NOT_CUT": "Outer span is not cut",
+      "SPAN_SEGMENT_ALREADY_CONNECTED": "Span segment already connected",
+      "EXPECTED_SPAN_SEGMENTS_FROM_TWO_SPAN_EQUIPMENT": "The command requires that inner and / or outer spansegment belonging to two different spansegments be selected",
+      "EXPECTED_SAME_NUMBER_OF_SPAN_SEGMENTS_BELONGING_TO_TWO_SPAN_EQUIPMENT": "If only the end of the inner tube is selected, then the number of inner tubes must be the same in the two multi-tubes that are connected",
+      "EXPECTED_SAME_SPECIFICATIONS_OF_SPAN_SEGMENTS_BELONGING_TO_TWO_SPAN_EQUIPMENT": "If more than two inner tubes are selected, then the type of inner tube must be the same in the multi-tubes that are connected",
+      "SPAN_EQUIPMENT_IS_NOT_AFFIXED_TO_NODE_CONTAINER": "The command requires that the pipe or cable be attached to a structure",
+      "SPAN_SEGMENT_IS_CONNECTED_INSIDE_NODE_CONTAINER": "Cannot release the pipe or cable from the structure as long as it is connected",
+      "SPAN_SEGMENT_IS_CUT_INSIDE_NODE_CONTAINER": "Cannot release a continuous pipe from the structure if the inner pipe is cut",
+      "SPAN_SEGMENTS_ARE_NOT_CONNECTED": "The command requires that the pipe or cable be connected",
+      "EXPECTED_A_SPAN_SEGMENT_FROM_TWO_SPAN_EQUIPMENT": "The command requires two segment to be selected",
+      "NODE_CONTAINER_ALREADY_EXISTS_IN_ROUTE_NODE": "A structure is already located at the node. Only one structure is allowed per route node",
+      "SPAN_EQUIPMENT_CANNOT_BE_CUT_AT_ENDS": "It is not possible to cut in a pipe or cable that ends in the trace node"
     }
   },
   "dk": {
@@ -109,6 +127,10 @@
       "CompressionConduitConnector": "Kompressionsmuffe",
       "Kind": "Strukturtype",
       "Function": "Funktion",
+      "Error has occured": "Error has occured",
+      "No identified feature": "Ingen selekterede features",
+      "No span segment selected": "Ingen selekterede segmenter",
+      "No node container selected": "Ingen valgt struktur",
       "CENTRAL_OFFICE_BIG": "Teknikhus",
       "CENTRAL_OFFICE_MEDIUM": "Core teknikhus",
       "CENTRAL_OFFICE_SMALL": "Teknikhus",
@@ -142,7 +164,21 @@
       "ROAD_CROSSOVER_DUCT_BANK": "Rørblok",
       "MICRO_TRENCHING": "Micro-trenching",
       "TUNNEL": "Tunnel",
-      "INDOOR": "Indendørs"
+      "INDOOR": "Indendørs",
+      "SPAN_EQUIPMENT_ALREADY_AFFIXED_TO_NODE_CONTAINER": "Røret eller kablet er allerede fastgjort til en struktur",
+      "SPAN_EQUIPMENT_NOT_AFFIXED_TO_NODE_CONTAINER": "Kommandoen kræver at røret eller kablet er fastgjort til en struktur",
+      "OUTER_SPAN_IS_NOT_CUT": "Kommandoen kræver at ydrekappen på røret eller kablet også klippes",
+      "SPAN_SEGMENT_ALREADY_CONNECTED": "En eller flere af de valgte rør er allerede forbundet",
+      "EXPECTED_SPAN_SEGMENTS_FROM_TWO_SPAN_EQUIPMENT": "Kommandoen kræver at inder- og/eller yderrør tilhørende to forskellige rør vælges",
+      "EXPECTED_SAME_NUMBER_OF_SPAN_SEGMENTS_BELONGING_TO_TWO_SPAN_EQUIPMENT": "Hvis mere end to inderrør er valgt, så skal antal af inderrør være det samme i de to multirør som konnekteres",
+      "EXPECTED_SAME_SPECIFICATIONS_OF_SPAN_SEGMENTS_BELONGING_TO_TWO_SPAN_EQUIPMENT": "Hvis mere end to inderrør er valgt, så skal typen på inderrør være det samme i de multirør som konnekteres",
+      "SPAN_EQUIPMENT_IS_NOT_AFFIXED_TO_NODE_CONTAINER": "Kommandoen kræver at røret eller kablet er fastgjort til en struktur",
+      "SPAN_SEGMENT_IS_CONNECTED_INSIDE_NODE_CONTAINER": "Kan ikke frigøre røret eller kablet fra strukturen så længe det er konnekteret",
+      "SPAN_SEGMENT_IS_CUT_INSIDE_NODE_CONTAINER": "Kan ikke frigøre et gennemløbende rør fra strukturen hvis inderrør er klippet",
+      "SPAN_SEGMENTS_ARE_NOT_CONNECTED": "Kommandoen kræver at røret eller kablet er forbundet",
+      "EXPECTED_A_SPAN_SEGMENT_FROM_TWO_SPAN_EQUIPMENT": "Kommandoen kræver at to rør vælges",
+      "NODE_CONTAINER_ALREADY_EXISTS_IN_ROUTE_NODE": "En struktur er allerede placeret i knudepunktet. Kun én struktur er tilladt per tracé-knudepunkt",
+      "SPAN_EQUIPMENT_CANNOT_BE_CUT_AT_ENDS": "Det er ikke muligt at klippe i et rør eller kabel som ender i tracé-knudepunktet"
     }
   }
 }

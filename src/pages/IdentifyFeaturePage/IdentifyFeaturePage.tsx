@@ -157,11 +157,11 @@ function IdentifyFeaturePage() {
     )?.properties?.refId as string;
 
     if (!nodeContainerId) {
-      toast.error("No node container selected");
+      toast.error(t("No node container selected"));
       return;
     }
     if (!spanSegmentId) {
-      toast.error("No segment selected");
+      toast.error(t("No span segment selected"));
       return;
     }
 
@@ -185,11 +185,13 @@ function IdentifyFeaturePage() {
 
     const { data } = await affixSpanEquipmentMutation(parameters);
     if (data?.spanEquipment.affixSpanEquipmentToNodeContainer.isSuccess) {
-      toast.success("Affix span equipment successful");
       selectedFeatures.current = [];
     } else {
       toast.error(
-        data?.spanEquipment.affixSpanEquipmentToNodeContainer.errorCode
+        t(
+          data?.spanEquipment.affixSpanEquipmentToNodeContainer.errorCode ??
+            "Error has occured"
+        )
       );
     }
 
@@ -206,7 +208,7 @@ function IdentifyFeaturePage() {
       .map((x) => x.properties?.refId as string);
 
     if (!identifiedFeature?.id) {
-      toast.error("No identified feature");
+      toast.error(t("No identified feature"));
       return;
     }
 
@@ -217,10 +219,11 @@ function IdentifyFeaturePage() {
 
     const { data } = await cutSpanSegmentsMutation(parameters);
     if (data?.spanEquipment.cutSpanSegments.isSuccess) {
-      toast.success("Span segments successfully cut");
       selectedFeatures.current = [];
     } else {
-      toast.error(data?.spanEquipment.cutSpanSegments.errorCode);
+      toast.error(
+        t(data?.spanEquipment.cutSpanSegments.errorCode ?? "Error has occured")
+      );
     }
   };
 
@@ -232,7 +235,7 @@ function IdentifyFeaturePage() {
       .map((x) => x.properties?.refId as string);
 
     if (!identifiedFeature?.id) {
-      toast.error("No identified feature");
+      toast.error(t("No identified feature"));
       return;
     }
 
@@ -243,10 +246,14 @@ function IdentifyFeaturePage() {
 
     const { data } = await connectSpanSegmentsMutation(parameters);
     if (data?.spanEquipment.connectSpanSegments.isSuccess) {
-      toast.success("Span segments successfully connected");
       selectedFeatures.current = [];
     } else {
-      toast.error(data?.spanEquipment.connectSpanSegments.errorCode);
+      toast.error(
+        t(
+          data?.spanEquipment.connectSpanSegments.errorCode ??
+            "Error has occured"
+        )
+      );
     }
   };
 
@@ -258,7 +265,7 @@ function IdentifyFeaturePage() {
       .map((x) => x.properties?.refId as string);
 
     if (!identifiedFeature?.id) {
-      toast.error("No identified feature");
+      toast.error(t("No identified feature"));
       return;
     }
 
@@ -269,10 +276,14 @@ function IdentifyFeaturePage() {
 
     const { data } = await disconnectSpanSegmentsMutation(parameters);
     if (data?.spanEquipment.disconnectSpanSegments.isSuccess) {
-      toast.success("Span segments successfully disconnected");
       selectedFeatures.current = [];
     } else {
-      toast.error(data?.spanEquipment.disconnectSpanSegments.errorCode);
+      toast.error(
+        t(
+          data?.spanEquipment.disconnectSpanSegments.errorCode ??
+            "Error has occured"
+        )
+      );
     }
   };
 
@@ -286,12 +297,12 @@ function IdentifyFeaturePage() {
       .map((x) => x.properties?.refId as string);
 
     if (spanSegmentToDetach.length === 0) {
-      toast.error("No span segments selected");
+      toast.error(t("No span segments selected"));
       return;
     }
 
     if (!identifiedFeature?.id) {
-      toast.error("No identified feature");
+      toast.error(t("No identified feature"));
       return;
     }
 
@@ -302,11 +313,13 @@ function IdentifyFeaturePage() {
 
     const { data } = await detachSpanEquipmentMutation(parameters);
     if (data?.spanEquipment.detachSpanEquipmentFromNodeContainer.isSuccess) {
-      toast.success("Span segments successfully disconnected");
       selectedFeatures.current = [];
     } else {
       toast.error(
-        data?.spanEquipment.detachSpanEquipmentFromNodeContainer.errorCode
+        t(
+          data?.spanEquipment.detachSpanEquipmentFromNodeContainer.errorCode ??
+            "Error has occurred"
+        )
       );
     }
   };
