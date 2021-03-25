@@ -51,6 +51,8 @@
   visibility: hidden;
   pointer-events: none;
   z-index: 2;
+  max-height: 600px;
+  overflow-y: auto;
 }
 
 .menu-select.open .menu-options {

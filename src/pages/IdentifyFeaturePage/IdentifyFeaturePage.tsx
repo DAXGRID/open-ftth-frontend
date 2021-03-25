@@ -36,6 +36,7 @@ import {
   QueryRouteNetworkElementResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
+import AddInnerSpanStructure from "./AddInnerSpanStructure";
 import { toast } from "react-toastify";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
 import { useTranslation } from "react-i18next";
@@ -57,6 +58,7 @@ function IdentifyFeaturePage() {
   const [editMode, setEditMode] = useState(false);
   const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
   const [showAddContainer, setShowAddContainer] = useState(false);
+  const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
   const { identifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [envelope, setEnvelope] = useState<Envelope>({
@@ -370,6 +372,13 @@ function IdentifyFeaturePage() {
         <AddContainer />
       </ModalContainer>
 
+      <ModalContainer
+        show={showHandleInnerConduit}
+        closeCallback={() => setShowHandleInnerConduit(false)}
+      >
+        <AddInnerSpanStructure />
+      </ModalContainer>
+
       {identifiedFeature.type === "RouteNode" && (
         <div className="feature-information-container">
           <div className="feature-informations">
@@ -442,6 +451,12 @@ function IdentifyFeaturePage() {
             icon={PlusSvg}
             action={() => setShowAddContainer(true)}
             title="Add node container"
+            disabled={!editMode}
+          />
+          <ActionButton
+            icon={PlusSvg}
+            action={() => setShowHandleInnerConduit(true)}
+            title="Handle inner conduits"
             disabled={!editMode}
           />
         </DiagramMenu>
