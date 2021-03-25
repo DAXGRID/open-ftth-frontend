@@ -5,8 +5,7 @@ export type NumberPickerProps = {
 
 function NumberPicker({ value, setValue }: NumberPickerProps) {
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const s = (event.target.value as unknown) as number;
-    setValue(s);
+    setValue(Number(event.target.value));
   };
 
   return (

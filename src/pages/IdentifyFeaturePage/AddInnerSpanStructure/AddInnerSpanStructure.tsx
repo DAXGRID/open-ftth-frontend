@@ -41,15 +41,16 @@ function AddInnerSpanStructure({
   const addInnerSpanStructure = async () => {
     const parameters: AddAdditionalInnerSpanStructuresParameter = {
       spanEquipmentOrSegmentId: selectedOuterConduit,
-      spanStructureSpecificationIds: [selected],
+      spanStructureSpecificationIds: Array(count).fill(selected),
     };
-    console.log(parameters);
 
     const result = await client
       .mutation(ADD_ADDITIONAL_INNER_SPAN_STRUCTURES, parameters)
       .toPromise();
 
-    console.log(result.data);
+    if (result.error) {
+      throw new Error("Failed");
+    }
   };
 
   if (response.fetching) return <></>;
