@@ -6,7 +6,7 @@ export interface AddAdditionalInnerSpanStructuresParameter {
 export const ADD_ADDITIONAL_INNER_SPAN_STRUCTURES = `
 mutation (
   $spanEquipmentOrSegmentId: ID!,
-  $spanStructureSpecificationIds: [ID!]!,
+  $spanStructureSpecificationIds: [ID]!,
 ) {
   spanEquipment {
     addAdditionalInnerSpanStructures(

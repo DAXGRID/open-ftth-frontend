@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "urql";
+import { useQuery, useClient } from "urql";
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import NumberPicker from "../../../components/NumberPicker";
@@ -7,6 +7,8 @@ import {
   SPAN_EQUIPMENT_SPEFICIATIONS_QUERY,
   SpanEquipmentSpecificationsResponse,
   SpanEquipmentSpecification,
+  ADD_ADDITIONAL_INNER_SPAN_STRUCTURES,
+  AddAdditionalInnerSpanStructuresParameter,
 } from "./AddInnerSpanStructureGql";
 
 const createSelectOptions = (
@@ -22,12 +24,33 @@ const createSelectOptions = (
     });
 };
 
-function AddInnerSpanStructure() {
+type AddInnerSpanStructureProps = {
+  selectedOuterConduit: string;
+};
+
+function AddInnerSpanStructure({
+  selectedOuterConduit,
+}: AddInnerSpanStructureProps) {
   const [count, setCount] = useState(0);
   const [selected, setSelected] = useState("");
+  const client = useClient();
   const [response] = useQuery<SpanEquipmentSpecificationsResponse>({
     query: SPAN_EQUIPMENT_SPEFICIATIONS_QUERY,
   });
+
+  const addInnerSpanStructure = async () => {
+    const parameters: AddAdditionalInnerSpanStructuresParameter = {
+      spanEquipmentOrSegmentId: selectedOuterConduit,
+      spanStructureSpecificationIds: [selected],
+    };
+    console.log(parameters);
+
+    const result = await client
+      .mutation(ADD_ADDITIONAL_INNER_SPAN_STRUCTURES, parameters)
+      .toPromise();
+
+    console.log(result.data);
+  };
 
   if (response.fetching) return <></>;
 
@@ -43,7 +66,10 @@ function AddInnerSpanStructure() {
         />
         <NumberPicker value={count} setValue={(value) => setCount(value)} />
       </div>
-      <DefaultButton onClick={() => {}} innerText="Place" />
+      <DefaultButton
+        onClick={async () => await addInnerSpanStructure()}
+        innerText="Place"
+      />
     </div>
   );
 }

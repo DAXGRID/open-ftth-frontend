@@ -376,7 +376,12 @@ function IdentifyFeaturePage() {
         show={showHandleInnerConduit}
         closeCallback={() => setShowHandleInnerConduit(false)}
       >
-        <AddInnerSpanStructure />
+        <AddInnerSpanStructure
+          selectedOuterConduit={
+            selectedFeatures.current.find((x) => x.source === "OuterConduit")
+              ?.properties?.refId ?? ""
+          }
+        />
       </ModalContainer>
 
       {identifiedFeature.type === "RouteNode" && (
