@@ -252,7 +252,7 @@ mutation (
 export interface SpanSegmentTraceResponse {
   utilityNetwork: {
     spanSegmentTrace: {
-      routeNetworkSegmentIds: string[];
+      routeNetworkSegmentIds?: string[];
     };
   };
 }
