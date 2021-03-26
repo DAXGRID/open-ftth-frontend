@@ -1,7 +1,6 @@
 import { useRef, useEffect } from "react";
 import mapboxgl, { Map, MapboxGeoJSONFeature, PointLike } from "mapbox-gl";
 import { Feature } from "geojson";
-import Config from "../../config";
 import {
   getLayer,
   createFeature,
@@ -180,8 +179,12 @@ function SchematicDiagram({
 
     const newMap = new Map({
       container: mapContainer.current ?? "",
-      style: Config.MAPBOX_STYLE_URI,
-      accessToken: Config.MAPBOX_API_KEY,
+      style: {
+        version: 8,
+        sources: {},
+        layers: [],
+        glyphs: "http://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+      },
       minZoom: 8,
       center: [0.014, 0.014],
     });
