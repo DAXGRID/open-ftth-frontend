@@ -158,7 +158,7 @@ export function getLayer(name: string): AnyLayer {
         layout: {
           "text-allow-overlap": true,
           "text-size": 14,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
+          "text-font": ["Open Sans Bold"],
           "text-field": ["get", "label"],
           "text-anchor": "right",
           "text-justify": "right",
@@ -177,7 +177,7 @@ export function getLayer(name: string): AnyLayer {
         layout: {
           "text-allow-overlap": true,
           "text-size": 14,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
+          "text-font": ["Open Sans Bold"],
           "text-field": ["get", "label"],
           "text-anchor": "left",
           "text-justify": "left",
@@ -196,7 +196,7 @@ export function getLayer(name: string): AnyLayer {
         layout: {
           "text-allow-overlap": true,
           "text-size": 14,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
+          "text-font": ["Open Sans Bold"],
           "text-field": ["get", "label"],
           "text-anchor": "right",
           "text-justify": "right",
@@ -216,7 +216,7 @@ export function getLayer(name: string): AnyLayer {
         layout: {
           "text-allow-overlap": true,
           "text-size": 14,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
+          "text-font": ["Open Sans Bold"],
           "text-field": ["get", "label"],
           "text-anchor": "left",
           "text-justify": "left",
@@ -236,7 +236,7 @@ export function getLayer(name: string): AnyLayer {
         layout: {
           "text-allow-overlap": true,
           "text-size": 14,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
+          "text-font": ["Open Sans Bold"],
           "text-field": ["get", "label"],
           "text-anchor": "left",
           "text-justify": "left",
@@ -256,7 +256,7 @@ export function getLayer(name: string): AnyLayer {
         layout: {
           "text-allow-overlap": true,
           "text-size": 14,
-          "text-font": ["PT Sans Narrow Bold", "Arial Unicode MS Regular"],
+          "text-font": ["Open Sans Bold"],
           "text-field": ["get", "label"],
           "text-anchor": "left",
           "text-justify": "left",
