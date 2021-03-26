@@ -95,7 +95,7 @@ function AddInnerSpanStructure({
       </div>
       <DefaultButton
         onClick={async () => await addInnerSpanStructure()}
-        innerText="Place"
+        innerText={t("Add inner conduit")}
       />
     </div>
   );

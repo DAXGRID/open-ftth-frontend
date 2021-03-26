@@ -88,7 +88,8 @@
       "SPAN_SEGMENTS_ARE_NOT_CONNECTED": "The command requires that the pipe or cable be connected",
       "EXPECTED_A_SPAN_SEGMENT_FROM_TWO_SPAN_EQUIPMENT": "The command requires two segment to be selected",
       "NODE_CONTAINER_ALREADY_EXISTS_IN_ROUTE_NODE": "A structure is already located at the node. Only one structure is allowed per route node",
-      "SPAN_EQUIPMENT_CANNOT_BE_CUT_AT_ENDS": "It is not possible to cut in a pipe or cable that ends in the trace node"
+      "SPAN_EQUIPMENT_CANNOT_BE_CUT_AT_ENDS": "It is not possible to cut in a pipe or cable that ends in the trace node",
+      "Add inner conduit": "Add inner conduit"
     }
   },
   "dk": {
@@ -180,7 +181,8 @@
       "SPAN_SEGMENTS_ARE_NOT_CONNECTED": "Kommandoen kræver at røret eller kablet er forbundet",
       "EXPECTED_A_SPAN_SEGMENT_FROM_TWO_SPAN_EQUIPMENT": "Kommandoen kræver at to rør vælges",
       "NODE_CONTAINER_ALREADY_EXISTS_IN_ROUTE_NODE": "En struktur er allerede placeret i knudepunktet. Kun én struktur er tilladt per tracé-knudepunkt",
-      "SPAN_EQUIPMENT_CANNOT_BE_CUT_AT_ENDS": "Det er ikke muligt at klippe i et rør eller kabel som ender i tracé-knudepunktet"
+      "SPAN_EQUIPMENT_CANNOT_BE_CUT_AT_ENDS": "Det er ikke muligt at klippe i et rør eller kabel som ender i tracé-knudepunktet",
+      "Add inner conduit": "Tilføj inderrør"
     }
   }
 }
