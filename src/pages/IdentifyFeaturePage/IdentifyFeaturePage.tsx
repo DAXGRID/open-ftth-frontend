@@ -367,14 +367,20 @@ function IdentifyFeaturePage() {
     <div className="identify-feature-page">
       <ModalContainer
         show={showAddContainer}
-        closeCallback={() => setShowAddContainer(false)}
+        closeCallback={() => {
+          setShowAddContainer(false);
+          selectedFeatures.current = [];
+        }}
       >
         <AddContainer />
       </ModalContainer>
 
       <ModalContainer
         show={showHandleInnerConduit}
-        closeCallback={() => setShowHandleInnerConduit(false)}
+        closeCallback={() => {
+          setShowHandleInnerConduit(false);
+          selectedFeatures.current = [];
+        }}
       >
         <AddInnerSpanStructure
           selectedOuterConduit={

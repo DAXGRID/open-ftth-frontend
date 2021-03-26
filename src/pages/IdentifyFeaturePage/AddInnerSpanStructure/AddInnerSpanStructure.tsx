@@ -3,13 +3,16 @@ import { useQuery, useClient } from "urql";
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import NumberPicker from "../../../components/NumberPicker";
+import { useTranslation } from "react-i18next";
 import {
   SPAN_EQUIPMENT_SPEFICIATIONS_QUERY,
   SpanEquipmentSpecificationsResponse,
   SpanEquipmentSpecification,
   ADD_ADDITIONAL_INNER_SPAN_STRUCTURES,
   AddAdditionalInnerSpanStructuresParameter,
+  AddAdditionalInnerSpanStructuresResponse,
 } from "./AddInnerSpanStructureGql";
+import { toast } from "react-toastify";
 
 const createSelectOptions = (
   specifications: SpanEquipmentSpecification[]
@@ -31,29 +34,52 @@ type AddInnerSpanStructureProps = {
 function AddInnerSpanStructure({
   selectedOuterConduit,
 }: AddInnerSpanStructureProps) {
-  const [count, setCount] = useState(0);
-  const [selected, setSelected] = useState("");
+  const { t } = useTranslation();
+  const [count, setCount] = useState(1);
+  const [selected, setSelected] = useState<string>();
   const client = useClient();
   const [response] = useQuery<SpanEquipmentSpecificationsResponse>({
     query: SPAN_EQUIPMENT_SPEFICIATIONS_QUERY,
   });
 
   const addInnerSpanStructure = async () => {
+    if (!selectedOuterConduit) {
+      toast.error(t("No outer conduit selected"));
+      return;
+    }
+
     const parameters: AddAdditionalInnerSpanStructuresParameter = {
       spanEquipmentOrSegmentId: selectedOuterConduit,
       spanStructureSpecificationIds: Array(count).fill(selected),
     };
 
     const result = await client
-      .mutation(ADD_ADDITIONAL_INNER_SPAN_STRUCTURES, parameters)
+      .mutation<AddAdditionalInnerSpanStructuresResponse>(
+        ADD_ADDITIONAL_INNER_SPAN_STRUCTURES,
+        parameters
+      )
       .toPromise();
 
-    if (result.error) {
-      throw new Error("Failed");
+    if (
+      !result.data?.spanEquipment.addAdditionalInnerSpanStructures.isSuccess
+    ) {
+      toast.error(
+        t(
+          result.data?.spanEquipment.addAdditionalInnerSpanStructures
+            .errorCode ?? ""
+        )
+      );
     }
   };
 
   if (response.fetching) return <></>;
+
+  if (!selected) {
+    setSelected(
+      response.data?.utilityNetwork.spanEquipmentSpecifications[0]
+        .outerSpanStructureSpecificationId
+    );
+  }
 
   return (
     <div className="add-inner-span-structure">

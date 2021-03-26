@@ -3,6 +3,15 @@ export interface AddAdditionalInnerSpanStructuresParameter {
   spanStructureSpecificationIds: string[];
 }
 
+export interface AddAdditionalInnerSpanStructuresResponse {
+  spanEquipment: {
+    addAdditionalInnerSpanStructures: {
+      errorCode?: string;
+      isSuccess: boolean;
+    };
+  };
+}
+
 export const ADD_ADDITIONAL_INNER_SPAN_STRUCTURES = `
 mutation (
   $spanEquipmentOrSegmentId: ID!,
