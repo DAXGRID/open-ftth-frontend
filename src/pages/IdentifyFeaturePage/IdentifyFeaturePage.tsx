@@ -327,22 +327,21 @@ function IdentifyFeaturePage() {
   };
 
   const onSelectedFeature = useCallback(
-    (feature: MapboxGeoJSONFeature) => {
+    async (feature: MapboxGeoJSONFeature) => {
       const isSelected = feature.state?.selected as boolean;
 
       if (!editMode) {
         if (isSelected) {
-          client
+          const response = await client
             .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
               spanSegmentId: feature.properties?.refId,
             })
-            .toPromise()
-            .then((x) => {
-              highlightFeatures(
-                x.data?.utilityNetwork.spanSegmentTrace
-                  .routeNetworkSegmentIds ?? []
-              );
-            });
+            .toPromise();
+
+          highlightFeatures(
+            response.data?.utilityNetwork.spanSegmentTrace
+              ?.routeNetworkSegmentIds ?? []
+          );
         } else {
           highlightFeatures([]);
         }
@@ -475,7 +474,7 @@ function IdentifyFeaturePage() {
       <SchematicDiagram
         diagramObjects={diagramObjects}
         envelope={envelope}
-        onSelectFeature={onSelectedFeature}
+        onSelectFeature={async (x) => await onSelectedFeature(x)}
         editMode={editMode}
       />
     </div>
