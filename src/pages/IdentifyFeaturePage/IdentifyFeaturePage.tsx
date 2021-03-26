@@ -474,7 +474,7 @@ function IdentifyFeaturePage() {
       <SchematicDiagram
         diagramObjects={diagramObjects}
         envelope={envelope}
-        onSelectFeature={async (x) => await onSelectedFeature(x)}
+        onSelectFeature={onSelectedFeature}
         editMode={editMode}
       />
     </div>
