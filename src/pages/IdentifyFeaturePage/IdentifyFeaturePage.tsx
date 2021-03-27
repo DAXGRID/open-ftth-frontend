@@ -421,7 +421,10 @@ function IdentifyFeaturePage() {
           <ToggleButton
             icon={PencilSvg}
             toggled={editMode}
-            toggle={() => setEditMode(!editMode)}
+            toggle={() => {
+              setEditMode(!editMode);
+              selectedFeatures.current = [];
+            }}
             id="Edit"
             title="Edit mode"
           />
