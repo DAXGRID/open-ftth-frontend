@@ -167,11 +167,9 @@ function AddContainer() {
 
     const { data } = await placeNodeContainerMutation(parameters);
 
-    if (data?.nodeContainer.placeNodeContainerInRouteNetwork.isSuccess) {
-      toast.success(t("Container placed"));
-    } else {
+    if (!data?.nodeContainer.placeNodeContainerInRouteNetwork.isSuccess) {
       toast.error(
-        data?.nodeContainer.placeNodeContainerInRouteNetwork.errorCode
+        t(data?.nodeContainer.placeNodeContainerInRouteNetwork.errorCode ?? "")
       );
     }
   };
