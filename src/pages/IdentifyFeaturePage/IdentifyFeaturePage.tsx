@@ -345,7 +345,7 @@ function IdentifyFeaturePage() {
     }
 
     const confirmed = window.confirm(
-      "Are you sure that you want to delete it?"
+      t("Are you sure you want to delete the selected object?")
     );
     if (!confirmed) return;
 
@@ -355,7 +355,9 @@ function IdentifyFeaturePage() {
       })
       .toPromise();
 
-    if (!response.data?.spanEquipment.removeSpanStructure.isSuccess) {
+    if (response.data?.spanEquipment.removeSpanStructure.isSuccess) {
+      selectedFeatures.current = [];
+    } else {
       toast.error(
         t(response.data?.spanEquipment.removeSpanStructure.errorCode ?? "")
       );
