@@ -183,7 +183,7 @@ function SchematicDiagram({
         version: 8,
         sources: {},
         layers: [],
-        glyphs: "http://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+        glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
       },
       minZoom: 8,
       center: [0.014, 0.014],
