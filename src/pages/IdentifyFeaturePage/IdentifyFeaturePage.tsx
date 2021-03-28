@@ -148,6 +148,8 @@ function IdentifyFeaturePage() {
     setDiagramObjects([...diagramObjects]);
     setEnvelope({ ...envelope });
     setShowAddContainer(false);
+    setShowHandleInnerConduit(false);
+    selectedFeatures.current = [];
   }, [res, setDiagramObjects, setEnvelope, setShowAddContainer]);
 
   const affixSpanEquipment = async () => {
@@ -189,9 +191,7 @@ function IdentifyFeaturePage() {
     };
 
     const { data } = await affixSpanEquipmentMutation(parameters);
-    if (data?.spanEquipment.affixSpanEquipmentToNodeContainer.isSuccess) {
-      selectedFeatures.current = [];
-    } else {
+    if (!data?.spanEquipment.affixSpanEquipmentToNodeContainer.isSuccess) {
       toast.error(
         t(
           data?.spanEquipment.affixSpanEquipmentToNodeContainer.errorCode ??
@@ -199,8 +199,6 @@ function IdentifyFeaturePage() {
         )
       );
     }
-
-    selectedFeatures.current = [];
   };
 
   const cutSpanSegments = async () => {
@@ -223,9 +221,7 @@ function IdentifyFeaturePage() {
     };
 
     const { data } = await cutSpanSegmentsMutation(parameters);
-    if (data?.spanEquipment.cutSpanSegments.isSuccess) {
-      selectedFeatures.current = [];
-    } else {
+    if (!data?.spanEquipment.cutSpanSegments.isSuccess) {
       toast.error(
         t(data?.spanEquipment.cutSpanSegments.errorCode ?? "Error has occured")
       );
@@ -250,9 +246,7 @@ function IdentifyFeaturePage() {
     };
 
     const { data } = await connectSpanSegmentsMutation(parameters);
-    if (data?.spanEquipment.connectSpanSegments.isSuccess) {
-      selectedFeatures.current = [];
-    } else {
+    if (!data?.spanEquipment.connectSpanSegments.isSuccess) {
       toast.error(
         t(
           data?.spanEquipment.connectSpanSegments.errorCode ??
@@ -280,9 +274,7 @@ function IdentifyFeaturePage() {
     };
 
     const { data } = await disconnectSpanSegmentsMutation(parameters);
-    if (data?.spanEquipment.disconnectSpanSegments.isSuccess) {
-      selectedFeatures.current = [];
-    } else {
+    if (!data?.spanEquipment.disconnectSpanSegments.isSuccess) {
       toast.error(
         t(
           data?.spanEquipment.disconnectSpanSegments.errorCode ??
@@ -317,9 +309,7 @@ function IdentifyFeaturePage() {
     };
 
     const { data } = await detachSpanEquipmentMutation(parameters);
-    if (data?.spanEquipment.detachSpanEquipmentFromNodeContainer.isSuccess) {
-      selectedFeatures.current = [];
-    } else {
+    if (!data?.spanEquipment.detachSpanEquipmentFromNodeContainer.isSuccess) {
       toast.error(
         t(
           data?.spanEquipment.detachSpanEquipmentFromNodeContainer.errorCode ??
@@ -355,9 +345,7 @@ function IdentifyFeaturePage() {
       })
       .toPromise();
 
-    if (response.data?.spanEquipment.removeSpanStructure.isSuccess) {
-      selectedFeatures.current = [];
-    } else {
+    if (!response.data?.spanEquipment.removeSpanStructure.isSuccess) {
       toast.error(
         t(response.data?.spanEquipment.removeSpanStructure.errorCode ?? "")
       );
@@ -404,20 +392,14 @@ function IdentifyFeaturePage() {
     <div className="identify-feature-page">
       <ModalContainer
         show={showAddContainer}
-        closeCallback={() => {
-          setShowAddContainer(false);
-          selectedFeatures.current = [];
-        }}
+        closeCallback={() => setShowAddContainer(false)}
       >
         <AddContainer />
       </ModalContainer>
 
       <ModalContainer
         show={showHandleInnerConduit}
-        closeCallback={() => {
-          setShowHandleInnerConduit(false);
-          selectedFeatures.current = [];
-        }}
+        closeCallback={() => setShowHandleInnerConduit(false)}
       >
         <AddInnerSpanStructure
           selectedOuterConduit={
