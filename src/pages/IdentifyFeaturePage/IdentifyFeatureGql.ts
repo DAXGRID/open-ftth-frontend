@@ -296,3 +296,23 @@ query ($routeElementId: ID!) {
   }
 }
 `;
+
+export interface RemoveSpanStructureResponse {
+  spanEquipment: {
+    removeSpanStructure: {
+      isSuccess: boolean;
+      errorCode: string;
+    };
+  };
+}
+
+export const REMOVE_SPAN_STRUCTURE = `
+mutation ($spanSegmentId: ID!) {
+  spanEquipment {
+    removeSpanStructure(spanSegmentId: $spanSegmentId) {
+      isSuccess
+      errorCode
+    }
+  }
+}
+`;
