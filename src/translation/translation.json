@@ -95,9 +95,9 @@
       "CANNOT_REMOVE_SPAN_STRUCTURES_FROM_FIXED_SPAN_EQUIPMENT": "It is not possible to remove inner conduit from a prefabricated multi-conduit",
       "CANNOT_REMOVE_SPAN_STRUCTURE_WITH_CONNECTED_SEGMENTS_FROM_SPAN_EQUIPMENT": "It is not possible to remove inner conduits that are connected ",
       "CANNOT_REMOVE_SPAN_EQUIPMENT_WITH_CONNECTED_SEGMENTS": "It is not possible to remove a conduit that is connected",
-      "Are you sure that you want to delete it?": "Are you sure that you want to delete it?",
-      "You can only delete one object at a time": "Du kan kun slette ét objekt af gangen",
-      "No objects selected": "Ingen objekter er selekteret"
+      "Are you sure you want to delete the selected object?": "Are you sure you want to delete the selected object?",
+      "You can only delete one object at a time": "You can only delete one object at a time",
+      "No objects selected": "No objects selected"
     }
   },
   "dk": {
@@ -196,7 +196,7 @@
       "CANNOT_REMOVE_SPAN_STRUCTURES_FROM_FIXED_SPAN_EQUIPMENT": "Det er ikke muligt at fjerne inderrør fra et præfabrikeret multirør",
       "CANNOT_REMOVE_SPAN_STRUCTURE_WITH_CONNECTED_SEGMENTS_FROM_SPAN_EQUIPMENT": "Det er ikke muligt at fjerne inderrør som er konnekteret",
       "CANNOT_REMOVE_SPAN_EQUIPMENT_WITH_CONNECTED_SEGMENTS": "Det er ikke muligt at fjerne et rør som er konnekteret",
-      "Are you sure that you want to delete it?": "Er du sikker på at du vil slette det valgte?",
+      "Are you sure you want to delete the selected object?": "Er du sikker på at du vil slette det valgte objekt?",
       "You can only delete one object at a time": "Du kan kun slette ét objekt af gangen",
       "No objects selected": "Ingen objekter er selekteret"
     }
