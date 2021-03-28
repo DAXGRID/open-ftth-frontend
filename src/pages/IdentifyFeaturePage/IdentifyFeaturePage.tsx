@@ -34,6 +34,8 @@ import {
   SpanSegmentTraceResponse,
   QUERY_ROUTE_NETWORK_ELEMENT,
   QueryRouteNetworkElementResponse,
+  REMOVE_SPAN_STRUCTURE,
+  RemoveSpanStructureResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
 import AddInnerSpanStructure from "./AddInnerSpanStructure";
@@ -49,6 +51,7 @@ import {
   PlusSvg,
   PutInContainerSvg,
   RemoveFromContainerSvg,
+  TrashCanSvg,
 } from "../../assets";
 
 function IdentifyFeaturePage() {
@@ -326,6 +329,39 @@ function IdentifyFeaturePage() {
     }
   };
 
+  const removeSpanStructure = async () => {
+    const spanSegmentsToRemove = selectedFeatures.current
+      .filter((x) => {
+        return x.layer.source === "OuterConduit" || "InnerConduit";
+      })
+      .map((x) => x.properties?.refId as string);
+
+    if (spanSegmentsToRemove.length > 1) {
+      toast.error(t("You can only delete one object at a time"));
+      return;
+    } else if (spanSegmentsToRemove.length === 0) {
+      toast.error(t("No objects selected"));
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Are you sure that you want to delete it?"
+    );
+    if (!confirmed) return;
+
+    const response = await client
+      .mutation<RemoveSpanStructureResponse>(REMOVE_SPAN_STRUCTURE, {
+        spanSegmentId: spanSegmentsToRemove[0],
+      })
+      .toPromise();
+
+    if (!response.data?.spanEquipment.removeSpanStructure.isSuccess) {
+      toast.error(
+        t(response.data?.spanEquipment.removeSpanStructure.errorCode ?? "")
+      );
+    }
+  };
+
   const onSelectedFeature = useCallback(
     async (feature: MapboxGeoJSONFeature) => {
       const isSelected = feature.state?.selected as boolean;
@@ -470,6 +506,12 @@ function IdentifyFeaturePage() {
             icon={PlusSvg}
             action={() => setShowHandleInnerConduit(true)}
             title="Handle inner conduits"
+            disabled={!editMode}
+          />
+          <ActionButton
+            icon={TrashCanSvg}
+            action={() => removeSpanStructure()}
+            title="Delete"
             disabled={!editMode}
           />
         </DiagramMenu>

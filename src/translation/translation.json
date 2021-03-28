@@ -80,16 +80,23 @@
       "OUTER_SPAN_IS_NOT_CUT": "Outer span is not cut",
       "SPAN_SEGMENT_ALREADY_CONNECTED": "Span segment already connected",
       "EXPECTED_SPAN_SEGMENTS_FROM_TWO_SPAN_EQUIPMENT": "The command requires that inner and / or outer spansegment belonging to two different spansegments be selected",
-      "EXPECTED_SAME_NUMBER_OF_SPAN_SEGMENTS_BELONGING_TO_TWO_SPAN_EQUIPMENT": "If only the end of the inner tube is selected, then the number of inner tubes must be the same in the two multi-tubes that are connected",
-      "EXPECTED_SAME_SPECIFICATIONS_OF_SPAN_SEGMENTS_BELONGING_TO_TWO_SPAN_EQUIPMENT": "If more than two inner tubes are selected, then the type of inner tube must be the same in the multi-tubes that are connected",
-      "SPAN_EQUIPMENT_IS_NOT_AFFIXED_TO_NODE_CONTAINER": "The command requires that the pipe or cable be attached to a structure",
-      "SPAN_SEGMENT_IS_CONNECTED_INSIDE_NODE_CONTAINER": "Cannot release the pipe or cable from the structure as long as it is connected",
-      "SPAN_SEGMENT_IS_CUT_INSIDE_NODE_CONTAINER": "Cannot release a continuous pipe from the structure if the inner pipe is cut",
-      "SPAN_SEGMENTS_ARE_NOT_CONNECTED": "The command requires that the pipe or cable be connected",
+      "EXPECTED_SAME_NUMBER_OF_SPAN_SEGMENTS_BELONGING_TO_TWO_SPAN_EQUIPMENT": "If only the end of the inner conduit is selected, then the number of inner tubes must be the same in the two multi-conduit that are connected",
+      "EXPECTED_SAME_SPECIFICATIONS_OF_SPAN_SEGMENTS_BELONGING_TO_TWO_SPAN_EQUIPMENT": "If more than two inner conduit are selected, then the type of inner tube must be the same in the multi-conduit that are connected",
+      "SPAN_EQUIPMENT_IS_NOT_AFFIXED_TO_NODE_CONTAINER": "The command requires that the conduit or cable be attached to a structure",
+      "SPAN_SEGMENT_IS_CONNECTED_INSIDE_NODE_CONTAINER": "Cannot release the conduit or cable from the structure as long as it is connected",
+      "SPAN_SEGMENT_IS_CUT_INSIDE_NODE_CONTAINER": "Cannot release a continuous conduit from the structure if the inner pipe is cut",
+      "SPAN_SEGMENTS_ARE_NOT_CONNECTED": "The command requires that the conduit or cable be connected",
       "EXPECTED_A_SPAN_SEGMENT_FROM_TWO_SPAN_EQUIPMENT": "The command requires two segment to be selected",
       "NODE_CONTAINER_ALREADY_EXISTS_IN_ROUTE_NODE": "A structure is already located at the node. Only one structure is allowed per route node",
-      "SPAN_EQUIPMENT_CANNOT_BE_CUT_AT_ENDS": "It is not possible to cut in a pipe or cable that ends in the trace node",
-      "Add inner conduit": "Add inner conduit"
+      "SPAN_EQUIPMENT_CANNOT_BE_CUT_AT_ENDS": "It is not possible to cut in a conduit or cable that ends in the trace node",
+      "Add inner conduit": "Add inner conduit",
+      "CANNOT_ADD_SPAN_STRUCTURES_TO_FIXED_SPAN_EQUIPMENT": "It is not possible to add inner conduit to a prefabricated multi-conduit ",
+      "CANNOT_REMOVE_SPAN_STRUCTURES_FROM_FIXED_SPAN_EQUIPMENT": "It is not possible to remove inner conduit from a prefabricated multi-conduit",
+      "CANNOT_REMOVE_SPAN_STRUCTURE_WITH_CONNECTED_SEGMENTS_FROM_SPAN_EQUIPMENT": "It is not possible to remove inner conduits that are connected ",
+      "CANNOT_REMOVE_SPAN_EQUIPMENT_WITH_CONNECTED_SEGMENTS": "It is not possible to remove a conduit that is connected",
+      "Are you sure that you want to delete it?": "Are you sure that you want to delete it?",
+      "You can only delete one object at a time": "Du kan kun slette ét objekt af gangen",
+      "No objects selected": "Ingen objekter er selekteret"
     }
   },
   "dk": {
@@ -182,7 +189,14 @@
       "EXPECTED_A_SPAN_SEGMENT_FROM_TWO_SPAN_EQUIPMENT": "Kommandoen kræver at to rør vælges",
       "NODE_CONTAINER_ALREADY_EXISTS_IN_ROUTE_NODE": "En struktur er allerede placeret i knudepunktet. Kun én struktur er tilladt per tracé-knudepunkt",
       "SPAN_EQUIPMENT_CANNOT_BE_CUT_AT_ENDS": "Det er ikke muligt at klippe i et rør eller kabel som ender i tracé-knudepunktet",
-      "Add inner conduit": "Tilføj inderrør"
+      "Add inner conduit": "Tilføj inderrør",
+      "CANNOT_ADD_SPAN_STRUCTURES_TO_FIXED_SPAN_EQUIPMENT": "Det er ikke muligt at tilføje inderrør til et præfabrikeret multirør",
+      "CANNOT_REMOVE_SPAN_STRUCTURES_FROM_FIXED_SPAN_EQUIPMENT": "Det er ikke muligt at fjerne inderrør fra et præfabrikeret multirør",
+      "CANNOT_REMOVE_SPAN_STRUCTURE_WITH_CONNECTED_SEGMENTS_FROM_SPAN_EQUIPMENT": "Det er ikke muligt at fjerne inderrør som er konnekteret",
+      "CANNOT_REMOVE_SPAN_EQUIPMENT_WITH_CONNECTED_SEGMENTS": "Det er ikke muligt at fjerne et rør som er konnekteret",
+      "Are you sure that you want to delete it?": "Er du sikker på at du vil slette det valgte?",
+      "You can only delete one object at a time": "Du kan kun slette ét objekt af gangen",
+      "No objects selected": "Ingen objekter er selekteret"
     }
   }
 }
