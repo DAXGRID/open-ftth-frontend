@@ -5,7 +5,7 @@ type ActionButtonProps = {
   icon: IconProp | string;
   action: () => void;
   title: string;
-  disabled: boolean;
+  disabled?: boolean;
 };
 
 function renderIcon(icon: IconProp | string, altText: string) {
