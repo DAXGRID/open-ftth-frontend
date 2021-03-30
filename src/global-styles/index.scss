@@ -17,8 +17,13 @@ body,
   height: 100vh;
 }
 
+header {
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+
 body {
-  margin: 0;
   font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
     "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -28,6 +33,7 @@ body {
 }
 
 .main-container {
+  padding-top: 57px;
   display: flex;
   transform: translateX(0px);
   color: $text-primary;
