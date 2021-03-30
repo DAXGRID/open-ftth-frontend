@@ -2,10 +2,10 @@
   display: none;
   position: fixed;
   z-index: 2;
-  left: 0x;
-  top: -66px; // Top menu size
+  top: 0;
+  left: 0;
   width: 100%;
-  height: calc(100vh + 66px); // Top menu size
+  height: calc(100vh);
   overflow-y: hidden;
   background-color: rgba(0, 0, 0, 0.4);
 
@@ -15,9 +15,11 @@
 
   .modal-content {
     background-color: #fefefe;
-    margin: 6% auto;
+    margin: 8% auto;
     padding: 20px;
     border: 1px solid #888;
+    border: none;
+
     max-width: 800px;
     display: flex;
     flex-wrap: wrap;
