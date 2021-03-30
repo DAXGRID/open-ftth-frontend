@@ -71,7 +71,10 @@ function IdentifyFeaturePage() {
     minY: 0,
   });
 
-  const [spanEquipmentResult] = useQuery<DiagramQueryResponse>({
+  const [
+    diagramQueryResult,
+    executeDiagramQuery,
+  ] = useQuery<DiagramQueryResponse>({
     requestPolicy: "cache-and-network",
     query: GET_DIAGRAM,
     variables: {
@@ -129,16 +132,16 @@ function IdentifyFeaturePage() {
   }, [identifiedFeature, setEditMode]);
 
   useEffect(() => {
-    if (!spanEquipmentResult.data) return;
+    if (!diagramQueryResult.data) return;
 
     const {
       diagramObjects,
       envelope,
-    } = spanEquipmentResult.data.schematic.buildDiagram;
+    } = diagramQueryResult.data.schematic.buildDiagram;
 
     setDiagramObjects([...diagramObjects]);
     setEnvelope({ ...envelope });
-  }, [spanEquipmentResult, setDiagramObjects, setEnvelope]);
+  }, [diagramQueryResult, setDiagramObjects, setEnvelope]);
 
   useEffect(() => {
     if (!res.data) return;
@@ -384,7 +387,17 @@ function IdentifyFeaturePage() {
     [editMode, client, highlightFeatures]
   );
 
-  if (spanEquipmentResult.fetching || !identifiedFeature?.id) {
+  const clearHighlights = () => {
+    // We only reload the diagram if not in edit mode
+    // To avoid annoying the user by deselecting.
+    if (!editMode) {
+      executeDiagramQuery();
+    }
+
+    highlightFeatures([]);
+  };
+
+  if (diagramQueryResult.fetching || !identifiedFeature?.id) {
     return <Loading />;
   }
 
@@ -497,6 +510,20 @@ function IdentifyFeaturePage() {
             action={() => removeSpanStructure()}
             title="Delete"
             disabled={!editMode}
+          />
+          <ActionButton
+            icon={TrashCanSvg}
+            action={() => clearHighlights()}
+            title="Clear highlight"
+          />
+        </DiagramMenu>
+      )}
+      {identifiedFeature.type === "RouteSegment" && (
+        <DiagramMenu>
+          <ActionButton
+            icon={TrashCanSvg}
+            action={() => clearHighlights()}
+            title="Clear highlight"
           />
         </DiagramMenu>
       )}
