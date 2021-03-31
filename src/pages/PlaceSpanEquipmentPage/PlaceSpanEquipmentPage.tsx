@@ -17,6 +17,7 @@ import {
 } from "./PlaceSpanEquipmentGql";
 import { MapContext } from "../../contexts/MapContext";
 import { toast } from "react-toastify";
+import Config from "../../config";
 
 const getFilteredSpanEquipmentSpecifications = (
   specifications: SpanEquipmentSpecification[],
@@ -80,15 +81,21 @@ const getFilteredManufacturers = (
   return [defaultValue, ...filtered];
 };
 
+const colorOptions = (colors: string[], t: TFunction<string>) => {
+  const options = colors.map<SelectOption>((x) => {
+    return { text: x, value: x };
+  });
+
+  return [{ text: t("Pick color marking"), value: "" }, ...options];
+};
+
 function PlaceSpanEquipmentPage() {
   const { t } = useTranslation();
   const { selectedSegmentIds } = useContext(MapContext);
-  const [colorMarkingOptions] = useState<SelectOption[]>([
-    { text: t("Pick color marking"), value: "" },
-    { text: "Red", value: "Red" },
-    { text: "Blue", value: "Blue" },
-    { text: "Yellow", value: "Yellow" },
-  ]);
+  const [colorMarkingOptions] = useState<SelectOption[]>(
+    colorOptions(Config.COLOR_OPTIONS, t)
+  );
+
   const [selectedColorMarking, setSelectedColorMarking] = useState<
     string | number | undefined
   >("");
