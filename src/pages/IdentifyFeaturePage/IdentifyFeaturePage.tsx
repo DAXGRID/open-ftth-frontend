@@ -48,7 +48,8 @@ import {
   CutConduitSvg,
   DisconnectSvg,
   PencilSvg,
-  PlusSvg,
+  AddConduitSvg,
+  AddStructureSvg,
   PutInContainerSvg,
   RemoveFromContainerSvg,
   TrashCanSvg,
@@ -494,13 +495,13 @@ function IdentifyFeaturePage() {
             disabled={!editMode}
           />
           <ActionButton
-            icon={PlusSvg}
+            icon={AddStructureSvg}
             action={() => setShowAddContainer(true)}
             title="Add node container"
             disabled={!editMode}
           />
           <ActionButton
-            icon={PlusSvg}
+            icon={AddConduitSvg}
             action={() => setShowHandleInnerConduit(true)}
             title="Handle inner conduits"
             disabled={!editMode}

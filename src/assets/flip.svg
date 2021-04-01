@@ -7,16 +7,18 @@ viewBox="0 0 10000 10000"
  <defs>
   <style type="text/css">
    <![CDATA[
-    .str0 {stroke:black;stroke-width:700}
+    .str0 {stroke:#2B2A29;stroke-width:700}
+    .str1 {stroke:#2B2A29;stroke-width:150;stroke-dasharray:750.000000 450.000000}
     .fil0 {fill:none}
-    .fil1 {fill:#009933}
+    .fil1 {fill:black}
    ]]>
   </style>
  </defs>
  <g id="Layer_x0020_1">
   <metadata id="CorelCorpID_0Corel-Layer"/>
-  <path class="fil0 str0" d="M1967 4723l6069 0c809,0 1465,328 1465,732l0 3035c0,405 -656,733 -1465,733l-6069 0c-809,0 -1466,-328 -1466,-733l0 -3035c0,-404 657,-732 1466,-732z"/>
-  <rect class="fil1" transform="matrix(1.09731E-13 1.125 -1.125 7.30105E-14 5489.37 355.299)" width="4830" height="900"/>
-  <polygon class="fil1" points="4983,7680 3978,6735 2971,5790 4983,5790 6995,5790 5989,6735 "/>
+  <rect class="fil0 str0" x="1117" y="965" width="7875" height="7875"/>
+  <polygon class="fil1" points="4969,7425 3972,6487 2973,5550 4969,5550 6965,5550 5967,6487 "/>
+  <polygon class="fil1" points="4969,2380 3972,3317 2973,4255 4969,4255 6965,4255 5967,3317 "/>
+  <line class="fil0 str1" x1="-31" y1="4902" x2="9969" y2= "4902" />
  </g>
 </svg>
