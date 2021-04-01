@@ -7,9 +7,8 @@ viewBox="0 0 10000 10000"
  <defs>
   <style type="text/css">
    <![CDATA[
-    .str2 {stroke:black;stroke-width:400}
-    .str1 {stroke:black;stroke-width:700}
-    .str0 {stroke:black;stroke-width:7.62}
+    .str1 {stroke:black;stroke-width:400}
+    .str0 {stroke:black;stroke-width:700}
     .fil0 {fill:none}
     .fil1 {fill:black}
    ]]>
@@ -17,22 +16,21 @@ viewBox="0 0 10000 10000"
  </defs>
  <g id="Layer_x0020_1">
   <metadata id="CorelCorpID_0Corel-Layer"/>
-  <rect class="fil0 str0" x="-500" width="10500" height="10000"/>
-  <polygon class="fil0 str1" points="2165,9292 1850,3618 7698,3618 7359,9292 "/>
-  <line class="fil0 str2" x1="4774" y1="3668" x2="4774" y2= "9131" />
-  <line class="fil0 str2" x1="3085" y1="3668" x2="3502" y2= "9292" />
-  <line class="fil0 str2" x1="6463" y1="3668" x2="6046" y2= "9292" />
-  <path class="fil0 str1" d="M1440 1552c248,-375 497,-750 829,-889 333,-139 750,-42 1531,133 781,174 1926,426 2688,596 762,170 1141,259 1348,532 208,273 244,730 261,959 18,228 18,228 18,228 0,0 0,0 0,0"/>
-  <rect class="fil1" transform="matrix(0.923861 0.215833 -0.207154 0.772781 1207.04 1057.14)" width="8000" height="715" rx="358" ry="358"/>
-  <rect class="fil1" transform="matrix(0.834408 0.194934 -0.214419 0.799883 4501.03 77.5418)" width="2020" height="760"/>
-  <ellipse class="fil1" cx="4723" cy="9621" rx="2924" ry="197"/>
-  <polygon class="fil0 str1" points="2165,9292 1850,3618 7698,3618 7359,9292 "/>
-  <line class="fil0 str2" x1="4774" y1="3668" x2="4774" y2= "9131" />
-  <line class="fil0 str2" x1="3085" y1="3668" x2="3502" y2= "9292" />
-  <line class="fil0 str2" x1="6463" y1="3668" x2="6046" y2= "9292" />
-  <path class="fil0 str1" d="M1440 1552c248,-375 497,-750 829,-889 333,-139 750,-42 1531,133 781,174 1926,426 2688,596 762,170 1141,259 1348,532 208,273 244,730 261,959 18,228 18,228 18,228 0,0 0,0 0,0"/>
-  <rect class="fil1" transform="matrix(0.923861 0.215833 -0.207154 0.772781 1207.04 1057.14)" width="8000" height="715" rx="358" ry="358"/>
-  <rect class="fil1" transform="matrix(0.834408 0.194934 -0.214419 0.799883 4501.03 77.5418)" width="2020" height="760"/>
-  <ellipse class="fil1" cx="4723" cy="9621" rx="2924" ry="197"/>
+  <polygon class="fil0 str0" points="2395,9382 2076,3638 7997,3638 7654,9382 "/>
+  <line class="fil0 str1" x1="5036" y1="3688" x2="5036" y2= "9219" />
+  <line class="fil0 str1" x1="3326" y1="3688" x2="3748" y2= "9382" />
+  <line class="fil0 str1" x1="6746" y1="3688" x2="6324" y2= "9382" />
+  <path class="fil0 str0" d="M1661 1546c251,-380 503,-760 839,-900 337,-141 759,-43 1550,134 791,176 1950,432 2722,604 771,172 1155,262 1365,538 210,277 247,739 264,971 18,231 18,231 18,231 0,0 0,0 0,0"/>
+  <path class="fil1" d="M1760 1123l6813 1592c185,43 301,203 260,358l0 0c-41,154 -225,244 -410,201l-6813 -1592c-185,-43 -302,-203 -260,-358l0 0c41,-154 225,-244 410,-201z"/>
+  <rect class="fil1" transform="matrix(0.985952 0.230338 -0.262296 0.978486 4759.95 52.7897)" width="1731" height="629"/>
+  <ellipse class="fil1" cx="4985" cy="9716" rx="2961" ry="199"/>
+  <polygon class="fil0 str0" points="2395,9382 2076,3638 7997,3638 7654,9382 "/>
+  <line class="fil0 str1" x1="5036" y1="3688" x2="5036" y2= "9219" />
+  <line class="fil0 str1" x1="3326" y1="3688" x2="3748" y2= "9382" />
+  <line class="fil0 str1" x1="6746" y1="3688" x2="6324" y2= "9382" />
+  <path class="fil0 str0" d="M1661 1546c251,-380 503,-760 839,-900 337,-141 759,-43 1550,134 791,176 1950,432 2722,604 771,172 1155,262 1365,538 210,277 247,739 264,971 18,231 18,231 18,231 0,0 0,0 0,0"/>
+  <path class="fil1" d="M1760 1123l6813 1592c185,43 301,203 260,358l0 0c-41,154 -225,244 -410,201l-6813 -1592c-185,-43 -302,-203 -260,-358l0 0c41,-154 225,-244 410,-201z"/>
+  <rect class="fil1" transform="matrix(0.985952 0.230338 -0.262296 0.978486 4759.95 52.7897)" width="1731" height="629"/>
+  <ellipse class="fil1" cx="4985" cy="9716" rx="2961" ry="199"/>
  </g>
 </svg>
