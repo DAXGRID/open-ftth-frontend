@@ -97,7 +97,17 @@
       "CANNOT_REMOVE_SPAN_EQUIPMENT_WITH_CONNECTED_SEGMENTS": "It is not possible to remove a conduit that is connected",
       "Are you sure you want to delete the selected object?": "Are you sure you want to delete the selected object?",
       "You can only delete one object at a time": "You can only delete one object at a time",
-      "No objects selected": "No objects selected"
+      "No objects selected": "No objects selected",
+      "EDIT_MODE": "Edit mode",
+      "CUT_CONDUIT": "Cut conduit",
+      "DISCONNECT_CONDUIT": "Disconnect conduit",
+      "CONNECT_CONDUIT": "Connect conduit",
+      "AFFIX_SPAN_EQUIPMENT": "Affix span equipment",
+      "DETACH_SPAN_EQUIPMENT": "Detach span equipment",
+      "ADD_NODE_CONTAINER": "Add node container",
+      "ADD_INNER_CONDUIT": "Add inner conduit",
+      "REMOVE_OBJECT": "Remove object",
+      "CLEAR_HIGHLIGHT": "Clear highlight"
     }
   },
   "dk": {
@@ -198,7 +208,17 @@
       "CANNOT_REMOVE_SPAN_EQUIPMENT_WITH_CONNECTED_SEGMENTS": "Det er ikke muligt at fjerne et rør som er konnekteret",
       "Are you sure you want to delete the selected object?": "Er du sikker på at du vil slette det valgte objekt?",
       "You can only delete one object at a time": "Du kan kun slette ét objekt af gangen",
-      "No objects selected": "Ingen objekter er selekteret"
+      "No objects selected": "Ingen objekter er selekteret",
+      "EDIT_MODE": "Start/stop editering",
+      "CUT_CONDUIT": "Klip rør eller fiberkabel",
+      "DISCONNECT_CONDUIT": "Adskil rør",
+      "CONNECT_CONDUIT": "Forbind rør",
+      "AFFIX_SPAN_EQUIPMENT": "Fastgør rør til brønd/rørmuffe",
+      "DETACH_SPAN_EQUIPMENT": "Frigør rør fra brønd/rørmuffe",
+      "ADD_NODE_CONTAINER": "Tilføj struktur (brønd, rørmuffe m.fl.)",
+      "ADD_INNER_CONDUIT": "Tilføj inderrør",
+      "REMOVE_OBJECT": "Slet objekt",
+      "CLEAR_HIGHLIGHT": "Fjern fremhævning"
     }
   }
 }
