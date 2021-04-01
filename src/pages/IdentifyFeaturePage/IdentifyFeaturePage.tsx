@@ -460,18 +460,18 @@ function IdentifyFeaturePage() {
               selectedFeatures.current = [];
             }}
             id="Edit"
-            title="Edit mode"
+            title={t("EDIT_MODE")}
           />
           <ActionButton
             icon={CutConduitSvg}
             action={() => cutSpanSegments()}
-            title="Cut conduit"
+            title={t("CUT_CONDUIT")}
             disabled={!editMode}
           />
           <ActionButton
             icon={DisconnectSvg}
             action={() => disconnectSpanSegments()}
-            title="Disconnect conduit"
+            title={t("DISCONNECT_CONDUIT")}
             disabled={!editMode}
           />
           <ActionButton
@@ -479,43 +479,43 @@ function IdentifyFeaturePage() {
             action={() => {
               connectSpanSegments();
             }}
-            title="Connect conduit"
+            title={t("CONNECT_CONDUIT")}
             disabled={!editMode}
           />
           <ActionButton
             icon={PutInContainerSvg}
             action={() => affixSpanEquipment()}
-            title="Attach"
+            title={t("AFFIX_SPAN_EQUIPMENT")}
             disabled={!editMode}
           />
           <ActionButton
             icon={RemoveFromContainerSvg}
             action={() => detachSpanEquipment()}
-            title="Detach"
+            title={t("DETACH_SPAN_EQUIPMENT")}
             disabled={!editMode}
           />
           <ActionButton
             icon={AddStructureSvg}
             action={() => setShowAddContainer(true)}
-            title="Add node container"
+            title={t("ADD_NODE_CONTAINER")}
             disabled={!editMode}
           />
           <ActionButton
             icon={AddConduitSvg}
             action={() => setShowHandleInnerConduit(true)}
-            title="Handle inner conduits"
+            title={t("ADD_INNER_CONDUIT")}
             disabled={!editMode}
           />
           <ActionButton
             icon={TrashCanSvg}
             action={() => removeSpanStructure()}
-            title="Delete"
+            title={t("REMOVE_OBJECT")}
             disabled={!editMode}
           />
           <ActionButton
             icon={TrashCanSvg}
             action={() => clearHighlights()}
-            title="Clear highlight"
+            title={t("CLEAR_HIGHLIGHT")}
           />
         </DiagramMenu>
       )}
@@ -524,7 +524,7 @@ function IdentifyFeaturePage() {
           <ActionButton
             icon={TrashCanSvg}
             action={() => clearHighlights()}
-            title="Clear highlight"
+            title={t("CLEAR_HIGHLIGHT")}
           />
         </DiagramMenu>
       )}
