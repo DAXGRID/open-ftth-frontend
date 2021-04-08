@@ -53,6 +53,7 @@ import {
   PutInContainerSvg,
   RemoveFromContainerSvg,
   TrashCanSvg,
+  EraserSvg,
 } from "../../assets";
 
 function IdentifyFeaturePage() {
@@ -513,7 +514,7 @@ function IdentifyFeaturePage() {
             disabled={!editMode}
           />
           <ActionButton
-            icon={TrashCanSvg}
+            icon={EraserSvg}
             action={() => clearHighlights()}
             title={t("CLEAR_HIGHLIGHT")}
           />

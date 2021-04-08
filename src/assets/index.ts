@@ -9,6 +9,7 @@ import PencilSvg from "./pencil.svg";
 import PutInContainerSvg from "./put-in-container.svg";
 import RemoveFromContainerSvg from "./remove-from-container.svg";
 import TrashCanSvg from "./trash-can.svg";
+import EraserSvg from "./eraser.svg";
 
 export {
   Loading,
@@ -22,4 +23,5 @@ export {
   PutInContainerSvg,
   RemoveFromContainerSvg,
   TrashCanSvg,
+  EraserSvg,
 };
