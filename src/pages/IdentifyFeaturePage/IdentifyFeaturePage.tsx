@@ -77,7 +77,6 @@ function IdentifyFeaturePage() {
     diagramQueryResult,
     executeDiagramQuery,
   ] = useQuery<DiagramQueryResponse>({
-    requestPolicy: "cache-and-network",
     query: GET_DIAGRAM,
     variables: {
       routeNetworkElementId: identifiedFeature?.id,
@@ -88,7 +87,6 @@ function IdentifyFeaturePage() {
   const [
     routeNetworkElementResponse,
   ] = useQuery<QueryRouteNetworkElementResponse>({
-    requestPolicy: "cache-and-network",
     query: QUERY_ROUTE_NETWORK_ELEMENT,
     variables: {
       routeElementId: identifiedFeature?.id,

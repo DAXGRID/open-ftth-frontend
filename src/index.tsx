@@ -19,6 +19,7 @@ const subscriptionClient = new SubscriptionClient(
 
 const client = new Client({
   url: `${Config.API_GATEWAY_HTTP_URI}/graphql`,
+  requestPolicy: "network-only",
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({
