@@ -236,7 +236,9 @@ function IdentifyFeaturePage() {
   const connectSpanSegments = async () => {
     const spanSegmentsToConnect = selectedFeatures.current
       .filter((x) => {
-        return x.layer.source === "InnerConduit";
+        return (
+          x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
+        );
       })
       .map((x) => x.properties?.refId as string);
 
