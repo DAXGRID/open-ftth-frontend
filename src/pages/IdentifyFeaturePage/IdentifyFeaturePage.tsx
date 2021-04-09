@@ -525,7 +525,7 @@ function IdentifyFeaturePage() {
       {identifiedFeature.type === "RouteSegment" && (
         <DiagramMenu>
           <ActionButton
-            icon={TrashCanSvg}
+            icon={EraserSvg}
             action={() => clearHighlights()}
             title={t("CLEAR_HIGHLIGHT")}
           />
