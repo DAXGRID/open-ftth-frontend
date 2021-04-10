@@ -57,11 +57,25 @@ function useBridgeConnector() {
     [keycloak.profile?.username]
   );
 
+  const selectRouteSegments = useCallback(
+    (segmentIds: string[]) => {
+      const message = {
+        eventType: "SelectRouteSegments",
+        Mrids: segmentIds,
+        username: keycloak.profile?.username,
+      };
+
+      send(message);
+    },
+    [keycloak.profile?.username]
+  );
+
   return {
     retrieveSelectedEquipments,
     retrieveIdentifiedNetworkElement,
     panToCoordinate,
     highlightFeatures,
+    selectRouteSegments,
   };
 }
 

@@ -8,6 +8,7 @@ import ToggleButton from "../../components/ToggleButton";
 import ActionButton from "../../components/ActionButton";
 import Loading from "../../components/Loading";
 import { MapContext } from "../../contexts/MapContext";
+import RerouteTube from "./RerouteTube";
 import {
   Diagram,
   DiagramQueryResponse,
@@ -64,6 +65,7 @@ function IdentifyFeaturePage() {
   const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
   const [showAddContainer, setShowAddContainer] = useState(false);
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
+  const [showRerouteTube, setShowRerouteTube] = useState(false);
   const { identifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [envelope, setEnvelope] = useState<Envelope>({
@@ -152,6 +154,7 @@ function IdentifyFeaturePage() {
     setEnvelope({ ...envelope });
     setShowAddContainer(false);
     setShowHandleInnerConduit(false);
+    setShowRerouteTube(false);
     selectedFeatures.current = [];
   }, [res, setDiagramObjects, setEnvelope, setShowAddContainer]);
 
@@ -420,6 +423,19 @@ function IdentifyFeaturePage() {
           selectedOuterConduit={
             selectedFeatures.current.find((x) => x.source === "OuterConduit")
               ?.properties?.refId ?? ""
+          }
+        />
+      </ModalContainer>
+
+      <ModalContainer
+        show={showRerouteTube}
+        closeCallback={() => setShowRerouteTube(false)}
+      >
+        <RerouteTube
+          selectedRouteSegmentMrid={
+            selectedFeatures.current.find(
+              (x) => x.source === "InnerConduit" || "OuterConduit"
+            )?.properties?.refId ?? ""
           }
         />
       </ModalContainer>
