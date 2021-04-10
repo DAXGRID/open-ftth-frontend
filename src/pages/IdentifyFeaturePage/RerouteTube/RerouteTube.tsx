@@ -1,13 +1,18 @@
+import { useContext } from "react";
 import DefaultButton from "../../../components/DefaultButton";
 import { useClient, Client } from "urql";
 import useBridgeConnector from "../../../bridge/useBridgeConnector";
+import { MapContext } from "../../../contexts/MapContext";
 import {
+  QUERY_GET_ROUTESEGMENT_IDS,
   GetRouteSegmentIdsParameter,
   GetRouteSegmentIdsResponse,
-  QUERY_GET_ROUTESEGMENT_IDS,
+  MUTATION_REROUTE,
+  RerouteParameter,
+  RerouteResponse,
 } from "./RerouteTubeGql";
 
-type ReRouteTubeParams = {
+type RerouteTubeParams = {
   selectedRouteSegmentMrid: string;
 };
 
@@ -28,9 +33,25 @@ const selectRouteSegmentsInMap = async (
   selectRouteSegments(mrids ?? []);
 };
 
-function RerouteTube({ selectedRouteSegmentMrid }: ReRouteTubeParams) {
+const reroute = async (
+  id: string,
+  routeSegmentIds: string[],
+  client: Client
+) => {
+  const params: RerouteParameter = {
+    spanEquipmentOrSegmentId: id,
+    routeSegmentIds: routeSegmentIds,
+  };
+
+  const result = await client
+    .mutation<RerouteResponse>(MUTATION_REROUTE, params)
+    .toPromise();
+};
+
+function RerouteTube({ selectedRouteSegmentMrid }: RerouteTubeParams) {
   const client = useClient();
   const { selectRouteSegments } = useBridgeConnector();
+  const { selectedSegmentIds } = useContext(MapContext);
 
   return (
     <div>
@@ -43,6 +64,12 @@ function RerouteTube({ selectedRouteSegmentMrid }: ReRouteTubeParams) {
           )
         }
         innerText="Select route segments in map"
+      />
+      <DefaultButton
+        onClick={() =>
+          reroute(selectedRouteSegmentMrid, selectedSegmentIds, client)
+        }
+        innerText="Reroute"
       />
     </div>
   );

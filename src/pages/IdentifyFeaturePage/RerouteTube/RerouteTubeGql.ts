@@ -22,3 +22,31 @@ query ($spanEquipmentOrSegmentId: ID!) {
   }
 }
 `;
+
+export interface RerouteResponse {
+  spanEquipment: {
+    move: {
+      isSuccess: boolean;
+      errorCode: string;
+    };
+  };
+}
+
+export interface RerouteParameter {
+  spanEquipmentOrSegmentId: string;
+  routeSegmentIds: string[];
+}
+
+export const MUTATION_REROUTE = `
+mutation ($spanEquipmentOrSegmentId: ID!, $routeSegmentIds: [ID!]!) {
+  spanEquipment {
+    move(
+      spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId
+      routeSegmentIds: $routeSegmentIds
+    ) {
+      isSuccess
+      errorCode
+    }
+  }
+}
+`;
