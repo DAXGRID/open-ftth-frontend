@@ -107,7 +107,12 @@
       "ADD_NODE_CONTAINER": "Add node container",
       "ADD_INNER_CONDUIT": "Add inner conduit",
       "REMOVE_OBJECT": "Remove object",
-      "CLEAR_HIGHLIGHT": "Clear highlight"
+      "CLEAR_HIGHLIGHT": "Clear highlight",
+      "SUCCESS_MOVED": "Moved",
+      "ERROR": "An error has occured",
+      "SELECTED": "Selected",
+      "SELECT": "Select",
+      "MOVE": "Move"
     }
   },
   "dk": {
@@ -218,7 +223,12 @@
       "ADD_NODE_CONTAINER": "Tilføj struktur (brønd, rørmuffe m.fl.)",
       "ADD_INNER_CONDUIT": "Tilføj inderrør",
       "REMOVE_OBJECT": "Slet objekt",
-      "CLEAR_HIGHLIGHT": "Fjern fremhævning"
+      "CLEAR_HIGHLIGHT": "Fjern fremhævning",
+      "SUCCESS_MOVED": "Flyttet",
+      "ERROR": "Der skete en fejl",
+      "SELECTED": "Selekteret",
+      "SELECT": "Selekter",
+      "MOVE": "Flyt"
     }
   }
 }
