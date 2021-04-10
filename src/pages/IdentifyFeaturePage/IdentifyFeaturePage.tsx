@@ -154,6 +154,7 @@ function IdentifyFeaturePage() {
     setEnvelope({ ...envelope });
     setShowAddContainer(false);
     setShowHandleInnerConduit(false);
+    setShowRerouteTube(false);
     selectedFeatures.current = [];
   }, [res, setDiagramObjects, setEnvelope, setShowAddContainer]);
 
@@ -531,11 +532,6 @@ function IdentifyFeaturePage() {
           <ActionButton
             icon={EraserSvg}
             action={() => clearHighlights()}
-            title={t("CLEAR_HIGHLIGHT")}
-          />
-          <ActionButton
-            icon={EraserSvg}
-            action={() => setShowRerouteTube(true)}
             title={t("CLEAR_HIGHLIGHT")}
           />
         </DiagramMenu>
