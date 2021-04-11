@@ -82,10 +82,7 @@ function IdentifyFeaturePage() {
     minY: 0,
   });
 
-  const [
-    diagramQueryResult,
-    executeDiagramQuery,
-  ] = useQuery<DiagramQueryResponse>({
+  const [diagramQueryResult] = useQuery<DiagramQueryResponse>({
     query: GET_DIAGRAM,
     variables: {
       routeNetworkElementId: identifiedFeature?.id,
