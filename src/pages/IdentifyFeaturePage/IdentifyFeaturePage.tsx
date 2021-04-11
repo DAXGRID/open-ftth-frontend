@@ -482,6 +482,7 @@ function IdentifyFeaturePage() {
             toggle={() => {
               setEditMode(!editMode);
               selectedFeatures.current = [];
+              setSingleSelectedFeature(null);
             }}
             id="Edit"
             title={t("EDIT_MODE")}
@@ -558,9 +559,11 @@ function IdentifyFeaturePage() {
         onSelectFeature={onSelectedFeature}
         editMode={editMode}
       />
-      <SpanEquipmentDetails
-        spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
-      />
+      {!editMode && singleSelectedFeature && (
+        <SpanEquipmentDetails
+          spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
+        />
+      )}
     </div>
   );
 }
