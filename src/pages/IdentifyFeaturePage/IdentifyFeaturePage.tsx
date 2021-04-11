@@ -9,6 +9,7 @@ import ActionButton from "../../components/ActionButton";
 import Loading from "../../components/Loading";
 import { MapContext } from "../../contexts/MapContext";
 import RerouteTube from "./RerouteTube";
+import EditSpanEquipment from "./EditSpanEquipment";
 import SpanEquipmentDetails from "./SpanEquipmentDetails";
 import {
   Diagram,
@@ -71,6 +72,7 @@ function IdentifyFeaturePage() {
   const [showAddContainer, setShowAddContainer] = useState(false);
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
   const [showRerouteTube, setShowRerouteTube] = useState(false);
+  const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
   const { identifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [envelope, setEnvelope] = useState<Envelope>({
@@ -161,7 +163,16 @@ function IdentifyFeaturePage() {
     setShowHandleInnerConduit(false);
     setShowRerouteTube(false);
     selectedFeatures.current = [];
-  }, [res, setDiagramObjects, setEnvelope, setShowAddContainer]);
+    setSingleSelectedFeature(null);
+    setShowEditSpanEquipment(false);
+  }, [
+    res,
+    setDiagramObjects,
+    setEnvelope,
+    setShowAddContainer,
+    setSingleSelectedFeature,
+    setShowEditSpanEquipment,
+  ]);
 
   const affixSpanEquipment = async () => {
     const nodeContainer = selectedFeatures.current.find(
@@ -407,6 +418,7 @@ function IdentifyFeaturePage() {
     }
 
     highlightFeatures([]);
+    setSingleSelectedFeature(null);
   };
 
   if (diagramQueryResult.fetching || !identifiedFeature?.id) {
@@ -444,6 +456,15 @@ function IdentifyFeaturePage() {
               (x) => x.source === "InnerConduit" || "OuterConduit"
             )?.properties?.refId ?? ""
           }
+        />
+      </ModalContainer>
+
+      <ModalContainer
+        show={showEditSpanEquipment}
+        closeCallback={() => setShowEditSpanEquipment(false)}
+      >
+        <EditSpanEquipment
+          spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
         />
       </ModalContainer>
 
@@ -540,6 +561,11 @@ function IdentifyFeaturePage() {
           <ActionButton
             icon={EraserSvg}
             action={() => clearHighlights()}
+            title={t("CLEAR_HIGHLIGHT")}
+          />
+          <ActionButton
+            icon={EraserSvg}
+            action={() => setShowEditSpanEquipment(true)}
             title={t("CLEAR_HIGHLIGHT")}
           />
         </DiagramMenu>

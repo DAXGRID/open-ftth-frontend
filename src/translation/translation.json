@@ -119,7 +119,9 @@
       "MANUFACTURER": "Manufacturer",
       "FIXED": "Fixed",
       "YES": "Yes",
-      "NO": "No"
+      "NO": "No",
+      "UPDATE": "Update",
+      "UPDATED": "Updated"
     }
   },
   "dk": {
@@ -242,7 +244,9 @@
       "MANUFACTURER": "Fabrikant",
       "FIXED": "Præfabrikeret",
       "YES": "Ja",
-      "NO": "Nej"
+      "NO": "Nej",
+      "UPDATE": "Opdater",
+      "UPDATED": "Opdateret"
     }
   }
 }

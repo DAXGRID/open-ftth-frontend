@@ -1,23 +1,26 @@
-import { useContext, useLayoutEffect, useState, useMemo } from "react";
-import { TFunction, useTranslation } from "react-i18next";
-import { v4 as uuidv4 } from "uuid";
-import SelectListView, { BodyItem } from "../../components/SelectListView";
-import SelectMenu, { SelectOption } from "../../components/SelectMenu";
-import DefaultButton from "../../components/DefaultButton";
-import Loading from "../../components/Loading";
-import { useQuery, useMutation } from "urql";
+import { useMemo, useState, useEffect } from "react";
 import {
-  UtilityNetworkResponse,
-  SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
   Manufacturer,
+  QUERY_SPAN_EQUIPMENT_DETAILS,
+  QUERY_SPAN_EQUIPMENT_SPECIFICATIONS_MANUFACTURER,
+  SpanEquipmentDetailsResponse,
   SpanEquipmentSpecification,
-  PlaceSpanEquipmentParameters,
-  PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK,
-  PlaceSpanEquipmentResponse,
-} from "./PlaceSpanEquipmentGql";
-import { MapContext } from "../../contexts/MapContext";
+  SpanEquipmentSpecificationsResponse,
+  MUTATION_UPDATE_SPAN_EQUIPMENT_DETAILS,
+  UpdateSpanEquipmentDetailsParameters,
+  UpdateSpanEquipmentDetailsResponse,
+} from "./EditspanEquipmentGql";
+import { useQuery, useClient } from "urql";
+import { TFunction, useTranslation } from "react-i18next";
+import DefaultButton from "../../../components/DefaultButton";
+import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
+import SelectListView, { BodyItem } from "../../../components/SelectListView";
 import { toast } from "react-toastify";
-import Config from "../../config";
+import Config from "../../../config";
+
+type EditSpanEquipmentParams = {
+  spanEquipmentMrid: string;
+};
 
 const getFilteredSpanEquipmentSpecifications = (
   specifications: SpanEquipmentSpecification[],
@@ -89,35 +92,48 @@ const colorOptions = (colors: string[], t: TFunction<string>) => {
   return [{ text: t("Pick color marking"), value: "" }, ...options];
 };
 
-function PlaceSpanEquipmentPage() {
+function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
   const { t } = useTranslation();
-  const { selectedSegmentIds } = useContext(MapContext);
+  const client = useClient();
+
   const [colorMarkingOptions] = useState<SelectOption[]>(
     colorOptions(Config.COLOR_OPTIONS, t)
   );
 
-  const [selectedColorMarking, setSelectedColorMarking] = useState<
-    string | number | undefined
-  >("");
-  const [selectedCategory, setSelectedCategory] = useState<
-    string | number | undefined
-  >();
+  const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
+  const [selectedManufacturer, setSelectedManufacturer] = useState<string>("");
 
   const [
     spanEquipmentSpecifications,
     setSpanEquipmentssetSpanEquipmentSpecifications,
   ] = useState<SpanEquipmentSpecification[]>([]);
-
   const [
     selectedSpanEquipmentSpecification,
     setSelectedSpanEquipmentSpecification,
   ] = useState<string>();
 
-  const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
-  const [selectedManufacturer, setSelectedManufacturer] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<
+    string | number | undefined
+  >();
 
-  const [spanEquipmentResult] = useQuery<UtilityNetworkResponse>({
-    query: SPAN_EQUIPMENT_SPEFICIATIONS_MANUFACTURER_QUERY,
+  const [selectedColorMarking, setSelectedColorMarking] = useState<
+    string | number | undefined
+  >("");
+
+  const [spanEquipmentDetailsResponse] = useQuery<SpanEquipmentDetailsResponse>(
+    {
+      query: QUERY_SPAN_EQUIPMENT_DETAILS,
+      variables: { spanEquipmentOrSegmentId: spanEquipmentMrid },
+      pause: !spanEquipmentMrid,
+    }
+  );
+
+  const [
+    spanEquipmentSpecificationsResponse,
+  ] = useQuery<SpanEquipmentSpecificationsResponse>({
+    query: QUERY_SPAN_EQUIPMENT_SPECIFICATIONS_MANUFACTURER,
+    requestPolicy: "cache-first",
+    pause: !spanEquipmentMrid,
   });
 
   const filteredSpanEquipmentSpecifications = useMemo(
@@ -145,44 +161,15 @@ function PlaceSpanEquipmentPage() {
     ]
   );
 
-  const [
-    ,
-    placeSpanEquipmentMutation,
-  ] = useMutation<PlaceSpanEquipmentResponse>(
-    PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK
-  );
-
-  const placeSpanEquipment = async () => {
-    const parameters: PlaceSpanEquipmentParameters = {
-      spanEquipmentId: uuidv4(),
-      spanEquipmentSpecificationId: selectedSpanEquipmentSpecification as string,
-      routeSegmentIds: selectedSegmentIds,
-      manufacturerId: selectedManufacturer ? selectedManufacturer : undefined,
-      markingColor: selectedColorMarking
-        ? (selectedColorMarking as string)
-        : undefined,
-    };
-
-    const { data } = await placeSpanEquipmentMutation(parameters);
-
-    if (data?.spanEquipment.placeSpanEquipmentInRouteNetwork.isSuccess) {
-      toast.success(t("Span equipment placed"));
-    } else {
-      toast.error(
-        data?.spanEquipment.placeSpanEquipmentInRouteNetwork.errorCode
-      );
-    }
-  };
-
-  useLayoutEffect(() => {
-    if (!spanEquipmentResult.data) {
+  useEffect(() => {
+    if (!spanEquipmentSpecificationsResponse.data) {
       return;
     }
 
     const {
       spanEquipmentSpecifications,
       manufacturers,
-    } = spanEquipmentResult.data.utilityNetwork;
+    } = spanEquipmentSpecificationsResponse.data.utilityNetwork;
 
     if (!spanEquipmentSpecifications || !manufacturers) {
       return;
@@ -192,36 +179,24 @@ function PlaceSpanEquipmentPage() {
     setSpanEquipmentssetSpanEquipmentSpecifications(
       spanEquipmentSpecifications
     );
-  }, [spanEquipmentResult]);
+  }, [spanEquipmentSpecificationsResponse]);
 
-  const categorySelectOptions = () => {
-    const categoryOptions = spanEquipmentSpecifications
-      .map((x) => {
-        return x.category;
-      })
-      .filter((v, i, a) => a.indexOf(v) === i)
-      .map<SelectOption>((x) => {
-        return {
-          text: t(x),
-          value: x,
-        };
-      });
-
-    // If none is selected then select Conduit
-    if (categoryOptions.length > 0 && !selectedCategory) {
-      setSelectedCategory("Conduit");
+  useEffect(() => {
+    if (!spanEquipmentDetailsResponse.data) {
+      return;
     }
 
-    return categoryOptions;
-  };
+    const {
+      manufacturer,
+      markingInfo,
+      specification,
+    } = spanEquipmentDetailsResponse.data.utilityNetwork.spanEquipment;
 
-  const selectCategory = (categoryId: string | number | undefined) => {
-    if (selectedCategory === categoryId || selectCategory === undefined) return;
-
-    setSelectedCategory(categoryId);
-    setSelectedSpanEquipmentSpecification(undefined);
-    setSelectedManufacturer("");
-  };
+    setSelectedCategory(specification.category);
+    setSelectedSpanEquipmentSpecification(specification.id);
+    setSelectedManufacturer(manufacturer?.id ?? "");
+    setSelectedColorMarking(markingInfo?.markingColor ?? "");
+  }, [spanEquipmentDetailsResponse]);
 
   const selectSpanEquipmentSpecification = (specificationId: string) => {
     if (selectedSpanEquipmentSpecification === specificationId) return;
@@ -230,26 +205,47 @@ function PlaceSpanEquipmentPage() {
     setSelectedManufacturer("");
   };
 
-  if (spanEquipmentResult.fetching) {
-    return <Loading />;
-  }
+  const update = async () => {
+    if (!selectedSpanEquipmentSpecification) {
+      toast.error("ERROR");
+      return;
+    }
+
+    const params: UpdateSpanEquipmentDetailsParameters = {
+      spanEquipmentOrSegmentId: spanEquipmentMrid,
+      manufacturerId:
+        selectedManufacturer === ""
+          ? "00000000-0000-0000-0000-000000000000"
+          : selectedManufacturer,
+      markingColor: selectedColorMarking?.toString() ?? "",
+      spanEquipmentSpecificationId: selectedSpanEquipmentSpecification,
+    };
+
+    const result = await client
+      .mutation<UpdateSpanEquipmentDetailsResponse>(
+        MUTATION_UPDATE_SPAN_EQUIPMENT_DETAILS,
+        params
+      )
+      .toPromise();
+
+    if (result.data?.spanEquipment.updateProperties.isSuccess) {
+      toast.success(t("UPDATED"));
+    } else {
+      toast.error(
+        t(result.data?.spanEquipment.updateProperties.errorCode ?? "ERROR")
+      );
+    }
+  };
 
   return (
-    <div className="place-span-equipment page-container">
-      <div className="full-row">
-        <SelectMenu
-          options={categorySelectOptions()}
-          removePlaceHolderOnSelect
-          onSelected={selectCategory}
-          selected={selectedCategory}
-        />
-      </div>
+    <div className="edit-span-equipment page-container">
       <div className="full-row">
         <SelectListView
           headerItems={[t("Specification")]}
           bodyItems={filteredSpanEquipmentSpecifications}
           selectItem={(x) => selectSpanEquipmentSpecification(x.id.toString())}
           selected={selectedSpanEquipmentSpecification}
+          maxHeightBody="400px"
         />
       </div>
       <div className="full-row">
@@ -268,8 +264,8 @@ function PlaceSpanEquipmentPage() {
           selected={selectedColorMarking}
         />
         <DefaultButton
-          innerText={t("Place span equipment")}
-          onClick={() => placeSpanEquipment()}
+          innerText={t("UPDATE")}
+          onClick={() => update()}
           disabled={
             selectedColorMarking === undefined ||
             !selectedManufacturer === undefined ||
@@ -283,4 +279,4 @@ function PlaceSpanEquipmentPage() {
   );
 }
 
-export default PlaceSpanEquipmentPage;
+export default EditSpanEquipment;
