@@ -32,6 +32,7 @@ const selectRouteSegmentsInMap = async (
     .query<GetRouteSegmentIdsResponse>(QUERY_GET_ROUTESEGMENT_IDS, params)
     .toPromise();
 
+  debugger;
   const mrids =
     result.data?.utilityNetwork?.spanEquipment?.routeSegmentIds ?? [];
   selectRouteSegments(mrids ?? []);

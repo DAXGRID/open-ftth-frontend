@@ -16,4 +16,25 @@
       font-size: 20px;
     }
   }
+
+  .feature-details {
+    border-top: 1px solid #e3e3e3;
+    padding: 20px;
+
+    .feature-details-container {
+      display: flex;
+      margin: 0px auto;
+      max-width: 1000px;
+
+      .feature-details-info {
+        flex: 1;
+      }
+
+      .feature-details-actions {
+        .action-button {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
 }

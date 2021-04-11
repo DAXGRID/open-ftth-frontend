@@ -9,6 +9,8 @@ import ActionButton from "../../components/ActionButton";
 import Loading from "../../components/Loading";
 import { MapContext } from "../../contexts/MapContext";
 import RerouteTube from "./RerouteTube";
+import EditSpanEquipment from "./EditSpanEquipment";
+import SpanEquipmentDetails from "./SpanEquipmentDetails";
 import {
   Diagram,
   DiagramQueryResponse,
@@ -63,9 +65,14 @@ function IdentifyFeaturePage() {
   const { highlightFeatures } = useBridgeConnector();
   const [editMode, setEditMode] = useState(false);
   const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
+  const [
+    singleSelectedFeature,
+    setSingleSelectedFeature,
+  ] = useState<MapboxGeoJSONFeature | null>();
   const [showAddContainer, setShowAddContainer] = useState(false);
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
   const [showRerouteTube, setShowRerouteTube] = useState(false);
+  const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
   const { identifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [envelope, setEnvelope] = useState<Envelope>({
@@ -156,7 +163,16 @@ function IdentifyFeaturePage() {
     setShowHandleInnerConduit(false);
     setShowRerouteTube(false);
     selectedFeatures.current = [];
-  }, [res, setDiagramObjects, setEnvelope, setShowAddContainer]);
+    setSingleSelectedFeature(null);
+    setShowEditSpanEquipment(false);
+  }, [
+    res,
+    setDiagramObjects,
+    setEnvelope,
+    setShowAddContainer,
+    setSingleSelectedFeature,
+    setShowEditSpanEquipment,
+  ]);
 
   const affixSpanEquipment = async () => {
     const nodeContainer = selectedFeatures.current.find(
@@ -376,8 +392,10 @@ function IdentifyFeaturePage() {
             response.data?.utilityNetwork.spanSegmentTrace
               ?.routeNetworkSegmentIds ?? []
           );
+          setSingleSelectedFeature(feature);
         } else {
           highlightFeatures([]);
+          setSingleSelectedFeature(null);
         }
       } else {
         if (isSelected) {
@@ -389,16 +407,10 @@ function IdentifyFeaturePage() {
         }
       }
     },
-    [editMode, client, highlightFeatures]
+    [editMode, client, highlightFeatures, setSingleSelectedFeature]
   );
 
   const clearHighlights = () => {
-    // We only reload the diagram if not in edit mode
-    // To avoid annoying the user by deselecting.
-    if (!editMode) {
-      executeDiagramQuery();
-    }
-
     highlightFeatures([]);
   };
 
@@ -433,10 +445,17 @@ function IdentifyFeaturePage() {
       >
         <RerouteTube
           selectedRouteSegmentMrid={
-            selectedFeatures.current.find(
-              (x) => x.source === "InnerConduit" || "OuterConduit"
-            )?.properties?.refId ?? ""
+            singleSelectedFeature?.properties?.refId ?? ""
           }
+        />
+      </ModalContainer>
+
+      <ModalContainer
+        show={showEditSpanEquipment}
+        closeCallback={() => setShowEditSpanEquipment(false)}
+      >
+        <EditSpanEquipment
+          spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
         />
       </ModalContainer>
 
@@ -475,6 +494,7 @@ function IdentifyFeaturePage() {
             toggle={() => {
               setEditMode(!editMode);
               selectedFeatures.current = [];
+              setSingleSelectedFeature(null);
             }}
             id="Edit"
             title={t("EDIT_MODE")}
@@ -551,6 +571,31 @@ function IdentifyFeaturePage() {
         onSelectFeature={onSelectedFeature}
         editMode={editMode}
       />
+      {!editMode && singleSelectedFeature && (
+        <div className="feature-details">
+          <div className="feature-details-container">
+            <div className="feature-details-info">
+              <SpanEquipmentDetails
+                spanEquipmentMrid={
+                  singleSelectedFeature?.properties?.refId ?? ""
+                }
+              />
+            </div>
+            <div className="feature-details-actions">
+              <ActionButton
+                icon={PencilSvg}
+                action={() => setShowEditSpanEquipment(true)}
+                title={t("EDIT")}
+              />
+              <ActionButton
+                icon={PencilSvg}
+                action={() => setShowRerouteTube(true)}
+                title={t("MOVE")}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

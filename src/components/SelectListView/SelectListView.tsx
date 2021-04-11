@@ -14,6 +14,7 @@ type SelectListViewProps = {
   bodyItems: BodyItem[];
   selectItem: (selected: BodyItem) => void;
   selected?: number | string;
+  maxHeightBody?: string;
 };
 
 function SelectListView({
@@ -22,6 +23,7 @@ function SelectListView({
   bodyItems,
   selectItem,
   selected,
+  maxHeightBody,
 }: SelectListViewProps) {
   return (
     <div className="select-list-view">
@@ -38,7 +40,12 @@ function SelectListView({
             </div>
           ))}
         </div>
-        <div className="select-list-view-body">
+        <div
+          className="select-list-view-body"
+          style={
+            maxHeightBody ? { maxHeight: maxHeightBody, overflowY: "auto" } : {}
+          }
+        >
           {bodyItems.map((row) => (
             <div key={row.id} className="select-list-view-body-row">
               {row.rows.map((item, index) => (
