@@ -121,7 +121,8 @@
       "YES": "Yes",
       "NO": "No",
       "UPDATE": "Update",
-      "UPDATED": "Updated"
+      "UPDATED": "Updated",
+      "EDIT": "Edit"
     }
   },
   "dk": {
@@ -246,7 +247,8 @@
       "YES": "Ja",
       "NO": "Nej",
       "UPDATE": "Opdater",
-      "UPDATED": "Opdateret"
+      "UPDATED": "Opdateret",
+      "EDIT": "Editer"
     }
   }
 }

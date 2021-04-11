@@ -411,14 +411,7 @@ function IdentifyFeaturePage() {
   );
 
   const clearHighlights = () => {
-    // We only reload the diagram if not in edit mode
-    // To avoid annoying the user by deselecting.
-    if (!editMode) {
-      executeDiagramQuery();
-    }
-
     highlightFeatures([]);
-    setSingleSelectedFeature(null);
   };
 
   if (diagramQueryResult.fetching || !identifiedFeature?.id) {
@@ -452,9 +445,7 @@ function IdentifyFeaturePage() {
       >
         <RerouteTube
           selectedRouteSegmentMrid={
-            selectedFeatures.current.find(
-              (x) => x.source === "InnerConduit" || "OuterConduit"
-            )?.properties?.refId ?? ""
+            singleSelectedFeature?.properties?.refId ?? ""
           }
         />
       </ModalContainer>
@@ -563,11 +554,6 @@ function IdentifyFeaturePage() {
             action={() => clearHighlights()}
             title={t("CLEAR_HIGHLIGHT")}
           />
-          <ActionButton
-            icon={EraserSvg}
-            action={() => setShowEditSpanEquipment(true)}
-            title={t("CLEAR_HIGHLIGHT")}
-          />
         </DiagramMenu>
       )}
       {identifiedFeature.type === "RouteSegment" && (
@@ -586,9 +572,29 @@ function IdentifyFeaturePage() {
         editMode={editMode}
       />
       {!editMode && singleSelectedFeature && (
-        <SpanEquipmentDetails
-          spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
-        />
+        <div className="feature-details">
+          <div className="feature-details-container">
+            <div className="feature-details-info">
+              <SpanEquipmentDetails
+                spanEquipmentMrid={
+                  singleSelectedFeature?.properties?.refId ?? ""
+                }
+              />
+            </div>
+            <div className="feature-details-actions">
+              <ActionButton
+                icon={PencilSvg}
+                action={() => setShowEditSpanEquipment(true)}
+                title={t("EDIT")}
+              />
+              <ActionButton
+                icon={PencilSvg}
+                action={() => setShowRerouteTube(true)}
+                title={t("MOVE")}
+              />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
