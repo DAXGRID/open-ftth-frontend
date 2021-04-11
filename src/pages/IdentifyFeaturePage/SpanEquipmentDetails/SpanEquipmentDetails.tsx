@@ -30,13 +30,13 @@ function SpanEquipmentDetails({
         <p>
           {`${t("SPECIFICATION")}: ${
             spanEquipmentDetails.data?.utilityNetwork.spanEquipment
-              .specification.description ?? ""
+              ?.specification?.description ?? ""
           }`}
         </p>
         <p>
           {`${t("MARKING_COLOR")}: ${
-            spanEquipmentDetails.data?.utilityNetwork.spanEquipment.markingInfo
-              .markingColor ?? ""
+            spanEquipmentDetails.data?.utilityNetwork.spanEquipment?.markingInfo
+              ?.markingColor ?? ""
           }`}
         </p>
         <p>
@@ -48,7 +48,7 @@ function SpanEquipmentDetails({
         <p>
           {`${t("FIXED")}: ${
             spanEquipmentDetails.data?.utilityNetwork.spanEquipment
-              .specification.isFixed
+              ?.specification?.isFixed
               ? t("YES")
               : t("NO")
           }`}
