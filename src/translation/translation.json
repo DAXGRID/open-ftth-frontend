@@ -112,7 +112,14 @@
       "ERROR": "An error has occured",
       "SELECTED": "Selected",
       "SELECT": "Select",
-      "MOVE": "Move"
+      "MOVE": "Move",
+      "NAME_OR_ID": "Id/Name",
+      "SPECIFICATION": "Specification",
+      "MARKING_COLOR": "Marking color",
+      "MANUFACTURER": "Manufacturer",
+      "FIXED": "Fixed",
+      "YES": "Yes",
+      "NO": "No"
     }
   },
   "dk": {
@@ -228,7 +235,14 @@
       "ERROR": "Der skete en fejl",
       "SELECTED": "Selekteret",
       "SELECT": "Selekter",
-      "MOVE": "Flyt"
+      "MOVE": "Flyt",
+      "NAME_OR_ID": "Id/Navn",
+      "SPECIFICATION": "Specifikation",
+      "MARKING_COLOR": "Markeringsfarve",
+      "MANUFACTURER": "Fabrikant",
+      "FIXED": "Præfabrikeret",
+      "YES": "Ja",
+      "NO": "Nej"
     }
   }
 }

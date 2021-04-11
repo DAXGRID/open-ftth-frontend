@@ -9,6 +9,7 @@ import ActionButton from "../../components/ActionButton";
 import Loading from "../../components/Loading";
 import { MapContext } from "../../contexts/MapContext";
 import RerouteTube from "./RerouteTube";
+import SpanEquipmentDetails from "./SpanEquipmentDetails";
 import {
   Diagram,
   DiagramQueryResponse,
@@ -63,6 +64,10 @@ function IdentifyFeaturePage() {
   const { highlightFeatures } = useBridgeConnector();
   const [editMode, setEditMode] = useState(false);
   const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
+  const [
+    singleSelectedFeature,
+    setSingleSelectedFeature,
+  ] = useState<MapboxGeoJSONFeature | null>();
   const [showAddContainer, setShowAddContainer] = useState(false);
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
   const [showRerouteTube, setShowRerouteTube] = useState(false);
@@ -376,8 +381,10 @@ function IdentifyFeaturePage() {
             response.data?.utilityNetwork.spanSegmentTrace
               ?.routeNetworkSegmentIds ?? []
           );
+          setSingleSelectedFeature(feature);
         } else {
           highlightFeatures([]);
+          setSingleSelectedFeature(null);
         }
       } else {
         if (isSelected) {
@@ -389,7 +396,7 @@ function IdentifyFeaturePage() {
         }
       }
     },
-    [editMode, client, highlightFeatures]
+    [editMode, client, highlightFeatures, setSingleSelectedFeature]
   );
 
   const clearHighlights = () => {
@@ -550,6 +557,9 @@ function IdentifyFeaturePage() {
         envelope={envelope}
         onSelectFeature={onSelectedFeature}
         editMode={editMode}
+      />
+      <SpanEquipmentDetails
+        spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
       />
     </div>
   );
