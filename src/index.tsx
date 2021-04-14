@@ -20,6 +20,16 @@ const subscriptionClient = new SubscriptionClient(
 const client = new Client({
   url: `${Config.API_GATEWAY_HTTP_URI}/graphql`,
   requestPolicy: "network-only",
+  fetchOptions: () => {
+    const token = keycloak.token;
+    return token
+      ? {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        }
+      : {};
+  },
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({
