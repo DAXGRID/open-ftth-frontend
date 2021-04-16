@@ -57,6 +57,8 @@ import {
   RemoveFromContainerSvg,
   TrashCanSvg,
   EraserSvg,
+  EditPropertiesSvg,
+  MoveConduitSvg,
 } from "../../assets";
 
 function IdentifyFeaturePage() {
@@ -580,12 +582,12 @@ function IdentifyFeaturePage() {
             </div>
             <div className="feature-details-actions">
               <ActionButton
-                icon={PencilSvg}
+                icon={EditPropertiesSvg}
                 action={() => setShowEditSpanEquipment(true)}
                 title={t("EDIT")}
               />
               <ActionButton
-                icon={PencilSvg}
+                icon={MoveConduitSvg}
                 action={() => setShowRerouteTube(true)}
                 title={t("MOVE")}
               />

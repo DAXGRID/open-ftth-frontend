@@ -10,6 +10,8 @@ import PutInContainerSvg from "./put-in-container.svg";
 import RemoveFromContainerSvg from "./remove-from-container.svg";
 import TrashCanSvg from "./trash-can.svg";
 import EraserSvg from "./eraser.svg";
+import EditPropertiesSvg from "./edit-properties.svg";
+import MoveConduitSvg from "./move-conduit.svg";
 
 export {
   Loading,
@@ -24,4 +26,6 @@ export {
   RemoveFromContainerSvg,
   TrashCanSvg,
   EraserSvg,
+  EditPropertiesSvg,
+  MoveConduitSvg,
 };
