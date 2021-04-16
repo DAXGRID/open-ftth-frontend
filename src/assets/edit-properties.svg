@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW Home & Student X8 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100mm" height="100mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 10000 10000"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str7 {stroke:black;stroke-width:200}
+    .str0 {stroke:#2B2A29;stroke-width:400}
+    .str1 {stroke:#2B2A29;stroke-width:500}
+    .str2 {stroke:white;stroke-width:500}
+    .str3 {stroke:#2B2A29;stroke-width:600}
+    .str8 {stroke:black;stroke-width:14.38}
+    .str9 {stroke:black;stroke-width:250}
+    .str6 {stroke:black;stroke-width:350}
+    .str4 {stroke:#2B2A29;stroke-width:7.62}
+    .str5 {stroke:red;stroke-width:7.62}
+    .fil0 {fill:none}
+    .fil3 {fill:black}
+    .fil2 {fill:black}
+    .fil1 {fill:white}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <line class="fil0 str0" x1="2211" y1="8135" x2="8165" y2= "8135" />
+  <line class="fil0 str0" x1="2211" y1="2616" x2="7791" y2= "2616" />
+  <line class="fil0 str0" x1="2211" y1="4456" x2="7791" y2= "4456" />
+  <line class="fil0 str0" x1="2211" y1="6296" x2="5026" y2= "6296" />
+  <rect class="fil0 str1" x="520" y="643" width="8710" height="8763" rx="551" ry="547"/>
+  <rect class="fil1 str2" x="8795" y="2320" width="757" height="2700"/>
+  <line class="fil0 str3" x1="737" y1="1045" x2="9014" y2= "1045" />
+  <rect class="fil2 str4" x="1450" y="7955" width="393" height="360"/>
+  <rect class="fil2 str4" x="1450" y="4276" width="393" height="360"/>
+  <rect class="fil2 str4" x="1450" y="2431" width="393" height="360"/>
+  <polygon class="fil1 str5" points="7122,7096 5558,6002 5624,7569 "/>
+  <rect class="fil1" transform="matrix(0.853201 0.615962 -0.653017 0.903423 7809.57 1967.19)" width="2111" height="3980"/>
+  <rect class="fil0 str6" transform="matrix(0.538643 0.38887 -0.38887 0.538643 8241.86 2475.63)" width="2550" height="6585"/>
+  <line class="fil0 str7" x1="8679" y1="2791" x2="6117" y2= "6338" />
+  <line class="fil0 str7" x1="9164" y1="3142" x2="6603" y2= "6689" />
+  <rect class="fil3 str8" transform="matrix(0.538643 0.38887 -0.38887 0.538643 5503.45 7471.97)" width="431" height="669"/>
+  <line class="fil0 str9" x1="5547" y1="6002" x2="5575" y2= "7616" />
+  <line class="fil0 str9" x1="7111" y1="7143" x2="5569" y2= "7625" />
+  <rect class="fil2 str4" x="1450" y="6116" width="393" height="360"/>
+ </g>
+</svg>
