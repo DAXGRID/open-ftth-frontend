@@ -149,7 +149,21 @@ function IdentifyFeaturePage() {
 
     setDiagramObjects([...diagramObjects]);
     setEnvelope({ ...envelope });
-  }, [diagramQueryResult, setDiagramObjects, setEnvelope]);
+    setShowAddContainer(false);
+    setShowHandleInnerConduit(false);
+    setShowRerouteTube(false);
+    selectedFeatures.current = [];
+    setSingleSelectedFeature(null);
+    setShowEditSpanEquipment(false);
+  }, [
+    diagramQueryResult,
+    setDiagramObjects,
+    setEnvelope,
+    setSingleSelectedFeature,
+    setShowRerouteTube,
+    setShowEditSpanEquipment,
+    setShowHandleInnerConduit,
+  ]);
 
   useEffect(() => {
     if (!res.data) return;
