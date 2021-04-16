@@ -22,11 +22,15 @@ const selectRouteSegmentsInMap = async (
   id: string,
   client: Client,
   selectRouteSegments: (mrids: string[]) => void,
+  highlightFeatures: (mrids: string[]) => void,
   t: TFunction<string>
 ) => {
   const params: GetRouteSegmentIdsParameter = {
     spanEquipmentOrSegmentId: id,
   };
+
+  // We remove the highlighted so it does not conflict with the selection.
+  highlightFeatures([]);
 
   const result = await client
     .query<GetRouteSegmentIdsResponse>(QUERY_GET_ROUTESEGMENT_IDS, params)
@@ -63,7 +67,7 @@ const reroute = async (
 
 function RerouteTube({ selectedRouteSegmentMrid }: RerouteTubeParams) {
   const client = useClient();
-  const { selectRouteSegments } = useBridgeConnector();
+  const { selectRouteSegments, highlightFeatures } = useBridgeConnector();
   const { selectedSegmentIds } = useContext(MapContext);
   const { t } = useTranslation();
 
@@ -76,6 +80,7 @@ function RerouteTube({ selectedRouteSegmentMrid }: RerouteTubeParams) {
               selectedRouteSegmentMrid,
               client,
               selectRouteSegments,
+              highlightFeatures,
               t
             )
           }
