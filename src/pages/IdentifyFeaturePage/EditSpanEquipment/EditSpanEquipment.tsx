@@ -245,7 +245,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
           bodyItems={filteredSpanEquipmentSpecifications}
           selectItem={(x) => selectSpanEquipmentSpecification(x.id.toString())}
           selected={selectedSpanEquipmentSpecification}
-          maxHeightBody="400px"
+          maxHeightBody="250px"
         />
       </div>
       <div className="full-row">
@@ -254,6 +254,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
           bodyItems={filteredManufactuers}
           selectItem={(x) => setSelectedManufacturer(x.id.toString())}
           selected={selectedManufacturer}
+          maxHeightBody="200px"
         />
       </div>
       <div className="full-row">
