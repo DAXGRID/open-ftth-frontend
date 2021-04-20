@@ -133,6 +133,7 @@ function IdentifyFeaturePage() {
   const [res] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
     variables: { routeNetworkElementId: identifiedFeature?.id },
+    pause: !identifiedFeature?.id,
   });
 
   useEffect(() => {
