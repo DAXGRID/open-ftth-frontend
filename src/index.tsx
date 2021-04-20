@@ -13,7 +13,13 @@ import "./global-styles/index.scss";
 const subscriptionClient = new SubscriptionClient(
   `${Config.API_GATEWAY_WS_URI}/graphql`,
   {
+    lazy: true,
     reconnect: true,
+    connectionParams: () => {
+      return {
+        Authorization: `Bearer ${keycloak.token}`,
+      };
+    },
   }
 );
 
@@ -25,7 +31,7 @@ const client = new Client({
     return token
       ? {
           headers: {
-            Authorization: `bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       : {};
@@ -33,9 +39,7 @@ const client = new Client({
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({
-      forwardSubscription(operation) {
-        return subscriptionClient.request(operation);
-      },
+      forwardSubscription: (operation) => subscriptionClient.request(operation),
     }),
   ],
 });
