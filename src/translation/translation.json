@@ -122,7 +122,8 @@
       "NO": "No",
       "UPDATE": "Update",
       "UPDATED": "Updated",
-      "EDIT": "Edit"
+      "EDIT": "Edit",
+      "REVERSE_VERTICAL_ALIGNMENT": "Reverse vertical alignment"
     }
   },
   "dk": {
@@ -248,7 +249,8 @@
       "NO": "Nej",
       "UPDATE": "Opdater",
       "UPDATED": "Opdateret",
-      "EDIT": "Editer"
+      "EDIT": "Editer",
+      "REVERSE_VERTICAL_ALIGNMENT": "Flip"
     }
   }
 }
