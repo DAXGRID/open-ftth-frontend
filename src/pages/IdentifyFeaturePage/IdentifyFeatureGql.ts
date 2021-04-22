@@ -316,3 +316,23 @@ mutation ($spanSegmentId: ID!) {
   }
 }
 `;
+
+export interface ReverseVerticalAlignmentResponse {
+  nodeContainer: {
+    reverseVerticalContentAlignment: {
+      isSuccess: boolean;
+      errorCode: string;
+    };
+  };
+}
+
+export const REVERSE_VERTICAL_ALIGNMENT = `
+mutation ($nodeContainerId: ID!) {
+  nodeContainer {
+    reverseVerticalContentAlignment(nodeContainerId: $nodeContainerId) {
+       isSuccess
+       errorCode
+    }
+  }
+}
+`;

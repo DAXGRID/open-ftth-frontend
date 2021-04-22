@@ -39,6 +39,8 @@ import {
   QueryRouteNetworkElementResponse,
   REMOVE_SPAN_STRUCTURE,
   RemoveSpanStructureResponse,
+  REVERSE_VERTICAL_ALIGNMENT,
+  ReverseVerticalAlignmentResponse,
 } from "./IdentifyFeatureGql";
 import AddContainer from "./AddContainer";
 import AddInnerSpanStructure from "./AddInnerSpanStructure";
@@ -59,6 +61,7 @@ import {
   EraserSvg,
   EditPropertiesSvg,
   MoveConduitSvg,
+  FlipSvg,
 } from "../../assets";
 
 function IdentifyFeaturePage() {
@@ -424,6 +427,34 @@ function IdentifyFeaturePage() {
     [editMode, client, highlightFeatures, setSingleSelectedFeature]
   );
 
+  const reverseVertialAlignment = async () => {
+    const nodeContainer = selectedFeatures.current.find(
+      (x) => x.layer.source === "NodeContainerSide"
+    );
+
+    const nodeContainerId = nodeContainer?.properties?.refId as string;
+
+    if (!nodeContainerId) {
+      toast.error(t("No node container selected"));
+      return;
+    }
+
+    const result = await client
+      .mutation<ReverseVerticalAlignmentResponse>(REVERSE_VERTICAL_ALIGNMENT, {
+        nodeContainerId: nodeContainerId,
+      })
+      .toPromise();
+
+    if (!result.data?.nodeContainer.reverseVerticalContentAlignment.isSuccess) {
+      toast.error(
+        t(
+          result.data?.nodeContainer.reverseVerticalContentAlignment
+            .errorCode ?? "Error has occurred"
+        )
+      );
+    }
+  };
+
   const clearHighlights = () => {
     highlightFeatures([]);
   };
@@ -561,6 +592,12 @@ function IdentifyFeaturePage() {
             icon={TrashCanSvg}
             action={() => removeSpanStructure()}
             title={t("REMOVE_OBJECT")}
+            disabled={!editMode}
+          />
+          <ActionButton
+            icon={FlipSvg}
+            action={() => reverseVertialAlignment()}
+            title={t("REVERSE_VERTICAL_ALIGNMENT")}
             disabled={!editMode}
           />
           <ActionButton
