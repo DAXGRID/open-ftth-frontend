@@ -196,21 +196,31 @@ function SchematicDiagram({
       mapFitBounds(envelope, newMap);
       enableResize(newMap);
 
-      if (diagramObjects.find((x) => x.style.startsWith("InnerConduit"))) {
-        newMap.addLayer(innerConduitSelect);
-        newMap.addLayer(outerConduitSelect);
+      const hasInnerConduit = diagramObjects.find((x) =>
+        x.style.startsWith("InnerConduit")
+      );
 
+      const hasOuterConduit = diagramObjects.find((x) =>
+        x.style.startsWith("OuterConduit")
+      );
+
+      const hasNodeContainerSide = diagramObjects.find((x) =>
+        x.style.startsWith("NodeContainerSide")
+      );
+
+      if (hasInnerConduit) {
+        newMap.addLayer(innerConduitSelect);
         hoverPointer("InnerConduit", newMap);
         clickHighlight("InnerConduit", newMap, onSelectFeature, editMode);
-        // if has inner conduit then it also has outer
+      }
+
+      if (hasOuterConduit) {
+        newMap.addLayer(outerConduitSelect);
         hoverPointer("OuterConduit", newMap);
         clickHighlight("OuterConduit", newMap, onSelectFeature, editMode);
       }
 
-      if (
-        diagramObjects.find((x) => x.style.startsWith("NodeContainerSide")) &&
-        editMode
-      ) {
+      if (hasNodeContainerSide && editMode) {
         newMap.addLayer(nodeContainerSideSelect);
         hoverPointer("NodeContainerSide", newMap);
         clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
