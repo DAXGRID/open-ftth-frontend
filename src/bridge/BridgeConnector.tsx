@@ -108,7 +108,8 @@ function BridgeConnector() {
           data.selectedType !== "RouteNode" &&
           data.selectedType !== "RouteSegment"
         ) {
-          throw new Error(`${data.selectedType} is not a valid type.`);
+          // Do nothing
+          return;
         }
 
         if (data.username === keycloak.profile?.username) {
