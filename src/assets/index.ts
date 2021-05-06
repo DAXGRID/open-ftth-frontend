@@ -12,6 +12,7 @@ import TrashCanSvg from "./trash-can.svg";
 import EraserSvg from "./eraser.svg";
 import EditPropertiesSvg from "./edit-properties.svg";
 import MoveConduitSvg from "./move-conduit.svg";
+import CabinetBigSvg from "./cabinet_big.svg";
 
 export {
   Loading,
@@ -28,4 +29,5 @@ export {
   EraserSvg,
   EditPropertiesSvg,
   MoveConduitSvg,
+  CabinetBigSvg,
 };
