@@ -427,7 +427,11 @@ function IdentifyFeaturePage() {
           selectedFeatures.current = [...selectedFeatures.current, feature];
         } else {
           selectedFeatures.current = selectedFeatures.current.filter((x) => {
-            return x.properties?.refId !== feature.properties?.refId;
+            const t =
+              x.properties?.refId !== feature.properties?.refId ||
+              x.properties?.type !== feature.properties?.type;
+
+            return t;
           });
         }
       }
