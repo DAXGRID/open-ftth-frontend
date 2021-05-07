@@ -298,11 +298,19 @@ function IdentifyFeaturePage() {
   };
 
   const disconnectSpanSegments = async () => {
-    const spanSegmentsToDisconnect = selectedFeatures.current
+    const innerConduits = selectedFeatures.current
       .filter((x) => {
         return x.layer.source === "InnerConduit";
       })
       .map((x) => x.properties?.refId as string);
+
+    const outerConduits = selectedFeatures.current
+      .filter((x) => {
+        return x.layer.source === "OuterConduit";
+      })
+      .map((x) => x.properties?.refId as string);
+
+    const spanSegmentsToDisconnect = [...innerConduits, ...outerConduits];
 
     if (!identifiedFeature?.id) {
       toast.error(t("No identified feature"));
