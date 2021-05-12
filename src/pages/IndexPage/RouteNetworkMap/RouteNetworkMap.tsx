@@ -1,6 +1,35 @@
 import { useEffect, useRef } from "react";
-import { Map } from "mapbox-gl";
+import { Map, PointLike, MapMouseEvent } from "mapbox-gl";
 import { CabinetBigSvg } from "../../../assets";
+
+function enableResize(map: Map) {
+  window.addEventListener("resize", () => {
+    // Hack to handle resize of mapcanvas because
+    // the event gets called to early, so we have to queue it up
+    setTimeout(() => {
+      map.resize();
+    }, 1);
+  });
+}
+
+function hoverPointer(featureName: string, map: Map) {
+  map.on("mousemove", (e: MapMouseEvent) => {
+    const bbox: [PointLike, PointLike] = [
+      [e.point.x - 10, e.point.y - 10],
+      [e.point.x + 10, e.point.y + 10],
+    ];
+
+    var features = map.queryRenderedFeatures(bbox, {
+      layers: ["route_segment"],
+    });
+
+    if (features.length > 0) {
+      map.getCanvas().style.cursor = "pointer";
+    } else {
+      map.getCanvas().style.cursor = "";
+    }
+  });
+}
 
 function RouteNetworkMap() {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -11,11 +40,16 @@ function RouteNetworkMap() {
       container: mapContainer.current ?? "",
       style:
         "https://api.maptiler.com/maps/basic/style.json?key=AI2XImJGt0ewRiF5VtVQ",
-      center: [0, 0],
-      zoom: 1,
+      center: [9.841181882076398, 55.86205081435847],
+      zoom: 18,
     });
 
     newMap.on("load", () => {
+      newMap.doubleClickZoom.disable();
+      newMap.dragRotate.disable();
+      enableResize(newMap);
+      hoverPointer("route_segment", newMap);
+
       let img = new Image(20, 20);
       img.onload = () => newMap.addImage("cabinet_big", img);
       img.src = CabinetBigSvg;
@@ -24,7 +58,7 @@ function RouteNetworkMap() {
 
       newMap.addSource("openftth", {
         type: "vector",
-        tiles: ["http://20.76.192.195/services/out/tiles/{z}/{x}/{y}.pbf"],
+        tiles: ["http://20.76.242.112/services/out/tiles/{z}/{x}/{y}.pbf"],
         minzoom: 4,
         maxzoom: 24,
       });
@@ -36,7 +70,7 @@ function RouteNetworkMap() {
         type: "line",
         paint: {
           "line-color": "#FF0000",
-          "line-width": 1,
+          "line-width": 2,
         },
       });
 
