@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Map, PointLike, MapMouseEvent } from "mapbox-gl";
+import { Map, PointLike, MapMouseEvent, MapboxGeoJSONFeature } from "mapbox-gl";
 import { CabinetBigSvg } from "../../../assets";
 
 function enableResize(map: Map) {
@@ -12,15 +12,15 @@ function enableResize(map: Map) {
   });
 }
 
-function hoverPointer(featureName: string, map: Map) {
+function hoverPointer(featureNames: string[], bboxSize: number, map: Map) {
   map.on("mousemove", (e: MapMouseEvent) => {
     const bbox: [PointLike, PointLike] = [
-      [e.point.x - 10, e.point.y - 10],
-      [e.point.x + 10, e.point.y + 10],
+      [e.point.x - bboxSize, e.point.y - bboxSize],
+      [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
     var features = map.queryRenderedFeatures(bbox, {
-      layers: ["route_segment"],
+      layers: [...featureNames],
     });
 
     if (features.length > 0) {
@@ -28,6 +28,35 @@ function hoverPointer(featureName: string, map: Map) {
     } else {
       map.getCanvas().style.cursor = "";
     }
+  });
+}
+
+function clickHighlight(
+  featureName: string,
+  bboxSize: number,
+  map: Map,
+  callback: (feature: MapboxGeoJSONFeature) => void
+) {
+  map.on("click", (e) => {
+    const bbox: [PointLike, PointLike] = [
+      [e.point.x - bboxSize, e.point.y - bboxSize],
+      [e.point.x + bboxSize, e.point.y + bboxSize],
+    ];
+
+    const feature = map.queryRenderedFeatures(bbox)[0];
+
+    if (feature.layer.id !== featureName) {
+      return;
+    }
+
+    feature.state.selected = !feature.state.selected;
+
+    map.setFeatureState(feature, {
+      ...feature,
+      selected: feature.state.selected,
+    });
+
+    if (callback) callback(feature);
   });
 }
 
@@ -48,42 +77,58 @@ function RouteNetworkMap() {
       newMap.doubleClickZoom.disable();
       newMap.dragRotate.disable();
       enableResize(newMap);
-      hoverPointer("route_segment", newMap);
+      hoverPointer(["route_segment", "route_segment"], 10, newMap);
+      clickHighlight("route_segment", 10, newMap, (x) => {
+        console.log(x);
+      });
 
-      let img = new Image(20, 20);
-      img.onload = () => newMap.addImage("cabinet_big", img);
-      img.src = CabinetBigSvg;
+      clickHighlight("route_node", 10, newMap, (x) => {
+        console.log(x);
+      });
 
-      newMap.addImage("skab", img);
-
-      newMap.addSource("openftth", {
+      newMap.addSource("route_network", {
         type: "vector",
-        tiles: ["http://20.76.242.112/services/out/tiles/{z}/{x}/{y}.pbf"],
+        tiles: [
+          "http://tiles.openftth.local/services/route_network/tiles/{z}/{x}/{y}.pbf",
+        ],
         minzoom: 4,
-        maxzoom: 24,
+        maxzoom: 22,
+      });
+
+      newMap.addLayer({
+        id: "route_node",
+        source: "route_network",
+        minzoom: 14,
+        maxzoom: 22,
+        "source-layer": "route_nodes",
+        type: "circle",
+        paint: {
+          "circle-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "#00FF00",
+            "#FF0000",
+          ],
+        },
       });
 
       newMap.addLayer({
         id: "route_segment",
-        source: "openftth",
-        "source-layer": "output",
+        source: "route_network",
+        minzoom: 4,
+        maxzoom: 24,
+        "source-layer": "route_segments",
         type: "line",
         paint: {
-          "line-color": "#FF0000",
+          "line-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "#00FF00",
+            "#FF0000",
+          ],
           "line-width": 2,
         },
       });
-
-      /* newMap.addLayer({
-       *   id: "route_node",
-       *   source: "openftth",
-       *   "source-layer": "route_node",
-       *   type: "symbol",
-       *   layout: {
-       *     "icon-image": "cabinet_big", // reference the image
-       *     "icon-size": 1,
-       *   },
-       * }); */
     });
 
     map.current = newMap;
