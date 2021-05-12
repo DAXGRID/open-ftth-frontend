@@ -96,23 +96,6 @@ function RouteNetworkMap() {
       });
 
       newMap.addLayer({
-        id: "route_node",
-        source: "route_network",
-        minzoom: 14,
-        maxzoom: 22,
-        "source-layer": "route_nodes",
-        type: "circle",
-        paint: {
-          "circle-color": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            "#00FF00",
-            "#FF0000",
-          ],
-        },
-      });
-
-      newMap.addLayer({
         id: "route_segment",
         source: "route_network",
         minzoom: 4,
@@ -127,6 +110,23 @@ function RouteNetworkMap() {
             "#FF0000",
           ],
           "line-width": 2,
+        },
+      });
+
+      newMap.addLayer({
+        id: "route_node",
+        source: "route_network",
+        minzoom: 14,
+        maxzoom: 22,
+        "source-layer": "route_nodes",
+        type: "circle",
+        paint: {
+          "circle-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "#00FF00",
+            "#FF0000",
+          ],
         },
       });
     });
