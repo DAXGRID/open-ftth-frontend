@@ -3,7 +3,7 @@ import { useQuery, useSubscription, useMutation, useClient } from "urql";
 import { MapboxGeoJSONFeature } from "mapbox-gl";
 import DiagramMenu from "../../components/DiagramMenu";
 import ModalContainer from "../../components/ModalContainer";
-import SchematicDiagram from "../../components/SchematicDiagram";
+import SchematicDiagram from "../../groups/SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
 import ActionButton from "../../components/ActionButton";
 import Loading from "../../components/Loading";
@@ -70,10 +70,8 @@ function IdentifyFeaturePage() {
   const { highlightFeatures } = useBridgeConnector();
   const [editMode, setEditMode] = useState(false);
   const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
-  const [
-    singleSelectedFeature,
-    setSingleSelectedFeature,
-  ] = useState<MapboxGeoJSONFeature | null>();
+  const [singleSelectedFeature, setSingleSelectedFeature] =
+    useState<MapboxGeoJSONFeature | null>();
   const [showAddContainer, setShowAddContainer] = useState(false);
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
   const [showRerouteTube, setShowRerouteTube] = useState(false);
@@ -95,43 +93,33 @@ function IdentifyFeaturePage() {
     pause: !identifiedFeature?.id,
   });
 
-  const [
-    routeNetworkElementResponse,
-  ] = useQuery<QueryRouteNetworkElementResponse>({
-    query: QUERY_ROUTE_NETWORK_ELEMENT,
-    variables: {
-      routeElementId: identifiedFeature?.id,
-    },
-    pause: !identifiedFeature?.id,
-  });
+  const [routeNetworkElementResponse] =
+    useQuery<QueryRouteNetworkElementResponse>({
+      query: QUERY_ROUTE_NETWORK_ELEMENT,
+      variables: {
+        routeElementId: identifiedFeature?.id,
+      },
+      pause: !identifiedFeature?.id,
+    });
 
-  const [, cutSpanSegmentsMutation] = useMutation<CutSpanSegmentsResponse>(
-    CUT_SPAN_SEGMENTS
-  );
+  const [, cutSpanSegmentsMutation] =
+    useMutation<CutSpanSegmentsResponse>(CUT_SPAN_SEGMENTS);
 
-  const [
-    ,
-    affixSpanEquipmentMutation,
-  ] = useMutation<AffixSpanEquipmentResponse>(
-    AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER
-  );
+  const [, affixSpanEquipmentMutation] =
+    useMutation<AffixSpanEquipmentResponse>(
+      AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER
+    );
 
-  const [
-    ,
-    connectSpanSegmentsMutation,
-  ] = useMutation<ConnectSpanSegmentsResponse>(CONNECT_SPAN_SEGMENTS);
+  const [, connectSpanSegmentsMutation] =
+    useMutation<ConnectSpanSegmentsResponse>(CONNECT_SPAN_SEGMENTS);
 
-  const [
-    ,
-    disconnectSpanSegmentsMutation,
-  ] = useMutation<DisconnectSpanSegmentsResponse>(DISCONNECT_SPAN_SEGMENTS);
+  const [, disconnectSpanSegmentsMutation] =
+    useMutation<DisconnectSpanSegmentsResponse>(DISCONNECT_SPAN_SEGMENTS);
 
-  const [
-    ,
-    detachSpanEquipmentMutation,
-  ] = useMutation<DetachSpanEquipmentResponse>(
-    DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER
-  );
+  const [, detachSpanEquipmentMutation] =
+    useMutation<DetachSpanEquipmentResponse>(
+      DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER
+    );
 
   const [res] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
@@ -146,10 +134,8 @@ function IdentifyFeaturePage() {
   useEffect(() => {
     if (!diagramQueryResult.data) return;
 
-    const {
-      diagramObjects,
-      envelope,
-    } = diagramQueryResult.data.schematic.buildDiagram;
+    const { diagramObjects, envelope } =
+      diagramQueryResult.data.schematic.buildDiagram;
 
     setDiagramObjects([...diagramObjects]);
     setEnvelope({ ...envelope });

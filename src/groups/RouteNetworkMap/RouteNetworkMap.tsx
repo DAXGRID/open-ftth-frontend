@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { Map, PointLike, MapMouseEvent, MapboxGeoJSONFeature } from "mapbox-gl";
-import { CabinetBigSvg } from "../../../assets";
 
 function enableResize(map: Map) {
   window.addEventListener("resize", () => {
@@ -99,7 +98,7 @@ function RouteNetworkMap() {
         id: "route_segment",
         source: "route_network",
         minzoom: 4,
-        maxzoom: 24,
+        maxzoom: 22,
         "source-layer": "route_segments",
         type: "line",
         paint: {

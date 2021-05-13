@@ -1,4 +1,4 @@
-import RouteNetworkMap from "./RouteNetworkMap";
+import RouteNetworkMap from "../../groups/RouteNetworkMap";
 
 function IndexPage() {
   return (
