@@ -78,14 +78,13 @@ function RouteNetworkMap() {
         "https://api.maptiler.com/maps/basic/style.json?key=AI2XImJGt0ewRiF5VtVQ",
       center: [9.841181882076398, 55.86205081435847],
       zoom: 18,
+      doubleClickZoom: false,
+      dragRotate: false,
     });
 
     newMap.on("load", () => {
-      newMap.doubleClickZoom.disable();
-      newMap.dragRotate.disable();
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
-
       clickHighlight(["route_segment", "route_node"], 10, newMap, (x) => {
         console.log(x);
       });
