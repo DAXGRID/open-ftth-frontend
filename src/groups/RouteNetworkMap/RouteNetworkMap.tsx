@@ -19,7 +19,12 @@ function hoverPointer(featureNames: string[], bboxSize: number, map: Map) {
     ];
 
     var features = map.queryRenderedFeatures(bbox, {
-      layers: [...featureNames],
+      filter: [
+        "any",
+        ...featureNames.map((x) => {
+          return ["==", "layer", x];
+        }),
+      ],
     });
 
     if (features.length > 0) {
@@ -44,7 +49,7 @@ function clickHighlight(
 
     const feature = map.queryRenderedFeatures(bbox)[0];
 
-    if (feature.layer.id !== featureName) {
+    if (feature?.properties?.layer !== featureName) {
       return;
     }
 
@@ -76,10 +81,7 @@ function RouteNetworkMap() {
       newMap.doubleClickZoom.disable();
       newMap.dragRotate.disable();
       enableResize(newMap);
-      hoverPointer(["route_segment", "route_segment"], 10, newMap);
-      clickHighlight("route_segment", 10, newMap, (x) => {
-        console.log(x);
-      });
+      hoverPointer(["route_node", "route_segment"], 10, newMap);
 
       clickHighlight("route_node", 10, newMap, (x) => {
         console.log(x);
@@ -88,7 +90,7 @@ function RouteNetworkMap() {
       newMap.addSource("route_network", {
         type: "vector",
         tiles: [
-          "http://tiles.openftth.local/services/route_network/tiles/{z}/{x}/{y}.pbf",
+          "http://tiles.openftth.local/services/out/tiles/{z}/{x}/{y}.pbf",
         ],
         minzoom: 4,
         maxzoom: 22,
@@ -97,8 +99,6 @@ function RouteNetworkMap() {
       newMap.addLayer({
         id: "route_segment",
         source: "route_network",
-        minzoom: 4,
-        maxzoom: 22,
         "source-layer": "route_segments",
         type: "line",
         paint: {
@@ -113,12 +113,11 @@ function RouteNetworkMap() {
       });
 
       newMap.addLayer({
-        id: "route_node",
+        id: "route_node_central_office_small",
         source: "route_network",
-        minzoom: 14,
-        maxzoom: 22,
-        "source-layer": "route_nodes",
+        "source-layer": "out",
         type: "circle",
+        filter: ["all", ["==", "kind", "CentralOfficeSmall"]],
         paint: {
           "circle-color": [
             "case",
