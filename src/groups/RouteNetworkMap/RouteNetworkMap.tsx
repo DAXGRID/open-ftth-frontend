@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Map, PointLike, MapMouseEvent, MapboxGeoJSONFeature } from "mapbox-gl";
+import { CabinetBigSvg } from "../../assets";
 
 function enableResize(map: Map) {
   window.addEventListener("resize", () => {
@@ -98,6 +99,10 @@ function RouteNetworkMap() {
         maxzoom: 22,
       });
 
+      let img = new Image(20, 20);
+      img.src = CabinetBigSvg;
+      img.onload = () => newMap.addImage("cabinet_big", img);
+
       newMap.addLayer({
         id: "route_segment",
         source: "route_network",
@@ -118,15 +123,12 @@ function RouteNetworkMap() {
         id: "route_node_central_office_small",
         source: "route_network",
         "source-layer": "out",
-        type: "circle",
+        type: "symbol",
         filter: ["all", ["==", "kind", "CentralOfficeSmall"]],
-        paint: {
-          "circle-color": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            "#00FF00",
-            "#FF0000",
-          ],
+        layout: {
+          "icon-image": "cabinet_big",
+          "icon-size": 1,
+          "icon-allow-overlap": true,
         },
       });
     });
