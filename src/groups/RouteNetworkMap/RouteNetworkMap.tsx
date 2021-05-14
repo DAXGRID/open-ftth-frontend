@@ -36,7 +36,7 @@ function hoverPointer(featureNames: string[], bboxSize: number, map: Map) {
 }
 
 function clickHighlight(
-  featureName: string,
+  featureNames: string[],
   bboxSize: number,
   map: Map,
   callback: (feature: MapboxGeoJSONFeature) => void
@@ -49,7 +49,10 @@ function clickHighlight(
 
     const feature = map.queryRenderedFeatures(bbox)[0];
 
-    if (feature?.properties?.layer !== featureName) {
+    if (
+      !feature ||
+      !featureNames.find((x) => x === feature.properties?.layer)
+    ) {
       return;
     }
 
@@ -83,7 +86,7 @@ function RouteNetworkMap() {
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
 
-      clickHighlight("route_node", 10, newMap, (x) => {
+      clickHighlight(["route_segment", "route_node"], 10, newMap, (x) => {
         console.log(x);
       });
 
