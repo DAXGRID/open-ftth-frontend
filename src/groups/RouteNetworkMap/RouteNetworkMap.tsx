@@ -1,6 +1,12 @@
 import { useEffect, useRef } from "react";
 import { Map, PointLike, MapMouseEvent, MapboxGeoJSONFeature } from "mapbox-gl";
-import { CabinetBigSvg } from "../../assets";
+import {
+  CabinetBigSvg,
+  CabinetSmallSvg,
+  CentralOfficeSmallSvg,
+  HandHoleSvg,
+  ConduitClosureSvg,
+} from "../../assets";
 
 function enableResize(map: Map) {
   window.addEventListener("resize", () => {
@@ -68,6 +74,12 @@ function clickHighlight(
   });
 }
 
+function mapAddImage(map: Map, name: string, icon: string) {
+  const img = new Image(20, 20);
+  img.src = icon;
+  img.onload = () => map.addImage(name, img);
+}
+
 function RouteNetworkMap() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<Map | null>(null);
@@ -99,9 +111,11 @@ function RouteNetworkMap() {
         maxzoom: 22,
       });
 
-      let img = new Image(20, 20);
-      img.src = CabinetBigSvg;
-      img.onload = () => newMap.addImage("cabinet_big", img);
+      mapAddImage(newMap, "central_office_small", CentralOfficeSmallSvg);
+      mapAddImage(newMap, "cabinet_big", CabinetBigSvg);
+      mapAddImage(newMap, "cabinet_small", CabinetSmallSvg);
+      mapAddImage(newMap, "hand_hole", HandHoleSvg);
+      mapAddImage(newMap, "conduit_closure", ConduitClosureSvg);
 
       newMap.addLayer({
         id: "route_segment",
@@ -126,7 +140,59 @@ function RouteNetworkMap() {
         type: "symbol",
         filter: ["all", ["==", "kind", "CentralOfficeSmall"]],
         layout: {
+          "icon-image": "central_office_small",
+          "icon-size": 1,
+          "icon-allow-overlap": true,
+        },
+      });
+
+      newMap.addLayer({
+        id: "route_node_conduit_closure",
+        source: "route_network",
+        "source-layer": "out",
+        type: "symbol",
+        filter: ["all", ["==", "kind", "ConduitClosure"]],
+        layout: {
+          "icon-image": "conduit_closure",
+          "icon-size": 1,
+          "icon-allow-overlap": true,
+        },
+      });
+
+      newMap.addLayer({
+        id: "route_node_cabinet_big",
+        source: "route_network",
+        "source-layer": "out",
+        type: "symbol",
+        filter: ["all", ["==", "kind", "CabinetBig"]],
+        layout: {
           "icon-image": "cabinet_big",
+          "icon-size": 1,
+          "icon-allow-overlap": true,
+        },
+      });
+
+      newMap.addLayer({
+        id: "route_node_cabinet_small",
+        source: "route_network",
+        "source-layer": "out",
+        type: "symbol",
+        filter: ["all", ["==", "kind", "CabinetSmall"]],
+        layout: {
+          "icon-image": "cabinet_small",
+          "icon-size": 1,
+          "icon-allow-overlap": true,
+        },
+      });
+
+      newMap.addLayer({
+        id: "route_node_hand_hole",
+        source: "route_network",
+        "source-layer": "out",
+        type: "symbol",
+        filter: ["all", ["==", "kind", "HandHole"]],
+        layout: {
+          "icon-image": "hand_hole",
           "icon-size": 1,
           "icon-allow-overlap": true,
         },
