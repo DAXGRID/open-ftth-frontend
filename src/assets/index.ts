@@ -12,7 +12,11 @@ import TrashCanSvg from "./trash-can.svg";
 import EraserSvg from "./eraser.svg";
 import EditPropertiesSvg from "./edit-properties.svg";
 import MoveConduitSvg from "./move-conduit.svg";
-import CabinetBigSvg from "./cabinet_big.svg";
+import CabinetBigSvg from "./cabinet-big.svg";
+import CabinetSmall from "./cabinet-small.svg";
+import HandHoleSvg from "./hand-hole.svg";
+import ConduitClosureSvg from "./conduit-closure.svg";
+import CentralOfficeSmall from "./central-office-small.svg";
 
 export {
   Loading,
@@ -30,4 +34,8 @@ export {
   EditPropertiesSvg,
   MoveConduitSvg,
   CabinetBigSvg,
+  CabinetSmall,
+  HandHoleSvg,
+  ConduitClosureSvg,
+  CentralOfficeSmall,
 };

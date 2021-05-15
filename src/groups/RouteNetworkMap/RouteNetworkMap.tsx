@@ -93,7 +93,7 @@ function RouteNetworkMap() {
       newMap.addSource("route_network", {
         type: "vector",
         tiles: [
-          "http://tiles.openftth.local/services/out/tiles/{z}/{x}/{y}.pbf",
+          "http://tiles.openftth.local/services/route_network/tiles/{z}/{x}/{y}.pbf",
         ],
         minzoom: 4,
         maxzoom: 22,
