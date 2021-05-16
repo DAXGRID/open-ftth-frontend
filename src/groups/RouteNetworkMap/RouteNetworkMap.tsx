@@ -101,8 +101,16 @@ function RouteNetworkMap() {
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
       clickHighlight(["route_segment", "route_node"], 10, newMap, (x) => {
-        console.log(x);
-        setIdentifiedFeature({ id: x?.properties?.mrid, type: "RouteNode" });
+        let type: "RouteNode" | "RouteSegment" | null = null;
+        if (x?.properties?.layer === "route_node") {
+          type = "RouteNode";
+        } else if (x?.properties?.layer === "route_segment") {
+          type = "RouteSegment";
+        } else {
+          throw Error(`${x.type} is not a valid type`);
+        }
+
+        setIdentifiedFeature({ id: x?.properties?.mrid, type: type });
       });
 
       newMap.addSource("route_network", {
