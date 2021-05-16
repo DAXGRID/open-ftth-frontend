@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { Map, PointLike, MapMouseEvent, MapboxGeoJSONFeature } from "mapbox-gl";
+import { MapContext } from "../../contexts/MapContext";
 import {
   CabinetBigSvg,
   CabinetSmallSvg,
@@ -83,6 +84,7 @@ function mapAddImage(map: Map, name: string, icon: string) {
 function RouteNetworkMap() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<Map | null>(null);
+  const { setIdentifiedFeature } = useContext(MapContext);
 
   useEffect(() => {
     const newMap = new Map({
@@ -100,6 +102,7 @@ function RouteNetworkMap() {
       hoverPointer(["route_node", "route_segment"], 10, newMap);
       clickHighlight(["route_segment", "route_node"], 10, newMap, (x) => {
         console.log(x);
+        setIdentifiedFeature({ id: x?.properties?.mrid, type: "RouteNode" });
       });
 
       newMap.addSource("route_network", {
