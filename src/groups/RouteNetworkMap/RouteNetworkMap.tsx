@@ -90,10 +90,14 @@ function RouteNetworkMap() {
   useEffect(() => {
     const newMap = new Map({
       container: mapContainer.current ?? "",
-      style:
-        "https://api.maptiler.com/maps/basic/style.json?key=AI2XImJGt0ewRiF5VtVQ",
-      center: [9.841181882076398, 55.86205081435847],
-      zoom: 18,
+      style: {
+        version: 8,
+        sources: {},
+        layers: [],
+        glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+      },
+      center: [9.996730316498656, 56.04595255289249],
+      zoom: 10,
       doubleClickZoom: false,
       dragRotate: false,
     });
@@ -102,6 +106,7 @@ function RouteNetworkMap() {
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
       clickHighlight(["route_segment", "route_node"], 10, newMap, (x) => {
+        console.log(newMap.getCenter());
         let type: "RouteNode" | "RouteSegment" | null = null;
         if (x?.properties?.layer === "route_node") {
           type = "RouteNode";
