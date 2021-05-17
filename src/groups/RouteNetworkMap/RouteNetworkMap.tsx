@@ -106,7 +106,6 @@ function RouteNetworkMap() {
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
       clickHighlight(["route_segment", "route_node"], 10, newMap, (x) => {
-        console.log(newMap.getCenter());
         let type: "RouteNode" | "RouteSegment" | null = null;
         if (x?.properties?.layer === "route_node") {
           type = "RouteNode";
