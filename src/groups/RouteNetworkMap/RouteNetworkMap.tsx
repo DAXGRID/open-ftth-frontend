@@ -1,6 +1,7 @@
 import { useEffect, useRef, useContext } from "react";
 import { Map, PointLike, MapMouseEvent, MapboxGeoJSONFeature } from "mapbox-gl";
 import { MapContext } from "../../contexts/MapContext";
+import Config from "../../config";
 import {
   CabinetBigSvg,
   CabinetSmallSvg,
@@ -116,7 +117,7 @@ function RouteNetworkMap() {
       newMap.addSource("route_network", {
         type: "vector",
         tiles: [
-          "http://tiles.openftth.local/services/route_network/tiles/{z}/{x}/{y}.pbf",
+          `${Config.ROUTE_NETWORK_TILE_SERVER_URI}/services/route_network/tiles/{z}/{x}/{y}.pbf`,
         ],
         minzoom: 4,
         maxzoom: 22,
@@ -216,7 +217,7 @@ function RouteNetworkMap() {
       newMap.remove();
       map.current = null;
     };
-  }, []);
+  }, [setIdentifiedFeature]);
 
   return (
     <div className="route-network-map">
