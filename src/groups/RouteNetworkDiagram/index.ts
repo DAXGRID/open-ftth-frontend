@@ -1,4 +1,4 @@
-import IdentifyFeaturePage from "./IdentifyFeaturePage";
-import "./IdentifyFeaturePage.scss";
+import IdentifyFeaturePage from "./RouteNetworkDiagram";
+import "./RouteNetworkDiagram.scss";
 
 export default IdentifyFeaturePage;

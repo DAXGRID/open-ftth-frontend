@@ -41,7 +41,7 @@ import {
   RemoveSpanStructureResponse,
   REVERSE_VERTICAL_ALIGNMENT,
   ReverseVerticalAlignmentResponse,
-} from "./IdentifyFeatureGql";
+} from "./RouteNetworkDiagramGql";
 import AddContainer from "./AddContainer";
 import AddInnerSpanStructure from "./AddInnerSpanStructure";
 import { toast } from "react-toastify";
@@ -64,7 +64,7 @@ import {
   FlipSvg,
 } from "../../assets";
 
-function IdentifyFeaturePage() {
+function RouteNetworkDiagram() {
   const client = useClient();
   const { t } = useTranslation();
   const { highlightFeatures } = useBridgeConnector();
@@ -462,7 +462,7 @@ function IdentifyFeaturePage() {
   }
 
   return (
-    <div className="identify-feature-page">
+    <div className="route-network-diagram">
       <ModalContainer
         show={showAddContainer}
         closeCallback={() => setShowAddContainer(false)}
@@ -649,4 +649,4 @@ function IdentifyFeaturePage() {
   );
 }
 
-export default IdentifyFeaturePage;
+export default RouteNetworkDiagram;
