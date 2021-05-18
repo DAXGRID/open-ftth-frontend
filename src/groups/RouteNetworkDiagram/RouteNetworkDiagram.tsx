@@ -64,7 +64,11 @@ import {
   FlipSvg,
 } from "../../assets";
 
-function RouteNetworkDiagram() {
+type RouteNetworkDiagramProps = {
+  enableEditMode: boolean;
+};
+
+function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
   const { highlightFeatures } = useBridgeConnector();
@@ -529,7 +533,7 @@ function RouteNetworkDiagram() {
           </div>
         </div>
       )}
-      {identifiedFeature.type === "RouteNode" && (
+      {identifiedFeature.type === "RouteNode" && enableEditMode && (
         <DiagramMenu>
           <ToggleButton
             icon={PencilSvg}
@@ -605,7 +609,7 @@ function RouteNetworkDiagram() {
           />
         </DiagramMenu>
       )}
-      {identifiedFeature.type === "RouteSegment" && (
+      {identifiedFeature.type === "RouteSegment" && enableEditMode && (
         <DiagramMenu>
           <ActionButton
             icon={EraserSvg}

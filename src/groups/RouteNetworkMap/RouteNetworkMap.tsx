@@ -1,13 +1,24 @@
 import { useEffect, useRef, useContext } from "react";
-import { Map, PointLike, MapMouseEvent, MapboxGeoJSONFeature } from "mapbox-gl";
+import {
+  Map,
+  PointLike,
+  MapMouseEvent,
+  MapboxGeoJSONFeature,
+  SymbolLayer,
+} from "mapbox-gl";
 import { MapContext } from "../../contexts/MapContext";
 import Config from "../../config";
 import {
   CabinetBigSvg,
+  CabinetBigHighlightSvg,
   CabinetSmallSvg,
+  CabinetSmallHighlightSvg,
   CentralOfficeSmallSvg,
+  CentralOfficeSmallHighlightSvg,
   HandHoleSvg,
+  HandHoleHighlightSvg,
   ConduitClosureSvg,
+  ConduitClosureHighlightSvg,
 } from "../../assets";
 
 function enableResize(map: Map) {
@@ -65,7 +76,19 @@ function clickHighlight(
       return;
     }
 
-    feature.state.selected = !feature.state.selected;
+    const iconImage = (feature.layer as SymbolLayer).layout?.["icon-image"];
+    // If its a symbol layer change image -
+    // This is required because we cannot use state for icons in mapbox to switch icon.
+    if (iconImage) {
+      map.setLayoutProperty(feature.layer.id, "icon-image", [
+        "match",
+        ["id"],
+        feature.id,
+        `${feature.layer.id}_highlight`,
+        feature.layer.id,
+      ]);
+      feature.state.selected = !feature.state.selected;
+    }
 
     map.setFeatureState(feature, {
       ...feature,
@@ -104,8 +127,8 @@ function RouteNetworkMap() {
 
     newMap.on("load", () => {
       enableResize(newMap);
-      hoverPointer(["route_node", "route_segment"], 10, newMap);
-      clickHighlight(["route_segment", "route_node"], 10, newMap, (x) => {
+      hoverPointer(["route_node", "route_segment"], 5, newMap);
+      clickHighlight(["route_segment", "route_node"], 5, newMap, (x) => {
         let type: "RouteNode" | "RouteSegment" | null = null;
         if (x?.properties?.layer === "route_node") {
           type = "RouteNode";
@@ -127,11 +150,45 @@ function RouteNetworkMap() {
         maxzoom: 22,
       });
 
-      mapAddImage(newMap, "central_office_small", CentralOfficeSmallSvg);
-      mapAddImage(newMap, "cabinet_big", CabinetBigSvg);
-      mapAddImage(newMap, "cabinet_small", CabinetSmallSvg);
-      mapAddImage(newMap, "hand_hole", HandHoleSvg);
-      mapAddImage(newMap, "conduit_closure", ConduitClosureSvg);
+      mapAddImage(
+        newMap,
+        "route_node_central_office_small",
+        CentralOfficeSmallSvg
+      );
+      mapAddImage(
+        newMap,
+        "route_node_central_office_small_highlight",
+        CentralOfficeSmallHighlightSvg
+      );
+      mapAddImage(newMap, "route_node_cabinet_big", CabinetBigSvg);
+      mapAddImage(
+        newMap,
+        "route_node_cabinet_big_highlight",
+        CabinetBigHighlightSvg
+      );
+      mapAddImage(newMap, "route_node_cabinet_small", CabinetSmallSvg);
+      mapAddImage(
+        newMap,
+        "route_node_cabinet_small_highlight",
+        CabinetSmallHighlightSvg
+      );
+      mapAddImage(
+        newMap,
+        "route_node_cabinet_highlight",
+        CabinetSmallHighlightSvg
+      );
+      mapAddImage(newMap, "route_node_hand_hole", HandHoleSvg);
+      mapAddImage(
+        newMap,
+        "route_node_hand_hole_highlight",
+        HandHoleHighlightSvg
+      );
+      mapAddImage(newMap, "route_node_conduit_closure", ConduitClosureSvg);
+      mapAddImage(
+        newMap,
+        "route_node_conduit_closure_highlight",
+        ConduitClosureHighlightSvg
+      );
 
       newMap.addLayer({
         id: "route_segment",
@@ -156,7 +213,7 @@ function RouteNetworkMap() {
         type: "symbol",
         filter: ["all", ["==", "kind", "CentralOfficeSmall"]],
         layout: {
-          "icon-image": "central_office_small",
+          "icon-image": "route_node_central_office_small",
           "icon-size": 1,
           "icon-allow-overlap": true,
         },
@@ -169,7 +226,7 @@ function RouteNetworkMap() {
         type: "symbol",
         filter: ["all", ["==", "kind", "ConduitClosure"]],
         layout: {
-          "icon-image": "conduit_closure",
+          "icon-image": "route_node_conduit_closure",
           "icon-size": 1,
           "icon-allow-overlap": true,
         },
@@ -182,7 +239,7 @@ function RouteNetworkMap() {
         type: "symbol",
         filter: ["all", ["==", "kind", "CabinetBig"]],
         layout: {
-          "icon-image": "cabinet_big",
+          "icon-image": "route_node_cabinet_big",
           "icon-size": 1,
           "icon-allow-overlap": true,
         },
@@ -195,7 +252,7 @@ function RouteNetworkMap() {
         type: "symbol",
         filter: ["all", ["==", "kind", "CabinetSmall"]],
         layout: {
-          "icon-image": "cabinet_small",
+          "icon-image": "route_node_cabinet_small",
           "icon-size": 1,
           "icon-allow-overlap": true,
         },
@@ -208,7 +265,7 @@ function RouteNetworkMap() {
         type: "symbol",
         filter: ["all", ["==", "kind", "HandHole"]],
         layout: {
-          "icon-image": "hand_hole",
+          "icon-image": "route_node_hand_hole",
           "icon-size": 1,
           "icon-allow-overlap": true,
         },

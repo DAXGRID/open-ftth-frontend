@@ -3,7 +3,7 @@ import RouteNetworkDiagram from "../../groups/RouteNetworkDiagram";
 function IdentifyFeaturePage() {
   return (
     <div className="identify-feature-page">
-      <RouteNetworkDiagram />
+      <RouteNetworkDiagram enableEditMode={true} />
     </div>
   );
 }
