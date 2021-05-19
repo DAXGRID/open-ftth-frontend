@@ -59,6 +59,7 @@ function clickHighlight(
   featureNames: string[],
   bboxSize: number,
   map: Map,
+  lastHighlightedFeature: React.RefObject<MapboxGeoJSONFeature>,
   callback: (feature: MapboxGeoJSONFeature) => void
 ) {
   map.on("click", (e) => {
@@ -80,6 +81,29 @@ function clickHighlight(
     // If its a symbol layer change image -
     // This is required because we cannot use state for icons in mapbox to switch icon.
     if (iconImage) {
+      // This is done to reset the old selected value
+      if (lastHighlightedFeature.current) {
+        map.setLayoutProperty(
+          lastHighlightedFeature.current.layer.id,
+          "icon-image",
+          [
+            "match",
+            ["id"],
+            -1,
+            `${feature.layer.id}_highlight`,
+            lastHighlightedFeature.current.layer.id,
+          ]
+        );
+
+        lastHighlightedFeature.current.state.selected =
+          !lastHighlightedFeature.current.state.selected;
+
+        map.setFeatureState(lastHighlightedFeature.current, {
+          ...lastHighlightedFeature.current,
+          selected: lastHighlightedFeature.current.state.selected ?? false,
+        });
+      }
+
       map.setLayoutProperty(feature.layer.id, "icon-image", [
         "match",
         ["id"],
@@ -87,6 +111,7 @@ function clickHighlight(
         `${feature.layer.id}_highlight`,
         feature.layer.id,
       ]);
+
       feature.state.selected = !feature.state.selected;
     }
 
@@ -107,6 +132,7 @@ function mapAddImage(map: Map, name: string, icon: string) {
 
 function RouteNetworkMap() {
   const mapContainer = useRef<HTMLDivElement>(null);
+  const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
   const { setIdentifiedFeature } = useContext(MapContext);
 
@@ -128,18 +154,25 @@ function RouteNetworkMap() {
     newMap.on("load", () => {
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 5, newMap);
-      clickHighlight(["route_segment", "route_node"], 5, newMap, (x) => {
-        let type: "RouteNode" | "RouteSegment" | null = null;
-        if (x?.properties?.layer === "route_node") {
-          type = "RouteNode";
-        } else if (x?.properties?.layer === "route_segment") {
-          type = "RouteSegment";
-        } else {
-          throw Error(`${x.type} is not a valid type`);
-        }
+      clickHighlight(
+        ["route_segment", "route_node"],
+        5,
+        newMap,
+        lastHighlightedFeature,
+        (x) => {
+          let type: "RouteNode" | "RouteSegment" | null = null;
+          if (x?.properties?.layer === "route_node") {
+            type = "RouteNode";
+          } else if (x?.properties?.layer === "route_segment") {
+            type = "RouteSegment";
+          } else {
+            throw Error(`${x.type} is not a valid type`);
+          }
 
-        setIdentifiedFeature({ id: x?.properties?.mrid, type: type });
-      });
+          lastHighlightedFeature.current = x;
+          setIdentifiedFeature({ id: x?.properties?.mrid, type: type });
+        }
+      );
 
       newMap.addSource("route_network", {
         type: "vector",
