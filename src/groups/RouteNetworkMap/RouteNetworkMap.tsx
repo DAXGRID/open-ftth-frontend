@@ -42,7 +42,7 @@ function hoverPointer(featureNames: string[], bboxSize: number, map: Map) {
       filter: [
         "any",
         ...featureNames.map((x) => {
-          return ["==", "layer", x];
+          return ["==", "objecttype", x];
         }),
       ],
     });
@@ -72,7 +72,7 @@ function clickHighlight(
 
     if (
       !feature ||
-      !featureNames.find((x) => x === feature.properties?.layer)
+      !featureNames.find((x) => x === feature.properties?.objecttype)
     ) {
       return;
     }
@@ -94,14 +94,6 @@ function clickHighlight(
             lastHighlightedFeature.current.layer.id,
           ]
         );
-
-        lastHighlightedFeature.current.state.selected =
-          !lastHighlightedFeature.current.state.selected;
-
-        map.setFeatureState(lastHighlightedFeature.current, {
-          ...lastHighlightedFeature.current,
-          selected: lastHighlightedFeature.current.state.selected ?? false,
-        });
       }
 
       map.setLayoutProperty(feature.layer.id, "icon-image", [
@@ -111,10 +103,16 @@ function clickHighlight(
         `${feature.layer.id}_highlight`,
         feature.layer.id,
       ]);
-
-      feature.state.selected = !feature.state.selected;
     }
 
+    if (lastHighlightedFeature.current) {
+      map.setFeatureState(lastHighlightedFeature.current, {
+        ...lastHighlightedFeature.current,
+        selected: false,
+      });
+    }
+
+    feature.state.selected = !feature.state.selected;
     map.setFeatureState(feature, {
       ...feature,
       selected: feature.state.selected,
@@ -153,17 +151,17 @@ function RouteNetworkMap() {
 
     newMap.on("load", () => {
       enableResize(newMap);
-      hoverPointer(["route_node", "route_segment"], 5, newMap);
+      hoverPointer(["route_node", "route_segment"], 10, newMap);
       clickHighlight(
         ["route_segment", "route_node"],
-        5,
+        10,
         newMap,
         lastHighlightedFeature,
         (x) => {
           let type: "RouteNode" | "RouteSegment" | null = null;
-          if (x?.properties?.layer === "route_node") {
+          if (x?.properties?.objecttype === "route_node") {
             type = "RouteNode";
-          } else if (x?.properties?.layer === "route_segment") {
+          } else if (x?.properties?.objecttype === "route_segment") {
             type = "RouteSegment";
           } else {
             throw Error(`${x.type} is not a valid type`);
@@ -226,8 +224,9 @@ function RouteNetworkMap() {
       newMap.addLayer({
         id: "route_segment",
         source: "route_network",
-        "source-layer": "route_segments",
+        "source-layer": "route_network",
         type: "line",
+        filter: ["all", ["==", "objecttype", "route_segment"]],
         paint: {
           "line-color": [
             "case",
@@ -242,7 +241,7 @@ function RouteNetworkMap() {
       newMap.addLayer({
         id: "route_node_central_office_small",
         source: "route_network",
-        "source-layer": "out",
+        "source-layer": "route_network",
         type: "symbol",
         filter: ["all", ["==", "kind", "CentralOfficeSmall"]],
         layout: {
@@ -255,7 +254,7 @@ function RouteNetworkMap() {
       newMap.addLayer({
         id: "route_node_conduit_closure",
         source: "route_network",
-        "source-layer": "out",
+        "source-layer": "route_network",
         type: "symbol",
         filter: ["all", ["==", "kind", "ConduitClosure"]],
         layout: {
@@ -268,7 +267,7 @@ function RouteNetworkMap() {
       newMap.addLayer({
         id: "route_node_cabinet_big",
         source: "route_network",
-        "source-layer": "out",
+        "source-layer": "route_network",
         type: "symbol",
         filter: ["all", ["==", "kind", "CabinetBig"]],
         layout: {
@@ -281,7 +280,7 @@ function RouteNetworkMap() {
       newMap.addLayer({
         id: "route_node_cabinet_small",
         source: "route_network",
-        "source-layer": "out",
+        "source-layer": "route_network",
         type: "symbol",
         filter: ["all", ["==", "kind", "CabinetSmall"]],
         layout: {
@@ -294,7 +293,7 @@ function RouteNetworkMap() {
       newMap.addLayer({
         id: "route_node_hand_hole",
         source: "route_network",
-        "source-layer": "out",
+        "source-layer": "route_network",
         type: "symbol",
         filter: ["all", ["==", "kind", "HandHole"]],
         layout: {
