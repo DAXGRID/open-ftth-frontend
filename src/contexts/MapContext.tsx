@@ -12,6 +12,8 @@ type MapContextType = {
   setSelectedSegmentIds: (selectedSegments: string[]) => void;
   identifiedFeature: IdentifiedFeature | null;
   setIdentifiedFeature: (identifiedNetworkElement: IdentifiedFeature) => void;
+  traceRouteNetworkId: string;
+  setTraceRouteNetworkId: (routeNetworkId: string) => void;
 };
 
 const MapContext = createContext<MapContextType>({
@@ -23,6 +25,10 @@ const MapContext = createContext<MapContextType>({
   setIdentifiedFeature: () => {
     console.warn("no provider set");
   },
+  traceRouteNetworkId: "",
+  setTraceRouteNetworkId: () => {
+    console.warn("no provider set");
+  },
 });
 
 type MapProviderProps = {
@@ -31,10 +37,9 @@ type MapProviderProps = {
 
 const MapProvider = ({ children }: MapProviderProps) => {
   const [selectedSegments, setSelectedSegments] = useState<string[]>([]);
-  const [
-    identifiedNetworkElement,
-    setIdentifiedNetworkElement,
-  ] = useState<IdentifiedFeature | null>(null);
+  const [identifiedNetworkElement, setIdentifiedNetworkElement] =
+    useState<IdentifiedFeature | null>(null);
+  const [traceRouteNetworkId, setTraceRouteNetworkId] = useState<string>("");
 
   return (
     <MapContext.Provider
@@ -43,6 +48,8 @@ const MapProvider = ({ children }: MapProviderProps) => {
         setSelectedSegmentIds: setSelectedSegments,
         identifiedFeature: identifiedNetworkElement,
         setIdentifiedFeature: setIdentifiedNetworkElement,
+        traceRouteNetworkId: traceRouteNetworkId,
+        setTraceRouteNetworkId: setTraceRouteNetworkId,
       }}
     >
       {children}

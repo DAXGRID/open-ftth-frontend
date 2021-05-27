@@ -80,7 +80,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
   const [showRerouteTube, setShowRerouteTube] = useState(false);
   const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
-  const { identifiedFeature } = useContext(MapContext);
+  const { identifiedFeature, setTraceRouteNetworkId } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [envelope, setEnvelope] = useState<Envelope>({
     maxX: 0,
@@ -403,13 +403,17 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
             })
             .toPromise();
 
+          setTraceRouteNetworkId(feature.properties?.refId ?? []);
+          // TODO move this
           highlightFeatures(
             response.data?.utilityNetwork.spanSegmentTrace
               ?.routeNetworkSegmentIds ?? []
           );
           setSingleSelectedFeature(feature);
         } else {
+          // TODO move this
           highlightFeatures([]);
+          setTraceRouteNetworkId("");
           setSingleSelectedFeature(null);
         }
       } else {
@@ -426,7 +430,13 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
         }
       }
     },
-    [editMode, client, highlightFeatures, setSingleSelectedFeature]
+    [
+      editMode,
+      client,
+      highlightFeatures,
+      setSingleSelectedFeature,
+      setTraceRouteNetworkId,
+    ]
   );
 
   const reverseVertialAlignment = async () => {
@@ -458,6 +468,8 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
   };
 
   const clearHighlights = () => {
+    setTraceRouteNetworkId("");
+    // TODO move this
     highlightFeatures([]);
   };
 

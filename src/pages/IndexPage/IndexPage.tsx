@@ -5,6 +5,7 @@ function IndexPage() {
   return (
     <div className="index-page">
       <RouteNetworkMap />
+      <RouteNetworkDiagram enableEditMode={false} />
     </div>
   );
 }

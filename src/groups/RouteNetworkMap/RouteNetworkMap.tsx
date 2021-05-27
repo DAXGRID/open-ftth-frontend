@@ -1,10 +1,13 @@
 import { useEffect, useRef, useContext } from "react";
+import { useClient } from "urql";
+import { Feature, GeoJsonProperties, Geometry } from "geojson";
 import {
   Map,
   PointLike,
   MapMouseEvent,
   MapboxGeoJSONFeature,
   SymbolLayer,
+  GeoJSONSource,
 } from "mapbox-gl";
 import { MapContext } from "../../contexts/MapContext";
 import Config from "../../config";
@@ -20,6 +23,12 @@ import {
   ConduitClosureSvg,
   ConduitClosureHighlightSvg,
 } from "../../assets";
+import {
+  SPAN_SEGMENT_TRACE,
+  SpanSegmentTraceResponse,
+} from "./RouteNetworkMapGql";
+import { responsePathAsArray } from "graphql";
+import { features } from "process";
 
 function enableResize(map: Map) {
   window.addEventListener("resize", () => {
@@ -131,21 +140,70 @@ function mapAddImage(map: Map, name: string, icon: string) {
   img.onload = () => map.addImage(name, img);
 }
 
+function highlightGeometries(map: Map, geoms: string[]) {
+  const features = geoms.map<Feature<Geometry, GeoJsonProperties>>((x, i) => {
+    return {
+      id: i,
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: JSON.parse(x),
+      },
+      properties: {},
+    };
+  });
+
+  (map.getSource("route_segment_trace") as GeoJSONSource).setData({
+    type: "FeatureCollection",
+    features: features,
+  });
+}
+
 function RouteNetworkMap() {
+  const client = useClient();
   const mapContainer = useRef<HTMLDivElement>(null);
   const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
-  const { setIdentifiedFeature } = useContext(MapContext);
+  const { setIdentifiedFeature, traceRouteNetworkId } = useContext(MapContext);
+
+  useEffect(() => {
+    if (!traceRouteNetworkId) {
+      return;
+    }
+
+    client
+      .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
+        spanSegmentId: traceRouteNetworkId,
+      })
+      .toPromise()
+      .then((x) => {
+        if (!map.current) {
+          return;
+        }
+
+        console.log(
+          x.data?.utilityNetwork.spanSegmentTrace.routeNetworkSegmentGeometries
+        );
+
+        highlightGeometries(
+          map.current,
+          x.data?.utilityNetwork.spanSegmentTrace
+            .routeNetworkSegmentGeometries ?? []
+        );
+      });
+  }, [traceRouteNetworkId, client, map]);
 
   useEffect(() => {
     const newMap = new Map({
       container: mapContainer.current ?? "",
-      style: {
-        version: 8,
-        sources: {},
-        layers: [],
-        glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
-      },
+      style:
+        "https://api.maptiler.com/maps/basic/style.json?key=AI2XImJGt0ewRiF5VtVQ",
+      /* style: {
+       *   version: 8,
+       *   sources: {},
+       *   layers: [],
+       *   glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+       * }, */
       center: [9.996730316498656, 56.04595255289249],
       zoom: 10,
       doubleClickZoom: false,
@@ -238,6 +296,37 @@ function RouteNetworkMap() {
             "#FF0000",
           ],
           "line-width": 2,
+        },
+      });
+
+      newMap.addSource("route_segment_trace", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [
+            {
+              id: 23223233,
+              type: "Feature",
+              geometry: {
+                type: "LineString",
+                coordinates: [
+                  [552386.282997872, 6191013.81882746],
+                  [551705.7118431069, 6191026.697491489],
+                ],
+              },
+              properties: {},
+            },
+          ],
+        },
+      });
+
+      newMap.addLayer({
+        id: "route_segment_trace",
+        type: "line",
+        source: "route_segment_trace",
+        paint: {
+          "line-color": "green",
+          "line-width": 3,
         },
       });
 
