@@ -77,25 +77,10 @@ function clickHighlight(
       return;
     }
 
-    const iconImage = (feature.layer as SymbolLayer).layout?.["icon-image"];
+    const isIconLayer = (feature.layer as SymbolLayer).layout?.["icon-image"];
     // If its a symbol layer change image -
     // This is required because we cannot use state for icons in mapbox to switch icon.
-    if (iconImage) {
-      // This is done to reset the old selected value
-      if (lastHighlightedFeature.current) {
-        map.setLayoutProperty(
-          lastHighlightedFeature.current.layer.id,
-          "icon-image",
-          [
-            "match",
-            ["id"],
-            -1,
-            `${feature.layer.id}_highlight`,
-            lastHighlightedFeature.current.layer.id,
-          ]
-        );
-      }
-
+    if (isIconLayer) {
       map.setLayoutProperty(feature.layer.id, "icon-image", [
         "match",
         ["id"],
@@ -105,7 +90,25 @@ function clickHighlight(
       ]);
     }
 
+    // reset last state to avoid multiple selected at the same time
     if (lastHighlightedFeature.current) {
+      const lastIsIconLayer = (
+        lastHighlightedFeature.current?.layer as SymbolLayer
+      ).layout?.["icon-image"];
+      if (lastIsIconLayer) {
+        map.setLayoutProperty(
+          lastHighlightedFeature?.current?.layer?.id,
+          "icon-image",
+          [
+            "match",
+            ["id"],
+            -1,
+            `${lastHighlightedFeature.current.layer.id}_highlight`,
+            lastHighlightedFeature.current.layer.id,
+          ]
+        );
+      }
+
       map.setFeatureState(lastHighlightedFeature.current, {
         ...lastHighlightedFeature.current,
         selected: false,
