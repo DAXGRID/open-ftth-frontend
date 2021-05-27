@@ -27,8 +27,6 @@ import {
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
 } from "./RouteNetworkMapGql";
-import { responsePathAsArray } from "graphql";
-import { features } from "process";
 
 function enableResize(map: Map) {
   window.addEventListener("resize", () => {
@@ -196,14 +194,12 @@ function RouteNetworkMap() {
   useEffect(() => {
     const newMap = new Map({
       container: mapContainer.current ?? "",
-      style:
-        "https://api.maptiler.com/maps/basic/style.json?key=AI2XImJGt0ewRiF5VtVQ",
-      /* style: {
-       *   version: 8,
-       *   sources: {},
-       *   layers: [],
-       *   glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
-       * }, */
+      style: {
+        version: 8,
+        sources: {},
+        layers: [],
+        glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+      },
       center: [9.996730316498656, 56.04595255289249],
       zoom: 10,
       doubleClickZoom: false,
@@ -239,7 +235,7 @@ function RouteNetworkMap() {
           `${Config.ROUTE_NETWORK_TILE_SERVER_URI}/services/route_network/tiles/{z}/{x}/{y}.pbf`,
         ],
         minzoom: 4,
-        maxzoom: 22,
+        maxzoom: 16,
       });
 
       mapAddImage(
@@ -303,20 +299,7 @@ function RouteNetworkMap() {
         type: "geojson",
         data: {
           type: "FeatureCollection",
-          features: [
-            {
-              id: 23223233,
-              type: "Feature",
-              geometry: {
-                type: "LineString",
-                coordinates: [
-                  [552386.282997872, 6191013.81882746],
-                  [551705.7118431069, 6191026.697491489],
-                ],
-              },
-              properties: {},
-            },
-          ],
+          features: [],
         },
       });
 
@@ -325,8 +308,9 @@ function RouteNetworkMap() {
         type: "line",
         source: "route_segment_trace",
         paint: {
-          "line-color": "green",
-          "line-width": 3,
+          "line-color": "yellow",
+          "line-opacity": 0.75,
+          "line-width": 5,
         },
       });
 
