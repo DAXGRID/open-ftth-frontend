@@ -75,27 +75,6 @@ function clickHighlight(
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    const feature = map
-      .queryRenderedFeatures(bbox)
-      .find((x) => featureNames.find((y) => y === x.properties?.objecttype));
-
-    if (!feature) {
-      return;
-    }
-
-    const isIconLayer = (feature.layer as SymbolLayer).layout?.["icon-image"];
-    // If its a symbol layer change image -
-    // This is required because we cannot use state for icons in mapbox to switch icon.
-    if (isIconLayer) {
-      map.setLayoutProperty(feature.layer.id, "icon-image", [
-        "match",
-        ["id"],
-        feature.id,
-        `${feature.layer.id}_highlight`,
-        feature.layer.id,
-      ]);
-    }
-
     // reset last state to avoid multiple selected at the same time
     if (lastHighlightedFeature.current) {
       const lastIsIconLayer = (
@@ -119,6 +98,27 @@ function clickHighlight(
         ...lastHighlightedFeature.current,
         selected: false,
       });
+    }
+
+    const feature = map
+      .queryRenderedFeatures(bbox)
+      .find((x) => featureNames.find((y) => y === x.properties?.objecttype));
+
+    if (!feature) {
+      return;
+    }
+
+    const isIconLayer = (feature.layer as SymbolLayer).layout?.["icon-image"];
+    // If its a symbol layer change image -
+    // This is required because we cannot use state for icons in mapbox to switch icon.
+    if (isIconLayer) {
+      map.setLayoutProperty(feature.layer.id, "icon-image", [
+        "match",
+        ["id"],
+        feature.id,
+        `${feature.layer.id}_highlight`,
+        feature.layer.id,
+      ]);
     }
 
     feature.state.selected = !feature.state.selected;
