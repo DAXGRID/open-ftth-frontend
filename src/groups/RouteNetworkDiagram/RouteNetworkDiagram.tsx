@@ -33,8 +33,6 @@ import {
   DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER,
   DetachSpanEquipmentParameters,
   DetachSpanEquipmentResponse,
-  SPAN_SEGMENT_TRACE,
-  SpanSegmentTraceResponse,
   QUERY_ROUTE_NETWORK_ELEMENT,
   QueryRouteNetworkElementResponse,
   REMOVE_SPAN_STRUCTURE,
@@ -45,7 +43,6 @@ import {
 import AddContainer from "./AddContainer";
 import AddInnerSpanStructure from "./AddInnerSpanStructure";
 import { toast } from "react-toastify";
-import useBridgeConnector from "../../bridge/useBridgeConnector";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -71,7 +68,6 @@ type RouteNetworkDiagramProps = {
 function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
-  const { highlightFeatures } = useBridgeConnector();
   const [editMode, setEditMode] = useState(false);
   const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
   const [singleSelectedFeature, setSingleSelectedFeature] =
@@ -397,22 +393,9 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
 
       if (!editMode) {
         if (isSelected) {
-          const response = await client
-            .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
-              spanSegmentId: feature.properties?.refId,
-            })
-            .toPromise();
-
           setTraceRouteNetworkId(feature.properties?.refId ?? []);
-          // TODO move this
-          highlightFeatures(
-            response.data?.utilityNetwork.spanSegmentTrace
-              ?.routeNetworkSegmentIds ?? []
-          );
           setSingleSelectedFeature(feature);
         } else {
-          // TODO move this
-          highlightFeatures([]);
           setTraceRouteNetworkId("");
           setSingleSelectedFeature(null);
         }
@@ -430,13 +413,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
         }
       }
     },
-    [
-      editMode,
-      client,
-      highlightFeatures,
-      setSingleSelectedFeature,
-      setTraceRouteNetworkId,
-    ]
+    [editMode, setSingleSelectedFeature, setTraceRouteNetworkId]
   );
 
   const reverseVertialAlignment = async () => {
@@ -469,12 +446,14 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
 
   const clearHighlights = () => {
     setTraceRouteNetworkId("");
-    // TODO move this
-    highlightFeatures([]);
   };
 
-  if (diagramQueryResult.fetching || !identifiedFeature?.id) {
+  if (diagramQueryResult.fetching) {
     return <Loading />;
+  }
+
+  if (!identifiedFeature?.id) {
+    return <div></div>;
   }
 
   return (

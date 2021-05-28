@@ -1,4 +1,5 @@
 import { useEffect, useContext, useState } from "react";
+import { useClient } from "urql";
 import { w3cwebsocket } from "websocket";
 import PubSub from "pubsub-js";
 import Config from "../config";
@@ -7,6 +8,10 @@ import useBridgeConnector, {
 } from "../bridge/useBridgeConnector";
 import { MapContext } from "../contexts/MapContext";
 import { useKeycloak } from "@react-keycloak/web";
+import {
+  SPAN_SEGMENT_TRACE,
+  SpanSegmentTraceResponse,
+} from "./BridgeConnectorGql";
 
 type IdentifyNetworkEvent = {
   eventType: string;
@@ -15,44 +20,45 @@ type IdentifyNetworkEvent = {
   username: string;
 };
 
-let client: w3cwebsocket | null;
+let websocketClient: w3cwebsocket | null;
 
 function send(eventMsg: any) {
-  client?.send(JSON.stringify(eventMsg));
+  websocketClient?.send(JSON.stringify(eventMsg));
 }
 
 function BridgeConnector() {
-  const { setSelectedSegmentIds, setIdentifiedFeature } = useContext(
-    MapContext
-  );
+  const { setSelectedSegmentIds, setIdentifiedFeature, traceRouteNetworkId } =
+    useContext(MapContext);
   const [connected, setConnected] = useState(false);
   const {
     retrieveSelectedEquipments,
     retrieveIdentifiedNetworkElement,
+    highlightFeatures,
   } = useBridgeConnector();
   const { keycloak } = useKeycloak();
+  const graphqlClient = useClient();
 
   useEffect(() => {
     function setup() {
-      client = new w3cwebsocket(Config.DESKTOP_BRIDGE_URI);
+      websocketClient = new w3cwebsocket(Config.DESKTOP_BRIDGE_URI);
 
-      client.onmessage = (message: any) => {
+      websocketClient.onmessage = (message: any) => {
         const event = JSON.parse(message.data);
         PubSub.publish(event.eventType, event);
       };
 
-      client.onopen = () => {
+      websocketClient.onopen = () => {
         setConnected(true);
         console.log("Connected to BridgeConnector");
       };
 
-      client.onclose = () => {
+      websocketClient.onclose = () => {
         console.log("Disconnected from BridgeConnector");
         setConnected(false);
         reconnect();
       };
 
-      client.onerror = () => {
+      websocketClient.onerror = () => {
         console.log("Error happend in BridgeConnector");
         setConnected(false);
         reconnect();
@@ -70,12 +76,13 @@ function BridgeConnector() {
 
     return () => {
       setConnected(false);
-      client = null;
+      websocketClient = null;
     };
   }, []);
 
   useEffect(() => {
-    if (!connected || !client || client.readyState !== 1) return;
+    if (!connected || !websocketClient || websocketClient.readyState !== 1)
+      return;
 
     const token = PubSub.subscribe(
       "RetrieveSelectedResponse",
@@ -99,7 +106,8 @@ function BridgeConnector() {
   ]);
 
   useEffect(() => {
-    if (!connected || !client || client.readyState !== 1) return;
+    if (!connected || !websocketClient || websocketClient.readyState !== 1)
+      return;
 
     const token = PubSub.subscribe(
       "IdentifyNetworkElement",
@@ -132,6 +140,27 @@ function BridgeConnector() {
     setIdentifiedFeature,
     keycloak.profile?.username,
   ]);
+
+  useEffect(() => {
+    if (!connected || !websocketClient || websocketClient.readyState !== 1)
+      return;
+
+    if (!traceRouteNetworkId) {
+      highlightFeatures([]);
+      return;
+    }
+
+    graphqlClient
+      .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
+        spanSegmentId: traceRouteNetworkId,
+      })
+      .toPromise()
+      .then((x) => {
+        highlightFeatures(
+          x.data?.utilityNetwork.spanSegmentTrace.routeNetworkSegmentIds ?? []
+        );
+      });
+  }, [traceRouteNetworkId, highlightFeatures, graphqlClient, connected]);
 
   return <></>;
 }
