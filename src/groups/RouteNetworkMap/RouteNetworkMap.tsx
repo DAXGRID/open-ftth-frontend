@@ -165,6 +165,11 @@ function RouteNetworkMap() {
 
   useEffect(() => {
     if (!traceRouteNetworkId) {
+      if (!map.current) {
+        return;
+      }
+
+      highlightGeometries(map.current, []);
       return;
     }
 
