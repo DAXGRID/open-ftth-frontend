@@ -75,12 +75,11 @@ function clickHighlight(
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    const feature = map.queryRenderedFeatures(bbox)[0];
+    const feature = map
+      .queryRenderedFeatures(bbox)
+      .find((x) => featureNames.find((y) => y === x.properties?.objecttype));
 
-    if (
-      !feature ||
-      !featureNames.find((x) => x === feature.properties?.objecttype)
-    ) {
+    if (!feature) {
       return;
     }
 
