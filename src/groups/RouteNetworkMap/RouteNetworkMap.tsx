@@ -151,9 +151,9 @@ function highlightGeometries(map: Map, geoms: string[]) {
     };
   });
 
-  (map.getSource("route_segment_trace") as GeoJSONSource).setData({
+  (map.getSource("route_segment_trace") as GeoJSONSource)?.setData({
     type: "FeatureCollection",
-    features: features,
+    features: features ?? [],
   });
 }
 
@@ -179,10 +179,6 @@ function RouteNetworkMap() {
           return;
         }
 
-        console.log(
-          x.data?.utilityNetwork.spanSegmentTrace.routeNetworkSegmentGeometries
-        );
-
         highlightGeometries(
           map.current,
           x.data?.utilityNetwork.spanSegmentTrace
@@ -194,12 +190,14 @@ function RouteNetworkMap() {
   useEffect(() => {
     const newMap = new Map({
       container: mapContainer.current ?? "",
-      style: {
-        version: 8,
-        sources: {},
-        layers: [],
-        glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
-      },
+      style:
+        "https://api.maptiler.com/maps/basic/style.json?key=AI2XImJGt0ewRiF5VtVQ",
+      /* style: {
+       *   version: 8,
+       *   sources: {},
+       *   layers: [],
+       *   glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+       * }, */
       center: [9.996730316498656, 56.04595255289249],
       zoom: 10,
       doubleClickZoom: false,
@@ -291,7 +289,12 @@ function RouteNetworkMap() {
             "#00FF00",
             "#FF0000",
           ],
-          "line-width": 2,
+          "line-width": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            5,
+            2,
+          ],
         },
       });
 
@@ -308,8 +311,7 @@ function RouteNetworkMap() {
         type: "line",
         source: "route_segment_trace",
         paint: {
-          "line-color": "yellow",
-          "line-opacity": 0.75,
+          "line-color": "#40e0d0",
           "line-width": 5,
         },
       });
