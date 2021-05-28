@@ -291,9 +291,22 @@ function RouteNetworkMap() {
           "line-width": [
             "case",
             ["boolean", ["feature-state", "selected"], false],
-            5,
+            6,
             2,
           ],
+        },
+      });
+
+      newMap.addLayer({
+        id: "route_node_central_office_small",
+        source: "route_network",
+        "source-layer": "route_network",
+        type: "symbol",
+        filter: ["all", ["==", "kind", "CentralOfficeSmall"]],
+        layout: {
+          "icon-image": "route_node_central_office_small",
+          "icon-size": 1,
+          "icon-allow-overlap": true,
         },
       });
 
@@ -311,20 +324,7 @@ function RouteNetworkMap() {
         source: "route_segment_trace",
         paint: {
           "line-color": "#40e0d0",
-          "line-width": 5,
-        },
-      });
-
-      newMap.addLayer({
-        id: "route_node_central_office_small",
-        source: "route_network",
-        "source-layer": "route_network",
-        type: "symbol",
-        filter: ["all", ["==", "kind", "CentralOfficeSmall"]],
-        layout: {
-          "icon-image": "route_node_central_office_small",
-          "icon-size": 1,
-          "icon-allow-overlap": true,
+          "line-width": 4,
         },
       });
 
