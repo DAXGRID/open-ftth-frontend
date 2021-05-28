@@ -625,18 +625,20 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
                 }
               />
             </div>
-            <div className="feature-details-actions">
-              <ActionButton
-                icon={EditPropertiesSvg}
-                action={() => setShowEditSpanEquipment(true)}
-                title={t("EDIT")}
-              />
-              <ActionButton
-                icon={MoveConduitSvg}
-                action={() => setShowRerouteTube(true)}
-                title={t("MOVE")}
-              />
-            </div>
+            {enableEditMode && (
+              <div className="feature-details-actions">
+                <ActionButton
+                  icon={EditPropertiesSvg}
+                  action={() => setShowEditSpanEquipment(true)}
+                  title={t("EDIT")}
+                />
+                <ActionButton
+                  icon={MoveConduitSvg}
+                  action={() => setShowRerouteTube(true)}
+                  title={t("MOVE")}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
