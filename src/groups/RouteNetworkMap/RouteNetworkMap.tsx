@@ -234,7 +234,9 @@ function RouteNetworkMap() {
       newMap.addSource("route_network", {
         type: "vector",
         tiles: [
-          `${Config.ROUTE_NETWORK_TILE_SERVER_URI}/services/route_network/tiles/{z}/{x}/{y}.pbf`,
+          `${
+            Config.ROUTE_NETWORK_TILE_SERVER_URI
+          }/services/route_network/tiles/{z}/{x}/{y}.pbf?dt=${Date.now()}`,
         ],
         minzoom: 4,
         maxzoom: 16,
