@@ -196,12 +196,6 @@ function RouteNetworkMap() {
       container: mapContainer.current ?? "",
       style:
         "https://api.maptiler.com/maps/basic/style.json?key=AI2XImJGt0ewRiF5VtVQ",
-      /* style: {
-       *   version: 8,
-       *   sources: {},
-       *   layers: [],
-       *   glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
-       * }, */
       center: [9.996730316498656, 56.04595255289249],
       zoom: 10,
       doubleClickZoom: false,
