@@ -600,7 +600,16 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
           />
         </DiagramMenu>
       )}
-      {identifiedFeature.type === "RouteSegment" && enableEditMode && (
+      {identifiedFeature.type === "RouteNode" && !enableEditMode && (
+        <DiagramMenu>
+          <ActionButton
+            icon={EraserSvg}
+            action={() => clearHighlights()}
+            title={t("CLEAR_HIGHLIGHT")}
+          />
+        </DiagramMenu>
+      )}
+      {identifiedFeature.type === "RouteSegment" && (
         <DiagramMenu>
           <ActionButton
             icon={EraserSvg}
