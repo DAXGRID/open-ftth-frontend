@@ -207,15 +207,16 @@ function RouteNetworkMap() {
             tiles: [
               `${Config.ROUTE_NETWORK_TILE_SERVER_URI}/services/route_network/tiles/{z}/{x}/{y}.pbf?dt=${Date.now()}`,
             ],
+            minZoom: 0,
             minzoom: 4,
-            maxzoom: 16,
+            maxzoom: 17,
           } as VectorSource,
           osm: {
             type: "vector",
             tiles: [
               `${Config.BASEMAP_TILE_SERVER_URI}/services/osm/tiles/{z}/{x}/{y}.pbf`,
             ],
-            minzoom: 0,
+            minZoom: 0,
             maxZoom: 14,
             maxzoom: 14,
           } as VectorSource,
