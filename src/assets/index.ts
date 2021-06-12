@@ -22,6 +22,7 @@ import ConduitClosureSvg from "./conduit-closure.svg";
 import ConduitClosureHighlightSvg from "./conduit-closure-highlight.svg";
 import CentralOfficeSmallSvg from "./central-office-small.svg";
 import CentralOfficeSmallHighlightSvg from "./central-office-small-highlight.svg";
+import MapboxStyle from "./open-ftth.json";
 
 export {
   Loading,
@@ -48,4 +49,5 @@ export {
   ConduitClosureHighlightSvg,
   CentralOfficeSmallSvg,
   CentralOfficeSmallHighlightSvg,
+  MapboxStyle
 };
