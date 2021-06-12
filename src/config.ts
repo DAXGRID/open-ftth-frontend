@@ -10,6 +10,7 @@ declare global {
   }
 }
 
+
 const settings = {
   API_GATEWAY_HTTP_URI: window.config_API_GATEWAY_HTTP_URI,
   API_GATEWAY_WS_URI: window.config_API_GATEWAY_WS_URI,

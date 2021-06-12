@@ -8,6 +8,8 @@ import {
   MapboxGeoJSONFeature,
   SymbolLayer,
   GeoJSONSource,
+  Style,
+  VectorSource
 } from "mapbox-gl";
 import { MapContext } from "../../contexts/MapContext";
 import Config from "../../config";
@@ -22,6 +24,7 @@ import {
   HandHoleHighlightSvg,
   ConduitClosureSvg,
   ConduitClosureHighlightSvg,
+  MapboxStyle,
 } from "../../assets";
 import {
   SPAN_SEGMENT_TRACE,
@@ -192,10 +195,42 @@ function RouteNetworkMap() {
   }, [traceRouteNetworkId, client, map]);
 
   useEffect(() => {
+    console.log(Config.BASEMAP_TILE_SERVER_URI);
+
     const newMap = new Map({
       container: mapContainer.current ?? "",
-      style:
-        "https://api.maptiler.com/maps/basic/style.json?key=AI2XImJGt0ewRiF5VtVQ",
+      style: {
+        ...MapboxStyle as Style,
+        sources: {
+          route_network: {
+            type: "vector",
+            tiles: [
+              `${Config.ROUTE_NETWORK_TILE_SERVER_URI}/services/route_network/tiles/{z}/{x}/{y}.pbf?dt=${Date.now()}`,
+            ],
+            minzoom: 4,
+            maxzoom: 16,
+          } as VectorSource,
+          osm: {
+            type: "vector",
+            tiles: [
+              `${Config.BASEMAP_TILE_SERVER_URI}/services/osm/tiles/{z}/{x}/{y}.pbf`,
+            ],
+            minzoom: 0,
+            maxZoom: 14,
+            maxzoom: 14,
+          } as VectorSource,
+          "basemap-danish": {
+            type: "vector",
+            tiles: [
+              "https://dev-tiles-basemap.openftth.com/services/objects/tiles/{z}/{x}/{y}.pbf"
+            ],
+            minZoom: 0,
+            maxZoom: 14,
+            minzoom: 16,
+            maxzoom: 16
+          } as VectorSource,
+        },
+      },
       center: [9.996730316498656, 56.04595255289249],
       zoom: 10,
       doubleClickZoom: false,
@@ -205,112 +240,26 @@ function RouteNetworkMap() {
     newMap.on("load", () => {
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
-      clickHighlight(
-        ["route_segment", "route_node"],
-        10,
-        newMap,
-        lastHighlightedFeature,
-        (x) => {
-          let type: "RouteNode" | "RouteSegment" | null = null;
-          if (x?.properties?.objecttype === "route_node") {
-            type = "RouteNode";
-          } else if (x?.properties?.objecttype === "route_segment") {
-            type = "RouteSegment";
-          } else {
-            throw Error(`${x.type} is not a valid type`);
-          }
+      /* clickHighlight(
+       *   ["route_segment", "route_node"],
+       *   10,
+       *   newMap,
+       *   lastHighlightedFeature,
+       *   (x) => {
+       *     let type: "RouteNode" | "RouteSegment" | null = null;
+       *     if (x?.properties?.objecttype === "route_node") {
+       *       type = "RouteNode";
+       *     } else if (x?.properties?.objecttype === "route_segment") {
+       *       type = "RouteSegment";
+       *     } else {
+       *       throw Error(`${x.type} is not a valid type`);
+       *     }
 
-          lastHighlightedFeature.current = x;
-          setIdentifiedFeature({ id: x?.properties?.mrid, type: type });
-        }
-      );
-
-      newMap.addSource("route_network", {
-        type: "vector",
-        tiles: [
-          `${
-            Config.ROUTE_NETWORK_TILE_SERVER_URI
-          }/services/route_network/tiles/{z}/{x}/{y}.pbf?dt=${Date.now()}`,
-        ],
-        minzoom: 4,
-        maxzoom: 16,
-      });
-
-      mapAddImage(
-        newMap,
-        "route_node_central_office_small",
-        CentralOfficeSmallSvg
-      );
-      mapAddImage(
-        newMap,
-        "route_node_central_office_small_highlight",
-        CentralOfficeSmallHighlightSvg
-      );
-      mapAddImage(newMap, "route_node_cabinet_big", CabinetBigSvg);
-      mapAddImage(
-        newMap,
-        "route_node_cabinet_big_highlight",
-        CabinetBigHighlightSvg
-      );
-      mapAddImage(newMap, "route_node_cabinet_small", CabinetSmallSvg);
-      mapAddImage(
-        newMap,
-        "route_node_cabinet_small_highlight",
-        CabinetSmallHighlightSvg
-      );
-      mapAddImage(
-        newMap,
-        "route_node_cabinet_highlight",
-        CabinetSmallHighlightSvg
-      );
-      mapAddImage(newMap, "route_node_hand_hole", HandHoleSvg);
-      mapAddImage(
-        newMap,
-        "route_node_hand_hole_highlight",
-        HandHoleHighlightSvg
-      );
-      mapAddImage(newMap, "route_node_conduit_closure", ConduitClosureSvg);
-      mapAddImage(
-        newMap,
-        "route_node_conduit_closure_highlight",
-        ConduitClosureHighlightSvg
-      );
-
-      newMap.addLayer({
-        id: "route_segment",
-        source: "route_network",
-        "source-layer": "route_network",
-        type: "line",
-        filter: ["all", ["==", "objecttype", "route_segment"]],
-        paint: {
-          "line-color": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            "#00FF00",
-            "#FF0000",
-          ],
-          "line-width": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            6,
-            2,
-          ],
-        },
-      });
-
-      newMap.addLayer({
-        id: "route_node_central_office_small",
-        source: "route_network",
-        "source-layer": "route_network",
-        type: "symbol",
-        filter: ["all", ["==", "kind", "CentralOfficeSmall"]],
-        layout: {
-          "icon-image": "route_node_central_office_small",
-          "icon-size": 1,
-          "icon-allow-overlap": true,
-        },
-      });
-
+       *     lastHighlightedFeature.current = x;
+       *     setIdentifiedFeature({ id: x?.properties?.mrid, type: type });
+       *   }
+       * );
+       */
       newMap.addSource("route_segment_trace", {
         type: "geojson",
         data: {
@@ -319,6 +268,29 @@ function RouteNetworkMap() {
         },
       });
 
+      /* newMap.addLayer({
+       *   id: "route_segment",
+       *   source: "route_network",
+       *   "source-layer": "route_network",
+       *   type: "line",
+       *   filter: ["all", ["==", "objecttype", "route_segment"]],
+       *   paint: {
+       *     "line-color": [
+       *       "case",
+       *       ["boolean", ["feature-state", "selected"], false],
+       *       "#00FF00",
+       *       "#FF0000",
+       *     ],
+       *     "line-width": [
+       *       "case",
+       *       ["boolean", ["feature-state", "selected"], false],
+       *       6,
+       *       2,
+       *     ],
+       *   },
+       * });
+       */
+
       newMap.addLayer({
         id: "route_segment_trace",
         type: "line",
@@ -326,58 +298,6 @@ function RouteNetworkMap() {
         paint: {
           "line-color": "#40e0d0",
           "line-width": 4,
-        },
-      });
-
-      newMap.addLayer({
-        id: "route_node_conduit_closure",
-        source: "route_network",
-        "source-layer": "route_network",
-        type: "symbol",
-        filter: ["all", ["==", "kind", "ConduitClosure"]],
-        layout: {
-          "icon-image": "route_node_conduit_closure",
-          "icon-size": 1,
-          "icon-allow-overlap": true,
-        },
-      });
-
-      newMap.addLayer({
-        id: "route_node_cabinet_big",
-        source: "route_network",
-        "source-layer": "route_network",
-        type: "symbol",
-        filter: ["all", ["==", "kind", "CabinetBig"]],
-        layout: {
-          "icon-image": "route_node_cabinet_big",
-          "icon-size": 1,
-          "icon-allow-overlap": true,
-        },
-      });
-
-      newMap.addLayer({
-        id: "route_node_cabinet_small",
-        source: "route_network",
-        "source-layer": "route_network",
-        type: "symbol",
-        filter: ["all", ["==", "kind", "CabinetSmall"]],
-        layout: {
-          "icon-image": "route_node_cabinet_small",
-          "icon-size": 1,
-          "icon-allow-overlap": true,
-        },
-      });
-
-      newMap.addLayer({
-        id: "route_node_hand_hole",
-        source: "route_network",
-        "source-layer": "route_network",
-        type: "symbol",
-        filter: ["all", ["==", "kind", "HandHole"]],
-        layout: {
-          "icon-image": "route_node_hand_hole",
-          "icon-size": 1,
-          "icon-allow-overlap": true,
         },
       });
     });
