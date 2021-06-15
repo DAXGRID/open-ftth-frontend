@@ -122,12 +122,6 @@ function clickHighlight(
   });
 }
 
-function mapAddImage(map: Map, name: string, icon: string) {
-  const img = new Image(20, 20);
-  img.src = icon;
-  img.onload = () => map.addImage(name, img);
-}
-
 function highlightGeometries(map: Map, geoms: string[]) {
   const features = geoms.map<Feature<Geometry, GeoJsonProperties>>((x, i) => {
     return {
@@ -183,8 +177,6 @@ function RouteNetworkMap() {
   }, [traceRouteNetworkId, client, map]);
 
   useEffect(() => {
-    console.log(Config.BASEMAP_TILE_SERVER_URI);
-
     const newMap = new Map({
       container: mapContainer.current ?? "",
       style: {
@@ -229,26 +221,26 @@ function RouteNetworkMap() {
     newMap.on("load", () => {
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
-      /* clickHighlight(
-       *   ["route_segment", "route_node"],
-       *   10,
-       *   newMap,
-       *   lastHighlightedFeature,
-       *   (x) => {
-       *     let type: "RouteNode" | "RouteSegment" | null = null;
-       *     if (x?.properties?.objecttype === "route_node") {
-       *       type = "RouteNode";
-       *     } else if (x?.properties?.objecttype === "route_segment") {
-       *       type = "RouteSegment";
-       *     } else {
-       *       throw Error(`${x.type} is not a valid type`);
-       *     }
+      clickHighlight(
+        ["route_segment", "route_node"],
+        10,
+        newMap,
+        lastHighlightedFeature,
+        (x) => {
+          let type: "RouteNode" | "RouteSegment" | null = null;
+          if (x?.properties?.objecttype === "route_node") {
+            type = "RouteNode";
+          } else if (x?.properties?.objecttype === "route_segment") {
+            type = "RouteSegment";
+          } else {
+            throw Error(`${x.type} is not a valid type`);
+          }
 
-       *     lastHighlightedFeature.current = x;
-       *     setIdentifiedFeature({ id: x?.properties?.mrid, type: type });
-       *   }
-       * );
-       */
+          lastHighlightedFeature.current = x;
+          setIdentifiedFeature({ id: x?.properties?.mrid, type: type });
+        }
+      );
+
       newMap.addSource("route_segment_trace", {
         type: "geojson",
         data: {
@@ -256,29 +248,6 @@ function RouteNetworkMap() {
           features: [],
         },
       });
-
-      /* newMap.addLayer({
-       *   id: "route_segment",
-       *   source: "route_network",
-       *   "source-layer": "route_network",
-       *   type: "line",
-       *   filter: ["all", ["==", "objecttype", "route_segment"]],
-       *   paint: {
-       *     "line-color": [
-       *       "case",
-       *       ["boolean", ["feature-state", "selected"], false],
-       *       "#00FF00",
-       *       "#FF0000",
-       *     ],
-       *     "line-width": [
-       *       "case",
-       *       ["boolean", ["feature-state", "selected"], false],
-       *       6,
-       *       2,
-       *     ],
-       *   },
-       * });
-       */
 
       newMap.addLayer({
         id: "route_segment_trace",

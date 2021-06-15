@@ -1133,7 +1133,16 @@
       "source": "route_network",
       "source-layer": "route_network",
       "filter": ["all", ["==", "method", "Schematic"]],
-      "paint": {"line-width": 2, "line-opacity": 1, "line-dasharray": [2, 1]}
+      "paint": {
+        "line-color": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false], "#00FF00", "black"],
+        "line-width": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false], 4, 2],
+        "line-opacity": 1,
+        "line-dasharray": [2, 1]
+      }
     },
     {
       "id": "route_segment_surveyd",
@@ -1142,7 +1151,15 @@
       "source-layer": "route_network",
       "filter": ["all", ["==", "method", "LandSurveying"]],
       "layout": {"visibility": "visible"},
-      "paint": {"line-width": 2, "line-opacity": 1}
+      "paint": {
+        "line-color": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false], "#00FF00", "black"],
+        "line-width": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false], 4, 2],
+        "line-opacity": 1
+      }
     },
     {
       "id": "route_central_office_small",
