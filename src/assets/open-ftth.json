@@ -1133,7 +1133,16 @@
       "source": "route_network",
       "source-layer": "route_network",
       "filter": ["all", ["==", "method", "Schematic"]],
-      "paint": {"line-width": 2, "line-opacity": 1, "line-dasharray": [2, 1]}
+      "paint": {
+        "line-color": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false], "#00FF00", "black"],
+        "line-width": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false], 4, 2],
+        "line-opacity": 1,
+        "line-dasharray": [2, 1]
+      }
     },
     {
       "id": "route_segment_surveyd",
@@ -1142,7 +1151,15 @@
       "source-layer": "route_network",
       "filter": ["all", ["==", "method", "LandSurveying"]],
       "layout": {"visibility": "visible"},
-      "paint": {"line-width": 2, "line-opacity": 1}
+      "paint": {
+        "line-color": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false], "#00FF00", "black"],
+        "line-width": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false], 4, 2],
+        "line-opacity": 1
+      }
     },
     {
       "id": "route_central_office_small",
@@ -1171,7 +1188,7 @@
       }
     },
     {
-      "id": "route_cabinet_big-copy",
+      "id": "route_cabinet_big",
       "type": "symbol",
       "source": "route_network",
       "source-layer": "route_network",
@@ -1195,7 +1212,7 @@
       }
     },
     {
-      "id": "route_cabinet_small-copy",
+      "id": "route_cabinet_small",
       "type": "symbol",
       "source": "route_network",
       "source-layer": "route_network",
@@ -1219,7 +1236,7 @@
       }
     },
     {
-      "id": "route_hand_hole-copy",
+      "id": "route_hand_hole",
       "type": "symbol",
       "source": "route_network",
       "source-layer": "route_network",
