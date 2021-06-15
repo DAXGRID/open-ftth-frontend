@@ -13,19 +13,7 @@ import {
 } from "mapbox-gl";
 import { MapContext } from "../../contexts/MapContext";
 import Config from "../../config";
-import {
-  CabinetBigSvg,
-  CabinetBigHighlightSvg,
-  CabinetSmallSvg,
-  CabinetSmallHighlightSvg,
-  CentralOfficeSmallSvg,
-  CentralOfficeSmallHighlightSvg,
-  HandHoleSvg,
-  HandHoleHighlightSvg,
-  ConduitClosureSvg,
-  ConduitClosureHighlightSvg,
-  MapboxStyle,
-} from "../../assets";
+import { MapboxStyle } from "../../assets";
 import {
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
