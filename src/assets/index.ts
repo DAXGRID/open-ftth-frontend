@@ -12,16 +12,6 @@ import TrashCanSvg from "./trash-can.svg";
 import EraserSvg from "./eraser.svg";
 import EditPropertiesSvg from "./edit-properties.svg";
 import MoveConduitSvg from "./move-conduit.svg";
-import CabinetBigSvg from "./cabinet-big.svg";
-import CabinetBigHighlightSvg from "./cabinet-big-highlight.svg";
-import CabinetSmallSvg from "./cabinet-small.svg";
-import CabinetSmallHighlightSvg from "./cabinet-small-highlight.svg";
-import HandHoleSvg from "./hand-hole.svg";
-import HandHoleHighlightSvg from "./hand-hole-highlight.svg";
-import ConduitClosureSvg from "./conduit-closure.svg";
-import ConduitClosureHighlightSvg from "./conduit-closure-highlight.svg";
-import CentralOfficeSmallSvg from "./central-office-small.svg";
-import CentralOfficeSmallHighlightSvg from "./central-office-small-highlight.svg";
 import MapboxStyle from "./open-ftth.json";
 
 export {
@@ -39,15 +29,5 @@ export {
   EraserSvg,
   EditPropertiesSvg,
   MoveConduitSvg,
-  CabinetBigSvg,
-  CabinetBigHighlightSvg,
-  CabinetSmallSvg,
-  CabinetSmallHighlightSvg,
-  HandHoleSvg,
-  HandHoleHighlightSvg,
-  ConduitClosureSvg,
-  ConduitClosureHighlightSvg,
-  CentralOfficeSmallSvg,
-  CentralOfficeSmallHighlightSvg,
   MapboxStyle
 };
