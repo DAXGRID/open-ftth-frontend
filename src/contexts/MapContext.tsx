@@ -7,6 +7,15 @@ type IdentifiedFeature = {
   type: FeatureType | null;
 };
 
+export interface SearchResult {
+  id: string;
+  objectType: string;
+  xwgs: number;
+  ywgs: number;
+  xetrs: number;
+  yetrs: number;
+}
+
 type MapContextType = {
   selectedSegmentIds: string[];
   setSelectedSegmentIds: (selectedSegments: string[]) => void;
@@ -14,20 +23,26 @@ type MapContextType = {
   setIdentifiedFeature: (identifiedNetworkElement: IdentifiedFeature) => void;
   traceRouteNetworkId: string;
   setTraceRouteNetworkId: (routeNetworkId: string) => void;
+  searchResult: SearchResult | null;
+  setSearchResult: (searchResult: SearchResult) => void;
 };
 
 const MapContext = createContext<MapContextType>({
   selectedSegmentIds: [],
   setSelectedSegmentIds: () => {
-    console.warn("no provider set");
+    console.warn("no provider set for setSelectedSegmentIds");
   },
   identifiedFeature: { id: null, type: null },
   setIdentifiedFeature: () => {
-    console.warn("no provider set");
+    console.warn("no provider set for setIdentifiedFeature");
   },
   traceRouteNetworkId: "",
   setTraceRouteNetworkId: () => {
-    console.warn("no provider set");
+    console.warn("no provider set for setTraceRouteNetwork");
+  },
+  searchResult: null,
+  setSearchResult: () => {
+    console.warn("no provider set for setSearchResult");
   },
 });
 
@@ -40,6 +55,7 @@ const MapProvider = ({ children }: MapProviderProps) => {
   const [identifiedNetworkElement, setIdentifiedNetworkElement] =
     useState<IdentifiedFeature | null>(null);
   const [traceRouteNetworkId, setTraceRouteNetworkId] = useState<string>("");
+  const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
 
   return (
     <MapContext.Provider
@@ -50,6 +66,8 @@ const MapProvider = ({ children }: MapProviderProps) => {
         setIdentifiedFeature: setIdentifiedNetworkElement,
         traceRouteNetworkId: traceRouteNetworkId,
         setTraceRouteNetworkId: setTraceRouteNetworkId,
+        searchResult: searchResult,
+        setSearchResult: setSearchResult,
       }}
     >
       {children}
