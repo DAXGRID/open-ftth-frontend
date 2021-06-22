@@ -27,13 +27,18 @@ function send(eventMsg: any) {
 }
 
 function BridgeConnector() {
-  const { setSelectedSegmentIds, setIdentifiedFeature, traceRouteNetworkId } =
-    useContext(MapContext);
+  const {
+    setSelectedSegmentIds,
+    setIdentifiedFeature,
+    traceRouteNetworkId,
+    searchResult,
+  } = useContext(MapContext);
   const [connected, setConnected] = useState(false);
   const {
     retrieveSelectedEquipments,
     retrieveIdentifiedNetworkElement,
     highlightFeatures,
+    panToCoordinate,
   } = useBridgeConnector();
   const { keycloak } = useKeycloak();
   const graphqlClient = useClient();
@@ -161,6 +166,12 @@ function BridgeConnector() {
         );
       });
   }, [traceRouteNetworkId, highlightFeatures, graphqlClient, connected]);
+
+  useEffect(() => {
+    if (!searchResult) return;
+
+    panToCoordinate(`[${searchResult.xetrs},${searchResult.yetrs}]`);
+  }, [searchResult]);
 
   return <></>;
 }
