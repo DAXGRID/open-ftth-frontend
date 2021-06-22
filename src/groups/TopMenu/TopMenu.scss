@@ -1,19 +1,19 @@
 .top-menu {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-  padding: 15px 20px;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2px;
-  font-size: 25px;
+  font-size: 24px;
 
   .top-menu-body {
     flex: 1;
-    margin: 0px 20px;
+    margin: 0px 60px;
   }
 
   .side-menu-icon {
-    padding-right: 40px;
+    align-items: center;
+    display: flex;
 
     &:hover {
       cursor: pointer;

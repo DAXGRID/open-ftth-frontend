@@ -1,21 +1,21 @@
-import React, { useState, useLayoutEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import Routes from "./routes/Routes";
-import TopMenu from "./components/TopMenu";
-import BridgeConnector from "./bridge/BridgeConnector";
-import SideMenu, { SideMenuItem } from "./components/SideMenu";
 import {
+  faDownload,
   faHome,
   faProjectDiagram,
-  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
-import Loading from "./components/Loading";
-import { MapProvider } from "./contexts/MapContext";
 import { useKeycloak } from "@react-keycloak/web";
-import { useTranslation } from "react-i18next";
-import { ToastContainer, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "mapbox-gl/dist/mapbox-gl.css";
+import React, { useLayoutEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Slide, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import BridgeConnector from "./bridge/BridgeConnector";
+import Loading from "./components/Loading";
+import SideMenu, { SideMenuItem } from "./components/SideMenu";
+import TopMenu from "./groups/TopMenu";
+import { MapProvider } from "./contexts/MapContext";
+import Routes from "./routes/Routes";
 
 function App() {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);

@@ -123,7 +123,8 @@
       "UPDATE": "Update",
       "UPDATED": "Updated",
       "EDIT": "Edit",
-      "REVERSE_VERTICAL_ALIGNMENT": "Reverse vertical alignment"
+      "REVERSE_VERTICAL_ALIGNMENT": "Reverse vertical alignment",
+      "SEARCH_FOR_ADDRESS_OR_NODE": "Search for address or node"
     }
   },
   "dk": {
@@ -250,7 +251,8 @@
       "UPDATE": "Opdater",
       "UPDATED": "Opdateret",
       "EDIT": "Editer",
-      "REVERSE_VERTICAL_ALIGNMENT": "Flip"
+      "REVERSE_VERTICAL_ALIGNMENT": "Flip",
+      "SEARCH_FOR_ADDRESS_OR_NODE": "Søg efter adresse eller node"
     }
   }
 }
