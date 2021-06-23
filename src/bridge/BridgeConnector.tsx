@@ -171,7 +171,7 @@ function BridgeConnector() {
     if (!searchResult) return;
 
     panToCoordinate(`[${searchResult.xetrs},${searchResult.yetrs}]`);
-  }, [searchResult]);
+  }, [searchResult, panToCoordinate]);
 
   return <></>;
 }
