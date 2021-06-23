@@ -33,15 +33,20 @@ function useBridgeConnector() {
     send(message);
   }, [keycloak.profile?.username]);
 
-  function panToCoordinate(coordinate: string) {
-    const message = {
-      eventType: "PanToCoordinate",
-      username: keycloak.profile?.username,
-      coordinate: JSON.parse(coordinate),
-    };
+  const panToCoordinate = useCallback(
+    (coordinate: string) => {
+      if (!keycloak.profile?.username) return;
 
-    send(message);
-  }
+      const message = {
+        eventType: "PanToCoordinate",
+        username: keycloak.profile?.username,
+        coordinate: JSON.parse(coordinate),
+      };
+
+      send(message);
+    },
+    [keycloak.profile?.username]
+  );
 
   const highlightFeatures = useCallback(
     (featureIds: string[]) => {
