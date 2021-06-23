@@ -1,22 +1,22 @@
-import { useEffect, useRef, useContext } from "react";
-import { useClient } from "urql";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
 import {
-  Map,
-  PointLike,
-  MapMouseEvent,
-  MapboxGeoJSONFeature,
-  SymbolLayer,
   GeoJSONSource,
+  Map,
+  MapboxGeoJSONFeature,
+  MapMouseEvent,
+  PointLike,
   Style,
-  VectorSource
+  SymbolLayer,
+  VectorSource,
 } from "mapbox-gl";
-import { MapContext } from "../../contexts/MapContext";
-import Config from "../../config";
+import { useContext, useEffect, useRef } from "react";
+import { useClient } from "urql";
 import { MapboxStyle } from "../../assets";
+import Config from "../../config";
+import { MapContext } from "../../contexts/MapContext";
 import {
-  SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
+  SPAN_SEGMENT_TRACE,
 } from "./RouteNetworkMapGql";
 
 function enableResize(map: Map) {
@@ -75,9 +75,10 @@ function clickHighlight(
 
       if (lastIsIconLayer) {
         // We have to do this check because mapbox is annoying and changes the type randomly
-        let icon = typeof lastIsIconLayer !== "string"
-          ? lastIsIconLayer.name as string
-          : lastIsIconLayer;
+        let icon =
+          typeof lastIsIconLayer !== "string"
+            ? (lastIsIconLayer.name as string)
+            : lastIsIconLayer;
 
         // In case that we switch from highlighted icon to another
         if (icon.endsWith("-highlight")) {
@@ -88,13 +89,7 @@ function clickHighlight(
         map.setLayoutProperty(
           lastHighlightedFeature?.current?.layer?.id,
           "icon-image",
-          [
-            "match",
-            ["id"],
-            -1,
-            `${icon}-highlight`,
-            icon,
-          ]
+          ["match", ["id"], -1, `${icon}-highlight`, icon]
         );
       }
 
@@ -113,13 +108,16 @@ function clickHighlight(
     }
 
     // We have to change it to any because mapbox changes the type randomly
-    const isIconLayer = (feature.layer as SymbolLayer).layout?.["icon-image"] as any;
+    const isIconLayer = (feature.layer as SymbolLayer).layout?.[
+      "icon-image"
+    ] as any;
     // If its a symbol layer change image -
     if (isIconLayer) {
       // We have to do this check because mapbox is annoying and changes the type randomly
-      let icon = typeof isIconLayer !== "string"
-        ? isIconLayer.name as string
-        : isIconLayer;
+      let icon =
+        typeof isIconLayer !== "string"
+          ? (isIconLayer.name as string)
+          : isIconLayer;
 
       // In case that we switch from highlighted icon to another
       if (icon.endsWith("-highlight")) {
@@ -170,7 +168,8 @@ function RouteNetworkMap() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
-  const { setIdentifiedFeature, traceRouteNetworkId } = useContext(MapContext);
+  const { setIdentifiedFeature, traceRouteNetworkId, searchResult } =
+    useContext(MapContext);
 
   useEffect(() => {
     if (!traceRouteNetworkId) {
@@ -204,12 +203,14 @@ function RouteNetworkMap() {
     const newMap = new Map({
       container: mapContainer.current ?? "",
       style: {
-        ...MapboxStyle as Style,
+        ...(MapboxStyle as Style),
         sources: {
           route_network: {
             type: "vector",
             tiles: [
-              `${Config.ROUTE_NETWORK_TILE_SERVER_URI}/services/route_network/tiles/{z}/{x}/{y}.pbf?dt=${Date.now()}`,
+              `${
+                Config.ROUTE_NETWORK_TILE_SERVER_URI
+              }/services/route_network/tiles/{z}/{x}/{y}.pbf?dt=${Date.now()}`,
             ],
             minZoom: 0,
             minzoom: 4,
@@ -227,12 +228,12 @@ function RouteNetworkMap() {
           "basemap-danish": {
             type: "vector",
             tiles: [
-              "https://dev-tiles-basemap.openftth.com/services/objects/tiles/{z}/{x}/{y}.pbf"
+              "https://dev-tiles-basemap.openftth.com/services/objects/tiles/{z}/{x}/{y}.pbf",
             ],
             minZoom: 0,
             maxZoom: 14,
             minzoom: 16,
-            maxzoom: 16
+            maxzoom: 16,
           } as VectorSource,
         },
       },
@@ -282,6 +283,26 @@ function RouteNetworkMap() {
           "line-width": 4,
         },
       });
+
+      newMap.addSource("search_marker", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [],
+        },
+      });
+
+      newMap.addLayer({
+        id: "search_marker",
+        type: "circle",
+        source: "search_marker",
+        paint: {
+          "circle-radius": 12,
+          "circle-stroke-width": 2,
+          "circle-opacity": 0,
+          "circle-stroke-color": "#FF0000",
+        },
+      });
     });
 
     map.current = newMap;
@@ -291,6 +312,34 @@ function RouteNetworkMap() {
       map.current = null;
     };
   }, [setIdentifiedFeature]);
+
+  useEffect(() => {
+    if (!map.current || !searchResult) return;
+
+    const features: Feature<Geometry, GeoJsonProperties>[] = [];
+    const feature: Feature<Geometry, GeoJsonProperties> = {
+      id: 0,
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [searchResult.xwgs, searchResult.ywgs],
+      },
+      properties: {},
+    };
+
+    features.push(feature);
+
+    (map.current.getSource("search_marker") as GeoJSONSource)?.setData({
+      type: "FeatureCollection",
+      features: features ?? [],
+    });
+
+    map.current.flyTo({
+      center: [searchResult.xwgs, searchResult.ywgs],
+      zoom: 17,
+      animate: false,
+    });
+  }, [searchResult]);
 
   return (
     <div className="route-network-map">

@@ -1,0 +1,45 @@
+@import "../../../global-styles/colors";
+
+.search-menu {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  color: $dark-grey;
+  font-size: 18px;
+
+  .search-menu-input {
+    font-size: 18px;
+    min-width: 500px;
+    display: block;
+    height: 100%;
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: 1px solid $border-color;
+  }
+
+  .search-menu-results {
+    position: absolute;
+    background: white;
+    border: 1px solid $border-color;
+    margin-top: 60px;
+    min-width: 500px;
+    padding: 15px;
+    border-radius: 4px;
+
+    ul {
+      font-size: 16px;
+
+      li {
+        border-bottom: 1px solid $border-color;
+        padding: 10px;
+        margin: 10px 0px;
+
+        &:hover {
+          cursor: pointer;
+          color: black;
+          border-bottom: 1px solid black;
+        }
+      }
+    }
+  }
+}
