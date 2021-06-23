@@ -47,17 +47,18 @@ function SearchMenu() {
       {searchText && searchFieldDirty && (
         <div className="search-menu-results">
           <ul>
-            {diagramQueryResult.data?.search.globalSearch.map((x) => {
-              return (
-                <li
-                  role="button"
-                  key={x.id}
-                  onClick={() => selectSearchResult(x)}
-                >
-                  {x.label}
-                </li>
-              );
-            })}
+            {diagramQueryResult.data?.search?.globalSearch &&
+              diagramQueryResult.data?.search?.globalSearch.map((x) => {
+                return (
+                  <li
+                    role="button"
+                    key={x.id}
+                    onClick={() => selectSearchResult(x)}
+                  >
+                    {x.label}
+                  </li>
+                );
+              })}
           </ul>
         </div>
       )}
