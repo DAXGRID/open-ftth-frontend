@@ -49,7 +49,11 @@ function SearchMenu() {
           <ul>
             {diagramQueryResult.data?.search.globalSearch.map((x) => {
               return (
-                <li key={x.id} onClick={() => selectSearchResult(x)}>
+                <li
+                  role="button"
+                  key={x.id}
+                  onClick={() => selectSearchResult(x)}
+                >
                   {x.label}
                 </li>
               );
