@@ -1,5 +1,35 @@
 export interface NodeContainerDetailsResponse {
   utilityNetwork: {
+    nodeContainer: {
+      specification: {
+        id: string;
+        category: string;
+      };
+      manufacturer: {
+        id: string;
+      };
+    };
+  };
+}
+
+export const QUERY_NODE_CONTAINER_DETAILS = `
+query ($nodeContainerId: ID!) {
+  utilityNetwork {
+    nodeContainer(nodeContainerId: $nodeContainerId) {
+      manufacturer {
+        id
+      }
+      specification {
+        id
+        category
+      }
+    }
+  }
+}
+`;
+
+export interface NodeContainerSpecificationsResponse {
+  utilityNetwork: {
     nodeContainerSpecifications: NodeContainerSpecification[];
     manufacturers: Manufacturer[];
   };

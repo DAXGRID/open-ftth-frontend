@@ -9,6 +9,8 @@ import {
   NODE_CONTAINER_SPECIFICATIONS_QUERY,
   NodeContainerSpecification,
   Manufacturer,
+  QUERY_NODE_CONTAINER_DETAILS,
+  NodeContainerSpecificationsResponse,
 } from "./EditNodeContainerGql";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import SelectListView, { BodyItem } from "../../../components/SelectListView";
@@ -96,9 +98,18 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [selectedManufacturer, setSelectedManufacturer] = useState<string>("");
 
-  const [specificationsQueryResult] = useQuery<NodeContainerDetailsResponse>({
-    query: NODE_CONTAINER_SPECIFICATIONS_QUERY,
-  });
+  const [specificationsQueryResult] =
+    useQuery<NodeContainerSpecificationsResponse>({
+      query: NODE_CONTAINER_SPECIFICATIONS_QUERY,
+    });
+
+  const [nodeContainerDetailsResponse] = useQuery<NodeContainerDetailsResponse>(
+    {
+      query: QUERY_NODE_CONTAINER_DETAILS,
+      variables: { nodeContainerId: nodeContainerMrid },
+      pause: !nodeContainerMrid,
+    }
+  );
 
   useEffect(() => {
     if (!specificationsQueryResult.data) return;
@@ -111,6 +122,17 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
     setSpecifications(nodeContainerSpecifications);
     setManufacturers(manufacturers);
   }, [specificationsQueryResult]);
+
+  useEffect(() => {
+    if (!nodeContainerDetailsResponse.data) return;
+
+    const { specification, manufacturer } =
+      nodeContainerDetailsResponse.data?.utilityNetwork.nodeContainer;
+
+    setSelectedCategory(specification.category);
+    setSelectedSpecification(specification.id);
+    setSelectedManufacturer(manufacturer.id);
+  }, [nodeContainerDetailsResponse]);
 
   const filteredNodeContainerSpecifications = useMemo(
     () =>
@@ -193,7 +215,11 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
     }
   };
 
-  if (!nodeContainerMrid || specificationsQueryResult.fetching) {
+  if (
+    !nodeContainerMrid ||
+    specificationsQueryResult.fetching ||
+    nodeContainerDetailsResponse.fetching
+  ) {
     return <></>;
   }
 
