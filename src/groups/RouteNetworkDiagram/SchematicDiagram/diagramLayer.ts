@@ -311,7 +311,22 @@ export const outerConduitSelect: LineLayer = {
   paint: {
     "line-width": 3,
     "line-color": colorMap.LIGHT_BLUE,
+    "line-opacity": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      1,
+      0,
+    ],
+  },
+};
 
+export const nodeContainerSelect: LineLayer = {
+  id: "NodeContainerSelect",
+  type: "line",
+  source: "NodeContainer",
+  paint: {
+    "line-width": 3,
+    "line-color": colorMap.LIGHT_BLUE,
     "line-opacity": [
       "case",
       ["boolean", ["feature-state", "selected"], false],

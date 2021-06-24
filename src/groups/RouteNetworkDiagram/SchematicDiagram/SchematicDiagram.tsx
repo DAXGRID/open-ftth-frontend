@@ -1,13 +1,14 @@
-import { useRef, useEffect } from "react";
-import mapboxgl, { Map, MapboxGeoJSONFeature, PointLike } from "mapbox-gl";
 import { Feature } from "geojson";
+import mapboxgl, { Map, MapboxGeoJSONFeature, PointLike } from "mapbox-gl";
+import { useEffect, useRef } from "react";
 import {
-  getLayer,
   createFeature,
   createSource,
+  getLayer,
   innerConduitSelect,
-  outerConduitSelect,
   nodeContainerSideSelect,
+  outerConduitSelect,
+  nodeContainerSelect,
 } from "./diagramLayer";
 
 interface Envelope {
@@ -141,6 +142,10 @@ function clickHighlight(
         sourceLayer: "OuterConduit",
       });
 
+      const nodeContainers = map.querySourceFeatures("NodeContainer", {
+        sourceLayer: "OuterConduit",
+      });
+
       innerConduits.forEach((x) => {
         map.setFeatureState(
           { source: "InnerConduit", id: x.id },
@@ -151,6 +156,13 @@ function clickHighlight(
       outerConduits.forEach((x) => {
         map.setFeatureState(
           { source: "OuterConduit", id: x.id },
+          { selected: false }
+        );
+      });
+
+      nodeContainers.forEach((x) => {
+        map.setFeatureState(
+          { source: "NodeContainer", id: x.id },
           { selected: false }
         );
       });
@@ -208,6 +220,10 @@ function SchematicDiagram({
         x.style.startsWith("NodeContainerSide")
       );
 
+      const hasNodeContainer = diagramObjects.find((x) =>
+        x.style.startsWith("NodeContainer")
+      );
+
       if (hasInnerConduit) {
         newMap.addLayer(innerConduitSelect);
         hoverPointer("InnerConduit", newMap);
@@ -224,6 +240,12 @@ function SchematicDiagram({
         newMap.addLayer(nodeContainerSideSelect);
         hoverPointer("NodeContainerSide", newMap);
         clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
+      }
+
+      if (!editMode && hasNodeContainer) {
+        newMap.addLayer(nodeContainerSelect);
+        hoverPointer("NodeContainer", newMap);
+        clickHighlight("NodeContainer", newMap, onSelectFeature, editMode);
       }
     });
 

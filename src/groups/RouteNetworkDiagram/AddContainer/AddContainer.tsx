@@ -6,7 +6,6 @@ import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import DefaultButton from "../../../components/DefaultButton";
 import Loading from "../../../components/Loading";
 import { useQuery, useMutation } from "urql";
-
 import {
   UtilityNetworkResponse,
   Manufacturer,
@@ -43,7 +42,7 @@ const getFilteredManufacturers = (
   manufacturers: Manufacturer[],
   selectedNodeContainerSpecification: string | number | undefined,
   nodeContainerSpecifications: NodeContainerSpecification[],
-  t: TFunction<string>
+  t: TFunction<"translation">
 ) => {
   if (
     !manufacturers ||
@@ -87,10 +86,8 @@ function AddContainer() {
   const [selectedCategory, setSelectedCategory] = useState<
     string | number | undefined
   >();
-  const [
-    nodeContainerSpecifications,
-    setNodeContainerSpecifications,
-  ] = useState<NodeContainerSpecification[]>([]);
+  const [nodeContainerSpecifications, setNodeContainerSpecifications] =
+    useState<NodeContainerSpecification[]>([]);
   const [
     selectedNodeContainerSpecification,
     setSelectedSpanEquipmentSpecification,
@@ -102,14 +99,10 @@ function AddContainer() {
     query: NODE_CONTAINER_SPECIFICATIONS_QUERY,
   });
 
-  const [
-    // TODO fix this
-    // eslint-disable-next-line
-    placeNodeContainerMutationResult,
-    placeNodeContainerMutation,
-  ] = useMutation<PlaceNodeContainerResponse>(
-    PLACE_NODE_CONTAINER_IN_ROUTE_NETWORK
-  );
+  const [, placeNodeContainerMutation] =
+    useMutation<PlaceNodeContainerResponse>(
+      PLACE_NODE_CONTAINER_IN_ROUTE_NETWORK
+    );
 
   const filteredSpanEquipmentSpecifications = useMemo(
     () =>
@@ -139,10 +132,8 @@ function AddContainer() {
   useLayoutEffect(() => {
     if (!nodeContainerResult.data) return;
 
-    const {
-      nodeContainerSpecifications,
-      manufacturers,
-    } = nodeContainerResult.data.utilityNetwork;
+    const { nodeContainerSpecifications, manufacturers } =
+      nodeContainerResult.data.utilityNetwork;
 
     if (!nodeContainerSpecifications || !manufacturers) return;
 
