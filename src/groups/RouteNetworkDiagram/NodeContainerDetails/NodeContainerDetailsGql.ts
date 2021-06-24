@@ -27,18 +27,3 @@ query ($nodeContainerId: ID!) {
   }
 }
 `;
-
-export const MUTATION_UPDATE_NODE_CONTAINER = `
-mutation ($nodeContainerId: ID!,
-          $specificationId: ID!,
-          $manufacturerId: ID!) {
-  nodeContainer {
-    updateProperties (nodeContainerId: $nodeContainerId,
-                      specificationId: $specificationId,
-                      manufacturerId: $manufacturerid) {
-      isSuccess
-      errorMessage
-    }
-  }
-}
-`;

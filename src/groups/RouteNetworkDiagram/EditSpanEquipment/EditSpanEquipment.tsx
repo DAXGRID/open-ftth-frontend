@@ -46,7 +46,7 @@ const getFilteredManufacturers = (
   manufacturers: Manufacturer[],
   selectedSpanEquipmentSpecification: string | number | undefined,
   spanEquipmentSpecifications: SpanEquipmentSpecification[],
-  t: TFunction<string>
+  t: TFunction<"translation">
 ) => {
   if (
     !manufacturers ||
@@ -84,7 +84,7 @@ const getFilteredManufacturers = (
   return [defaultValue, ...filtered];
 };
 
-const colorOptions = (colors: string[], t: TFunction<string>) => {
+const colorOptions = (colors: string[], t: TFunction<"translation">) => {
   const options = colors.map<SelectOption>((x) => {
     return { text: x, value: x };
   });
@@ -128,13 +128,12 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     }
   );
 
-  const [
-    spanEquipmentSpecificationsResponse,
-  ] = useQuery<SpanEquipmentSpecificationsResponse>({
-    query: QUERY_SPAN_EQUIPMENT_SPECIFICATIONS_MANUFACTURER,
-    requestPolicy: "cache-first",
-    pause: !spanEquipmentMrid,
-  });
+  const [spanEquipmentSpecificationsResponse] =
+    useQuery<SpanEquipmentSpecificationsResponse>({
+      query: QUERY_SPAN_EQUIPMENT_SPECIFICATIONS_MANUFACTURER,
+      requestPolicy: "cache-first",
+      pause: !spanEquipmentMrid,
+    });
 
   const filteredSpanEquipmentSpecifications = useMemo(
     () =>
@@ -166,10 +165,8 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       return;
     }
 
-    const {
-      spanEquipmentSpecifications,
-      manufacturers,
-    } = spanEquipmentSpecificationsResponse.data.utilityNetwork;
+    const { spanEquipmentSpecifications, manufacturers } =
+      spanEquipmentSpecificationsResponse.data.utilityNetwork;
 
     if (!spanEquipmentSpecifications || !manufacturers) {
       return;
@@ -186,11 +183,8 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       return;
     }
 
-    const {
-      manufacturer,
-      markingInfo,
-      specification,
-    } = spanEquipmentDetailsResponse.data.utilityNetwork.spanEquipment;
+    const { manufacturer, markingInfo, specification } =
+      spanEquipmentDetailsResponse.data.utilityNetwork.spanEquipment;
 
     setSelectedCategory(specification.category);
     setSelectedSpanEquipmentSpecification(specification.id);

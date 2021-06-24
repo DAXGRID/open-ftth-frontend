@@ -10,6 +10,7 @@ import Loading from "../../components/Loading";
 import { MapContext } from "../../contexts/MapContext";
 import RerouteTube from "./RerouteTube";
 import EditSpanEquipment from "./EditSpanEquipment";
+import EditNodeContainer from "./EditNodeContainer";
 import NodeContainerDetails from "./NodeContainerDetails";
 import SpanEquipmentDetails from "./SpanEquipmentDetails";
 import {
@@ -77,6 +78,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
   const [showRerouteTube, setShowRerouteTube] = useState(false);
   const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
+  const [showEditNodeContainer, setShowEditNodeContainer] = useState(false);
   const { identifiedFeature, setTraceRouteNetworkId } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [envelope, setEnvelope] = useState<Envelope>({
@@ -503,6 +505,17 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
         </ModalContainer>
       )}
 
+      {singleSelectedFeature?.source === "NodeContainer" && (
+        <ModalContainer
+          show={showEditNodeContainer}
+          closeCallback={() => setShowEditNodeContainer(false)}
+        >
+          <EditNodeContainer
+            nodeContainerMrid={singleSelectedFeature?.properties?.refId ?? ""}
+          />
+        </ModalContainer>
+      )}
+
       {identifiedFeature.type === "RouteNode" && (
         <div className="feature-information-container">
           <div className="feature-informations">
@@ -673,7 +686,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
               <div className="feature-details-actions">
                 <ActionButton
                   icon={EditPropertiesSvg}
-                  action={() => setShowEditSpanEquipment(true)}
+                  action={() => setShowEditNodeContainer(true)}
                   title={t("EDIT")}
                 />
               </div>
