@@ -44,25 +44,27 @@ query {
 export type MutationUpdateNodeContainerParams = {
   nodeContainerId: string;
   specificationId: string;
-  manufacturerId: string;
+  manufacturerId: string | null;
 };
 
 export type MutationUpdateNodeContainerResponse = {
   nodeContainer: {
-    isSuccess: boolean;
-    errorMessage: string;
-    errorCode: string;
+    updateProperties: {
+      isSuccess: boolean;
+      errorMessage: string;
+      errorCode: string;
+    };
   };
 };
 
 export const MUTATION_UPDATE_NODE_CONTAINER = `
 mutation ($nodeContainerId: ID!,
           $specificationId: ID!,
-          $manufacturerId: ID!) {
+          $manufacturerId: ID) {
   nodeContainer {
     updateProperties (nodeContainerId: $nodeContainerId,
                       specificationId: $specificationId,
-                      manufacturerId: $manufacturerid) {
+                      manufacturerId: $manufacturerId) {
       isSuccess
       errorMessage
       errorCode

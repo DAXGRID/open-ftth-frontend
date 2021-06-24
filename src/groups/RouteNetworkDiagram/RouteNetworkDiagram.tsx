@@ -171,6 +171,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
     selectedFeatures.current = [];
     setSingleSelectedFeature(null);
     setShowEditSpanEquipment(false);
+    setShowEditNodeContainer(false);
   }, [
     res,
     setDiagramObjects,
@@ -178,6 +179,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
     setShowAddContainer,
     setSingleSelectedFeature,
     setShowEditSpanEquipment,
+    setShowEditNodeContainer,
   ]);
 
   const affixSpanEquipment = async () => {

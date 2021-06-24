@@ -172,7 +172,7 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
     }
 
     const parameters: MutationUpdateNodeContainerParams = {
-      manufacturerId: selectedManufacturer,
+      manufacturerId: selectedManufacturer === "" ? null : selectedManufacturer,
       nodeContainerId: nodeContainerMrid,
       specificationId: selectedSpecification,
     };
@@ -184,8 +184,12 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
       )
       .toPromise();
 
-    if (!result.data?.nodeContainer.isSuccess) {
-      toast.error(t(result.data?.nodeContainer.errorCode ?? "ERROR"));
+    if (!result.data?.nodeContainer.updateProperties.isSuccess) {
+      toast.error(
+        t(result.data?.nodeContainer.updateProperties.errorCode ?? "ERROR")
+      );
+    } else {
+      toast.success(t("UPDATED"));
     }
   };
 
@@ -223,9 +227,7 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
         <DefaultButton
           innerText={t("Place container")}
           onClick={() => updateNodeContainer()}
-          disabled={
-            !selectedManufacturer || !selectedSpecification ? true : false
-          }
+          disabled={!selectedSpecification}
         />
       </div>
     </div>
