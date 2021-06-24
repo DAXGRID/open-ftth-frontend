@@ -19,6 +19,8 @@ function SpanEquipmentDetails({
     pause: !spanEquipmentMrid,
   });
 
+  if (spanEquipmentDetails.fetching) return <></>;
+
   return (
     <div className="span-equipment-details">
       <div className="span-equipment-details-container">

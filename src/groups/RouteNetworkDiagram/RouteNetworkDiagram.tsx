@@ -10,6 +10,7 @@ import Loading from "../../components/Loading";
 import { MapContext } from "../../contexts/MapContext";
 import RerouteTube from "./RerouteTube";
 import EditSpanEquipment from "./EditSpanEquipment";
+import NodeContainerDetails from "./NodeContainerDetails";
 import SpanEquipmentDetails from "./SpanEquipmentDetails";
 import {
   Diagram,
@@ -220,7 +221,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
       toast.error(
         t(
           data?.spanEquipment.affixSpanEquipmentToNodeContainer.errorCode ??
-          "Error has occured"
+            "Error has occured"
         )
       );
     }
@@ -277,7 +278,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
       toast.error(
         t(
           data?.spanEquipment.connectSpanSegments.errorCode ??
-          "Error has occured"
+            "Error has occured"
         )
       );
     }
@@ -313,7 +314,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
       toast.error(
         t(
           data?.spanEquipment.disconnectSpanSegments.errorCode ??
-          "Error has occured"
+            "Error has occured"
         )
       );
     }
@@ -348,7 +349,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
       toast.error(
         t(
           data?.spanEquipment.detachSpanEquipmentFromNodeContainer.errorCode ??
-          "Error has occurred"
+            "Error has occurred"
         )
       );
     }
@@ -492,24 +493,25 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
 
       {(singleSelectedFeature?.source === "InnerConduit" ||
         singleSelectedFeature?.source === "OuterConduit") && (
-          <ModalContainer
-            show={showEditSpanEquipment}
-            closeCallback={() => setShowEditSpanEquipment(false)}
-          >
-            <EditSpanEquipment
-              spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
-            />
-          </ModalContainer>
-        )}
+        <ModalContainer
+          show={showEditSpanEquipment}
+          closeCallback={() => setShowEditSpanEquipment(false)}
+        >
+          <EditSpanEquipment
+            spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
+          />
+        </ModalContainer>
+      )}
 
       {identifiedFeature.type === "RouteNode" && (
         <div className="feature-information-container">
           <div className="feature-informations">
             <p>
               <strong>{t("Name")}</strong>
-              {`: ${routeNetworkElementResponse.data?.routeNetwork.routeElement
+              {`: ${
+                routeNetworkElementResponse.data?.routeNetwork.routeElement
                   .namingInfo?.name ?? ""
-                }`}
+              }`}
             </p>
             <p>
               <strong>{t("Kind")}</strong>
@@ -657,6 +659,28 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
             </div>
           </div>
         )}
+      {!editMode && singleSelectedFeature?.source === "NodeContainer" && (
+        <div className="feature-details">
+          <div className="feature-details-container">
+            <div className="feature-details-info">
+              <NodeContainerDetails
+                nodeContainerMrid={
+                  singleSelectedFeature?.properties?.refId ?? ""
+                }
+              />
+            </div>
+            {enableEditMode && (
+              <div className="feature-details-actions">
+                <ActionButton
+                  icon={EditPropertiesSvg}
+                  action={() => setShowEditSpanEquipment(true)}
+                  title={t("EDIT")}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
