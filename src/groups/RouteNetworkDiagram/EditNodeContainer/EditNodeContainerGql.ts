@@ -49,7 +49,7 @@ export type MutationUpdateNodeContainerParams = {
 
 export type MutationUpdateNodeContainerResponse = {
   nodeContainer: {
-    isSuccess: bool;
+    isSuccess: boolean;
     errorMessage: string;
     errorCode: string;
   };
