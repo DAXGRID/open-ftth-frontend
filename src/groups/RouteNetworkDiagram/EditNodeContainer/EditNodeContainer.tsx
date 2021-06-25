@@ -254,7 +254,7 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
       </div>
       <div className="full-row">
         <DefaultButton
-          innerText={t("Place container")}
+          innerText={t("UPDATE")}
           onClick={() => updateNodeContainer()}
           disabled={!selectedSpecification}
         />
