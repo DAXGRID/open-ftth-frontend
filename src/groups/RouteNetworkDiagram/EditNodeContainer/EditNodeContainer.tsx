@@ -131,7 +131,7 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
 
     setSelectedCategory(specification.category);
     setSelectedSpecification(specification.id);
-    setSelectedManufacturer(manufacturer.id);
+    setSelectedManufacturer(manufacturer?.id ?? "");
   }, [nodeContainerDetailsResponse]);
 
   const filteredNodeContainerSpecifications = useMemo(
@@ -194,7 +194,10 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
     }
 
     const parameters: MutationUpdateNodeContainerParams = {
-      manufacturerId: selectedManufacturer === "" ? null : selectedManufacturer,
+      manufacturerId:
+        selectedManufacturer === ""
+          ? "00000000-0000-0000-0000-000000000000"
+          : selectedManufacturer,
       nodeContainerId: nodeContainerMrid,
       specificationId: selectedSpecification,
     };
