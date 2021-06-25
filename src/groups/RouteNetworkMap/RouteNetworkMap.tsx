@@ -311,7 +311,7 @@ function RouteNetworkMap() {
     newMap.addControl(
       new AttributionControl({
         customAttribution: [
-          '<a href="http://www.openstreetmap.org/about/">© OpenStreetMap</a>',
+          '<a href="http://www.openstreetmap.org/about/">© OpenStreetMap contributors</a>',
           '<a href="https://openmaptiles.org/">© OpenMapTiles</a>',
         ],
       }),
