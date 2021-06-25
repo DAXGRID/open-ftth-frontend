@@ -12,6 +12,8 @@ import {
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
 } from "./BridgeConnectorGql";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 type IdentifyNetworkEvent = {
   eventType: string;
@@ -27,6 +29,7 @@ function send(eventMsg: any) {
 }
 
 function BridgeConnector() {
+  const { t } = useTranslation();
   const {
     setSelectedSegmentIds,
     setIdentifiedFeature,
@@ -93,7 +96,13 @@ function BridgeConnector() {
       "RetrieveSelectedResponse",
       async (_msg: string, data: RetrieveSelectedSpanEquipmentsResponse) => {
         if (data.username === keycloak.profile?.username) {
-          setSelectedSegmentIds(data.selectedFeaturesMrid);
+          // If the user has not saved inside of the map
+          if (data.selectedFeaturesMrid.includes("uuid_generate_v4()")) {
+            toast.error(t("NOT_VALID_SELECTION"));
+            setSelectedSegmentIds([]);
+          } else {
+            setSelectedSegmentIds(data.selectedFeaturesMrid);
+          }
         }
       }
     );
@@ -108,6 +117,7 @@ function BridgeConnector() {
     setSelectedSegmentIds,
     retrieveSelectedEquipments,
     keycloak.profile?.username,
+    t,
   ]);
 
   useEffect(() => {
