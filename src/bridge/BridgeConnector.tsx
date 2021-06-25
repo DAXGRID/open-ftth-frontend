@@ -136,10 +136,14 @@ function BridgeConnector() {
         }
 
         if (data.username === keycloak.profile?.username) {
-          setIdentifiedFeature({
-            id: data.identifiedFeatureId,
-            type: data.selectedType as "RouteSegment" | "RouteNode",
-          });
+          if (data.identifiedFeatureId === "uuid_generate_v4()") {
+            toast.error(t("NOT_VALID_SELECTION"));
+          } else {
+            setIdentifiedFeature({
+              id: data.identifiedFeatureId,
+              type: data.selectedType as "RouteSegment" | "RouteNode",
+            });
+          }
         }
       }
     );
@@ -154,6 +158,7 @@ function BridgeConnector() {
     retrieveIdentifiedNetworkElement,
     setIdentifiedFeature,
     keycloak.profile?.username,
+    t,
   ]);
 
   useEffect(() => {
