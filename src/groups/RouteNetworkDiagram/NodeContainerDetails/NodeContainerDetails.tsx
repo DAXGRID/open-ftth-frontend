@@ -33,7 +33,9 @@ function NodeContainerDetails({
           nodeContainer?.specification.name ?? ""
         }`}</p>
         <p>
-          {`${t("MANUFACTURER")}: ${nodeContainer?.manufacturer?.name ?? ""}`}
+          {`${t("MANUFACTURER")}: ${
+            nodeContainer?.manufacturer?.name ?? t("Unspecified")
+          }`}
         </p>
       </div>
     </div>
