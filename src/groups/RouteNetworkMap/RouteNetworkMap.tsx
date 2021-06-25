@@ -9,6 +9,7 @@ import {
   SymbolLayer,
   VectorSource,
   ScaleControl,
+  AttributionControl,
 } from "mapbox-gl";
 import { useContext, useEffect, useRef } from "react";
 import { useClient } from "urql";
@@ -307,6 +308,15 @@ function RouteNetworkMap() {
     });
 
     newMap.addControl(new ScaleControl(), "bottom-left");
+    newMap.addControl(
+      new AttributionControl({
+        customAttribution: [
+          '<a href="http://www.openstreetmap.org/about/">© OpenStreetMap</a>',
+          '<a href="https://openmaptiles.org/">© OpenMapTiles</a>',
+        ],
+      }),
+      "bottom-right"
+    );
 
     map.current = newMap;
 
