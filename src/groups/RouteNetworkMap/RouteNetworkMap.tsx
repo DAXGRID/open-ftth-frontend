@@ -8,6 +8,7 @@ import {
   Style,
   SymbolLayer,
   VectorSource,
+  ScaleControl,
 } from "mapbox-gl";
 import { useContext, useEffect, useRef } from "react";
 import { useClient } from "urql";
@@ -304,6 +305,8 @@ function RouteNetworkMap() {
         },
       });
     });
+
+    newMap.addControl(new ScaleControl(), "bottom-left");
 
     map.current = newMap;
 
