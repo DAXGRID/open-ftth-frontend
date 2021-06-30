@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState } from "react";
 
-type FeatureType = "RouteNode" | "RouteSegment";
+type FeatureType = "RouteNode" | "RouteSegment" | "Deleted";
 
 type IdentifiedFeature = {
   id: string | null;
