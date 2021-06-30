@@ -129,7 +129,8 @@ function BridgeConnector() {
       (_msg: string, data: IdentifyNetworkEvent) => {
         if (
           data.selectedType !== "RouteNode" &&
-          data.selectedType !== "RouteSegment"
+          data.selectedType !== "RouteSegment" &&
+          data.selectedType !== null
         ) {
           // Do nothing
           return;
@@ -141,7 +142,7 @@ function BridgeConnector() {
           } else {
             setIdentifiedFeature({
               id: data.identifiedFeatureId,
-              type: data.selectedType as "RouteSegment" | "RouteNode",
+              type: data.selectedType as "RouteSegment" | "RouteNode" | null,
             });
           }
         }
