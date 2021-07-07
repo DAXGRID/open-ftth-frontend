@@ -245,6 +245,10 @@ function RouteNetworkMap() {
       dragRotate: false,
     });
 
+    newMap.doubleClickZoom.disable();
+    newMap.dragRotate.disable();
+    newMap.touchZoomRotate.disableRotation();
+
     newMap.on("load", () => {
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
