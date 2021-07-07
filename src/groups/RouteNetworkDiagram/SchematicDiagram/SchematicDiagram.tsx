@@ -204,6 +204,7 @@ function SchematicDiagram({
     newMap.on("load", () => {
       newMap.doubleClickZoom.disable();
       newMap.dragRotate.disable();
+      newMap.touchZoomRotate.disableRotation();
       loadDiagram(newMap, diagramObjects);
       mapFitBounds(envelope, newMap);
       enableResize(newMap);
