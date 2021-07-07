@@ -33,12 +33,12 @@ body {
 }
 
 .main-container {
-  padding-top: 57px;
+  padding-top: 65px;
   display: flex;
   transform: translateX(0px);
   color: $text-primary;
   justify-content: center;
-  min-height: calc(100% - 67px);
+  min-height: calc(100% - 60px);
 
   &.side-menu-open {
     width: 100%;
