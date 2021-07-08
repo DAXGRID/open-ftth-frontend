@@ -1,5 +1,10 @@
 import { Feature } from "geojson";
-import mapboxgl, { Map, MapboxGeoJSONFeature, PointLike } from "mapbox-gl";
+import mapboxgl, {
+  Map,
+  MapboxGeoJSONFeature,
+  PointLike,
+  NavigationControl,
+} from "mapbox-gl";
 import { useEffect, useRef } from "react";
 import {
   createFeature,
@@ -201,10 +206,17 @@ function SchematicDiagram({
       center: [0.014, 0.014],
     });
 
+    newMap.doubleClickZoom.disable();
+    newMap.dragRotate.disable();
+    newMap.touchZoomRotate.disableRotation();
+    newMap.addControl(
+      new NavigationControl({
+        showCompass: false,
+      }),
+      "top-left"
+    );
+
     newMap.on("load", () => {
-      newMap.doubleClickZoom.disable();
-      newMap.dragRotate.disable();
-      newMap.touchZoomRotate.disableRotation();
       loadDiagram(newMap, diagramObjects);
       mapFitBounds(envelope, newMap);
       enableResize(newMap);

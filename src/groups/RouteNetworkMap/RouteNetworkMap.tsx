@@ -10,6 +10,7 @@ import {
   VectorSource,
   ScaleControl,
   AttributionControl,
+  NavigationControl,
 } from "mapbox-gl";
 import { useContext, useEffect, useRef } from "react";
 import { useClient } from "urql";
@@ -248,6 +249,12 @@ function RouteNetworkMap() {
     newMap.doubleClickZoom.disable();
     newMap.dragRotate.disable();
     newMap.touchZoomRotate.disableRotation();
+    newMap.addControl(
+      new NavigationControl({
+        showCompass: false,
+      }),
+      "top-left"
+    );
 
     newMap.on("load", () => {
       enableResize(newMap);
