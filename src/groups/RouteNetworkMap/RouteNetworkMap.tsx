@@ -228,16 +228,21 @@ function RouteNetworkMap() {
             maxZoom: 14,
             maxzoom: 14,
           } as VectorSource,
-          "basemap-danish": {
+          "basemap-extra": {
             type: "vector",
             tiles: [
-              "https://dev-tiles-basemap.openftth.com/services/objects/tiles/{z}/{x}/{y}.pbf",
+              `${Config.BASEMAP_TILE_SERVER_URI}/services/objects/tiles/{z}/{x}/{y}.pbf`,
             ],
             minZoom: 0,
             maxZoom: 14,
             minzoom: 16,
             maxzoom: 16,
           } as VectorSource,
+          "aerial-photo": {
+            type: "raster",
+            tiles: [Config.AERIAL_PHOTO_SERVER_URI],
+            tileSize: 256,
+          },
         },
       },
       center: [9.996730316498656, 56.04595255289249],
