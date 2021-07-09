@@ -320,6 +320,7 @@ function RouteNetworkMap() {
     });
 
     newMap.addControl(new ScaleControl(), "bottom-left");
+
     newMap.addControl(
       new AttributionControl({
         customAttribution: [
@@ -329,12 +330,14 @@ function RouteNetworkMap() {
       }),
       "bottom-right"
     );
+
     newMap.addControl(
       new NavigationControl({
         showCompass: false,
       }),
       "top-left"
     );
+
     newMap.addControl(
       new GeolocateControl({
         positionOptions: {
@@ -344,7 +347,9 @@ function RouteNetworkMap() {
         showAccuracyCircle: false,
       })
     );
+
     newMap.addControl(new ToggleLayerButton("aerial_photo"), "top-right");
+
     map.current = newMap;
 
     return () => {
