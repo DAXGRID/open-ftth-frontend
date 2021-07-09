@@ -11,12 +11,14 @@ import {
   ScaleControl,
   AttributionControl,
   NavigationControl,
+  GeolocateControl,
 } from "mapbox-gl";
 import { useContext, useEffect, useRef } from "react";
 import { useClient } from "urql";
 import { MapboxStyle } from "../../assets";
 import Config from "../../config";
 import { MapContext } from "../../contexts/MapContext";
+import ToggleLayerButton from "./MapControls/ToggleLayerButton";
 import {
   SpanSegmentTraceResponse,
   SPAN_SEGMENT_TRACE,
@@ -228,16 +230,21 @@ function RouteNetworkMap() {
             maxZoom: 14,
             maxzoom: 14,
           } as VectorSource,
-          "basemap-danish": {
+          "basemap-extra": {
             type: "vector",
             tiles: [
-              "https://dev-tiles-basemap.openftth.com/services/objects/tiles/{z}/{x}/{y}.pbf",
+              `${Config.BASEMAP_TILE_SERVER_URI}/services/objects/tiles/{z}/{x}/{y}.pbf`,
             ],
             minZoom: 0,
             maxZoom: 14,
             minzoom: 16,
             maxzoom: 16,
           } as VectorSource,
+          "aerial-photo": {
+            type: "raster",
+            tiles: [Config.AERIAL_PHOTO_SERVER_URI],
+            tileSize: 256,
+          },
         },
       },
       center: [9.996730316498656, 56.04595255289249],
@@ -249,12 +256,6 @@ function RouteNetworkMap() {
     newMap.doubleClickZoom.disable();
     newMap.dragRotate.disable();
     newMap.touchZoomRotate.disableRotation();
-    newMap.addControl(
-      new NavigationControl({
-        showCompass: false,
-      }),
-      "top-left"
-    );
 
     newMap.on("load", () => {
       enableResize(newMap);
@@ -319,6 +320,7 @@ function RouteNetworkMap() {
     });
 
     newMap.addControl(new ScaleControl(), "bottom-left");
+
     newMap.addControl(
       new AttributionControl({
         customAttribution: [
@@ -328,6 +330,25 @@ function RouteNetworkMap() {
       }),
       "bottom-right"
     );
+
+    newMap.addControl(
+      new NavigationControl({
+        showCompass: false,
+      }),
+      "top-left"
+    );
+
+    newMap.addControl(
+      new GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: false,
+        },
+        trackUserLocation: true,
+        showAccuracyCircle: false,
+      })
+    );
+
+    newMap.addControl(new ToggleLayerButton("aerial_photo"), "top-right");
 
     map.current = newMap;
 

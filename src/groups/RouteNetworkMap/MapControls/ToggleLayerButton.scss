@@ -1,0 +1,24 @@
+.map-button-group {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 10%);
+
+  .toggle-layer-button {
+    border-radius: 4px;
+    border: none;
+    background-color: white;
+    border-bottom: 1px solid #e3e3e3;
+    height: 29px;
+    width: 29px;
+
+    &.active {
+      color: #33b5e5;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
