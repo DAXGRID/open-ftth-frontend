@@ -632,6 +632,7 @@
       "id": "aerial_photo",
       "type": "raster",
       "source": "aerial-photo",
+      "layout": { "visibility": "none" },
       "paint": { "raster-opacity": 0.8 }
     },
     {
