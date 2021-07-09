@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
 import {
   GeoJSONSource,
@@ -19,6 +20,7 @@ import { MapboxStyle } from "../../assets";
 import Config from "../../config";
 import { MapContext } from "../../contexts/MapContext";
 import ToggleLayerButton from "./MapControls/ToggleLayerButton";
+import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import {
   SpanSegmentTraceResponse,
   SPAN_SEGMENT_TRACE,
@@ -169,6 +171,7 @@ function highlightGeometries(map: Map, geoms: string[]) {
 }
 
 function RouteNetworkMap() {
+  const { t } = useTranslation();
   const client = useClient();
   const mapContainer = useRef<HTMLDivElement>(null);
   const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
@@ -317,10 +320,44 @@ function RouteNetworkMap() {
           "circle-stroke-color": "#FF0000",
         },
       });
+
+      newMap.addSource("measurement", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [],
+        },
+      });
+
+      // Add styles to the map
+      newMap.addLayer({
+        id: "measure-points",
+        type: "circle",
+        source: "measurement",
+        paint: {
+          "circle-radius": 5,
+          "circle-color": "#000",
+        },
+        filter: ["in", "$type", "Point"],
+      });
+
+      newMap.addLayer({
+        id: "measure-lines",
+        type: "line",
+        source: "measurement",
+        layout: {
+          "line-cap": "round",
+          "line-join": "round",
+        },
+        paint: {
+          "line-color": "#000",
+          "line-width": 2.5,
+        },
+        filter: ["in", "$type", "LineString"],
+      });
     });
 
     newMap.addControl(new ScaleControl(), "bottom-left");
-
     newMap.addControl(
       new AttributionControl({
         customAttribution: [
@@ -330,14 +367,12 @@ function RouteNetworkMap() {
       }),
       "bottom-right"
     );
-
     newMap.addControl(
       new NavigationControl({
         showCompass: false,
       }),
       "top-left"
     );
-
     newMap.addControl(
       new GeolocateControl({
         positionOptions: {
@@ -347,8 +382,8 @@ function RouteNetworkMap() {
         showAccuracyCircle: false,
       })
     );
-
     newMap.addControl(new ToggleLayerButton("aerial_photo"), "top-right");
+    newMap.addControl(new MeasureDistanceControl(t("DISTANCE")), "top-right");
 
     map.current = newMap;
 
@@ -356,7 +391,7 @@ function RouteNetworkMap() {
       newMap.remove();
       map.current = null;
     };
-  }, [setIdentifiedFeature]);
+  }, [setIdentifiedFeature, t]);
 
   useEffect(() => {
     if (!map.current || !searchResult) return;
@@ -388,6 +423,7 @@ function RouteNetworkMap() {
 
   return (
     <div className="route-network-map">
+      <div id="distance" className="distance-container"></div>
       <div className="route-network-map-container" ref={mapContainer} />
     </div>
   );

@@ -965,7 +965,7 @@
       "id": "vejkant",
       "type": "line",
       "source": "basemap-extra",
-      "source-layer": "basemap-extra",
+      "source-layer": "danishbasemap",
       "filter": ["all", ["==", "objecttype", "vejkant"]],
       "paint": { "line-color": "rgba(201, 201, 201, 1)" }
     },
@@ -973,7 +973,7 @@
       "id": "helle",
       "type": "line",
       "source": "basemap-extra",
-      "source-layer": "basemap-extra",
+      "source-layer": "danishbasemap",
       "filter": ["all", ["==", "objecttype", "helle"]],
       "paint": { "line-color": "rgba(183, 180, 180, 1)" }
     },
@@ -981,7 +981,7 @@
       "id": "skel",
       "type": "line",
       "source": "basemap-extra",
-      "source-layer": "basemap-extra",
+      "source-layer": "danishbasemap",
       "filter": ["all", ["==", "objecttype", "skel"]],
       "paint": { "line-color": "rgba(211, 211, 211, 1)" }
     },
