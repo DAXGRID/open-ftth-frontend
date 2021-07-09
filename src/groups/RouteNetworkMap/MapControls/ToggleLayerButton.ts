@@ -12,7 +12,7 @@ class ToggleLayerButton {
   map: Map | undefined;
 
   constructor(layerName: string) {
-    this.className = "mapboxgl-ctrl mapboxgl-ctrl-group map-button-group";
+    this.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
     this.layerName = layerName;
     this.container = null;
   }

@@ -126,7 +126,8 @@
       "REVERSE_VERTICAL_ALIGNMENT": "Reverse vertical alignment",
       "SEARCH_FOR_ADDRESS_OR_NODE": "Search for address or node",
       "NO_CHANGE": "Cannot update to the same values",
-      "NOT_VALID_SELECTION": "Not a valid selection, have you remembered to save?"
+      "NOT_VALID_SELECTION": "Not a valid selection, have you remembered to save?",
+      "DISTANCE": "Distance"
     }
   },
   "dk": {
@@ -256,7 +257,8 @@
       "REVERSE_VERTICAL_ALIGNMENT": "Flip",
       "SEARCH_FOR_ADDRESS_OR_NODE": "Søg efter adresse eller node",
       "NO_CHANGE": "Kan ikke opdatere til det samme",
-      "NOT_VALID_SELECTION": "Ikke en valid selektion, har du gemt?"
+      "NOT_VALID_SELECTION": "Ikke en valid selektion, har du gemt?",
+      "DISTANCE": "Afstand"
     }
   }
 }
