@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, KeyboardEvent } from "react";
 import {
   GLOBAL_SEARCH_QUERY,
   GlobalSearch,
@@ -34,12 +34,40 @@ function SearchMenu() {
     setSearchFieldDirty(true);
   };
 
+  const keyPressResultList = (
+    e: KeyboardEvent<HTMLElement>,
+    searchResult: SearchResult
+  ) => {
+    if (e.key === "Enter") {
+      selectSearchResult(searchResult);
+    } else if (e.key === "ArrowDown") {
+      (e.currentTarget.nextElementSibling as HTMLElement)?.focus();
+    } else if (e.key === "ArrowUp") {
+      (e.currentTarget.previousElementSibling as HTMLElement)?.focus();
+    }
+  };
+
+  const keyPressSearchInput = (
+    e: KeyboardEvent<HTMLInputElement>,
+    searchItems: SearchResult[]
+  ) => {
+    if (searchItems.length === 0) return;
+    if (e.key === "Enter") {
+      selectSearchResult(searchItems[0]);
+    }
+  };
+
+  const searchResult = diagramQueryResult?.data?.search.globalSearch;
+
   return (
     <div className="search-menu">
       <input
         className="search-menu-input"
         type="text"
         placeholder={t("SEARCH_FOR_ADDRESS_OR_NODE")}
+        onKeyDown={(e) =>
+          keyPressSearchInput(e, searchResult ? searchResult : [])
+        }
         value={searchText}
         onChange={(x) => searchInput(x.target.value)}
       />
@@ -47,12 +75,14 @@ function SearchMenu() {
       {searchText && searchFieldDirty && (
         <div className="search-menu-results">
           <ul>
-            {diagramQueryResult.data?.search?.globalSearch &&
-              diagramQueryResult.data?.search?.globalSearch.map((x) => {
+            {searchResult &&
+              searchResult.map((x) => {
                 return (
                   <li
                     role="button"
                     key={x.id}
+                    tabIndex={0}
+                    onKeyDown={(e) => keyPressResultList(e, x)}
                     onClick={() => selectSearchResult(x)}
                   >
                     {x.label}
