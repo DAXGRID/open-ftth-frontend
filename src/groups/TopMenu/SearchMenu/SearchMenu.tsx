@@ -1,4 +1,4 @@
-import { useState, useContext, KeyboardEvent } from "react";
+import { useState, useContext, KeyboardEvent, useRef } from "react";
 import {
   GLOBAL_SEARCH_QUERY,
   GlobalSearch,
@@ -13,8 +13,9 @@ function SearchMenu() {
   const [searchText, setSearchText] = useState<string>("");
   const [searchFieldDirty, setSearchFieldDirty] = useState<boolean>(false);
   const { setSearchResult } = useContext(MapContext);
+  const searchResultElementList = useRef<HTMLUListElement | null>(null);
 
-  const [diagramQueryResult] = useQuery<GlobalSearch>({
+  const [globalSearchResult] = useQuery<GlobalSearch>({
     query: GLOBAL_SEARCH_QUERY,
     variables: {
       searchString: searchText,
@@ -54,10 +55,14 @@ function SearchMenu() {
     if (searchItems.length === 0) return;
     if (e.key === "Enter") {
       selectSearchResult(searchItems[0]);
+    } else if (e.key === "ArrowDown") {
+      (
+        searchResultElementList.current?.firstElementChild as HTMLElement
+      )?.focus();
     }
   };
 
-  const searchResult = diagramQueryResult?.data?.search.globalSearch;
+  const searchResult = globalSearchResult?.data?.search.globalSearch;
 
   return (
     <div className="search-menu">
@@ -74,7 +79,7 @@ function SearchMenu() {
 
       {searchText && searchFieldDirty && (
         <div className="search-menu-results">
-          <ul>
+          <ul ref={searchResultElementList}>
             {searchResult &&
               searchResult.map((x) => {
                 return (
