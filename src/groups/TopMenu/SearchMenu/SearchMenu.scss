@@ -37,7 +37,8 @@
         padding: 10px;
         margin: 10px 0px;
 
-        &:hover {
+        &:hover,
+        &:focus {
           cursor: pointer;
           color: black;
           border-bottom: 1px solid black;
