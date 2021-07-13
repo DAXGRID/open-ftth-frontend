@@ -1,11 +1,6 @@
-import {
-  faDownload,
-  faHome,
-  faProjectDiagram,
-} from "@fortawesome/free-solid-svg-icons";
 import { useKeycloak } from "@react-keycloak/web";
 import "mapbox-gl/dist/mapbox-gl.css";
-import React, { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Slide, ToastContainer } from "react-toastify";
@@ -56,16 +51,14 @@ function App() {
           <TopMenu toggleSideMenu={toggleSideMenu} />
         </header>
         <SideMenu open={sideMenuOpen}>
-          <SideMenuItem path="/" linkText={t("Home")} icon={faHome} />
+          <SideMenuItem path="/" linkText={t("Home")} />
           <SideMenuItem
             path="/place-span-equipment"
             linkText={t("Place span equipments")}
-            icon={faDownload}
           />
           <SideMenuItem
             path="/schematic-diagram"
             linkText={t("Schematic diagram")}
-            icon={faProjectDiagram}
           />
         </SideMenu>
         <main
