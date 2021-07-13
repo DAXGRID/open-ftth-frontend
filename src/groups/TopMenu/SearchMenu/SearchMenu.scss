@@ -9,12 +9,14 @@
 
   .search-menu-input {
     font-size: 18px;
-    min-width: 500px;
+    width: 100%;
     display: block;
     height: 100%;
     padding: 10px 20px;
     border-radius: 4px;
     border: 1px solid $border-color;
+    max-width: 500px;
+    width: 100%;
   }
 
   .search-menu-results {
@@ -22,9 +24,10 @@
     background: white;
     border: 1px solid $border-color;
     margin-top: 60px;
-    min-width: 500px;
     padding: 15px;
     border-radius: 4px;
+    max-width: 500px;
+    width: 100%;
 
     ul {
       font-size: 16px;
