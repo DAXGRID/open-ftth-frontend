@@ -1,0 +1,10 @@
+.map-diagram {
+  display: flex;
+  flex-wrap: wrap;
+
+  .container {
+    flex: 1;
+    min-width: 800px;
+    height: 100%;
+  }
+}

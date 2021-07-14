@@ -1,11 +1,9 @@
-import RouteNetworkMap from "../../groups/RouteNetworkMap";
-import RouteNetworkDiagram from "../../groups/RouteNetworkDiagram";
+import MapDiagram from "../../groups/MapDiagram";
 
 function IndexPage() {
   return (
     <div className="index-page">
-      <RouteNetworkMap />
-      <RouteNetworkDiagram enableEditMode={false} />
+      <MapDiagram />
     </div>
   );
 }
