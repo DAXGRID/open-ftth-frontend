@@ -21,6 +21,7 @@ import Config from "../../config";
 import { MapContext } from "../../contexts/MapContext";
 import ToggleLayerButton from "./MapControls/ToggleLayerButton";
 import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
+import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 import {
   SpanSegmentTraceResponse,
   SPAN_SEGMENT_TRACE,
@@ -170,7 +171,11 @@ function highlightGeometries(map: Map, geoms: string[]) {
   });
 }
 
-function RouteNetworkMap() {
+type RouteNetworkMapProps = {
+  showSchematicDiagram: (show: boolean) => void;
+};
+
+function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
   const { t } = useTranslation();
   const client = useClient();
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -367,11 +372,16 @@ function RouteNetworkMap() {
       }),
       "bottom-right"
     );
+
     newMap.addControl(
       new NavigationControl({
         showCompass: false,
       }),
       "top-left"
+    );
+    newMap.addControl(
+      new ToggleDiagramControl(showSchematicDiagram),
+      "top-right"
     );
     newMap.addControl(
       new GeolocateControl({
