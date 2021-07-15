@@ -433,8 +433,9 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
 
   return (
     <div className="route-network-map">
-      <div id="distance" className="distance-container"></div>
-      <div className="route-network-map-container" ref={mapContainer} />
+      <div className="route-network-map-container" ref={mapContainer}>
+        <div id="distance" className="distance-container"></div>
+      </div>
     </div>
   );
 }
