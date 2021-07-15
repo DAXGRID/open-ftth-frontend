@@ -1,8 +1,11 @@
 import { Map } from "mapbox-gl";
 import { icon, library } from "@fortawesome/fontawesome-svg-core";
-import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faExpandArrowsAlt,
+  faCompressArrowsAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
-library.add(faArrowRight, faArrowLeft);
+library.add(faExpandArrowsAlt, faCompressArrowsAlt);
 
 class ToggleDiagramControl {
   className: string;
@@ -24,7 +27,7 @@ class ToggleDiagramControl {
     this.container.className = this.className;
 
     const createButtonIcon = (show: boolean): Element => {
-      const iconToShow = show ? "arrow-right" : "arrow-left";
+      const iconToShow = show ? "expand-arrows-alt" : "compress-arrows-alt";
       return icon({ prefix: "fas", iconName: iconToShow }).node[0];
     };
 
