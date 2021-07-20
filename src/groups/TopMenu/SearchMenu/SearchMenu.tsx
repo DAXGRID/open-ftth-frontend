@@ -65,7 +65,7 @@ function SearchMenu() {
   const searchResult = globalSearchResult?.data?.search.globalSearch;
 
   return (
-    <div className="search-menu">
+    <div className={"search-menu"}>
       <input
         className="search-menu-input"
         type="text"
