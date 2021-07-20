@@ -10,17 +10,21 @@ type TopMenuProps = {
 function TopMenu({ toggleSideMenu }: TopMenuProps) {
   return (
     <div className="top-menu">
-      <div
-        className="side-menu-icon"
-        role="button"
-        tabIndex={0}
-        onClick={() => toggleSideMenu()}
-        onKeyPress={(e) => (e.key === "Enter" ? { toggleSideMenu } : () => {})}
-      >
-        <FontAwesomeIcon icon={faBars} />
-      </div>
       <div className="top-menu-body">
-        <SearchMenu />
+        <div
+          className="side-menu-icon"
+          role="button"
+          tabIndex={0}
+          onClick={() => toggleSideMenu()}
+          onKeyPress={(e) =>
+            e.key === "Enter" ? { toggleSideMenu } : () => {}
+          }
+        >
+          <FontAwesomeIcon icon={faBars} />
+        </div>
+        <div className="top-menu-item">
+          <SearchMenu />
+        </div>
       </div>
     </div>
   );

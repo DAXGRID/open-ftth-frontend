@@ -1,19 +1,25 @@
+@import "../../global-styles/colors";
+
 .top-menu {
   background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+  border-bottom: 1px solid $border-color;
   padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
   font-size: 24px;
 
   .top-menu-body {
-    flex: 1;
-    margin: 0px 60px;
+    display: flex;
+    align-content: center;
+
+    .top-menu-item {
+      flex: 1;
+      padding: 0px 10px;
+    }
   }
 
   .side-menu-icon {
-    align-items: center;
     display: flex;
+    align-items: center;
+    flex: 0;
 
     &:hover {
       cursor: pointer;
