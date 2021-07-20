@@ -93,10 +93,12 @@ function AddInnerSpanStructure({
         />
         <NumberPicker value={count} setValue={(value) => setCount(value)} />
       </div>
-      <DefaultButton
-        onClick={async () => await addInnerSpanStructure()}
-        innerText={t("Add inner conduit")}
-      />
+      <div className="full-row">
+        <DefaultButton
+          onClick={async () => await addInnerSpanStructure()}
+          innerText={t("Add inner conduit")}
+        />
+      </div>
     </div>
   );
 }
