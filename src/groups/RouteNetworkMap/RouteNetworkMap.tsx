@@ -401,7 +401,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       newMap.remove();
       map.current = null;
     };
-  }, [setIdentifiedFeature, t]);
+  }, [setIdentifiedFeature, showSchematicDiagram, t]);
 
   useEffect(() => {
     if (!map.current || !searchResult) return;
