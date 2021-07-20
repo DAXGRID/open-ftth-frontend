@@ -145,17 +145,16 @@ function PlaceSpanEquipmentPage() {
     ]
   );
 
-  const [
-    ,
-    placeSpanEquipmentMutation,
-  ] = useMutation<PlaceSpanEquipmentResponse>(
-    PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK
-  );
+  const [, placeSpanEquipmentMutation] =
+    useMutation<PlaceSpanEquipmentResponse>(
+      PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK
+    );
 
   const placeSpanEquipment = async () => {
     const parameters: PlaceSpanEquipmentParameters = {
       spanEquipmentId: uuidv4(),
-      spanEquipmentSpecificationId: selectedSpanEquipmentSpecification as string,
+      spanEquipmentSpecificationId:
+        selectedSpanEquipmentSpecification as string,
       routeSegmentIds: selectedSegmentIds,
       manufacturerId: selectedManufacturer ? selectedManufacturer : undefined,
       markingColor: selectedColorMarking
@@ -179,10 +178,8 @@ function PlaceSpanEquipmentPage() {
       return;
     }
 
-    const {
-      spanEquipmentSpecifications,
-      manufacturers,
-    } = spanEquipmentResult.data.utilityNetwork;
+    const { spanEquipmentSpecifications, manufacturers } =
+      spanEquipmentResult.data.utilityNetwork;
 
     if (!spanEquipmentSpecifications || !manufacturers) {
       return;
@@ -235,7 +232,7 @@ function PlaceSpanEquipmentPage() {
   }
 
   return (
-    <div className="place-span-equipment page-container">
+    <div className="place-span-equipment page-container page-container-fitted">
       <div className="full-row">
         <SelectMenu
           options={categorySelectOptions()}

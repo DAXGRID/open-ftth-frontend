@@ -30,11 +30,8 @@
     }
 
     &.side-menu-item--selected {
-      background-color: $dark-grey;
-
-      a {
-        color: white;
-      }
+      background-color: $select-color;
+      font-weight: bold;
     }
 
     .side-menu-item-icon {

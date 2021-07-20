@@ -76,6 +76,11 @@
   cursor: pointer;
   transition: all 0.2s;
   font-size: 18px;
+  border-bottom: 1px solid $border-color;
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .menu-option:hover {
@@ -84,8 +89,7 @@
 }
 
 .menu-option.selected {
-  color: #ffffff;
-  background-color: $dark-grey;
+  background-color: $select-color;
 }
 
 .arrow {
