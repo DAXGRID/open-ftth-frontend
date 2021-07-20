@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import RouteNetworkMap from "../RouteNetworkMap";
 import RouteNetworkDiagram from "../RouteNetworkDiagram";
 
@@ -9,9 +9,12 @@ function MapDiagram() {
     window.dispatchEvent(new Event("resize"));
   }, [showDiagram]);
 
-  const toggleDiagram = (show: boolean) => {
-    setShowDiagram(show);
-  };
+  const toggleDiagram = useCallback(
+    (show: boolean) => {
+      setShowDiagram(show);
+    },
+    [setShowDiagram]
+  );
 
   return (
     <div className="map-diagram">
