@@ -1,4 +1,4 @@
-import IdentifyFeaturePage from "./RouteNetworkDiagram";
+import DiagramWrapper from "./Diagram";
 import "./RouteNetworkDiagram.scss";
 
-export default IdentifyFeaturePage;
+export default DiagramWrapper;

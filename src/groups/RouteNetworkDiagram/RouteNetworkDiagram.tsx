@@ -1,12 +1,11 @@
 import { useEffect, useState, useContext, useRef, useCallback } from "react";
-import { useQuery, useSubscription, useMutation, useClient } from "urql";
+import { useQuery, useMutation, useClient } from "urql";
 import { MapboxGeoJSONFeature } from "mapbox-gl";
 import DiagramMenu from "../../components/DiagramMenu";
 import ModalContainer from "../../components/ModalContainer";
 import SchematicDiagram from "./SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
 import ActionButton from "../../components/ActionButton";
-import Loading from "../../components/Loading";
 import { MapContext } from "../../contexts/MapContext";
 import RerouteTube from "./RerouteTube";
 import EditSpanEquipment from "./EditSpanEquipment";
@@ -15,11 +14,7 @@ import NodeContainerDetails from "./NodeContainerDetails";
 import SpanEquipmentDetails from "./SpanEquipmentDetails";
 import {
   Diagram,
-  DiagramQueryResponse,
-  DiagramUpdatedResponse,
   Envelope,
-  GET_DIAGRAM,
-  SCHEMATIC_DIAGRAM_UPDATED,
   AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER,
   AffixSpanEquipmentParams,
   AffixSpanEquipmentResponse,
@@ -65,9 +60,15 @@ import {
 
 type RouteNetworkDiagramProps = {
   enableEditMode: boolean;
+  diagramObjects: Diagram[];
+  envelope: Envelope;
 };
 
-function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
+function RouteNetworkDiagram({
+  enableEditMode,
+  diagramObjects,
+  envelope,
+}: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
   const [editMode, setEditMode] = useState(false);
@@ -80,21 +81,6 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
   const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
   const [showEditNodeContainer, setShowEditNodeContainer] = useState(false);
   const { identifiedFeature, setTraceRouteNetworkId } = useContext(MapContext);
-  const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
-  const [envelope, setEnvelope] = useState<Envelope>({
-    maxX: 0,
-    maxY: 0,
-    minX: 0,
-    minY: 0,
-  });
-
-  const [diagramQueryResult] = useQuery<DiagramQueryResponse>({
-    query: GET_DIAGRAM,
-    variables: {
-      routeNetworkElementId: identifiedFeature?.id,
-    },
-    pause: !identifiedFeature?.id,
-  });
 
   const [routeNetworkElementResponse] =
     useQuery<QueryRouteNetworkElementResponse>({
@@ -124,24 +110,11 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
       DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER
     );
 
-  const [res] = useSubscription<DiagramUpdatedResponse>({
-    query: SCHEMATIC_DIAGRAM_UPDATED,
-    variables: { routeNetworkElementId: identifiedFeature?.id },
-    pause: !identifiedFeature?.id,
-  });
-
   useEffect(() => {
     setEditMode(false);
   }, [identifiedFeature, setEditMode]);
 
   useEffect(() => {
-    if (!diagramQueryResult.data) return;
-
-    const { diagramObjects, envelope } =
-      diagramQueryResult.data.schematic.buildDiagram;
-
-    setDiagramObjects([...diagramObjects]);
-    setEnvelope({ ...envelope });
     setShowAddContainer(false);
     setShowHandleInnerConduit(false);
     setShowRerouteTube(false);
@@ -149,37 +122,12 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
     setSingleSelectedFeature(null);
     setShowEditSpanEquipment(false);
   }, [
-    diagramQueryResult,
-    setDiagramObjects,
-    setEnvelope,
+    diagramObjects,
+    envelope,
     setSingleSelectedFeature,
     setShowRerouteTube,
     setShowEditSpanEquipment,
     setShowHandleInnerConduit,
-  ]);
-
-  useEffect(() => {
-    if (!res.data) return;
-
-    const { diagramObjects, envelope } = res.data.schematicDiagramUpdated;
-
-    setDiagramObjects([...diagramObjects]);
-    setEnvelope({ ...envelope });
-    setShowAddContainer(false);
-    setShowHandleInnerConduit(false);
-    setShowRerouteTube(false);
-    selectedFeatures.current = [];
-    setSingleSelectedFeature(null);
-    setShowEditSpanEquipment(false);
-    setShowEditNodeContainer(false);
-  }, [
-    res,
-    setDiagramObjects,
-    setEnvelope,
-    setShowAddContainer,
-    setSingleSelectedFeature,
-    setShowEditSpanEquipment,
-    setShowEditNodeContainer,
   ]);
 
   const affixSpanEquipment = async () => {
@@ -454,10 +402,6 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
   const clearHighlights = () => {
     setTraceRouteNetworkId("");
   };
-
-  if (diagramQueryResult.fetching) {
-    return <Loading />;
-  }
 
   if (!identifiedFeature?.id) {
     return <div></div>;
