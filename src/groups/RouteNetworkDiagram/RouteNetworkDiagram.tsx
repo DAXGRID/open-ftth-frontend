@@ -38,7 +38,6 @@ import AddContainer from "./AddContainer";
 import AddInnerSpanStructure from "./AddInnerSpanStructure";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-
 import {
   ConnectSvg,
   CutConduitSvg,
@@ -108,6 +107,7 @@ function RouteNetworkDiagram({
     setShowAddContainer(false);
     setShowHandleInnerConduit(false);
     selectedFeatures.current = [];
+
     setSingleSelectedFeature(null);
   }, [
     diagramObjects,

@@ -3,7 +3,11 @@ import { MapboxGeoJSONFeature } from "mapbox-gl";
 import SchematicDiagram from "./SchematicDiagram";
 import SpanEquipmentDetails from "./SpanEquipmentDetails";
 import NodeContainerDetails from "./NodeContainerDetails";
+import DiagramMenu from "../../components/DiagramMenu";
+import ActionButton from "../../components/ActionButton";
 import { MapContext } from "../../contexts/MapContext";
+import { EraserSvg } from "../../assets";
+import { useTranslation } from "react-i18next";
 
 interface Envelope {
   minX: number;
@@ -37,6 +41,7 @@ function ReadOnlyDiagram({
   const { setTraceRouteNetworkId } = useContext(MapContext);
   const [selectedFeature, setSelectedFeature] =
     useState<MapboxGeoJSONFeature | null>(null);
+  const { t } = useTranslation();
 
   const onSelectedFeature = useCallback(
     (feature: MapboxGeoJSONFeature) => {
@@ -59,8 +64,19 @@ function ReadOnlyDiagram({
     [setTraceRouteNetworkId, setSelectedFeature]
   );
 
+  const clearHighlights = () => {
+    setTraceRouteNetworkId("");
+  };
+
   return (
     <div>
+      <DiagramMenu>
+        <ActionButton
+          icon={EraserSvg}
+          action={() => clearHighlights()}
+          title={t("CLEAR_HIGHLIGHT")}
+        />
+      </DiagramMenu>
       <SchematicDiagram
         diagramObjects={diagramObjects}
         editMode={false}
