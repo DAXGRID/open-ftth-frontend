@@ -39,7 +39,7 @@ function ReadOnlyDiagram({
   diagramObjects,
   envelope,
 }: RouteSegmentDiagramProps) {
-  const { identifiedFeature, setTraceRouteNetworkId } = useContext(MapContext);
+  const { setTraceRouteNetworkId } = useContext(MapContext);
   const [selectedFeature, setSelectedFeature] =
     useState<MapboxGeoJSONFeature | null>(null);
   const { t } = useTranslation();
