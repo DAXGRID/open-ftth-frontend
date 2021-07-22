@@ -45,7 +45,7 @@ function FeatureInformation() {
       {identifiedFeature.type === "RouteSegment" && (
         <div className="feature-informations">
           <p>
-            <strong>{t("Type")}</strong>
+            <strong>{t("TYPE")}</strong>
             {`: ${t(routeElement.routeSegmentInfo?.kind ?? "")}`}
           </p>
         </div>
