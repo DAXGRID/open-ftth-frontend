@@ -338,6 +338,7 @@ function RouteNetworkDiagram({
     }
   };
 
+  // TODO check why it is async
   const onSelectedFeature = useCallback(
     async (feature: MapboxGeoJSONFeature) => {
       const isSelected = feature.state?.selected as boolean;
@@ -581,49 +582,15 @@ function RouteNetworkDiagram({
       {!editMode &&
         (singleSelectedFeature?.source === "InnerConduit" ||
           singleSelectedFeature?.source === "OuterConduit") && (
-          <div className="feature-details">
-            <div className="feature-details-container">
-              <div className="feature-details-info">
-                <SpanEquipmentDetails
-                  spanEquipmentMrid={
-                    singleSelectedFeature?.properties?.refId ?? ""
-                  }
-                />
-              </div>
-              <div className="feature-details-actions">
-                <ActionButton
-                  icon={EditPropertiesSvg}
-                  action={() => setShowEditSpanEquipment(true)}
-                  title={t("EDIT")}
-                />
-                <ActionButton
-                  icon={MoveConduitSvg}
-                  action={() => setShowRerouteTube(true)}
-                  title={t("MOVE")}
-                />
-              </div>
-            </div>
-          </div>
+          <SpanEquipmentDetails
+            spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
+          />
         )}
       {!editMode && singleSelectedFeature?.source === "NodeContainer" && (
-        <div className="feature-details">
-          <div className="feature-details-container">
-            <div className="feature-details-info">
-              <NodeContainerDetails
-                nodeContainerMrid={
-                  singleSelectedFeature?.properties?.refId ?? ""
-                }
-              />
-            </div>
-            <div className="feature-details-actions">
-              <ActionButton
-                icon={EditPropertiesSvg}
-                action={() => setShowEditNodeContainer(true)}
-                title={t("EDIT")}
-              />
-            </div>
-          </div>
-        </div>
+        <NodeContainerDetails
+          nodeContainerMrid={singleSelectedFeature?.properties?.refId ?? ""}
+          showActions={false}
+        />
       )}
     </div>
   );

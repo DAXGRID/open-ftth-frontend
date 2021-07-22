@@ -1,13 +1,47 @@
 import { useQuery } from "urql";
-import { useTranslation } from "react-i18next";
+import { useTranslation, TFunction } from "react-i18next";
 import {
   QUERY_SPAN_EQUIPMENT_DETAILS,
   SpanEquipmentDetailsResponse,
 } from "./SpanEquipmentDetailsGql";
+import FeatureDetailsContainer from "../FeatureDetailContainer";
 
 type SpanEquipmentDetailsParams = {
   spanEquipmentMrid: string;
 };
+
+function mapEquipmentDetails(
+  x: SpanEquipmentDetailsResponse | undefined,
+  t: TFunction<string>
+) {
+  if (!x) return [];
+
+  const { manufacturer, markingInfo, name, specification } =
+    x.utilityNetwork.spanEquipment;
+
+  return [
+    {
+      name: t("NAME_OR_ID"),
+      value: name ?? t("Unspecified"),
+    },
+    {
+      name: t("SPECIFICATION"),
+      value: specification.description ?? t("Unspecified"),
+    },
+    {
+      name: t("MARKING_COLOR"),
+      value: markingInfo.markingColor ?? t("Unspecified"),
+    },
+    {
+      name: t("MANUFACTURER"),
+      value: manufacturer.name ?? t("Unspecified"),
+    },
+    {
+      name: t("FIXED"),
+      value: specification.isFixed ? t("YES") : t("NO"),
+    },
+  ];
+}
 
 function SpanEquipmentDetails({
   spanEquipmentMrid,
@@ -21,41 +55,11 @@ function SpanEquipmentDetails({
 
   if (spanEquipmentDetails.fetching) return <></>;
 
+  const details = mapEquipmentDetails(spanEquipmentDetails.data, t);
+
   return (
     <div className="span-equipment-details">
-      <div className="span-equipment-details-container">
-        <p>
-          {`${t("NAME_OR_ID")}: ${
-            spanEquipmentDetails.data?.utilityNetwork.spanEquipment.name ?? ""
-          }`}
-        </p>
-        <p>
-          {`${t("SPECIFICATION")}: ${
-            spanEquipmentDetails.data?.utilityNetwork.spanEquipment
-              ?.specification?.description ?? ""
-          }`}
-        </p>
-        <p>
-          {`${t("MARKING_COLOR")}: ${
-            spanEquipmentDetails.data?.utilityNetwork.spanEquipment?.markingInfo
-              ?.markingColor ?? ""
-          }`}
-        </p>
-        <p>
-          {`${t("MANUFACTURER")}: ${
-            spanEquipmentDetails.data?.utilityNetwork.spanEquipment
-              ?.manufacturer?.name ?? ""
-          }`}
-        </p>
-        <p>
-          {`${t("FIXED")}: ${
-            spanEquipmentDetails.data?.utilityNetwork.spanEquipment
-              ?.specification?.isFixed
-              ? t("YES")
-              : t("NO")
-          }`}
-        </p>
-      </div>
+      <FeatureDetailsContainer details={details} />
     </div>
   );
 }

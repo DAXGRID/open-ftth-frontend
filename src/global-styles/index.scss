@@ -38,7 +38,7 @@ body {
   transform: translateX(0px);
   color: $text-primary;
   justify-content: center;
-  min-height: calc(100% - 60px);
+  height: 100%;
 
   &.side-menu-open {
     width: 100%;

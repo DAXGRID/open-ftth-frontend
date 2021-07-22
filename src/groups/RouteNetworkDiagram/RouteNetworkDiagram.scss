@@ -15,29 +15,4 @@
       font-size: 18px;
     }
   }
-
-  .feature-details {
-    border-top: 1px solid #e3e3e3;
-    padding: 20px 10px;
-
-    .feature-details-container {
-      display: flex;
-      margin: 0px auto;
-      max-width: 1000px;
-      background: white;
-      padding: 10px 20px;
-      border-radius: 4px;
-
-      .feature-details-info {
-        flex: 1;
-      }
-
-      .feature-details-actions {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 10px;
-      }
-    }
-  }
 }
