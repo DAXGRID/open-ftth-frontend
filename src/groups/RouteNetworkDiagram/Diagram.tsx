@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { useQuery, useSubscription } from "urql";
 import { MapContext } from "../../contexts/MapContext";
 import RouteNetworkDiagram from "./RouteNetworkDiagram";
+import ReadOnlyDiagram from "./ReadOnlyDiagram";
 import Loading from "../../components/Loading";
 import {
   GET_DIAGRAM,
@@ -15,6 +16,25 @@ import {
 type DiagramWrapperProps = {
   editable: boolean;
 };
+
+function getDiagramType(
+  editable: boolean,
+  envelope: Envelope,
+  diagramObjects: Diagram[]
+): JSX.Element {
+  if (editable) {
+    return (
+      <RouteNetworkDiagram
+        diagramObjects={diagramObjects}
+        envelope={envelope}
+      />
+    );
+  } else {
+    return (
+      <ReadOnlyDiagram diagramObjects={diagramObjects} envelope={envelope} />
+    );
+  }
+}
 
 function DiagramWrapper({ editable }: DiagramWrapperProps) {
   const { identifiedFeature } = useContext(MapContext);
@@ -68,15 +88,7 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
     return <></>;
   }
 
-  return (
-    <div>
-      <RouteNetworkDiagram
-        diagramObjects={diagramObjects}
-        enableEditMode={editable}
-        envelope={envelope}
-      />
-    </div>
-  );
+  return <div>{getDiagramType(editable, envelope, diagramObjects)}</div>;
 }
 
 export default DiagramWrapper;

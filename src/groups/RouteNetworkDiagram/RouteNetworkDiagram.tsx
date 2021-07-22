@@ -59,13 +59,11 @@ import {
 } from "../../assets";
 
 type RouteNetworkDiagramProps = {
-  enableEditMode: boolean;
   diagramObjects: Diagram[];
   envelope: Envelope;
 };
 
 function RouteNetworkDiagram({
-  enableEditMode,
   diagramObjects,
   envelope,
 }: RouteNetworkDiagramProps) {
@@ -489,7 +487,7 @@ function RouteNetworkDiagram({
           </div>
         </div>
       )}
-      {identifiedFeature.type === "RouteNode" && enableEditMode && (
+      {identifiedFeature.type === "RouteNode" && (
         <DiagramMenu>
           <ToggleButton
             icon={PencilSvg}
@@ -565,15 +563,6 @@ function RouteNetworkDiagram({
           />
         </DiagramMenu>
       )}
-      {identifiedFeature.type === "RouteNode" && !enableEditMode && (
-        <DiagramMenu>
-          <ActionButton
-            icon={EraserSvg}
-            action={() => clearHighlights()}
-            title={t("CLEAR_HIGHLIGHT")}
-          />
-        </DiagramMenu>
-      )}
       {identifiedFeature.type === "RouteSegment" && (
         <DiagramMenu>
           <ActionButton
@@ -601,20 +590,18 @@ function RouteNetworkDiagram({
                   }
                 />
               </div>
-              {enableEditMode && (
-                <div className="feature-details-actions">
-                  <ActionButton
-                    icon={EditPropertiesSvg}
-                    action={() => setShowEditSpanEquipment(true)}
-                    title={t("EDIT")}
-                  />
-                  <ActionButton
-                    icon={MoveConduitSvg}
-                    action={() => setShowRerouteTube(true)}
-                    title={t("MOVE")}
-                  />
-                </div>
-              )}
+              <div className="feature-details-actions">
+                <ActionButton
+                  icon={EditPropertiesSvg}
+                  action={() => setShowEditSpanEquipment(true)}
+                  title={t("EDIT")}
+                />
+                <ActionButton
+                  icon={MoveConduitSvg}
+                  action={() => setShowRerouteTube(true)}
+                  title={t("MOVE")}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -628,15 +615,13 @@ function RouteNetworkDiagram({
                 }
               />
             </div>
-            {enableEditMode && (
-              <div className="feature-details-actions">
-                <ActionButton
-                  icon={EditPropertiesSvg}
-                  action={() => setShowEditNodeContainer(true)}
-                  title={t("EDIT")}
-                />
-              </div>
-            )}
+            <div className="feature-details-actions">
+              <ActionButton
+                icon={EditPropertiesSvg}
+                action={() => setShowEditNodeContainer(true)}
+                title={t("EDIT")}
+              />
+            </div>
           </div>
         </div>
       )}

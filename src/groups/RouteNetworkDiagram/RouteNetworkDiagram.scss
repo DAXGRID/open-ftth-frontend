@@ -18,18 +18,25 @@
 
   .feature-details {
     border-top: 1px solid #e3e3e3;
-    padding: 10px;
+    padding: 20px 10px;
 
     .feature-details-container {
       display: flex;
       margin: 0px auto;
       max-width: 1000px;
+      background: white;
+      padding: 20px;
+      border-radius: 4px;
 
       .feature-details-info {
         flex: 1;
       }
 
       .feature-details-actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
         .action-button {
           margin-bottom: 10px;
         }
