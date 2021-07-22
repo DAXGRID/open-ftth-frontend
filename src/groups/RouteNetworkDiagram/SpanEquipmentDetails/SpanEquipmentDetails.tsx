@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "urql";
 import { useTranslation, TFunction } from "react-i18next";
 import {
@@ -5,10 +6,10 @@ import {
   SpanEquipmentDetailsResponse,
 } from "./SpanEquipmentDetailsGql";
 import FeatureDetailsContainer from "../FeatureDetailContainer";
-
-type SpanEquipmentDetailsParams = {
-  spanEquipmentMrid: string;
-};
+import ModalContainer from "../../../components/ModalContainer";
+import EditSpanEquipment from "../EditSpanEquipment";
+import RerouteTube from "../RerouteTube";
+import { EditPropertiesSvg, MoveConduitSvg } from "../../../assets";
 
 function mapEquipmentDetails(
   x: SpanEquipmentDetailsResponse | undefined,
@@ -26,27 +27,35 @@ function mapEquipmentDetails(
     },
     {
       name: t("SPECIFICATION"),
-      value: specification.description ?? t("Unspecified"),
+      value: specification?.description ?? t("Unspecified"),
     },
     {
       name: t("MARKING_COLOR"),
-      value: markingInfo.markingColor ?? t("Unspecified"),
+      value: markingInfo?.markingColor ?? t("Unspecified"),
     },
     {
       name: t("MANUFACTURER"),
-      value: manufacturer.name ?? t("Unspecified"),
+      value: manufacturer?.name ?? t("Unspecified"),
     },
     {
       name: t("FIXED"),
-      value: specification.isFixed ? t("YES") : t("NO"),
+      value: specification?.isFixed ? t("YES") : t("NO"),
     },
   ];
 }
 
+type SpanEquipmentDetailsParams = {
+  spanEquipmentMrid: string;
+  showActions: boolean;
+};
+
 function SpanEquipmentDetails({
   spanEquipmentMrid,
+  showActions,
 }: SpanEquipmentDetailsParams) {
   const { t } = useTranslation();
+  const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
+  const [showRerouteTube, setShowRerouteTube] = useState(false);
   const [spanEquipmentDetails] = useQuery<SpanEquipmentDetailsResponse>({
     query: QUERY_SPAN_EQUIPMENT_DETAILS,
     variables: { spanEquipmentOrSegmentId: spanEquipmentMrid },
@@ -59,7 +68,38 @@ function SpanEquipmentDetails({
 
   return (
     <div className="span-equipment-details">
-      <FeatureDetailsContainer details={details} />
+      <ModalContainer
+        show={showRerouteTube}
+        closeCallback={() => setShowRerouteTube(false)}
+      >
+        <RerouteTube selectedRouteSegmentMrid={spanEquipmentMrid ?? ""} />
+      </ModalContainer>
+      <ModalContainer
+        show={showEditSpanEquipment}
+        closeCallback={() => setShowEditSpanEquipment(false)}
+      >
+        <EditSpanEquipment spanEquipmentMrid={spanEquipmentMrid ?? ""} />
+      </ModalContainer>
+      <FeatureDetailsContainer
+        details={details}
+        showActions={showActions}
+        actions={[
+          {
+            action: () => setShowRerouteTube(true),
+            icon: MoveConduitSvg,
+            title: t("MOVE"),
+            disabled: false,
+            key: 0,
+          },
+          {
+            action: () => setShowEditSpanEquipment(true),
+            icon: EditPropertiesSvg,
+            title: t("EDIT"),
+            disabled: false,
+            key: 1,
+          },
+        ]}
+      />
     </div>
   );
 }

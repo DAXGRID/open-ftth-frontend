@@ -7,9 +7,6 @@ import SchematicDiagram from "./SchematicDiagram";
 import ToggleButton from "../../components/ToggleButton";
 import ActionButton from "../../components/ActionButton";
 import { MapContext } from "../../contexts/MapContext";
-import RerouteTube from "./RerouteTube";
-import EditSpanEquipment from "./EditSpanEquipment";
-import EditNodeContainer from "./EditNodeContainer";
 import NodeContainerDetails from "./NodeContainerDetails";
 import SpanEquipmentDetails from "./SpanEquipmentDetails";
 import {
@@ -53,8 +50,6 @@ import {
   RemoveFromContainerSvg,
   TrashCanSvg,
   EraserSvg,
-  EditPropertiesSvg,
-  MoveConduitSvg,
   FlipSvg,
 } from "../../assets";
 
@@ -75,9 +70,6 @@ function RouteNetworkDiagram({
     useState<MapboxGeoJSONFeature | null>();
   const [showAddContainer, setShowAddContainer] = useState(false);
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
-  const [showRerouteTube, setShowRerouteTube] = useState(false);
-  const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
-  const [showEditNodeContainer, setShowEditNodeContainer] = useState(false);
   const { identifiedFeature, setTraceRouteNetworkId } = useContext(MapContext);
 
   const [routeNetworkElementResponse] =
@@ -115,16 +107,12 @@ function RouteNetworkDiagram({
   useEffect(() => {
     setShowAddContainer(false);
     setShowHandleInnerConduit(false);
-    setShowRerouteTube(false);
     selectedFeatures.current = [];
     setSingleSelectedFeature(null);
-    setShowEditSpanEquipment(false);
   }, [
     diagramObjects,
     envelope,
     setSingleSelectedFeature,
-    setShowRerouteTube,
-    setShowEditSpanEquipment,
     setShowHandleInnerConduit,
   ]);
 
@@ -427,40 +415,6 @@ function RouteNetworkDiagram({
         />
       </ModalContainer>
 
-      <ModalContainer
-        show={showRerouteTube}
-        closeCallback={() => setShowRerouteTube(false)}
-      >
-        <RerouteTube
-          selectedRouteSegmentMrid={
-            singleSelectedFeature?.properties?.refId ?? ""
-          }
-        />
-      </ModalContainer>
-
-      {(singleSelectedFeature?.source === "InnerConduit" ||
-        singleSelectedFeature?.source === "OuterConduit") && (
-        <ModalContainer
-          show={showEditSpanEquipment}
-          closeCallback={() => setShowEditSpanEquipment(false)}
-        >
-          <EditSpanEquipment
-            spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
-          />
-        </ModalContainer>
-      )}
-
-      {singleSelectedFeature?.source === "NodeContainer" && (
-        <ModalContainer
-          show={showEditNodeContainer}
-          closeCallback={() => setShowEditNodeContainer(false)}
-        >
-          <EditNodeContainer
-            nodeContainerMrid={singleSelectedFeature?.properties?.refId ?? ""}
-          />
-        </ModalContainer>
-      )}
-
       {identifiedFeature.type === "RouteNode" && (
         <div className="feature-information-container">
           <div className="feature-informations">
@@ -584,12 +538,13 @@ function RouteNetworkDiagram({
           singleSelectedFeature?.source === "OuterConduit") && (
           <SpanEquipmentDetails
             spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
+            showActions={true}
           />
         )}
       {!editMode && singleSelectedFeature?.source === "NodeContainer" && (
         <NodeContainerDetails
           nodeContainerMrid={singleSelectedFeature?.properties?.refId ?? ""}
-          showActions={false}
+          showActions={true}
         />
       )}
     </div>

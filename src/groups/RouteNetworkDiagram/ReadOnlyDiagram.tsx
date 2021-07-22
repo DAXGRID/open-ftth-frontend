@@ -70,13 +70,14 @@ function ReadOnlyDiagram({
       {selectedFeature?.source === "NodeContainer" && (
         <NodeContainerDetails
           nodeContainerMrid={selectedFeature.properties?.refId ?? ""}
-          showActions={true}
+          showActions={false}
         />
       )}
       {(selectedFeature?.source === "InnerConduit" ||
         selectedFeature?.source === "OuterConduit") && (
         <SpanEquipmentDetails
           spanEquipmentMrid={selectedFeature.properties?.refId ?? ""}
+          showActions={false}
         />
       )}
     </div>

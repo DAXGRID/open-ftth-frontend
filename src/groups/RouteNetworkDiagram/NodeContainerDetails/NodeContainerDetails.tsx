@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation, TFunction } from "react-i18next";
 import { useQuery } from "urql";
 import FeatureDetailsContainer from "../FeatureDetailContainer";
@@ -5,6 +6,9 @@ import {
   QUERY_NODE_CONTAINER_DETAILS,
   NodeContainerDetailsResponse,
 } from "./NodeContainerDetailsGql";
+import { EditPropertiesSvg } from "../../../assets";
+import ModalContainer from "../../../components/ModalContainer";
+import EditNodeContainer from "../EditNodeContainer";
 
 type SpanEquopmentDetailsParams = {
   nodeContainerMrid: string;
@@ -34,6 +38,7 @@ function NodeContainerDetails({
   showActions,
 }: SpanEquopmentDetailsParams) {
   const { t } = useTranslation();
+  const [showEditNodeContainer, setShowEditNodeContainer] = useState(false);
   const [nodeContainerDetailsResponse] = useQuery<NodeContainerDetailsResponse>(
     {
       query: QUERY_NODE_CONTAINER_DETAILS,
@@ -48,7 +53,25 @@ function NodeContainerDetails({
 
   return (
     <div className="node-container-details">
-      <FeatureDetailsContainer details={details} />
+      <ModalContainer
+        show={showEditNodeContainer}
+        closeCallback={() => setShowEditNodeContainer(false)}
+      >
+        <EditNodeContainer nodeContainerMrid={nodeContainerMrid ?? ""} />
+      </ModalContainer>
+      <FeatureDetailsContainer
+        details={details}
+        showActions={showActions}
+        actions={[
+          {
+            action: () => setShowEditNodeContainer(true),
+            icon: EditPropertiesSvg,
+            title: t("EDIT"),
+            disabled: false,
+            key: 0,
+          },
+        ]}
+      />
     </div>
   );
 }
