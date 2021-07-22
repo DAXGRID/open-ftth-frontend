@@ -405,7 +405,7 @@ function RouteNetworkDiagram({
         />
       </ModalContainer>
 
-      {identifiedFeature.type === "RouteNode" && <FeatureInformation />}
+      <FeatureInformation />
 
       {identifiedFeature.type === "RouteNode" && (
         <DiagramMenu>

@@ -71,7 +71,7 @@ function ReadOnlyDiagram({
 
   return (
     <div>
-      {identifiedFeature?.type === "RouteNode" && <FeatureInformation />}
+      <FeatureInformation />
       <DiagramMenu>
         <ActionButton
           icon={EraserSvg}

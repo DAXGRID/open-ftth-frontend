@@ -8,6 +8,9 @@ export interface QueryRouteNetworkElementResponse {
       namingInfo?: {
         name?: string;
       };
+      routeSegmentInfo?: {
+        kind?: string;
+      };
     };
   };
 }
@@ -22,6 +25,9 @@ query ($routeElementId: ID!) {
       }
       namingInfo {
         name
+      }
+      routeSegmentInfo {
+        kind
       }
     }
   }
