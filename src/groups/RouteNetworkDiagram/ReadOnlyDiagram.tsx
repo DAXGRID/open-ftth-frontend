@@ -8,6 +8,7 @@ import ActionButton from "../../components/ActionButton";
 import { MapContext } from "../../contexts/MapContext";
 import { EraserSvg } from "../../assets";
 import { useTranslation } from "react-i18next";
+import FeatureInformation from "./FeatureInformation";
 
 interface Envelope {
   minX: number;
@@ -38,7 +39,7 @@ function ReadOnlyDiagram({
   diagramObjects,
   envelope,
 }: RouteSegmentDiagramProps) {
-  const { setTraceRouteNetworkId } = useContext(MapContext);
+  const { identifiedFeature, setTraceRouteNetworkId } = useContext(MapContext);
   const [selectedFeature, setSelectedFeature] =
     useState<MapboxGeoJSONFeature | null>(null);
   const { t } = useTranslation();
@@ -70,6 +71,7 @@ function ReadOnlyDiagram({
 
   return (
     <div>
+      {identifiedFeature?.type === "RouteNode" && <FeatureInformation />}
       <DiagramMenu>
         <ActionButton
           icon={EraserSvg}

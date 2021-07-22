@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext, useRef, useCallback } from "react";
-import { useQuery, useMutation, useClient } from "urql";
+import { useMutation, useClient } from "urql";
 import { MapboxGeoJSONFeature } from "mapbox-gl";
 import DiagramMenu from "../../components/DiagramMenu";
 import ModalContainer from "../../components/ModalContainer";
@@ -9,6 +9,7 @@ import ActionButton from "../../components/ActionButton";
 import { MapContext } from "../../contexts/MapContext";
 import NodeContainerDetails from "./NodeContainerDetails";
 import SpanEquipmentDetails from "./SpanEquipmentDetails";
+import FeatureInformation from "./FeatureInformation";
 import {
   Diagram,
   Envelope,
@@ -27,8 +28,6 @@ import {
   DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER,
   DetachSpanEquipmentParameters,
   DetachSpanEquipmentResponse,
-  QUERY_ROUTE_NETWORK_ELEMENT,
-  QueryRouteNetworkElementResponse,
   REMOVE_SPAN_STRUCTURE,
   RemoveSpanStructureResponse,
   REVERSE_VERTICAL_ALIGNMENT,
@@ -70,15 +69,6 @@ function RouteNetworkDiagram({
   const [showAddContainer, setShowAddContainer] = useState(false);
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
   const { identifiedFeature, setTraceRouteNetworkId } = useContext(MapContext);
-
-  const [routeNetworkElementResponse] =
-    useQuery<QueryRouteNetworkElementResponse>({
-      query: QUERY_ROUTE_NETWORK_ELEMENT,
-      variables: {
-        routeElementId: identifiedFeature?.id,
-      },
-      pause: !identifiedFeature?.id,
-    });
 
   const [, cutSpanSegmentsMutation] =
     useMutation<CutSpanSegmentsResponse>(CUT_SPAN_SEGMENTS);
@@ -415,33 +405,8 @@ function RouteNetworkDiagram({
         />
       </ModalContainer>
 
-      {identifiedFeature.type === "RouteNode" && (
-        <div className="feature-information-container">
-          <div className="feature-informations">
-            <p>
-              <strong>{t("Name")}</strong>
-              {`: ${
-                routeNetworkElementResponse.data?.routeNetwork.routeElement
-                  .namingInfo?.name ?? ""
-              }`}
-            </p>
-            <p>
-              <strong>{t("Kind")}</strong>
-              {`: ${t(
-                routeNetworkElementResponse.data?.routeNetwork.routeElement
-                  .routeNodeInfo?.kind ?? ""
-              )}`}
-            </p>
-            <p>
-              <strong>{t("Function")}</strong>
-              {`: ${t(
-                routeNetworkElementResponse.data?.routeNetwork.routeElement
-                  .routeNodeInfo?.function ?? ""
-              )}`}
-            </p>
-          </div>
-        </div>
-      )}
+      {identifiedFeature.type === "RouteNode" && <FeatureInformation />}
+
       {identifiedFeature.type === "RouteNode" && (
         <DiagramMenu>
           <ToggleButton
