@@ -1,15 +1,15 @@
 import { useEffect, useState, useContext, useRef, useCallback } from "react";
 import { useMutation, useClient } from "urql";
 import { MapboxGeoJSONFeature } from "mapbox-gl";
-import DiagramMenu from "../../components/DiagramMenu";
-import ModalContainer from "../../components/ModalContainer";
-import SchematicDiagram from "./SchematicDiagram";
-import ToggleButton from "../../components/ToggleButton";
-import ActionButton from "../../components/ActionButton";
-import { MapContext } from "../../contexts/MapContext";
-import NodeContainerDetails from "./NodeContainerDetails";
-import SpanEquipmentDetails from "./SpanEquipmentDetails";
-import FeatureInformation from "./FeatureInformation";
+import DiagramMenu from "../../../components/DiagramMenu";
+import ModalContainer from "../../../components/ModalContainer";
+import SchematicDiagram from "../SchematicDiagram";
+import ToggleButton from "../../../components/ToggleButton";
+import ActionButton from "../../../components/ActionButton";
+import { MapContext } from "../../../contexts/MapContext";
+import NodeContainerDetails from "../NodeContainerDetails";
+import SpanEquipmentDetails from "../SpanEquipmentDetails";
+import FeatureInformation from "../FeatureInformation";
 import {
   Diagram,
   Envelope,
@@ -32,9 +32,9 @@ import {
   RemoveSpanStructureResponse,
   REVERSE_VERTICAL_ALIGNMENT,
   ReverseVerticalAlignmentResponse,
-} from "./RouteNetworkDiagramGql";
-import AddContainer from "./AddContainer";
-import AddInnerSpanStructure from "./AddInnerSpanStructure";
+} from "./EditDiagramGql";
+import AddContainer from "../AddContainer";
+import AddInnerSpanStructure from "../AddInnerSpanStructure";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import {
@@ -49,17 +49,14 @@ import {
   TrashCanSvg,
   EraserSvg,
   FlipSvg,
-} from "../../assets";
+} from "../../../assets";
 
 type RouteNetworkDiagramProps = {
   diagramObjects: Diagram[];
   envelope: Envelope;
 };
 
-function RouteNetworkDiagram({
-  diagramObjects,
-  envelope,
-}: RouteNetworkDiagramProps) {
+function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
   const [editMode, setEditMode] = useState(false);
@@ -516,4 +513,4 @@ function RouteNetworkDiagram({
   );
 }
 
-export default RouteNetworkDiagram;
+export default EditDiagram;

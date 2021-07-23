@@ -1,14 +1,14 @@
 import { useState, useContext, useCallback } from "react";
 import { MapboxGeoJSONFeature } from "mapbox-gl";
-import SchematicDiagram from "./SchematicDiagram";
-import SpanEquipmentDetails from "./SpanEquipmentDetails";
-import NodeContainerDetails from "./NodeContainerDetails";
-import DiagramMenu from "../../components/DiagramMenu";
-import ActionButton from "../../components/ActionButton";
-import { MapContext } from "../../contexts/MapContext";
-import { EraserSvg } from "../../assets";
+import SchematicDiagram from "../SchematicDiagram";
+import SpanEquipmentDetails from "../SpanEquipmentDetails";
+import NodeContainerDetails from "../NodeContainerDetails";
+import DiagramMenu from "../../../components/DiagramMenu";
+import ActionButton from "../../../components/ActionButton";
+import { MapContext } from "../../../contexts/MapContext";
+import { EraserSvg } from "../../../assets";
 import { useTranslation } from "react-i18next";
-import FeatureInformation from "./FeatureInformation";
+import FeatureInformation from "../FeatureInformation";
 
 interface Envelope {
   minX: number;

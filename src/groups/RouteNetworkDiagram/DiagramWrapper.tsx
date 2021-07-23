@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useQuery, useSubscription } from "urql";
 import { MapContext } from "../../contexts/MapContext";
-import RouteNetworkDiagram from "./RouteNetworkDiagram";
+import RouteNetworkDiagram from "./EditDiagram";
 import ReadOnlyDiagram from "./ReadOnlyDiagram";
 import Loading from "../../components/Loading";
 import {
@@ -11,7 +11,7 @@ import {
   Diagram,
   SCHEMATIC_DIAGRAM_UPDATED,
   DiagramUpdatedResponse,
-} from "./RouteNetworkDiagramGql";
+} from "./DiagramWrapperGql";
 
 type DiagramWrapperProps = {
   editable: boolean;
