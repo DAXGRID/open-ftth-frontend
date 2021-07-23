@@ -5,7 +5,7 @@ import mapboxgl, {
   PointLike,
   NavigationControl,
 } from "mapbox-gl";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import {
   createFeature,
   createSource,
@@ -191,7 +191,7 @@ function SchematicDiagram({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<Map | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (diagramObjects.length === 0) return;
 
     const newMap = new Map({

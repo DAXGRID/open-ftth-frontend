@@ -23,7 +23,7 @@ function MapDiagram() {
       </div>
 
       <div className={showDiagram ? "container" : "container hide"}>
-        <RouteNetworkDiagram enableEditMode={false} />
+        <RouteNetworkDiagram editable={false} />
       </div>
     </div>
   );

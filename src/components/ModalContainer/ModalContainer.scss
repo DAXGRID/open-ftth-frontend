@@ -8,6 +8,7 @@
   height: calc(100vh);
   overflow-y: hidden;
   background-color: rgba(0, 0, 0, 0.4);
+  padding: 0px 10px;
 
   &.show {
     display: block;
@@ -15,7 +16,7 @@
 
   .modal-content {
     background-color: #fefefe;
-    margin: 100px auto;
+    margin: 150px auto;
     padding: 20px;
     border: none;
     border-radius: 4px;

@@ -1,25 +1,18 @@
 import { useEffect, useState, useContext, useRef, useCallback } from "react";
-import { useQuery, useSubscription, useMutation, useClient } from "urql";
+import { useMutation, useClient } from "urql";
 import { MapboxGeoJSONFeature } from "mapbox-gl";
-import DiagramMenu from "../../components/DiagramMenu";
-import ModalContainer from "../../components/ModalContainer";
-import SchematicDiagram from "./SchematicDiagram";
-import ToggleButton from "../../components/ToggleButton";
-import ActionButton from "../../components/ActionButton";
-import Loading from "../../components/Loading";
-import { MapContext } from "../../contexts/MapContext";
-import RerouteTube from "./RerouteTube";
-import EditSpanEquipment from "./EditSpanEquipment";
-import EditNodeContainer from "./EditNodeContainer";
-import NodeContainerDetails from "./NodeContainerDetails";
-import SpanEquipmentDetails from "./SpanEquipmentDetails";
+import DiagramMenu from "../../../components/DiagramMenu";
+import ModalContainer from "../../../components/ModalContainer";
+import SchematicDiagram from "../SchematicDiagram";
+import ToggleButton from "../../../components/ToggleButton";
+import ActionButton from "../../../components/ActionButton";
+import { MapContext } from "../../../contexts/MapContext";
+import NodeContainerDetails from "../NodeContainerDetails";
+import SpanEquipmentDetails from "../SpanEquipmentDetails";
+import FeatureInformation from "../FeatureInformation";
 import {
   Diagram,
-  DiagramQueryResponse,
-  DiagramUpdatedResponse,
   Envelope,
-  GET_DIAGRAM,
-  SCHEMATIC_DIAGRAM_UPDATED,
   AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER,
   AffixSpanEquipmentParams,
   AffixSpanEquipmentResponse,
@@ -35,18 +28,15 @@ import {
   DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER,
   DetachSpanEquipmentParameters,
   DetachSpanEquipmentResponse,
-  QUERY_ROUTE_NETWORK_ELEMENT,
-  QueryRouteNetworkElementResponse,
   REMOVE_SPAN_STRUCTURE,
   RemoveSpanStructureResponse,
   REVERSE_VERTICAL_ALIGNMENT,
   ReverseVerticalAlignmentResponse,
-} from "./RouteNetworkDiagramGql";
-import AddContainer from "./AddContainer";
-import AddInnerSpanStructure from "./AddInnerSpanStructure";
+} from "./EditDiagramGql";
+import AddContainer from "../AddContainer";
+import AddInnerSpanStructure from "../AddInnerSpanStructure";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-
 import {
   ConnectSvg,
   CutConduitSvg,
@@ -58,16 +48,15 @@ import {
   RemoveFromContainerSvg,
   TrashCanSvg,
   EraserSvg,
-  EditPropertiesSvg,
-  MoveConduitSvg,
   FlipSvg,
-} from "../../assets";
+} from "../../../assets";
 
 type RouteNetworkDiagramProps = {
-  enableEditMode: boolean;
+  diagramObjects: Diagram[];
+  envelope: Envelope;
 };
 
-function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
+function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
   const [editMode, setEditMode] = useState(false);
@@ -76,34 +65,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
     useState<MapboxGeoJSONFeature | null>();
   const [showAddContainer, setShowAddContainer] = useState(false);
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
-  const [showRerouteTube, setShowRerouteTube] = useState(false);
-  const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
-  const [showEditNodeContainer, setShowEditNodeContainer] = useState(false);
   const { identifiedFeature, setTraceRouteNetworkId } = useContext(MapContext);
-  const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
-  const [envelope, setEnvelope] = useState<Envelope>({
-    maxX: 0,
-    maxY: 0,
-    minX: 0,
-    minY: 0,
-  });
-
-  const [diagramQueryResult] = useQuery<DiagramQueryResponse>({
-    query: GET_DIAGRAM,
-    variables: {
-      routeNetworkElementId: identifiedFeature?.id,
-    },
-    pause: !identifiedFeature?.id,
-  });
-
-  const [routeNetworkElementResponse] =
-    useQuery<QueryRouteNetworkElementResponse>({
-      query: QUERY_ROUTE_NETWORK_ELEMENT,
-      variables: {
-        routeElementId: identifiedFeature?.id,
-      },
-      pause: !identifiedFeature?.id,
-    });
 
   const [, cutSpanSegmentsMutation] =
     useMutation<CutSpanSegmentsResponse>(CUT_SPAN_SEGMENTS);
@@ -124,62 +86,21 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
       DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER
     );
 
-  const [res] = useSubscription<DiagramUpdatedResponse>({
-    query: SCHEMATIC_DIAGRAM_UPDATED,
-    variables: { routeNetworkElementId: identifiedFeature?.id },
-    pause: !identifiedFeature?.id,
-  });
-
   useEffect(() => {
     setEditMode(false);
   }, [identifiedFeature, setEditMode]);
 
   useEffect(() => {
-    if (!diagramQueryResult.data) return;
-
-    const { diagramObjects, envelope } =
-      diagramQueryResult.data.schematic.buildDiagram;
-
-    setDiagramObjects([...diagramObjects]);
-    setEnvelope({ ...envelope });
     setShowAddContainer(false);
     setShowHandleInnerConduit(false);
-    setShowRerouteTube(false);
     selectedFeatures.current = [];
+
     setSingleSelectedFeature(null);
-    setShowEditSpanEquipment(false);
   }, [
-    diagramQueryResult,
-    setDiagramObjects,
-    setEnvelope,
+    diagramObjects,
+    envelope,
     setSingleSelectedFeature,
-    setShowRerouteTube,
-    setShowEditSpanEquipment,
     setShowHandleInnerConduit,
-  ]);
-
-  useEffect(() => {
-    if (!res.data) return;
-
-    const { diagramObjects, envelope } = res.data.schematicDiagramUpdated;
-
-    setDiagramObjects([...diagramObjects]);
-    setEnvelope({ ...envelope });
-    setShowAddContainer(false);
-    setShowHandleInnerConduit(false);
-    setShowRerouteTube(false);
-    selectedFeatures.current = [];
-    setSingleSelectedFeature(null);
-    setShowEditSpanEquipment(false);
-    setShowEditNodeContainer(false);
-  }, [
-    res,
-    setDiagramObjects,
-    setEnvelope,
-    setShowAddContainer,
-    setSingleSelectedFeature,
-    setShowEditSpanEquipment,
-    setShowEditNodeContainer,
   ]);
 
   const affixSpanEquipment = async () => {
@@ -392,6 +313,7 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
     }
   };
 
+  // TODO check why it is async
   const onSelectedFeature = useCallback(
     async (feature: MapboxGeoJSONFeature) => {
       const isSelected = feature.state?.selected as boolean;
@@ -455,10 +377,6 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
     setTraceRouteNetworkId("");
   };
 
-  if (diagramQueryResult.fetching) {
-    return <Loading />;
-  }
-
   if (!identifiedFeature?.id) {
     return <div></div>;
   }
@@ -484,68 +402,9 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
         />
       </ModalContainer>
 
-      <ModalContainer
-        show={showRerouteTube}
-        closeCallback={() => setShowRerouteTube(false)}
-      >
-        <RerouteTube
-          selectedRouteSegmentMrid={
-            singleSelectedFeature?.properties?.refId ?? ""
-          }
-        />
-      </ModalContainer>
-
-      {(singleSelectedFeature?.source === "InnerConduit" ||
-        singleSelectedFeature?.source === "OuterConduit") && (
-        <ModalContainer
-          show={showEditSpanEquipment}
-          closeCallback={() => setShowEditSpanEquipment(false)}
-        >
-          <EditSpanEquipment
-            spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
-          />
-        </ModalContainer>
-      )}
-
-      {singleSelectedFeature?.source === "NodeContainer" && (
-        <ModalContainer
-          show={showEditNodeContainer}
-          closeCallback={() => setShowEditNodeContainer(false)}
-        >
-          <EditNodeContainer
-            nodeContainerMrid={singleSelectedFeature?.properties?.refId ?? ""}
-          />
-        </ModalContainer>
-      )}
+      <FeatureInformation />
 
       {identifiedFeature.type === "RouteNode" && (
-        <div className="feature-information-container">
-          <div className="feature-informations">
-            <p>
-              <strong>{t("Name")}</strong>
-              {`: ${
-                routeNetworkElementResponse.data?.routeNetwork.routeElement
-                  .namingInfo?.name ?? ""
-              }`}
-            </p>
-            <p>
-              <strong>{t("Kind")}</strong>
-              {`: ${t(
-                routeNetworkElementResponse.data?.routeNetwork.routeElement
-                  .routeNodeInfo?.kind ?? ""
-              )}`}
-            </p>
-            <p>
-              <strong>{t("Function")}</strong>
-              {`: ${t(
-                routeNetworkElementResponse.data?.routeNetwork.routeElement
-                  .routeNodeInfo?.function ?? ""
-              )}`}
-            </p>
-          </div>
-        </div>
-      )}
-      {identifiedFeature.type === "RouteNode" && enableEditMode && (
         <DiagramMenu>
           <ToggleButton
             icon={PencilSvg}
@@ -621,15 +480,6 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
           />
         </DiagramMenu>
       )}
-      {identifiedFeature.type === "RouteNode" && !enableEditMode && (
-        <DiagramMenu>
-          <ActionButton
-            icon={EraserSvg}
-            action={() => clearHighlights()}
-            title={t("CLEAR_HIGHLIGHT")}
-          />
-        </DiagramMenu>
-      )}
       {identifiedFeature.type === "RouteSegment" && (
         <DiagramMenu>
           <ActionButton
@@ -648,56 +498,19 @@ function RouteNetworkDiagram({ enableEditMode }: RouteNetworkDiagramProps) {
       {!editMode &&
         (singleSelectedFeature?.source === "InnerConduit" ||
           singleSelectedFeature?.source === "OuterConduit") && (
-          <div className="feature-details">
-            <div className="feature-details-container">
-              <div className="feature-details-info">
-                <SpanEquipmentDetails
-                  spanEquipmentMrid={
-                    singleSelectedFeature?.properties?.refId ?? ""
-                  }
-                />
-              </div>
-              {enableEditMode && (
-                <div className="feature-details-actions">
-                  <ActionButton
-                    icon={EditPropertiesSvg}
-                    action={() => setShowEditSpanEquipment(true)}
-                    title={t("EDIT")}
-                  />
-                  <ActionButton
-                    icon={MoveConduitSvg}
-                    action={() => setShowRerouteTube(true)}
-                    title={t("MOVE")}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
+          <SpanEquipmentDetails
+            spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
+            showActions={true}
+          />
         )}
       {!editMode && singleSelectedFeature?.source === "NodeContainer" && (
-        <div className="feature-details">
-          <div className="feature-details-container">
-            <div className="feature-details-info">
-              <NodeContainerDetails
-                nodeContainerMrid={
-                  singleSelectedFeature?.properties?.refId ?? ""
-                }
-              />
-            </div>
-            {enableEditMode && (
-              <div className="feature-details-actions">
-                <ActionButton
-                  icon={EditPropertiesSvg}
-                  action={() => setShowEditNodeContainer(true)}
-                  title={t("EDIT")}
-                />
-              </div>
-            )}
-          </div>
-        </div>
+        <NodeContainerDetails
+          nodeContainerMrid={singleSelectedFeature?.properties?.refId ?? ""}
+          showActions={true}
+        />
       )}
     </div>
   );
 }
 
-export default RouteNetworkDiagram;
+export default EditDiagram;
