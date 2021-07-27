@@ -3,6 +3,7 @@ import IndexPage from "../pages/IndexPage";
 import PlaceSpanEquipmentPage from "../pages/PlaceSpanEquipmentPage";
 import LoginPage from "../pages/LoginPage";
 import IdentifyFeaturesPage from "../pages/IdentifyFeaturePage";
+import WorkTaskPage from "../pages/WorkTaskPage";
 import PrivateRoute from "./utils";
 
 const Routes = () => (
@@ -18,6 +19,7 @@ const Routes = () => (
       path="/schematic-diagram/:id?"
       component={IdentifyFeaturesPage}
     />
+    <PrivateRoute exact path="/work-tasks/" component={WorkTaskPage} />
     <Route exact path="/login" component={LoginPage} title="Login" />
   </Switch>
 );

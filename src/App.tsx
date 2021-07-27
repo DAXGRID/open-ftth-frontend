@@ -60,6 +60,7 @@ function App() {
             path="/schematic-diagram"
             linkText={t("Schematic diagram")}
           />
+          <SideMenuItem path="/work-tasks" linkText={t("Work tasks")} />
         </SideMenu>
         <main
           className={
