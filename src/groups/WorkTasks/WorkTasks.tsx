@@ -74,6 +74,7 @@ function createWorkTaskBodyItems(
 function WorkTasks() {
   const { t } = useTranslation();
   const [selectedProject, setSelectedProject] = useState<string>();
+  const [selectedWorkTask, setSelectedWorkTask] = useState<string>();
   const [projects, setProjects] = useState<ProjectAndWorkTasks[]>([]);
   const [projectsResponse] = useQuery<ProjectAndWorkTasksResponse>({
     query: PROJECT_AND_WORK_TASKS_QUERY,
@@ -87,8 +88,12 @@ function WorkTasks() {
     setSelectedProject(projectsAndWorksTasks[0].mRID ?? "");
   }, [projectsResponse, setProjects, setSelectedProject]);
 
+  useEffect(() => {
+    setSelectedWorkTask("");
+  }, [selectedProject, setSelectedWorkTask]);
+
   const selectItem = (x: BodyItem) => {
-    console.log(x);
+    setSelectedWorkTask(x.id as string);
   };
 
   if (projectsResponse.fetching) return <Loading />;
@@ -118,6 +123,7 @@ function WorkTasks() {
             (x) => x.collectionId === selectedProject
           )}
           selectItem={selectItem}
+          selected={selectedWorkTask}
         />
       </div>
     </div>
