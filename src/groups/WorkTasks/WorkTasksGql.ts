@@ -17,7 +17,7 @@ export interface WorkTask {
   geometry?: Geometry;
 }
 
-interface ProjectAndWorkTasks {
+export interface ProjectAndWorkTasks {
   mRID?: string;
   name?: string;
   workTasks: WorkTask[];
