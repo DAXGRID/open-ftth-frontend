@@ -33,6 +33,7 @@
 
       .select-list-view-header-item {
         flex: 1;
+        border-right: 1px solid $border-color;
 
         &:last-of-type {
           border-right: none;
