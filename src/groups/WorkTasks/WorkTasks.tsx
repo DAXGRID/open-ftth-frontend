@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { useKeycloak } from "@react-keycloak/web";
 import { useQuery, useMutation } from "urql";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
 import {
@@ -79,6 +80,7 @@ function createWorkTaskBodyItems(
 
 function WorkTasks() {
   const { t } = useTranslation();
+  const { keycloak } = useKeycloak();
   const { panToCoordinate } = useBridgeConnector();
   const [selectedProject, setSelectedProject] = useState<string>();
   const [selectedWorkTask, setSelectedWorkTask] = useState<string>();
@@ -134,9 +136,12 @@ function WorkTasks() {
   );
 
   const pickWorkTask = useCallback(() => {
-    if (!selectedWorkTask) return;
-    setCurrentWorkTask({ userName: "user", workTaskId: selectedWorkTask });
-  }, [setCurrentWorkTask, selectedWorkTask]);
+    if (!selectedWorkTask || !keycloak.profile?.username) return;
+    setCurrentWorkTask({
+      userName: keycloak.profile?.username,
+      workTaskId: selectedWorkTask,
+    });
+  }, [setCurrentWorkTask, selectedWorkTask, keycloak.profile?.username]);
 
   const panToAddress = () => {
     const workTask = workTaskBodyItems.find(
