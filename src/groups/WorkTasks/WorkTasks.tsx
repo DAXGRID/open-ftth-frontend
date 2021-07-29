@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation } from "urql";
+import useBridgeConnector from "../../bridge/useBridgeConnector";
 import {
   PROJECT_AND_WORK_TASKS_QUERY,
   ProjectAndWorkTasksResponse,
@@ -8,6 +9,7 @@ import {
   WorkTask,
   ProjectAndWorkTasks,
 } from "./WorkTasksGql";
+
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import DefaultButton from "../../components/DefaultButton";
@@ -77,6 +79,7 @@ function createWorkTaskBodyItems(
 
 function WorkTasks() {
   const { t } = useTranslation();
+  const { panToCoordinate } = useBridgeConnector();
   const [selectedProject, setSelectedProject] = useState<string>();
   const [selectedWorkTask, setSelectedWorkTask] = useState<string>();
   const [projects, setProjects] = useState<ProjectAndWorkTasks[]>([]);
@@ -135,6 +138,23 @@ function WorkTasks() {
     setCurrentWorkTask({ userName: "user", workTaskId: selectedWorkTask });
   }, [setCurrentWorkTask, selectedWorkTask]);
 
+  const panToAddress = () => {
+    const workTask = workTaskBodyItems.find(
+      (x) => x.workTask.mRID === selectedWorkTask
+    )?.workTask;
+
+    if (!workTask) {
+      toast.warning(t("Please select a work task"));
+    }
+    if (!workTask?.geometry?.coordinates) {
+      toast.warning(t("The work task has no coordinates"));
+      return;
+    }
+
+    panToCoordinate(workTask.geometry.coordinates);
+    toast.success(t("Pan/Zoom to address"));
+  };
+
   if (projectsResponse.fetching) return <Loading />;
 
   return (
@@ -167,6 +187,11 @@ function WorkTasks() {
         <DefaultButton
           innerText={t("Pick work task")}
           onClick={pickWorkTask}
+          disabled={!selectedWorkTask}
+        />
+        <DefaultButton
+          innerText={t("Pan/Zoom to address")}
+          onClick={panToAddress}
           disabled={!selectedWorkTask}
         />
       </div>
