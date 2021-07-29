@@ -1,23 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "urql";
+import { useQuery, useMutation } from "urql";
 import {
   PROJECT_AND_WORK_TASKS_QUERY,
   ProjectAndWorkTasksResponse,
-  SET_CURRENT_WORK_TASK,
+  SET_CURRENT_WORK_TASK_MUTATION,
   WorkTask,
   ProjectAndWorkTasks,
 } from "./WorkTasksGql";
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
+import DefaultButton from "../../components/DefaultButton";
 import Loading from "../../components/Loading";
+import { toast } from "react-toastify";
 
 interface WorkTaskBodyItem extends BodyItem {
   collectionId: string;
   workTask: WorkTask;
 }
 
-function projectSelectOptions(projects: ProjectAndWorkTasks[]): SelectOption[] {
+function createProjectSelectOptions(
+  projects: ProjectAndWorkTasks[]
+): SelectOption[] {
   return projects.map<SelectOption>((x) => {
     return { text: x.name ?? "", value: x.mRID ?? "" };
   });
@@ -79,22 +83,57 @@ function WorkTasks() {
   const [projectsResponse] = useQuery<ProjectAndWorkTasksResponse>({
     query: PROJECT_AND_WORK_TASKS_QUERY,
   });
+  const [setCurrentWorkTaskResult, setCurrentWorkTask] = useMutation(
+    SET_CURRENT_WORK_TASK_MUTATION
+  );
 
   useEffect(() => {
     if (!projectsResponse?.data) return;
     const projectsAndWorksTasks =
       projectsResponse.data.workService.projectsAndWorkTasks;
     setProjects(projectsAndWorksTasks);
-    setSelectedProject(projectsAndWorksTasks[0].mRID ?? "");
-  }, [projectsResponse, setProjects, setSelectedProject]);
+    if (!selectedProject) {
+      setSelectedProject(projectsAndWorksTasks[0].mRID ?? "");
+    }
+  }, [projectsResponse, selectedProject, setSelectedProject, setProjects]);
 
   useEffect(() => {
     setSelectedWorkTask("");
-  }, [selectedProject, setSelectedWorkTask]);
+  }, [selectedProject, setSelectedProject]);
 
-  const selectItem = (x: BodyItem) => {
-    setSelectedWorkTask(x.id as string);
-  };
+  useEffect(() => {
+    if (!setCurrentWorkTaskResult?.data) return;
+    if (!setCurrentWorkTaskResult.error) {
+      toast.success(t("Work task is now added to user"));
+    } else {
+      toast.error(setCurrentWorkTaskResult.error.message);
+    }
+  }, [setCurrentWorkTaskResult, t]);
+
+  const workTaskBodyItems = useMemo(
+    () =>
+      createWorkTaskBodyItems(projects).filter(
+        (x) => x.collectionId === selectedProject
+      ),
+    [projects, selectedProject]
+  );
+
+  const projectSelectOptions = useMemo(
+    () => createProjectSelectOptions(projects),
+    [projects]
+  );
+
+  const selectItem = useCallback(
+    (x: BodyItem) => {
+      setSelectedWorkTask(x.id as string);
+    },
+    [setSelectedWorkTask]
+  );
+
+  const pickWorkTask = useCallback(() => {
+    if (!selectedWorkTask) return;
+    setCurrentWorkTask({ userName: "user", workTaskId: selectedWorkTask });
+  }, [setCurrentWorkTask, selectedWorkTask]);
 
   if (projectsResponse.fetching) return <Loading />;
 
@@ -104,7 +143,7 @@ function WorkTasks() {
         <SelectMenu
           onSelected={(x) => setSelectedProject(x as string)}
           selected={selectedProject}
-          options={projectSelectOptions(projects)}
+          options={projectSelectOptions}
         />
       </div>
       <div className="full-row">
@@ -119,11 +158,16 @@ function WorkTasks() {
             t("Address"),
             t("Status"),
           ]}
-          bodyItems={createWorkTaskBodyItems(projects).filter(
-            (x) => x.collectionId === selectedProject
-          )}
+          bodyItems={workTaskBodyItems}
           selectItem={selectItem}
           selected={selectedWorkTask}
+        />
+      </div>
+      <div className="full-row">
+        <DefaultButton
+          innerText={t("Pick work task")}
+          onClick={pickWorkTask}
+          disabled={!selectedWorkTask}
         />
       </div>
     </div>

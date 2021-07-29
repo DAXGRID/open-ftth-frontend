@@ -56,7 +56,7 @@ export const PROJECT_AND_WORK_TASKS_QUERY = `query {
   }
 }`;
 
-export const SET_CURRENT_WORK_TASK = `mutation ($userName: String!, $workTaskId: ID!) {
+export const SET_CURRENT_WORK_TASK_MUTATION = `mutation ($userName: String!, $workTaskId: ID!) {
   userContext {
     setCurrentWorkTask(userName: $userName, workTaskId: $workTaskId)
     {
