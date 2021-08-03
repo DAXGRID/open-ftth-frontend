@@ -66,9 +66,14 @@ function clickHighlight(
   bboxSize: number,
   map: Map,
   lastHighlightedFeature: React.RefObject<MapboxGeoJSONFeature>,
+  measureDistanceControl: MeasureDistanceControl,
   callback: (feature: MapboxGeoJSONFeature) => void
 ) {
   map.on("click", (e) => {
+    // Do nothing if the measure distance control is active to avoid
+    // annoyances for the user doing measureing.
+    if (measureDistanceControl.active) return;
+
     const bbox: [PointLike, PointLike] = [
       [e.point.x - bboxSize, e.point.y - bboxSize],
       [e.point.x + bboxSize, e.point.y + bboxSize],
@@ -265,6 +270,40 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
     newMap.dragRotate.disable();
     newMap.touchZoomRotate.disableRotation();
 
+    newMap.addControl(new ScaleControl(), "bottom-left");
+    newMap.addControl(
+      new AttributionControl({
+        customAttribution: [
+          '<a href="http://www.openstreetmap.org/about/">© OpenStreetMap contributors</a>',
+          '<a href="https://openmaptiles.org/">© OpenMapTiles</a>',
+        ],
+      }),
+      "bottom-right"
+    );
+
+    newMap.addControl(
+      new NavigationControl({
+        showCompass: false,
+      }),
+      "top-left"
+    );
+    newMap.addControl(
+      new ToggleDiagramControl(showSchematicDiagram),
+      "top-right"
+    );
+    newMap.addControl(
+      new GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: false,
+        },
+        trackUserLocation: true,
+        showAccuracyCircle: false,
+      })
+    );
+    newMap.addControl(new ToggleLayerButton("aerial_photo"), "top-right");
+    const measureDistanceControl = new MeasureDistanceControl(t("DISTANCE"));
+    newMap.addControl(measureDistanceControl, "top-right");
+
     newMap.on("load", () => {
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
@@ -273,6 +312,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
         10,
         newMap,
         lastHighlightedFeature,
+        measureDistanceControl,
         (x) => {
           let type: "RouteNode" | "RouteSegment" | null = null;
           if (x?.properties?.objecttype === "route_node") {
@@ -361,39 +401,6 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
         filter: ["in", "$type", "LineString"],
       });
     });
-
-    newMap.addControl(new ScaleControl(), "bottom-left");
-    newMap.addControl(
-      new AttributionControl({
-        customAttribution: [
-          '<a href="http://www.openstreetmap.org/about/">© OpenStreetMap contributors</a>',
-          '<a href="https://openmaptiles.org/">© OpenMapTiles</a>',
-        ],
-      }),
-      "bottom-right"
-    );
-
-    newMap.addControl(
-      new NavigationControl({
-        showCompass: false,
-      }),
-      "top-left"
-    );
-    newMap.addControl(
-      new ToggleDiagramControl(showSchematicDiagram),
-      "top-right"
-    );
-    newMap.addControl(
-      new GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: false,
-        },
-        trackUserLocation: true,
-        showAccuracyCircle: false,
-      })
-    );
-    newMap.addControl(new ToggleLayerButton("aerial_photo"), "top-right");
-    newMap.addControl(new MeasureDistanceControl(t("DISTANCE")), "top-right");
 
     map.current = newMap;
 

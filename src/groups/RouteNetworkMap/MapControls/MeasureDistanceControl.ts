@@ -15,7 +15,7 @@ library.add(faRuler);
 
 class MeasureDistanceControl {
   className: string;
-  enabled: boolean;
+  active: boolean;
   container: HTMLElement | null;
   map: Map | undefined;
   geojson: FeatureCollection<Geometry, GeoJsonProperties>;
@@ -26,7 +26,7 @@ class MeasureDistanceControl {
   constructor(distanceText: string) {
     this.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
     this.container = null;
-    this.enabled = false;
+    this.active = false;
     this.geojson = {
       type: "FeatureCollection",
       features: [],
@@ -64,8 +64,8 @@ class MeasureDistanceControl {
   measureDistance() {
     if (!this.map || !this.container) return;
 
-    if (!this.enabled) {
-      this.enabled = true;
+    if (!this.active) {
+      this.active = true;
       this.container.firstElementChild?.classList.add("active");
 
       this.mouseMove = (e: MapMouseEvent) => {
@@ -121,7 +121,7 @@ class MeasureDistanceControl {
 
           this.geojson.features.push(linestring);
 
-          var value = document.createElement("pre");
+          const value = document.createElement("pre");
           value.textContent = `${this.distanceText}: ${length(
             linestring
           ).toLocaleString()} km`;
@@ -136,7 +136,7 @@ class MeasureDistanceControl {
       this.map.on("click", this.measureClick);
       this.map.on("mousemove", this.mouseMove);
     } else {
-      this.enabled = false;
+      this.active = false;
       this.container.firstElementChild?.classList.remove("active");
       this.geojson = {
         type: "FeatureCollection",
