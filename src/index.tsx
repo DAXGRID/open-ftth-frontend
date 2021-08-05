@@ -9,6 +9,8 @@ import keycloak from "./keycloak";
 import "./translation/i18n";
 import "./global-styles/reset.scss";
 import "./global-styles/index.scss";
+import { MapProvider } from "./contexts/MapContext";
+import { UserProvider } from "./contexts/UserContext";
 
 const subscriptionClient = new SubscriptionClient(
   `${Config.API_GATEWAY_WS_URI}/graphql`,
@@ -48,7 +50,11 @@ ReactDOM.render(
   <React.StrictMode>
     <ReactKeycloakProvider authClient={keycloak}>
       <Provider value={client}>
-        <App />
+        <UserProvider>
+          <MapProvider>
+            <App />
+          </MapProvider>
+        </UserProvider>
       </Provider>
     </ReactKeycloakProvider>
   </React.StrictMode>,
