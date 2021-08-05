@@ -381,7 +381,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
         source: "measurement",
         paint: {
           "circle-radius": 5,
-          "circle-color": "#000",
+          "circle-color": "#FFD700",
         },
         filter: ["in", "$type", "Point"],
       });
@@ -395,7 +395,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
           "line-join": "round",
         },
         paint: {
-          "line-color": "#000",
+          "line-color": "#FFD700",
           "line-width": 2.5,
         },
         filter: ["in", "$type", "LineString"],
