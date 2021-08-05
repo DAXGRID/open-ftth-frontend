@@ -1,9 +1,9 @@
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useState, useContext } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { useState, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Slide, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import BridgeConnector from "./bridge/BridgeConnector";
 import Loading from "./components/Loading";
 import SideMenu, { SideMenuItem } from "./components/SideMenu";
@@ -12,9 +12,15 @@ import Routes from "./routes/Routes";
 import { UserContext } from "./contexts/UserContext";
 
 function App() {
+  const { userName } = useContext(UserContext);
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const { t } = useTranslation();
-  const { userName } = useContext(UserContext);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!userName) return;
+    setLoaded(true);
+  }, [userName, setLoaded]);
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);
@@ -22,7 +28,7 @@ function App() {
     window.dispatchEvent(new Event("resize"));
   };
 
-  if (!userName) return <Loading />;
+  if (!loaded) return <Loading />;
 
   return (
     <Router>

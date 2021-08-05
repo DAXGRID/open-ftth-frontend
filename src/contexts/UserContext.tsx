@@ -1,12 +1,15 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { useKeycloak } from "@react-keycloak/web";
+import useUserWorkContext, { UserWorkTask } from "./useUserWorkContext";
 
 type UserContextType = {
   userName: string;
+  userWorkTask: UserWorkTask | null;
 };
 
 const UserContext = createContext<UserContextType>({
   userName: "",
+  userWorkTask: null,
 });
 
 type UserContextProps = {
@@ -16,6 +19,7 @@ type UserContextProps = {
 const UserProvider = ({ children }: UserContextProps) => {
   const [userName, setUsername] = useState<string>("");
   const { initialized, keycloak } = useKeycloak();
+  const userWorkTask = useUserWorkContext(userName);
 
   useEffect(() => {
     if (!initialized) return;
@@ -30,6 +34,7 @@ const UserProvider = ({ children }: UserContextProps) => {
     <UserContext.Provider
       value={{
         userName: userName,
+        userWorkTask: userWorkTask ?? null,
       }}
     >
       {children}
