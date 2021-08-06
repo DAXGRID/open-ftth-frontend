@@ -128,7 +128,8 @@
       "NO_CHANGE": "Cannot update to the same values",
       "NOT_VALID_SELECTION": "Not a valid selection, have you remembered to save?",
       "DISTANCE": "Distance",
-      "TYPE": "Type"
+      "TYPE": "Type",
+      "NO_SELECTED_WORK_TASK": "No selected work task."
     }
   },
   "dk": {
@@ -260,7 +261,8 @@
       "NO_CHANGE": "Kan ikke opdatere til det samme",
       "NOT_VALID_SELECTION": "Ikke en valid selektion, har du gemt?",
       "DISTANCE": "Afstand",
-      "TYPE": "Type"
+      "TYPE": "Type",
+      "NO_SELECTED_WORK_TASK": "Du har ikke valgt en opgave."
     }
   }
 }

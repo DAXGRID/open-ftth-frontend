@@ -3,7 +3,7 @@
 .top-menu {
   background-color: white;
   border-bottom: 1px solid $border-color;
-  padding: 10px 20px;
+  padding: 10px 15px;
   font-size: 24px;
 
   .top-menu-body {
@@ -11,16 +11,22 @@
     align-content: center;
 
     .top-menu-item {
+      display: flex;
       flex: 1;
-      padding: 0px 10px;
+      align-items: center;
+
+      &.top-menu-item__center {
+        flex: 4;
+        justify-content: center;
+      }
+
+      &.top-menu-item__end {
+        flex-direction: row-reverse;
+      }
     }
   }
 
   .side-menu-icon {
-    display: flex;
-    align-items: center;
-    flex: 0;
-
     &:hover {
       cursor: pointer;
     }

@@ -1,7 +1,8 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useKeycloak } from "@react-keycloak/web";
 import { useQuery, useMutation } from "urql";
+import { UserContext } from "../../contexts/UserContext";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
 import {
   PROJECT_AND_WORK_TASKS_QUERY,
@@ -10,7 +11,6 @@ import {
   WorkTask,
   ProjectAndWorkTasks,
 } from "./WorkTasksGql";
-
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import DefaultButton from "../../components/DefaultButton";
@@ -81,6 +81,7 @@ function createWorkTaskBodyItems(
 function WorkTasks() {
   const { t } = useTranslation();
   const { keycloak } = useKeycloak();
+  const { reloadUserWorkTask } = useContext(UserContext);
   const { panToCoordinate } = useBridgeConnector();
   const [selectedProject, setSelectedProject] = useState<string>();
   const [selectedWorkTask, setSelectedWorkTask] = useState<string>();
@@ -110,10 +111,11 @@ function WorkTasks() {
     if (!setCurrentWorkTaskResult?.data) return;
     if (!setCurrentWorkTaskResult.error) {
       toast.success(t("Work task is now added to user"));
+      reloadUserWorkTask();
     } else {
       toast.error(setCurrentWorkTaskResult.error.message);
     }
-  }, [setCurrentWorkTaskResult, t]);
+  }, [setCurrentWorkTaskResult, t, reloadUserWorkTask]);
 
   const workTaskBodyItems = useMemo(
     () =>

@@ -185,7 +185,6 @@ function BridgeConnector() {
 
   useEffect(() => {
     if (!searchResult) return;
-
     panToCoordinate(`[${searchResult.xetrs},${searchResult.yetrs}]`);
   }, [searchResult, panToCoordinate]);
 
