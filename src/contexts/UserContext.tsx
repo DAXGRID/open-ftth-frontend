@@ -24,9 +24,10 @@ const UserProvider = ({ children }: UserContextProps) => {
   useEffect(() => {
     if (!initialized) return;
     keycloak.loadUserProfile().then(() => {
-      if (!keycloak.profile?.username)
-        throw new Error("Could not load user from keycloak.");
-      else setUsername(keycloak.profile.username);
+      /* if (!keycloak.profile?.username)
+       *   throw new Error("Could not load user from keycloak.");
+       * else setUsername(keycloak.profile.username); */
+      setUsername(keycloak.profile?.username ?? "");
     });
   }, [initialized, keycloak]);
 

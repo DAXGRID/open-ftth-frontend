@@ -63,7 +63,7 @@ function useUserWorkContext(userName: string) {
   });
 
   useEffect(() => {
-    if (!response.data) return;
+    if (!response.data?.workService?.userWorkContext?.currentWorkTask) return;
     setUserWorkContext(
       response.data.workService.userWorkContext.currentWorkTask
     );

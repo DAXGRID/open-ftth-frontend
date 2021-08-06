@@ -1,6 +1,6 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import "react-toastify/dist/ReactToastify.css";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Slide, ToastContainer } from "react-toastify";
@@ -10,17 +10,13 @@ import SideMenu, { SideMenuItem } from "./components/SideMenu";
 import TopMenu from "./groups/TopMenu";
 import Routes from "./routes/Routes";
 import { UserContext } from "./contexts/UserContext";
+import { useKeycloak } from "@react-keycloak/web";
 
 function App() {
   const { userName } = useContext(UserContext);
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const { t } = useTranslation();
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    if (!userName) return;
-    setLoaded(true);
-  }, [userName, setLoaded]);
+  const { initialized, keycloak } = useKeycloak();
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);
@@ -28,7 +24,9 @@ function App() {
     window.dispatchEvent(new Event("resize"));
   };
 
-  if (!loaded) return <Loading />;
+  if (!initialized) return <Loading />;
+  // if keycloak is setup and user is authenticated but no username
+  if (initialized && keycloak.authenticated && !userName) return <Loading />;
 
   return (
     <Router>

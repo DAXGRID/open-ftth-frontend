@@ -11,6 +11,7 @@ function IconInformationMenu({ icon, children }: IconInformationMenuProps) {
   return (
     <div className="icon-information-menu">
       <FontAwesomeIcon icon={icon} />
+      <div className="icon-information-menu-container">{children}</div>
     </div>
   );
 }
