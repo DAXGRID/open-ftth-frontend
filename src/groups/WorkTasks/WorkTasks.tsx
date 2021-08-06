@@ -11,7 +11,6 @@ import {
   WorkTask,
   ProjectAndWorkTasks,
 } from "./WorkTasksGql";
-
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import DefaultButton from "../../components/DefaultButton";
