@@ -54,22 +54,26 @@ type UserWorkContextQueryResponse = {
 
 function useUserWorkContext(userName: string) {
   const [userWorkContext, setUserWorkContext] = useState<UserWorkTask>();
-  const [response] = useQuery<UserWorkContextQueryResponse>({
-    query: USER_WORK_CONTEXT_QUERY,
-    variables: {
-      userName: userName,
-    },
-    pause: !userName,
-  });
+  const [userWorkContextQuery, reExecuteUserWorkContextQuery] =
+    useQuery<UserWorkContextQueryResponse>({
+      query: USER_WORK_CONTEXT_QUERY,
+      variables: {
+        userName: userName,
+      },
+      pause: !userName,
+    });
 
   useEffect(() => {
-    if (!response.data?.workService?.userWorkContext?.currentWorkTask) return;
+    if (
+      !userWorkContextQuery.data?.workService?.userWorkContext?.currentWorkTask
+    )
+      return;
     setUserWorkContext(
-      response.data.workService.userWorkContext.currentWorkTask
+      userWorkContextQuery.data.workService.userWorkContext.currentWorkTask
     );
-  }, [response]);
+  }, [userWorkContextQuery]);
 
-  return userWorkContext;
+  return { userWorkContext, reExecuteUserWorkContextQuery };
 }
 
 export default useUserWorkContext;
