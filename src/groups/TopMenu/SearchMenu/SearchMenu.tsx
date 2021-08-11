@@ -94,7 +94,11 @@ function SearchMenu() {
   return (
     <div className={"search-menu"}>
       <input
-        className="search-menu-input"
+        className={
+          searchText && searchFieldDirty
+            ? "search-menu-input"
+            : "search-menu-input search-menu-input__open"
+        }
         type="text"
         placeholder={t("SEARCH_FOR_ADDRESS_OR_NODE")}
         onKeyDown={(e) =>
