@@ -7,6 +7,8 @@ import {
 import { useQuery } from "urql";
 import { useTranslation } from "react-i18next";
 import { MapContext } from "../../../contexts/MapContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 function SearchMenu() {
   const { t } = useTranslation();
@@ -14,6 +16,7 @@ function SearchMenu() {
   const [searchFieldDirty, setSearchFieldDirty] = useState<boolean>(false);
   const { setSearchResult } = useContext(MapContext);
   const searchResultElementList = useRef<HTMLUListElement | null>(null);
+  const searchInputElement = useRef<HTMLInputElement | null>(null);
 
   const [globalSearchResult] = useQuery<GlobalSearch>({
     query: GLOBAL_SEARCH_QUERY,
@@ -44,7 +47,18 @@ function SearchMenu() {
     } else if (e.key === "ArrowDown") {
       (e.currentTarget.nextElementSibling as HTMLElement)?.focus();
     } else if (e.key === "ArrowUp") {
-      (e.currentTarget.previousElementSibling as HTMLElement)?.focus();
+      if (!(e.currentTarget.previousElementSibling as HTMLElement)) {
+        searchInputElement.current?.focus();
+        // Hack because it won't move there without timeout
+        setTimeout(() => {
+          searchInputElement.current?.setSelectionRange(
+            searchInputElement.current.value.length ?? 0,
+            searchInputElement.current.value.length ?? 0
+          );
+        }, 1);
+      } else {
+        (e.currentTarget.previousElementSibling as HTMLElement)?.focus();
+      }
     }
   };
 
@@ -55,11 +69,24 @@ function SearchMenu() {
     if (searchItems.length === 0) return;
     if (e.key === "Enter") {
       selectSearchResult(searchItems[0]);
+    } else if (e.key === "ArrowUp") {
+      // Hack because it won't move there without timeout
+      setTimeout(() => {
+        searchInputElement.current?.setSelectionRange(
+          searchInputElement.current.value.length ?? 0,
+          searchInputElement.current.value.length ?? 0
+        );
+      }, 1);
     } else if (e.key === "ArrowDown") {
       (
         searchResultElementList.current?.firstElementChild as HTMLElement
       )?.focus();
     }
+  };
+
+  const clearSearchText = () => {
+    setSearchText("");
+    searchInputElement.current?.focus();
   };
 
   const searchResult = globalSearchResult?.data?.search.globalSearch;
@@ -75,7 +102,14 @@ function SearchMenu() {
         }
         value={searchText}
         onChange={(x) => searchInput(x.target.value)}
+        ref={searchInputElement}
       />
+
+      <div className="search-menu-clear">
+        <span onClick={() => clearSearchText()}>
+          <FontAwesomeIcon icon={faTimes} />
+        </span>
+      </div>
 
       {searchText && searchFieldDirty && (
         <div className="search-menu-results">
