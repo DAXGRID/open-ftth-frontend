@@ -106,7 +106,7 @@ function SearchMenu() {
       />
 
       <div className="search-menu-clear">
-        <span onClick={() => clearSearchText()}>
+        <span role="button" onClick={() => clearSearchText()}>
           <FontAwesomeIcon icon={faTimes} />
         </span>
       </div>
