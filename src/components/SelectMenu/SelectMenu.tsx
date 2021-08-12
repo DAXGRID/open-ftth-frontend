@@ -4,6 +4,7 @@ import CustomOption from "./CustomOption";
 interface SelectOption {
   text: string;
   value: string | number;
+  key?: string | number;
 }
 
 type SelectMenuProps = {
@@ -39,7 +40,7 @@ function SelectMenu({
         <div className="menu-options">
           {options?.map((option) => (
             <CustomOption
-              key={option.value}
+              key={option.key ?? option.value}
               text={option.text}
               triggerSelected={onSelected}
               isSelected={option.value === selected}
