@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useState, useEffect } from "react";
 
 type FeatureType = "RouteNode" | "RouteSegment" | "Deleted";
 
@@ -56,6 +56,13 @@ const MapProvider = ({ children }: MapProviderProps) => {
     useState<IdentifiedFeature | null>(null);
   const [traceRouteNetworkId, setTraceRouteNetworkId] = useState<string>("");
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
+
+  useEffect(() => {
+    if (!searchResult) return;
+    if (searchResult?.objectType === "routeNode") {
+      setIdentifiedNetworkElement({ id: searchResult.id, type: "RouteNode" });
+    }
+  }, [searchResult]);
 
   return (
     <MapContext.Provider
