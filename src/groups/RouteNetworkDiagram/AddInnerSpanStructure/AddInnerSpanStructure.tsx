@@ -23,6 +23,7 @@ const createSelectOptions = (
       return {
         text: x.description,
         value: x.outerSpanStructureSpecificationId,
+        key: x.id,
       };
     });
 };

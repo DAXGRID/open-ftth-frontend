@@ -35,6 +35,7 @@ export interface SpanEquipmentSpecification {
   description: string;
   outerSpanStructureSpecificationId: string;
   isMultiLevel: boolean;
+  id: string;
 }
 
 export interface SpanEquipmentSpecificationsResponse {
@@ -47,6 +48,7 @@ export const SPAN_EQUIPMENT_SPEFICIATIONS_QUERY = `
 query {
   utilityNetwork {
     spanEquipmentSpecifications {
+      id
       description
       outerSpanStructureSpecificationId
       isMultiLevel
