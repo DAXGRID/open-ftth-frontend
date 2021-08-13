@@ -79,30 +79,42 @@ function clickHighlight(
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
+    const changeSymbolIconImageHighlight = (
+      iconLayer: any,
+      feature: MapboxGeoJSONFeature,
+      remove: boolean
+    ) => {
+      // We have to do this check because mapbox is annoying and changes the type "randomly"
+      let icon =
+        typeof iconLayer !== "string" ? (iconLayer.name as string) : iconLayer;
+
+      // In case that we switch from highlighted icon to another
+      if (icon.endsWith("-highlight")) {
+        icon = icon.replace("-highlight", "");
+      }
+
+      // This is required because we cannot use state for icons in mapbox to switch icon.
+      map.setLayoutProperty(feature.layer?.id, "icon-image", [
+        "match",
+        ["id"],
+        remove ? -1 : feature.id,
+        `${icon}-highlight`,
+        icon,
+      ]);
+    };
+
     // reset last state to avoid multiple selected at the same time
     if (lastHighlightedFeature.current) {
       // We have to change it to any because mapbox changes the type randomly
-      const lastIsIconLayer = (
-        lastHighlightedFeature.current?.layer as SymbolLayer
-      ).layout?.["icon-image"] as any;
+      const iconImage = (lastHighlightedFeature.current?.layer as SymbolLayer)
+        .layout?.["icon-image"] as any;
 
-      if (lastIsIconLayer) {
-        // We have to do this check because mapbox is annoying and changes the type randomly
-        let icon =
-          typeof lastIsIconLayer !== "string"
-            ? (lastIsIconLayer.name as string)
-            : lastIsIconLayer;
-
-        // In case that we switch from highlighted icon to another
-        if (icon.endsWith("-highlight")) {
-          icon = icon.replace("-highlight", "");
-        }
-
-        // This is required because we cannot use state for icons in mapbox to switch icon.
-        map.setLayoutProperty(
-          lastHighlightedFeature?.current?.layer?.id,
-          "icon-image",
-          ["match", ["id"], -1, `${icon}-highlight`, icon]
+      // If it has iconImage change highlight
+      if (iconImage) {
+        changeSymbolIconImageHighlight(
+          iconImage,
+          lastHighlightedFeature.current,
+          true
         );
       }
 
@@ -121,30 +133,12 @@ function clickHighlight(
     }
 
     // We have to change it to any because mapbox changes the type randomly
-    const isIconLayer = (feature.layer as SymbolLayer).layout?.[
+    const iconImage = (feature.layer as SymbolLayer).layout?.[
       "icon-image"
     ] as any;
-    // If its a symbol layer change image -
-    if (isIconLayer) {
-      // We have to do this check because mapbox is annoying and changes the type randomly
-      let icon =
-        typeof isIconLayer !== "string"
-          ? (isIconLayer.name as string)
-          : isIconLayer;
-
-      // In case that we switch from highlighted icon to another
-      if (icon.endsWith("-highlight")) {
-        icon = icon.replace("-highlight", "");
-      }
-
-      // This is required because we cannot use state for icons in mapbox to switch icon.
-      map.setLayoutProperty(feature.layer.id, "icon-image", [
-        "match",
-        ["id"],
-        feature.id,
-        `${icon}-highlight`,
-        icon,
-      ]);
+    // If it has iconImage change highlight
+    if (iconImage) {
+      changeSymbolIconImageHighlight(iconImage, feature, false);
     }
 
     feature.state.selected = !feature.state.selected;
