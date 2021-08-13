@@ -1,5 +1,5 @@
 import { useState, useContext, useCallback } from "react";
-import { MapboxGeoJSONFeature } from "mapbox-gl";
+import { MapboxGeoJSONFeature } from "maplibre-gl";
 import SchematicDiagram from "../SchematicDiagram";
 import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import NodeContainerDetails from "../NodeContainerDetails";

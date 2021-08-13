@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, useRef, useCallback } from "react";
 import { useMutation, useClient } from "urql";
-import { MapboxGeoJSONFeature } from "mapbox-gl";
+import { MapboxGeoJSONFeature } from "maplibre-gl";
 import DiagramMenu from "../../../components/DiagramMenu";
 import ModalContainer from "../../../components/ModalContainer";
 import SchematicDiagram from "../SchematicDiagram";

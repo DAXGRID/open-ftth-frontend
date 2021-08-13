@@ -1,4 +1,4 @@
-import { Map, MapMouseEvent, GeoJSONSource } from "mapbox-gl";
+import { Map, MapMouseEvent, GeoJSONSource } from "maplibre-gl";
 import {
   FeatureCollection,
   Geometry,

@@ -1,4 +1,4 @@
-import { Map } from "mapbox-gl";
+import { Map } from "maplibre-gl";
 import { icon, library } from "@fortawesome/fontawesome-svg-core";
 import {
   faExpandArrowsAlt,
