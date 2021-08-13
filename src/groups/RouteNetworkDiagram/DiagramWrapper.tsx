@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useQuery, useSubscription } from "urql";
 import { MapContext } from "../../contexts/MapContext";
-import RouteNetworkDiagram from "./EditDiagram";
+import EditDiagram from "./EditDiagram";
 import ReadOnlyDiagram from "./ReadOnlyDiagram";
 import Loading from "../../components/Loading";
 import {
@@ -23,12 +23,7 @@ function getDiagramType(
   diagramObjects: Diagram[]
 ): JSX.Element {
   if (editable) {
-    return (
-      <RouteNetworkDiagram
-        diagramObjects={diagramObjects}
-        envelope={envelope}
-      />
-    );
+    return <EditDiagram diagramObjects={diagramObjects} envelope={envelope} />;
   } else {
     return (
       <ReadOnlyDiagram diagramObjects={diagramObjects} envelope={envelope} />
@@ -80,13 +75,9 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
     setEnvelope({ ...envelope });
   }, [diagramSubscriptionResult]);
 
-  if (diagramQueryResult.fetching) {
-    return <Loading />;
-  }
+  if (diagramQueryResult.fetching) return <Loading />;
 
-  if (!identifiedFeature?.id || !diagramQueryResult.data) {
-    return <></>;
-  }
+  if (!identifiedFeature?.id || !diagramQueryResult.data) return <></>;
 
   return <div>{getDiagramType(editable, envelope, diagramObjects)}</div>;
 }
