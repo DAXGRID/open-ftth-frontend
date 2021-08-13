@@ -13,7 +13,7 @@ import {
   AttributionControl,
   NavigationControl,
   GeolocateControl,
-} from "mapbox-gl";
+} from "maplibre-gl";
 import { useContext, useEffect, useRef } from "react";
 import { useClient } from "urql";
 import { MapboxStyle } from "../../assets";

@@ -5,8 +5,7 @@ import {
   LineLayer,
   SymbolLayer,
   GeoJSONSourceRaw,
-} from "mapbox-gl";
-
+} from "maplibre-gl";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
 
 export function createSource(

@@ -4,7 +4,7 @@ import mapboxgl, {
   MapboxGeoJSONFeature,
   PointLike,
   NavigationControl,
-} from "mapbox-gl";
+} from "maplibre-gl";
 import { useLayoutEffect, useRef } from "react";
 import {
   createFeature,
