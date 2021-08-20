@@ -7,12 +7,13 @@
 
   .table-container-header {
     display: flex;
-    justify-content: space-between;
-    padding: 10px;
+    justify-content: flex-start;
+    padding: 15px 10px;
     font-size: 18px;
+    background-color: $hover-color;
 
     p {
-      flex: 1;
+      margin-right: 50px;
     }
   }
 
@@ -21,13 +22,46 @@
 }
 
 .terminal-equipment-table-grid {
-  grid-template-columns: 3fr 2fr 1fr 2fr 2fr;
   display: grid;
+  grid-template-columns: 4fr 2fr 1fr 2fr 3fr;
 }
 
 .terminal-equipment-table {
   border-top: 1px solid $border-color;
-  background-color: $hover-color;
+
+  .terminal-equipment-header {
+    border-bottom: 1px solid $border-color;
+    font-size: 16px;
+  }
+
+  .terminal-equipment-table-body {
+    display: flex;
+    flex-flow: column wrap;
+
+    .terminal-equipment-table-row {
+      flex: 1;
+      border-bottom: 1px solid $border-color;
+
+      &:last-of-type {
+        border-bottom: none;
+      }
+
+      .terminal-equipment-header-row {
+        display: flex;
+        justify-content: flex-start;
+        padding: 10px 10px;
+
+        .terminal-equipment-row-header__item {
+          margin-right: 50px;
+          font-weight: bold;
+        }
+      }
+
+      .terminal-equipment-data-row {
+        font-size: 14px;
+      }
+    }
+  }
 
   .terminal-equipment-table-item {
     padding: 10px;
