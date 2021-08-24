@@ -162,6 +162,7 @@ export function getLayer(name: string): AnyLayer {
           "text-anchor": "right",
           "text-justify": "right",
           "text-offset": [-0.5, 0],
+          "text-max-width": 1000,
         },
       } as SymbolLayer;
     case "EastTerminalLabel":
@@ -181,6 +182,7 @@ export function getLayer(name: string): AnyLayer {
           "text-anchor": "left",
           "text-justify": "left",
           "text-offset": [0.5, 0],
+          "text-max-width": 1000,
         },
       } as SymbolLayer;
     case "SouthTerminalLabel":
@@ -201,6 +203,7 @@ export function getLayer(name: string): AnyLayer {
           "text-justify": "right",
           "text-rotate": -90,
           "text-offset": [-0.5, 0],
+          "text-max-width": 1000,
         },
       } as SymbolLayer;
     case "NorthTerminalLabel":
@@ -221,6 +224,7 @@ export function getLayer(name: string): AnyLayer {
           "text-justify": "left",
           "text-rotate": -90,
           "text-offset": [0.5, 0],
+          "text-max-width": 1000,
         },
       } as SymbolLayer;
     case "SpanEquipmentLabel":
@@ -241,6 +245,7 @@ export function getLayer(name: string): AnyLayer {
           "text-justify": "left",
           "text-rotate": 0,
           "text-offset": [0, 0],
+          "text-max-width": 1000,
         },
       } as SymbolLayer;
     case "NodeContainerLabel":
@@ -261,6 +266,7 @@ export function getLayer(name: string): AnyLayer {
           "text-justify": "left",
           "text-rotate": 0,
           "text-offset": [0, 0],
+          "text-max-width": 1000,
         },
       } as SymbolLayer;
     default:
