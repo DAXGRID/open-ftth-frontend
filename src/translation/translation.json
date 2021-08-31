@@ -129,7 +129,8 @@
       "NOT_VALID_SELECTION": "Not a valid selection, have you remembered to save?",
       "DISTANCE": "Distance",
       "TYPE": "Type",
-      "NO_SELECTED_WORK_TASK": "No selected work task."
+      "NO_SELECTED_WORK_TASK": "No selected work task.",
+      "CustomerConduit": "Customer conduit"
     }
   },
   "dk": {
@@ -262,7 +263,8 @@
       "NOT_VALID_SELECTION": "Ikke en valid selektion, har du gemt?",
       "DISTANCE": "Afstand",
       "TYPE": "Type",
-      "NO_SELECTED_WORK_TASK": "Du har ikke valgt en opgave."
+      "NO_SELECTED_WORK_TASK": "Du har ikke valgt en opgave.",
+      "CustomerConduit": "Kunderør"
     }
   }
 }
