@@ -131,7 +131,9 @@
       "TYPE": "Type",
       "NO_SELECTED_WORK_TASK": "No selected work task.",
       "CustomerConduit": "Customer conduit",
-      "ESTABLISH_CUSTOMER_CONNECTION": "Establish customer connection"
+      "ESTABLISH_CUSTOMER_CONNECTION": "Establish customer connection",
+      "PERFORM": "Perform",
+      "CUSTOMER_CONDUIT_END": "Conduit end"
     }
   },
   "dk": {
@@ -266,7 +268,9 @@
       "TYPE": "Type",
       "NO_SELECTED_WORK_TASK": "Du har ikke valgt en opgave.",
       "CustomerConduit": "Kunderør",
-      "ESTABLISH_CUSTOMER_CONNECTION": "Etabler kundeforbindelse"
+      "ESTABLISH_CUSTOMER_CONNECTION": "Etabler kundeforbindelse",
+      "PERFORM": "Udfør",
+      "CUSTOMER_CONDUIT_END": "Rørsløjfe"
     }
   }
 }
