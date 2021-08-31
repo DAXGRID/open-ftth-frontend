@@ -49,6 +49,7 @@ import {
   TrashCanSvg,
   EraserSvg,
   FlipSvg,
+  EstablishCustomerConnectionSvg,
 } from "../../../assets";
 
 type RouteNetworkDiagramProps = {
@@ -471,6 +472,12 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             icon={FlipSvg}
             action={() => reverseVertialAlignment()}
             title={t("REVERSE_VERTICAL_ALIGNMENT")}
+            disabled={!editMode}
+          />
+          <ActionButton
+            icon={EstablishCustomerConnectionSvg}
+            action={() => {}}
+            title={t("ESTABLISH_CUSTOMER_CONNECTION")}
             disabled={!editMode}
           />
           <ActionButton

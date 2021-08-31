@@ -130,7 +130,8 @@
       "DISTANCE": "Distance",
       "TYPE": "Type",
       "NO_SELECTED_WORK_TASK": "No selected work task.",
-      "CustomerConduit": "Customer conduit"
+      "CustomerConduit": "Customer conduit",
+      "ESTABLISH_CUSTOMER_CONNECTION": "Establish customer connection"
     }
   },
   "dk": {
@@ -264,7 +265,8 @@
       "DISTANCE": "Afstand",
       "TYPE": "Type",
       "NO_SELECTED_WORK_TASK": "Du har ikke valgt en opgave.",
-      "CustomerConduit": "Kunderør"
+      "CustomerConduit": "Kunderør",
+      "ESTABLISH_CUSTOMER_CONNECTION": "Etabler kundeforbindelse"
     }
   }
 }
