@@ -1,5 +1,5 @@
 import { useTranslation, TFunction } from "react-i18next";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useQuery } from "urql";
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
@@ -10,9 +10,9 @@ import {
   NearestAccessAddressesResponse,
 } from "./EstablishCustomerConnectionGql";
 
-const connectionTypeOptions: SelectOption[] = [
-  { text: "CUSTOMER_CONDUIT_END", value: "CONNECTION_END", key: 0 },
-];
+function connectionTypeOptions(t: TFunction<"translation">): SelectOption[] {
+  return [{ text: t("CUSTOMER_CONDUIT_END"), value: "CONNECTION_END", key: 0 }];
+}
 
 const connectionPointOptions: SelectOption[] = [
   { text: "Skab F3420", value: "1", key: 0 },
@@ -76,7 +76,7 @@ function EstablishCustomerConnection({
       .map(accessAddressToOption);
   }, [queryResponse]);
 
-  const unitAddresses = useMemo<SelectOption[]>(() => {
+  const unitAddressOptions = useMemo<SelectOption[]>(() => {
     if (!queryResponse.data?.addressService.nearestAccessAddresses) return [];
 
     const defaultList: SelectOption[] = [
@@ -87,7 +87,7 @@ function EstablishCustomerConnection({
       },
     ];
 
-    const unitAddressOptions =
+    const options =
       queryResponse.data?.addressService.nearestAccessAddresses
         .find((x) => x.accessAddress.id === selectedAccessAddress)
         ?.accessAddress.unitAddresses.map(unitAddressToOption)
@@ -95,7 +95,7 @@ function EstablishCustomerConnection({
           return x.text > y.text ? 1 : -1;
         }) ?? [];
 
-    return defaultList.concat(unitAddressOptions);
+    return defaultList.concat(options);
   }, [queryResponse, selectedAccessAddress, t]);
 
   if (!load || !routeNodeId || queryResponse.fetching) return <></>;
@@ -108,7 +108,7 @@ function EstablishCustomerConnection({
     <div className="establish-customer-connection page-container">
       <div className="full-row">
         <SelectMenu
-          options={connectionTypeOptions}
+          options={connectionTypeOptions(t)}
           onSelected={(x) => setSelectedConnectionType(x?.toString() ?? "")}
           selected={selectedConnectionType}
         />
@@ -129,7 +129,7 @@ function EstablishCustomerConnection({
       </div>
       <div className="full-row">
         <SelectMenu
-          options={unitAddresses ?? []}
+          options={unitAddressOptions ?? []}
           onSelected={(x) => setSelectedUnitAddress(x?.toString() ?? "")}
           selected={selectedUnitAddress}
         />
