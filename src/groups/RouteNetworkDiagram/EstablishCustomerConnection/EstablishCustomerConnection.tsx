@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
-import { useState, useEffect, useMemo } from "react";
+import { useTranslation, TFunction } from "react-i18next";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "urql";
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
@@ -79,17 +79,30 @@ function EstablishCustomerConnection({
   const unitAddresses = useMemo<SelectOption[]>(() => {
     if (!queryResponse.data?.addressService.nearestAccessAddresses) return [];
 
-    return (
+    const defaultList: SelectOption[] = [
+      {
+        text: t("NO_SELECTED_UNIT_ADDRESS"),
+        value: "",
+        key: "NO_SELECTED_UNIT_ADDRESS",
+      },
+    ];
+
+    const unitAddressOptions =
       queryResponse.data?.addressService.nearestAccessAddresses
         .find((x) => x.accessAddress.id === selectedAccessAddress)
         ?.accessAddress.unitAddresses.map(unitAddressToOption)
         ?.sort((x, y) => {
           return x.text > y.text ? 1 : -1;
-        }) ?? []
-    );
-  }, [queryResponse, selectedAccessAddress]);
+        }) ?? [];
+
+    return defaultList.concat(unitAddressOptions);
+  }, [queryResponse, selectedAccessAddress, t]);
 
   if (!load || !routeNodeId || queryResponse.fetching) return <></>;
+
+  if (accessAddresses && accessAddresses.length > 0 && !selectedAccessAddress) {
+    setSelectedAccessAddress(accessAddresses[0].value.toString());
+  }
 
   return (
     <div className="establish-customer-connection page-container">

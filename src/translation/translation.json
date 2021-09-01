@@ -133,7 +133,8 @@
       "CustomerConduit": "Customer conduit",
       "ESTABLISH_CUSTOMER_CONNECTION": "Establish customer connection",
       "PERFORM": "Perform",
-      "CUSTOMER_CONDUIT_END": "Conduit end"
+      "CUSTOMER_CONDUIT_END": "Conduit end",
+      "NO_SELECTED_UNIT_ADDRESS": "No selected unit address"
     }
   },
   "dk": {
@@ -270,7 +271,8 @@
       "CustomerConduit": "Kunderør",
       "ESTABLISH_CUSTOMER_CONNECTION": "Etabler kundeforbindelse",
       "PERFORM": "Udfør",
-      "CUSTOMER_CONDUIT_END": "Rørsløjfe"
+      "CUSTOMER_CONDUIT_END": "Rørsløjfe",
+      "NO_SELECTED_UNIT_ADDRESS": "Ingen selekteret enhedsadresse."
     }
   }
 }
