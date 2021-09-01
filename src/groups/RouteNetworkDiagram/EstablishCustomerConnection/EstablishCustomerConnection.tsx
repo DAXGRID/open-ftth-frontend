@@ -14,10 +14,6 @@ const connectionTypeOptions: SelectOption[] = [
   { text: "CUSTOMER_CONDUIT_END", value: "CONNECTION_END", key: 0 },
 ];
 
-interface AccessAddressSelectOption extends SelectOption {
-  distance: Number;
-}
-
 const connectionPointOptions: SelectOption[] = [
   { text: "Skab F3420", value: "1", key: 0 },
   { text: "Skab F3425", value: "2", key: 1 },
@@ -28,14 +24,13 @@ const connectionPointOptions: SelectOption[] = [
 
 function accessAddressToOption(
   nearestAccessAddress: NearestAccessAddress
-): AccessAddressSelectOption {
+): SelectOption {
   return {
     text: `${nearestAccessAddress.accessAddress.roadName} ${
       nearestAccessAddress.accessAddress.houseNumber
     } - (${nearestAccessAddress.distance.toFixed(2)} meters).`,
     value: nearestAccessAddress.accessAddress.id,
     key: nearestAccessAddress.accessAddress.id,
-    distance: nearestAccessAddress.distance,
   };
 }
 
