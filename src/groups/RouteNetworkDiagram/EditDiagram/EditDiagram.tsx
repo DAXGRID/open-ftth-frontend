@@ -410,7 +410,10 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         show={showEstablishCustomerConnection}
         closeCallback={() => setShowEstablishCustomerConnection(false)}
       >
-        <EstablishCustomerConnection routeNodeId={identifiedFeature.id} />
+        <EstablishCustomerConnection
+          routeNodeId={identifiedFeature.id}
+          load={showEstablishCustomerConnection}
+        />
       </ModalContainer>
 
       <FeatureInformation />

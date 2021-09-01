@@ -13,9 +13,14 @@ export type AccessAddress = {
   unitAddresses: UnitAddress[];
 };
 
-export type NearestAccessAddressResponse = {
-  adressService: {
-    nearestAccessAddresses: AccessAddress[];
+export type NearestAccessAddress = {
+  distance: number;
+  accessAddress: AccessAddress;
+};
+
+export type NearestAccessAddressesResponse = {
+  addressService: {
+    nearestAccessAddresses: NearestAccessAddress[];
   };
 };
 
@@ -27,7 +32,7 @@ query($routeNodeId: ID!) {
       accessAddress {
         id
         roadName
-        houseHumber
+        houseNumber
         townName
         postDistrict
         unitAddresses {
