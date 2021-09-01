@@ -1,5 +1,5 @@
 import { useTranslation, TFunction } from "react-i18next";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "urql";
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
@@ -65,6 +65,11 @@ function EstablishCustomerConnection({
     },
     pause: !routeNodeId || !load,
   });
+
+  useEffect(() => {
+    if (!selectedAccessAddress) return;
+    setSelectedUnitAddress("");
+  }, [selectedAccessAddress, setSelectedUnitAddress]);
 
   const accessAddresses = useMemo<SelectOption[]>(() => {
     if (!queryResponse.data?.addressService.nearestAccessAddresses) return [];
