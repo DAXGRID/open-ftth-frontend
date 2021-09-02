@@ -67,17 +67,26 @@ function EstablishCustomerConnection({
   });
 
   useEffect(() => {
-    if (!selectedAccessAddress) return;
     setSelectedUnitAddress("");
   }, [selectedAccessAddress, setSelectedUnitAddress]);
 
   const accessAddresses = useMemo<SelectOption[]>(() => {
     if (!queryResponse.data?.addressService.nearestAccessAddresses) return [];
 
-    return queryResponse.data?.addressService.nearestAccessAddresses
+    const defaultList: SelectOption[] = [
+      {
+        text: t("NO_SELECTED_ACCESS_ADDRESS"),
+        value: "",
+        key: "NO_SELECTED_ACCESS_ADDRESS",
+      },
+    ];
+
+    const options = queryResponse.data?.addressService.nearestAccessAddresses
       .sort((x, y) => x.distance - y.distance)
       .map(accessAddressToOption);
-  }, [queryResponse]);
+
+    return defaultList.concat(options);
+  }, [queryResponse, t]);
 
   const unitAddressOptions = useMemo<SelectOption[]>(() => {
     if (!queryResponse.data?.addressService.nearestAccessAddresses) return [];
@@ -102,10 +111,6 @@ function EstablishCustomerConnection({
   }, [queryResponse, selectedAccessAddress, t]);
 
   if (!load || !routeNodeId || queryResponse.fetching) return <></>;
-
-  if (accessAddresses && accessAddresses.length > 0 && !selectedAccessAddress) {
-    setSelectedAccessAddress(accessAddresses[0].value.toString());
-  }
 
   return (
     <div className="establish-customer-connection page-container">
