@@ -8,27 +8,36 @@ import {
   UnitAddress,
   NearestAccessAddress,
   NearestAccessAddressesResponse,
+  NEAREST_NEIGHBOR_NODES,
+  NearestNeighborNodesResponse,
+  NeighborNode,
 } from "./EstablishCustomerConnectionGql";
 
 function connectionTypeOptions(t: TFunction<"translation">): SelectOption[] {
   return [{ text: t("CUSTOMER_CONDUIT_END"), value: "CONNECTION_END", key: 0 }];
 }
 
-const connectionPointOptions: SelectOption[] = [
-  { text: "Skab F3420", value: "1", key: 0 },
-  { text: "Skab F3425", value: "2", key: 1 },
-  { text: "Skab F3430", value: "3", key: 2 },
-  { text: "Skab F3435", value: "4", key: 3 },
-  { text: "Skab F3440", value: "5", key: 4 },
-];
+function nearestNeighborNodeToOption(
+  neighborNode: NeighborNode,
+  t: TFunction<"translation">
+): SelectOption {
+  return {
+    text: `${
+      neighborNode.name ?? t("NO_NAME")
+    } - (${neighborNode.distance.toFixed(2)} ${t("METER")})`,
+    value: neighborNode.id,
+    key: neighborNode.id,
+  };
+}
 
 function accessAddressToOption(
-  nearestAccessAddress: NearestAccessAddress
+  nearestAccessAddress: NearestAccessAddress,
+  t: TFunction<"translation">
 ): SelectOption {
   return {
     text: `${nearestAccessAddress.accessAddress.roadName} ${
       nearestAccessAddress.accessAddress.houseNumber
-    } - (${nearestAccessAddress.distance.toFixed(2)} meters).`,
+    } - (${nearestAccessAddress.distance.toFixed(2)} ${t("METER")})`,
     value: nearestAccessAddress.accessAddress.id,
     key: nearestAccessAddress.accessAddress.id,
   };
@@ -54,24 +63,39 @@ function EstablishCustomerConnection({
   const { t } = useTranslation();
   const [selectedConnectionType, setSelectedConnectionType] =
     useState("CONNECTION_END");
-  const [selectedConnectionPoint, setSelectedConnectionPoint] = useState("1");
+  const [selectedConnectionPoint, setSelectedConnectionPoint] = useState("");
   const [selectedAccessAddress, setSelectedAccessAddress] = useState("");
   const [selectedUnitAddress, setSelectedUnitAddress] = useState("");
 
-  const [queryResponse] = useQuery<NearestAccessAddressesResponse>({
-    query: NEAREST_ACCESS_ADDRESSES_QUERY,
-    variables: {
-      routeNodeId: routeNodeId,
-    },
-    pause: !routeNodeId || !load,
-  });
+  const [nearestAccessAddressesResponse] =
+    useQuery<NearestAccessAddressesResponse>({
+      query: NEAREST_ACCESS_ADDRESSES_QUERY,
+      variables: {
+        routeNodeId: routeNodeId,
+      },
+      pause: !routeNodeId || !load,
+    });
+
+  const [nearestNeighborNodesResponse] = useQuery<NearestNeighborNodesResponse>(
+    {
+      query: NEAREST_NEIGHBOR_NODES,
+      variables: {
+        sourceRouteNodeId: routeNodeId,
+      },
+      pause: !routeNodeId || !load,
+    }
+  );
 
   useEffect(() => {
     setSelectedUnitAddress("");
   }, [selectedAccessAddress, setSelectedUnitAddress]);
 
   const accessAddresses = useMemo<SelectOption[]>(() => {
-    if (!queryResponse.data?.addressService.nearestAccessAddresses) return [];
+    if (
+      !nearestAccessAddressesResponse.data?.addressService
+        .nearestAccessAddresses
+    )
+      return [];
 
     const defaultList: SelectOption[] = [
       {
@@ -81,15 +105,20 @@ function EstablishCustomerConnection({
       },
     ];
 
-    const options = queryResponse.data?.addressService.nearestAccessAddresses
-      .sort((x, y) => x.distance - y.distance)
-      .map(accessAddressToOption);
+    const options =
+      nearestAccessAddressesResponse.data?.addressService.nearestAccessAddresses
+        .sort((x, y) => x.distance - y.distance)
+        .map((x) => accessAddressToOption(x, t));
 
     return defaultList.concat(options);
-  }, [queryResponse, t]);
+  }, [nearestAccessAddressesResponse, t]);
 
   const unitAddressOptions = useMemo<SelectOption[]>(() => {
-    if (!queryResponse.data?.addressService.nearestAccessAddresses) return [];
+    if (
+      !nearestAccessAddressesResponse.data?.addressService
+        .nearestAccessAddresses
+    )
+      return [];
 
     const defaultList: SelectOption[] = [
       {
@@ -100,7 +129,7 @@ function EstablishCustomerConnection({
     ];
 
     const options =
-      queryResponse.data?.addressService.nearestAccessAddresses
+      nearestAccessAddressesResponse.data?.addressService.nearestAccessAddresses
         .find((x) => x.accessAddress.id === selectedAccessAddress)
         ?.accessAddress.unitAddresses.sort((x, y) =>
           x.externalId > y.externalId ? 1 : -1
@@ -108,9 +137,28 @@ function EstablishCustomerConnection({
         .map(unitAddressToOption) ?? [];
 
     return defaultList.concat(options);
-  }, [queryResponse, selectedAccessAddress, t]);
+  }, [nearestAccessAddressesResponse, selectedAccessAddress, t]);
 
-  if (!load || !routeNodeId || queryResponse.fetching) return <></>;
+  const connectionPointOptions = useMemo<SelectOption[]>(() => {
+    if (!nearestNeighborNodesResponse.data?.routeNetwork.nearestNeighborNodes)
+      return [];
+
+    return nearestNeighborNodesResponse.data.routeNetwork.nearestNeighborNodes
+      .sort((x) => x.distance)
+      .map((x) => nearestNeighborNodeToOption(x, t));
+  }, [nearestNeighborNodesResponse, t]);
+
+  if (
+    !load ||
+    !routeNodeId ||
+    nearestAccessAddressesResponse.fetching ||
+    nearestNeighborNodesResponse.fetching
+  )
+    return <></>;
+
+  if (!selectedConnectionPoint && connectionPointOptions.length > 0) {
+    setSelectedConnectionPoint(connectionPointOptions[0].value.toString());
+  }
 
   return (
     <div className="establish-customer-connection page-container">
