@@ -10,6 +10,7 @@ import { MapContext } from "../../../contexts/MapContext";
 import NodeContainerDetails from "../NodeContainerDetails";
 import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import FeatureInformation from "../FeatureInformation";
+import EstablishCustomerConnection from "../EstablishCustomerConnection";
 import {
   Diagram,
   Envelope,
@@ -49,6 +50,7 @@ import {
   TrashCanSvg,
   EraserSvg,
   FlipSvg,
+  EstablishCustomerConnectionSvg,
 } from "../../../assets";
 
 type RouteNetworkDiagramProps = {
@@ -65,6 +67,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     useState<MapboxGeoJSONFeature | null>();
   const [showAddContainer, setShowAddContainer] = useState(false);
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
+  const [showEstablishCustomerConnection, setShowEstablishCustomerConnection] =
+    useState(false);
   const { identifiedFeature, setTraceRouteNetworkId } = useContext(MapContext);
 
   const [, cutSpanSegmentsMutation] =
@@ -402,6 +406,16 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         />
       </ModalContainer>
 
+      <ModalContainer
+        show={showEstablishCustomerConnection}
+        closeCallback={() => setShowEstablishCustomerConnection(false)}
+      >
+        <EstablishCustomerConnection
+          routeNodeId={identifiedFeature.id}
+          load={showEstablishCustomerConnection}
+        />
+      </ModalContainer>
+
       <FeatureInformation />
 
       {identifiedFeature.type === "RouteNode" && (
@@ -471,6 +485,12 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             icon={FlipSvg}
             action={() => reverseVertialAlignment()}
             title={t("REVERSE_VERTICAL_ALIGNMENT")}
+            disabled={!editMode}
+          />
+          <ActionButton
+            icon={EstablishCustomerConnectionSvg}
+            action={() => setShowEstablishCustomerConnection(true)}
+            title={t("ESTABLISH_CUSTOMER_CONNECTION")}
             disabled={!editMode}
           />
           <ActionButton

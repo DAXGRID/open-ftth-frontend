@@ -130,7 +130,15 @@
       "DISTANCE": "Distance",
       "TYPE": "Type",
       "NO_SELECTED_WORK_TASK": "No selected work task.",
-      "CustomerConduit": "Customer conduit"
+      "CustomerConduit": "Customer conduit",
+      "ESTABLISH_CUSTOMER_CONNECTION": "Establish customer connection",
+      "PERFORM": "Perform",
+      "CUSTOMER_CONDUIT_END": "Conduit end",
+      "SELECT_ACCESS_ADDRESS": "Select access address.",
+      "SELECT_UNIT_ADDRESS": "Select unit address.",
+      "METER": "meter",
+      "NO_NAME": "No name",
+      "ADDITIONAL_ADDRESS_INFORMATION": "Additional address information"
     }
   },
   "dk": {
@@ -264,7 +272,15 @@
       "DISTANCE": "Afstand",
       "TYPE": "Type",
       "NO_SELECTED_WORK_TASK": "Du har ikke valgt en opgave.",
-      "CustomerConduit": "Kunderør"
+      "CustomerConduit": "Kunderør",
+      "ESTABLISH_CUSTOMER_CONNECTION": "Etabler kundeforbindelse",
+      "PERFORM": "Udfør",
+      "CUSTOMER_CONDUIT_END": "Rørsløjfe",
+      "SELECT_ACCESS_ADDRESS": "Vælg adgangsadresse.",
+      "SELECT_UNIT_ADDRESS": "Vælg enhedsadresse.",
+      "METER": "meter",
+      "NO_NAME": "Unavngivet",
+      "ADDITIONAL_ADDRESS_INFORMATION": "Supplerende adresse information"
     }
   }
 }

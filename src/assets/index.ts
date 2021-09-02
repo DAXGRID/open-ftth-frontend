@@ -12,6 +12,7 @@ import TrashCanSvg from "./trash-can.svg";
 import EraserSvg from "./eraser.svg";
 import EditPropertiesSvg from "./edit-properties.svg";
 import MoveConduitSvg from "./move-conduit.svg";
+import EstablishCustomerConnectionSvg from "./establish-customer-connection.svg";
 import MapboxStyle from "./open-ftth.json";
 
 export {
@@ -29,5 +30,6 @@ export {
   EraserSvg,
   EditPropertiesSvg,
   MoveConduitSvg,
-  MapboxStyle
+  EstablishCustomerConnectionSvg,
+  MapboxStyle,
 };
