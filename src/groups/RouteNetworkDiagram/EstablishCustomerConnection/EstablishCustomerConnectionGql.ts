@@ -2,6 +2,7 @@ export type UnitAddress = {
   id: string;
   floorName: string;
   suitName: string;
+  externalId: string;
 };
 
 export type AccessAddress = {
@@ -39,6 +40,7 @@ query($routeNodeId: ID!) {
           id
           floorName
           suitName
+          externalId
         }
       }
     }

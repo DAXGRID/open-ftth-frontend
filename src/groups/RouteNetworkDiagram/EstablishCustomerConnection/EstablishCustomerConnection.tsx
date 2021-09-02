@@ -75,9 +75,7 @@ function EstablishCustomerConnection({
     if (!queryResponse.data?.addressService.nearestAccessAddresses) return [];
 
     return queryResponse.data?.addressService.nearestAccessAddresses
-      .sort((x, y) => {
-        return x.distance - y.distance;
-      })
+      .sort((x, y) => x.distance - y.distance)
       .map(accessAddressToOption);
   }, [queryResponse]);
 
@@ -95,10 +93,10 @@ function EstablishCustomerConnection({
     const options =
       queryResponse.data?.addressService.nearestAccessAddresses
         .find((x) => x.accessAddress.id === selectedAccessAddress)
-        ?.accessAddress.unitAddresses.map(unitAddressToOption)
-        ?.sort((x, y) => {
-          return x.text > y.text ? 1 : -1;
-        }) ?? [];
+        ?.accessAddress.unitAddresses.sort((x, y) =>
+          x.externalId > y.externalId ? 1 : -1
+        )
+        .map(unitAddressToOption) ?? [];
 
     return defaultList.concat(options);
   }, [queryResponse, selectedAccessAddress, t]);
