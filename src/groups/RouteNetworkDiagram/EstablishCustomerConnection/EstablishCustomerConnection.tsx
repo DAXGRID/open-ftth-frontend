@@ -8,13 +8,26 @@ import {
   UnitAddress,
   NearestAccessAddress,
   NearestAccessAddressesResponse,
-  NEAREST_NEIGHBOR_NODES,
+  NEAREST_NEIGHBOR_NODES_QUERY,
   NearestNeighborNodesResponse,
   NeighborNode,
+  SPAN_EQUIPMENT_SPEFICIATIONS_QUERY,
+  SpanEquipmentSpecificationsResponse,
+  SpanEquipmentSpecification,
 } from "./EstablishCustomerConnectionGql";
 
 function connectionTypeOptions(t: TFunction<"translation">): SelectOption[] {
   return [{ text: t("CUSTOMER_CONDUIT_END"), value: "CONNECTION_END", key: 0 }];
+}
+
+function spanEquipmentSpecificationToOption(
+  spanEquipmentSpecification: SpanEquipmentSpecification
+): SelectOption {
+  return {
+    text: spanEquipmentSpecification.name,
+    value: spanEquipmentSpecification.id,
+    key: spanEquipmentSpecification.id,
+  };
 }
 
 function nearestNeighborNodeToOption(
@@ -66,6 +79,7 @@ function EstablishCustomerConnection({
   const [selectedConnectionPoint, setSelectedConnectionPoint] = useState("");
   const [selectedAccessAddress, setSelectedAccessAddress] = useState("");
   const [selectedUnitAddress, setSelectedUnitAddress] = useState("");
+  const [selectedSpecification, setSelectedSpecification] = useState("");
 
   const [nearestAccessAddressesResponse] =
     useQuery<NearestAccessAddressesResponse>({
@@ -78,13 +92,19 @@ function EstablishCustomerConnection({
 
   const [nearestNeighborNodesResponse] = useQuery<NearestNeighborNodesResponse>(
     {
-      query: NEAREST_NEIGHBOR_NODES,
+      query: NEAREST_NEIGHBOR_NODES_QUERY,
       variables: {
         sourceRouteNodeId: routeNodeId,
       },
       pause: !routeNodeId || !load,
     }
   );
+
+  const [spanEquipmentSpecificationsResponse] =
+    useQuery<SpanEquipmentSpecificationsResponse>({
+      query: SPAN_EQUIPMENT_SPEFICIATIONS_QUERY,
+      pause: !load,
+    });
 
   useEffect(() => {
     setSelectedUnitAddress("");
@@ -148,16 +168,33 @@ function EstablishCustomerConnection({
       .map((x) => nearestNeighborNodeToOption(x, t));
   }, [nearestNeighborNodesResponse, t]);
 
+  const specificationOptions = useMemo<SelectOption[]>(() => {
+    if (
+      !spanEquipmentSpecificationsResponse.data?.utilityNetwork
+        .spanEquipmentSpecifications
+    )
+      return [];
+
+    return spanEquipmentSpecificationsResponse.data.utilityNetwork.spanEquipmentSpecifications
+      .filter((x) => x.category === "CustomerConduit")
+      .map(spanEquipmentSpecificationToOption);
+  }, [spanEquipmentSpecificationsResponse]);
+
   if (
     !load ||
     !routeNodeId ||
     nearestAccessAddressesResponse.fetching ||
-    nearestNeighborNodesResponse.fetching
+    nearestNeighborNodesResponse.fetching ||
+    spanEquipmentSpecificationsResponse.fetching
   )
     return <></>;
 
   if (!selectedConnectionPoint && connectionPointOptions.length > 0) {
     setSelectedConnectionPoint(connectionPointOptions[0].value.toString());
+  }
+
+  if (!selectedSpecification && specificationOptions.length > 0) {
+    setSelectedSpecification(specificationOptions[0].value.toString());
   }
 
   return (
@@ -174,6 +211,13 @@ function EstablishCustomerConnection({
           options={connectionPointOptions}
           onSelected={(x) => setSelectedConnectionPoint(x?.toString() ?? "")}
           selected={selectedConnectionPoint}
+        />
+      </div>
+      <div className="full-row">
+        <SelectMenu
+          options={specificationOptions}
+          onSelected={(x) => setSelectedSpecification(x?.toString() ?? "")}
+          selected={selectedSpecification}
         />
       </div>
       <div className="full-row">

@@ -5,7 +5,7 @@ export type UnitAddress = {
   externalId: string;
 };
 
-export type AccessAddress = {
+type AccessAddress = {
   id: string;
   roadName: string;
   houseNumber: string;
@@ -61,7 +61,7 @@ export type NearestNeighborNodesResponse = {
   };
 };
 
-export const NEAREST_NEIGHBOR_NODES = `
+export const NEAREST_NEIGHBOR_NODES_QUERY = `
 query($sourceRouteNodeId: ID!) {
   routeNetwork {
     nearestNeighborNodes(
@@ -76,6 +76,33 @@ query($sourceRouteNodeId: ID!) {
       distance
       routeNetworkSegmentIds
       routeNetworkSegmentGeometries
+    }
+  }
+}`;
+
+export type SpanEquipmentSpecification = {
+  id: string;
+  category: string;
+  name: string;
+  description: string;
+  deprecated: boolean;
+};
+
+export type SpanEquipmentSpecificationsResponse = {
+  utilityNetwork: {
+    spanEquipmentSpecifications: SpanEquipmentSpecification[];
+  };
+};
+
+export const SPAN_EQUIPMENT_SPEFICIATIONS_QUERY = `
+query {
+  utilityNetwork {
+    spanEquipmentSpecifications {
+      id
+      category
+      name
+      description
+      deprecated
     }
   }
 }`;
