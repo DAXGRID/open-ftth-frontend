@@ -106,3 +106,49 @@ query {
     }
   }
 }`;
+
+export type PlaceSpanEquipmentInRouteNetworkParameters = {
+  spanEquipmentId: string;
+  spanEquipmentSpecificationId: string;
+  routeSegmentIds: string[];
+  accessAddressId?: string | null;
+  unitAddressId?: string | null;
+  remark?: string | null;
+};
+
+export type PlaceSpanEquipmentResponse = {
+  spanEquipment: {
+    placeSpanEquipmentInRouteNetwork: {
+      errorCode?: string;
+      isSuccess: boolean;
+      errorMesssage?: string;
+    };
+  };
+};
+
+export const PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK_MUTATION = `
+mutation (
+  $spanEquipmentId: ID!,
+  $spanEquipmentSpecificationId: ID!,
+  $routeSegmentIds: [ID!]!,
+  $accessAddressId: ID,
+  $unitAddressId: ID,
+  $remark: String)
+{
+  spanEquipment {
+    placeSpanEquipmentInRouteNetwork(
+      spanEquipmentId: $spanEquipmentId
+      spanEquipmentSpecificationId: $spanEquipmentSpecificationId
+      routeSegmentIds: $routeSegmentIds
+      addressInfo: {
+        accessAddressId: $accessAddressId
+        unitAddressId: $unitAddressId
+        remark: $remark
+      }
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}`;

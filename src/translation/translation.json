@@ -137,7 +137,8 @@
       "SELECT_ACCESS_ADDRESS": "Select access address.",
       "SELECT_UNIT_ADDRESS": "Select unit address.",
       "METER": "meter",
-      "NO_NAME": "No name"
+      "NO_NAME": "No name",
+      "ADDITIONAL_ADDRESS_INFORMATION": "Additional address information"
     }
   },
   "dk": {
@@ -278,7 +279,8 @@
       "SELECT_ACCESS_ADDRESS": "Vælg adgangsadresse.",
       "SELECT_UNIT_ADDRESS": "Vælg enhedsadresse.",
       "METER": "meter",
-      "NO_NAME": "Unavngivet"
+      "NO_NAME": "Unavngivet",
+      "ADDITIONAL_ADDRESS_INFORMATION": "Supplerende adresse information"
     }
   }
 }

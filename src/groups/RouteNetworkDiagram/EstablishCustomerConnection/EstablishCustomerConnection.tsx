@@ -1,8 +1,10 @@
 import { useTranslation, TFunction } from "react-i18next";
 import { useState, useMemo, useEffect } from "react";
-import { useQuery } from "urql";
+import { useQuery, useClient } from "urql";
 import DefaultButton from "../../../components/DefaultButton";
+import TextBox from "../../../components/TextBox";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
+import { toast } from "react-toastify";
 import {
   NEAREST_ACCESS_ADDRESSES_QUERY,
   UnitAddress,
@@ -14,6 +16,9 @@ import {
   SPAN_EQUIPMENT_SPEFICIATIONS_QUERY,
   SpanEquipmentSpecificationsResponse,
   SpanEquipmentSpecification,
+  PlaceSpanEquipmentInRouteNetworkParameters,
+  PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK_MUTATION,
+  PlaceSpanEquipmentResponse,
 } from "./EstablishCustomerConnectionGql";
 
 function connectionTypeOptions(t: TFunction<"translation">): SelectOption[] {
@@ -74,12 +79,15 @@ function EstablishCustomerConnection({
   load,
 }: EstablishCustomerConnectionParams) {
   const { t } = useTranslation();
+  const graphqlClient = useClient();
   const [selectedConnectionType, setSelectedConnectionType] =
     useState("CONNECTION_END");
   const [selectedConnectionPoint, setSelectedConnectionPoint] = useState("");
   const [selectedAccessAddress, setSelectedAccessAddress] = useState("");
   const [selectedUnitAddress, setSelectedUnitAddress] = useState("");
   const [selectedSpecification, setSelectedSpecification] = useState("");
+  const [additionalAddressInformation, setAdditionAddressInformation] =
+    useState("");
 
   const [nearestAccessAddressesResponse] =
     useQuery<NearestAccessAddressesResponse>({
@@ -180,6 +188,50 @@ function EstablishCustomerConnection({
       .map(spanEquipmentSpecificationToOption);
   }, [spanEquipmentSpecificationsResponse]);
 
+  const handleSelectedConnecionPointChange = (id: string) => {
+    setSelectedConnectionPoint(id);
+  };
+
+  const perform = async () => {
+    const segmentIds =
+      nearestNeighborNodesResponse.data?.routeNetwork.nearestNeighborNodes.find(
+        (x) => x.id === selectedConnectionPoint
+      )?.routeNetworkSegmentIds;
+
+    if (!segmentIds) throw new Error("Error no segment ids could be found.");
+
+    const params: PlaceSpanEquipmentInRouteNetworkParameters = {
+      accessAddressId: selectedAccessAddress ? selectedAccessAddress : null,
+      unitAddressId: selectedUnitAddress ? selectedUnitAddress : null,
+      spanEquipmentId: selectedConnectionPoint,
+      spanEquipmentSpecificationId: selectedSpecification,
+      routeSegmentIds: segmentIds,
+      remark: additionalAddressInformation
+        ? additionalAddressInformation
+        : null,
+    };
+
+    debugger;
+
+    const response = await graphqlClient
+      .mutation<PlaceSpanEquipmentResponse>(
+        PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK_MUTATION,
+        params
+      )
+      .toPromise();
+
+    if (
+      response.data?.spanEquipment.placeSpanEquipmentInRouteNetwork.isSuccess
+    ) {
+      toast.success(t("Span equipment placed"));
+    } else {
+      toast.error(
+        response.data?.spanEquipment.placeSpanEquipmentInRouteNetwork
+          .errorMesssage
+      );
+    }
+  };
+
   if (
     !load ||
     !routeNodeId ||
@@ -209,7 +261,9 @@ function EstablishCustomerConnection({
       <div className="full-row">
         <SelectMenu
           options={connectionPointOptions}
-          onSelected={(x) => setSelectedConnectionPoint(x?.toString() ?? "")}
+          onSelected={(x) =>
+            handleSelectedConnecionPointChange(x?.toString() ?? "")
+          }
           selected={selectedConnectionPoint}
         />
       </div>
@@ -235,7 +289,14 @@ function EstablishCustomerConnection({
         />
       </div>
       <div className="full-row">
-        <DefaultButton innerText={t("PERFORM")} onClick={() => {}} />
+        <TextBox
+          placeHolder={t("ADDITIONAL_ADDRESS_INFORMATION")}
+          setValue={setAdditionAddressInformation}
+          value={additionalAddressInformation}
+        />
+      </div>
+      <div className="full-row">
+        <DefaultButton innerText={t("PERFORM")} onClick={() => perform()} />
       </div>
     </div>
   );
