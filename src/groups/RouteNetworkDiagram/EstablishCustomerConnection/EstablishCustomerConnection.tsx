@@ -1,4 +1,5 @@
 import { useTranslation, TFunction } from "react-i18next";
+import { v4 as uuidv4 } from "uuid";
 import { useState, useMemo, useEffect } from "react";
 import { useQuery, useClient } from "urql";
 import DefaultButton from "../../../components/DefaultButton";
@@ -203,15 +204,13 @@ function EstablishCustomerConnection({
     const params: PlaceSpanEquipmentInRouteNetworkParameters = {
       accessAddressId: selectedAccessAddress ? selectedAccessAddress : null,
       unitAddressId: selectedUnitAddress ? selectedUnitAddress : null,
-      spanEquipmentId: selectedConnectionPoint,
+      spanEquipmentId: uuidv4(),
       spanEquipmentSpecificationId: selectedSpecification,
       routeSegmentIds: segmentIds,
       remark: additionalAddressInformation
         ? additionalAddressInformation
         : null,
     };
-
-    debugger;
 
     const response = await graphqlClient
       .mutation<PlaceSpanEquipmentResponse>(
