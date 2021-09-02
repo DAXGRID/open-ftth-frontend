@@ -134,8 +134,8 @@
       "ESTABLISH_CUSTOMER_CONNECTION": "Establish customer connection",
       "PERFORM": "Perform",
       "CUSTOMER_CONDUIT_END": "Conduit end",
-      "NO_SELECTED_ACCESS_ADDRESS": "No selected access address.",
-      "NO_SELECTED_UNIT_ADDRESS": "No selected unit address."
+      "SELECT_ACCESS_ADDRESS": "Select access address.",
+      "SELECT_UNIT_ADDRESS": "Select unit address."
     }
   },
   "dk": {
@@ -273,8 +273,8 @@
       "ESTABLISH_CUSTOMER_CONNECTION": "Etabler kundeforbindelse",
       "PERFORM": "Udfør",
       "CUSTOMER_CONDUIT_END": "Rørsløjfe",
-      "NO_SELECTED_ACCESS_ADDRESS": "Ingen selekteret adgangsadresse.",
-      "NO_SELECTED_UNIT_ADDRESS": "Ingen selekteret enhedsadresse."
+      "SELECT_ACCESS_ADDRESS": "Vælg adgangsadresse.",
+      "SELECT_UNIT_ADDRESS": "Vælg enhedsadresse."
     }
   }
 }

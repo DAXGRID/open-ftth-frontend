@@ -75,9 +75,9 @@ function EstablishCustomerConnection({
 
     const defaultList: SelectOption[] = [
       {
-        text: t("NO_SELECTED_ACCESS_ADDRESS"),
+        text: t("SELECT_ACCESS_ADDRESS"),
         value: "",
-        key: "NO_SELECTED_ACCESS_ADDRESS",
+        key: "SELECT_ACCESS_ADDRESS",
       },
     ];
 
@@ -93,9 +93,9 @@ function EstablishCustomerConnection({
 
     const defaultList: SelectOption[] = [
       {
-        text: t("NO_SELECTED_UNIT_ADDRESS"),
+        text: t("SELECT_UNIT_ADDRESS"),
         value: "",
-        key: "NO_SELECTED_UNIT_ADDRESS",
+        key: "SELECT_UNIT_ADDRESS",
       },
     ];
 
