@@ -11,6 +11,7 @@ query ($spanSegmentId: ID!) {
   utilityNetwork {
     spanSegmentTrace(spanSegmentId: $spanSegmentId) {
       routeNetworkSegmentIds
+      routeNetworkSegmentGeometries
     }
   }
 }

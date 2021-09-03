@@ -15,17 +15,12 @@ import {
   GeolocateControl,
 } from "maplibre-gl";
 import { useContext, useEffect, useRef } from "react";
-import { useClient } from "urql";
 import { MapboxStyle } from "../../assets";
 import Config from "../../config";
 import { MapContext } from "../../contexts/MapContext";
 import ToggleLayerButton from "./MapControls/ToggleLayerButton";
 import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
-import {
-  SpanSegmentTraceResponse,
-  SPAN_SEGMENT_TRACE,
-} from "./RouteNetworkMapGql";
 
 function enableResize(map: Map) {
   window.addEventListener("resize", () => {
@@ -176,40 +171,15 @@ type RouteNetworkMapProps = {
 
 function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
   const { t } = useTranslation();
-  const client = useClient();
   const mapContainer = useRef<HTMLDivElement>(null);
   const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
-  const { setIdentifiedFeature, traceRouteNetworkId, searchResult } =
-    useContext(MapContext);
+  const { setIdentifiedFeature, trace, searchResult } = useContext(MapContext);
 
   useEffect(() => {
-    if (!traceRouteNetworkId) {
-      if (!map.current) {
-        return;
-      }
-
-      highlightGeometries(map.current, []);
-      return;
-    }
-
-    client
-      .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
-        spanSegmentId: traceRouteNetworkId,
-      })
-      .toPromise()
-      .then((x) => {
-        if (!map.current) {
-          return;
-        }
-
-        highlightGeometries(
-          map.current,
-          x.data?.utilityNetwork.spanSegmentTrace
-            .routeNetworkSegmentGeometries ?? []
-        );
-      });
-  }, [traceRouteNetworkId, client, map]);
+    if (!map.current) return;
+    highlightGeometries(map.current, trace.geometries);
+  }, [trace, map]);
 
   useEffect(() => {
     const newMap = new Map({

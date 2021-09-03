@@ -21,10 +21,15 @@ type MapContextType = {
   setSelectedSegmentIds: (selectedSegments: string[]) => void;
   identifiedFeature: IdentifiedFeature | null;
   setIdentifiedFeature: (identifiedNetworkElement: IdentifiedFeature) => void;
-  traceRouteNetworkId: string;
-  setTraceRouteNetworkId: (routeNetworkId: string) => void;
+  trace: Trace;
+  setTrace: (trace: Trace) => void;
   searchResult: SearchResult | null;
   setSearchResult: (searchResult: SearchResult) => void;
+};
+
+type Trace = {
+  ids: string[];
+  geometries: string[];
 };
 
 const MapContext = createContext<MapContextType>({
@@ -36,8 +41,8 @@ const MapContext = createContext<MapContextType>({
   setIdentifiedFeature: () => {
     console.warn("no provider set for setIdentifiedFeature");
   },
-  traceRouteNetworkId: "",
-  setTraceRouteNetworkId: () => {
+  trace: { geometries: [], ids: [] },
+  setTrace: () => {
     console.warn("no provider set for setTraceRouteNetwork");
   },
   searchResult: null,
@@ -54,7 +59,7 @@ const MapProvider = ({ children }: MapProviderProps) => {
   const [selectedSegments, setSelectedSegments] = useState<string[]>([]);
   const [identifiedNetworkElement, setIdentifiedNetworkElement] =
     useState<IdentifiedFeature | null>(null);
-  const [traceRouteNetworkId, setTraceRouteNetworkId] = useState<string>("");
+  const [trace, setTrace] = useState<Trace>({ geometries: [], ids: [] });
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
 
   useEffect(() => {
@@ -71,8 +76,8 @@ const MapProvider = ({ children }: MapProviderProps) => {
         setSelectedSegmentIds: setSelectedSegments,
         identifiedFeature: identifiedNetworkElement,
         setIdentifiedFeature: setIdentifiedNetworkElement,
-        traceRouteNetworkId: traceRouteNetworkId,
-        setTraceRouteNetworkId: setTraceRouteNetworkId,
+        trace: trace,
+        setTrace: setTrace,
         searchResult: searchResult,
         setSearchResult: setSearchResult,
       }}

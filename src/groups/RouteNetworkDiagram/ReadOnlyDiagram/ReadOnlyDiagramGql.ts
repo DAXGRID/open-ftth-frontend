@@ -2,6 +2,7 @@ export interface SpanSegmentTraceResponse {
   utilityNetwork: {
     spanSegmentTrace: {
       routeNetworkSegmentGeometries?: string[];
+      routeNetworkSegmentIds?: string[];
     };
   };
 }
@@ -11,6 +12,7 @@ query ($spanSegmentId: ID!) {
   utilityNetwork {
     spanSegmentTrace(spanSegmentId: $spanSegmentId) {
       routeNetworkSegmentGeometries
+      routeNetworkSegmentIds
     }
   }
 }
