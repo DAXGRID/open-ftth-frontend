@@ -67,7 +67,7 @@ query($sourceRouteNodeId: ID!) {
     nearestNeighborNodes(
       sourceRouteNodeId: $sourceRouteNodeId
       maxBirdFlyDistanceMeters: 1000
-      maxHits: 5
+      maxHits: 10
       stops: [CENTRAL_OFFICE_SMALL]
   interests: [CABINET_SMALL, CONDUIT_CLOSURE_BRANCH_OFF]
     ) {
