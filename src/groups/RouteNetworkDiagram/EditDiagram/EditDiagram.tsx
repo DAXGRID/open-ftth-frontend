@@ -33,6 +33,8 @@ import {
   RemoveSpanStructureResponse,
   REVERSE_VERTICAL_ALIGNMENT,
   ReverseVerticalAlignmentResponse,
+  SPAN_SEGMENT_TRACE,
+  SpanSegmentTraceResponse,
 } from "./EditDiagramGql";
 import AddContainer from "../AddContainer";
 import AddInnerSpanStructure from "../AddInnerSpanStructure";
@@ -69,7 +71,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
   const [showEstablishCustomerConnection, setShowEstablishCustomerConnection] =
     useState(false);
-  const { identifiedFeature, setTraceRouteNetworkId } = useContext(MapContext);
+  const { identifiedFeature, setTrace } = useContext(MapContext);
 
   const [, cutSpanSegmentsMutation] =
     useMutation<CutSpanSegmentsResponse>(CUT_SPAN_SEGMENTS);
@@ -325,11 +327,24 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       if (!editMode) {
         if (isSelected) {
           if (feature.properties?.type !== "NodeContainer") {
-            setTraceRouteNetworkId(feature.properties?.refId ?? []);
+            const segmentTrace = await client
+              .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
+                spanSegmentId: feature.properties?.refId,
+              })
+              .toPromise();
+
+            setTrace({
+              geometries:
+                segmentTrace.data?.utilityNetwork.spanSegmentTrace
+                  .routeNetworkSegmentGeometries ?? [],
+              ids:
+                segmentTrace.data?.utilityNetwork.spanSegmentTrace
+                  .routeNetworkSegmentIds ?? [],
+            });
           }
           setSingleSelectedFeature(feature);
         } else {
-          setTraceRouteNetworkId("");
+          setTrace({ geometries: [], ids: [] });
           setSingleSelectedFeature(null);
         }
       } else {
@@ -346,7 +361,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         }
       }
     },
-    [editMode, setSingleSelectedFeature, setTraceRouteNetworkId]
+    [editMode, setSingleSelectedFeature, setTrace, client]
   );
 
   const reverseVertialAlignment = async () => {
@@ -378,7 +393,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const clearHighlights = () => {
-    setTraceRouteNetworkId("");
+    setTrace({ geometries: [], ids: [] });
   };
 
   if (!identifiedFeature?.id) {

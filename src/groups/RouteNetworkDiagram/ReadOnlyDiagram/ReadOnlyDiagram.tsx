@@ -1,4 +1,5 @@
 import { useState, useContext, useCallback } from "react";
+import { useClient } from "urql";
 import { MapboxGeoJSONFeature } from "maplibre-gl";
 import SchematicDiagram from "../SchematicDiagram";
 import SpanEquipmentDetails from "../SpanEquipmentDetails";
@@ -9,6 +10,10 @@ import { MapContext } from "../../../contexts/MapContext";
 import { EraserSvg } from "../../../assets";
 import { useTranslation } from "react-i18next";
 import FeatureInformation from "../FeatureInformation";
+import {
+  SPAN_SEGMENT_TRACE,
+  SpanSegmentTraceResponse,
+} from "./ReadOnlyDiagramGql";
 
 interface Envelope {
   minX: number;
@@ -39,34 +44,48 @@ function ReadOnlyDiagram({
   diagramObjects,
   envelope,
 }: RouteSegmentDiagramProps) {
-  const { setTraceRouteNetworkId } = useContext(MapContext);
+  const { setTrace } = useContext(MapContext);
   const [selectedFeature, setSelectedFeature] =
     useState<MapboxGeoJSONFeature | null>(null);
   const { t } = useTranslation();
+  const client = useClient();
 
   const onSelectedFeature = useCallback(
-    (feature: MapboxGeoJSONFeature) => {
+    async (feature: MapboxGeoJSONFeature) => {
       const isSelected = feature.state?.selected as boolean;
       const featureType = feature.source;
 
       if (isSelected) {
         // If it can be traced otherwise we remove the current trace
         if (featureType === "InnerConduit" || featureType === "OuterConduit") {
-          setTraceRouteNetworkId(feature.properties?.refId ?? "");
+          const spanSegmentTrace = await client
+            .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
+              spanSegmentId: feature.properties?.refId,
+            })
+            .toPromise();
+
+          setTrace({
+            geometries:
+              spanSegmentTrace.data?.utilityNetwork.spanSegmentTrace
+                .routeNetworkSegmentGeometries ?? [],
+            ids:
+              spanSegmentTrace.data?.utilityNetwork.spanSegmentTrace
+                .routeNetworkSegmentIds ?? [],
+          });
         } else {
-          setTraceRouteNetworkId("");
+          setTrace({ geometries: [], ids: [] });
         }
         setSelectedFeature(feature);
       } else {
-        setTraceRouteNetworkId("");
+        setTrace({ geometries: [], ids: [] });
         setSelectedFeature(null);
       }
     },
-    [setTraceRouteNetworkId, setSelectedFeature]
+    [setTrace, setSelectedFeature, client]
   );
 
   const clearHighlights = () => {
-    setTraceRouteNetworkId("");
+    setTrace({ geometries: [], ids: [] });
   };
 
   return (

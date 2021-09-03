@@ -1,5 +1,4 @@
 import { useEffect, useContext, useState } from "react";
-import { useClient } from "urql";
 import { w3cwebsocket } from "websocket";
 import PubSub from "pubsub-js";
 import Config from "../config";
@@ -8,10 +7,6 @@ import useBridgeConnector, {
 } from "../bridge/useBridgeConnector";
 import { MapContext } from "../contexts/MapContext";
 import { useKeycloak } from "@react-keycloak/web";
-import {
-  SPAN_SEGMENT_TRACE,
-  SpanSegmentTraceResponse,
-} from "./BridgeConnectorGql";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
@@ -30,12 +25,8 @@ function send(eventMsg: any) {
 
 function BridgeConnector() {
   const { t } = useTranslation();
-  const {
-    setSelectedSegmentIds,
-    setIdentifiedFeature,
-    traceRouteNetworkId,
-    searchResult,
-  } = useContext(MapContext);
+  const { setSelectedSegmentIds, setIdentifiedFeature, trace, searchResult } =
+    useContext(MapContext);
   const [connected, setConnected] = useState(false);
   const {
     retrieveSelectedEquipments,
@@ -44,7 +35,6 @@ function BridgeConnector() {
     panToCoordinate,
   } = useBridgeConnector();
   const { keycloak } = useKeycloak();
-  const graphqlClient = useClient();
 
   useEffect(() => {
     function setup() {
@@ -166,22 +156,8 @@ function BridgeConnector() {
     if (!connected || !websocketClient || websocketClient.readyState !== 1)
       return;
 
-    if (!traceRouteNetworkId) {
-      highlightFeatures([]);
-      return;
-    }
-
-    graphqlClient
-      .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
-        spanSegmentId: traceRouteNetworkId,
-      })
-      .toPromise()
-      .then((x) => {
-        highlightFeatures(
-          x.data?.utilityNetwork.spanSegmentTrace.routeNetworkSegmentIds ?? []
-        );
-      });
-  }, [traceRouteNetworkId, highlightFeatures, graphqlClient, connected]);
+    highlightFeatures(trace.ids);
+  }, [trace, highlightFeatures, connected]);
 
   useEffect(() => {
     if (!searchResult) return;
