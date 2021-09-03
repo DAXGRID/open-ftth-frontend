@@ -1,7 +1,8 @@
 import { useTranslation, TFunction } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useContext } from "react";
 import { useQuery, useClient } from "urql";
+import { MapContext } from "../../../contexts/MapContext";
 import DefaultButton from "../../../components/DefaultButton";
 import TextBox from "../../../components/TextBox";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
@@ -80,7 +81,8 @@ function EstablishCustomerConnection({
   load,
 }: EstablishCustomerConnectionParams) {
   const { t } = useTranslation();
-  const graphqlClient = useClient();
+  const client = useClient();
+  const { setTrace } = useContext(MapContext);
   const [selectedConnectionType, setSelectedConnectionType] =
     useState("CONNECTION_END");
   const [selectedConnectionPoint, setSelectedConnectionPoint] = useState("");
@@ -118,6 +120,27 @@ function EstablishCustomerConnection({
   useEffect(() => {
     setSelectedUnitAddress("");
   }, [selectedAccessAddress, setSelectedUnitAddress]);
+
+  useEffect(() => {
+    if (
+      !selectedConnectionPoint ||
+      !nearestNeighborNodesResponse.data?.routeNetwork.nearestNeighborNodes
+    )
+      return;
+
+    const connectionPoint =
+      nearestNeighborNodesResponse.data?.routeNetwork.nearestNeighborNodes.find(
+        (x) => x.id === selectedConnectionPoint
+      );
+    if (connectionPoint) {
+      setTrace({
+        geometries: connectionPoint.routeNetworkSegmentGeometries ?? [],
+        ids: connectionPoint.routeNetworkSegmentIds ?? [],
+      });
+    } else {
+      setTrace({ geometries: [], ids: [] });
+    }
+  }, [selectedConnectionPoint, setTrace, nearestNeighborNodesResponse]);
 
   const accessAddresses = useMemo<SelectOption[]>(() => {
     if (
@@ -212,7 +235,7 @@ function EstablishCustomerConnection({
         : null,
     };
 
-    const response = await graphqlClient
+    const response = await client
       .mutation<PlaceSpanEquipmentResponse>(
         PLACE_SPAN_EQUIPMENT_IN_ROUTE_NETWORK_MUTATION,
         params
