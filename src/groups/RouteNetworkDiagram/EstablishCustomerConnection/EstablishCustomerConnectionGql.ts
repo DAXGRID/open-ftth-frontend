@@ -66,10 +66,10 @@ query($sourceRouteNodeId: ID!) {
   routeNetwork {
     nearestNeighborNodes(
       sourceRouteNodeId: $sourceRouteNodeId
-      maxBirdFlyDistanceMeters: 1000
+      maxBirdFlyDistanceMeters: 2000
       maxHits: 10
       stops: [CENTRAL_OFFICE_SMALL]
-      interests: [CABINET_SMALL]
+  interests: [CABINET_SMALL, CONDUIT_CLOSURE_BRANCH_OFF]
     ) {
       id
       name
