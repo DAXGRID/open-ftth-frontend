@@ -173,7 +173,7 @@ function EstablishCustomerConnection({
       return [];
 
     return nearestNeighborNodesResponse.data.routeNetwork.nearestNeighborNodes
-      .sort((x) => x.distance)
+      .sort((x, y) => (x.distance > y.distance ? 1 : -1))
       .map((x) => nearestNeighborNodeToOption(x, t));
   }, [nearestNeighborNodesResponse, t]);
 
