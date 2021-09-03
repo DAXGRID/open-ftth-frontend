@@ -506,7 +506,6 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             icon={EstablishCustomerConnectionSvg}
             action={() => setShowEstablishCustomerConnection(true)}
             title={t("ESTABLISH_CUSTOMER_CONNECTION")}
-            disabled={!editMode}
           />
           <ActionButton
             icon={EraserSvg}
