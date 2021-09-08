@@ -56,6 +56,11 @@ export interface SpanEquipmentDetailsResponse {
       manufacturer: {
         id: string;
       };
+      addressInfo: {
+        remark: string;
+        accessAddressId: string;
+        unitAddressId: string;
+      };
     };
   };
 }
@@ -77,6 +82,17 @@ query ($spanEquipmentOrSegmentId: ID!){
       manufacturer {
         id
       }
+      addressInfo {
+        accessAddressId
+        unitAddressId
+        remark
+        accessAddress {
+          id
+        }
+        unitAddress {
+          id
+        }
+      }
     }
   }
 }
@@ -87,6 +103,9 @@ export interface UpdateSpanEquipmentDetailsParameters {
   markingColor: string;
   manufacturerId: string;
   spanEquipmentSpecificationId: string;
+  accessAddressId: string | null;
+  unitAddressId: string | null;
+  remark: string | null;
 }
 
 export interface UpdateSpanEquipmentDetailsResponse {
@@ -103,13 +122,21 @@ mutation (
  $spanEquipmentOrSegmentId: ID!,
  $markingColor: String,
  $manufacturerId: ID!,
- $spanEquipmentSpecificationId: ID!) {
+ $spanEquipmentSpecificationId: ID!,
+ $accessAddressId: ID,
+ $unitAddressId: ID,
+ $remark: String) {
   spanEquipment {
     updateProperties(
-      spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId,
-      markingInfo: { markingColor: $markingColor },
-      manufacturerId: $manufacturerId,
-      spanEquipmentSpecificationId: $spanEquipmentSpecificationId
+      spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId
+      markingInfo: { markingColor: $markingColor }
+      manufacturerId: $manufacturerId
+      spanEquipmentSpecificationId: $spanEquipmentSpecificationId,
+      addressInfo: {
+        accessAddressId: $accessAddressId
+        unitAddressId: $unitAddressId
+        remark: $remark
+      }
     ) {
       isSuccess
       errorCode
@@ -117,3 +144,52 @@ mutation (
   }
 }
 `;
+
+export type UnitAddress = {
+  id: string;
+  floorName: string;
+  suitName: string;
+  externalId: string;
+};
+
+type AccessAddress = {
+  id: string;
+  roadName: string;
+  houseNumber: string;
+  townName: string;
+  postDistrict: string;
+  unitAddresses: UnitAddress[];
+};
+
+export type NearestAccessAddress = {
+  distance: number;
+  accessAddress: AccessAddress;
+};
+
+export type NearestAccessAddressesResponse = {
+  addressService: {
+    nearestAccessAddresses: NearestAccessAddress[];
+  };
+};
+
+export const NEAREST_ACCESS_ADDRESSES_QUERY = `
+query($spanEquipmentOrSegmentId: ID!) {
+  addressService {
+    nearestAccessAddresses(spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId, maxHits: 10) {
+      distance
+      accessAddress {
+        id
+        roadName
+        houseNumber
+        townName
+        postDistrict
+        unitAddresses {
+          id
+          floorName
+          suitName
+          externalId
+        }
+      }
+    }
+  }
+}`;

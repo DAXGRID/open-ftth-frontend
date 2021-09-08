@@ -37,8 +37,7 @@ export const QUERY_SPAN_EQUIPMENT_DETAILS = `
 query ($spanEquipmentOrSegmentId: ID!){
   utilityNetwork {
     spanEquipment(
-      spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId
-    )
+      spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId)
     {
       name
       specification {
@@ -52,8 +51,6 @@ query ($spanEquipmentOrSegmentId: ID!){
         name
       }
       addressInfo {
-        accessAddressId
-        unitAddressId
         remark
         accessAddress {
           id
