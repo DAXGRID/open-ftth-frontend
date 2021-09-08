@@ -65,7 +65,7 @@ function accessAddressToOption(
 
 function unitAddressToOption(unitAddress: UnitAddress): SelectOption {
   return {
-    text: `${unitAddress.suitName ?? ""} ${unitAddress.floorName ?? ""}`,
+    text: `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`,
     value: unitAddress.id,
     key: unitAddress.id,
   };

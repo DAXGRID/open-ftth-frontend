@@ -41,7 +41,7 @@ function accessAddressToOption(
 
 function unitAddressToOption(unitAddress: UnitAddress): SelectOption {
   return {
-    text: `${unitAddress.suitName ?? ""} ${unitAddress.floorName ?? ""}`,
+    text: `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`,
     value: unitAddress.id,
     key: unitAddress.id,
   };
@@ -218,12 +218,12 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     setSelectedManufacturer(manufacturer?.id ?? "");
     setSelectedColorMarking(markingInfo?.markingColor ?? "");
     setSelectedAccessAddressId(
-      spanEquipmentDetailsResponse.data.utilityNetwork.spanEquipment.addressInfo
-        .accessAddressId ?? ""
+      spanEquipmentDetailsResponse.data.utilityNetwork?.spanEquipment
+        ?.addressInfo?.accessAddressId ?? ""
     );
     setSelectedUnitAddressId(
-      spanEquipmentDetailsResponse.data.utilityNetwork.spanEquipment.addressInfo
-        .unitAddressId ?? ""
+      spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
+        ?.addressInfo?.unitAddressId ?? ""
     );
   }, [spanEquipmentDetailsResponse]);
 
