@@ -4,6 +4,8 @@ import { useTranslation, TFunction } from "react-i18next";
 import {
   QUERY_SPAN_EQUIPMENT_DETAILS,
   SpanEquipmentDetailsResponse,
+  AccessAddress,
+  UnitAddress,
 } from "./SpanEquipmentDetailsGql";
 import FeatureDetailsContainer from "../FeatureDetailContainer";
 import ModalContainer from "../../../components/ModalContainer";
@@ -11,16 +13,24 @@ import EditSpanEquipment from "../EditSpanEquipment";
 import RerouteTube from "../RerouteTube";
 import { EditPropertiesSvg, MoveConduitSvg } from "../../../assets";
 
+function mapAccessAddress(accessAddress: AccessAddress): string {
+  return `${accessAddress.roadName} ${accessAddress.houseNumber}, ${accessAddress.postDistrictCode} ${accessAddress.postDistrict}`;
+}
+
+function mapUnitAddress(unitAddress: UnitAddress): string {
+  return `${unitAddress.floorName} ${unitAddress.suitName}`;
+}
+
 function mapEquipmentDetails(
   x: SpanEquipmentDetailsResponse | undefined,
   t: TFunction<string>
 ) {
   if (!x) return [];
 
-  const { manufacturer, markingInfo, name, specification } =
+  const { manufacturer, markingInfo, name, specification, addressInfo } =
     x.utilityNetwork.spanEquipment;
 
-  return [
+  const mapped = [
     {
       name: t("NAME_OR_ID"),
       value: name ?? t("Unspecified"),
@@ -42,6 +52,26 @@ function mapEquipmentDetails(
       value: specification?.isFixed ? t("YES") : t("NO"),
     },
   ];
+
+  if (addressInfo?.accessAddress) {
+    mapped.push({
+      name: t("ADDRESS"),
+      value: `${mapAccessAddress(addressInfo.accessAddress)} ${
+        addressInfo.unitAddress
+          ? ", " + mapUnitAddress(addressInfo.unitAddress)
+          : ""
+      }`,
+    });
+  }
+
+  if (addressInfo?.remark) {
+    mapped.push({
+      name: t("ADDRESS_REMARK"),
+      value: addressInfo.remark,
+    });
+  }
+
+  return mapped;
 }
 
 type SpanEquipmentDetailsParams = {

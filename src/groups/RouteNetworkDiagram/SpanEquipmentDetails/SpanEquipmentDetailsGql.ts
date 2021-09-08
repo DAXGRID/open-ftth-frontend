@@ -1,4 +1,16 @@
-export interface SpanEquipmentDetailsResponse {
+export type AccessAddress = {
+  roadName: string;
+  postDistrictCode: string;
+  postDistrict: string;
+  houseNumber: string;
+};
+
+export type UnitAddress = {
+  floorName: string;
+  suitName: string;
+};
+
+export type SpanEquipmentDetailsResponse = {
   utilityNetwork: {
     spanEquipment: {
       name: string;
@@ -12,9 +24,14 @@ export interface SpanEquipmentDetailsResponse {
       manufacturer: {
         name: string;
       };
+      addressInfo: {
+        remark: string;
+        accessAddress: AccessAddress;
+        unitAddress: UnitAddress;
+      };
     };
   };
-}
+};
 
 export const QUERY_SPAN_EQUIPMENT_DETAILS = `
 query ($spanEquipmentOrSegmentId: ID!){
@@ -33,6 +50,23 @@ query ($spanEquipmentOrSegmentId: ID!){
       }
       manufacturer {
         name
+      }
+      addressInfo {
+        accessAddressId
+        unitAddressId
+        remark
+        accessAddress {
+          id
+          roadName
+          postDistrictCode
+          postDistrict
+          houseNumber
+        }
+        unitAddress {
+          id
+          floorName
+          suitName
+        }
       }
     }
   }
