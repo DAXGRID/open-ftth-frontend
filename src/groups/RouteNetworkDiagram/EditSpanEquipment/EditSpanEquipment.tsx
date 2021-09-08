@@ -158,13 +158,14 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
   const [spanEquipmentSpecificationsResponse] =
     useQuery<SpanEquipmentSpecificationsResponse>({
       query: QUERY_SPAN_EQUIPMENT_SPECIFICATIONS_MANUFACTURER,
-      requestPolicy: "cache-first",
+      requestPolicy: "cache-and-network",
       pause: !spanEquipmentMrid,
     });
 
   const [nearestAccessAddressesResponse] =
     useQuery<NearestAccessAddressesResponse>({
       query: NEAREST_ACCESS_ADDRESSES_QUERY,
+      requestPolicy: "network-only",
       variables: { spanEquipmentOrSegmentId: spanEquipmentMrid },
       pause: !spanEquipmentMrid,
     });
