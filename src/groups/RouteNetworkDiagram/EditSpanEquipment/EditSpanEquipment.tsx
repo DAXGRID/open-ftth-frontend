@@ -221,11 +221,11 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     setSelectedColorMarking(markingInfo?.markingColor ?? "");
     setSelectedAccessAddressId(
       spanEquipmentDetailsResponse.data.utilityNetwork?.spanEquipment
-        ?.addressInfo?.accessAddressId ?? ""
+        ?.addressInfo?.accessAddress?.id ?? ""
     );
     setSelectedUnitAddressId(
       spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
-        ?.addressInfo?.unitAddressId ?? ""
+        ?.addressInfo?.unitAddress?.id ?? ""
     );
     setAdditionalAddressInformation(
       spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment

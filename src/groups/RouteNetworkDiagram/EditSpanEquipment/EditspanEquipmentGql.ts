@@ -58,8 +58,12 @@ export interface SpanEquipmentDetailsResponse {
       };
       addressInfo: {
         remark: string;
-        accessAddressId: string;
-        unitAddressId: string;
+        accessAddress: {
+          id: string;
+        };
+        unitAddress: {
+          id: string;
+        };
       };
     };
   };
