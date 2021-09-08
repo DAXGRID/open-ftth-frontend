@@ -117,31 +117,6 @@ function EstablishCustomerConnection({
       pause: !load,
     });
 
-  useEffect(() => {
-    setSelectedUnitAddress("");
-  }, [selectedAccessAddress, setSelectedUnitAddress]);
-
-  useEffect(() => {
-    if (
-      !selectedConnectionPoint ||
-      !nearestNeighborNodesResponse.data?.routeNetwork.nearestNeighborNodes
-    )
-      return;
-
-    const connectionPoint =
-      nearestNeighborNodesResponse.data?.routeNetwork.nearestNeighborNodes.find(
-        (x) => x.id === selectedConnectionPoint
-      );
-    if (connectionPoint) {
-      setTrace({
-        geometries: connectionPoint.routeNetworkSegmentGeometries ?? [],
-        ids: connectionPoint.routeNetworkSegmentIds ?? [],
-      });
-    } else {
-      setTrace({ geometries: [], ids: [] });
-    }
-  }, [selectedConnectionPoint, setTrace, nearestNeighborNodesResponse]);
-
   const accessAddresses = useMemo<SelectOption[]>(() => {
     if (
       !nearestAccessAddressesResponse.data?.addressService
@@ -161,6 +136,18 @@ function EstablishCustomerConnection({
       nearestAccessAddressesResponse.data?.addressService.nearestAccessAddresses
         .sort((x, y) => x.distance - y.distance)
         .map((x) => accessAddressToOption(x, t));
+
+    // We do this because there is an issue
+    // where unit address has an id but no labels and its the only one
+    if (options.length === 1) {
+      return [
+        {
+          text: t("SELECT_ACCESS_ADDRESS"),
+          value: options[0].value,
+          key: "SELECT_ACCESS_ADDRESS",
+        },
+      ];
+    }
 
     return defaultList.concat(options);
   }, [nearestAccessAddressesResponse, t]);
@@ -190,6 +177,33 @@ function EstablishCustomerConnection({
 
     return defaultList.concat(options);
   }, [nearestAccessAddressesResponse, selectedAccessAddress, t]);
+
+  useEffect(() => {
+    if (unitAddressOptions.length === 1)
+      setSelectedUnitAddress(unitAddressOptions[0].value.toString());
+    else setSelectedUnitAddress("");
+  }, [selectedAccessAddress, setSelectedUnitAddress, unitAddressOptions]);
+
+  useEffect(() => {
+    if (
+      !selectedConnectionPoint ||
+      !nearestNeighborNodesResponse.data?.routeNetwork.nearestNeighborNodes
+    )
+      return;
+
+    const connectionPoint =
+      nearestNeighborNodesResponse.data?.routeNetwork.nearestNeighborNodes.find(
+        (x) => x.id === selectedConnectionPoint
+      );
+    if (connectionPoint) {
+      setTrace({
+        geometries: connectionPoint.routeNetworkSegmentGeometries ?? [],
+        ids: connectionPoint.routeNetworkSegmentIds ?? [],
+      });
+    } else {
+      setTrace({ geometries: [], ids: [] });
+    }
+  }, [selectedConnectionPoint, setTrace, nearestNeighborNodesResponse]);
 
   const connectionPointOptions = useMemo<SelectOption[]>(() => {
     if (!nearestNeighborNodesResponse.data?.routeNetwork.nearestNeighborNodes)

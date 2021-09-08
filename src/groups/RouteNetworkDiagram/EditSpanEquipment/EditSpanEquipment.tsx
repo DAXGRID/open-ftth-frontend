@@ -195,6 +195,67 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     ]
   );
 
+  const accessAddresses = useMemo<SelectOption[]>(() => {
+    if (
+      !nearestAccessAddressesResponse.data?.addressService
+        .nearestAccessAddresses
+    )
+      return [];
+
+    const defaultList: SelectOption[] = [
+      {
+        text: t("SELECT_ACCESS_ADDRESS"),
+        value: "",
+        key: "SELECT_ACCESS_ADDRESS",
+      },
+    ];
+
+    const options =
+      nearestAccessAddressesResponse.data?.addressService.nearestAccessAddresses
+        .sort((x, y) => x.distance - y.distance)
+        .map((x) => accessAddressToOption(x, t));
+
+    return defaultList.concat(options);
+  }, [nearestAccessAddressesResponse, t]);
+
+  const unitAddressOptions = useMemo<SelectOption[]>(() => {
+    if (
+      !nearestAccessAddressesResponse.data?.addressService
+        .nearestAccessAddresses
+    )
+      return [];
+
+    const defaultList: SelectOption[] = [
+      {
+        text: t("SELECT_UNIT_ADDRESS"),
+        value: "",
+        key: "-1",
+      },
+    ];
+
+    const options =
+      nearestAccessAddressesResponse.data?.addressService.nearestAccessAddresses
+        .find((x) => x.accessAddress.id === selectedAccessAddressId)
+        ?.accessAddress.unitAddresses.sort((x, y) =>
+          x.externalId > y.externalId ? 1 : -1
+        )
+        .map(unitAddressToOption) ?? [];
+
+    // We do this because there is an issue
+    // where unit address has an id but no labels and its the only one
+    if (options.length === 1) {
+      return [
+        {
+          text: t("SELECT_UNIT_ADDRESS"),
+          value: options[0].value,
+          key: "-1",
+        },
+      ];
+    }
+
+    return defaultList.concat(options);
+  }, [nearestAccessAddressesResponse, selectedAccessAddressId, t]);
+
   useEffect(() => {
     if (!spanEquipmentSpecificationsResponse.data) return;
 
@@ -234,8 +295,9 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
   }, [spanEquipmentDetailsResponse]);
 
   useEffect(() => {
-    if (!nearestAccessAddressesResponse.data) return;
-  }, [nearestAccessAddressesResponse]);
+    if (unitAddressOptions.length === 1)
+      setSelectedUnitAddressId(unitAddressOptions[0].value.toString());
+  }, [unitAddressOptions, setSelectedUnitAddressId]);
 
   const selectSpanEquipmentSpecification = (specificationId: string) => {
     if (selectedSpanEquipmentSpecification === specificationId) return;
@@ -243,55 +305,6 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     setSelectedSpanEquipmentSpecification(specificationId);
     setSelectedManufacturer("");
   };
-
-  const accessAddresses = useMemo<SelectOption[]>(() => {
-    if (
-      !nearestAccessAddressesResponse.data?.addressService
-        .nearestAccessAddresses
-    )
-      return [];
-
-    const defaultList: SelectOption[] = [
-      {
-        text: t("SELECT_ACCESS_ADDRESS"),
-        value: "",
-        key: "SELECT_ACCESS_ADDRESS",
-      },
-    ];
-
-    const options =
-      nearestAccessAddressesResponse.data?.addressService.nearestAccessAddresses
-        .sort((x, y) => x.distance - y.distance)
-        .map((x) => accessAddressToOption(x, t));
-
-    return defaultList.concat(options);
-  }, [nearestAccessAddressesResponse, t]);
-
-  const unitAddressOptions = useMemo<SelectOption[]>(() => {
-    if (
-      !nearestAccessAddressesResponse.data?.addressService
-        .nearestAccessAddresses
-    )
-      return [];
-
-    const defaultList: SelectOption[] = [
-      {
-        text: t("SELECT_UNIT_ADDRESS"),
-        value: "",
-        key: "SELECT_UNIT_ADDRESS",
-      },
-    ];
-
-    const options =
-      nearestAccessAddressesResponse.data?.addressService.nearestAccessAddresses
-        .find((x) => x.accessAddress.id === selectedAccessAddressId)
-        ?.accessAddress.unitAddresses.sort((x, y) =>
-          x.externalId > y.externalId ? 1 : -1
-        )
-        .map(unitAddressToOption) ?? [];
-
-    return defaultList.concat(options);
-  }, [nearestAccessAddressesResponse, selectedAccessAddressId, t]);
 
   const update = async () => {
     if (!selectedSpanEquipmentSpecification) {
