@@ -18,7 +18,7 @@ function mapAccessAddress(accessAddress: AccessAddress): string {
 }
 
 function mapUnitAddress(unitAddress: UnitAddress): string {
-  if (!unitAddress?.floorName && !unitAddress?.suitName) "";
+  if (!unitAddress?.floorName && !unitAddress?.suitName) return "";
   return `${unitAddress?.floorName ?? ""} ${unitAddress?.suitName ?? ""}`;
 }
 
@@ -58,7 +58,7 @@ function mapEquipmentDetails(
     mapped.push({
       name: t("ADDRESS"),
       value: `${mapAccessAddress(addressInfo.accessAddress)} ${
-        addressInfo.unitAddress
+        addressInfo.unitAddress?.floorName || addressInfo.unitAddress?.suitName
           ? ", " + mapUnitAddress(addressInfo.unitAddress)
           : ""
       }`,
