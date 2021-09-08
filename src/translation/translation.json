@@ -140,7 +140,9 @@
       "NO_NAME": "No name",
       "ADDITIONAL_ADDRESS_INFORMATION": "Additional address information",
       "ADDRESS": "Address",
-      "ADDRESS_REMARK": "Address remark"
+      "ADDRESS_REMARK": "Address remark",
+      "SPAN_EQUIPMENT_INFORMATION": "Span equipment information",
+      "ADDRESS_INFORMATION": "Address information"
     }
   },
   "dk": {
@@ -284,7 +286,9 @@
       "NO_NAME": "Unavngivet",
       "ADDITIONAL_ADDRESS_INFORMATION": "Supplerende adresse information",
       "ADDRESS": "Adresse",
-      "ADDRESS_REMARK": "Supplerende addresse information"
+      "ADDRESS_REMARK": "Supplerende addresse information",
+      "SPAN_EQUIPMENT_INFORMATION": "Rør information",
+      "ADDRESS_INFORMATION": "Adresse information"
     }
   }
 }

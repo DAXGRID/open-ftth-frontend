@@ -165,7 +165,6 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
   const [nearestAccessAddressesResponse] =
     useQuery<NearestAccessAddressesResponse>({
       query: NEAREST_ACCESS_ADDRESSES_QUERY,
-      requestPolicy: "cache-first",
       variables: { spanEquipmentOrSegmentId: spanEquipmentMrid },
       pause: !spanEquipmentMrid,
     });
@@ -337,53 +336,63 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
 
   return (
     <div className="edit-span-equipment page-container">
-      <div className="full-row">
-        <SelectListView
-          headerItems={[t("Specification")]}
-          bodyItems={filteredSpanEquipmentSpecifications}
-          selectItem={(x) => selectSpanEquipmentSpecification(x.id.toString())}
-          selected={selectedSpanEquipmentSpecification}
-          maxHeightBody="250px"
-        />
+      <div className="block">
+        <p className="block-title">{t("SPAN_EQUIPMENT_INFORMATION")}</p>
+        <div className="full-row">
+          <SelectListView
+            headerItems={[t("Specification")]}
+            bodyItems={filteredSpanEquipmentSpecifications}
+            selectItem={(x) =>
+              selectSpanEquipmentSpecification(x.id.toString())
+            }
+            selected={selectedSpanEquipmentSpecification}
+            maxHeightBody="250px"
+          />
+        </div>
+        <div className="full-row">
+          <SelectListView
+            headerItems={[t("Manufacturer")]}
+            bodyItems={filteredManufactuers}
+            selectItem={(x) => setSelectedManufacturer(x.id.toString())}
+            selected={selectedManufacturer}
+            maxHeightBody="200px"
+          />
+        </div>
+        <div className="full-row">
+          <SelectMenu
+            options={colorMarkingOptions}
+            removePlaceHolderOnSelect
+            onSelected={(x) => setSelectedColorMarking(x)}
+            selected={selectedColorMarking}
+          />
+        </div>
       </div>
-      <div className="full-row">
-        <SelectListView
-          headerItems={[t("Manufacturer")]}
-          bodyItems={filteredManufactuers}
-          selectItem={(x) => setSelectedManufacturer(x.id.toString())}
-          selected={selectedManufacturer}
-          maxHeightBody="200px"
-        />
+
+      <div className="block">
+        <p className="block-title">{t("ADDRESS_INFORMATION")}</p>
+        <div className="full-row">
+          <SelectMenu
+            options={accessAddresses ?? []}
+            onSelected={(x) => selectAccessAddressId(x?.toString() ?? "")}
+            selected={selectedAccessAddressId}
+          />
+        </div>
+        <div className="full-row">
+          <SelectMenu
+            options={unitAddressOptions ?? []}
+            onSelected={(x) => setSelectedUnitAddressId(x?.toString() ?? "")}
+            selected={selectedUnitAddressId}
+          />
+        </div>
+        <div className="full-row">
+          <TextBox
+            placeHolder={t("ADDITIONAL_ADDRESS_INFORMATION")}
+            setValue={setAdditionalAddressInformation}
+            value={additionalAddressInformation}
+          />
+        </div>
       </div>
-      <div className="full-row">
-        <SelectMenu
-          options={colorMarkingOptions}
-          removePlaceHolderOnSelect
-          onSelected={(x) => setSelectedColorMarking(x)}
-          selected={selectedColorMarking}
-        />
-      </div>
-      <div className="full-row">
-        <SelectMenu
-          options={accessAddresses ?? []}
-          onSelected={(x) => selectAccessAddressId(x?.toString() ?? "")}
-          selected={selectedAccessAddressId}
-        />
-      </div>
-      <div className="full-row">
-        <SelectMenu
-          options={unitAddressOptions ?? []}
-          onSelected={(x) => setSelectedUnitAddressId(x?.toString() ?? "")}
-          selected={selectedUnitAddressId}
-        />
-      </div>
-      <div className="full-row">
-        <TextBox
-          placeHolder={t("ADDITIONAL_ADDRESS_INFORMATION")}
-          setValue={setAdditionalAddressInformation}
-          value={additionalAddressInformation}
-        />
-      </div>
+
       <div className="full-row">
         <DefaultButton
           innerText={t("UPDATE")}
