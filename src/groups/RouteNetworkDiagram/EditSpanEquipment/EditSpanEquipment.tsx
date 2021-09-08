@@ -228,8 +228,8 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
         ?.addressInfo?.unitAddressId ?? ""
     );
     setAdditionalAddressInformation(
-      spanEquipmentDetailsResponse.data.utilityNetwork.spanEquipment.addressInfo
-        .remark
+      spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
+        ?.addressInfo?.remark ?? ""
     );
   }, [spanEquipmentDetailsResponse]);
 
@@ -347,7 +347,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
               selectSpanEquipmentSpecification(x.id.toString())
             }
             selected={selectedSpanEquipmentSpecification}
-            maxHeightBody="250px"
+            maxHeightBody="175px"
           />
         </div>
         <div className="full-row">
@@ -356,7 +356,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
             bodyItems={filteredManufactuers}
             selectItem={(x) => setSelectedManufacturer(x.id.toString())}
             selected={selectedManufacturer}
-            maxHeightBody="200px"
+            maxHeightBody="175px"
           />
         </div>
         <div className="full-row">
