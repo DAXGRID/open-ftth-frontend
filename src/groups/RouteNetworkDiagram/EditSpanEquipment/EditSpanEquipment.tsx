@@ -18,6 +18,7 @@ import { useQuery, useClient } from "urql";
 import { TFunction, useTranslation } from "react-i18next";
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
+import TextBox from "../../../components/TextBox";
 import SelectListView, { BodyItem } from "../../../components/SelectListView";
 import { toast } from "react-toastify";
 import Config from "../../../config";
@@ -143,7 +144,8 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     useState<string>("");
   const [selectedUnitAddressId, setSelectedUnitAddressId] =
     useState<string>("");
-  const [addressRemark, setAddressRemark] = useState<string>("");
+  const [additionalAddressInformation, setAdditionalAddressInformation] =
+    useState<string>("");
 
   const [spanEquipmentDetailsResponse] = useQuery<SpanEquipmentDetailsResponse>(
     {
@@ -225,6 +227,10 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
         ?.addressInfo?.unitAddressId ?? ""
     );
+    setAdditionalAddressInformation(
+      spanEquipmentDetailsResponse.data.utilityNetwork.spanEquipment.addressInfo
+        .remark
+    );
   }, [spanEquipmentDetailsResponse]);
 
   useEffect(() => {
@@ -303,7 +309,9 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       spanEquipmentSpecificationId: selectedSpanEquipmentSpecification,
       accessAddressId: selectedAccessAddressId ? selectedAccessAddressId : null,
       unitAddressId: selectedUnitAddressId ? selectedUnitAddressId : null,
-      remark: addressRemark ? addressRemark : null,
+      remark: additionalAddressInformation
+        ? additionalAddressInformation
+        : null,
     };
 
     const result = await client
@@ -349,6 +357,14 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       </div>
       <div className="full-row">
         <SelectMenu
+          options={colorMarkingOptions}
+          removePlaceHolderOnSelect
+          onSelected={(x) => setSelectedColorMarking(x)}
+          selected={selectedColorMarking}
+        />
+      </div>
+      <div className="full-row">
+        <SelectMenu
           options={accessAddresses ?? []}
           onSelected={(x) => selectAccessAddressId(x?.toString() ?? "")}
           selected={selectedAccessAddressId}
@@ -362,12 +378,13 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
         />
       </div>
       <div className="full-row">
-        <SelectMenu
-          options={colorMarkingOptions}
-          removePlaceHolderOnSelect
-          onSelected={(x) => setSelectedColorMarking(x)}
-          selected={selectedColorMarking}
+        <TextBox
+          placeHolder={t("ADDITIONAL_ADDRESS_INFORMATION")}
+          setValue={setAdditionalAddressInformation}
+          value={additionalAddressInformation}
         />
+      </div>
+      <div className="full-row">
         <DefaultButton
           innerText={t("UPDATE")}
           onClick={() => update()}
