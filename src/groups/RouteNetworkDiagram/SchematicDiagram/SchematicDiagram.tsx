@@ -249,16 +249,16 @@ function SchematicDiagram({
         clickHighlight("OuterConduit", newMap, onSelectFeature, editMode);
       }
 
+      if (hasNodeContainer) {
+        newMap.addLayer(nodeContainerSelect);
+        hoverPointer("NodeContainer", newMap);
+        clickHighlight("NodeContainer", newMap, onSelectFeature, editMode);
+      }
+
       if (hasNodeContainerSide && editMode) {
         newMap.addLayer(nodeContainerSideSelect);
         hoverPointer("NodeContainerSide", newMap);
         clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
-      }
-
-      if (!editMode && hasNodeContainer) {
-        newMap.addLayer(nodeContainerSelect);
-        hoverPointer("NodeContainer", newMap);
-        clickHighlight("NodeContainer", newMap, onSelectFeature, editMode);
       }
     });
 
