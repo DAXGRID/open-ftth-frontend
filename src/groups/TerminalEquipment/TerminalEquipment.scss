@@ -70,5 +70,13 @@
     &:nth-of-type(5) {
       border-right: none;
     }
+
+    .terminal-equipment-table-item__icon {
+      padding-right: 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 }

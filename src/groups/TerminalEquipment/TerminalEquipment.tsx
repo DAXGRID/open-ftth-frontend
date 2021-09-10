@@ -1,4 +1,9 @@
 import { ReactNode } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronRight,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
 
 type TableContainerProps = {
   children: ReactNode;
@@ -48,7 +53,10 @@ function ReadonlyTable() {
         <div className="terminal-equipment-table-row">
           <div className="terminal-equipment-data-row terminal-equipment-table-grid">
             <div className="terminal-equipment-table-item">
-              GALAH-ODF 1-3-1 WDM 1-4-1 OLT-1-1-1
+              <span className="terminal-equipment-table-item__icon">
+                <FontAwesomeIcon icon={faChevronRight} />
+              </span>
+              <span>GALAH-ODF 1-3-1 WDM 1-4-1 OLT-1-1-1</span>
             </div>
             <div className="terminal-equipment-table-item">
               K102034 (72) Fiber 1
@@ -66,7 +74,10 @@ function ReadonlyTable() {
         <div className="terminal-equipment-table-row">
           <div className="terminal-equipment-data-row terminal-equipment-table-grid">
             <div className="terminal-equipment-table-item">
-              GALAH-ODF 1-3-1 WDM 1-4-1 OLT-1-1-1
+              <span className="terminal-equipment-table-item__icon">
+                <FontAwesomeIcon icon={faChevronDown} />
+              </span>
+              <span>GALAH-ODF 1-3-1 WDM 1-4-1 OLT-1-1-1</span>
             </div>
             <div className="terminal-equipment-table-item">
               K102034 (72) Fiber 1
@@ -84,8 +95,6 @@ function ReadonlyTable() {
     </div>
   );
 }
-
-const testData = {};
 
 function TerminalEquipment() {
   return (
