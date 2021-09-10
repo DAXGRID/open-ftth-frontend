@@ -1,9 +1,6 @@
 import { ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronRight,
-  faChevronDown,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faPen } from "@fortawesome/free-solid-svg-icons";
 
 type TableContainerProps = {
   children: ReactNode;
@@ -17,13 +14,18 @@ function TableContainer({ children, headerTexts }: TableContainerProps) {
         {headerTexts?.map((x) => {
           return <p key={x}>{x}</p>;
         })}
+        <div className="header-icons">
+          <span className="header-icons__icon">
+            <FontAwesomeIcon icon={faPen} />
+          </span>
+        </div>
       </div>
       <div className="table-container-body">{children}</div>
     </div>
   );
 }
 
-function ReadonlyTable() {
+function TerminalEquipmentTable() {
   return (
     <div className="terminal-equipment-table">
       <div
@@ -56,7 +58,9 @@ function ReadonlyTable() {
               <span className="terminal-equipment-table-item__icon">
                 <FontAwesomeIcon icon={faChevronRight} />
               </span>
-              <span>GALAH-ODF 1-3-1 WDM 1-4-1 OLT-1-1-1</span>
+              <span className="terminal-equipment-table-item__equipped">
+                GALAH-ODF 1-3-1 WDM 1-4-1 OLT-1-1-1
+              </span>
             </div>
             <div className="terminal-equipment-table-item">
               K102034 (72) Fiber 1
@@ -75,9 +79,11 @@ function ReadonlyTable() {
           <div className="terminal-equipment-data-row terminal-equipment-table-grid">
             <div className="terminal-equipment-table-item">
               <span className="terminal-equipment-table-item__icon">
-                <FontAwesomeIcon icon={faChevronDown} />
+                <FontAwesomeIcon icon={faChevronRight} />
               </span>
-              <span>GALAH-ODF 1-3-1 WDM 1-4-1 OLT-1-1-1</span>
+              <span className="terminal-equipment-table-item__equipped">
+                GALAH-ODF 1-3-1 WDM 1-4-1 OLT-1-1-1
+              </span>
             </div>
             <div className="terminal-equipment-table-item">
               K102034 (72) Fiber 1
@@ -102,7 +108,7 @@ function TerminalEquipment() {
       <TableContainer
         headerTexts={["Rack position: 3", "Type: Comspec FIST-GSS2"]}
       >
-        <ReadonlyTable />
+        <TerminalEquipmentTable />
       </TableContainer>
     </div>
   );
