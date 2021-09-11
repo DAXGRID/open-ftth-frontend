@@ -240,3 +240,22 @@ query ($spanSegmentId: ID!) {
   }
 }
 `;
+
+export type RemoveNodeContainerResponse = {
+  nodeContainer: {
+    remove: {
+      isSuccess: boolean;
+      errorCode: string;
+    };
+  };
+};
+
+export const REMOVE_NODE_CONTAINER = `
+mutation($nodeContainerId: ID!) {
+  nodeContainer {
+    remove(nodeContainerId: $nodeContainerId) {
+      isSuccess
+      errorCode
+    }
+  }
+}`;

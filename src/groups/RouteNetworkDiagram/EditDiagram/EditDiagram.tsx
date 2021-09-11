@@ -35,6 +35,8 @@ import {
   ReverseVerticalAlignmentResponse,
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
+  REMOVE_NODE_CONTAINER,
+  RemoveNodeContainerResponse,
 } from "./EditDiagramGql";
 import AddContainer from "../AddContainer";
 import AddInnerSpanStructure from "../AddInnerSpanStructure";
@@ -286,17 +288,24 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     }
   };
 
-  const removeSpanStructure = async () => {
-    const spanSegmentsToRemove = selectedFeatures.current
+  const removeObject = async () => {
+    const selectedObjects = selectedFeatures.current
       .filter((x) => {
-        return x.layer.source === "OuterConduit" || "InnerConduit";
+        return (
+          x.layer.source === "OuterConduit" || "InnerConduit" || "NodeContainer"
+        );
       })
-      .map((x) => x.properties?.refId as string);
+      .map((x) => {
+        return {
+          id: x.properties?.refId as string,
+          source: x.layer.source,
+        };
+      });
 
-    if (spanSegmentsToRemove.length > 1) {
+    if (selectedObjects.length > 1) {
       toast.error(t("You can only delete one object at a time"));
       return;
-    } else if (spanSegmentsToRemove.length === 0) {
+    } else if (selectedObjects.length === 0) {
       toast.error(t("No objects selected"));
       return;
     }
@@ -306,20 +315,33 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     );
     if (!confirmed) return;
 
-    const response = await client
-      .mutation<RemoveSpanStructureResponse>(REMOVE_SPAN_STRUCTURE, {
-        spanSegmentId: spanSegmentsToRemove[0],
-      })
-      .toPromise();
+    const objectToRemove = selectedObjects[0];
 
-    if (!response.data?.spanEquipment.removeSpanStructure.isSuccess) {
-      toast.error(
-        t(response.data?.spanEquipment.removeSpanStructure.errorCode ?? "")
-      );
+    if (objectToRemove.source === "NodeContainer") {
+      const response = await client
+        .mutation<RemoveNodeContainerResponse>(REMOVE_NODE_CONTAINER, {
+          nodeContainerId: objectToRemove.id,
+        })
+        .toPromise();
+
+      if (!response.data?.nodeContainer.remove.isSuccess) {
+        toast.error(t(response.data?.nodeContainer.remove.errorCode ?? ""));
+      }
+    } else if (objectToRemove.source === "OuterConduit" || "InnerConduit") {
+      const response = await client
+        .mutation<RemoveSpanStructureResponse>(REMOVE_SPAN_STRUCTURE, {
+          spanSegmentId: objectToRemove.id,
+        })
+        .toPromise();
+
+      if (!response.data?.spanEquipment.removeSpanStructure.isSuccess) {
+        toast.error(
+          t(response.data?.spanEquipment.removeSpanStructure.errorCode ?? "")
+        );
+      }
     }
   };
 
-  // TODO check why it is async
   const onSelectedFeature = useCallback(
     async (feature: MapboxGeoJSONFeature) => {
       const isSelected = feature.state?.selected as boolean;
@@ -492,7 +514,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           />
           <ActionButton
             icon={TrashCanSvg}
-            action={() => removeSpanStructure()}
+            action={() => removeObject()}
             title={t("REMOVE_OBJECT")}
             disabled={!editMode}
           />
