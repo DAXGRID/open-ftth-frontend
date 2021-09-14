@@ -1,37 +1,55 @@
-import { ReactNode } from "react";
+import { useState, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faPen } from "@fortawesome/free-solid-svg-icons";
 
-type TableContainerProps = {
+type TerminalEquipmentTableContainerProps = {
   children: ReactNode;
   headerTexts?: string[];
+  editMode: boolean;
+  toggleEditMode: () => void;
 };
 
-function TableContainer({ children, headerTexts }: TableContainerProps) {
+function TerminalEquipmentTableContainer({
+  children,
+  headerTexts,
+  editMode,
+  toggleEditMode,
+}: TerminalEquipmentTableContainerProps) {
   return (
-    <div className="table-container">
-      <div className="table-container-header">
+    <div className="terminal-equipment-table-container">
+      <div className="terminal-equipment-table-container-header">
         {headerTexts?.map((x) => {
           return <p key={x}>{x}</p>;
         })}
         <div className="header-icons">
-          <span className="header-icons__icon">
+          <span
+            className={
+              editMode
+                ? "header-icons__icon header-icons__icon--selected"
+                : "header-icons__icon"
+            }
+            onClick={() => toggleEditMode()}
+          >
             <FontAwesomeIcon icon={faPen} />
           </span>
         </div>
       </div>
-      <div className="table-container-body">{children}</div>
+      <div className="terminal-equipment-table-container-body">{children}</div>
     </div>
   );
 }
 
-function TerminalEquipmentTable() {
+type TerminalEquipmentTableProps = {
+  editMode: boolean;
+};
+
+function TerminalEquipmentTable({ editMode }: TerminalEquipmentTableProps) {
   return (
     <div className="terminal-equipment-table">
       <div
         className="terminal-equipment-header
         terminal-equipment-table-row
-        terminal-equipment-table-grid"
+        terminal-equipment-table-grid-header"
       >
         <div className="terminal-equipment-table-item">A-Info</div>
         <div className="terminal-equipment-table-item">From</div>
@@ -47,13 +65,13 @@ function TerminalEquipmentTable() {
               12 soems bred splidsebakke
             </p>
             <p className="terminal-equipment-row-header__item">
-              (1 af 12 pladser brugt)
+              (2 af 12 pladser brugt)
             </p>
           </div>
         </div>
 
         <div className="terminal-equipment-table-row">
-          <div className="terminal-equipment-data-row terminal-equipment-table-grid">
+          <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
             <div className="terminal-equipment-table-item">
               <span className="terminal-equipment-table-item__icon">
                 <FontAwesomeIcon icon={faChevronRight} />
@@ -76,7 +94,7 @@ function TerminalEquipmentTable() {
         </div>
 
         <div className="terminal-equipment-table-row">
-          <div className="terminal-equipment-data-row terminal-equipment-table-grid">
+          <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
             <div className="terminal-equipment-table-item">
               <span className="terminal-equipment-table-item__icon">
                 <FontAwesomeIcon icon={faChevronRight} />
@@ -97,19 +115,43 @@ function TerminalEquipmentTable() {
             </div>
           </div>
         </div>
+
+        {editMode && (
+          <>
+            <div className="terminal-equipment-table-row">
+              <div className="terminal-equipment-data-row terminal-equipment-table-grid-free">
+                <div className="terminal-equipment-table-item terminal-equipment-table-item--free">
+                  Free
+                </div>
+                <div className="terminal-equipment-table-item">3</div>
+                <div className="terminal-equipment-table-item terminal-equipment-table-item--free">
+                  Free
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
 }
 
 function TerminalEquipment() {
+  const [editMode, setEditMode] = useState(false);
+
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+  };
+
   return (
     <div>
-      <TableContainer
+      <TerminalEquipmentTableContainer
         headerTexts={["Rack position: 3", "Type: Comspec FIST-GSS2"]}
+        editMode={editMode}
+        toggleEditMode={toggleEditMode}
       >
-        <TerminalEquipmentTable />
-      </TableContainer>
+        <TerminalEquipmentTable editMode={editMode} />
+      </TerminalEquipmentTableContainer>
     </div>
   );
 }

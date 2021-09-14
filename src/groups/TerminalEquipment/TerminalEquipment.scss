@@ -1,11 +1,11 @@
 @import "../../global-styles/colors";
 
-.table-container {
+.terminal-equipment-table-container {
   background-color: white;
   border-radius: 4px;
   border: 1px solid $border-color;
 
-  .table-container-header {
+  .terminal-equipment-table-container-header {
     display: flex;
     justify-content: flex-start;
     padding: 15px 10px;
@@ -20,6 +20,7 @@
       display: flex;
       flex: 1;
       justify-content: flex-end;
+      user-select: none;
 
       .header-icons__icon {
         padding-right: 5px;
@@ -27,17 +28,27 @@
         &:hover {
           cursor: pointer;
         }
+
+        &.header-icons__icon--selected {
+          color: $success-color;
+        }
       }
     }
   }
 
-  .table-container-body {
+  .terminal-equipment-table-container-body {
   }
 }
 
-.terminal-equipment-table-grid {
+.terminal-equipment-table-grid-header,
+.terminal-equipment-table-grid-equipped {
   display: grid;
   grid-template-columns: 4fr 2fr 1fr 2fr 3fr;
+}
+
+.terminal-equipment-table-grid-free {
+  display: grid;
+  grid-template-columns: 6fr 1fr 5fr;
 }
 
 .terminal-equipment-table {
@@ -86,14 +97,21 @@
     }
 
     .terminal-equipment-table-item__icon {
+      user-select: none;
       padding-right: 10px;
 
       &:hover {
         cursor: pointer;
       }
     }
+  }
 
-    .terminal-equipment-table-item__equipped {
+  .terminal-equipment-table-item--free {
+    background-color: #b3e4b3;
+    text-align: center;
+
+    &:last-child {
+      border-right: none;
     }
   }
 }
