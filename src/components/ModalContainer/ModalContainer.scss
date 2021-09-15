@@ -47,7 +47,10 @@
   .modal-body {
     flex: 1;
     flex-basis: 100%;
+  }
+
+  .modal-body--max-size {
     max-height: 600px;
-    overflow-x: auto;
+    overflow-y: auto;
   }
 }
