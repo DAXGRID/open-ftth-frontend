@@ -5,23 +5,22 @@ import { useTranslation, TFunction } from "react-i18next";
 
 type TerminalEquipmentTableContainerProps = {
   children: ReactNode;
-  headerTexts?: string[];
   editMode: boolean;
   toggleEditMode: () => void;
+  t: TFunction;
 };
 
 function TerminalEquipmentTableContainer({
   children,
-  headerTexts,
   editMode,
   toggleEditMode,
+  t,
 }: TerminalEquipmentTableContainerProps) {
   return (
     <div className="terminal-equipment-table-container">
       <div className="terminal-equipment-table-container-header">
-        {headerTexts?.map((x) => {
-          return <p key={x}>{x}</p>;
-        })}
+        <p>{t("RACK_POSITION", { position: 3 })}</p>
+        <p>{t("TYPE")}: Comspec FIST-GSS2</p>
         <div className="header-icons">
           <span
             role="button"
@@ -43,13 +42,10 @@ function TerminalEquipmentTableContainer({
 
 type TerminalEquipmentTableProps = {
   editMode: boolean;
-  translation: TFunction;
+  t: TFunction;
 };
 
-function TerminalEquipmentTable({
-  editMode,
-  translation,
-}: TerminalEquipmentTableProps) {
+function TerminalEquipmentTable({ editMode, t }: TerminalEquipmentTableProps) {
   return (
     <div className="terminal-equipment-table">
       <div
@@ -57,19 +53,11 @@ function TerminalEquipmentTable({
         terminal-equipment-table-row
         terminal-equipment-table-grid-header"
       >
-        <div className="terminal-equipment-table-item">
-          {translation("A-INFO")}
-        </div>
-        <div className="terminal-equipment-table-item">
-          {translation("FROM")}
-        </div>
-        <div className="terminal-equipment-table-item">
-          {translation("PIN/PORT")}
-        </div>
-        <div className="terminal-equipment-table-item">{translation("TO")}</div>
-        <div className="terminal-equipment-table-item">
-          {translation("Z-INFO")}
-        </div>
+        <div className="terminal-equipment-table-item">{t("A-INFO")}</div>
+        <div className="terminal-equipment-table-item">{t("FROM")}</div>
+        <div className="terminal-equipment-table-item">{t("PIN/PORT")}</div>
+        <div className="terminal-equipment-table-item">{t("TO")}</div>
+        <div className="terminal-equipment-table-item">{t("Z-INFO")}</div>
       </div>
       <div className="terminal-equipment-table-body">
         <div className="terminal-equipment-table-row">
@@ -79,7 +67,7 @@ function TerminalEquipmentTable({
               12 soems bred splidsebakke
             </p>
             <p className="terminal-equipment-row-header__item">
-              (2 af 12 pladser brugt)
+              {t("TERMINAL_EQUIPMENT_PLACES_USED", { used: 2, total: 12 })}
             </p>
           </div>
         </div>
@@ -102,7 +90,10 @@ function TerminalEquipmentTable({
               Splitter 1 (1:32) Ind 1
             </div>
             <div className="terminal-equipment-table-item">
-              Total 29 installations. 3 free ports
+              {t("TOTAL_INSTALLATIONS_PORTS_FREE", {
+                installations: 29,
+                freePorts: 3,
+              })}
             </div>
           </div>
         </div>
@@ -125,7 +116,10 @@ function TerminalEquipmentTable({
               Splitter 1 (1:32) Ind 1
             </div>
             <div className="terminal-equipment-table-item">
-              Total 29 installations. 3 free ports
+              {t("TOTAL_INSTALLATIONS_PORTS_FREE", {
+                installations: 29,
+                freePorts: 3,
+              })}
             </div>
           </div>
         </div>
@@ -141,14 +135,54 @@ function TerminalEquipmentTable({
                   className="terminal-equipment-table-item
                   terminal-equipment-table-item--free"
                 >
-                  {translation("FREE")}
+                  {t("FREE")}
                 </div>
                 <div className="terminal-equipment-table-item">3</div>
                 <div
                   className="terminal-equipment-table-item
                   terminal-equipment-table-item--free"
                 >
-                  {translation("FREE")}
+                  {t("FREE")}
+                </div>
+              </div>
+            </div>
+            <div className="terminal-equipment-table-row">
+              <div
+                className="terminal-equipment-data-row
+                terminal-equipment-table-grid-free"
+              >
+                <div
+                  className="terminal-equipment-table-item
+                  terminal-equipment-table-item--free"
+                >
+                  {t("FREE")}
+                </div>
+                <div className="terminal-equipment-table-item">4</div>
+                <div
+                  className="terminal-equipment-table-item
+                  terminal-equipment-table-item--free"
+                >
+                  {t("FREE")}
+                </div>
+              </div>
+            </div>
+            <div className="terminal-equipment-table-row">
+              <div
+                className="terminal-equipment-data-row
+                terminal-equipment-table-grid-free"
+              >
+                <div
+                  className="terminal-equipment-table-item
+                  terminal-equipment-table-item--free"
+                >
+                  {t("FREE")}
+                </div>
+                <div className="terminal-equipment-table-item">5</div>
+                <div
+                  className="terminal-equipment-table-item
+                  terminal-equipment-table-item--free"
+                >
+                  {t("FREE")}
                 </div>
               </div>
             </div>
@@ -170,11 +204,11 @@ function TerminalEquipment() {
   return (
     <div>
       <TerminalEquipmentTableContainer
-        headerTexts={["Rack position: 3", "Type: Comspec FIST-GSS2"]}
+        t={t}
         editMode={editMode}
         toggleEditMode={toggleEditMode}
       >
-        <TerminalEquipmentTable editMode={editMode} translation={t} />
+        <TerminalEquipmentTable editMode={editMode} t={t} />
       </TerminalEquipmentTableContainer>
     </div>
   );

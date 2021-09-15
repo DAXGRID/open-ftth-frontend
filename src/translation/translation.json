@@ -150,7 +150,10 @@
       "TO": "Til",
       "A-INFO": "A-info",
       "Z-INFO": "Z-info",
-      "PIN/PORT": "Pin/Port"
+      "PIN/PORT": "Pin/Port",
+      "RACK_POSITION": "Rack position: {{position}}",
+      "TOTAL_INSTALLATIONS_PORTS_FREE": "Total {{installations}} installations. {{freePorts}} free ports",
+      "TERMINAL_EQUIPMENT_PLACES_USED": "({{used}} of {{total}} places used)"
     }
   },
   "dk": {
@@ -304,7 +307,10 @@
       "TO": "Til",
       "A-INFO": "A-info",
       "Z-INFO": "Z-info",
-      "PIN/PORT": "Pin/Port"
+      "PIN/PORT": "Pin/Port",
+      "RACK_POSITION": "Rack position: {{position}}",
+      "TOTAL_INSTALLATIONS_PORTS_FREE": "Total {{installations}} installationer. {{freePorts}} frie porte",
+      "TERMINAL_EQUIPMENT_PLACES_USED": "({{used}} af {{total}} pladser brugt)"
     }
   }
 }

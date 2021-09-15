@@ -43,12 +43,12 @@
 .terminal-equipment-table-grid-header,
 .terminal-equipment-table-grid-equipped {
   display: grid;
-  grid-template-columns: 4fr 2fr 1fr 2fr 3fr;
+  grid-template-columns: 4fr 2fr 1fr 3fr 3fr;
 }
 
 .terminal-equipment-table-grid-free {
   display: grid;
-  grid-template-columns: 6fr 1fr 5fr;
+  grid-template-columns: 6fr 1fr 6fr;
 }
 
 .terminal-equipment-table {
