@@ -108,6 +108,7 @@ function SpanEquipmentDetails({
       <ModalContainer
         show={showEditSpanEquipment}
         closeCallback={() => setShowEditSpanEquipment(false)}
+        enableMaxSize={true}
       >
         <EditSpanEquipment spanEquipmentMrid={spanEquipmentMrid ?? ""} />
       </ModalContainer>
