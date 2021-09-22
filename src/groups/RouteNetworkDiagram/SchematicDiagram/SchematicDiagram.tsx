@@ -269,7 +269,13 @@ function SchematicDiagram({
   }, [diagramObjects, envelope, onSelectFeature, editMode]);
 
   return (
-    <div className="schematic-diagram">
+    <div
+      className={
+        editMode
+          ? "schematic-diagram"
+          : "schematic-diagram schematic-diagram--read-only"
+      }
+    >
       <div className="schematic-diagram-container" ref={mapContainer} />
     </div>
   );

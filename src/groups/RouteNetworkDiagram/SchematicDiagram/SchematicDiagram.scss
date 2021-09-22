@@ -1,6 +1,11 @@
 .schematic-diagram {
-  height: calc(100vh - 445px);
+  height: calc(100vh - 220px);
   width: 100%;
+
+  &.schematic-diagram--read-only {
+    border-bottom: 1px solid #e3e3e3;
+    height: calc(100vh - 445px);
+  }
 
   .schematic-diagram-container {
     width: 100%;
