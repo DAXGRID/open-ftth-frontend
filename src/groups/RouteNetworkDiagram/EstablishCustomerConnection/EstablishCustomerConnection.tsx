@@ -315,6 +315,7 @@ function EstablishCustomerConnection({
           options={accessAddresses ?? []}
           onSelected={(x) => setSelectedAccessAddress(x?.toString() ?? "")}
           selected={selectedAccessAddress}
+          enableSearch={true}
         />
       </div>
       <div className="full-row">
@@ -322,6 +323,7 @@ function EstablishCustomerConnection({
           options={unitAddressOptions ?? []}
           onSelected={(x) => setSelectedUnitAddress(x?.toString() ?? "")}
           selected={selectedUnitAddress}
+          enableSearch={true}
         />
       </div>
       <div className="full-row">

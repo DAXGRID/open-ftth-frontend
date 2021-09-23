@@ -91,6 +91,7 @@ function AddInnerSpanStructure({
           options={createSelectOptions(
             response.data?.utilityNetwork.spanEquipmentSpecifications ?? []
           )}
+          enableSearch={true}
         />
         <NumberPicker value={count} setValue={(value) => setCount(value)} />
       </div>
