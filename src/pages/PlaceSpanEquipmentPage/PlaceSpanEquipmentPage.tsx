@@ -265,6 +265,7 @@ function PlaceSpanEquipmentPage() {
           removePlaceHolderOnSelect
           onSelected={(x) => setSelectedColorMarking(x)}
           selected={selectedColorMarking}
+          enableSearch={true}
         />
         <DefaultButton
           innerText={t("Place span equipment")}

@@ -14,7 +14,7 @@ type SelectMenuProps = {
   onSelected: (selected: number | string | undefined) => void;
   maxWidth?: string;
   selected: string | number | undefined;
-  disableSearch?: false;
+  enableSearch?: boolean;
 };
 
 function SelectMenu({
@@ -22,7 +22,7 @@ function SelectMenu({
   onSelected,
   maxWidth,
   selected,
-  disableSearch,
+  enableSearch,
 }: SelectMenuProps) {
   const [toggled, setToggled] = useState(false);
   const [search, setSearch] = useState("");
@@ -43,7 +43,7 @@ function SelectMenu({
           <div className="arrow" />
         </div>
         <div className="menu-options">
-          {!disableSearch && (
+          {enableSearch && (
             <input
               onClick={(e) => e.stopPropagation()}
               className="menu-option-search"
