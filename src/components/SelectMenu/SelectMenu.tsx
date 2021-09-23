@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CustomOption from "./CustomOption";
+import { useTranslation } from "react-i18next";
 
 interface SelectOption {
   text: string;
@@ -13,6 +14,7 @@ type SelectMenuProps = {
   onSelected: (selected: number | string | undefined) => void;
   maxWidth?: string;
   selected: string | number | undefined;
+  disableSearch?: false;
 };
 
 function SelectMenu({
@@ -20,8 +22,11 @@ function SelectMenu({
   onSelected,
   maxWidth,
   selected,
+  disableSearch,
 }: SelectMenuProps) {
   const [toggled, setToggled] = useState(false);
+  const [search, setSearch] = useState("");
+  const { t } = useTranslation();
 
   return (
     <div
@@ -38,15 +43,27 @@ function SelectMenu({
           <div className="arrow" />
         </div>
         <div className="menu-options">
-          {options?.map((option) => (
-            <CustomOption
-              key={option.key ?? option.value}
-              text={option.text}
-              triggerSelected={onSelected}
-              isSelected={option.value === selected}
-              value={option.value}
+          {!disableSearch && (
+            <input
+              onClick={(e) => e.stopPropagation()}
+              className="menu-option-search"
+              type="text"
+              value={search}
+              placeholder={t("SEARCH")}
+              onChange={(e) => setSearch(e.target.value)}
             />
-          ))}
+          )}
+          {options
+            .filter((x) => x.text.toLowerCase().includes(search.toLowerCase()))
+            ?.map((option) => (
+              <CustomOption
+                key={option.key ?? option.value}
+                text={option.text}
+                triggerSelected={onSelected}
+                isSelected={option.value === selected}
+                value={option.value}
+              />
+            ))}
         </div>
       </div>
     </div>

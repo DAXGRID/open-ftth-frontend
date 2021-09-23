@@ -143,7 +143,8 @@
       "ADDRESS_REMARK": "Address remark",
       "SPAN_EQUIPMENT_INFORMATION": "Span equipment information",
       "ADDRESS_INFORMATION": "Address information",
-      "CANNOT_REMOVE_NODE_CONTAINER_WITH_AFFIXED_SPAN_EQUIPMENT": "Can't remove container with affixed span equipments"
+      "CANNOT_REMOVE_NODE_CONTAINER_WITH_AFFIXED_SPAN_EQUIPMENT": "Can't remove container with affixed span equipments",
+      "SEARCH": "Search"
     }
   },
   "dk": {
@@ -290,7 +291,8 @@
       "ADDRESS_REMARK": "Supplerende addresse information",
       "SPAN_EQUIPMENT_INFORMATION": "Rør information",
       "ADDRESS_INFORMATION": "Adresse information",
-      "CANNOT_REMOVE_NODE_CONTAINER_WITH_AFFIXED_SPAN_EQUIPMENT": "Kan ikke slette struktur med ledninger tilknyttet"
+      "CANNOT_REMOVE_NODE_CONTAINER_WITH_AFFIXED_SPAN_EQUIPMENT": "Kan ikke slette struktur med ledninger tilknyttet",
+      "SEARCH": "Søg"
     }
   }
 }
