@@ -28,7 +28,7 @@ export type NearestAccessAddressesResponse = {
 export const NEAREST_ACCESS_ADDRESSES_QUERY = `
 query($routeNodeId: ID!) {
   addressService {
-    nearestAccessAddresses(routeNodeId: $routeNodeId, maxHits: 10) {
+    nearestAccessAddresses(routeNodeId: $routeNodeId, maxHits: 100) {
       distance
       accessAddress {
         id
