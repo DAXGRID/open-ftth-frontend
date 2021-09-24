@@ -378,6 +378,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
             removePlaceHolderOnSelect
             onSelected={(x) => setSelectedColorMarking(x)}
             selected={selectedColorMarking}
+            enableSearch={true}
           />
         </div>
       </div>
@@ -389,6 +390,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
             options={accessAddresses ?? []}
             onSelected={(x) => selectAccessAddressId(x?.toString() ?? "")}
             selected={selectedAccessAddressId}
+            enableSearch={true}
           />
         </div>
         <div className="full-row">
@@ -396,6 +398,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
             options={unitAddressOptions ?? []}
             onSelected={(x) => setSelectedUnitAddressId(x?.toString() ?? "")}
             selected={selectedUnitAddressId}
+            enableSearch={true}
           />
         </div>
         <div className="full-row">

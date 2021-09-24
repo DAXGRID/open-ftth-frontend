@@ -179,7 +179,7 @@ export type NearestAccessAddressesResponse = {
 export const NEAREST_ACCESS_ADDRESSES_QUERY = `
 query($spanEquipmentOrSegmentId: ID!) {
   addressService {
-    nearestAccessAddresses(spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId, maxHits: 10) {
+    nearestAccessAddresses(spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId, maxHits: 100) {
       distance
       accessAddress {
         id
