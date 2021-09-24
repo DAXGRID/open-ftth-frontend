@@ -19,7 +19,7 @@ export interface Geometry {
 }
 
 export interface AffixSpanEquipmentParams {
-  spanSegmentId: string;
+  spanSegmentIds: string[];
   nodeContainerId: string;
   nodeContainerSide: "NORTH" | "SOUTH" | "WEST" | "EAST";
 }
@@ -36,7 +36,7 @@ export interface AffixSpanEquipmentResponse {
 
 export const AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER = `
 mutation (
-  $spanSegmentId: ID!,
+  $spanSegmentIds: [ID!]!,
   $nodeContainerId: ID!,
   $nodeContainerSide: NodeContainerSideEnum!
 )
@@ -44,7 +44,7 @@ mutation (
   spanEquipment
   {
     affixSpanEquipmentToNodeContainer(
-      spanSegmentId: $spanSegmentId
+      spanSegmentIds: $spanSegmentIds
       nodeContainerId: $nodeContainerId
       nodeContainerSide: $nodeContainerSide
     )
@@ -151,7 +151,7 @@ mutation (
 `;
 
 export interface DetachSpanEquipmentParameters {
-  spanSegmentId: string;
+  spanSegmentIds: string[];
   routeNodeId: string;
 }
 
@@ -166,12 +166,12 @@ export interface DetachSpanEquipmentResponse {
 
 export const DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER = `
 mutation (
-  $spanSegmentId: ID!,
+  $spanSegmentIds: [ID!]!,
   $routeNodeId: ID!,
 ) {
   spanEquipment {
     detachSpanEquipmentFromNodeContainer(
-      spanSegmentId: $spanSegmentId
+      spanSegmentIds: $spanSegmentIds
       routeNodeId: $routeNodeId
     ) {
         isSuccess

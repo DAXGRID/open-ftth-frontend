@@ -118,16 +118,16 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
     const nodeContainerId = nodeContainer?.properties?.refId as string;
 
-    const spanSegmentId = selectedFeatures.current.find(
-      (x) => x.layer.source === "OuterConduit"
-    )?.properties?.refId as string;
+    const spanSegmentIds = selectedFeatures.current
+      .filter((x) => x.layer.source === "OuterConduit")
+      ?.map((x) => x.properties?.refId as string);
 
     if (!nodeContainerId) {
       toast.error(t("No node container selected"));
       return;
     }
-    if (!spanSegmentId) {
-      toast.error(t("No span segment selected"));
+    if (spanSegmentIds.length === 0) {
+      toast.error(t("No span segments selected"));
       return;
     }
 
@@ -146,7 +146,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         | "WEST"
         | "EAST"
         | "SOUTH",
-      spanSegmentId: spanSegmentId,
+      spanSegmentIds: spanSegmentIds,
     };
 
     const { data } = await affixSpanEquipmentMutation(parameters);
@@ -254,7 +254,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const detachSpanEquipment = async () => {
-    const spanSegmentToDetach = selectedFeatures.current
+    const spanSegmentsIds = selectedFeatures.current
       .filter((x) => {
         return (
           x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
@@ -262,7 +262,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       })
       .map((x) => x.properties?.refId as string);
 
-    if (spanSegmentToDetach.length === 0) {
+    if (spanSegmentsIds.length === 0) {
       toast.error(t("No span segments selected"));
       return;
     }
@@ -274,7 +274,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
     const parameters: DetachSpanEquipmentParameters = {
       routeNodeId: identifiedFeature.id,
-      spanSegmentId: spanSegmentToDetach[0],
+      spanSegmentIds: spanSegmentsIds,
     };
 
     const { data } = await detachSpanEquipmentMutation(parameters);
