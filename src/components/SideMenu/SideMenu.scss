@@ -11,6 +11,7 @@
   transition: all 0.3s linear;
   transform: translateX(-100%);
   border-right: 1px solid $border-color;
+  z-index: 1;
 
   .side-menu__label {
     flex: 1;
