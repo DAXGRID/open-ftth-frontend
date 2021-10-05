@@ -8,8 +8,9 @@ function MapDiagram() {
   const { identifiedFeature } = useContext(MapContext);
 
   useEffect(() => {
+    // Hack to handle issue with map not being displayed fully.
     window.dispatchEvent(new Event("resize"));
-  }, [showDiagram]);
+  }, [showDiagram, identifiedFeature]);
 
   const toggleDiagram = useCallback(
     (show: boolean) => {
