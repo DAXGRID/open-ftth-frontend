@@ -34,3 +34,13 @@
     }
   }
 }
+
+@media only screen and (max-width: 1024px) {
+  .map-diagram {
+    .container {
+      flex-basis: 100%;
+      width: 100%;
+      height: calc(100vh - 64px);
+    }
+  }
+}
