@@ -5,24 +5,29 @@ import "./ToggleLayerButton.scss";
 
 library.add(faLayerGroup);
 
+function createToggleList(): HTMLElement {
+  const element = document.createElement("div");
+  element.innerText = "Hello world!";
+  return element;
+}
+
 class ToggleLayerButton {
-  className: string;
-  layerName: string;
+  layerNames: string[];
   container: HTMLElement | null;
   map: Map | undefined;
 
-  constructor(layerName: string) {
-    this.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
-    this.layerName = layerName;
+  constructor(layerNames: string[]) {
+    this.layerNames = layerNames;
     this.container = null;
   }
 
   onAdd(map: Map) {
     this.map = map;
     this.container = document.createElement("div");
-    this.container.className = this.className;
+    this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
 
     const buttonIcon = icon({ prefix: "fas", iconName: "layer-group" }).node[0];
+
     const button = document.createElement("button");
     button.appendChild(buttonIcon);
     button.className = "toggle-layer-button";
@@ -31,29 +36,26 @@ class ToggleLayerButton {
     });
 
     this.container.appendChild(button);
-
+    this.container.appendChild(createToggleList());
     return this.container;
   }
 
   onRemove() {
     if (!this.container || !this.map) return;
-
     this.container?.parentNode?.removeChild(this.container);
     this.map = undefined;
   }
 
   toggleLayerName() {
-    if (!this.map || !this.container) return;
-
-    var visibility = this.map.getLayoutProperty(this.layerName, "visibility");
-
-    if (visibility === "visible") {
-      this.map.setLayoutProperty(this.layerName, "visibility", "none");
-      this.container.firstElementChild?.classList.remove("active");
-    } else {
-      this.map.setLayoutProperty(this.layerName, "visibility", "visible");
-      this.container.firstElementChild?.classList.add("active");
-    }
+    // if (!this.map || !this.container) return;
+    // var visibility = this.map.getLayoutProperty(this.layerName, "visibility");
+    // if (visibility === "visible") {
+    //   this.map.setLayoutProperty(this.layerName, "visibility", "none");
+    //   this.container.firstElementChild?.classList.remove("active");
+    // } else {
+    //   this.map.setLayoutProperty(this.layerName, "visibility", "visible");
+    //   this.container.firstElementChild?.classList.add("active");
+    // }
   }
 }
 

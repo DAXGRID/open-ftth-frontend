@@ -222,6 +222,13 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
             tiles: [Config.AERIAL_PHOTO_SERVER_URI],
             tileSize: 256,
           },
+          custom: {
+            type: "vector",
+            tiles: ["/services/customer_area/tiles/{z}/{x}/{y}.pbf"],
+            minZoom: 0,
+            maxZoom: 14,
+            maxzoom: 17,
+          } as VectorSource,
         },
       },
       center: [9.996730316498656, 56.04595255289249],
@@ -264,7 +271,10 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
         showAccuracyCircle: false,
       })
     );
-    newMap.addControl(new ToggleLayerButton("aerial_photo"), "top-right");
+    newMap.addControl(
+      new ToggleLayerButton(["aerial_photo", "customer_area"]),
+      "top-right"
+    );
     const measureDistanceControl = new MeasureDistanceControl(t("DISTANCE"));
     newMap.addControl(measureDistanceControl, "top-right");
 
