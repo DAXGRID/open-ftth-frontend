@@ -224,7 +224,9 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
           },
           custom: {
             type: "vector",
-            tiles: ["/services/customer_area/tiles/{z}/{x}/{y}.pbf"],
+            tiles: [
+              "http://tiles-custom.openftth.local/services/customer_area/tiles/{z}/{x}/{y}.pbf",
+            ],
             minZoom: 0,
             maxZoom: 14,
             maxzoom: 17,
@@ -272,7 +274,10 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       })
     );
     newMap.addControl(
-      new ToggleLayerButton(["aerial_photo", "customer_area"]),
+      new ToggleLayerButton([
+        { name: "aerial_photo", text: "Luftphoto" },
+        { name: "customer_area", text: "Kunde polygon" },
+      ]),
       "top-right"
     );
     const measureDistanceControl = new MeasureDistanceControl(t("DISTANCE"));

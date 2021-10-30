@@ -1557,7 +1557,8 @@
       "type": "fill",
       "source": "custom",
       "source-layer": "customer_area",
-      "paint": { "fill-opacity": 0.2 }
+      "paint": { "fill-opacity": 0.2 },
+      "layout": { "visibility": "none" }
     }
   ],
   "id": "positron"
