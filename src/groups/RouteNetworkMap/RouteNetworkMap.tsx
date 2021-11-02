@@ -270,18 +270,19 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
         showAccuracyCircle: false,
       })
     );
-    newMap.addControl(
-      new ToggleLayerButton(
-        Config.LAYERS.flatMap((x) => {
-          return x.layerToggles;
-        })
-      ),
-      "top-right"
-    );
     const measureDistanceControl = new MeasureDistanceControl(t("DISTANCE"));
     newMap.addControl(measureDistanceControl, "top-right");
 
     newMap.on("load", () => {
+      // We add this control here since it checks the style
+      newMap.addControl(
+        new ToggleLayerButton(
+          Config.LAYERS.flatMap((x) => {
+            return x.layerToggles;
+          })
+        ),
+        "top-right"
+      );
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
       clickHighlight(
