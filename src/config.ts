@@ -8,6 +8,7 @@ declare global {
     config_BASEMAP_TILE_SERVER_URI: string;
     config_AERIAL_PHOTO_SERVER_URI: string;
     config_COLOR_OPTIONS: string[];
+    config_LAYERS: any[];
   }
 }
 
@@ -20,6 +21,7 @@ const settings = {
   BASEMAP_TILE_SERVER_URI: window.config_BASEMAP_TILE_SERVER_URI,
   AERIAL_PHOTO_SERVER_URI: window.config_AERIAL_PHOTO_SERVER_URI,
   COLOR_OPTIONS: window.config_COLOR_OPTIONS,
+  LAYERS: window.config_LAYERS ?? [],
 };
 
 export default settings;

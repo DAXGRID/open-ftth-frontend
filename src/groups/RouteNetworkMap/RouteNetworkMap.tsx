@@ -22,6 +22,48 @@ import ToggleLayerButton from "./MapControls/ToggleLayerButton";
 import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 
+function createSources(layers: any[]): any {
+  let sources: any = {
+    route_network: {
+      type: "vector",
+      tiles: [
+        `${
+          Config.ROUTE_NETWORK_TILE_SERVER_URI
+        }/services/route_network/tiles/{z}/{x}/{y}.pbf?dt=${Date.now()}`,
+      ],
+      minZoom: 0,
+      minzoom: 4,
+      maxzoom: 17,
+    } as VectorSource,
+    osm: {
+      type: "vector",
+      tiles: [
+        `${Config.BASEMAP_TILE_SERVER_URI}/services/osm/tiles/{z}/{x}/{y}.pbf`,
+      ],
+      minZoom: 0,
+      maxZoom: 14,
+      maxzoom: 14,
+    } as VectorSource,
+    "basemap-extra": {
+      type: "vector",
+      tiles: [
+        `${Config.BASEMAP_TILE_SERVER_URI}/services/objects/tiles/{z}/{x}/{y}.pbf`,
+      ],
+      minZoom: 0,
+      maxZoom: 14,
+      minzoom: 16,
+      maxzoom: 16,
+    } as VectorSource,
+  };
+
+  return layers.reduce((acc, v) => {
+    return {
+      ...acc,
+      [`${v.name}`]: { ...v.layer },
+    };
+  }, sources);
+}
+
 function enableResize(map: Map) {
   window.addEventListener("resize", () => {
     // Hack to handle resize of mapcanvas because
@@ -186,43 +228,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       container: mapContainer.current ?? "",
       style: {
         ...(MapboxStyle as Style),
-        sources: {
-          route_network: {
-            type: "vector",
-            tiles: [
-              `${
-                Config.ROUTE_NETWORK_TILE_SERVER_URI
-              }/services/route_network/tiles/{z}/{x}/{y}.pbf?dt=${Date.now()}`,
-            ],
-            minZoom: 0,
-            minzoom: 4,
-            maxzoom: 17,
-          } as VectorSource,
-          osm: {
-            type: "vector",
-            tiles: [
-              `${Config.BASEMAP_TILE_SERVER_URI}/services/osm/tiles/{z}/{x}/{y}.pbf`,
-            ],
-            minZoom: 0,
-            maxZoom: 14,
-            maxzoom: 14,
-          } as VectorSource,
-          "basemap-extra": {
-            type: "vector",
-            tiles: [
-              `${Config.BASEMAP_TILE_SERVER_URI}/services/objects/tiles/{z}/{x}/{y}.pbf`,
-            ],
-            minZoom: 0,
-            maxZoom: 14,
-            minzoom: 16,
-            maxzoom: 16,
-          } as VectorSource,
-          "aerial-photo": {
-            type: "raster",
-            tiles: [Config.AERIAL_PHOTO_SERVER_URI],
-            tileSize: 256,
-          },
-        },
+        sources: createSources(Config.LAYERS),
       },
       center: [9.996730316498656, 56.04595255289249],
       zoom: 10,
@@ -264,7 +270,14 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
         showAccuracyCircle: false,
       })
     );
-    newMap.addControl(new ToggleLayerButton("aerial_photo"), "top-right");
+    newMap.addControl(
+      new ToggleLayerButton(
+        Config.LAYERS.flatMap((x) => {
+          return x.layerToggles;
+        })
+      ),
+      "top-right"
+    );
     const measureDistanceControl = new MeasureDistanceControl(t("DISTANCE"));
     newMap.addControl(measureDistanceControl, "top-right");
 

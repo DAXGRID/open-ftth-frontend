@@ -1,3 +1,5 @@
+@import "../../../global-styles/colors";
+
 .toggle-layer-button {
   border-radius: 4px;
   border: none;
@@ -12,5 +14,52 @@
 
   &:hover {
     cursor: pointer;
+  }
+}
+
+.toggle-list {
+  border-radius: 4px;
+  position: absolute;
+  right: 55px;
+  background-color: white;
+  top: 0px;
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 10%);
+  visibility: hidden;
+
+  &.toggle-list--visible {
+    visibility: visible;
+  }
+
+  .toggle-list-item {
+    font-size: 14px;
+    border-bottom: 1px solid #e3e3e3;
+    padding: 10px 20px;
+    border-radius: 4px;
+    user-select: none;
+    white-space: nowrap;
+
+    &.toggle-list-item--selected {
+      background-color: $select-color;
+
+      &:hover {
+        background-color: $select-color;
+      }
+    }
+
+    &:hover {
+      background-color: $hover-color;
+      cursor: pointer;
+    }
+
+    &:first-of-type {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+
+    &:last-of-type {
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
+      border-bottom: none;
+    }
   }
 }
