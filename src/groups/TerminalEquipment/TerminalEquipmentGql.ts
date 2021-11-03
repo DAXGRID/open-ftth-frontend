@@ -28,7 +28,7 @@ type Line = {
   } | null;
 };
 
-type TerminalStructure = {
+export type TerminalStructure = {
   id: string;
   category: string;
   name: string;
@@ -37,7 +37,7 @@ type TerminalStructure = {
   lines: Line[];
 };
 
-type TerminalEquipment = {
+export type TerminalEquipment = {
   id: string;
   parentNodeStructureId: string;
   category: string;
@@ -49,9 +49,9 @@ type TerminalEquipment = {
 
 export type TerminalEquipmentResponse = {
   parentNodeStructures: ParentNodeStructure[];
-  terminalEquipment: TerminalEquipment[];
+  terminalEquipments: TerminalEquipment[];
 };
 
-export function getTerminalEquipment(): TerminalEquipmentResponse {
+export function getTerminalEquipments(): TerminalEquipmentResponse {
   return terminalEquipmentData;
 }

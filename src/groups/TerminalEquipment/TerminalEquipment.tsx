@@ -2,13 +2,18 @@ import { useState, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faPen } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation, TFunction } from "react-i18next";
-import
+import {
+  getTerminalEquipments,
+  TerminalEquipment as TerminalEquipmentType,
+  TerminalStructure,
+} from "./TerminalEquipmentGql";
 
 type TerminalEquipmentTableContainerProps = {
   children: ReactNode;
   editMode: boolean;
   toggleEditMode: () => void;
   t: TFunction;
+  terminalEquipment: TerminalEquipmentType;
 };
 
 function TerminalEquipmentTableContainer({
@@ -16,12 +21,15 @@ function TerminalEquipmentTableContainer({
   editMode,
   toggleEditMode,
   t,
+  terminalEquipment,
 }: TerminalEquipmentTableContainerProps) {
   return (
     <div className="terminal-equipment-table-container">
       <div className="terminal-equipment-table-container-header">
-        <p>{t("RACK_POSITION", { position: 3 })}</p>
-        <p>{t("TYPE")}: Comspec FIST-GSS2</p>
+        <p>{t("RACK_POSITION", { position: terminalEquipment.name })}</p>
+        <p>
+          {t("TYPE")}: {terminalEquipment.specName}
+        </p>
         <div className="header-icons">
           <span
             role="button"
@@ -44,9 +52,14 @@ function TerminalEquipmentTableContainer({
 type TerminalEquipmentTableProps = {
   editMode: boolean;
   t: TFunction;
+  terminalStructures: TerminalStructure[];
 };
 
-function TerminalEquipmentTable({ editMode, t }: TerminalEquipmentTableProps) {
+function TerminalEquipmentTable({
+  editMode,
+  t,
+  terminalStructures,
+}: TerminalEquipmentTableProps) {
   return (
     <div className="terminal-equipment-table">
       <div
@@ -87,32 +100,6 @@ function TerminalEquipmentTable({ editMode, t }: TerminalEquipmentTableProps) {
               K102034 (72) Fiber 1
             </div>
             <div className="terminal-equipment-table-item">1 -O-</div>
-            <div className="terminal-equipment-table-item">
-              Splitter 1 (1:32) Ind 1
-            </div>
-            <div className="terminal-equipment-table-item">
-              {t("TOTAL_INSTALLATIONS_PORTS_FREE", {
-                installations: 29,
-                freePorts: 3,
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div className="terminal-equipment-table-row">
-          <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
-            <div className="terminal-equipment-table-item">
-              <span className="terminal-equipment-table-item__icon">
-                <FontAwesomeIcon icon={faChevronRight} />
-              </span>
-              <span className="terminal-equipment-table-item__equipped">
-                GALAH-ODF 1-3-1 WDM 1-4-1 OLT-1-1-1
-              </span>
-            </div>
-            <div className="terminal-equipment-table-item">
-              K102034 (72) Fiber 1
-            </div>
-            <div className="terminal-equipment-table-item">2 -O-</div>
             <div className="terminal-equipment-table-item">
               Splitter 1 (1:32) Ind 1
             </div>
@@ -197,20 +184,27 @@ function TerminalEquipmentTable({ editMode, t }: TerminalEquipmentTableProps) {
 function TerminalEquipment() {
   const [editMode, setEditMode] = useState(false);
   const { t } = useTranslation();
+  const response = getTerminalEquipments();
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
   };
 
   return (
-    <div>
-      <TerminalEquipmentTableContainer
-        t={t}
-        editMode={editMode}
-        toggleEditMode={toggleEditMode}
-      >
-        <TerminalEquipmentTable editMode={editMode} t={t} />
-      </TerminalEquipmentTableContainer>
+    <div className="terminal-equipment">
+      {response.terminalEquipments.map((x) => {
+        return (
+          <TerminalEquipmentTableContainer
+            key={x.id}
+            t={t}
+            editMode={editMode}
+            toggleEditMode={toggleEditMode}
+            terminalEquipment={x}
+          >
+            <TerminalEquipmentTable editMode={editMode} t={t} />
+          </TerminalEquipmentTableContainer>
+        );
+      })}
     </div>
   );
 }
