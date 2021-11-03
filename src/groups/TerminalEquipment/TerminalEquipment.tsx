@@ -2,6 +2,7 @@ import { useState, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faPen } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation, TFunction } from "react-i18next";
+import
 
 type TerminalEquipmentTableContainerProps = {
   children: ReactNode;
