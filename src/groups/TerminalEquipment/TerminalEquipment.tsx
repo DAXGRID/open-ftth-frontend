@@ -1,6 +1,7 @@
 import { useState, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faPen } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation, TFunction } from "react-i18next";
 
 type TerminalEquipmentTableContainerProps = {
   children: ReactNode;
@@ -23,6 +24,7 @@ function TerminalEquipmentTableContainer({
         })}
         <div className="header-icons">
           <span
+            role="button"
             className={
               editMode
                 ? "header-icons__icon header-icons__icon--selected"
@@ -41,9 +43,13 @@ function TerminalEquipmentTableContainer({
 
 type TerminalEquipmentTableProps = {
   editMode: boolean;
+  translation: TFunction;
 };
 
-function TerminalEquipmentTable({ editMode }: TerminalEquipmentTableProps) {
+function TerminalEquipmentTable({
+  editMode,
+  translation,
+}: TerminalEquipmentTableProps) {
   return (
     <div className="terminal-equipment-table">
       <div
@@ -51,11 +57,19 @@ function TerminalEquipmentTable({ editMode }: TerminalEquipmentTableProps) {
         terminal-equipment-table-row
         terminal-equipment-table-grid-header"
       >
-        <div className="terminal-equipment-table-item">A-Info</div>
-        <div className="terminal-equipment-table-item">From</div>
-        <div className="terminal-equipment-table-item">Pin/Port</div>
-        <div className="terminal-equipment-table-item">To</div>
-        <div className="terminal-equipment-table-item">Z-Info</div>
+        <div className="terminal-equipment-table-item">
+          {translation("A-INFO")}
+        </div>
+        <div className="terminal-equipment-table-item">
+          {translation("FROM")}
+        </div>
+        <div className="terminal-equipment-table-item">
+          {translation("PIN/PORT")}
+        </div>
+        <div className="terminal-equipment-table-item">{translation("TO")}</div>
+        <div className="terminal-equipment-table-item">
+          {translation("Z-INFO")}
+        </div>
       </div>
       <div className="terminal-equipment-table-body">
         <div className="terminal-equipment-table-row">
@@ -119,13 +133,22 @@ function TerminalEquipmentTable({ editMode }: TerminalEquipmentTableProps) {
         {editMode && (
           <>
             <div className="terminal-equipment-table-row">
-              <div className="terminal-equipment-data-row terminal-equipment-table-grid-free">
-                <div className="terminal-equipment-table-item terminal-equipment-table-item--free">
-                  Free
+              <div
+                className="terminal-equipment-data-row
+                terminal-equipment-table-grid-free"
+              >
+                <div
+                  className="terminal-equipment-table-item
+                  terminal-equipment-table-item--free"
+                >
+                  {translation("FREE")}
                 </div>
                 <div className="terminal-equipment-table-item">3</div>
-                <div className="terminal-equipment-table-item terminal-equipment-table-item--free">
-                  Free
+                <div
+                  className="terminal-equipment-table-item
+                  terminal-equipment-table-item--free"
+                >
+                  {translation("FREE")}
                 </div>
               </div>
             </div>
@@ -138,6 +161,7 @@ function TerminalEquipmentTable({ editMode }: TerminalEquipmentTableProps) {
 
 function TerminalEquipment() {
   const [editMode, setEditMode] = useState(false);
+  const { t } = useTranslation();
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
@@ -150,7 +174,7 @@ function TerminalEquipment() {
         editMode={editMode}
         toggleEditMode={toggleEditMode}
       >
-        <TerminalEquipmentTable editMode={editMode} />
+        <TerminalEquipmentTable editMode={editMode} translation={t} />
       </TerminalEquipmentTableContainer>
     </div>
   );

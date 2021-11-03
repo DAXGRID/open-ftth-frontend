@@ -144,7 +144,13 @@
       "SPAN_EQUIPMENT_INFORMATION": "Span equipment information",
       "ADDRESS_INFORMATION": "Address information",
       "CANNOT_REMOVE_NODE_CONTAINER_WITH_AFFIXED_SPAN_EQUIPMENT": "Can't remove container with affixed span equipments",
-      "SEARCH": "Search"
+      "SEARCH": "Search",
+      "FREE": "Free",
+      "FROM": "Fra",
+      "TO": "Til",
+      "A-INFO": "A-info",
+      "Z-INFO": "Z-info",
+      "PIN/PORT": "Pin/Port"
     }
   },
   "dk": {
@@ -292,7 +298,13 @@
       "SPAN_EQUIPMENT_INFORMATION": "Rør information",
       "ADDRESS_INFORMATION": "Adresse information",
       "CANNOT_REMOVE_NODE_CONTAINER_WITH_AFFIXED_SPAN_EQUIPMENT": "Kan ikke slette struktur med ledninger tilknyttet",
-      "SEARCH": "Søg"
+      "SEARCH": "Søg",
+      "FREE": "Fri",
+      "FROM": "Fra",
+      "TO": "Til",
+      "A-INFO": "A-info",
+      "Z-INFO": "Z-info",
+      "PIN/PORT": "Pin/Port"
     }
   }
 }
