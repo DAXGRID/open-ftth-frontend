@@ -6,15 +6,15 @@ import "./ToggleLayerButton.scss";
 library.add(faLayerGroup);
 
 type LayerItem = {
-  name: string;
+  names: string[];
   text: string;
-  callback: (layerName: string) => void;
+  callback: (layerName: string[]) => void;
   defaultVisible: boolean;
 };
 
-type Layer = {
-  name: string;
+type LayerGroup = {
   text: string;
+  layers: string[];
 };
 
 function createToggleListItem(layerItem: LayerItem): HTMLElement {
@@ -29,7 +29,7 @@ function createToggleListItem(layerItem: LayerItem): HTMLElement {
   }
 
   element.addEventListener("click", () => {
-    layerItem.callback(layerItem.name);
+    layerItem.callback(layerItem.names);
     if (element.classList.contains("toggle-list-item--selected")) {
       element.classList.remove("toggle-list-item--selected");
     } else {
@@ -55,13 +55,13 @@ function createToggleList(layerItems: LayerItem[]): HTMLElement {
 }
 
 class ToggleLayerButton {
-  layers: Layer[];
+  layers: LayerGroup[];
   container: HTMLElement | null;
   map: Map | undefined;
   toggleButton: HTMLElement | null;
   toggleList: HTMLElement | null;
 
-  constructor(layerNames: Layer[]) {
+  constructor(layerNames: LayerGroup[]) {
     this.layers = layerNames;
     this.container = null;
     this.toggleButton = null;
@@ -86,18 +86,29 @@ class ToggleLayerButton {
     this.container.appendChild(button);
 
     const layerItems = this.layers.map<LayerItem>((x) => {
+      // We do this to find out if the button is toggled or not
+      let visible = true;
+      for (const layer of x.layers) {
+        var visibility = map.getLayoutProperty(layer, "visibility");
+        if (visibility === "none") {
+          visible = false;
+        }
+      }
+
       return {
-        name: x.name,
+        names: x.layers,
         text: x.text,
-        defaultVisible:
-          this.map?.getLayoutProperty(x.name, "visibility") === "visible",
+        defaultVisible: visible,
         callback: () => {
           if (!this.map || !this.container) return;
-          var visibility = this.map.getLayoutProperty(x.name, "visibility");
-          if (visibility === "visible") {
-            this.map.setLayoutProperty(x.name, "visibility", "none");
-          } else {
-            this.map.setLayoutProperty(x.name, "visibility", "visible");
+          for (const name of x.layers) {
+            var visibility = this.map.getLayoutProperty(name, "visibility");
+            // If undefined it is visible
+            if (visibility === "visible" || visibility === undefined) {
+              this.map.setLayoutProperty(name, "visibility", "none");
+            } else {
+              this.map.setLayoutProperty(name, "visibility", "visible");
+            }
           }
         },
       };

@@ -1,3 +1,12 @@
+type LayerConfig = {
+  name: string;
+  layerGroups: {
+    text: string;
+    layers: string[];
+  }[];
+  layer: any;
+};
+
 declare global {
   interface Window {
     config_API_GATEWAY_HTTP_URI: string;
@@ -8,7 +17,7 @@ declare global {
     config_BASEMAP_TILE_SERVER_URI: string;
     config_AERIAL_PHOTO_SERVER_URI: string;
     config_COLOR_OPTIONS: string[];
-    config_LAYERS: any[];
+    config_LAYERS: LayerConfig[];
   }
 }
 
