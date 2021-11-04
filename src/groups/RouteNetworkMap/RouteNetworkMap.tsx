@@ -278,7 +278,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       newMap.addControl(
         new ToggleLayerButton(
           Config.LAYERS.flatMap((x) => {
-            return x.layerToggles;
+            return x.layerGroups;
           })
         ),
         "top-right"
