@@ -301,6 +301,7 @@ function EstablishCustomerConnection({
             handleSelectedConnecionPointChange(x?.toString() ?? "")
           }
           selected={selectedConnectionPoint}
+          enableSearch={true}
         />
       </div>
       <div className="full-row">
