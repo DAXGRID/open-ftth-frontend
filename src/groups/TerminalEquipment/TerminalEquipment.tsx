@@ -6,6 +6,7 @@ import {
   getTerminalEquipments,
   TerminalEquipment as TerminalEquipmentType,
   TerminalStructure,
+  Line,
 } from "./TerminalEquipmentGql";
 
 type TerminalEquipmentTableContainerProps = {
@@ -26,10 +27,9 @@ function TerminalEquipmentTableContainer({
   return (
     <div className="terminal-equipment-table-container">
       <div className="terminal-equipment-table-container-header">
-        <p>{t("RACK_POSITION", { position: terminalEquipment.name })}</p>
-        <p>
-          {t("TYPE")}: {terminalEquipment.specName}
-        </p>
+        <p>{terminalEquipment.name}</p>
+        <p>{terminalEquipment.specName}</p>
+        <p>{terminalEquipment.info}</p>
         <div className="header-icons">
           <span
             role="button"
@@ -46,6 +46,40 @@ function TerminalEquipmentTableContainer({
       </div>
       <div className="terminal-equipment-table-container-body">{children}</div>
     </div>
+  );
+}
+
+type TerminalStructureRow = {
+  line: Line;
+  t: TFunction;
+};
+
+function TerminalLine({ line }: TerminalStructureRow) {
+  return (
+    <>
+      <div className="terminal-equipment-table-row">
+        <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
+          <div className="terminal-equipment-table-item">
+            <span className="terminal-equipment-table-item__icon">
+              <FontAwesomeIcon icon={faChevronRight} />
+            </span>
+            <span className="terminal-equipment-table-item__equipped">
+              {line.a?.end}
+            </span>
+          </div>
+          <div className="terminal-equipment-table-item">
+            {line.a?.connectedTo}
+          </div>
+          <div className="terminal-equipment-table-item">
+            {line.a?.terminal.name} -O- {line.z?.terminal.name}
+          </div>
+          <div className="terminal-equipment-table-item">
+            {line.z?.connectedTo}
+          </div>
+          <div className="terminal-equipment-table-item">{line.z?.end}</div>
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -74,43 +108,35 @@ function TerminalEquipmentTable({
         <div className="terminal-equipment-table-item">{t("Z-INFO")}</div>
       </div>
       <div className="terminal-equipment-table-body">
-        <div className="terminal-equipment-table-row">
-          <div className="terminal-equipment-header-row">
-            <p className="terminal-equipment-row-header__item">1</p>
-            <p className="terminal-equipment-row-header__item">
-              12 soems bred splidsebakke
-            </p>
-            <p className="terminal-equipment-row-header__item">
-              {t("TERMINAL_EQUIPMENT_PLACES_USED", { used: 2, total: 12 })}
-            </p>
-          </div>
-        </div>
+        {terminalStructures.map((x) => {
+          return (
+            <div key={x.id}>
+              <div className="terminal-equipment-table-row">
+                <div className="terminal-equipment-header-row">
+                  <p className="terminal-equipment-row-header__item">
+                    {x.name}
+                  </p>
+                  <p className="terminal-equipment-row-header__item">
+                    {x.specName}
+                  </p>
+                  <p className="terminal-equipment-row-header__item">
+                    {x.info}
+                  </p>
+                </div>
+              </div>
 
-        <div className="terminal-equipment-table-row">
-          <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
-            <div className="terminal-equipment-table-item">
-              <span className="terminal-equipment-table-item__icon">
-                <FontAwesomeIcon icon={faChevronRight} />
-              </span>
-              <span className="terminal-equipment-table-item__equipped">
-                GALAH-ODF 1-3-1 WDM 1-4-1 OLT-1-1-1
-              </span>
-            </div>
-            <div className="terminal-equipment-table-item">
-              K102034 (72) Fiber 1
-            </div>
-            <div className="terminal-equipment-table-item">1 -O-</div>
-            <div className="terminal-equipment-table-item">
-              Splitter 1 (1:32) Ind 1
-            </div>
-            <div className="terminal-equipment-table-item">
-              {t("TOTAL_INSTALLATIONS_PORTS_FREE", {
-                installations: 29,
-                freePorts: 3,
+              {x.lines.map((y) => {
+                return (
+                  <TerminalLine
+                    t={t}
+                    line={y}
+                    key={y.a?.terminal.id ?? y.z?.terminal.id}
+                  />
+                );
               })}
             </div>
-          </div>
-        </div>
+          );
+        })}
 
         {editMode && (
           <>
@@ -201,7 +227,11 @@ function TerminalEquipment() {
             toggleEditMode={toggleEditMode}
             terminalEquipment={x}
           >
-            <TerminalEquipmentTable editMode={editMode} t={t} />
+            <TerminalEquipmentTable
+              editMode={editMode}
+              t={t}
+              terminalStructures={x.terminalStructures}
+            />
           </TerminalEquipmentTableContainer>
         );
       })}

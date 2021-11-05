@@ -8,7 +8,7 @@ type ParentNodeStructure = {
   info: string | null;
 };
 
-type Line = {
+export type Line = {
   connectorSymbol: string;
   a: {
     terminal: {

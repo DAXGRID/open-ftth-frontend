@@ -11,6 +11,7 @@
   border-radius: 4px;
   border: 1px solid $border-color;
   flex-basis: 100%;
+  border-bottom: none;
 
   .terminal-equipment-table-container-header {
     display: flex;
@@ -73,10 +74,6 @@
     .terminal-equipment-table-row {
       flex: 1;
       border-bottom: 1px solid $border-color;
-
-      &:last-of-type {
-        border-bottom: none;
-      }
 
       .terminal-equipment-header-row {
         display: flex;
