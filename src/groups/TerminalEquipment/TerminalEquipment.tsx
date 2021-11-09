@@ -7,13 +7,46 @@ import {
   TerminalEquipment as TerminalEquipmentType,
   TerminalStructure,
   Line,
+  ParentNodeStructure,
 } from "./TerminalEquipmentGql";
+
+type RackContainerProps = {
+  children: ReactNode;
+  parentNodeStructure?: ParentNodeStructure;
+};
+
+function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
+  if (!parentNodeStructure) <></>;
+
+  return (
+    <div className="rack-container">
+      <div className="rack-container-header">
+        <p>{parentNodeStructure?.name}</p>
+        <p>{parentNodeStructure?.specName}</p>
+        <p>{parentNodeStructure?.info}</p>
+        <div className="header-icons">
+          <span
+            role="button"
+            className={
+              false
+                ? "header-icons__icon header-icons__icon--selected"
+                : "header-icons__icon"
+            }
+            onClick={() => {}}
+          >
+            <FontAwesomeIcon icon={faPen} />
+          </span>
+        </div>
+      </div>
+      {children}
+    </div>
+  );
+}
 
 type TerminalEquipmentTableContainerProps = {
   children: ReactNode;
   editMode: boolean;
   toggleEditMode: () => void;
-  t: TFunction;
   terminalEquipment: TerminalEquipmentType;
 };
 
@@ -21,7 +54,6 @@ function TerminalEquipmentTableContainer({
   children,
   editMode,
   toggleEditMode,
-  t,
   terminalEquipment,
 }: TerminalEquipmentTableContainerProps) {
   return (
@@ -122,6 +154,7 @@ function TerminalEquipmentTable({
                   <p className="terminal-equipment-row-header__item">
                     {x.info}
                   </p>
+                  <p className="terminal-equipment-row-header__item"></p>
                 </div>
               </div>
 
@@ -207,10 +240,28 @@ function TerminalEquipmentTable({
   );
 }
 
+function groupByParentId(terminalEquipments: TerminalEquipmentType[]): {
+  [name: string]: TerminalEquipmentType[];
+} {
+  return terminalEquipments.reduce<{
+    [name: string]: TerminalEquipmentType[];
+  }>((acc, v) => {
+    if (acc[v.parentNodeStructureId]) {
+      return {
+        ...acc,
+        [v.parentNodeStructureId]: [...acc[v.parentNodeStructureId], v],
+      };
+    } else {
+      return { ...acc, [v.parentNodeStructureId]: [v] };
+    }
+  }, {});
+}
+
 function TerminalEquipment() {
   const [editMode, setEditMode] = useState(false);
   const { t } = useTranslation();
   const response = getTerminalEquipments();
+  const groupedById = groupByParentId(response.terminalEquipments);
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
@@ -218,21 +269,31 @@ function TerminalEquipment() {
 
   return (
     <div className="terminal-equipment">
-      {response.terminalEquipments.map((x) => {
+      {Object.keys(groupedById).map((x) => {
         return (
-          <TerminalEquipmentTableContainer
-            key={x.id}
-            t={t}
-            editMode={editMode}
-            toggleEditMode={toggleEditMode}
-            terminalEquipment={x}
+          <RackContainer
+            parentNodeStructure={response.parentNodeStructures.find(
+              (z) => z.id === x
+            )}
+            key={x}
           >
-            <TerminalEquipmentTable
-              editMode={editMode}
-              t={t}
-              terminalStructures={x.terminalStructures}
-            />
-          </TerminalEquipmentTableContainer>
+            {groupedById[x].map((y) => {
+              return (
+                <TerminalEquipmentTableContainer
+                  key={y.id}
+                  editMode={editMode}
+                  toggleEditMode={toggleEditMode}
+                  terminalEquipment={y}
+                >
+                  <TerminalEquipmentTable
+                    editMode={editMode}
+                    t={t}
+                    terminalStructures={y.terminalStructures}
+                  />
+                </TerminalEquipmentTableContainer>
+              );
+            })}
+          </RackContainer>
         );
       })}
     </div>

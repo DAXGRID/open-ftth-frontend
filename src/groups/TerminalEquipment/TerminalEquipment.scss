@@ -1,5 +1,53 @@
 @import "../../global-styles/colors";
 
+.rack-container {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border: 1px solid $border-color;
+  border-bottom: none;
+
+  .rack-container-header {
+    display: flex;
+    justify-content: flex-start;
+    padding: 15px 10px;
+    font-size: 18px;
+    background-color: $hover-color;
+    border-bottom: none;
+    display: flex;
+    border-bottom: 1px solid $border-color;
+
+    p {
+      flex: 1;
+      font-weight: bold;
+    }
+
+    .header-icons {
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+      user-select: none;
+
+      .header-icons__icon {
+        padding-right: 5px;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        &.header-icons__icon--selected {
+          color: $success-color;
+        }
+      }
+    }
+  }
+
+  .terminal-equipment-table-container {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border: none;
+  }
+}
+
 .terminal-equipment {
   display: flex;
   flex-wrap: wrap;
@@ -19,9 +67,11 @@
     padding: 15px 10px;
     font-size: 18px;
     background-color: $hover-color;
+    display: flex;
 
     p {
-      margin-right: 50px;
+      flex: 1;
+      font-weight: bold;
     }
 
     .header-icons {
@@ -79,9 +129,10 @@
         display: flex;
         justify-content: flex-start;
         padding: 10px 10px;
+        background-color: $hover-color;
 
         .terminal-equipment-row-header__item {
-          margin-right: 50px;
+          flex: 1;
           font-weight: bold;
         }
       }

@@ -1,6 +1,6 @@
 import terminalEquipmentData from "./terminalEquipmentData.json";
 
-type ParentNodeStructure = {
+export type ParentNodeStructure = {
   id: string;
   category: string;
   name: string;
