@@ -122,7 +122,10 @@
 
   .terminal-equipment-table-body {
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: wrap;
+    overflow-y: auto;
+    max-height: 700px;
+    overflow-x: none;
 
     .terminal-equipment-table-row {
       flex: 1;
