@@ -4,7 +4,8 @@ import {
   faChevronRight,
   faTrashAlt,
   faPlusCircle,
-  faClipboardList,
+  faEdit,
+  faPlug,
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation, TFunction } from "react-i18next";
 import {
@@ -32,23 +33,15 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
         <div className="header-icons">
           <span
             role="button"
-            className={
-              false
-                ? "header-icons__icon header-icons__icon--selected"
-                : "header-icons__icon"
-            }
+            className="header-icons__icon text-green"
             onClick={() => {}}
           >
-            <FontAwesomeIcon icon={faClipboardList} />
+            <FontAwesomeIcon icon={faEdit} />
           </span>
 
           <span
             role="button"
-            className={
-              false
-                ? "header-icons__icon header-icons__icon--selected"
-                : "header-icons__icon"
-            }
+            className="header-icons__icon text-green"
             onClick={() => {}}
           >
             <FontAwesomeIcon icon={faPlusCircle} />
@@ -56,11 +49,7 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
 
           <span
             role="button"
-            className={
-              false
-                ? "header-icons__icon header-icons__icon--selected"
-                : "header-icons__icon"
-            }
+            className="header-icons__icon text-red"
             onClick={() => {}}
           >
             <FontAwesomeIcon icon={faTrashAlt} />
@@ -94,22 +83,14 @@ function TerminalEquipmentTableContainer({
         <div className="header-icons">
           <span
             role="button"
-            className={
-              editMode
-                ? "header-icons__icon header-icons__icon--selected"
-                : "header-icons__icon"
-            }
+            className="header-icons__icon text-green"
             onClick={() => toggleEditMode()}
           >
-            <FontAwesomeIcon icon={faClipboardList} />
+            <FontAwesomeIcon icon={faEdit} />
           </span>
           <span
             role="button"
-            className={
-              false
-                ? "header-icons__icon header-icons__icon--selected"
-                : "header-icons__icon"
-            }
+            className="header-icons__icon text-green"
             onClick={() => {}}
           >
             <FontAwesomeIcon icon={faPlusCircle} />
@@ -117,11 +98,7 @@ function TerminalEquipmentTableContainer({
 
           <span
             role="button"
-            className={
-              false
-                ? "header-icons__icon header-icons__icon--selected"
-                : "header-icons__icon"
-            }
+            className="header-icons__icon text-red"
             onClick={() => {}}
           >
             <FontAwesomeIcon icon={faTrashAlt} />
@@ -155,7 +132,37 @@ function TerminalLine({ line }: TerminalStructureRow) {
             {line.a?.connectedTo}
           </div>
           <div className="terminal-equipment-table-item">
-            {line.a?.terminal.name} -O- {line.z?.terminal.name}
+            <div className="table-item-terminal">
+              <div
+                role="button"
+                className={
+                  line.a?.connectedTo
+                    ? "table-item-terminal__item text-red"
+                    : "table-item-terminal__item text-green"
+                }
+              >
+                <FontAwesomeIcon icon={faPlug} />
+              </div>
+
+              <div className="table-item-terminal__item">
+                {line.a?.terminal.name}
+              </div>
+              <div className="table-item-terminal__item">-O-</div>
+              <div className="table-item-terminal__item">
+                {line.z?.terminal.name}
+              </div>
+
+              <div
+                role="button"
+                className={
+                  line.z?.connectedTo
+                    ? "table-item-terminal__item text-red"
+                    : "table-item-terminal__item text-green"
+                }
+              >
+                <FontAwesomeIcon icon={faPlug} />
+              </div>
+            </div>
           </div>
           <div className="terminal-equipment-table-item">
             {line.z?.connectedTo}

@@ -102,7 +102,7 @@
 .terminal-equipment-table-grid-header,
 .terminal-equipment-table-grid-equipped {
   display: grid;
-  grid-template-columns: 4fr 2fr 1fr 3fr 3fr;
+  grid-template-columns: 4fr 3fr 2fr 3fr 3fr;
 }
 
 .terminal-equipment-table-grid-free {
@@ -114,7 +114,6 @@
   border-top: 1px solid $border-color;
 
   .terminal-equipment-header {
-    border-bottom: 1px solid $border-color;
     font-size: 16px;
   }
 
@@ -139,6 +138,12 @@
         padding: 10px 10px;
         background-color: $ultra-light-grey;
         font-size: 14px;
+        border-top: 1px solid $border-color;
+
+        &:first-child {
+          border-top: none;
+          border-top: 1px solid $border-color;
+        }
 
         .terminal-equipment-row-header__item {
           flex: 1;
@@ -153,13 +158,37 @@
   }
 
   .terminal-equipment-table-item {
-    padding: 10px 20px 10px 10px;
+    padding: 10px;
     border-right: 1px solid $border-color;
     display: flex;
     align-items: center;
 
+    &:last-child {
+      padding: 10px 20px 10px 10px;
+    }
+
     &:nth-of-type(5) {
       border-right: none;
+    }
+
+    .table-item-terminal {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 0.5fr 1fr 1fr 1fr 0.5fr;
+      align-items: center;
+
+      .table-item-terminal__item {
+        text-align: center;
+
+        svg {
+          font-size: 18px;
+          user-select: none;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
     }
 
     .terminal-equipment-table-item__icon {

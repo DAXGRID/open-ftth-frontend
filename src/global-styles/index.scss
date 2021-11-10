@@ -123,3 +123,15 @@ strong {
 .mapboxgl-ctrl-group button {
   font-size: 15px;
 }
+
+.color-red {
+  color: $error-color;
+}
+
+.text-red {
+  color: $red;
+}
+
+.text-green {
+  color: $green;
+}
