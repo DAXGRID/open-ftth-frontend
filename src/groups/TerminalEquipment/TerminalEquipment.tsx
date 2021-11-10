@@ -1,6 +1,11 @@
 import { useState, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight, faPen } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronRight,
+  faTrashAlt,
+  faPlusCircle,
+  faClipboardList,
+} from "@fortawesome/free-solid-svg-icons";
 import { useTranslation, TFunction } from "react-i18next";
 import {
   getTerminalEquipments,
@@ -34,7 +39,31 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
             }
             onClick={() => {}}
           >
-            <FontAwesomeIcon icon={faPen} />
+            <FontAwesomeIcon icon={faClipboardList} />
+          </span>
+
+          <span
+            role="button"
+            className={
+              false
+                ? "header-icons__icon header-icons__icon--selected"
+                : "header-icons__icon"
+            }
+            onClick={() => {}}
+          >
+            <FontAwesomeIcon icon={faPlusCircle} />
+          </span>
+
+          <span
+            role="button"
+            className={
+              false
+                ? "header-icons__icon header-icons__icon--selected"
+                : "header-icons__icon"
+            }
+            onClick={() => {}}
+          >
+            <FontAwesomeIcon icon={faTrashAlt} />
           </span>
         </div>
       </div>
@@ -72,7 +101,30 @@ function TerminalEquipmentTableContainer({
             }
             onClick={() => toggleEditMode()}
           >
-            <FontAwesomeIcon icon={faPen} />
+            <FontAwesomeIcon icon={faClipboardList} />
+          </span>
+          <span
+            role="button"
+            className={
+              false
+                ? "header-icons__icon header-icons__icon--selected"
+                : "header-icons__icon"
+            }
+            onClick={() => {}}
+          >
+            <FontAwesomeIcon icon={faPlusCircle} />
+          </span>
+
+          <span
+            role="button"
+            className={
+              false
+                ? "header-icons__icon header-icons__icon--selected"
+                : "header-icons__icon"
+            }
+            onClick={() => {}}
+          >
+            <FontAwesomeIcon icon={faTrashAlt} />
           </span>
         </div>
       </div>
