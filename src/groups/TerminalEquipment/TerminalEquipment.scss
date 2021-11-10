@@ -44,9 +44,9 @@
   }
 
   .terminal-equipment-table-container {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    border-radius: 0;
     border: none;
+    border-bottom: 1px solid $border-color;
   }
 }
 
@@ -124,12 +124,16 @@
     display: flex;
     flex-flow: wrap;
     overflow-y: auto;
+    overflow: overlay;
     max-height: 700px;
-    overflow-x: none;
 
     .terminal-equipment-table-row {
       flex: 1;
       border-bottom: 1px solid $border-color;
+
+      &:last-child {
+        border-bottom: none;
+      }
 
       .terminal-equipment-header-row {
         display: flex;
@@ -151,8 +155,10 @@
   }
 
   .terminal-equipment-table-item {
-    padding: 10px;
+    padding: 10px 20px 10px 10px;
     border-right: 1px solid $border-color;
+    display: flex;
+    align-items: center;
 
     &:nth-of-type(5) {
       border-right: none;
