@@ -102,12 +102,12 @@
 .terminal-equipment-table-grid-header,
 .terminal-equipment-table-grid-equipped {
   display: grid;
-  grid-template-columns: 4fr 3fr 2fr 3fr 3fr;
+  grid-template-columns: 4fr 3.5fr 3fr 3.5fr 4fr;
 }
 
 .terminal-equipment-table-grid-free {
   display: grid;
-  grid-template-columns: 6fr 1fr 6fr;
+  grid-template-columns: 7.5fr 3fr 7.5fr;
 }
 
 .terminal-equipment-table {
@@ -173,12 +173,12 @@
 
     .table-item-terminal {
       width: 100%;
-      display: grid;
-      grid-template-columns: 0.5fr 1fr 1fr 1fr 0.5fr;
+      display: flex;
       align-items: center;
 
       .table-item-terminal__item {
         text-align: center;
+        flex: 1;
 
         svg {
           font-size: 18px;

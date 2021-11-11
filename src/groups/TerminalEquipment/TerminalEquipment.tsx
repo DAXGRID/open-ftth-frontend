@@ -110,6 +110,35 @@ function TerminalEquipmentTableContainer({
   );
 }
 
+type TerminalStructureRowFree = {
+  t: TFunction;
+};
+
+function TerminalLineFree({ t }: TerminalStructureRowFree) {
+  return (
+    <div className="terminal-equipment-table-row">
+      <div
+        className="terminal-equipment-data-row
+                terminal-equipment-table-grid-free"
+      >
+        <div
+          className="terminal-equipment-table-item
+                  terminal-equipment-table-item--free"
+        >
+          {t("FREE")}
+        </div>
+        <div className="terminal-equipment-table-item"></div>
+        <div
+          className="terminal-equipment-table-item
+                  terminal-equipment-table-item--free"
+        >
+          {t("FREE")}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 type TerminalStructureRow = {
   line: Line;
   t: TFunction;
@@ -117,60 +146,58 @@ type TerminalStructureRow = {
 
 function TerminalLine({ line }: TerminalStructureRow) {
   return (
-    <>
-      <div className="terminal-equipment-table-row">
-        <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
-          <div className="terminal-equipment-table-item">
-            <span className="terminal-equipment-table-item__icon">
-              <FontAwesomeIcon icon={faChevronRight} />
-            </span>
-            <span className="terminal-equipment-table-item__equipped">
-              {line.a?.end}
-            </span>
-          </div>
-          <div className="terminal-equipment-table-item">
-            {line.a?.connectedTo}
-          </div>
-          <div className="terminal-equipment-table-item">
-            <div className="table-item-terminal">
-              <div
-                role="button"
-                className={
-                  line.a?.connectedTo
-                    ? "table-item-terminal__item text-red"
-                    : "table-item-terminal__item text-green"
-                }
-              >
-                <FontAwesomeIcon icon={faPlug} />
-              </div>
+    <div className="terminal-equipment-table-row">
+      <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
+        <div className="terminal-equipment-table-item">
+          <span className="terminal-equipment-table-item__icon">
+            <FontAwesomeIcon icon={faChevronRight} />
+          </span>
+          <span className="terminal-equipment-table-item__equipped">
+            {line.a?.end}
+          </span>
+        </div>
+        <div className="terminal-equipment-table-item">
+          {line.a?.connectedTo}
+        </div>
+        <div className="terminal-equipment-table-item">
+          <div className="table-item-terminal">
+            <div
+              role="button"
+              className={
+                line.a?.connectedTo
+                  ? "table-item-terminal__item text-red"
+                  : "table-item-terminal__item text-green"
+              }
+            >
+              <FontAwesomeIcon icon={faPlug} />
+            </div>
 
-              <div className="table-item-terminal__item">
-                {line.a?.terminal.name}
-              </div>
-              <div className="table-item-terminal__item">-O-</div>
-              <div className="table-item-terminal__item">
-                {line.z?.terminal.name}
-              </div>
+            <div className="table-item-terminal__item">
+              {line.a?.terminal.name}
+            </div>
+            <div className="table-item-terminal__item">-O-</div>
+            <div className="table-item-terminal__item">
+              {line.z?.terminal.name}
+            </div>
 
-              <div
-                role="button"
-                className={
-                  line.z?.connectedTo
-                    ? "table-item-terminal__item text-red"
-                    : "table-item-terminal__item text-green"
-                }
-              >
-                <FontAwesomeIcon icon={faPlug} />
-              </div>
+            <div
+              role="button"
+              className={
+                line.z?.connectedTo
+                  ? "table-item-terminal__item text-red"
+                  : "table-item-terminal__item text-green"
+              }
+            >
+              <FontAwesomeIcon icon={faPlug} />
             </div>
           </div>
-          <div className="terminal-equipment-table-item">
-            {line.z?.connectedTo}
-          </div>
-          <div className="terminal-equipment-table-item">{line.z?.end}</div>
         </div>
+        <div className="terminal-equipment-table-item">
+          {line.z?.connectedTo}
+        </div>
+        <div className="terminal-equipment-table-item">{line.z?.end}</div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -217,83 +244,32 @@ function TerminalEquipmentTable({
                 </div>
               </div>
 
-              {x.lines.map((y) => {
-                return (
-                  <TerminalLine
-                    t={t}
-                    line={y}
-                    key={y.a?.terminal.id ?? y.z?.terminal.id}
-                  />
-                );
-              })}
+              {x.lines
+                .filter((t) => t.a?.connectedTo || t.z?.connectedTo)
+                .map((y) => {
+                  return (
+                    <TerminalLine
+                      t={t}
+                      line={y}
+                      key={y.a?.terminal.id ?? y.z?.terminal.id}
+                    />
+                  );
+                })}
+
+              {editMode &&
+                x.lines
+                  .filter((t) => !t.a?.connectedTo && !t.z?.connectedTo)
+                  .map((y) => {
+                    return (
+                      <TerminalLineFree
+                        t={t}
+                        key={y.a?.terminal.id ?? y.z?.terminal.id}
+                      />
+                    );
+                  })}
             </div>
           );
         })}
-
-        {editMode && (
-          <>
-            <div className="terminal-equipment-table-row">
-              <div
-                className="terminal-equipment-data-row
-                terminal-equipment-table-grid-free"
-              >
-                <div
-                  className="terminal-equipment-table-item
-                  terminal-equipment-table-item--free"
-                >
-                  {t("FREE")}
-                </div>
-                <div className="terminal-equipment-table-item">3</div>
-                <div
-                  className="terminal-equipment-table-item
-                  terminal-equipment-table-item--free"
-                >
-                  {t("FREE")}
-                </div>
-              </div>
-            </div>
-            <div className="terminal-equipment-table-row">
-              <div
-                className="terminal-equipment-data-row
-                terminal-equipment-table-grid-free"
-              >
-                <div
-                  className="terminal-equipment-table-item
-                  terminal-equipment-table-item--free"
-                >
-                  {t("FREE")}
-                </div>
-                <div className="terminal-equipment-table-item">4</div>
-                <div
-                  className="terminal-equipment-table-item
-                  terminal-equipment-table-item--free"
-                >
-                  {t("FREE")}
-                </div>
-              </div>
-            </div>
-            <div className="terminal-equipment-table-row">
-              <div
-                className="terminal-equipment-data-row
-                terminal-equipment-table-grid-free"
-              >
-                <div
-                  className="terminal-equipment-table-item
-                  terminal-equipment-table-item--free"
-                >
-                  {t("FREE")}
-                </div>
-                <div className="terminal-equipment-table-item">5</div>
-                <div
-                  className="terminal-equipment-table-item
-                  terminal-equipment-table-item--free"
-                >
-                  {t("FREE")}
-                </div>
-              </div>
-            </div>
-          </>
-        )}
       </div>
     </div>
   );
