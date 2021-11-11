@@ -86,8 +86,8 @@ function TerminalEquipmentTableContainer({
             role="button"
             className={
               showFreeLines
-                ? "header-icons__icon text-green"
-                : "header-icons__icon"
+                ? "header-icons__icon"
+                : "header-icons__icon text-green"
             }
             onClick={() => toggleShowFreeLines(terminalEquipment.id)}
           >
@@ -122,41 +122,86 @@ function TerminalEquipmentTableContainer({
   );
 }
 
-type TerminalStructureRowFree = {
+type PinPortProps = {
+  line: Line;
+};
+
+function PinPort({ line }: PinPortProps) {
+  return (
+    <div className="table-item-terminal">
+      <div
+        role="button"
+        className={
+          line.a?.connectedTo
+            ? "table-item-terminal__item text-red"
+            : "table-item-terminal__item text-green"
+        }
+      >
+        {line.a && <FontAwesomeIcon icon={faPlug} />}
+      </div>
+      <div className="table-item-terminal__item">{line.a?.terminal.name}</div>
+      <div className="table-item-terminal__item">-O-</div>
+      <div className="table-item-terminal__item">{line.z?.terminal.name}</div>
+      <div
+        role="button"
+        className={
+          line.z?.connectedTo
+            ? "table-item-terminal__item text-red"
+            : "table-item-terminal__item text-green"
+        }
+      >
+        {line.z && <FontAwesomeIcon icon={faPlug} />}
+      </div>
+    </div>
+  );
+}
+
+type TerminalLineFreeProps = {
+  line: Line;
   t: TFunction;
 };
 
-function TerminalLineFree({ t }: TerminalStructureRowFree) {
+function TerminalLineFree({ t, line }: TerminalLineFreeProps) {
   return (
     <div className="terminal-equipment-table-row">
       <div
         className="terminal-equipment-data-row
                 terminal-equipment-table-grid-free"
       >
-        <div
-          className="terminal-equipment-table-item
+        {line.a ? (
+          <div
+            className="terminal-equipment-table-item
                   terminal-equipment-table-item--free"
-        >
-          {t("FREE")}
+          >
+            {t("FREE")}
+          </div>
+        ) : (
+          <div className="terminal-equipment-table-item"></div>
+        )}
+        <div className="terminal-equipment-table-item">
+          <PinPort line={line} />
         </div>
-        <div className="terminal-equipment-table-item"></div>
-        <div
-          className="terminal-equipment-table-item
+        {line.z ? (
+          <div
+            className="terminal-equipment-table-item
                   terminal-equipment-table-item--free"
-        >
-          {t("FREE")}
-        </div>
+          >
+            {t("FREE")}
+          </div>
+        ) : (
+          <div className="terminal-equipment-table-item"></div>
+        )}
       </div>
     </div>
   );
 }
 
-type TerminalStructureRow = {
+type TerminalLineProps = {
   line: Line;
   t: TFunction;
 };
 
-function TerminalLine({ line }: TerminalStructureRow) {
+function TerminalLine({ line }: TerminalLineProps) {
   return (
     <div className="terminal-equipment-table-row">
       <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
@@ -172,37 +217,7 @@ function TerminalLine({ line }: TerminalStructureRow) {
           {line.a?.connectedTo}
         </div>
         <div className="terminal-equipment-table-item">
-          <div className="table-item-terminal">
-            <div
-              role="button"
-              className={
-                line.a?.connectedTo
-                  ? "table-item-terminal__item text-red"
-                  : "table-item-terminal__item text-green"
-              }
-            >
-              <FontAwesomeIcon icon={faPlug} />
-            </div>
-
-            <div className="table-item-terminal__item">
-              {line.a?.terminal.name}
-            </div>
-            <div className="table-item-terminal__item">-O-</div>
-            <div className="table-item-terminal__item">
-              {line.z?.terminal.name}
-            </div>
-
-            <div
-              role="button"
-              className={
-                line.z?.connectedTo
-                  ? "table-item-terminal__item text-red"
-                  : "table-item-terminal__item text-green"
-              }
-            >
-              <FontAwesomeIcon icon={faPlug} />
-            </div>
-          </div>
+          <PinPort line={line} />
         </div>
         <div className="terminal-equipment-table-item">
           {line.z?.connectedTo}
@@ -275,6 +290,7 @@ function TerminalEquipmentTable({
                     return (
                       <TerminalLineFree
                         t={t}
+                        line={y}
                         key={y.a?.terminal.id ?? y.z?.terminal.id}
                       />
                     );
