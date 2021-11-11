@@ -180,6 +180,14 @@
         text-align: center;
         flex: 1;
 
+        &:first-child {
+          flex: 0.5;
+        }
+
+        &:last-child {
+          flex: 0.5;
+        }
+
         svg {
           font-size: 18px;
           user-select: none;

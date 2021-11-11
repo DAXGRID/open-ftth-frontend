@@ -6,6 +6,7 @@ import {
   faPlusCircle,
   faEdit,
   faPlug,
+  faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation, TFunction } from "react-i18next";
 import {
@@ -63,15 +64,15 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
 
 type TerminalEquipmentTableContainerProps = {
   children: ReactNode;
-  editMode: boolean;
-  toggleEditMode: () => void;
+  toggleShowFreeLines: (id: string) => void;
+  showFreeLines: boolean;
   terminalEquipment: TerminalEquipmentType;
 };
 
 function TerminalEquipmentTableContainer({
   children,
-  editMode,
-  toggleEditMode,
+  toggleShowFreeLines,
+  showFreeLines,
   terminalEquipment,
 }: TerminalEquipmentTableContainerProps) {
   return (
@@ -83,8 +84,19 @@ function TerminalEquipmentTableContainer({
         <div className="header-icons">
           <span
             role="button"
+            className={
+              showFreeLines
+                ? "header-icons__icon text-green"
+                : "header-icons__icon"
+            }
+            onClick={() => toggleShowFreeLines(terminalEquipment.id)}
+          >
+            <FontAwesomeIcon icon={faFilter} />
+          </span>
+          <span
+            role="button"
             className="header-icons__icon text-green"
-            onClick={() => toggleEditMode()}
+            onClick={() => {}}
           >
             <FontAwesomeIcon icon={faEdit} />
           </span>
@@ -202,13 +214,13 @@ function TerminalLine({ line }: TerminalStructureRow) {
 }
 
 type TerminalEquipmentTableProps = {
-  editMode: boolean;
+  showFreeLines: boolean;
   t: TFunction;
   terminalStructures: TerminalStructure[];
 };
 
 function TerminalEquipmentTable({
-  editMode,
+  showFreeLines,
   t,
   terminalStructures,
 }: TerminalEquipmentTableProps) {
@@ -256,7 +268,7 @@ function TerminalEquipmentTable({
                   );
                 })}
 
-              {editMode &&
+              {showFreeLines &&
                 x.lines
                   .filter((t) => !t.a?.connectedTo && !t.z?.connectedTo)
                   .map((y) => {
@@ -293,13 +305,15 @@ function groupByParentId(terminalEquipments: TerminalEquipmentType[]): {
 }
 
 function TerminalEquipment() {
-  const [editMode, setEditMode] = useState(false);
+  const [showFreeLines, setShowFreeLines] = useState<{ [id: string]: boolean }>(
+    {}
+  );
   const { t } = useTranslation();
   const response = getTerminalEquipments();
   const groupedById = groupByParentId(response.terminalEquipments);
 
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
+  const toggleShowFreeLines = (id: string) => {
+    setShowFreeLines({ ...showFreeLines, [id]: !showFreeLines[id] });
   };
 
   return (
@@ -316,12 +330,12 @@ function TerminalEquipment() {
               return (
                 <TerminalEquipmentTableContainer
                   key={y.id}
-                  editMode={editMode}
-                  toggleEditMode={toggleEditMode}
+                  toggleShowFreeLines={toggleShowFreeLines}
                   terminalEquipment={y}
+                  showFreeLines={showFreeLines[y.id] ?? false}
                 >
                   <TerminalEquipmentTable
-                    editMode={editMode}
+                    showFreeLines={showFreeLines[y.id] ?? false}
                     t={t}
                     terminalStructures={y.terminalStructures}
                   />
