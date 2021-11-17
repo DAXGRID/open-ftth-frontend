@@ -4,7 +4,7 @@ import DefaultButton from "../../components/DefaultButton";
 import TextBox from "../../components/TextBox";
 import NumberPicker from "../../components/NumberPicker";
 import EquipmentSelector from "./EquipmentSelector";
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 function FiberConnectionEditor() {
   const { t } = useTranslation();
