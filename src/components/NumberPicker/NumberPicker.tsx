@@ -5,12 +5,13 @@ export type NumberPickerProps = {
 
 function NumberPicker({ value, setValue }: NumberPickerProps) {
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(Number(event.target.value));
+    const removeFrontZeros = event.target.value.replace(/^0+/, "");
+    setValue(removeFrontZeros.length === 0 ? 0 : parseInt(removeFrontZeros));
   };
 
   return (
     <div className="number-picker">
-      <input value={value} type="number" onChange={onChange} />
+      <input value={value.toString()} type="number" onChange={onChange} />
     </div>
   );
 }
