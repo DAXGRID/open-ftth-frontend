@@ -72,7 +72,7 @@
   padding: 0 18px 0 18px;
   font-size: 14px;
   color: #3b3b3b;
-  line-height: 45px;
+  line-height: 40px;
   cursor: pointer;
   transition: all 0.2s;
   border-bottom: 1px solid $border-color;
@@ -102,8 +102,8 @@
 
 .arrow {
   position: relative;
-  height: 15px;
-  width: 15px;
+  height: 12px;
+  width: 12px;
 }
 
 .arrow::before,
@@ -117,23 +117,23 @@
 }
 
 .arrow::before {
-  left: -5px;
+  left: -3.5px;
   transform: rotate(45deg);
   background-color: $dark-grey;
 }
 
 .arrow::after {
-  left: 5px;
+  left: 3.5px;
   transform: rotate(-45deg);
   background-color: $dark-grey;
 }
 
 .open .arrow::before {
-  left: -5px;
+  left: -3.5px;
   transform: rotate(-45deg);
 }
 
 .open .arrow::after {
-  left: 5px;
+  left: 3.5px;
   transform: rotate(45deg);
 }
