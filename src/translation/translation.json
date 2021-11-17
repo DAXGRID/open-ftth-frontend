@@ -151,9 +151,17 @@
       "A-INFO": "A-info",
       "Z-INFO": "Z-info",
       "PIN/PORT": "Pin/Port",
-      "RACK_POSITION": "Rack position: {{position}}",
-      "TOTAL_INSTALLATIONS_PORTS_FREE": "Total {{installations}} installations. {{freePorts}} free ports",
-      "TERMINAL_EQUIPMENT_PLACES_USED": "({{used}} of {{total}} places used)"
+      "END_INFO": "End Info",
+      "FROM_EQUIPMENT": "From equipment",
+      "TO_EQUIPMENT": "To equipment",
+      "CONNECT": "Connect",
+      "FROM_EQUIPMENT": "From equipment",
+      "TO_EQUIPMENT": "To equipment",
+      "FROM_POSITION": "From position",
+      "TO_POSITION": "To position",
+      "NUMBER_OF_CONNECTIONS": "Number of connections",
+      "FROM_EQUIPMENT_JUMP": "From equipment jump",
+      "PATCH/PIGTAIL_COORD_LENGTH_CM": "Patch/pigtail coord length (cm)"
     }
   },
   "dk": {
@@ -308,9 +316,17 @@
       "A-INFO": "A-info",
       "Z-INFO": "Z-info",
       "PIN/PORT": "Pin/Port",
-      "RACK_POSITION": "Rack position: {{position}}",
-      "TOTAL_INSTALLATIONS_PORTS_FREE": "Total {{installations}} installationer. {{freePorts}} frie porte",
-      "TERMINAL_EQUIPMENT_PLACES_USED": "({{used}} af {{total}} pladser brugt)"
+      "END_INFO": "End Info",
+      "FROM_EQUIPMENT": "From equipment",
+      "TO_EQUIPMENT": "To equipment",
+      "CONNECT": "Forbind",
+      "FROM_EQUIPMENT": "Fra equipment",
+      "TO_EQUIPMENT": "Til equipment",
+      "FROM_POSITION": "Fra position",
+      "TO_POSITION": "Til position",
+      "NUMBER_OF_CONNECTIONS": "Antal forbindelser",
+      "FROM_EQUIPMENT_JUMP": "Fra equipment hop",
+      "PATCH/PIGTAIL_COORD_LENGTH_CM": "Patch/pigtail coord length(cm)"
     }
   }
 }

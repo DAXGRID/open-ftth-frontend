@@ -3,12 +3,15 @@ import LabelContainer from "../../components/LabelContainer";
 import DefaultButton from "../../components/DefaultButton";
 import TextBox from "../../components/TextBox";
 import EquipmentSelector from "./EquipmentSelector";
+import { useTranslation, TFunction } from "react-i18next";
 
 function FiberConnectionEditor() {
+  const { t } = useTranslation();
+
   return (
     <div className="fiber-connection-editor">
       <div className="full-row">
-        <LabelContainer text="From equipment:">
+        <LabelContainer text={t("FROM_EQUIPMENT")}>
           <SelectMenu
             options={[]}
             removePlaceHolderOnSelect
@@ -16,7 +19,7 @@ function FiberConnectionEditor() {
             selected={""}
           />
         </LabelContainer>
-        <LabelContainer text="To equipment:">
+        <LabelContainer text={t("TO_EQUIPMENT")}>
           <SelectMenu
             options={[]}
             removePlaceHolderOnSelect
@@ -26,7 +29,7 @@ function FiberConnectionEditor() {
         </LabelContainer>
       </div>
       <div className="full-row">
-        <LabelContainer text="From position:">
+        <LabelContainer text={t("FROM_POSITION")}>
           <SelectMenu
             options={[]}
             removePlaceHolderOnSelect
@@ -34,7 +37,7 @@ function FiberConnectionEditor() {
             selected={""}
           />
         </LabelContainer>
-        <LabelContainer text="To position:">
+        <LabelContainer text={t("TO_POSITION")}>
           <SelectMenu
             options={[]}
             removePlaceHolderOnSelect
@@ -43,26 +46,23 @@ function FiberConnectionEditor() {
           />
         </LabelContainer>
       </div>
-
       <div className="full-row">
-        <LabelContainer text="Number of connections:">
+        <LabelContainer text={t("NUMBER_OF_CONNECTIONS")}>
           <TextBox minWidth="250px" setValue={() => {}} value="10" />
         </LabelContainer>
-        <LabelContainer text="From equipment jump:">
+        <LabelContainer text={t("FROM_EQUIPMENT_JUMP")}>
           <TextBox minWidth="250px" setValue={() => {}} value="10" />
         </LabelContainer>
-        <LabelContainer text="Patch/pigtail coord length(cm):">
+        <LabelContainer text={t("PATCH/PIGTAIL_COORD_LENGTH_CM")}>
           <TextBox minWidth="250px" setValue={() => {}} value="10" />
         </LabelContainer>
       </div>
-
       <div className="full-row">
-        <EquipmentSelector />
+        <EquipmentSelector t={t} />
       </div>
-
       <div className="full-row center-items">
         <DefaultButton
-          innerText="Connect"
+          innerText={t("CONNECT")}
           maxWidth="500px"
           onClick={() => {
             console.log("Clicked");
