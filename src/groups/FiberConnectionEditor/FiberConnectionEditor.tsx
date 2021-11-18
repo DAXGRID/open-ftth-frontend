@@ -7,12 +7,15 @@ import NumberPicker from "../../components/NumberPicker";
 import EquipmentSelector from "./EquipmentSelector";
 import { useTranslation } from "react-i18next";
 import {
-  getEquipmentConnectivityFacesData,
-  EquipmentConnectivityFace,
+  getConnectivityFacesData,
+  ConnectivityFace,
+  ConnectivityFaceConnection,
+  getTConnectivityFaceConnectionsData,
+  getSConnectivityFaceConnectionsData,
 } from "./FiberConnectionEditorGql";
 
-function createEquipmentConnectivitySelectOptions(
-  x: EquipmentConnectivityFace[]
+function createConnectivityFaceSelectOptions(
+  x: ConnectivityFace[]
 ): SelectOption[] {
   return x.map<SelectOption>((y) => {
     return {
@@ -23,29 +26,65 @@ function createEquipmentConnectivitySelectOptions(
   });
 }
 
+function createConnectivityFaceConnectionSelectOptions(
+  x: ConnectivityFaceConnection[]
+): SelectOption[] {
+  return x.map<SelectOption>((y) => {
+    return {
+      text: y.name,
+      value: y.id,
+      key: y.id,
+    };
+  });
+}
+
 function FiberConnectionEditor() {
   const { t } = useTranslation();
   const [fromEquipmentId, setFromEquipmentId] = useState<string>("");
   const [toEquipmentId, setToEquipmentId] = useState<string>("");
-  const [equipmentConnectivityData] = useState(
-    getEquipmentConnectivityFacesData()
+  const [fromPositionId, setFromPositionId] = useState<string>("");
+  const [toPositionId, setToPositionId] = useState<string>("");
+  const [connectivityData] = useState(getConnectivityFacesData());
+  const [tConnectivityFaceConnections] = useState(
+    getTConnectivityFaceConnectionsData()
+  );
+  const [sConnectivityFaceConnections] = useState(
+    getSConnectivityFaceConnectionsData()
   );
 
-  const equipmentConnectivitySelectOptions = useMemo<SelectOption[]>(() => {
+  const connectivityFaceOptions = useMemo<SelectOption[]>(() => {
     return [
       { text: t("CHOOSE"), value: "", key: "0" },
-      ...createEquipmentConnectivitySelectOptions(
-        equipmentConnectivityData.equipmentConnectivityFaces
+      ...createConnectivityFaceSelectOptions(
+        connectivityData.equipmentConnectivityFaces
       ),
     ];
-  }, [equipmentConnectivityData, t]);
+  }, [connectivityData, t]);
+
+  const tConnectivityFaceConnectionOptions = useMemo<SelectOption[]>(() => {
+    return [
+      { text: t("CHOOSE"), value: "", key: "0" },
+      ...createConnectivityFaceConnectionSelectOptions(
+        tConnectivityFaceConnections.connectivityFaceConnections
+      ),
+    ];
+  }, [connectivityData, t]);
+
+  const sConnectivityFaceConnectionOptions = useMemo<SelectOption[]>(() => {
+    return [
+      { text: t("CHOOSE"), value: "", key: "0" },
+      ...createConnectivityFaceConnectionSelectOptions(
+        sConnectivityFaceConnections.connectivityFaceConnections
+      ),
+    ];
+  }, [connectivityData, t]);
 
   return (
     <div className="fiber-connection-editor">
       <div className="full-row">
         <LabelContainer text={t("FROM_EQUIPMENT")}>
           <SelectMenu
-            options={equipmentConnectivitySelectOptions}
+            options={connectivityFaceOptions}
             removePlaceHolderOnSelect
             onSelected={(x) => setFromEquipmentId(x as string)}
             selected={fromEquipmentId}
@@ -54,7 +93,7 @@ function FiberConnectionEditor() {
         </LabelContainer>
         <LabelContainer text={t("TO_EQUIPMENT")}>
           <SelectMenu
-            options={equipmentConnectivitySelectOptions}
+            options={connectivityFaceOptions}
             removePlaceHolderOnSelect
             onSelected={(x) => setToEquipmentId(x as string)}
             selected={toEquipmentId}
@@ -65,18 +104,20 @@ function FiberConnectionEditor() {
       <div className="full-row">
         <LabelContainer text={t("FROM_POSITION")}>
           <SelectMenu
-            options={[]}
+            options={tConnectivityFaceConnectionOptions}
             removePlaceHolderOnSelect
-            onSelected={() => {}}
-            selected={""}
+            onSelected={(x) => setFromPositionId(x as string)}
+            selected={fromPositionId}
+            enableSearch={true}
           />
         </LabelContainer>
         <LabelContainer text={t("TO_POSITION")}>
           <SelectMenu
-            options={[]}
+            options={sConnectivityFaceConnectionOptions}
             removePlaceHolderOnSelect
-            onSelected={() => {}}
-            selected={""}
+            onSelected={(x) => setToPositionId(x as string)}
+            selected={toPositionId}
+            enableSearch={true}
           />
         </LabelContainer>
       </div>

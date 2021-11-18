@@ -1,146 +1,146 @@
 [
-   {
-      "Id":"013efb04-1384-4bef-bbc2-de7edf280436",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 1",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-1",
-      "IsConnected":true
-   },
-   {
-      "Id":"69260b15-a222-40f6-9cae-bf12f612e05f",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 2",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-2",
-      "IsConnected":true
-   },
-   {
-      "Id":"91351b42-9f35-4f6a-9fd7-7f51e4ae62be",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 3",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-3",
-      "IsConnected":true
-   },
-   {
-      "Id":"56247f42-331a-47a5-a5cc-2609bbd8b624",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 4",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-4",
-      "IsConnected":true
-   },
-   {
-      "Id":"430191ab-4ba9-4f66-b890-335189997397",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 5",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-5",
-      "IsConnected":true
-   },
-   {
-      "Id":"dc3a1e9e-6ecd-4b2b-9d48-b146f6a99132",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 6",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-6",
-      "IsConnected":true
-   },
-   {
-      "Id":"5e3ec9f1-3d22-45ef-b269-d4d6a6ed3c3b",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 7",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-7",
-      "IsConnected":true
-   },
-   {
-      "Id":"8ac8dd45-54e5-45d2-bca4-da21ec50a03c",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 8",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-8",
-      "IsConnected":true
-   },
-   {
-      "Id":"6dff2761-9a14-4431-9f04-09d446a30b15",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 9",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-9",
-      "IsConnected":true
-   },
-   {
-      "Id":"01de28f3-0dfb-4014-8e91-210ed742f935",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 10",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-10",
-      "IsConnected":true
-   },
-   {
-      "Id":"79bdf92d-e724-42c1-b286-c6826ae5e28d",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 11",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-11",
-      "IsConnected":true
-   },
-   {
-      "Id":"c9d3df4d-7a92-4cc1-b747-e4f8ccc4fcce",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 12",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-12",
-      "IsConnected":true
-   },
-   {
-      "Id":"635ad572-d36a-4931-91f3-5a03bb370ba5",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 13",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-13",
-      "IsConnected":false
-   },
-   {
-      "Id":"a6c5dcd3-fe6f-4ba9-8123-167c4d4a190b",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 14",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-14",
-      "IsConnected":false
-   },
-   {
-      "Id":"b326518d-4903-4539-858e-22d2e02f113c",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 15",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-15",
-      "IsConnected":false
-   },
-   {
-      "Id":"251e8279-a840-491d-8f8c-813d674dcf56",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 16",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-16",
-      "IsConnected":false
-   },
-   {
-      "Id":"25f5f5fd-35b2-4028-a0c2-c0b7df318371",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 17",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-17",
-      "IsConnected":false
-   },
-   {
-      "Id":"71242428-19ca-4864-83d4-520683b4076a",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 18",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-18",
-      "IsConnected":false
-   },
-   {
-      "Id":"12f6c478-7335-417c-872e-1ceb7f8eef07",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 19",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-19",
-      "IsConnected":false
-   },
-   {
-      "Id":"341cd347-3259-4f8c-971e-0016c56686ba",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 20",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-20",
-      "IsConnected":false
-   },
-   {
-      "Id":"efd17e7b-a03a-45a7-9925-f830ec11c05b",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 21",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-21",
-      "IsConnected":false
-   },
-   {
-      "Id":"e13db27a-ad0e-4157-9125-e179b31df02f",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 22",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-22",
-      "IsConnected":false
-   },
-   {
-      "Id":"ad5ed457-fee6-41e7-9a6b-6d67ab65f42b",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 23",
-      "EndInfo":"GALARH OLT 1-1-1 <- KINA WDM 1-2-23",
-      "IsConnected":false
-   },
-   {
-      "Id":"906eb1d4-c449-4b11-a97c-b3921d32f210",
-      "Name":"Rack 1 - LISA Tray 1 - Splice Pin 24",
-      "EndInfo":"GALARH OLT 1-1-0 <- KINA WDM 1-2-24",
-      "IsConnected":false
-   }
+  {
+    "id": "013efb04-1384-4bef-bbc2-de7edf280436",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 1",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-1",
+    "isConnected": true
+  },
+  {
+    "id": "69260b15-a222-40f6-9cae-bf12f612e05f",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 2",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-2",
+    "isConnected": true
+  },
+  {
+    "id": "91351b42-9f35-4f6a-9fd7-7f51e4ae62be",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 3",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-3",
+    "isConnected": true
+  },
+  {
+    "id": "56247f42-331a-47a5-a5cc-2609bbd8b624",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 4",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-4",
+    "isConnected": true
+  },
+  {
+    "id": "430191ab-4ba9-4f66-b890-335189997397",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 5",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-5",
+    "isConnected": true
+  },
+  {
+    "id": "dc3a1e9e-6ecd-4b2b-9d48-b146f6a99132",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 6",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-6",
+    "isConnected": true
+  },
+  {
+    "id": "5e3ec9f1-3d22-45ef-b269-d4d6a6ed3c3b",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 7",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-7",
+    "isConnected": true
+  },
+  {
+    "id": "8ac8dd45-54e5-45d2-bca4-da21ec50a03c",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 8",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-8",
+    "isConnected": true
+  },
+  {
+    "id": "6dff2761-9a14-4431-9f04-09d446a30b15",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 9",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-9",
+    "isConnected": true
+  },
+  {
+    "id": "01de28f3-0dfb-4014-8e91-210ed742f935",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 10",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-10",
+    "isConnected": true
+  },
+  {
+    "id": "79bdf92d-e724-42c1-b286-c6826ae5e28d",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 11",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-11",
+    "isConnected": true
+  },
+  {
+    "id": "c9d3df4d-7a92-4cc1-b747-e4f8ccc4fcce",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 12",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-12",
+    "isConnected": true
+  },
+  {
+    "id": "635ad572-d36a-4931-91f3-5a03bb370ba5",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 13",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-13",
+    "isConnected": false
+  },
+  {
+    "id": "a6c5dcd3-fe6f-4ba9-8123-167c4d4a190b",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 14",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-14",
+    "isConnected": false
+  },
+  {
+    "id": "b326518d-4903-4539-858e-22d2e02f113c",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 15",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-15",
+    "isConnected": false
+  },
+  {
+    "id": "251e8279-a840-491d-8f8c-813d674dcf56",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 16",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-16",
+    "isConnected": false
+  },
+  {
+    "id": "25f5f5fd-35b2-4028-a0c2-c0b7df318371",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 17",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-17",
+    "isConnected": false
+  },
+  {
+    "id": "71242428-19ca-4864-83d4-520683b4076a",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 18",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-18",
+    "isConnected": false
+  },
+  {
+    "id": "12f6c478-7335-417c-872e-1ceb7f8eef07",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 19",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-19",
+    "isConnected": false
+  },
+  {
+    "id": "341cd347-3259-4f8c-971e-0016c56686ba",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 20",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-20",
+    "isConnected": false
+  },
+  {
+    "id": "efd17e7b-a03a-45a7-9925-f830ec11c05b",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 21",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-21",
+    "isConnected": false
+  },
+  {
+    "id": "e13db27a-ad0e-4157-9125-e179b31df02f",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 22",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-22",
+    "isConnected": false
+  },
+  {
+    "id": "ad5ed457-fee6-41e7-9a6b-6d67ab65f42b",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 23",
+    "endInfo": "GALARH OLT 1-1-1 <- KINA WDM 1-2-23",
+    "isConnected": false
+  },
+  {
+    "id": "906eb1d4-c449-4b11-a97c-b3921d32f210",
+    "name": "Rack 1 - LISA Tray 1 - Splice Pin 24",
+    "endInfo": "GALARH OLT 1-1-0 <- KINA WDM 1-2-24",
+    "isConnected": false
+  }
 ]
