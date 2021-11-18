@@ -23,6 +23,7 @@ function SelectMenu({
   maxWidth,
   selected,
   enableSearch,
+  removePlaceHolderOnSelect,
 }: SelectMenuProps) {
   const [toggled, setToggled] = useState(false);
   const [search, setSearch] = useState("");
@@ -53,17 +54,34 @@ function SelectMenu({
               onChange={(e) => setSearch(e.target.value)}
             />
           )}
-          {options
-            .filter((x) => x.text.toLowerCase().includes(search.toLowerCase()))
-            ?.map((option) => (
-              <CustomOption
-                key={option.key ?? option.value}
-                text={option.text}
-                triggerSelected={onSelected}
-                isSelected={option.value === selected}
-                value={option.value}
-              />
-            ))}
+          {removePlaceHolderOnSelect
+            ? options
+                .filter((x) => x.value && x.value !== -1)
+                .filter((x) =>
+                  x.text.toLowerCase().includes(search.toLowerCase())
+                )
+                ?.map((option) => (
+                  <CustomOption
+                    key={option.key ?? option.value}
+                    text={option.text}
+                    triggerSelected={onSelected}
+                    isSelected={option.value === selected}
+                    value={option.value}
+                  />
+                ))
+            : options
+                .filter((x) =>
+                  x.text.toLowerCase().includes(search.toLowerCase())
+                )
+                ?.map((option) => (
+                  <CustomOption
+                    key={option.key ?? option.value}
+                    text={option.text}
+                    triggerSelected={onSelected}
+                    isSelected={option.value === selected}
+                    value={option.value}
+                  />
+                ))}
         </div>
       </div>
     </div>

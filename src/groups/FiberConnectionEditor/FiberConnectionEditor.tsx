@@ -1,31 +1,64 @@
-import SelectMenu from "../../components/SelectMenu";
+import { useMemo, useState } from "react";
+import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import LabelContainer from "../../components/LabelContainer";
 import DefaultButton from "../../components/DefaultButton";
 import TextBox from "../../components/TextBox";
 import NumberPicker from "../../components/NumberPicker";
 import EquipmentSelector from "./EquipmentSelector";
 import { useTranslation } from "react-i18next";
+import {
+  getEquipmentConnectivityFacesData,
+  EquipmentConnectivityFace,
+} from "./FiberConnectionEditorGql";
+
+function createEquipmentConnectivitySelectOptions(
+  x: EquipmentConnectivityFace[]
+): SelectOption[] {
+  return x.map<SelectOption>((y) => {
+    return {
+      text: `${y.equipmentName} (${y.directionName})`,
+      value: `${y.equipmentId}(${y.directionType})`,
+      key: `${y.equipmentId}(${y.directionType})`,
+    };
+  });
+}
 
 function FiberConnectionEditor() {
   const { t } = useTranslation();
+  const [fromEquipmentId, setFromEquipmentId] = useState<string>("");
+  const [toEquipmentId, setToEquipmentId] = useState<string>("");
+  const [equipmentConnectivityData] = useState(
+    getEquipmentConnectivityFacesData()
+  );
+
+  const equipmentConnectivitySelectOptions = useMemo<SelectOption[]>(() => {
+    return [
+      { text: t("CHOOSE"), value: "", key: "0" },
+      ...createEquipmentConnectivitySelectOptions(
+        equipmentConnectivityData.equipmentConnectivityFaces
+      ),
+    ];
+  }, [equipmentConnectivityData, t]);
 
   return (
     <div className="fiber-connection-editor">
       <div className="full-row">
         <LabelContainer text={t("FROM_EQUIPMENT")}>
           <SelectMenu
-            options={[]}
+            options={equipmentConnectivitySelectOptions}
             removePlaceHolderOnSelect
-            onSelected={() => {}}
-            selected={""}
+            onSelected={(x) => setFromEquipmentId(x as string)}
+            selected={fromEquipmentId}
+            enableSearch={true}
           />
         </LabelContainer>
         <LabelContainer text={t("TO_EQUIPMENT")}>
           <SelectMenu
-            options={[]}
+            options={equipmentConnectivitySelectOptions}
             removePlaceHolderOnSelect
-            onSelected={() => {}}
-            selected={""}
+            onSelected={(x) => setToEquipmentId(x as string)}
+            selected={toEquipmentId}
+            enableSearch={true}
           />
         </LabelContainer>
       </div>

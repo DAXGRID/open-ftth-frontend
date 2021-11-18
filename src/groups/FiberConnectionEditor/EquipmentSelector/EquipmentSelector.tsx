@@ -10,11 +10,11 @@ function EquipmentSelector({ t }: EquipmentSelectorProps) {
       <div className="equipment-selector-table">
         <div className="equipment-selector-table-header">
           <div className="equipment-selector-table-header__row">
-            <p>{t("END_INFO")}:</p>
-            <p>{t("FROM_EQUIPMENT")}:</p>
+            <p>{t("END_INFO")}</p>
+            <p>{t("FROM")}</p>
             <p></p>
-            <p>{t("TO_EQUIPMENT")}:</p>
-            <p>{t("END_INFO")}:</p>
+            <p>{t("TO")}</p>
+            <p>{t("END_INFO")}</p>
           </div>
         </div>
         <div className="equipment-selector-table-body">

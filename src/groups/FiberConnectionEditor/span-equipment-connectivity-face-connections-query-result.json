@@ -1,0 +1,446 @@
+[
+   {
+      "Id":"d1aebf91-b297-4aa7-bd4f-351c15ea31c4",
+      "Name":"Fiber 1",
+      "EndInfo":"F1200 GSS 1-1-1 -> Splitter 1",
+      "IsConnected":true
+   },
+   {
+      "Id":"999c7fca-a754-49da-a3e5-4600143e9caf",
+      "Name":"Fiber 2",
+      "EndInfo":"F1200 GSS 1-1-2 -> Splitter 2",
+      "IsConnected":true
+   },
+   {
+      "Id":"7249a551-494c-42b4-b72d-0b7050551bc4",
+      "Name":"Fiber 3",
+      "EndInfo":"F1200 GSS 1-1-3 -> Splitter 3",
+      "IsConnected":true
+   },
+   {
+      "Id":"8788c5f5-0f01-4ec4-964b-9dfa19bcf2d2",
+      "Name":"Fiber 4",
+      "EndInfo":"F1200 GSS 1-1-4 -> Splitter 4",
+      "IsConnected":true
+   },
+   {
+      "Id":"882e36a8-0f35-4fb3-ad2e-5e8a10a0946a",
+      "Name":"Fiber 5",
+      "EndInfo":"F1200 GSS 1-1-5 -> Splitter 5",
+      "IsConnected":true
+   },
+   {
+      "Id":"a86a8d42-3932-44dc-97cd-3cedf12c8e5a",
+      "Name":"Fiber 6",
+      "EndInfo":"F1200 GSS 1-1-6 -> Splitter 6",
+      "IsConnected":true
+   },
+   {
+      "Id":"a4d061fc-896e-49b4-b885-0102b3031944",
+      "Name":"Fiber 7",
+      "EndInfo":"F1200 GSS 1-1-7 -> Splitter 7",
+      "IsConnected":true
+   },
+   {
+      "Id":"a6b16f29-25c8-4c00-bd89-5d9b839c3bb4",
+      "Name":"Fiber 8",
+      "EndInfo":"F1200 GSS 1-1-8 -> Splitter 8",
+      "IsConnected":true
+   },
+   {
+      "Id":"9fad7d47-414c-4044-ab36-eb88e6352700",
+      "Name":"Fiber 9",
+      "EndInfo":"F1200 GSS 1-1-9 -> Splitter 9",
+      "IsConnected":true
+   },
+   {
+      "Id":"dddda7fe-8e36-43a1-9170-9ea621c86df8",
+      "Name":"Fiber 10",
+      "EndInfo":"F1200 GSS 1-1-10 -> Splitter 10",
+      "IsConnected":true
+   },
+   {
+      "Id":"533ef059-01a2-4dad-a345-378f74806945",
+      "Name":"Fiber 11",
+      "EndInfo":"F1200 GSS 1-1-11 -> Splitter 11",
+      "IsConnected":true
+   },
+   {
+      "Id":"0001f83c-e477-42ed-955b-20814621b009",
+      "Name":"Fiber 12",
+      "EndInfo":"F1200 GSS 1-1-12 -> Splitter 12",
+      "IsConnected":true
+   },
+   {
+      "Id":"bcb39906-d30d-4bff-bee5-30c24409965e",
+      "Name":"Fiber 13",
+      "EndInfo":"F1200 GSS 1-2-13 -> K530030 (48) Fiber 13",
+      "IsConnected":false
+   },
+   {
+      "Id":"a535fa9b-7d0c-4048-a5a4-a5f17bd753bc",
+      "Name":"Fiber 14",
+      "EndInfo":"F1200 GSS 1-2-14 -> K530030 (48) Fiber 14",
+      "IsConnected":false
+   },
+   {
+      "Id":"2a541e9a-e498-4a3e-8696-ebc1a20f68d7",
+      "Name":"Fiber 15",
+      "EndInfo":"F1200 GSS 1-2-15 -> K530030 (48) Fiber 15",
+      "IsConnected":false
+   },
+   {
+      "Id":"a40d51fe-ac11-440a-8810-d57babcb34b7",
+      "Name":"Fiber 16",
+      "EndInfo":"F1200 GSS 1-2-16 -> K530030 (48) Fiber 16",
+      "IsConnected":false
+   },
+   {
+      "Id":"d372270f-ba4d-4a1f-adda-9e1c525e688e",
+      "Name":"Fiber 17",
+      "EndInfo":"F1200 GSS 1-2-17 -> K530030 (48) Fiber 17",
+      "IsConnected":false
+   },
+   {
+      "Id":"7992ad7b-dda4-4b8a-8444-252e624aab79",
+      "Name":"Fiber 18",
+      "EndInfo":"F1200 GSS 1-2-18 -> K530030 (48) Fiber 18",
+      "IsConnected":false
+   },
+   {
+      "Id":"a69d731c-ea92-4901-8c33-3c237c8a51ec",
+      "Name":"Fiber 19",
+      "EndInfo":"F1200 GSS 1-2-19 -> K530030 (48) Fiber 19",
+      "IsConnected":false
+   },
+   {
+      "Id":"e918a24a-7bd8-474f-89ba-d7a8887ea598",
+      "Name":"Fiber 20",
+      "EndInfo":"F1200 GSS 1-2-20 -> K530030 (48) Fiber 20",
+      "IsConnected":false
+   },
+   {
+      "Id":"b05bbb4d-b4b2-457b-a456-87d9ad07f71a",
+      "Name":"Fiber 21",
+      "EndInfo":"F1200 GSS 1-2-21 -> K530030 (48) Fiber 21",
+      "IsConnected":false
+   },
+   {
+      "Id":"420b4053-7e12-40c7-b52c-dbca5bff218a",
+      "Name":"Fiber 22",
+      "EndInfo":"F1200 GSS 1-2-22 -> K530030 (48) Fiber 22",
+      "IsConnected":false
+   },
+   {
+      "Id":"122925c5-baa2-4bab-a4bd-1cf0a77fb028",
+      "Name":"Fiber 23",
+      "EndInfo":"F1200 GSS 1-2-23 -> K530030 (48) Fiber 23",
+      "IsConnected":false
+   },
+   {
+      "Id":"f7174b52-ebaa-4036-a60a-4d4a712592f3",
+      "Name":"Fiber 24",
+      "EndInfo":"F1200 GSS 1-2-24 -> K530030 (48) Fiber 24",
+      "IsConnected":false
+   },
+   {
+      "Id":"c990fd3e-620b-4422-bf7f-2e4988d09781",
+      "Name":"Fiber 23",
+      "EndInfo":"F1210 GSS 1-1-23 -> Splitter 23",
+      "IsConnected":false
+   },
+   {
+      "Id":"1ccee515-8d8c-4a5b-a908-85914bc3cd97",
+      "Name":"Fiber 24",
+      "EndInfo":"F1210 GSS 1-1-24 -> Splitter 24",
+      "IsConnected":false
+   },
+   {
+      "Id":"b24182f7-833a-4814-a29a-8f1dcad31343",
+      "Name":"Fiber 25",
+      "EndInfo":"F1210 GSS 1-1-25 -> Splitter 25",
+      "IsConnected":false
+   },
+   {
+      "Id":"56ce22aa-196b-4821-ba63-3d85fbecf20d",
+      "Name":"Fiber 26",
+      "EndInfo":"F1210 GSS 1-1-26 -> Splitter 26",
+      "IsConnected":false
+   },
+   {
+      "Id":"701e9b55-dd31-4327-979e-f93baba00ec4",
+      "Name":"Fiber 27",
+      "EndInfo":"F1210 GSS 1-1-27 -> Splitter 27",
+      "IsConnected":false
+   },
+   {
+      "Id":"55677f9f-d53e-4f6f-9b3d-8b25aa85bb9b",
+      "Name":"Fiber 28",
+      "EndInfo":"F1210 GSS 1-1-28 -> Splitter 28",
+      "IsConnected":false
+   },
+   {
+      "Id":"af617ab2-5c1b-43c4-934d-b4059cf78ddd",
+      "Name":"Fiber 29",
+      "EndInfo":"F1210 GSS 1-1-29 -> Splitter 29",
+      "IsConnected":false
+   },
+   {
+      "Id":"67698632-d97e-44d2-bb83-4f96d0eed9c8",
+      "Name":"Fiber 30",
+      "EndInfo":"F1210 GSS 1-1-30 -> Splitter 30",
+      "IsConnected":false
+   },
+   {
+      "Id":"d4edbcfd-9c1a-487b-8f1a-2b6d069e7e8a",
+      "Name":"Fiber 31",
+      "EndInfo":"F1210 GSS 1-1-31 -> Splitter 31",
+      "IsConnected":false
+   },
+   {
+      "Id":"5fc51ff3-7827-4f52-ac6e-da7e2e65a55d",
+      "Name":"Fiber 32",
+      "EndInfo":"F1210 GSS 1-1-32 -> Splitter 32",
+      "IsConnected":false
+   },
+   {
+      "Id":"e8edcf00-0bc3-49eb-b99d-22074f6bd5da",
+      "Name":"Fiber 33",
+      "EndInfo":"F1210 GSS 1-1-33 -> Splitter 33",
+      "IsConnected":false
+   },
+   {
+      "Id":"0e466796-fadd-410e-9a36-7bf4f019f0c9",
+      "Name":"Fiber 34",
+      "EndInfo":"F1210 GSS 1-1-34 -> Splitter 34",
+      "IsConnected":false
+   },
+   {
+      "Id":"2e0d01f3-6da5-4de6-8b40-351312c2180e",
+      "Name":"Fiber 35",
+      "EndInfo":"F1210 GSS 1-1-35 -> Splitter 35",
+      "IsConnected":false
+   },
+   {
+      "Id":"6f46e279-2ded-4b48-876d-c1023e38e95f",
+      "Name":"Fiber 36",
+      "EndInfo":"F1210 GSS 1-1-36 -> Splitter 36",
+      "IsConnected":false
+   },
+   {
+      "Id":"719f7ad0-2ac9-4ee1-8001-cdd179da16f2",
+      "Name":"Fiber 37",
+      "EndInfo":"F1210 GSS 1-2-37 -> K430234 (48) Fiber 37",
+      "IsConnected":false
+   },
+   {
+      "Id":"e1169cd5-ab97-44ba-8e0a-539249e06317",
+      "Name":"Fiber 38",
+      "EndInfo":"F1210 GSS 1-2-38 -> K430234 (48) Fiber 38",
+      "IsConnected":false
+   },
+   {
+      "Id":"79a30dd7-f9a7-4c8e-8ae8-f44273554aae",
+      "Name":"Fiber 39",
+      "EndInfo":"F1210 GSS 1-2-39 -> K430234 (48) Fiber 39",
+      "IsConnected":false
+   },
+   {
+      "Id":"51e69133-52f8-4959-a151-8504cb938aa8",
+      "Name":"Fiber 40",
+      "EndInfo":"F1210 GSS 1-2-40 -> K430234 (48) Fiber 40",
+      "IsConnected":false
+   },
+   {
+      "Id":"50638653-ef5b-4937-a83d-693985da654f",
+      "Name":"Fiber 41",
+      "EndInfo":"F1210 GSS 1-2-41 -> K430234 (48) Fiber 41",
+      "IsConnected":false
+   },
+   {
+      "Id":"ba1e6d4b-e74b-488f-b405-ee5155ae268b",
+      "Name":"Fiber 42",
+      "EndInfo":"F1210 GSS 1-2-42 -> K430234 (48) Fiber 42",
+      "IsConnected":false
+   },
+   {
+      "Id":"7ca135ac-ce6b-4a07-837a-01c587bdfdac",
+      "Name":"Fiber 43",
+      "EndInfo":"F1210 GSS 1-2-43 -> K430234 (48) Fiber 43",
+      "IsConnected":false
+   },
+   {
+      "Id":"2612316f-4d99-48c7-8749-2ddb22833dbd",
+      "Name":"Fiber 44",
+      "EndInfo":"F1210 GSS 1-2-44 -> K430234 (48) Fiber 44",
+      "IsConnected":false
+   },
+   {
+      "Id":"7b4bb2f3-1b09-4fa8-b827-329b4ed70242",
+      "Name":"Fiber 45",
+      "EndInfo":"F1210 GSS 1-2-45 -> K430234 (48) Fiber 45",
+      "IsConnected":false
+   },
+   {
+      "Id":"aae848d7-326d-41b6-8fe5-abec9a85039d",
+      "Name":"Fiber 46",
+      "EndInfo":"F1210 GSS 1-2-46 -> K430234 (48) Fiber 46",
+      "IsConnected":false
+   },
+   {
+      "Id":"eea40560-9b8b-4b44-addd-f4ebd3744d76",
+      "Name":"Fiber 47",
+      "EndInfo":"F1210 GSS 1-2-47 -> K430234 (48) Fiber 47",
+      "IsConnected":false
+   },
+   {
+      "Id":"9497d3df-79e5-41ba-8d9d-99517969da93",
+      "Name":"Fiber 48",
+      "EndInfo":"F1210 GSS 1-2-48 -> K430234 (48) Fiber 48",
+      "IsConnected":false
+   },
+   {
+      "Id":"276a6dd6-0be3-4e87-b719-061bd4ecff94",
+      "Name":"Fiber 49",
+      "EndInfo":"F1230 GSS 1-1-49 -> Splitter 49",
+      "IsConnected":true
+   },
+   {
+      "Id":"228a8910-6000-41f0-b45c-1391f46becde",
+      "Name":"Fiber 50",
+      "EndInfo":"F1230 GSS 1-1-50 -> Splitter 50",
+      "IsConnected":true
+   },
+   {
+      "Id":"48427c93-dc1b-49b8-9d09-94efb28eef92",
+      "Name":"Fiber 51",
+      "EndInfo":"F1230 GSS 1-1-51 -> Splitter 51",
+      "IsConnected":true
+   },
+   {
+      "Id":"ebf08dd3-e9bb-4c25-a95f-2962466025d0",
+      "Name":"Fiber 52",
+      "EndInfo":"F1230 GSS 1-1-52 -> Splitter 52",
+      "IsConnected":true
+   },
+   {
+      "Id":"8ba17e95-2a2b-4f07-afb8-efea89539477",
+      "Name":"Fiber 53",
+      "EndInfo":"F1230 GSS 1-1-53 -> Splitter 53",
+      "IsConnected":true
+   },
+   {
+      "Id":"23c31a24-08a2-4ece-9a7c-57467e5c699a",
+      "Name":"Fiber 54",
+      "EndInfo":"F1230 GSS 1-1-54 -> Splitter 54",
+      "IsConnected":true
+   },
+   {
+      "Id":"e8bd2429-a75f-42bb-b5a1-f454cb538c46",
+      "Name":"Fiber 55",
+      "EndInfo":"F1230 GSS 1-1-55 -> Splitter 55",
+      "IsConnected":true
+   },
+   {
+      "Id":"316df134-df91-4bd3-bbfd-c38cb3057d0c",
+      "Name":"Fiber 56",
+      "EndInfo":"F1230 GSS 1-1-56 -> Splitter 56",
+      "IsConnected":true
+   },
+   {
+      "Id":"0b438c53-e358-4f19-8b33-69ad6cf87068",
+      "Name":"Fiber 57",
+      "EndInfo":"F1230 GSS 1-1-57 -> Splitter 57",
+      "IsConnected":true
+   },
+   {
+      "Id":"7db87733-5166-4393-b8cc-4aa5d210a68d",
+      "Name":"Fiber 58",
+      "EndInfo":"F1230 GSS 1-1-58 -> Splitter 58",
+      "IsConnected":true
+   },
+   {
+      "Id":"05ea100c-ed9d-4d6b-ae2a-4dd5b19bd24c",
+      "Name":"Fiber 59",
+      "EndInfo":"F1230 GSS 1-1-59 -> Splitter 59",
+      "IsConnected":true
+   },
+   {
+      "Id":"4c24b862-4ba8-48e7-bb1c-bc0a64303c16",
+      "Name":"Fiber 60",
+      "EndInfo":"F1230 GSS 1-1-60 -> Splitter 60",
+      "IsConnected":true
+   },
+   {
+      "Id":"876aa369-d7e8-4d1f-9165-88d2cd13c078",
+      "Name":"Fiber 61",
+      "EndInfo":"F1230 GSS 1-2-61 -> K601155 (48) Fiber 61",
+      "IsConnected":false
+   },
+   {
+      "Id":"96d6e459-4027-49bb-a9d8-3276ced1e546",
+      "Name":"Fiber 62",
+      "EndInfo":"F1230 GSS 1-2-62 -> K601155 (48) Fiber 62",
+      "IsConnected":false
+   },
+   {
+      "Id":"850ed6d3-dcc3-4370-aa54-c799bbe2eefa",
+      "Name":"Fiber 63",
+      "EndInfo":"F1230 GSS 1-2-63 -> K601155 (48) Fiber 63",
+      "IsConnected":false
+   },
+   {
+      "Id":"93be4460-da2e-4771-a8aa-7240622e7660",
+      "Name":"Fiber 64",
+      "EndInfo":"F1230 GSS 1-2-64 -> K601155 (48) Fiber 64",
+      "IsConnected":false
+   },
+   {
+      "Id":"ec7d2d81-d25e-449e-bdc3-523882e0a72f",
+      "Name":"Fiber 65",
+      "EndInfo":"F1230 GSS 1-2-65 -> K601155 (48) Fiber 65",
+      "IsConnected":false
+   },
+   {
+      "Id":"a7e86067-b379-49ce-85ea-129d0e962555",
+      "Name":"Fiber 66",
+      "EndInfo":"F1230 GSS 1-2-66 -> K601155 (48) Fiber 66",
+      "IsConnected":false
+   },
+   {
+      "Id":"2d86b738-97b6-400c-98ac-344c27b7cca4",
+      "Name":"Fiber 67",
+      "EndInfo":"F1230 GSS 1-2-67 -> K601155 (48) Fiber 67",
+      "IsConnected":false
+   },
+   {
+      "Id":"56a509aa-3aa0-470a-a8aa-a8fe0aa55aec",
+      "Name":"Fiber 68",
+      "EndInfo":"F1230 GSS 1-2-68 -> K601155 (48) Fiber 68",
+      "IsConnected":false
+   },
+   {
+      "Id":"48145659-b49c-4c6b-8c66-ea3cf35b9737",
+      "Name":"Fiber 69",
+      "EndInfo":"F1230 GSS 1-2-69 -> K601155 (48) Fiber 69",
+      "IsConnected":false
+   },
+   {
+      "Id":"a93b3040-647d-4421-9433-d6d7365ee5a3",
+      "Name":"Fiber 70",
+      "EndInfo":"F1230 GSS 1-2-70 -> K601155 (48) Fiber 70",
+      "IsConnected":false
+   },
+   {
+      "Id":"cedcf3f2-a6d7-4a7c-b7fd-013aec4fa4e4",
+      "Name":"Fiber 71",
+      "EndInfo":"F1230 GSS 1-2-71 -> K601155 (48) Fiber 71",
+      "IsConnected":false
+   },
+   {
+      "Id":"331d7ddb-e7bf-439e-ab6a-595981491f06",
+      "Name":"Fiber 72",
+      "EndInfo":"F1230 GSS 1-2-72 -> K601155 (48) Fiber 72",
+      "IsConnected":false
+   }
+]
