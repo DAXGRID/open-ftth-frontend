@@ -33,8 +33,7 @@ type EquipmentSelectorRow = {
 
 function createNumberOptions(count: number): SelectOption[] {
   if (count === 0) return [{ text: "0", value: 0, key: 0 }];
-
-  return Array.from({ length: count }, (v, k) => k + 1).map<SelectOption>(
+  return Array.from({ length: count }, (_, k) => k + 1).map<SelectOption>(
     (x) => {
       return { text: x.toString(), value: x, key: x };
     }
@@ -58,7 +57,7 @@ function createConnectivityFaceConnectionSelectOptions(
 ): SelectOption[] {
   return x.map<SelectOption>((y) => {
     return {
-      text: y.name,
+      text: `${y.name} (${y.endInfo})`,
       value: y.id,
       disabled: y.isConnected,
       key: y.id,
@@ -104,6 +103,8 @@ function FiberConnectionEditor() {
   const [toEquipmentId, setToEquipmentId] = useState<string>("");
   const [fromPositionId, setFromPositionId] = useState<string>("");
   const [toPositionId, setToPositionId] = useState<string>("");
+  const [numberOfConnections, setNumberOfConnections] = useState(0);
+  const [jumps, setJumps] = useState(0);
   const [connectivityData] = useState(getConnectivityFacesData());
   const [tConnectivityFaceConnections] = useState(
     getTConnectivityFaceConnectionsData()
@@ -139,7 +140,7 @@ function FiberConnectionEditor() {
     ];
   }, [sConnectivityFaceConnections, t]);
 
-  const maxAvailableCount = useMemo(() => {
+  const maxAvailableConnectionsCount = useMemo(() => {
     if (
       !tConnectivityFaceConnections.connectivityFaceConnections ||
       !sConnectivityFaceConnections.connectivityFaceConnections ||
@@ -206,14 +207,19 @@ function FiberConnectionEditor() {
       <div className="full-row">
         <LabelContainer text={t("NUMBER_OF_CONNECTIONS")}>
           <SelectMenu
-            options={createNumberOptions(maxAvailableCount)}
+            options={createNumberOptions(maxAvailableConnectionsCount)}
             removePlaceHolderOnSelect
-            onSelected={(x) => {}}
-            selected={1}
+            onSelected={(x) => setNumberOfConnections(Number(x))}
+            selected={numberOfConnections}
           />
         </LabelContainer>
         <LabelContainer text={t("FROM_EQUIPMENT_JUMP")}>
-          <NumberPicker minWidth="250px" setValue={() => {}} value={0} />
+          <SelectMenu
+            options={createNumberOptions(maxAvailableConnectionsCount)}
+            removePlaceHolderOnSelect
+            onSelected={(x) => setJumps(Number(x))}
+            selected={jumps}
+          />
         </LabelContainer>
         <LabelContainer text={t("PATCH/PIGTAIL_COORD_LENGTH_CM")}>
           <TextBox minWidth="250px" setValue={() => {}} value="0" />
