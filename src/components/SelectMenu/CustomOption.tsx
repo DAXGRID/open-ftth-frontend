@@ -3,13 +3,26 @@ type CustomOptionProps = {
   value: string | number;
   triggerSelected: (selected: string | number) => void;
   isSelected: boolean;
+  disabled: boolean;
 };
+
+function handleClassName(selected: boolean, disabled: boolean) {
+  if (disabled) {
+    return "menu-option disabled";
+  }
+  if (selected) {
+    return "menu-option selected";
+  }
+
+  return "menu-option";
+}
 
 function CustomOption({
   text,
   value,
   triggerSelected,
   isSelected,
+  disabled,
 }: CustomOptionProps) {
   function keyPress(triggerValue: string | number) {
     triggerSelected(triggerValue);
@@ -19,10 +32,12 @@ function CustomOption({
     <span
       role="button"
       tabIndex={0}
-      className={isSelected ? "menu-option selected" : "menu-option"}
+      className={handleClassName(isSelected, disabled)}
       data-value={value}
-      onClick={() => triggerSelected(value)}
-      onKeyPress={(e) => (e.key === "Enter" ? keyPress(value) : () => {})}
+      onClick={() => !disabled && triggerSelected(value)}
+      onKeyPress={(e) =>
+        !disabled && (e.key === "Enter" ? keyPress(value) : () => {})
+      }
     >
       {text}
     </span>

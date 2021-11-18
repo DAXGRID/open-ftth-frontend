@@ -6,6 +6,7 @@ interface SelectOption {
   text: string;
   value: string | number;
   key?: string | number;
+  disabled?: boolean;
 }
 
 type SelectMenuProps = {
@@ -67,6 +68,7 @@ function SelectMenu({
                     triggerSelected={onSelected}
                     isSelected={option.value === selected}
                     value={option.value}
+                    disabled={option.disabled ?? false}
                   />
                 ))
             : options
@@ -80,6 +82,7 @@ function SelectMenu({
                     triggerSelected={onSelected}
                     isSelected={option.value === selected}
                     value={option.value}
+                    disabled={option.disabled ?? false}
                   />
                 ))}
         </div>
