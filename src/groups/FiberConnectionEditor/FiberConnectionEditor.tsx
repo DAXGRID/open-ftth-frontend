@@ -32,24 +32,22 @@ function createRows(
   from: ConnectivityFaceConnection[],
   to: ConnectivityFaceConnection[]
 ): EquipmentSelectorRow[] {
-  {
-    return from.map<EquipmentSelectorRow>((x, i) => {
-      return {
-        from: {
-          id: x.id,
-          endInfo: x.endInfo,
-          isConnected: x.isConnected,
-          name: x.name,
-        },
-        to: {
-          id: to[i].id,
-          endInfo: to[i].endInfo,
-          isConnected: to[i].isConnected,
-          name: to[i].name,
-        },
-      };
-    });
-  }
+  return from.map<EquipmentSelectorRow>((x, i) => {
+    return {
+      from: {
+        id: x.id,
+        endInfo: x.endInfo,
+        isConnected: x.isConnected,
+        name: x.name,
+      },
+      to: {
+        id: to[i].id,
+        endInfo: to[i].endInfo,
+        isConnected: to[i].isConnected,
+        name: to[i].name,
+      },
+    };
+  });
 }
 
 function createNumberOptions(count: number): SelectOption[] {
@@ -91,7 +89,8 @@ function getAvailableConnections(
   to: ConnectivityFaceConnection[],
   fromId: string,
   toId: string,
-  count: number
+  count: number,
+  jumps: number
 ): { from: ConnectivityFaceConnection[]; to: ConnectivityFaceConnection[] } {
   const fromFiltered = from.filter((x) => !x.isConnected);
   const toFiltered = to.filter((x) => !x.isConnected);
@@ -99,8 +98,18 @@ function getAvailableConnections(
   const fromIndex = fromFiltered.findIndex((x) => x.id === fromId);
   const toIndex = toFiltered.findIndex((x) => x.id === toId);
 
-  const fromAvailable = fromFiltered.splice(fromIndex, count);
+  let fromAvailable: ConnectivityFaceConnection[] = [];
   const toAvailable = toFiltered.splice(toIndex, count);
+  if (jumps <= 1) {
+    fromAvailable = fromFiltered.splice(fromIndex, count);
+  } else {
+    let fromRest = fromFiltered.splice(fromIndex);
+    let fromFirst = fromRest.splice(0, count / 2);
+    let fromSecond = fromRest.splice(jumps, count / 2);
+    fromAvailable = fromFirst
+      .map((element, index) => [element, fromSecond[index]])
+      .flat();
+  }
 
   return { from: fromAvailable, to: toAvailable };
 }
@@ -125,14 +134,24 @@ function findAvailableCountFaceConnections(
     : fromAvailableCount;
 }
 
+function findAvailableJumps(
+  maxAvailableConnections: number,
+  numberOfConnections: number
+) {
+  if (!maxAvailableConnections || !numberOfConnections) return 1;
+  if (numberOfConnections === 1) return 1;
+  if (numberOfConnections === maxAvailableConnections) return 1;
+  return maxAvailableConnections - numberOfConnections;
+}
+
 function FiberConnectionEditor() {
   const { t } = useTranslation();
   const [fromEquipmentId, setFromEquipmentId] = useState<string>("");
   const [toEquipmentId, setToEquipmentId] = useState<string>("");
   const [fromPositionId, setFromPositionId] = useState<string>("");
   const [toPositionId, setToPositionId] = useState<string>("");
-  const [numberOfConnections, setNumberOfConnections] = useState(0);
-  const [jumps, setJumps] = useState(0);
+  const [numberOfConnections, setNumberOfConnections] = useState(1);
+  const [jumps, setJumps] = useState(1);
   const [connectivityData] = useState(getConnectivityFacesData());
   const [tConnectivityFaceConnections] = useState(
     getTConnectivityFaceConnectionsData()
@@ -190,13 +209,21 @@ function FiberConnectionEditor() {
     toPositionId,
   ]);
 
-  const rows = useMemo(() => {
+  const maxAvailableJumps = useMemo(() => {
+    return findAvailableJumps(
+      maxAvailableConnectionsCount,
+      numberOfConnections
+    );
+  }, [maxAvailableConnectionsCount, numberOfConnections]);
+
+  const connectionRows = useMemo(() => {
     if (
       !tConnectivityFaceConnections.connectivityFaceConnections ||
       !sConnectivityFaceConnections.connectivityFaceConnections ||
       !fromPositionId ||
       !toPositionId ||
-      !numberOfConnections
+      !numberOfConnections ||
+      !jumps
     )
       return [];
 
@@ -205,7 +232,8 @@ function FiberConnectionEditor() {
       sConnectivityFaceConnections.connectivityFaceConnections,
       fromPositionId,
       toPositionId,
-      numberOfConnections
+      numberOfConnections,
+      jumps
     );
 
     return createRows(available.from, available.to);
@@ -218,6 +246,33 @@ function FiberConnectionEditor() {
     jumps,
   ]);
 
+  const handleSetNumberOfConnections = (x: number) => {
+    setNumberOfConnections(x);
+    setJumps(1);
+  };
+
+  const handleSetFromEquipmentId = (x: string) => {
+    setFromEquipmentId(x);
+    setFromPositionId("");
+  };
+
+  const handleSetToEquipmentId = (x: string) => {
+    setToEquipmentId(x);
+    setToPositionId("");
+  };
+
+  const handleSetFromPositionId = (x: string) => {
+    setFromPositionId(x);
+    setNumberOfConnections(1);
+    setJumps(1);
+  };
+
+  const handleSetToPositionId = (x: string) => {
+    setToPositionId(x);
+    setNumberOfConnections(1);
+    setJumps(1);
+  };
+
   return (
     <div className="fiber-connection-editor">
       <div className="full-row">
@@ -225,7 +280,7 @@ function FiberConnectionEditor() {
           <SelectMenu
             options={connectivityFaceOptions}
             removePlaceHolderOnSelect
-            onSelected={(x) => setFromEquipmentId(x as string)}
+            onSelected={(x) => handleSetFromEquipmentId(x as string)}
             selected={fromEquipmentId}
             enableSearch={true}
           />
@@ -234,7 +289,7 @@ function FiberConnectionEditor() {
           <SelectMenu
             options={connectivityFaceOptions}
             removePlaceHolderOnSelect
-            onSelected={(x) => setToEquipmentId(x as string)}
+            onSelected={(x) => handleSetToEquipmentId(x as string)}
             selected={toEquipmentId}
             enableSearch={true}
           />
@@ -245,7 +300,7 @@ function FiberConnectionEditor() {
           <SelectMenu
             options={tConnectivityFaceConnectionOptions}
             removePlaceHolderOnSelect
-            onSelected={(x) => setFromPositionId(x as string)}
+            onSelected={(x) => handleSetFromPositionId(x as string)}
             selected={fromPositionId}
             enableSearch={true}
           />
@@ -254,7 +309,7 @@ function FiberConnectionEditor() {
           <SelectMenu
             options={sConnectivityFaceConnectionOptions}
             removePlaceHolderOnSelect
-            onSelected={(x) => setToPositionId(x as string)}
+            onSelected={(x) => handleSetToPositionId(x as string)}
             selected={toPositionId}
             enableSearch={true}
           />
@@ -265,13 +320,13 @@ function FiberConnectionEditor() {
           <SelectMenu
             options={createNumberOptions(maxAvailableConnectionsCount)}
             removePlaceHolderOnSelect
-            onSelected={(x) => setNumberOfConnections(Number(x))}
+            onSelected={(x) => handleSetNumberOfConnections(Number(x))}
             selected={numberOfConnections}
           />
         </LabelContainer>
         <LabelContainer text={t("FROM_EQUIPMENT_JUMP")}>
           <SelectMenu
-            options={createNumberOptions(maxAvailableConnectionsCount)}
+            options={createNumberOptions(maxAvailableJumps)}
             removePlaceHolderOnSelect
             onSelected={(x) => setJumps(Number(x))}
             selected={jumps}
@@ -282,7 +337,7 @@ function FiberConnectionEditor() {
         </LabelContainer>
       </div>
       <div className="full-row">
-        <EquipmentSelector t={t} rows={rows} />
+        <EquipmentSelector t={t} rows={connectionRows} />
       </div>
       <div className="full-row center-items">
         <DefaultButton
