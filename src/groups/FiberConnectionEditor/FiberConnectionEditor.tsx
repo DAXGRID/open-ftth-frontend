@@ -183,14 +183,59 @@ function FiberConnectionEditor() {
     getSConnectivityFaceConnectionsData()
   );
 
-  const connectivityFaceOptions = useMemo<SelectOption[]>(() => {
+  const fromConnectivityFaceOptions = useMemo<SelectOption[]>(() => {
+    const defaultOption = { text: t("CHOOSE"), value: "", key: "0" };
+    if (toEquipmentId) {
+      const kind = getEquipmentKind(
+        toEquipmentId,
+        connectivityData.equipmentConnectivityFaces
+      );
+      if (kind === "SpanEquipment") {
+        return [
+          defaultOption,
+          ...createConnectivityFaceSelectOptions(
+            connectivityData.equipmentConnectivityFaces.filter(
+              (x) => x.equipmentKind === "TerminalEquipment"
+            )
+          ),
+        ];
+      }
+    }
+
     return [
-      { text: t("CHOOSE"), value: "", key: "0" },
+      defaultOption,
       ...createConnectivityFaceSelectOptions(
         connectivityData.equipmentConnectivityFaces
       ),
     ];
-  }, [connectivityData, t]);
+  }, [connectivityData, t, toEquipmentId]);
+
+  const toConnectivityFaceOptions = useMemo<SelectOption[]>(() => {
+    const defaultOption = { text: t("CHOOSE"), value: "", key: "0" };
+    if (fromEquipmentId) {
+      const kind = getEquipmentKind(
+        fromEquipmentId,
+        connectivityData.equipmentConnectivityFaces
+      );
+      if (kind === "SpanEquipment") {
+        return [
+          defaultOption,
+          ...createConnectivityFaceSelectOptions(
+            connectivityData.equipmentConnectivityFaces.filter(
+              (x) => x.equipmentKind === "TerminalEquipment"
+            )
+          ),
+        ];
+      }
+    }
+
+    return [
+      defaultOption,
+      ...createConnectivityFaceSelectOptions(
+        connectivityData.equipmentConnectivityFaces
+      ),
+    ];
+  }, [connectivityData, t, fromEquipmentId]);
 
   const fromConnectivityFaceConnectionOptions = useMemo<SelectOption[]>(() => {
     return [
@@ -301,7 +346,7 @@ function FiberConnectionEditor() {
       <div className="full-row">
         <LabelContainer text={t("FROM_EQUIPMENT")}>
           <SelectMenu
-            options={connectivityFaceOptions}
+            options={fromConnectivityFaceOptions}
             removePlaceHolderOnSelect
             onSelected={(x) => handleSetFromEquipmentId(x as string)}
             selected={fromEquipmentId}
@@ -310,7 +355,7 @@ function FiberConnectionEditor() {
         </LabelContainer>
         <LabelContainer text={t("TO_EQUIPMENT")}>
           <SelectMenu
-            options={connectivityFaceOptions}
+            options={toConnectivityFaceOptions}
             removePlaceHolderOnSelect
             onSelected={(x) => handleSetToEquipmentId(x as string)}
             selected={toEquipmentId}
