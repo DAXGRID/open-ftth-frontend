@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import LabelContainer from "../../components/LabelContainer";
 import DefaultButton from "../../components/DefaultButton";
-import TextBox from "../../components/TextBox";
+import NumberPicker from "../../components/NumberPicker";
 import EquipmentSelector from "./EquipmentSelector";
 import { useTranslation } from "react-i18next";
 import {
@@ -27,6 +27,28 @@ type EquipmentSelectorRow = {
     isConnected: boolean;
   };
 };
+
+function getEquipmentKind(
+  id: string,
+  connectivityFaces: ConnectivityFace[]
+): string {
+  if (!id) return "";
+  return (
+    connectivityFaces.find((x) => x.equipmentId === id)?.equipmentKind ?? ""
+  );
+}
+
+function bothTerminalEquipment(
+  fromId: string,
+  toId: string,
+  connectivityFaces: ConnectivityFace[]
+): boolean {
+  if (!fromId || !toId) return false;
+  const fromKind = getEquipmentKind(fromId, connectivityFaces);
+  const toKind = getEquipmentKind(toId, connectivityFaces);
+  if (!fromKind || !toKind) return false;
+  return fromKind === "TerminalEquipment" && toKind === "TerminalEquipment";
+}
 
 function createRows(
   from: ConnectivityFaceConnection[],
@@ -65,7 +87,7 @@ function createConnectivityFaceSelectOptions(
   return x.map<SelectOption>((y) => {
     return {
       text: `${y.equipmentName} (${y.directionName})`,
-      value: `${y.equipmentId}(${y.directionType})`,
+      value: y.equipmentId,
       key: `${y.equipmentId}(${y.directionType})`,
     };
   });
@@ -152,11 +174,12 @@ function FiberConnectionEditor() {
   const [toPositionId, setToPositionId] = useState<string>("");
   const [numberOfConnections, setNumberOfConnections] = useState(1);
   const [jumps, setJumps] = useState(1);
+  const [coord, setCoord] = useState(0);
   const [connectivityData] = useState(getConnectivityFacesData());
-  const [tConnectivityFaceConnections] = useState(
+  const [fromConnectivityFaceConnections] = useState(
     getTConnectivityFaceConnectionsData()
   );
-  const [sConnectivityFaceConnections] = useState(
+  const [toConnectivityFaceConnections] = useState(
     getSConnectivityFaceConnectionsData()
   );
 
@@ -169,42 +192,42 @@ function FiberConnectionEditor() {
     ];
   }, [connectivityData, t]);
 
-  const tConnectivityFaceConnectionOptions = useMemo<SelectOption[]>(() => {
+  const fromConnectivityFaceConnectionOptions = useMemo<SelectOption[]>(() => {
     return [
       { text: t("CHOOSE"), value: "", key: "0" },
       ...createConnectivityFaceConnectionSelectOptions(
-        tConnectivityFaceConnections.connectivityFaceConnections
+        fromConnectivityFaceConnections.connectivityFaceConnections
       ),
     ];
-  }, [tConnectivityFaceConnections, t]);
+  }, [fromConnectivityFaceConnections, t]);
 
-  const sConnectivityFaceConnectionOptions = useMemo<SelectOption[]>(() => {
+  const toConnectivityFaceConnectionOptions = useMemo<SelectOption[]>(() => {
     return [
       { text: t("CHOOSE"), value: "", key: "0" },
       ...createConnectivityFaceConnectionSelectOptions(
-        sConnectivityFaceConnections.connectivityFaceConnections
+        toConnectivityFaceConnections.connectivityFaceConnections
       ),
     ];
-  }, [sConnectivityFaceConnections, t]);
+  }, [toConnectivityFaceConnections, t]);
 
   const maxAvailableConnectionsCount = useMemo(() => {
     if (
-      !tConnectivityFaceConnections.connectivityFaceConnections ||
-      !sConnectivityFaceConnections.connectivityFaceConnections ||
+      !fromConnectivityFaceConnections.connectivityFaceConnections ||
+      !toConnectivityFaceConnections.connectivityFaceConnections ||
       !fromPositionId ||
       !toPositionId
     )
       return 0;
 
     return findAvailableCountFaceConnections(
-      tConnectivityFaceConnections.connectivityFaceConnections,
-      sConnectivityFaceConnections.connectivityFaceConnections,
+      fromConnectivityFaceConnections.connectivityFaceConnections,
+      toConnectivityFaceConnections.connectivityFaceConnections,
       fromPositionId,
       toPositionId
     );
   }, [
-    tConnectivityFaceConnections,
-    sConnectivityFaceConnections,
+    fromConnectivityFaceConnections,
+    toConnectivityFaceConnections,
     fromPositionId,
     toPositionId,
   ]);
@@ -218,8 +241,8 @@ function FiberConnectionEditor() {
 
   const connectionRows = useMemo(() => {
     if (
-      !tConnectivityFaceConnections.connectivityFaceConnections ||
-      !sConnectivityFaceConnections.connectivityFaceConnections ||
+      !fromConnectivityFaceConnections.connectivityFaceConnections ||
+      !toConnectivityFaceConnections.connectivityFaceConnections ||
       !fromPositionId ||
       !toPositionId ||
       !numberOfConnections ||
@@ -228,8 +251,8 @@ function FiberConnectionEditor() {
       return [];
 
     const available = getAvailableConnections(
-      tConnectivityFaceConnections.connectivityFaceConnections,
-      sConnectivityFaceConnections.connectivityFaceConnections,
+      fromConnectivityFaceConnections.connectivityFaceConnections,
+      toConnectivityFaceConnections.connectivityFaceConnections,
       fromPositionId,
       toPositionId,
       numberOfConnections,
@@ -238,18 +261,13 @@ function FiberConnectionEditor() {
 
     return createRows(available.from, available.to);
   }, [
-    tConnectivityFaceConnections,
-    sConnectivityFaceConnections,
+    fromConnectivityFaceConnections,
+    toConnectivityFaceConnections,
     fromPositionId,
     toPositionId,
     numberOfConnections,
     jumps,
   ]);
-
-  const handleSetNumberOfConnections = (x: number) => {
-    setNumberOfConnections(x);
-    setJumps(1);
-  };
 
   const handleSetFromEquipmentId = (x: string) => {
     setFromEquipmentId(x);
@@ -270,6 +288,11 @@ function FiberConnectionEditor() {
   const handleSetToPositionId = (x: string) => {
     setToPositionId(x);
     setNumberOfConnections(1);
+    setJumps(1);
+  };
+
+  const handleSetNumberOfConnections = (x: number) => {
+    setNumberOfConnections(x);
     setJumps(1);
   };
 
@@ -298,7 +321,7 @@ function FiberConnectionEditor() {
       <div className="full-row">
         <LabelContainer text={t("FROM_POSITION")}>
           <SelectMenu
-            options={tConnectivityFaceConnectionOptions}
+            options={fromConnectivityFaceConnectionOptions}
             removePlaceHolderOnSelect
             onSelected={(x) => handleSetFromPositionId(x as string)}
             selected={fromPositionId}
@@ -307,7 +330,7 @@ function FiberConnectionEditor() {
         </LabelContainer>
         <LabelContainer text={t("TO_POSITION")}>
           <SelectMenu
-            options={sConnectivityFaceConnectionOptions}
+            options={toConnectivityFaceConnectionOptions}
             removePlaceHolderOnSelect
             onSelected={(x) => handleSetToPositionId(x as string)}
             selected={toPositionId}
@@ -332,9 +355,19 @@ function FiberConnectionEditor() {
             selected={jumps}
           />
         </LabelContainer>
-        <LabelContainer text={t("PATCH/PIGTAIL_COORD_LENGTH_CM")}>
-          <TextBox minWidth="250px" setValue={() => {}} value="0" />
-        </LabelContainer>
+        {bothTerminalEquipment(
+          fromEquipmentId,
+          toEquipmentId,
+          connectivityData.equipmentConnectivityFaces
+        ) && (
+          <LabelContainer text={t("PATCH/PIGTAIL_COORD_LENGTH_CM")}>
+            <NumberPicker
+              minWidth="250px"
+              setValue={(x) => setCoord(x)}
+              value={coord}
+            />
+          </LabelContainer>
+        )}
       </div>
       <div className="full-row">
         <EquipmentSelector t={t} rows={connectionRows} />
