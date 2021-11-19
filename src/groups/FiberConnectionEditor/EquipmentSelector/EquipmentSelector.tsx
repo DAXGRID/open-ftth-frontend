@@ -32,22 +32,20 @@ function EquipmentSelector({ rows, t }: EquipmentSelectorProps) {
           </div>
         </div>
         <div className="equipment-selector-table-body">
-          <div className="equipment-selector-table-body__row">
-            {rows.map((x) => {
-              return (
-                <div
-                  className="equipment-selector-table-body__row"
-                  key={`${x.from.id}${x.to.id}`}
-                >
-                  <p>{x.from.endInfo}</p>
-                  <p>{x.from.name}</p>
-                  <p className="text-center">-</p>
-                  <p>{x.to.name}</p>
-                  <p>{x.to.name}</p>
-                </div>
-              );
-            })}
-          </div>
+          {rows.map((x) => {
+            return (
+              <div
+                className="equipment-selector-table-body__row"
+                key={`${x.from.id}${x.to.id}`}
+              >
+                <p>{x.from.endInfo}</p>
+                <p>{x.from.name}</p>
+                <p className="text-center">-</p>
+                <p>{x.to.name}</p>
+                <p>{x.to.endInfo}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

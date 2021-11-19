@@ -3,7 +3,6 @@ import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import LabelContainer from "../../components/LabelContainer";
 import DefaultButton from "../../components/DefaultButton";
 import TextBox from "../../components/TextBox";
-import NumberPicker from "../../components/NumberPicker";
 import EquipmentSelector from "./EquipmentSelector";
 import { useTranslation } from "react-i18next";
 import {
@@ -15,21 +14,43 @@ import {
 } from "./FiberConnectionEditorGql";
 
 type EquipmentSelectorRow = {
-  rows: {
-    from: {
-      id: string;
-      name: string;
-      endInfo: string;
-      isConnected: boolean;
-    };
-    to: {
-      id: string;
-      name: string;
-      endInfo: string;
-      isConnected: boolean;
-    };
+  from: {
+    id: string;
+    name: string;
+    endInfo: string;
+    isConnected: boolean;
+  };
+  to: {
+    id: string;
+    name: string;
+    endInfo: string;
+    isConnected: boolean;
   };
 };
+
+function createRows(
+  from: ConnectivityFaceConnection[],
+  to: ConnectivityFaceConnection[]
+): EquipmentSelectorRow[] {
+  {
+    return from.map<EquipmentSelectorRow>((x, i) => {
+      return {
+        from: {
+          id: x.id,
+          endInfo: x.endInfo,
+          isConnected: x.isConnected,
+          name: x.name,
+        },
+        to: {
+          id: to[i].id,
+          endInfo: to[i].endInfo,
+          isConnected: to[i].isConnected,
+          name: to[i].name,
+        },
+      };
+    });
+  }
+}
 
 function createNumberOptions(count: number): SelectOption[] {
   if (count === 0) return [{ text: "0", value: 0, key: 0 }];
@@ -65,6 +86,25 @@ function createConnectivityFaceConnectionSelectOptions(
   });
 }
 
+function getAvailableConnections(
+  from: ConnectivityFaceConnection[],
+  to: ConnectivityFaceConnection[],
+  fromId: string,
+  toId: string,
+  count: number
+): { from: ConnectivityFaceConnection[]; to: ConnectivityFaceConnection[] } {
+  const fromFiltered = from.filter((x) => !x.isConnected);
+  const toFiltered = to.filter((x) => !x.isConnected);
+
+  const fromIndex = fromFiltered.findIndex((x) => x.id === fromId);
+  const toIndex = toFiltered.findIndex((x) => x.id === toId);
+
+  const fromAvailable = fromFiltered.splice(fromIndex, count);
+  const toAvailable = toFiltered.splice(toIndex, count);
+
+  return { from: fromAvailable, to: toAvailable };
+}
+
 function findAvailableCountFaceConnections(
   from: ConnectivityFaceConnection[],
   to: ConnectivityFaceConnection[],
@@ -83,18 +123,6 @@ function findAvailableCountFaceConnections(
   return fromAvailableCount > toAvailableCount
     ? toAvailableCount
     : fromAvailableCount;
-}
-
-function interleaveFaceConnections(
-  from: ConnectivityFaceConnection[],
-  to: ConnectivityFaceConnection[],
-  count: number,
-  jump: number
-): EquipmentSelectorRow[] {
-  const fromFiltered = from.filter((x) => !x.isConnected);
-  const toFiltered = to.filter((x) => !x.isConnected);
-
-  return [];
 }
 
 function FiberConnectionEditor() {
@@ -156,10 +184,38 @@ function FiberConnectionEditor() {
       toPositionId
     );
   }, [
-    tConnectivityFaceConnectionOptions,
-    sConnectivityFaceConnectionOptions,
+    tConnectivityFaceConnections,
+    sConnectivityFaceConnections,
     fromPositionId,
     toPositionId,
+  ]);
+
+  const rows = useMemo(() => {
+    if (
+      !tConnectivityFaceConnections.connectivityFaceConnections ||
+      !sConnectivityFaceConnections.connectivityFaceConnections ||
+      !fromPositionId ||
+      !toPositionId ||
+      !numberOfConnections
+    )
+      return [];
+
+    const available = getAvailableConnections(
+      tConnectivityFaceConnections.connectivityFaceConnections,
+      sConnectivityFaceConnections.connectivityFaceConnections,
+      fromPositionId,
+      toPositionId,
+      numberOfConnections
+    );
+
+    return createRows(available.from, available.to);
+  }, [
+    tConnectivityFaceConnections,
+    sConnectivityFaceConnections,
+    fromPositionId,
+    toPositionId,
+    numberOfConnections,
+    jumps,
   ]);
 
   return (
@@ -226,7 +282,7 @@ function FiberConnectionEditor() {
         </LabelContainer>
       </div>
       <div className="full-row">
-        <EquipmentSelector t={t} rows={[]} />
+        <EquipmentSelector t={t} rows={rows} />
       </div>
       <div className="full-row center-items">
         <DefaultButton
