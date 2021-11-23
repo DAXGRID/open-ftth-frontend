@@ -1,0 +1,40 @@
+@import "../../global-styles/colors";
+
+.table-container {
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid $border-color;
+
+  .table-container-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 18px;
+
+    p {
+      flex: 1;
+    }
+  }
+
+  .table-container-body {
+  }
+}
+
+.terminal-equipment-table-grid {
+  grid-template-columns: 3fr 2fr 1fr 2fr 2fr;
+  display: grid;
+}
+
+.terminal-equipment-table {
+  border-top: 1px solid $border-color;
+  background-color: $hover-color;
+
+  .terminal-equipment-table-item {
+    padding: 10px;
+    border-right: 1px solid $border-color;
+
+    &:nth-of-type(5) {
+      border-right: none;
+    }
+  }
+}

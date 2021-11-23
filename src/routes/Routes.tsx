@@ -4,6 +4,7 @@ import PlaceSpanEquipmentPage from "../pages/PlaceSpanEquipmentPage";
 import LoginPage from "../pages/LoginPage";
 import IdentifyFeaturesPage from "../pages/IdentifyFeaturePage";
 import WorkTaskPage from "../pages/WorkTaskPage";
+import TerminalEquipmentPage from "../pages/TerminalEquipmentPage";
 import PrivateRoute from "./utils";
 
 const Routes = () => (
@@ -20,6 +21,11 @@ const Routes = () => (
       component={IdentifyFeaturesPage}
     />
     <PrivateRoute exact path="/work-tasks/" component={WorkTaskPage} />
+    <PrivateRoute
+      exact
+      path="/terminal-equipment/"
+      component={TerminalEquipmentPage}
+    />
     <Route exact path="/login" component={LoginPage} />
   </Switch>
 );
