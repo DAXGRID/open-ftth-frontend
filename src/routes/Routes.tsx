@@ -5,6 +5,7 @@ import LoginPage from "../pages/LoginPage";
 import IdentifyFeaturesPage from "../pages/IdentifyFeaturePage";
 import WorkTaskPage from "../pages/WorkTaskPage";
 import TerminalEquipmentPage from "../pages/TerminalEquipmentPage";
+import FiberConnectionEditorPage from "../pages/FiberConnectionEditorPage";
 import PrivateRoute from "./utils";
 
 const Routes = () => (
@@ -25,6 +26,11 @@ const Routes = () => (
       exact
       path="/terminal-equipment/"
       component={TerminalEquipmentPage}
+    />
+    <PrivateRoute
+      exact
+      path="/fiber-connection-editor/"
+      component={FiberConnectionEditorPage}
     />
     <Route exact path="/login" component={LoginPage} />
   </Switch>

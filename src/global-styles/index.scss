@@ -79,6 +79,10 @@ body {
   &:last-child {
     padding-bottom: 0;
   }
+
+  &.center-items {
+    justify-content: center;
+  }
 }
 
 .justify-end {

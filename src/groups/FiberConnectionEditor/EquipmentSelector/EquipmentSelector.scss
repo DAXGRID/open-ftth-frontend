@@ -1,0 +1,52 @@
+@import "../../../global-styles/colors";
+
+.equipment-selector {
+  display: flex;
+  width: 100%;
+}
+
+.equipment-selector-table {
+  border: 1px solid $border-color;
+  width: 100%;
+
+  .equipment-selector-table-header {
+    border-bottom: 1px solid $border-color;
+
+    .equipment-selector-table-header__row {
+      display: grid;
+      grid-template-columns: 3fr 2fr 0.5fr 2fr 3fr;
+
+      p {
+        font-weight: bold;
+        font-size: 16px;
+        border-right: 1px solid $border-color;
+        padding: 10px 15px;
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
+  }
+
+  .equipment-selector-table-body {
+    .equipment-selector-table-body__row {
+      display: grid;
+      grid-template-columns: 3fr 2fr 0.5fr 2fr 3fr;
+      border-bottom: 1px solid $border-color;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      p {
+        font-size: 16px;
+        border-right: 1px solid $border-color;
+        padding: 10px 15px;
+
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+.label-container {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  .label-container__label {
+    flex-basis: 100%;
+    font-size: 18px;
+  }
+
+  .label-container-children {
+    flex-basis: 100%;
+  }
+}

@@ -1,5 +1,3 @@
-import React from "react";
-
 type DefaultButtonProps = {
   onClick: () => void;
   innerText: string | undefined;
