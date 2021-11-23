@@ -1,4 +1,4 @@
-FROM node:15.7 as build
+FROM node:16.8 as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
