@@ -20,7 +20,7 @@ const Routes = () => (
       component={IdentifyFeaturesPage}
     />
     <PrivateRoute exact path="/work-tasks/" component={WorkTaskPage} />
-    <Route exact path="/login" component={LoginPage} title="Login" />
+    <Route exact path="/login" component={LoginPage} />
   </Switch>
 );
 
