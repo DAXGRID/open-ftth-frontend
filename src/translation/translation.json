@@ -160,7 +160,9 @@
       "NUMBER_OF_CONNECTIONS": "Number of connections",
       "FROM_EQUIPMENT_JUMP": "From equipment jump",
       "PATCH/PIGTAIL_COORD_LENGTH_CM": "Patch/pigtail coord length (cm)",
-      "CHOOSE": "Choose"
+      "CHOOSE": "Choose",
+      "ADD_RACK": "Add rack",
+      "ADD_TERMINAL_EQUIPMENT": "Add terminal equipment"
     }
   },
   "dk": {
@@ -324,7 +326,9 @@
       "NUMBER_OF_CONNECTIONS": "Antal forbindelser",
       "FROM_EQUIPMENT_JUMP": "Fra equipment hop",
       "PATCH/PIGTAIL_COORD_LENGTH_CM": "Patch/pigtail coord length(cm)",
-      "CHOOSE": "Vælg"
+      "CHOOSE": "Vælg",
+      "ADD_RACK": "Tilføj rack",
+      "ADD_TERMINAL_EQUIPMENT": "Tilføj fiberudstyr"
     }
   }
 }

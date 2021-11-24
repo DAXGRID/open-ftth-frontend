@@ -6,6 +6,7 @@ import ModalContainer from "../../../components/ModalContainer";
 import SchematicDiagram from "../SchematicDiagram";
 import ToggleButton from "../../../components/ToggleButton";
 import ActionButton from "../../../components/ActionButton";
+import MultiOptionActionButton from "../../../components/MultiOptionActionButton";
 import { MapContext } from "../../../contexts/MapContext";
 import NodeContainerDetails from "../NodeContainerDetails";
 import SpanEquipmentDetails from "../SpanEquipmentDetails";
@@ -500,9 +501,25 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             title={t("DETACH_SPAN_EQUIPMENT")}
             disabled={!editMode}
           />
-          <ActionButton
+          <MultiOptionActionButton
             icon={AddStructureSvg}
-            action={() => setShowAddContainer(true)}
+            actions={[
+              {
+                text: t("ADD_NODE_CONTAINER"),
+                action: () => {},
+                activeFilter: () => true,
+              },
+              {
+                text: t("ADD_RACK"),
+                action: () => {},
+                activeFilter: () => true,
+              },
+              {
+                text: t("ADD_TERMINAL_EQUIPMENT"),
+                action: () => {},
+                activeFilter: () => true,
+              },
+            ]}
             title={t("ADD_NODE_CONTAINER")}
             disabled={!editMode}
           />
