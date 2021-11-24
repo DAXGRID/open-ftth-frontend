@@ -2,7 +2,6 @@ import { useState, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
-  faTrashAlt,
   faPlusCircle,
   faEdit,
   faPlug,
@@ -32,28 +31,11 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
         <p>{parentNodeStructure?.specName}</p>
         <p>{parentNodeStructure?.info}</p>
         <div className="header-icons">
-          <span
-            role="button"
-            className="header-icons__icon text-green"
-            onClick={() => {}}
-          >
+          <span role="button" className="header-icons__icon" onClick={() => {}}>
             <FontAwesomeIcon icon={faEdit} />
           </span>
-
-          <span
-            role="button"
-            className="header-icons__icon text-green"
-            onClick={() => {}}
-          >
+          <span role="button" className="header-icons__icon" onClick={() => {}}>
             <FontAwesomeIcon icon={faPlusCircle} />
-          </span>
-
-          <span
-            role="button"
-            className="header-icons__icon text-red"
-            onClick={() => {}}
-          >
-            <FontAwesomeIcon icon={faTrashAlt} />
           </span>
         </div>
       </div>
@@ -93,27 +75,11 @@ function TerminalEquipmentTableContainer({
           >
             <FontAwesomeIcon icon={faFilter} />
           </span>
-          <span
-            role="button"
-            className="header-icons__icon text-green"
-            onClick={() => {}}
-          >
+          <span role="button" className="header-icons__icon" onClick={() => {}}>
             <FontAwesomeIcon icon={faEdit} />
           </span>
-          <span
-            role="button"
-            className="header-icons__icon text-green"
-            onClick={() => {}}
-          >
+          <span role="button" className="header-icons__icon" onClick={() => {}}>
             <FontAwesomeIcon icon={faPlusCircle} />
-          </span>
-
-          <span
-            role="button"
-            className="header-icons__icon text-red"
-            onClick={() => {}}
-          >
-            <FontAwesomeIcon icon={faTrashAlt} />
           </span>
         </div>
       </div>
