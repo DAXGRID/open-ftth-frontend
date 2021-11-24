@@ -507,17 +507,17 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               {
                 text: t("ADD_NODE_CONTAINER"),
                 action: () => {},
-                activeFilter: () => true,
+                disabled: false,
               },
               {
                 text: t("ADD_RACK"),
                 action: () => {},
-                activeFilter: () => true,
+                disabled: true,
               },
               {
                 text: t("ADD_TERMINAL_EQUIPMENT"),
                 action: () => {},
-                activeFilter: () => true,
+                disabled: true,
               },
             ]}
             title={t("ADD_NODE_CONTAINER")}

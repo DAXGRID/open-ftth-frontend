@@ -57,6 +57,14 @@
         flex-basis: 100%;
         border-bottom: 1px solid $border-color;
 
+        &.disabled {
+          color: darkgrey;
+
+          &:hover {
+            cursor: not-allowed;
+          }
+        }
+
         &:last-child {
           border-bottom: none;
         }
