@@ -510,18 +510,21 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             actions={[
               {
                 text: t("ADD_NODE_CONTAINER"),
-                action: () => {},
+                action: () => setShowAddContainer(true),
                 disabled: containsNodeContainer(diagramObjects),
+                key: 0,
               },
               {
                 text: t("ADD_RACK"),
                 action: () => {},
                 disabled: !containsNodeContainer(diagramObjects),
+                key: 1,
               },
               {
                 text: t("ADD_TERMINAL_EQUIPMENT"),
                 action: () => {},
                 disabled: !containsNodeContainer(diagramObjects),
+                key: 2,
               },
             ]}
             title={t("ADD_NODE_CONTAINER")}

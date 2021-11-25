@@ -3,7 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 interface MultiOptionActionButtonProps {
-  actions: { text: string; action: () => void; disabled: boolean }[];
+  actions: {
+    text: string;
+    action: () => void;
+    disabled: boolean;
+    key: string | number;
+  }[];
   title: string;
   icon: IconProp | string;
   disabled: boolean;
@@ -49,6 +54,7 @@ function MultiOptionActionButton({
             {actions.map((x) => {
               return (
                 <li
+                  key={x.key}
                   className={x.disabled ? "disabled" : ""}
                   onClick={() => x.disabled && x.action()}
                 >
