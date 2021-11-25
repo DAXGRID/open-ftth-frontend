@@ -1,4 +1,11 @@
-import { useEffect, useState, useContext, useRef, useCallback } from "react";
+import {
+  useEffect,
+  useState,
+  useContext,
+  useRef,
+  useCallback,
+  useReducer,
+} from "react";
 import { useMutation, useClient } from "urql";
 import { MapboxGeoJSONFeature } from "maplibre-gl";
 import DiagramMenu from "../../../components/DiagramMenu";
@@ -67,6 +74,55 @@ function containsNodeContainer(diagramObjects: Diagram[]): boolean {
   return diagramObjects.find((x) => x.style === "NodeContainer") ? true : false;
 }
 
+interface ShowModals {
+  addContainer: boolean;
+  handleInnerConduit: boolean;
+  establishCustomerConnection: boolean;
+}
+
+interface ShowModalsAction {
+  type:
+    | "addContainer"
+    | "addInnerConduit"
+    | "establishCustomerConnection"
+    | "reset";
+  show?: boolean;
+}
+
+const showModalsInitialState: ShowModals = {
+  addContainer: false,
+  establishCustomerConnection: false,
+  handleInnerConduit: false,
+};
+
+function showModalsReducer(
+  state: ShowModals,
+  action: ShowModalsAction
+): ShowModals {
+  switch (action.type) {
+    case "addContainer":
+      return {
+        ...state,
+        addContainer: action.show ?? !state.addContainer,
+      };
+    case "addInnerConduit":
+      return {
+        ...state,
+        handleInnerConduit: action.show ?? !state.handleInnerConduit,
+      };
+    case "establishCustomerConnection":
+      return {
+        ...state,
+        establishCustomerConnection:
+          action.show ?? !state.establishCustomerConnection,
+      };
+    case "reset":
+      return { ...showModalsInitialState };
+    default:
+      throw new Error();
+  }
+}
+
 function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
@@ -74,11 +130,11 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
   const [singleSelectedFeature, setSingleSelectedFeature] =
     useState<MapboxGeoJSONFeature | null>();
-  const [showAddContainer, setShowAddContainer] = useState(false);
-  const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
-  const [showEstablishCustomerConnection, setShowEstablishCustomerConnection] =
-    useState(false);
   const { identifiedFeature, setTrace } = useContext(MapContext);
+  const [showModals, showModalsDispatch] = useReducer(
+    showModalsReducer,
+    showModalsInitialState
+  );
 
   const [, cutSpanSegmentsMutation] =
     useMutation<CutSpanSegmentsResponse>(CUT_SPAN_SEGMENTS);
@@ -104,17 +160,10 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   }, [identifiedFeature, setEditMode]);
 
   useEffect(() => {
-    setShowAddContainer(false);
-    setShowHandleInnerConduit(false);
+    showModalsDispatch({ type: "reset" });
     selectedFeatures.current = [];
-
     setSingleSelectedFeature(null);
-  }, [
-    diagramObjects,
-    envelope,
-    setSingleSelectedFeature,
-    setShowHandleInnerConduit,
-  ]);
+  }, [showModalsDispatch, diagramObjects, envelope, setSingleSelectedFeature]);
 
   const affixSpanEquipment = async () => {
     const nodeContainer = selectedFeatures.current.find(
@@ -430,15 +479,19 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   return (
     <div className="route-network-diagram">
       <ModalContainer
-        show={showAddContainer}
-        closeCallback={() => setShowAddContainer(false)}
+        show={showModals.addContainer}
+        closeCallback={() =>
+          showModalsDispatch({ type: "addContainer", show: false })
+        }
       >
         <AddContainer />
       </ModalContainer>
 
       <ModalContainer
-        show={showHandleInnerConduit}
-        closeCallback={() => setShowHandleInnerConduit(false)}
+        show={showModals.handleInnerConduit}
+        closeCallback={() =>
+          showModalsDispatch({ type: "addInnerConduit", show: false })
+        }
       >
         <AddInnerSpanStructure
           selectedOuterConduit={
@@ -449,12 +502,17 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       </ModalContainer>
 
       <ModalContainer
-        show={showEstablishCustomerConnection}
-        closeCallback={() => setShowEstablishCustomerConnection(false)}
+        show={showModals.establishCustomerConnection}
+        closeCallback={() =>
+          showModalsDispatch({
+            type: "establishCustomerConnection",
+            show: false,
+          })
+        }
       >
         <EstablishCustomerConnection
           routeNodeId={identifiedFeature.id}
-          load={showEstablishCustomerConnection}
+          load={showModals.establishCustomerConnection}
         />
       </ModalContainer>
 
@@ -510,7 +568,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             actions={[
               {
                 text: t("ADD_NODE_CONTAINER"),
-                action: () => setShowAddContainer(true),
+                action: () =>
+                  showModalsDispatch({ type: "addContainer", show: true }),
                 disabled: containsNodeContainer(diagramObjects),
                 key: 0,
               },
@@ -532,7 +591,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           />
           <ActionButton
             icon={AddConduitSvg}
-            action={() => setShowHandleInnerConduit(true)}
+            action={() =>
+              showModalsDispatch({ type: "addInnerConduit", show: true })
+            }
             title={t("ADD_INNER_CONDUIT")}
             disabled={!editMode}
           />
@@ -550,7 +611,12 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           />
           <ActionButton
             icon={EstablishCustomerConnectionSvg}
-            action={() => setShowEstablishCustomerConnection(true)}
+            action={() =>
+              showModalsDispatch({
+                type: "establishCustomerConnection",
+                show: true,
+              })
+            }
             title={t("ESTABLISH_CUSTOMER_CONNECTION")}
           />
           <ActionButton
