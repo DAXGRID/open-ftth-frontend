@@ -40,11 +40,7 @@ function MultiOptionActionButton({
         role="button"
         tabIndex={0}
         onClick={() => !disabled && setOpen(!open)}
-        className={
-          disabled
-            ? "multi-option-action-button disabled"
-            : "multi-option-action-button"
-        }
+        className={`multi-option-action-button ${disabled ? "disabled" : ""}`}
       >
         {renderIcon(icon, title)}
       </div>

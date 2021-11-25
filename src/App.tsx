@@ -58,9 +58,7 @@ function App() {
         <SideMenuItem path="/work-tasks" linkText={t("Work tasks")} />
       </SideMenu>
       <main
-        className={
-          sideMenuOpen ? "main-container side-menu-open" : "main-container"
-        }
+        className={`main-container ${sideMenuOpen ? "side-menu-open" : ""}`}
       >
         <Routes />
       </main>
