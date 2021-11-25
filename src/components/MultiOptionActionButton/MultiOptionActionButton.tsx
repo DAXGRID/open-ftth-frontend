@@ -56,7 +56,11 @@ function MultiOptionActionButton({
                 <li
                   key={x.key}
                   className={x.disabled ? "disabled" : ""}
-                  onClick={() => x.disabled && x.action()}
+                  onClick={() => {
+                    if (x.disabled) return;
+                    x.action();
+                    setOpen(false);
+                  }}
                 >
                   {x.text}
                 </li>
