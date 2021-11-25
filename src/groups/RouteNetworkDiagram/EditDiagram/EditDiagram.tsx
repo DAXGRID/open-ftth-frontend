@@ -63,6 +63,10 @@ type RouteNetworkDiagramProps = {
   envelope: Envelope;
 };
 
+function containsNodeContainer(diagramObjects: Diagram[]): boolean {
+  return diagramObjects.find((x) => x.style === "NodeContainer") ? true : false;
+}
+
 function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
@@ -507,17 +511,17 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               {
                 text: t("ADD_NODE_CONTAINER"),
                 action: () => {},
-                disabled: false,
+                disabled: containsNodeContainer(diagramObjects),
               },
               {
                 text: t("ADD_RACK"),
                 action: () => {},
-                disabled: true,
+                disabled: !containsNodeContainer(diagramObjects),
               },
               {
                 text: t("ADD_TERMINAL_EQUIPMENT"),
                 action: () => {},
-                disabled: true,
+                disabled: !containsNodeContainer(diagramObjects),
               },
             ]}
             title={t("ADD_NODE_CONTAINER")}
