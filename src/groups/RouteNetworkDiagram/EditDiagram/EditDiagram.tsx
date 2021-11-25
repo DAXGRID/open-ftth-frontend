@@ -19,6 +19,7 @@ import NodeContainerDetails from "../NodeContainerDetails";
 import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import FeatureInformation from "../FeatureInformation";
 import EstablishCustomerConnection from "../EstablishCustomerConnection";
+import AddRack from "../AddRack";
 import {
   Diagram,
   Envelope,
@@ -78,6 +79,7 @@ interface ShowModals {
   addContainer: boolean;
   handleInnerConduit: boolean;
   establishCustomerConnection: boolean;
+  addRack: boolean;
 }
 
 interface ShowModalsAction {
@@ -85,6 +87,7 @@ interface ShowModalsAction {
     | "addContainer"
     | "addInnerConduit"
     | "establishCustomerConnection"
+    | "addRack"
     | "reset";
   show?: boolean;
 }
@@ -93,6 +96,7 @@ const showModalsInitialState: ShowModals = {
   addContainer: false,
   establishCustomerConnection: false,
   handleInnerConduit: false,
+  addRack: false,
 };
 
 function showModalsReducer(
@@ -115,6 +119,11 @@ function showModalsReducer(
         ...state,
         establishCustomerConnection:
           action.show ?? !state.establishCustomerConnection,
+      };
+    case "addRack":
+      return {
+        ...state,
+        addRack: action.show ?? !state.addRack,
       };
     case "reset":
       return { ...showModalsInitialState };
@@ -516,6 +525,18 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         />
       </ModalContainer>
 
+      <ModalContainer
+        show={showModals.addRack}
+        closeCallback={() =>
+          showModalsDispatch({
+            type: "addRack",
+            show: false,
+          })
+        }
+      >
+        <AddRack />
+      </ModalContainer>
+
       <FeatureInformation />
 
       {identifiedFeature.type === "RouteNode" && (
@@ -575,7 +596,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               },
               {
                 text: t("ADD_RACK"),
-                action: () => {},
+                action: () =>
+                  showModalsDispatch({ type: "addRack", show: true }),
                 disabled: !containsNodeContainer(diagramObjects),
                 key: 1,
               },
