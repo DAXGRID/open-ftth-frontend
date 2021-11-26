@@ -20,6 +20,7 @@ import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import FeatureInformation from "../FeatureInformation";
 import EstablishCustomerConnection from "../EstablishCustomerConnection";
 import AddRack from "../AddRack";
+import AddTerminalEquipment from "../AddTerminalEquipment";
 import {
   Diagram,
   Envelope,
@@ -80,6 +81,7 @@ interface ShowModals {
   handleInnerConduit: boolean;
   establishCustomerConnection: boolean;
   addRack: boolean;
+  addTerminalEquipment: boolean;
 }
 
 interface ShowModalsAction {
@@ -88,6 +90,7 @@ interface ShowModalsAction {
     | "addInnerConduit"
     | "establishCustomerConnection"
     | "addRack"
+    | "addTerminalEquipment"
     | "reset";
   show?: boolean;
 }
@@ -97,6 +100,7 @@ const showModalsInitialState: ShowModals = {
   establishCustomerConnection: false,
   handleInnerConduit: false,
   addRack: false,
+  addTerminalEquipment: false,
 };
 
 function showModalsReducer(
@@ -124,6 +128,11 @@ function showModalsReducer(
       return {
         ...state,
         addRack: action.show ?? !state.addRack,
+      };
+    case "addTerminalEquipment":
+      return {
+        ...state,
+        addTerminalEquipment: action.show ?? !state.addTerminalEquipment,
       };
     case "reset":
       return { ...showModalsInitialState };
@@ -537,6 +546,18 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         <AddRack />
       </ModalContainer>
 
+      <ModalContainer
+        show={showModals.addTerminalEquipment}
+        closeCallback={() =>
+          showModalsDispatch({
+            type: "addTerminalEquipment",
+            show: false,
+          })
+        }
+      >
+        <AddTerminalEquipment />
+      </ModalContainer>
+
       <FeatureInformation />
 
       {identifiedFeature.type === "RouteNode" && (
@@ -603,7 +624,11 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               },
               {
                 text: t("ADD_TERMINAL_EQUIPMENT"),
-                action: () => {},
+                action: () =>
+                  showModalsDispatch({
+                    type: "addTerminalEquipment",
+                    show: true,
+                  }),
                 disabled: !containsNodeContainer(diagramObjects),
                 key: 2,
               },
