@@ -26,15 +26,21 @@
   }
 
   .modal-header {
+    display: flex;
     flex: 1;
-    flex-basis: 100%;
     padding-bottom: 20px;
 
+    .modal-header__title {
+      flex: 1;
+      font-size: 20px;
+      font-weight: bold;
+      align-self: center;
+    }
+
     .close {
-      color: #aaa;
-      float: right;
       font-size: 28px;
       font-weight: bold;
+      justify-self: flex-end;
 
       &:hover {
         color: black;

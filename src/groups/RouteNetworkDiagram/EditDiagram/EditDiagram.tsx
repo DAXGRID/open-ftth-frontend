@@ -535,6 +535,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       </ModalContainer>
 
       <ModalContainer
+        title={t("ADD_RACK")}
         show={showModals.addRack}
         closeCallback={() =>
           showModalsDispatch({
@@ -547,6 +548,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       </ModalContainer>
 
       <ModalContainer
+        title={t("ADD_TERMINAL_EQUIPMENT")}
         show={showModals.addTerminalEquipment}
         closeCallback={() =>
           showModalsDispatch({

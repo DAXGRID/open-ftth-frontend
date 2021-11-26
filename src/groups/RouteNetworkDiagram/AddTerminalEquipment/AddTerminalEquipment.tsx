@@ -7,7 +7,6 @@ function AddTerminalEquipment() {
   return (
     <div className="add-terminal-equipment">
       <div className="full-row-group">
-        <p className="full-row-group__title">Fiberudstyr</p>
         <div className="full-row">
           <LabelContainer text="Category:">
             <SelectMenu
