@@ -137,7 +137,7 @@ function showModalsReducer(
     case "reset":
       return { ...showModalsInitialState };
     default:
-      throw new Error();
+      throw new Error(`No action with type ${action.type}`);
   }
 }
 
