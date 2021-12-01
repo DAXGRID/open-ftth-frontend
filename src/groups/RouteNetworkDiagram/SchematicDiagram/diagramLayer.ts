@@ -279,13 +279,13 @@ export function getLayer(name: string): AnyLayer {
         },
         layout: {
           "text-allow-overlap": true,
-          "text-size": 14,
+          "text-size": 16,
           "text-font": ["Open Sans Bold"],
           "text-field": ["get", "label"],
           "text-anchor": "left",
           "text-justify": "left",
           "text-rotate": 0,
-          "text-offset": [0, 0],
+          "text-offset": [0, -0.5],
           "text-max-width": 1000,
         },
       } as SymbolLayer;
