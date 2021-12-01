@@ -73,6 +73,7 @@ export function getLayer(name: string): AnyLayer {
         type: "fill",
         paint: {
           "fill-color": "#CDCDCD",
+          "fill-outline-color": "black",
         },
       } as FillLayer;
     case "Rack":
@@ -83,6 +84,7 @@ export function getLayer(name: string): AnyLayer {
         type: "fill",
         paint: {
           "fill-color": "white",
+          "fill-outline-color": "black",
         },
       } as FillLayer;
     case "SubrackSpace":
@@ -93,6 +95,7 @@ export function getLayer(name: string): AnyLayer {
         type: "fill",
         paint: {
           "fill-color": "#98e398",
+          "fill-outline-color": "black",
         },
       } as FillLayer;
     case "OuterConduitOrange":
