@@ -151,6 +151,10 @@ function clickHighlight(
         sourceLayer: "OuterConduit",
       });
 
+      const racks = map.querySourceFeatures("Rack", {
+        sourceLayer: "Rack",
+      });
+
       innerConduits.forEach((x) => {
         map.setFeatureState(
           { source: "InnerConduit", id: x.id },
@@ -170,6 +174,10 @@ function clickHighlight(
           { source: "NodeContainer", id: x.id },
           { selected: false }
         );
+      });
+
+      racks.forEach((x) => {
+        map.setFeatureState({ source: "Rack", id: x.id }, { selected: false });
       });
     }
 
@@ -237,6 +245,8 @@ function SchematicDiagram({
         x.style.startsWith("NodeContainer")
       );
 
+      const hasRack = diagramObjects.find((x) => x.style.startsWith("Rack"));
+
       if (hasInnerConduit) {
         newMap.addLayer(innerConduitSelect);
         hoverPointer("InnerConduit", newMap);
@@ -260,6 +270,12 @@ function SchematicDiagram({
         hoverPointer("NodeContainerSide", newMap);
         clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
       }
+
+      /* if (hasRack && editMode) {
+       *   newMap.addLayer();
+       *   hoverPointer("Rack", newMap);
+       *   clickHighlight("Rack", newMap, onSelectFeature, editMode);
+       * } */
     });
 
     return () => {

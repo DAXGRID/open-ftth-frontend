@@ -75,6 +75,26 @@ export function getLayer(name: string): AnyLayer {
           "fill-color": "#CDCDCD",
         },
       } as FillLayer;
+    case "Rack":
+      return {
+        id: "Rack",
+        source: "Rack",
+        order: 1,
+        type: "fill",
+        paint: {
+          "fill-color": "white",
+        },
+      } as FillLayer;
+    case "SubrackSpace":
+      return {
+        id: "SubrackSpace",
+        source: "SubrackSpace",
+        order: 1,
+        type: "fill",
+        paint: {
+          "fill-color": "#98e398",
+        },
+      } as FillLayer;
     case "OuterConduitOrange":
     case "OuterConduitRed":
       return {
@@ -266,6 +286,47 @@ export function getLayer(name: string): AnyLayer {
           "text-justify": "left",
           "text-rotate": 0,
           "text-offset": [0, 0],
+          "text-max-width": 1000,
+        },
+      } as SymbolLayer;
+    case "RackLabel":
+      return {
+        id: "RackLabel",
+        source: "RackLabel",
+        type: "symbol",
+        order: 4,
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
+          "text-allow-overlap": true,
+          "text-size": 18,
+          "text-font": ["Open Sans Bold"],
+          "text-field": ["get", "label"],
+          "text-anchor": "left",
+          "text-justify": "left",
+          "text-rotate": 0,
+          "text-offset": [0, -0.25],
+          "text-max-width": 1000,
+        },
+      } as SymbolLayer;
+    case "RackUnitLabel":
+      return {
+        id: "RackUnitLabel",
+        source: "RackUnitLabel",
+        type: "symbol",
+        order: 4,
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
+          "text-allow-overlap": false,
+          "text-size": 14,
+          "text-font": ["Open Sans Bold"],
+          "text-field": ["get", "label"],
+          "text-anchor": "right",
+          "text-justify": "right",
+          "text-offset": [-0.75, 0],
           "text-max-width": 1000,
         },
       } as SymbolLayer;
