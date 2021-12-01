@@ -1,14 +1,20 @@
 import { useMemo, useReducer, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import TextBox from "../../../components/TextBox";
 import NumberPicker from "../../../components/NumberPicker";
 import LabelContainer from "../../../components/LabelContainer";
-import { useQuery } from "urql";
+import { useQuery, useClient } from "urql";
 import {
   QUERY_RACK_SPECIFICATIONS,
   RackSpecification,
   RackSpecificationsResponse,
+  PLACE_RACK_IN_CONTAINER,
+  PlaceRackInContainerResponse,
+  PlaceRackInContainerParameter,
 } from "./AddRackGql";
 
 function rackSpecificationToOptions(
@@ -52,7 +58,13 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-function AddRack() {
+interface AddRackProps {
+  nodeContainerId: string;
+}
+
+function AddRack({ nodeContainerId }: AddRackProps) {
+  const { t } = useTranslation();
+  const client = useClient();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const [specificationsQueryResult] = useQuery<RackSpecificationsResponse>({
@@ -72,7 +84,39 @@ function AddRack() {
         type: "setSelectedSpecification",
         id: specificationOptions[0].value.toString(),
       });
-  }, [specificationOptions, dispatch]);
+  }, [specificationOptions, state.selectedSpecification, dispatch]);
+
+  const addRack = async () => {
+    if (!nodeContainerId) {
+      toast.error("NO_NODE_CONTAINER_SELECTED");
+    }
+
+    const parameters: PlaceRackInContainerParameter = {
+      nodeContainerId: nodeContainerId,
+      rackHeightInUnits: state.heightUnits,
+      rackId: uuidv4(),
+      rackName: state.rackName,
+      rackSpecificationId: state.selectedSpecification,
+    };
+
+    debugger;
+
+    const response = await client
+      .mutation<PlaceRackInContainerResponse>(
+        PLACE_RACK_IN_CONTAINER,
+        parameters
+      )
+      .toPromise();
+
+    if (!response.data?.nodeContainer.placeRackInNodeContainer.isSuccess) {
+      toast.error(
+        t(
+          response.data?.nodeContainer.placeRackInNodeContainer.errorCode ??
+            "ERROR"
+        )
+      );
+    }
+  };
 
   return (
     <div className="add-rack page-container">
@@ -108,7 +152,7 @@ function AddRack() {
         </LabelContainer>
       </div>
       <div className="full-row">
-        <DefaultButton onClick={() => {}} innerText="Tilfoej" />
+        <DefaultButton onClick={() => addRack()} innerText="Tilfoej" />
       </div>
     </div>
   );

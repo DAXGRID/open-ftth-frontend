@@ -162,7 +162,8 @@
       "PATCH/PIGTAIL_COORD_LENGTH_CM": "Patch/pigtail coord length (cm)",
       "CHOOSE": "Choose",
       "ADD_RACK": "Add rack",
-      "ADD_TERMINAL_EQUIPMENT": "Add terminal equipment"
+      "ADD_TERMINAL_EQUIPMENT": "Add terminal equipment",
+      "NO_NODE_CONTAINER_SELECTED": "No node container selected"
     }
   },
   "dk": {
@@ -328,7 +329,8 @@
       "PATCH/PIGTAIL_COORD_LENGTH_CM": "Patch/pigtail coord length(cm)",
       "CHOOSE": "Vælg",
       "ADD_RACK": "Tilføj rack",
-      "ADD_TERMINAL_EQUIPMENT": "Tilføj fiberudstyr"
+      "ADD_TERMINAL_EQUIPMENT": "Tilføj fiberudstyr",
+      "NO_NODE_CONTAINER_SELECTED": "Du har ikke valgt en struktur."
     }
   }
 }

@@ -544,7 +544,12 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           })
         }
       >
-        <AddRack />
+        <AddRack
+          nodeContainerId={
+            selectedFeatures.current.find((x) => x.source === "NodeContainer")
+              ?.properties?.refId ?? ""
+          }
+        />
       </ModalContainer>
 
       <ModalContainer
