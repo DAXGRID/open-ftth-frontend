@@ -401,3 +401,19 @@ export const nodeContainerSelect: LineLayer = {
     ],
   },
 };
+
+export const rackSelect: LineLayer = {
+  id: "RackSelect",
+  type: "line",
+  source: "Rack",
+  paint: {
+    "line-width": 3,
+    "line-color": colorMap.LIGHT_BLUE,
+    "line-opacity": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      1,
+      0,
+    ],
+  },
+};

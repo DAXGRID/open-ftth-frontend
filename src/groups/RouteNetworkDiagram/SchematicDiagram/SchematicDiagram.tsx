@@ -14,6 +14,7 @@ import {
   nodeContainerSideSelect,
   outerConduitSelect,
   nodeContainerSelect,
+  rackSelect,
 } from "./diagramLayer";
 
 interface Envelope {
@@ -271,11 +272,11 @@ function SchematicDiagram({
         clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
       }
 
-      /* if (hasRack && editMode) {
-       *   newMap.addLayer();
-       *   hoverPointer("Rack", newMap);
-       *   clickHighlight("Rack", newMap, onSelectFeature, editMode);
-       * } */
+      if (hasRack && editMode) {
+        newMap.addLayer(rackSelect);
+        hoverPointer("Rack", newMap);
+        clickHighlight("Rack", newMap, onSelectFeature, editMode);
+      }
     });
 
     return () => {
