@@ -99,8 +99,6 @@ function AddRack({ nodeContainerId }: AddRackProps) {
       rackSpecificationId: state.selectedSpecification,
     };
 
-    debugger;
-
     const response = await client
       .mutation<PlaceRackInContainerResponse>(
         PLACE_RACK_IN_CONTAINER,
