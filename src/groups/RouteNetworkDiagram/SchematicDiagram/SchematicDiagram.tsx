@@ -127,9 +127,10 @@ function clickHighlight(
   editMode: boolean
 ) {
   map.on("click", featureName, (e) => {
+    const bboxSize = 1;
     const bbox: [PointLike, PointLike] = [
-      [e.point.x - 1, e.point.y - 1],
-      [e.point.x + 1, e.point.y + 1],
+      [e.point.x - bboxSize, e.point.y - bboxSize],
+      [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
     const feature = map.queryRenderedFeatures(bbox)[0];
@@ -149,7 +150,7 @@ function clickHighlight(
       });
 
       const nodeContainers = map.querySourceFeatures("NodeContainer", {
-        sourceLayer: "OuterConduit",
+        sourceLayer: "NodeContainer",
       });
 
       const racks = map.querySourceFeatures("Rack", {
@@ -270,6 +271,8 @@ function SchematicDiagram({
         newMap.addLayer(nodeContainerSideSelect);
         hoverPointer("NodeContainerSide", newMap);
         clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
+      } else if (hasNodeContainerSide) {
+        newMap.addLayer(nodeContainerSideSelect);
       }
 
       if (hasRack && editMode) {

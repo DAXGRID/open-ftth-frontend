@@ -60,8 +60,8 @@ export function getLayer(name: string): AnyLayer {
           "line-cap": "round",
         },
         paint: {
-          "line-width": 10,
-          "line-color": "#CDCDCD",
+          "line-width": 15,
+          "line-color": "black",
           "line-opacity": 0,
         },
       } as LineLayer;
@@ -346,13 +346,17 @@ export const nodeContainerSideSelect: LineLayer = {
     "line-cap": "butt",
   },
   paint: {
-    "line-width": 10,
-    "line-color": colorMap.LIGHT_BLUE,
-    "line-opacity": [
+    "line-width": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
-      1,
-      0,
+      8,
+      0.5,
+    ],
+    "line-color": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      colorMap.LIGHT_BLUE,
+      colorMap.BLACK,
     ],
   },
 };
@@ -394,7 +398,7 @@ export const nodeContainerSelect: LineLayer = {
   type: "line",
   source: "NodeContainer",
   paint: {
-    "line-width": 3,
+    "line-width": 4,
     "line-color": colorMap.LIGHT_BLUE,
     "line-opacity": [
       "case",
@@ -410,7 +414,7 @@ export const rackSelect: LineLayer = {
   type: "line",
   source: "Rack",
   paint: {
-    "line-width": 3,
+    "line-width": 4,
     "line-color": colorMap.LIGHT_BLUE,
     "line-opacity": [
       "case",
