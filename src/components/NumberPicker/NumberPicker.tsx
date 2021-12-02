@@ -3,6 +3,8 @@ export type NumberPickerProps = {
   setValue: (value: number) => void;
   minWidth?: string;
   disabled?: boolean;
+  minValue?: number;
+  maxValue?: number;
 };
 
 function NumberPicker({
@@ -10,10 +12,20 @@ function NumberPicker({
   setValue,
   minWidth,
   disabled,
+  minValue,
+  maxValue,
 }: NumberPickerProps) {
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const removeFrontZeros = event.target.value.replace(/^0+/, "");
-    setValue(removeFrontZeros.length === 0 ? 0 : parseInt(removeFrontZeros));
+    const noFrontZeros = event.target.value.replace(/^0+/, "");
+    const number = noFrontZeros.length === 0 ? 0 : parseInt(noFrontZeros);
+
+    if (minValue !== undefined && number < minValue) {
+      setValue(minValue);
+    } else if (maxValue !== undefined && number > maxValue) {
+      setValue(maxValue);
+    } else {
+      setValue(number);
+    }
   };
 
   return (

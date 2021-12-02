@@ -35,7 +35,7 @@ interface State {
 }
 
 type Action =
-  | { type: "setSelectedSpecification"; id: string }
+  | { type: "setSpecification"; id: string }
   | { type: "setRackName"; name: string }
   | { type: "setHeightUnits"; units: number };
 
@@ -47,7 +47,7 @@ const initialState: State = {
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case "setSelectedSpecification":
+    case "setSpecification":
       return { ...state, selectedSpecification: action.id };
     case "setRackName":
       return { ...state, rackName: action.name };
@@ -81,7 +81,7 @@ function AddRack({ nodeContainerId }: AddRackProps) {
     if (!specificationOptions || specificationOptions.length === 0) return;
     if (!state.selectedSpecification)
       dispatch({
-        type: "setSelectedSpecification",
+        type: "setSpecification",
         id: specificationOptions[0].value.toString(),
       });
   }, [specificationOptions, state.selectedSpecification, dispatch]);
@@ -125,7 +125,7 @@ function AddRack({ nodeContainerId }: AddRackProps) {
             removePlaceHolderOnSelect
             onSelected={(x) =>
               dispatch({
-                type: "setSelectedSpecification",
+                type: "setSpecification",
                 id: x?.toString() ?? "",
               })
             }

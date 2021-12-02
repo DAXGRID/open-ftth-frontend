@@ -562,7 +562,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           })
         }
       >
-        <AddTerminalEquipment />
+        <AddTerminalEquipment
+          routeNodeId={identifiedFeature.id}
+          rackId={
+            selectedFeatures.current.find((x) => x.source === "Rack")
+              ?.properties?.refId ?? ""
+          }
+        />
       </ModalContainer>
 
       <FeatureInformation />
