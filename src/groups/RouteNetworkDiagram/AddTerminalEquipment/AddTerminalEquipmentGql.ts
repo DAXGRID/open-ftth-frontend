@@ -79,6 +79,8 @@ export interface PlaceTerminalEquipmentInNodeContainerResponse {
   };
 }
 
+export type PlacementMethod = "TOP_DOWN" | "BOTTOM_UP";
+
 export interface PlaceTerminalEquipmentInNodeContainerParams {
   routeNodeId: string;
   terminalEquipmentSpecificationId: string;
@@ -91,7 +93,8 @@ export interface PlaceTerminalEquipmentInNodeContainerParams {
   subrackPlacementInfo: {
     rackId: string;
     startUnitPosition: number;
-    placementMethod: "TOP_DOWN";
+    // TODO fix naming issue
+    placmentMethod: PlacementMethod;
   } | null;
 }
 

@@ -8,6 +8,7 @@ import DefaultButton from "../../../components/DefaultButton";
 import NumberPicker from "../../../components/NumberPicker";
 import LabelContainer from "../../../components/LabelContainer";
 import {
+  PlacementMethod,
   QUERY_TERMINAL_EQUIPMENT,
   TerminalEquipmentSpecification,
   SpanEquipmentSpecificationsResponse,
@@ -31,9 +32,11 @@ function categoryToOptions(
 
 function specificationToOptions(
   specs: TerminalEquipmentSpecification[],
-  category: string
+  category: string,
+  isRackEquipment: boolean
 ): SelectOption[] {
   return specs
+    .filter((x) => x.isRackEquipment === isRackEquipment)
     .filter((x) => x.category === category)
     .map((x) => ({ text: x.name, value: x.id, key: x.id }));
 }
@@ -54,6 +57,8 @@ interface State {
   name: string;
   count: number;
   startNumber: number;
+  startUnitPosition: number;
+  placementMethod: PlacementMethod;
 }
 
 type Action =
@@ -62,7 +67,10 @@ type Action =
   | { type: "setManufacturer"; id: string }
   | { type: "setName"; text: string }
   | { type: "setCount"; count: number }
-  | { type: "setStartNumber"; startNumber: number };
+  | { type: "setStartNumber"; startNumber: number }
+  | { type: "setStartUnitPosition"; unitPosition: number }
+  | { type: "setPlacementMethod"; method: PlacementMethod }
+  | { type: "reset" };
 
 const initialState: State = {
   category: "",
@@ -71,6 +79,8 @@ const initialState: State = {
   name: "",
   count: 1,
   startNumber: 1,
+  startUnitPosition: 0,
+  placementMethod: "TOP_DOWN",
 };
 
 function reducer(state: State, action: Action): State {
@@ -92,6 +102,12 @@ function reducer(state: State, action: Action): State {
       return { ...state, count: action.count };
     case "setStartNumber":
       return { ...state, startNumber: action.startNumber };
+    case "setStartUnitPosition":
+      return { ...state, startUnitPosition: action.unitPosition };
+    case "setPlacementMethod":
+      return { ...state, placementMethod: action.method };
+    case "reset":
+      return initialState;
     default:
       throw new Error("No action found.");
   }
@@ -144,11 +160,13 @@ function AddTerminalEquipment({
       return [];
     return specificationToOptions(
       specificationResponse.data.utilityNetwork.terminalEquipmentSpecifications,
-      state.category
+      state.category,
+      !!rackId
     );
   }, [
     specificationResponse.data?.utilityNetwork.terminalEquipmentSpecifications,
     state.category,
+    rackId,
   ]);
 
   const manufacturerOptions = useMemo<SelectOption[]>(() => {
@@ -182,7 +200,13 @@ function AddTerminalEquipment({
       numberOfEquipments: state.count,
       startSequenceNumber: state.startNumber,
       terminalEquipmentNamingMethod: "NAME_AND_NUMBER",
-      subrackPlacementInfo: null,
+      subrackPlacementInfo: rackId
+        ? {
+            placmentMethod: state.placementMethod,
+            rackId: rackId,
+            startUnitPosition: state.startUnitPosition,
+          }
+        : null,
     };
 
     const response = await client
@@ -202,6 +226,8 @@ function AddTerminalEquipment({
             .errorCode ?? "ERROR"
         )
       );
+    } else {
+      dispatch({ type: "reset" });
     }
   };
 
@@ -282,21 +308,31 @@ function AddTerminalEquipment({
           </p>
           <div className="full-row">
             <LabelContainer text="Rack unit:">
-              <SelectMenu
-                options={[]}
-                removePlaceHolderOnSelect
-                onSelected={() => {}}
-                selected={""}
+              <NumberPicker
+                value={state.startNumber}
+                minValue={0}
+                maxValue={100}
+                setValue={(x) =>
+                  dispatch({ type: "setStartNumber", startNumber: x })
+                }
               />
             </LabelContainer>
           </div>
           <div className="full-row">
             <LabelContainer text="Placerings metode:">
               <SelectMenu
-                options={[]}
+                options={[
+                  { text: "TOP_DOWN", value: "TOP_DOWN", key: 0 },
+                  { text: "BOTTOM_UP", value: "BOTTOM_UP", key: 1 },
+                ]}
                 removePlaceHolderOnSelect
-                onSelected={() => {}}
-                selected={""}
+                onSelected={(x) =>
+                  dispatch({
+                    type: "setPlacementMethod",
+                    method: x as PlacementMethod,
+                  })
+                }
+                selected={state.placementMethod}
               />
             </LabelContainer>
           </div>
