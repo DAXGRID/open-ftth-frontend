@@ -168,6 +168,17 @@ export function getLayer(name: string): AnyLayer {
           ],
         },
       } as FillLayer;
+    case "TerminalEquipment":
+      return {
+        id: "TerminalEquipment",
+        source: "TerminalEquipment",
+        order: 1,
+        type: "fill",
+        paint: {
+          "fill-color": "#f4f6f8",
+          "fill-outline-color": "black",
+        },
+      } as FillLayer;
     case "WestTerminalLabel":
       return {
         id: "WestTerminalLabel",
@@ -331,6 +342,46 @@ export function getLayer(name: string): AnyLayer {
           "text-justify": "right",
           "text-offset": [-0.75, 0],
           "text-max-width": 1000,
+        },
+      } as SymbolLayer;
+    case "TerminalEquipmentNameLabel":
+      return {
+        id: "TerminalEquipmentNameLabel",
+        source: "TerminalEquipmentNameLabel",
+        type: "symbol",
+        order: 4,
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
+          "text-allow-overlap": false,
+          "text-size": 14,
+          "text-font": ["Open Sans Bold"],
+          "text-field": ["get", "label"],
+          "text-anchor": "center",
+          "text-justify": "center",
+          "text-offset": [0, 0],
+          "text-max-width": 20,
+        },
+      } as SymbolLayer;
+    case "TerminalEquipmentTypeLabel":
+      return {
+        id: "TerminalEquipmentTypeLabel",
+        source: "TerminalEquipmentTypeLabel",
+        type: "symbol",
+        order: 4,
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
+          "text-allow-overlap": false,
+          "text-size": 14,
+          "text-font": ["Open Sans Bold"],
+          "text-field": ["get", "label"],
+          "text-anchor": "center",
+          "text-justify": "center",
+          "text-offset": [0, 0],
+          "text-max-width": 20,
         },
       } as SymbolLayer;
     default:

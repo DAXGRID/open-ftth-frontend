@@ -69,10 +69,20 @@ query (
 }
 `;
 
+export interface PlaceTerminalEquipmentInNodeContainerResponse {
+  nodeContainer: {
+    placeTerminalEquipmentInNodeContainer: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
 export interface PlaceTerminalEquipmentInNodeContainerParams {
-  nodeContainerId: string;
+  routeNodeId: string;
   terminalEquipmentSpecificationId: string;
-  numberofEquipments: number;
+  numberOfEquipments: number;
   startSequenceNumber: number;
   terminalEquipmentNamingMethod: "NAME_AND_NUMBER";
   namingInfo: {
@@ -82,26 +92,28 @@ export interface PlaceTerminalEquipmentInNodeContainerParams {
     rackId: string;
     startUnitPosition: number;
     placementMethod: "TOP_DOWN";
-  };
+  } | null;
 }
 
 export const PLACE_TERMINAL_EQUIPMENT_IN_NODE_CONTAINER = `
 mutation (
-$nodeContainerId: ID
+$routeNodeId: ID!
+$terminalEquipmentSpecificationId: ID!
+$numberOfEquipments: Int!
+$startSequenceNumber: Int!
+$terminalEquipmentNamingMethod: TerminalEquipmentNamingMethodEnum!
+$namingInfo: NamingInfoInputType!
+$subrackPlacementInfo: SubrackPlacementInfoInputType
 ) {
   nodeContainer {
     placeTerminalEquipmentInNodeContainer(
-      nodeContainerId: ""
-      terminalEquipmentSpecificationId: ""
-      numberOfEquipments: 2
-      startSequenceNumber: 10
-      terminalEquipmentNamingMethod: NAME_AND_NUMBER
-      namingInfo: { name: "Kassette" }
-      subrackPlacementInfo: {
-        rackId: ""
-        startUnitPosition: 0
-        placmentMethod: TOP_DOWN
-      }
+      routeNodeId: $routeNodeId
+      terminalEquipmentSpecificationId: $terminalEquipmentSpecificationId
+      numberOfEquipments: $numberOfEquipments
+      startSequenceNumber: $startSequenceNumber
+      terminalEquipmentNamingMethod: $terminalEquipmentNamingMethod
+      namingInfo: $namingInfo
+      subrackPlacementInfo: $subrackPlacementInfo
     ) {
       isSuccess
       errorCode

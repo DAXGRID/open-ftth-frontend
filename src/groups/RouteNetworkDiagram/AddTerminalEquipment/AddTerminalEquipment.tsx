@@ -1,7 +1,10 @@
 import { useEffect, useReducer, useMemo } from "react";
 import { useClient, useQuery } from "urql";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import TextBox from "../../../components/TextBox";
+import DefaultButton from "../../../components/DefaultButton";
 import NumberPicker from "../../../components/NumberPicker";
 import LabelContainer from "../../../components/LabelContainer";
 import {
@@ -10,8 +13,10 @@ import {
   SpanEquipmentSpecificationsResponse,
   Manufacturer,
   QUERY_RACK,
-  Rack,
   RackResponse,
+  PlaceTerminalEquipmentInNodeContainerParams,
+  PLACE_TERMINAL_EQUIPMENT_IN_NODE_CONTAINER,
+  PlaceTerminalEquipmentInNodeContainerResponse,
 } from "./AddTerminalEquipmentGql";
 
 function categoryToOptions(
@@ -102,6 +107,8 @@ function AddTerminalEquipment({
   rackId,
 }: AddTerminalEquipmentProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { t } = useTranslation();
+  const client = useClient();
 
   const [specificationResponse] = useQuery<SpanEquipmentSpecificationsResponse>(
     {
@@ -166,6 +173,37 @@ function AddTerminalEquipment({
     if (!categoryOptions || categoryOptions.length === 0) return;
     dispatch({ type: "setCategory", id: categoryOptions[0].value as string });
   }, [categoryOptions]);
+
+  const addTerminalEquipment = async () => {
+    const params: PlaceTerminalEquipmentInNodeContainerParams = {
+      routeNodeId: routeNodeId,
+      terminalEquipmentSpecificationId: state.specification,
+      namingInfo: { name: state.name },
+      numberOfEquipments: state.count,
+      startSequenceNumber: state.startNumber,
+      terminalEquipmentNamingMethod: "NAME_AND_NUMBER",
+      subrackPlacementInfo: null,
+    };
+
+    const response = await client
+      .mutation<PlaceTerminalEquipmentInNodeContainerResponse>(
+        PLACE_TERMINAL_EQUIPMENT_IN_NODE_CONTAINER,
+        params
+      )
+      .toPromise();
+
+    if (
+      !response.data?.nodeContainer.placeTerminalEquipmentInNodeContainer
+        .isSuccess
+    ) {
+      toast.error(
+        t(
+          response.data?.nodeContainer.placeTerminalEquipmentInNodeContainer
+            .errorCode ?? "ERROR"
+        )
+      );
+    }
+  };
 
   return (
     <div className="add-terminal-equipment">
@@ -264,6 +302,12 @@ function AddTerminalEquipment({
           </div>
         </div>
       )}
+      <div className="full-row">
+        <DefaultButton
+          innerText="Click me!"
+          onClick={() => addTerminalEquipment()}
+        />
+      </div>
     </div>
   );
 }
