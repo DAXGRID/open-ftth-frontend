@@ -21,9 +21,16 @@ import {
 } from "./AddTerminalEquipmentGql";
 
 function categoryToOptions(
-  specs: TerminalEquipmentSpecification[]
+  specs: TerminalEquipmentSpecification[],
+  isRackEquipment: boolean
 ): SelectOption[] {
-  return [...new Set(specs.map((x) => x.category))].map((x, i) => ({
+  return [
+    ...new Set(
+      specs
+        .filter((x) => x.isRackEquipment === isRackEquipment)
+        .map((x) => x.category)
+    ),
+  ].map((x, i) => ({
     text: x,
     value: x,
     key: i,
@@ -145,10 +152,12 @@ function AddTerminalEquipment({
     )
       return [];
     return categoryToOptions(
-      specificationResponse.data.utilityNetwork.terminalEquipmentSpecifications
+      specificationResponse.data.utilityNetwork.terminalEquipmentSpecifications,
+      !!rackId
     );
   }, [
     specificationResponse.data?.utilityNetwork.terminalEquipmentSpecifications,
+    rackId,
   ]);
 
   const specificationOptions = useMemo<SelectOption[]>(() => {
@@ -202,7 +211,7 @@ function AddTerminalEquipment({
       terminalEquipmentNamingMethod: "NAME_AND_NUMBER",
       subrackPlacementInfo: rackId
         ? {
-            placmentMethod: state.placementMethod,
+            placementMethod: state.placementMethod,
             rackId: rackId,
             startUnitPosition: state.startUnitPosition,
           }
@@ -217,8 +226,8 @@ function AddTerminalEquipment({
       .toPromise();
 
     if (
-      !response.data?.nodeContainer.placeTerminalEquipmentInNodeContainer
-        .isSuccess
+      !response.data?.nodeContainer?.placeTerminalEquipmentInNodeContainer
+        ?.isSuccess
     ) {
       toast.error(
         t(
@@ -309,11 +318,11 @@ function AddTerminalEquipment({
           <div className="full-row">
             <LabelContainer text="Rack unit:">
               <NumberPicker
-                value={state.startNumber}
+                value={state.startUnitPosition}
                 minValue={0}
                 maxValue={100}
                 setValue={(x) =>
-                  dispatch({ type: "setStartNumber", startNumber: x })
+                  dispatch({ type: "setStartUnitPosition", unitPosition: x })
                 }
               />
             </LabelContainer>

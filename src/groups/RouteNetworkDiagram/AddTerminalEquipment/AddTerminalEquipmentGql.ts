@@ -93,8 +93,7 @@ export interface PlaceTerminalEquipmentInNodeContainerParams {
   subrackPlacementInfo: {
     rackId: string;
     startUnitPosition: number;
-    // TODO fix naming issue
-    placmentMethod: PlacementMethod;
+    placementMethod: PlacementMethod;
   } | null;
 }
 

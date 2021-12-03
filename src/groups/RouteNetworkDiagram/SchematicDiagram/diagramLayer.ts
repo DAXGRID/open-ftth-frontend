@@ -54,7 +54,6 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "NodeContainerSide",
         source: "NodeContainerSide",
-        order: 0,
         type: "line",
         layout: {
           "line-cap": "round",
@@ -69,7 +68,6 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "NodeContainer",
         source: "NodeContainer",
-        order: 0,
         type: "fill",
         paint: {
           "fill-color": "#CDCDCD",
@@ -80,7 +78,6 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "Rack",
         source: "Rack",
-        order: 1,
         type: "fill",
         paint: {
           "fill-color": "white",
@@ -91,7 +88,6 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "SubrackSpace",
         source: "SubrackSpace",
-        order: 1,
         type: "fill",
         paint: {
           "fill-color": "#98e398",
@@ -103,7 +99,6 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "OuterConduit",
         source: "OuterConduit",
-        order: 1,
         type: "fill",
         paint: {
           "fill-outline-color": "#555",
@@ -133,7 +128,6 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "InnerConduit",
         source: "InnerConduit",
-        order: 2,
         type: "fill",
         paint: {
           "fill-outline-color": "#555",
@@ -172,7 +166,6 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "TerminalEquipment",
         source: "TerminalEquipment",
-        order: 1,
         type: "fill",
         paint: {
           "fill-color": "#f4f6f8",
@@ -184,7 +177,6 @@ export function getLayer(name: string): AnyLayer {
         id: "WestTerminalLabel",
         source: "WestTerminalLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -204,7 +196,6 @@ export function getLayer(name: string): AnyLayer {
         id: "EastTerminalLabel",
         source: "EastTerminalLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -224,7 +215,6 @@ export function getLayer(name: string): AnyLayer {
         id: "SouthTerminalLabel",
         source: "SouthTerminalLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -245,7 +235,6 @@ export function getLayer(name: string): AnyLayer {
         id: "NorthTerminalLabel",
         source: "NorthTerminalLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -266,7 +255,6 @@ export function getLayer(name: string): AnyLayer {
         id: "SpanEquipmentLabel",
         source: "SpanEquipmentLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -287,7 +275,6 @@ export function getLayer(name: string): AnyLayer {
         id: "NodeContainerLabel",
         source: "NodeContainerLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -308,7 +295,6 @@ export function getLayer(name: string): AnyLayer {
         id: "RackLabel",
         source: "RackLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -329,7 +315,6 @@ export function getLayer(name: string): AnyLayer {
         id: "RackUnitLabel",
         source: "RackUnitLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -349,7 +334,7 @@ export function getLayer(name: string): AnyLayer {
         id: "TerminalEquipmentNameLabel",
         source: "TerminalEquipmentNameLabel",
         type: "symbol",
-        order: 4,
+        minzoom: 12,
         paint: {
           "text-color": "#444",
         },
@@ -361,7 +346,7 @@ export function getLayer(name: string): AnyLayer {
           "text-anchor": "center",
           "text-justify": "center",
           "text-offset": [0, 0],
-          "text-max-width": 20,
+          "text-max-width": 100000,
         },
       } as SymbolLayer;
     case "TerminalEquipmentTypeLabel":
@@ -369,13 +354,13 @@ export function getLayer(name: string): AnyLayer {
         id: "TerminalEquipmentTypeLabel",
         source: "TerminalEquipmentTypeLabel",
         type: "symbol",
-        order: 4,
+        minzoom: 13,
         paint: {
           "text-color": "#444",
         },
         layout: {
           "text-allow-overlap": false,
-          "text-size": 14,
+          "text-size": 12,
           "text-font": ["Open Sans Bold"],
           "text-field": ["get", "label"],
           "text-anchor": "center",
