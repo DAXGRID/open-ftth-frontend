@@ -176,7 +176,8 @@
       "START_NUMBER": "Start number",
       "LABEL_METHOD": "Label method",
       "RACK_UNIT": "Rack unit",
-      "PLACEMENT_METHOD": "Placement method"
+      "PLACEMENT_METHOD": "Placement method",
+      "HEIGHT_UNITS": "Height units"
     }
   },
   "dk": {
@@ -356,7 +357,8 @@
       "START_NUMBER": "Start nummerering",
       "LABEL_METHOD": "Label metode",
       "RACK_UNIT": "Rack unit",
-      "PLACEMENT_METHOD": "Placering metode"
+      "PLACEMENT_METHOD": "Placering metode",
+      "HEIGHT_UNITS": "Højde units"
     }
   }
 }

@@ -119,7 +119,7 @@ function AddRack({ nodeContainerId }: AddRackProps) {
   return (
     <div className="add-rack page-container">
       <div className="full-row">
-        <LabelContainer text="Specification:">
+        <LabelContainer text={`${t("SPECIFICATION")}:`}>
           <SelectMenu
             options={specificationOptions}
             removePlaceHolderOnSelect
@@ -134,7 +134,7 @@ function AddRack({ nodeContainerId }: AddRackProps) {
         </LabelContainer>
       </div>
       <div className="full-row">
-        <LabelContainer text="Navn:">
+        <LabelContainer text={`${t("NAME")}:`}>
           <TextBox
             setValue={(x) => dispatch({ type: "setRackName", name: x })}
             value={state.rackName}
@@ -142,7 +142,7 @@ function AddRack({ nodeContainerId }: AddRackProps) {
         </LabelContainer>
       </div>
       <div className="full-row">
-        <LabelContainer text="Hoejde units:">
+        <LabelContainer text={`${t("HEIGHT_UNITS")}:`}>
           <NumberPicker
             setValue={(x) => dispatch({ type: "setHeightUnits", units: x })}
             value={state.heightUnits}
