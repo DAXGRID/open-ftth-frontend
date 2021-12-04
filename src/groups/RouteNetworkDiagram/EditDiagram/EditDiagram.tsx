@@ -2,9 +2,9 @@ import {
   useEffect,
   useState,
   useContext,
-  useRef,
   useCallback,
   useReducer,
+  useMemo,
 } from "react";
 import { useMutation, useClient } from "urql";
 import { MapboxGeoJSONFeature } from "maplibre-gl";
@@ -76,6 +76,14 @@ function containsNodeContainer(diagramObjects: Diagram[]): boolean {
   return diagramObjects.find((x) => x.style === "NodeContainer") ? true : false;
 }
 
+function isSingleSelected(
+  source: string,
+  selected: MapboxGeoJSONFeature[]
+): boolean {
+  if (selected.length > 1) return false;
+  return selected.find((x) => x.source === source) ? true : false;
+}
+
 interface ShowModals {
   addContainer: boolean;
   handleInnerConduit: boolean;
@@ -145,7 +153,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
   const [editMode, setEditMode] = useState(false);
-  const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
+  const [selectedFeatures, setSelectedFeatures] = useState<
+    MapboxGeoJSONFeature[]
+  >([]);
   const [singleSelectedFeature, setSingleSelectedFeature] =
     useState<MapboxGeoJSONFeature | null>();
   const { identifiedFeature, setTrace } = useContext(MapContext);
@@ -179,18 +189,18 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
   useEffect(() => {
     showModalsDispatch({ type: "reset" });
-    selectedFeatures.current = [];
+    setSelectedFeatures([]);
     setSingleSelectedFeature(null);
   }, [showModalsDispatch, diagramObjects, envelope, setSingleSelectedFeature]);
 
   const affixSpanEquipment = async () => {
-    const nodeContainer = selectedFeatures.current.find(
+    const nodeContainer = currentlySelectedFeatures.find(
       (x) => x.layer.source === "NodeContainerSide"
     );
 
     const nodeContainerId = nodeContainer?.properties?.refId as string;
 
-    const spanSegmentIds = selectedFeatures.current
+    const spanSegmentIds = currentlySelectedFeatures
       .filter((x) => x.layer.source === "OuterConduit")
       ?.map((x) => x.properties?.refId as string);
 
@@ -233,7 +243,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const cutSpanSegments = async () => {
-    const spanSegmentsToCut = selectedFeatures.current
+    const spanSegmentsToCut = currentlySelectedFeatures
       .filter((x) => {
         return (
           x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
@@ -260,7 +270,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const connectSpanSegments = async () => {
-    const spanSegmentsToConnect = selectedFeatures.current
+    const spanSegmentsToConnect = currentlySelectedFeatures
       .filter((x) => {
         return (
           x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
@@ -290,13 +300,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const disconnectSpanSegments = async () => {
-    const innerConduits = selectedFeatures.current
+    const innerConduits = currentlySelectedFeatures
       .filter((x) => {
         return x.layer.source === "InnerConduit";
       })
       .map((x) => x.properties?.refId as string);
 
-    const outerConduits = selectedFeatures.current
+    const outerConduits = currentlySelectedFeatures
       .filter((x) => {
         return x.layer.source === "OuterConduit";
       })
@@ -326,7 +336,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const detachSpanEquipment = async () => {
-    const spanSegmentsIds = selectedFeatures.current
+    const spanSegmentsIds = currentlySelectedFeatures
       .filter((x) => {
         return (
           x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
@@ -361,7 +371,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const removeObject = async () => {
-    const selectedObjects = selectedFeatures.current
+    const selectedObjects = currentlySelectedFeatures
       .filter((x) => {
         return (
           x.layer.source === "OuterConduit" || "InnerConduit" || "NodeContainer"
@@ -442,24 +452,46 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           setSingleSelectedFeature(null);
         }
       } else {
-        if (isSelected) {
-          selectedFeatures.current = [...selectedFeatures.current, feature];
-        } else {
-          selectedFeatures.current = selectedFeatures.current.filter((x) => {
-            const t =
-              x.properties?.refId !== feature.properties?.refId ||
-              x.properties?.type !== feature.properties?.type;
-
-            return t;
-          });
-        }
+        setSingleSelectedFeature(feature);
       }
     },
     [editMode, setSingleSelectedFeature, setTrace, client]
   );
 
+  useEffect(() => {
+    if (!singleSelectedFeature) return;
+
+    const found = selectedFeatures.find(
+      (x) =>
+        x.properties?.refId === singleSelectedFeature.properties?.refId &&
+        x.properties?.type === singleSelectedFeature.properties?.type
+    );
+
+    if (!found) {
+      setSelectedFeatures([...selectedFeatures, singleSelectedFeature]);
+    } else if (
+      (found.state.selected as boolean) !==
+      (singleSelectedFeature.state.selected as boolean)
+    ) {
+      setSelectedFeatures([
+        ...selectedFeatures.filter(
+          (x) =>
+            !(
+              x.properties?.refId === found.properties?.refId &&
+              x.properties?.type === found.properties?.type
+            )
+        ),
+        singleSelectedFeature,
+      ]);
+    }
+  }, [singleSelectedFeature, setSelectedFeatures, selectedFeatures]);
+
+  const currentlySelectedFeatures = useMemo(() => {
+    return selectedFeatures.filter((x) => x.state?.selected);
+  }, [selectedFeatures]);
+
   const reverseVertialAlignment = async () => {
-    const nodeContainer = selectedFeatures.current.find(
+    const nodeContainer = currentlySelectedFeatures.find(
       (x) => x.layer.source === "NodeContainerSide"
     );
 
@@ -516,7 +548,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         >
           <AddInnerSpanStructure
             selectedOuterConduit={
-              selectedFeatures.current.find((x) => x.source === "OuterConduit")
+              currentlySelectedFeatures.find((x) => x.source === "OuterConduit")
                 ?.properties?.refId ?? ""
             }
           />
@@ -553,8 +585,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         >
           <AddRack
             nodeContainerId={
-              selectedFeatures.current.find((x) => x.source === "NodeContainer")
-                ?.properties?.refId ?? ""
+              currentlySelectedFeatures.find(
+                (x) => x.source === "NodeContainer"
+              )?.properties?.refId ?? ""
             }
           />
         </ModalContainer>
@@ -574,7 +607,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           <AddTerminalEquipment
             routeNodeId={identifiedFeature.id}
             rackId={
-              selectedFeatures.current.find((x) => x.source === "Rack")
+              currentlySelectedFeatures.find((x) => x.source === "Rack")
                 ?.properties?.refId ?? ""
             }
           />
@@ -590,7 +623,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             toggled={editMode}
             toggle={() => {
               setEditMode(!editMode);
-              selectedFeatures.current = [];
+              setSelectedFeatures([]);
               setSingleSelectedFeature(null);
             }}
             id="Edit"
@@ -642,7 +675,10 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                 text: t("ADD_RACK"),
                 action: () =>
                   showModalsDispatch({ type: "addRack", show: true }),
-                disabled: !containsNodeContainer(diagramObjects),
+                disabled: !isSingleSelected(
+                  "NodeContainer",
+                  currentlySelectedFeatures
+                ),
                 key: 1,
               },
               {
@@ -652,7 +688,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                     type: "addTerminalEquipment",
                     show: true,
                   }),
-                disabled: !containsNodeContainer(diagramObjects),
+                disabled:
+                  !isSingleSelected("Rack", currentlySelectedFeatures) &&
+                  !isSingleSelected("NodeContainer", currentlySelectedFeatures),
                 key: 2,
               },
             ]}
