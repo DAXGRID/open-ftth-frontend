@@ -496,80 +496,90 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
   return (
     <div className="route-network-diagram">
-      <ModalContainer
-        show={showModals.addContainer}
-        closeCallback={() =>
-          showModalsDispatch({ type: "addContainer", show: false })
-        }
-      >
-        <AddContainer />
-      </ModalContainer>
-
-      <ModalContainer
-        show={showModals.handleInnerConduit}
-        closeCallback={() =>
-          showModalsDispatch({ type: "addInnerConduit", show: false })
-        }
-      >
-        <AddInnerSpanStructure
-          selectedOuterConduit={
-            selectedFeatures.current.find((x) => x.source === "OuterConduit")
-              ?.properties?.refId ?? ""
+      {showModals.addContainer && (
+        <ModalContainer
+          show={showModals.addContainer}
+          closeCallback={() =>
+            showModalsDispatch({ type: "addContainer", show: false })
           }
-        />
-      </ModalContainer>
+        >
+          <AddContainer />
+        </ModalContainer>
+      )}
 
-      <ModalContainer
-        show={showModals.establishCustomerConnection}
-        closeCallback={() =>
-          showModalsDispatch({
-            type: "establishCustomerConnection",
-            show: false,
-          })
-        }
-      >
-        <EstablishCustomerConnection
-          routeNodeId={identifiedFeature.id}
-          load={showModals.establishCustomerConnection}
-        />
-      </ModalContainer>
-
-      <ModalContainer
-        title={t("ADD_RACK")}
-        show={showModals.addRack}
-        closeCallback={() =>
-          showModalsDispatch({
-            type: "addRack",
-            show: false,
-          })
-        }
-      >
-        <AddRack
-          nodeContainerId={
-            selectedFeatures.current.find((x) => x.source === "NodeContainer")
-              ?.properties?.refId ?? ""
+      {showModals.handleInnerConduit && (
+        <ModalContainer
+          show={showModals.handleInnerConduit}
+          closeCallback={() =>
+            showModalsDispatch({ type: "addInnerConduit", show: false })
           }
-        />
-      </ModalContainer>
+        >
+          <AddInnerSpanStructure
+            selectedOuterConduit={
+              selectedFeatures.current.find((x) => x.source === "OuterConduit")
+                ?.properties?.refId ?? ""
+            }
+          />
+        </ModalContainer>
+      )}
 
-      <ModalContainer
-        title={t("ADD_TERMINAL_EQUIPMENT")}
-        show={showModals.addTerminalEquipment}
-        closeCallback={() =>
-          showModalsDispatch({
-            type: "addTerminalEquipment",
-            show: false,
-          })
-        }
-      >
-        <AddTerminalEquipment
-          routeNodeId={identifiedFeature.id}
-          rackId={
-            selectedFeatures.current.find((x) => x.source === "Rack")
-              ?.properties?.refId ?? ""
+      {showModals.establishCustomerConnection && (
+        <ModalContainer
+          show={showModals.establishCustomerConnection}
+          closeCallback={() =>
+            showModalsDispatch({
+              type: "establishCustomerConnection",
+              show: false,
+            })
           }
-        />
-      </ModalContainer>
+        >
+          <EstablishCustomerConnection
+            routeNodeId={identifiedFeature.id}
+            load={showModals.establishCustomerConnection}
+          />
+        </ModalContainer>
+      )}
+
+      {showModals.addRack && (
+        <ModalContainer
+          title={t("ADD_RACK")}
+          show={showModals.addRack}
+          closeCallback={() =>
+            showModalsDispatch({
+              type: "addRack",
+              show: false,
+            })
+          }
+        >
+          <AddRack
+            nodeContainerId={
+              selectedFeatures.current.find((x) => x.source === "NodeContainer")
+                ?.properties?.refId ?? ""
+            }
+          />
+        </ModalContainer>
+      )}
+
+      {showModals.addTerminalEquipment && (
+        <ModalContainer
+          title={t("ADD_TERMINAL_EQUIPMENT")}
+          show={showModals.addTerminalEquipment}
+          closeCallback={() =>
+            showModalsDispatch({
+              type: "addTerminalEquipment",
+              show: false,
+            })
+          }
+        >
+          <AddTerminalEquipment
+            routeNodeId={identifiedFeature.id}
+            rackId={
+              selectedFeatures.current.find((x) => x.source === "Rack")
+                ?.properties?.refId ?? ""
+            }
+          />
+        </ModalContainer>
+      )}
 
       <FeatureInformation />
 
