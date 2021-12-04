@@ -81,12 +81,14 @@ export interface PlaceTerminalEquipmentInNodeContainerResponse {
 
 export type PlacementMethod = "TOP_DOWN" | "BOTTOM_UP";
 
+export type NamingMethod = "NAME_AND_NUMBER" | "NAME_ONLY" | "NUMBER_ONLY";
+
 export interface PlaceTerminalEquipmentInNodeContainerParams {
   routeNodeId: string;
   terminalEquipmentSpecificationId: string;
   numberOfEquipments: number;
   startSequenceNumber: number;
-  terminalEquipmentNamingMethod: "NAME_AND_NUMBER";
+  terminalEquipmentNamingMethod: NamingMethod;
   namingInfo: {
     name: string;
   };

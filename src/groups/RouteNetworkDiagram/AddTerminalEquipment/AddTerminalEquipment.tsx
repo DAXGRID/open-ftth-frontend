@@ -18,6 +18,7 @@ import {
   PlaceTerminalEquipmentInNodeContainerParams,
   PLACE_TERMINAL_EQUIPMENT_IN_NODE_CONTAINER,
   PlaceTerminalEquipmentInNodeContainerResponse,
+  NamingMethod,
 } from "./AddTerminalEquipmentGql";
 
 function categoryToOptions(
@@ -66,6 +67,7 @@ interface State {
   startNumber: number;
   startUnitPosition: number;
   placementMethod: PlacementMethod;
+  namingMethod: NamingMethod;
 }
 
 type Action =
@@ -77,6 +79,7 @@ type Action =
   | { type: "setStartNumber"; startNumber: number }
   | { type: "setStartUnitPosition"; unitPosition: number }
   | { type: "setPlacementMethod"; method: PlacementMethod }
+  | { type: "setNamingMethod"; method: NamingMethod }
   | { type: "reset" };
 
 const initialState: State = {
@@ -88,6 +91,7 @@ const initialState: State = {
   startNumber: 1,
   startUnitPosition: 0,
   placementMethod: "TOP_DOWN",
+  namingMethod: "NAME_AND_NUMBER",
 };
 
 function reducer(state: State, action: Action): State {
@@ -113,6 +117,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, startUnitPosition: action.unitPosition };
     case "setPlacementMethod":
       return { ...state, placementMethod: action.method };
+    case "setNamingMethod":
+      return { ...state, namingMethod: action.method };
     case "reset":
       return initialState;
     default:
@@ -191,10 +197,7 @@ function AddTerminalEquipment({
         (x) => x.id === state.specification
       )?.manufacturerRefs ?? []
     );
-  }, [
-    specificationResponse.data?.utilityNetwork.terminalEquipmentSpecifications,
-    state.specification,
-  ]);
+  }, [state.specification, specificationResponse]);
 
   useEffect(() => {
     if (!categoryOptions || categoryOptions.length === 0) return;
@@ -208,7 +211,7 @@ function AddTerminalEquipment({
       namingInfo: { name: state.name },
       numberOfEquipments: state.count,
       startSequenceNumber: state.startNumber,
-      terminalEquipmentNamingMethod: "NAME_AND_NUMBER",
+      terminalEquipmentNamingMethod: state.namingMethod,
       subrackPlacementInfo: rackId
         ? {
             placementMethod: state.placementMethod,
@@ -306,6 +309,25 @@ function AddTerminalEquipment({
               setValue={(x) =>
                 dispatch({ type: "setStartNumber", startNumber: x })
               }
+            />
+          </LabelContainer>
+        </div>
+        <div className="full-row">
+          <LabelContainer text="Label metode">
+            <SelectMenu
+              options={[
+                { text: "NAME_AND_NUMBER", value: "NAME_AND_NUMBER", key: 0 },
+                { text: "NAME_ONLY", value: "NAME_ONLY", key: 1 },
+                { text: "NUMBER_ONLY", value: "NUMBER_ONLY", key: 2 },
+              ]}
+              removePlaceHolderOnSelect
+              onSelected={(x) =>
+                dispatch({
+                  type: "setNamingMethod",
+                  method: x as NamingMethod,
+                })
+              }
+              selected={state.namingMethod}
             />
           </LabelContainer>
         </div>
