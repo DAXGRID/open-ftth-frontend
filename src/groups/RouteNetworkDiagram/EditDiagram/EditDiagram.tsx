@@ -459,6 +459,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   );
 
   useEffect(() => {
+    // This whole useeffect is a special case, this is needed to done because if not,
+    // the schematic diagram depdency will keep reloading everytime a diagram object is being clicked.
+    // This is mainly an issue because of mapbox not playing to nicely with the way react works so it rerenders the map.
     if (!singleSelectedFeature) return;
 
     const found = selectedFeatures.find(
