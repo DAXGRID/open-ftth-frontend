@@ -90,7 +90,7 @@ export function getLayer(name: string): AnyLayer {
         source: "SubrackSpace",
         type: "fill",
         paint: {
-          "fill-color": "#98e398",
+          "fill-color": "#ccf1cc",
           "fill-outline-color": "black",
         },
       } as FillLayer;
