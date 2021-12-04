@@ -144,13 +144,21 @@ function AddRack({ nodeContainerId }: AddRackProps) {
       <div className="full-row">
         <LabelContainer text={`${t("HEIGHT_UNITS")}:`}>
           <NumberPicker
+            minValue={0}
+            maxValue={100}
             setValue={(x) => dispatch({ type: "setHeightUnits", units: x })}
             value={state.heightUnits}
           />
         </LabelContainer>
       </div>
       <div className="full-row">
-        <DefaultButton onClick={() => addRack()} innerText={t("ADD")} />
+        <DefaultButton
+          onClick={() => addRack()}
+          innerText={t("ADD")}
+          disabled={
+            state.heightUnits === 0 || state.rackName.trim().length === 0
+          }
+        />
       </div>
     </div>
   );
