@@ -378,6 +378,7 @@ function AddTerminalEquipment({
       )}
       <div className="full-row">
         <DefaultButton
+          disabled={state.count === 0 || !state.startNumber}
           innerText={t("ADD")}
           onClick={() => addTerminalEquipment()}
         />
