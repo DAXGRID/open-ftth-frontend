@@ -70,7 +70,7 @@ export function getLayer(name: string): AnyLayer {
         source: "NodeContainer",
         type: "fill",
         paint: {
-          "fill-color": "#CDCDCD",
+          "fill-color": "#e1e1e1",
           "fill-outline-color": "black",
         },
       } as FillLayer;
