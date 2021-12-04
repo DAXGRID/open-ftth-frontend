@@ -163,7 +163,20 @@
       "CHOOSE": "Choose",
       "ADD_RACK": "Add rack",
       "ADD_TERMINAL_EQUIPMENT": "Add terminal equipment",
-      "NO_NODE_CONTAINER_SELECTED": "No node container selected"
+      "NO_NODE_CONTAINER_SELECTED": "No node container selected",
+      "ADD": "Add",
+      "NAME_AND_NUMBER": "Name and number",
+      "NAME_ONLY": "Only name",
+      "NUMBER_ONLY": "Only number",
+      "TOP_DOWN": "Top down",
+      "BOTTOM_UP": "Bottom up",
+      "CATEGORY": "Category",
+      "NAME": "Name",
+      "COUNT": "Count",
+      "START_NUMBER": "Start number",
+      "LABEL_METHOD": "Label method",
+      "RACK_UNIT": "Rack unit",
+      "PLACEMENT_METHOD": "Placement method"
     }
   },
   "dk": {
@@ -330,7 +343,20 @@
       "CHOOSE": "Vælg",
       "ADD_RACK": "Tilføj rack",
       "ADD_TERMINAL_EQUIPMENT": "Tilføj fiberudstyr",
-      "NO_NODE_CONTAINER_SELECTED": "Du har ikke valgt en struktur."
+      "NO_NODE_CONTAINER_SELECTED": "Du har ikke valgt en struktur.",
+      "ADD": "Tilføj",
+      "NAME_AND_NUMBER": "Navn og nummer",
+      "NAME_ONLY": "Kun navn",
+      "NUMBER_ONLY": "Kun nummer",
+      "TOP_DOWN": "Oppefra og ned",
+      "BOTTOM_UP": "Nedefra og op",
+      "CATEGORY": "Kategori",
+      "NAME": "Navn",
+      "COUNT": "Antal",
+      "START_NUMBER": "Start nummerering",
+      "LABEL_METHOD": "Label metode",
+      "RACK_UNIT": "Rack unit",
+      "PLACEMENT_METHOD": "Placering metode"
     }
   }
 }

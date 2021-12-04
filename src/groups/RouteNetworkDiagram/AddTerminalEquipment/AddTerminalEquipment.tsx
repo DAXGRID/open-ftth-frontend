@@ -247,8 +247,9 @@ function AddTerminalEquipment({
     <div className="add-terminal-equipment">
       <div className="full-row-group">
         <div className="full-row">
-          <LabelContainer text="Category:">
+          <LabelContainer text={`${t("CATEGORY")}:`}>
             <SelectMenu
+              autoSelectFirst={true}
               options={categoryOptions}
               removePlaceHolderOnSelect
               onSelected={(x) =>
@@ -259,8 +260,9 @@ function AddTerminalEquipment({
           </LabelContainer>
         </div>
         <div className="full-row">
-          <LabelContainer text="Specification:">
+          <LabelContainer text={`${t("SPECIFICATION")}:`}>
             <SelectMenu
+              autoSelectFirst={true}
               options={specificationOptions}
               removePlaceHolderOnSelect
               onSelected={(x) =>
@@ -271,8 +273,9 @@ function AddTerminalEquipment({
           </LabelContainer>
         </div>
         <div className="full-row">
-          <LabelContainer text="Manufacturer:">
+          <LabelContainer text={`${t("MANUFACTURER")}:`}>
             <SelectMenu
+              autoSelectFirst={true}
               options={manufacturerOptions}
               removePlaceHolderOnSelect
               onSelected={(x) =>
@@ -283,7 +286,7 @@ function AddTerminalEquipment({
           </LabelContainer>
         </div>
         <div className="full-row">
-          <LabelContainer text="Name:">
+          <LabelContainer text={`${t("NAME")}:`}>
             <TextBox
               value={state.name}
               setValue={(x) => dispatch({ type: "setName", text: x })}
@@ -291,17 +294,17 @@ function AddTerminalEquipment({
           </LabelContainer>
         </div>
         <div className="full-row">
-          <LabelContainer text="Antal:">
+          <LabelContainer text={`${t("COUNT")}:`}>
             <NumberPicker
               value={state.count}
               setValue={(x) => dispatch({ type: "setCount", count: x })}
-              minValue={1}
+              minValue={0}
               maxValue={100}
             />
           </LabelContainer>
         </div>
         <div className="full-row">
-          <LabelContainer text="Start numerering:">
+          <LabelContainer text={`${t("START_NUMBER")}:`}>
             <NumberPicker
               value={state.startNumber}
               minValue={0}
@@ -313,12 +316,16 @@ function AddTerminalEquipment({
           </LabelContainer>
         </div>
         <div className="full-row">
-          <LabelContainer text="Label metode">
+          <LabelContainer text={`${t("LABEL_METHOD")}:`}>
             <SelectMenu
               options={[
-                { text: "NAME_AND_NUMBER", value: "NAME_AND_NUMBER", key: 0 },
-                { text: "NAME_ONLY", value: "NAME_ONLY", key: 1 },
-                { text: "NUMBER_ONLY", value: "NUMBER_ONLY", key: 2 },
+                {
+                  text: t("NAME_AND_NUMBER"),
+                  value: "NAME_AND_NUMBER",
+                  key: 0,
+                },
+                { text: t("NAME_ONLY"), value: "NAME_ONLY", key: 1 },
+                { text: t("NUMBER_ONLY"), value: "NUMBER_ONLY", key: 2 },
               ]}
               removePlaceHolderOnSelect
               onSelected={(x) =>
@@ -338,7 +345,7 @@ function AddTerminalEquipment({
             {rackResponse.data?.utilityNetwork.rack.name}
           </p>
           <div className="full-row">
-            <LabelContainer text="Rack unit:">
+            <LabelContainer text={`${t("RACK_UNIT")}:`}>
               <NumberPicker
                 value={state.startUnitPosition}
                 minValue={0}
@@ -350,11 +357,11 @@ function AddTerminalEquipment({
             </LabelContainer>
           </div>
           <div className="full-row">
-            <LabelContainer text="Placerings metode:">
+            <LabelContainer text={`${t("PLACEMENT_METHOD")}:`}>
               <SelectMenu
                 options={[
-                  { text: "TOP_DOWN", value: "TOP_DOWN", key: 0 },
-                  { text: "BOTTOM_UP", value: "BOTTOM_UP", key: 1 },
+                  { text: t("TOP_DOWN"), value: "TOP_DOWN", key: 0 },
+                  { text: t("BOTTOM_UP"), value: "BOTTOM_UP", key: 1 },
                 ]}
                 removePlaceHolderOnSelect
                 onSelected={(x) =>
@@ -371,7 +378,7 @@ function AddTerminalEquipment({
       )}
       <div className="full-row">
         <DefaultButton
-          innerText="Click me!"
+          innerText={t("ADD")}
           onClick={() => addTerminalEquipment()}
         />
       </div>

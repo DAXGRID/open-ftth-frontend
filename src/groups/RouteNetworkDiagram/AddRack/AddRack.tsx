@@ -150,7 +150,7 @@ function AddRack({ nodeContainerId }: AddRackProps) {
         </LabelContainer>
       </div>
       <div className="full-row">
-        <DefaultButton onClick={() => addRack()} innerText="Tilfoej" />
+        <DefaultButton onClick={() => addRack()} innerText={t("ADD")} />
       </div>
     </div>
   );

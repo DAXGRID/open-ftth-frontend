@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CustomOption from "./CustomOption";
 import { useTranslation } from "react-i18next";
 
@@ -16,6 +16,7 @@ type SelectMenuProps = {
   maxWidth?: string;
   selected: string | number | undefined;
   enableSearch?: boolean;
+  autoSelectFirst?: boolean;
 };
 
 function SelectMenu({
@@ -25,10 +26,17 @@ function SelectMenu({
   selected,
   enableSearch,
   removePlaceHolderOnSelect,
+  autoSelectFirst,
 }: SelectMenuProps) {
   const [toggled, setToggled] = useState(false);
   const [search, setSearch] = useState("");
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (autoSelectFirst && !selected && options.length > 0) {
+      onSelected(options[0].value);
+    }
+  }, [options, autoSelectFirst, selected, onSelected]);
 
   return (
     <div
