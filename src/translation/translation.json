@@ -177,7 +177,8 @@
       "LABEL_METHOD": "Label method",
       "RACK_UNIT": "Rack unit",
       "PLACEMENT_METHOD": "Placement method",
-      "HEIGHT_UNITS": "Height units"
+      "HEIGHT_UNITS": "Height units",
+      "FiberCable": "Fiber cable"
     }
   },
   "dk": {
@@ -358,7 +359,8 @@
       "LABEL_METHOD": "Label metode",
       "RACK_UNIT": "Rack unit",
       "PLACEMENT_METHOD": "Placering metode",
-      "HEIGHT_UNITS": "Højde units"
+      "HEIGHT_UNITS": "Højde units",
+      "FiberCable": "Fiber kabel"
     }
   }
 }

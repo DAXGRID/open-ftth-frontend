@@ -47,6 +47,22 @@ export function createFeature(
 
 export function getLayer(name: string): AnyLayer {
   switch (name) {
+    case "FiberCable": {
+      return {
+        id: "FiberCable",
+        source: "FiberCable",
+        type: "line",
+        paint: {
+          "line-width": 8,
+          "line-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            colorMap.LIGHT_BLUE,
+            colorMap.BLACK,
+          ],
+        },
+      } as LineLayer;
+    }
     case "NodeContainerSideNorth":
     case "NodeContainerSideSouth":
     case "NodeContainerSideEast":
@@ -474,5 +490,25 @@ export const terminalEquipmentSelect: LineLayer = {
       1,
       0,
     ],
+  },
+};
+
+export const fiberCableSymbolLayer: any = {
+  id: "FiberCableLabel",
+  type: "symbol",
+  source: "FiberCable",
+  layout: {
+    "symbol-placement": "line",
+    "text-font": ["Open Sans Regular"],
+    "text-field": "{label}",
+    "text-size": 14,
+    "symbol-spacing": 350,
+  },
+  paint: {
+    "text-color": "rgba(0, 0, 0, 1)",
+    "text-halo-blur": 0,
+    "text-halo-color": "rgba(255, 255, 255, 1)",
+    "text-halo-width": 10,
+    "text-translate": [0, 0],
   },
 };

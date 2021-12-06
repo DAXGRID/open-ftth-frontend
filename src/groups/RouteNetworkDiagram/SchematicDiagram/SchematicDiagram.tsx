@@ -16,6 +16,7 @@ import {
   nodeContainerSelect,
   rackSelect,
   terminalEquipmentSelect,
+  fiberCableSymbolLayer,
 } from "./diagramLayer";
 
 interface Envelope {
@@ -265,6 +266,10 @@ function SchematicDiagram({
         x.style.startsWith("TerminalEquipment")
       );
 
+      const hasFiberCable = diagramObjects.find((x) =>
+        x.style.startsWith("FiberCable")
+      );
+
       if (hasInnerConduit) {
         newMap.addLayer(innerConduitSelect);
         hoverPointer("InnerConduit", newMap);
@@ -301,6 +306,12 @@ function SchematicDiagram({
         newMap.addLayer(terminalEquipmentSelect);
         hoverPointer("TerminalEquipment", newMap);
         clickHighlight("TerminalEquipment", newMap, onSelectFeature, editMode);
+      }
+
+      if (hasFiberCable) {
+        newMap.addLayer(fiberCableSymbolLayer);
+        hoverPointer("FiberCable", newMap);
+        clickHighlight("FiberCable", newMap, onSelectFeature, editMode);
       }
     });
 
