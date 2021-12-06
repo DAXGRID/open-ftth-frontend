@@ -15,6 +15,7 @@ import {
   outerConduitSelect,
   nodeContainerSelect,
   rackSelect,
+  terminalEquipmentSelect,
 } from "./diagramLayer";
 
 interface Envelope {
@@ -157,6 +158,10 @@ function clickHighlight(
         sourceLayer: "Rack",
       });
 
+      const terminalEquipment = map.querySourceFeatures("TerminalEquipment", {
+        sourceLayer: "TerminalEquipment",
+      });
+
       innerConduits.forEach((x) => {
         map.setFeatureState(
           { source: "InnerConduit", id: x.id },
@@ -180,6 +185,13 @@ function clickHighlight(
 
       racks.forEach((x) => {
         map.setFeatureState({ source: "Rack", id: x.id }, { selected: false });
+      });
+
+      terminalEquipment.forEach((x) => {
+        map.setFeatureState(
+          { source: "TerminalEquipment", id: x.id },
+          { selected: false }
+        );
       });
     }
 
@@ -249,6 +261,10 @@ function SchematicDiagram({
 
       const hasRack = diagramObjects.find((x) => x.style.startsWith("Rack"));
 
+      const hasTerminalEquipment = diagramObjects.find((x) =>
+        x.style.startsWith("TerminalEquipment")
+      );
+
       if (hasInnerConduit) {
         newMap.addLayer(innerConduitSelect);
         hoverPointer("InnerConduit", newMap);
@@ -279,6 +295,12 @@ function SchematicDiagram({
         newMap.addLayer(rackSelect);
         hoverPointer("Rack", newMap);
         clickHighlight("Rack", newMap, onSelectFeature, editMode);
+      }
+
+      if (hasTerminalEquipment) {
+        newMap.addLayer(terminalEquipmentSelect);
+        hoverPointer("TerminalEquipment", newMap);
+        clickHighlight("TerminalEquipment", newMap, onSelectFeature, editMode);
       }
     });
 

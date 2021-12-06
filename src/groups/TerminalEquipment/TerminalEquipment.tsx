@@ -320,35 +320,59 @@ function TerminalEquipment({
     setShowFreeLines({ ...showFreeLines, [id]: !showFreeLines[id] });
   };
 
+  const hasParentNodeStructures =
+    response.data?.utilityNetwork.terminalEquipmentConnectivityView
+      .parentNodeStructures;
+
   return (
     <div className="terminal-equipment">
-      {Object.keys(groupedById).map((x) => {
-        return (
-          <RackContainer
-            parentNodeStructure={response.data?.utilityNetwork?.terminalEquipmentConnectivityView?.parentNodeStructures.find(
-              (z) => z.id === x
-            )}
-            key={x}
-          >
-            {groupedById[x].map((y) => {
-              return (
-                <TerminalEquipmentTableContainer
-                  key={y.id}
-                  toggleShowFreeLines={toggleShowFreeLines}
-                  terminalEquipment={y}
-                  showFreeLines={showFreeLines[y.id] ?? false}
-                >
-                  <TerminalEquipmentTable
+      {hasParentNodeStructures &&
+        Object.keys(groupedById).map((x) => {
+          return (
+            <RackContainer
+              parentNodeStructure={response.data?.utilityNetwork?.terminalEquipmentConnectivityView?.parentNodeStructures.find(
+                (z) => z.id === x
+              )}
+              key={x}
+            >
+              {groupedById[x].map((y) => {
+                return (
+                  <TerminalEquipmentTableContainer
+                    key={y.id}
+                    toggleShowFreeLines={toggleShowFreeLines}
+                    terminalEquipment={y}
                     showFreeLines={showFreeLines[y.id] ?? false}
-                    t={t}
-                    terminalStructures={y.terminalStructures}
-                  />
-                </TerminalEquipmentTableContainer>
-              );
-            })}
-          </RackContainer>
-        );
-      })}
+                  >
+                    <TerminalEquipmentTable
+                      showFreeLines={showFreeLines[y.id] ?? false}
+                      t={t}
+                      terminalStructures={y.terminalStructures}
+                    />
+                  </TerminalEquipmentTableContainer>
+                );
+              })}
+            </RackContainer>
+          );
+        })}
+      {!hasParentNodeStructures &&
+        Object.keys(groupedById).map((x) => {
+          return groupedById[x].map((y) => {
+            return (
+              <TerminalEquipmentTableContainer
+                key={y.id}
+                toggleShowFreeLines={toggleShowFreeLines}
+                terminalEquipment={y}
+                showFreeLines={showFreeLines[y.id] ?? false}
+              >
+                <TerminalEquipmentTable
+                  showFreeLines={showFreeLines[y.id] ?? false}
+                  t={t}
+                  terminalStructures={y.terminalStructures}
+                />
+              </TerminalEquipmentTableContainer>
+            );
+          });
+        })}
     </div>
   );
 }

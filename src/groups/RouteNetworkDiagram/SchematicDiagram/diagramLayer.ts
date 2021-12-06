@@ -460,3 +460,19 @@ export const rackSelect: LineLayer = {
     ],
   },
 };
+
+export const terminalEquipmentSelect: LineLayer = {
+  id: "TerminalEquipmentSelect",
+  type: "line",
+  source: "TerminalEquipment",
+  paint: {
+    "line-width": 2,
+    "line-color": colorMap.LIGHT_BLUE,
+    "line-opacity": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      1,
+      0,
+    ],
+  },
+};
