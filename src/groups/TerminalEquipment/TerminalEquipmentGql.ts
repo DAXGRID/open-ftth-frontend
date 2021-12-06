@@ -1,5 +1,3 @@
-import terminalEquipmentData from "./terminalEquipmentData.json";
-
 export type ParentNodeStructure = {
   id: string;
   category: string;
@@ -48,10 +46,62 @@ export type TerminalEquipment = {
 };
 
 export type TerminalEquipmentResponse = {
-  parentNodeStructures: ParentNodeStructure[];
-  terminalEquipments: TerminalEquipment[];
+  utilityNetwork: {
+    terminalEquipmentConnectivityView: {
+      parentNodeStructures: ParentNodeStructure[];
+      terminalEquipments: TerminalEquipment[];
+    };
+  };
 };
 
-export function getTerminalEquipments(): TerminalEquipmentResponse {
-  return terminalEquipmentData;
+export const TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_QUERY = `
+query (
+$routeNodeId: ID!,
+$terminalEquipmentOrRackId: ID!
+) {
+  utilityNetwork {
+    terminalEquipmentConnectivityView(
+      routeNodeId: $routeNodeId
+      terminalEquipmentOrRackId: $terminalEquipmentOrRackId
+    ) {
+      parentNodeStructures {
+        id
+        name
+        specName
+      }
+      terminalEquipments {
+        id
+        parentNodeStructureId
+        name
+        category
+        specName
+        terminalStructures {
+          id
+          name
+          specName
+          info
+          lines {
+            connectorSymbol
+            a {
+              terminal {
+                id
+                name
+              }
+              connectedTo
+              end
+            }
+            z {
+              terminal {
+                id
+                name
+              }
+              connectedTo
+              end
+            }
+          }
+        }
+      }
+    }
+  }
 }
+`;

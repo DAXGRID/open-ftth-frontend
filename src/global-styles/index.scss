@@ -55,6 +55,21 @@ body {
   margin: 20px;
 }
 
+.container-max-size {
+  max-width: 1500px;
+}
+
+.container-center {
+  margin: 30px auto;
+}
+
+.container-background {
+  border-radius: 4px;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid $border-color;
+}
+
 .block {
   border-radius: 4px;
   background-color: white;

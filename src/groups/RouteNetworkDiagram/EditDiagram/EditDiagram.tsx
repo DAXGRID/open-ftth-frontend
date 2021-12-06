@@ -21,6 +21,7 @@ import FeatureInformation from "../FeatureInformation";
 import EstablishCustomerConnection from "../EstablishCustomerConnection";
 import AddRack from "../AddRack";
 import AddTerminalEquipment from "../AddTerminalEquipment";
+import TerminalEquipment from "../../TerminalEquipment";
 import {
   Diagram,
   Envelope,
@@ -430,7 +431,11 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
       if (!editMode) {
         if (isSelected) {
-          if (feature.properties?.type !== "NodeContainer") {
+          if (
+            feature.properties?.type === "OuterConduit" ||
+            feature.properties?.type === "InnerConduit"
+          ) {
+            // Then we trace the conduit.
             const segmentTrace = await client
               .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
                 spanSegmentId: feature.properties?.refId,
@@ -766,6 +771,18 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           showActions={true}
         />
       )}
+      {!editMode &&
+        (singleSelectedFeature?.source === "Rack" ||
+          singleSelectedFeature?.source === "TerminalEquipment") && (
+          <div className="container-background container-max-size container-center">
+            <TerminalEquipment
+              routeNodeId={identifiedFeature?.id ?? ""}
+              terminalEquipmentOrRackId={
+                singleSelectedFeature.properties?.refId ?? ""
+              }
+            />
+          </div>
+        )}
     </div>
   );
 }

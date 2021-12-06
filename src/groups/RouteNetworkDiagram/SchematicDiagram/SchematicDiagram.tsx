@@ -275,7 +275,7 @@ function SchematicDiagram({
         clickHighlight("NodeContainer", newMap, onSelectFeature, editMode);
       }
 
-      if (hasRack && editMode) {
+      if (hasRack) {
         newMap.addLayer(rackSelect);
         hoverPointer("Rack", newMap);
         clickHighlight("Rack", newMap, onSelectFeature, editMode);

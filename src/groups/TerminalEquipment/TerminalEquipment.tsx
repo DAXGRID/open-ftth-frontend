@@ -1,5 +1,6 @@
 import { useState, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useQuery } from "urql";
 import {
   faChevronRight,
   faPlusCircle,
@@ -9,11 +10,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation, TFunction } from "react-i18next";
 import {
-  getTerminalEquipments,
   TerminalEquipment as TerminalEquipmentType,
   TerminalStructure,
   Line,
   ParentNodeStructure,
+  TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_QUERY,
+  TerminalEquipmentResponse,
 } from "./TerminalEquipmentGql";
 
 type RackContainerProps = {
@@ -286,13 +288,33 @@ function groupByParentId(terminalEquipments: TerminalEquipmentType[]): {
   }, {});
 }
 
-function TerminalEquipment() {
+interface TerminalEquipmentProps {
+  routeNodeId: string;
+  terminalEquipmentOrRackId: string;
+}
+
+function TerminalEquipment({
+  routeNodeId,
+  terminalEquipmentOrRackId,
+}: TerminalEquipmentProps) {
   const [showFreeLines, setShowFreeLines] = useState<{ [id: string]: boolean }>(
     {}
   );
   const { t } = useTranslation();
-  const response = getTerminalEquipments();
-  const groupedById = groupByParentId(response.terminalEquipments);
+
+  const [response] = useQuery<TerminalEquipmentResponse>({
+    query: TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_QUERY,
+    variables: {
+      routeNodeId: routeNodeId,
+      terminalEquipmentOrRackId: terminalEquipmentOrRackId,
+    },
+    pause: !routeNodeId || !terminalEquipmentOrRackId,
+  });
+
+  const groupedById = groupByParentId(
+    response.data?.utilityNetwork.terminalEquipmentConnectivityView
+      ?.terminalEquipments ?? []
+  );
 
   const toggleShowFreeLines = (id: string) => {
     setShowFreeLines({ ...showFreeLines, [id]: !showFreeLines[id] });
@@ -303,7 +325,7 @@ function TerminalEquipment() {
       {Object.keys(groupedById).map((x) => {
         return (
           <RackContainer
-            parentNodeStructure={response.parentNodeStructures.find(
+            parentNodeStructure={response.data?.utilityNetwork?.terminalEquipmentConnectivityView?.parentNodeStructures.find(
               (z) => z.id === x
             )}
             key={x}

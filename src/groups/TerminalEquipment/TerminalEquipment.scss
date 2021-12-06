@@ -5,6 +5,7 @@
   border-top-left-radius: 4px;
   border: 1px solid $border-color;
   border-bottom: none;
+  width: 100%;
 
   .rack-container-header {
     display: flex;
@@ -118,8 +119,6 @@
   }
 
   .terminal-equipment-table-body {
-    display: flex;
-    flex-flow: wrap;
     overflow-y: auto;
     overflow: overlay;
     max-height: 700px;
