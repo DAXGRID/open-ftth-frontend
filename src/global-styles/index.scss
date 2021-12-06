@@ -60,7 +60,7 @@ body {
 }
 
 .container-center {
-  margin: 30px auto;
+  margin: 0px auto;
 }
 
 .container-background {
@@ -68,6 +68,7 @@ body {
   padding: 20px;
   background-color: white;
   border: 1px solid $border-color;
+  margin: 20px;
 }
 
 .block {
