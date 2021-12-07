@@ -1,6 +1,8 @@
 import { useState, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "urql";
+import ModalContainer from "../../components/ModalContainer";
+import FiberConnectionEditor from "../FiberConnectionEditor";
 import {
   faChevronRight,
   faPlusCircle,
@@ -92,13 +94,15 @@ function TerminalEquipmentTableContainer({
 
 type PinPortProps = {
   line: Line;
+  action: () => void;
 };
 
-function PinPort({ line }: PinPortProps) {
+function PinPort({ line, action }: PinPortProps) {
   return (
     <div className="table-item-terminal">
       <div
         role="button"
+        onClick={action}
         className={
           line.a?.connectedTo
             ? "table-item-terminal__item text-red"
@@ -112,6 +116,7 @@ function PinPort({ line }: PinPortProps) {
       <div className="table-item-terminal__item">{line.z?.terminal.name}</div>
       <div
         role="button"
+        onClick={action}
         className={
           line.z?.connectedTo
             ? "table-item-terminal__item text-red"
@@ -127,9 +132,10 @@ function PinPort({ line }: PinPortProps) {
 type TerminalLineFreeProps = {
   line: Line;
   t: TFunction;
+  action: () => void;
 };
 
-function TerminalLineFree({ t, line }: TerminalLineFreeProps) {
+function TerminalLineFree({ t, line, action }: TerminalLineFreeProps) {
   return (
     <div className="terminal-equipment-table-row">
       <div
@@ -147,7 +153,7 @@ function TerminalLineFree({ t, line }: TerminalLineFreeProps) {
           <div className="terminal-equipment-table-item"></div>
         )}
         <div className="terminal-equipment-table-item">
-          <PinPort line={line} />
+          <PinPort action={action} line={line} />
         </div>
         {line.z ? (
           <div
@@ -167,9 +173,10 @@ function TerminalLineFree({ t, line }: TerminalLineFreeProps) {
 type TerminalLineProps = {
   line: Line;
   t: TFunction;
+  action: () => void;
 };
 
-function TerminalLine({ line }: TerminalLineProps) {
+function TerminalLine({ line, action }: TerminalLineProps) {
   return (
     <div className="terminal-equipment-table-row">
       <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
@@ -185,7 +192,7 @@ function TerminalLine({ line }: TerminalLineProps) {
           {line.a?.connectedTo}
         </div>
         <div className="terminal-equipment-table-item">
-          <PinPort line={line} />
+          <PinPort action={action} line={line} />
         </div>
         <div className="terminal-equipment-table-item">
           {line.z?.connectedTo}
@@ -200,12 +207,14 @@ type TerminalEquipmentTableProps = {
   showFreeLines: boolean;
   t: TFunction;
   terminalStructures: TerminalStructure[];
+  action: () => void;
 };
 
 function TerminalEquipmentTable({
   showFreeLines,
   t,
   terminalStructures,
+  action,
 }: TerminalEquipmentTableProps) {
   return (
     <div className="terminal-equipment-table">
@@ -244,6 +253,7 @@ function TerminalEquipmentTable({
                 .map((y) => {
                   return (
                     <TerminalLine
+                      action={action}
                       t={t}
                       line={y}
                       key={y.a?.terminal.id ?? y.z?.terminal.id}
@@ -257,6 +267,7 @@ function TerminalEquipmentTable({
                   .map((y) => {
                     return (
                       <TerminalLineFree
+                        action={action}
                         t={t}
                         line={y}
                         key={y.a?.terminal.id ?? y.z?.terminal.id}
@@ -300,6 +311,8 @@ function TerminalEquipment({
   const [showFreeLines, setShowFreeLines] = useState<{ [id: string]: boolean }>(
     {}
   );
+  const [showFiberEditor, setShowFiberEditor] = useState<boolean>(false);
+
   const { t } = useTranslation();
 
   const [response] = useQuery<TerminalEquipmentResponse>({
@@ -326,6 +339,16 @@ function TerminalEquipment({
 
   return (
     <div className="terminal-equipment">
+      {showFiberEditor && (
+        <ModalContainer
+          show={showFiberEditor}
+          closeCallback={() => setShowFiberEditor(false)}
+          maxWidth="1200px"
+        >
+          <FiberConnectionEditor />
+        </ModalContainer>
+      )}
+
       {hasParentNodeStructures &&
         Object.keys(groupedById).map((x) => {
           return (
@@ -344,6 +367,7 @@ function TerminalEquipment({
                     showFreeLines={showFreeLines[y.id] ?? false}
                   >
                     <TerminalEquipmentTable
+                      action={() => setShowFiberEditor(true)}
                       showFreeLines={showFreeLines[y.id] ?? false}
                       t={t}
                       terminalStructures={y.terminalStructures}
@@ -365,6 +389,7 @@ function TerminalEquipment({
                 showFreeLines={showFreeLines[y.id] ?? false}
               >
                 <TerminalEquipmentTable
+                  action={() => setShowFiberEditor(true)}
                   showFreeLines={showFreeLines[y.id] ?? false}
                   t={t}
                   terminalStructures={y.terminalStructures}

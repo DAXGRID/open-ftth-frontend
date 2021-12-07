@@ -6,6 +6,7 @@ type ModalContainerProps = {
   closeCallback: () => void;
   enableMaxSize?: boolean;
   title?: string;
+  maxWidth?: string;
 };
 
 function ModalContainer({
@@ -14,10 +15,11 @@ function ModalContainer({
   closeCallback,
   enableMaxSize,
   title,
+  maxWidth,
 }: ModalContainerProps) {
   return (
     <div className={show ? "modal-container show" : "modal-container"}>
-      <div className="modal-content">
+      <div className="modal-content" style={{ maxWidth: maxWidth ?? "800px" }}>
         <div className="modal-header">
           <p className="modal-header__title">{title}</p>
           <p role="button" onClick={() => closeCallback()} className="close">
