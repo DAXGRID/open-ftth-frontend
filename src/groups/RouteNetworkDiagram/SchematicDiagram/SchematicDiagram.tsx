@@ -17,6 +17,7 @@ import {
   rackSelect,
   terminalEquipmentSelect,
   fiberCableSymbolLayer,
+  fiberCableUnderLayer,
 } from "./diagramLayer";
 
 interface Envelope {
@@ -278,6 +279,7 @@ function SchematicDiagram({
       }
 
       if (hasFiberCable) {
+        newMap.addLayer(fiberCableUnderLayer);
         newMap.addLayer(fiberCableSymbolLayer);
         hoverPointer("FiberCable", newMap);
         clickHighlight("FiberCable", newMap, onSelectFeature, editMode);

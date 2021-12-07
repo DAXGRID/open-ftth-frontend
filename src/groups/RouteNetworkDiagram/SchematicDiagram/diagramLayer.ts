@@ -53,12 +53,12 @@ export function getLayer(name: string): AnyLayer {
         source: "FiberCable",
         type: "line",
         paint: {
-          "line-width": 4,
+          "line-width": 14,
           "line-color": [
             "case",
             ["boolean", ["feature-state", "selected"], false],
             colorMap.LIGHT_BLUE,
-            colorMap.BLACK,
+            colorMap.WHITE,
           ],
         },
       } as LineLayer;
@@ -498,17 +498,26 @@ export const fiberCableSymbolLayer: any = {
   type: "symbol",
   source: "FiberCable",
   layout: {
-    "symbol-placement": "line",
+    "symbol-placement": "line-center",
     "text-font": ["Open Sans Regular"],
     "text-field": "{label}",
     "text-size": 14,
-    "symbol-spacing": 350,
   },
   paint: {
     "text-color": "rgba(0, 0, 0, 1)",
-    "text-halo-blur": 0,
+    "text-halo-blur": 1,
     "text-halo-color": "rgba(255, 255, 255, 1)",
     "text-halo-width": 10,
     "text-translate": [0, 0],
+  },
+};
+
+export const fiberCableUnderLayer: LineLayer = {
+  id: "FiberCableUnderLayer",
+  source: "FiberCable",
+  type: "line",
+  paint: {
+    "line-width": 6,
+    "line-color": colorMap.BLACK,
   },
 };
