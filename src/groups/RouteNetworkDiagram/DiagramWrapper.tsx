@@ -17,20 +17,6 @@ type DiagramWrapperProps = {
   editable: boolean;
 };
 
-function getDiagramType(
-  editable: boolean,
-  envelope: Envelope,
-  diagramObjects: Diagram[]
-): JSX.Element {
-  if (editable) {
-    return <EditDiagram diagramObjects={diagramObjects} envelope={envelope} />;
-  } else {
-    return (
-      <ReadOnlyDiagram diagramObjects={diagramObjects} envelope={envelope} />
-    );
-  }
-}
-
 function DiagramWrapper({ editable }: DiagramWrapperProps) {
   const { identifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
@@ -79,7 +65,16 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
 
   if (!identifiedFeature?.id || !diagramQueryResult.data) return <></>;
 
-  return <div>{getDiagramType(editable, envelope, diagramObjects)}</div>;
+  return (
+    <>
+      {editable && (
+        <EditDiagram diagramObjects={diagramObjects} envelope={envelope} />
+      )}
+      {!editable && (
+        <ReadOnlyDiagram diagramObjects={diagramObjects} envelope={envelope} />
+      )}
+    </>
+  );
 }
 
 export default DiagramWrapper;

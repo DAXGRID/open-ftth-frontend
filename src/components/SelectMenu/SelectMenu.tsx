@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CustomOption from "./CustomOption";
 import { useTranslation } from "react-i18next";
 
@@ -6,6 +6,7 @@ interface SelectOption {
   text: string;
   value: string | number;
   key?: string | number;
+  disabled?: boolean;
 }
 
 type SelectMenuProps = {
@@ -15,6 +16,7 @@ type SelectMenuProps = {
   maxWidth?: string;
   selected: string | number | undefined;
   enableSearch?: boolean;
+  autoSelectFirst?: boolean;
 };
 
 function SelectMenu({
@@ -23,10 +25,18 @@ function SelectMenu({
   maxWidth,
   selected,
   enableSearch,
+  removePlaceHolderOnSelect,
+  autoSelectFirst,
 }: SelectMenuProps) {
   const [toggled, setToggled] = useState(false);
   const [search, setSearch] = useState("");
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (autoSelectFirst && !selected && options.length > 0) {
+      onSelected(options[0].value);
+    }
+  }, [options, autoSelectFirst, selected, onSelected]);
 
   return (
     <div
@@ -53,17 +63,36 @@ function SelectMenu({
               onChange={(e) => setSearch(e.target.value)}
             />
           )}
-          {options
-            .filter((x) => x.text.toLowerCase().includes(search.toLowerCase()))
-            ?.map((option) => (
-              <CustomOption
-                key={option.key ?? option.value}
-                text={option.text}
-                triggerSelected={onSelected}
-                isSelected={option.value === selected}
-                value={option.value}
-              />
-            ))}
+          {removePlaceHolderOnSelect
+            ? options
+                .filter((x) => x.value && x.value !== -1)
+                .filter((x) =>
+                  x.text.toLowerCase().includes(search.toLowerCase())
+                )
+                ?.map((option) => (
+                  <CustomOption
+                    key={option.key ?? option.value}
+                    text={option.text}
+                    triggerSelected={onSelected}
+                    isSelected={option.value === selected}
+                    value={option.value}
+                    disabled={option.disabled ?? false}
+                  />
+                ))
+            : options
+                .filter((x) =>
+                  x.text.toLowerCase().includes(search.toLowerCase())
+                )
+                ?.map((option) => (
+                  <CustomOption
+                    key={option.key ?? option.value}
+                    text={option.text}
+                    triggerSelected={onSelected}
+                    isSelected={option.value === selected}
+                    value={option.value}
+                    disabled={option.disabled ?? false}
+                  />
+                ))}
         </div>
       </div>
     </div>

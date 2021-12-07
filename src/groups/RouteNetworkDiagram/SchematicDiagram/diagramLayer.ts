@@ -47,6 +47,22 @@ export function createFeature(
 
 export function getLayer(name: string): AnyLayer {
   switch (name) {
+    case "FiberCable": {
+      return {
+        id: "FiberCable",
+        source: "FiberCable",
+        type: "line",
+        paint: {
+          "line-width": 14,
+          "line-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            colorMap.LIGHT_BLUE,
+            colorMap.WHITE,
+          ],
+        },
+      } as LineLayer;
+    }
     case "NodeContainerSideNorth":
     case "NodeContainerSideSouth":
     case "NodeContainerSideEast":
@@ -54,14 +70,13 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "NodeContainerSide",
         source: "NodeContainerSide",
-        order: 0,
         type: "line",
         layout: {
           "line-cap": "round",
         },
         paint: {
-          "line-width": 10,
-          "line-color": "#CDCDCD",
+          "line-width": 15,
+          "line-color": "black",
           "line-opacity": 0,
         },
       } as LineLayer;
@@ -69,10 +84,30 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "NodeContainer",
         source: "NodeContainer",
-        order: 0,
         type: "fill",
         paint: {
-          "fill-color": "#CDCDCD",
+          "fill-color": "#e1e1e1",
+          "fill-outline-color": "black",
+        },
+      } as FillLayer;
+    case "Rack":
+      return {
+        id: "Rack",
+        source: "Rack",
+        type: "fill",
+        paint: {
+          "fill-color": "white",
+          "fill-outline-color": "black",
+        },
+      } as FillLayer;
+    case "SubrackSpace":
+      return {
+        id: "SubrackSpace",
+        source: "SubrackSpace",
+        type: "fill",
+        paint: {
+          "fill-color": "#ccf1cc",
+          "fill-outline-color": "black",
         },
       } as FillLayer;
     case "OuterConduitOrange":
@@ -80,7 +115,6 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "OuterConduit",
         source: "OuterConduit",
-        order: 1,
         type: "fill",
         paint: {
           "fill-outline-color": "#555",
@@ -110,7 +144,6 @@ export function getLayer(name: string): AnyLayer {
       return {
         id: "InnerConduit",
         source: "InnerConduit",
-        order: 2,
         type: "fill",
         paint: {
           "fill-outline-color": "#555",
@@ -145,12 +178,21 @@ export function getLayer(name: string): AnyLayer {
           ],
         },
       } as FillLayer;
+    case "TerminalEquipment":
+      return {
+        id: "TerminalEquipment",
+        source: "TerminalEquipment",
+        type: "fill",
+        paint: {
+          "fill-color": "#f4f6f8",
+          "fill-outline-color": "black",
+        },
+      } as FillLayer;
     case "WestTerminalLabel":
       return {
         id: "WestTerminalLabel",
         source: "WestTerminalLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -170,7 +212,6 @@ export function getLayer(name: string): AnyLayer {
         id: "EastTerminalLabel",
         source: "EastTerminalLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -190,7 +231,6 @@ export function getLayer(name: string): AnyLayer {
         id: "SouthTerminalLabel",
         source: "SouthTerminalLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -211,7 +251,6 @@ export function getLayer(name: string): AnyLayer {
         id: "NorthTerminalLabel",
         source: "NorthTerminalLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -232,7 +271,6 @@ export function getLayer(name: string): AnyLayer {
         id: "SpanEquipmentLabel",
         source: "SpanEquipmentLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
@@ -253,20 +291,98 @@ export function getLayer(name: string): AnyLayer {
         id: "NodeContainerLabel",
         source: "NodeContainerLabel",
         type: "symbol",
-        order: 4,
         paint: {
           "text-color": "#444",
         },
         layout: {
           "text-allow-overlap": true,
-          "text-size": 14,
+          "text-size": 16,
           "text-font": ["Open Sans Bold"],
           "text-field": ["get", "label"],
           "text-anchor": "left",
           "text-justify": "left",
           "text-rotate": 0,
-          "text-offset": [0, 0],
+          "text-offset": [0, -0.5],
           "text-max-width": 1000,
+        },
+      } as SymbolLayer;
+    case "RackLabel":
+      return {
+        id: "RackLabel",
+        source: "RackLabel",
+        type: "symbol",
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
+          "text-allow-overlap": true,
+          "text-size": 18,
+          "text-font": ["Open Sans Bold"],
+          "text-field": ["get", "label"],
+          "text-anchor": "left",
+          "text-justify": "left",
+          "text-rotate": 0,
+          "text-offset": [0, -0.25],
+          "text-max-width": 1000,
+        },
+      } as SymbolLayer;
+    case "RackUnitLabel":
+      return {
+        id: "RackUnitLabel",
+        source: "RackUnitLabel",
+        type: "symbol",
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
+          "text-allow-overlap": false,
+          "text-size": 14,
+          "text-font": ["Open Sans Bold"],
+          "text-field": ["get", "label"],
+          "text-anchor": "right",
+          "text-justify": "right",
+          "text-offset": [-0.75, 0],
+          "text-max-width": 1000,
+        },
+      } as SymbolLayer;
+    case "TerminalEquipmentNameLabel":
+      return {
+        id: "TerminalEquipmentNameLabel",
+        source: "TerminalEquipmentNameLabel",
+        type: "symbol",
+        minzoom: 12,
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
+          "text-allow-overlap": false,
+          "text-size": 14,
+          "text-font": ["Open Sans Bold"],
+          "text-field": ["get", "label"],
+          "text-anchor": "center",
+          "text-justify": "center",
+          "text-offset": [0, 0],
+          "text-max-width": 100000,
+        },
+      } as SymbolLayer;
+    case "TerminalEquipmentTypeLabel":
+      return {
+        id: "TerminalEquipmentTypeLabel",
+        source: "TerminalEquipmentTypeLabel",
+        type: "symbol",
+        minzoom: 13,
+        paint: {
+          "text-color": "#444",
+        },
+        layout: {
+          "text-allow-overlap": false,
+          "text-size": 12,
+          "text-font": ["Open Sans Bold"],
+          "text-field": ["get", "label"],
+          "text-anchor": "center",
+          "text-justify": "center",
+          "text-offset": [0, 0],
+          "text-max-width": 20,
         },
       } as SymbolLayer;
     default:
@@ -282,13 +398,17 @@ export const nodeContainerSideSelect: LineLayer = {
     "line-cap": "butt",
   },
   paint: {
-    "line-width": 10,
-    "line-color": colorMap.LIGHT_BLUE,
-    "line-opacity": [
+    "line-width": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
-      1,
-      0,
+      8,
+      0.5,
+    ],
+    "line-color": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      colorMap.LIGHT_BLUE,
+      colorMap.BLACK,
     ],
   },
 };
@@ -330,7 +450,7 @@ export const nodeContainerSelect: LineLayer = {
   type: "line",
   source: "NodeContainer",
   paint: {
-    "line-width": 3,
+    "line-width": 4,
     "line-color": colorMap.LIGHT_BLUE,
     "line-opacity": [
       "case",
@@ -338,5 +458,66 @@ export const nodeContainerSelect: LineLayer = {
       1,
       0,
     ],
+  },
+};
+
+export const rackSelect: LineLayer = {
+  id: "RackSelect",
+  type: "line",
+  source: "Rack",
+  paint: {
+    "line-width": 4,
+    "line-color": colorMap.LIGHT_BLUE,
+    "line-opacity": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      1,
+      0,
+    ],
+  },
+};
+
+export const terminalEquipmentSelect: LineLayer = {
+  id: "TerminalEquipmentSelect",
+  type: "line",
+  source: "TerminalEquipment",
+  paint: {
+    "line-width": 2,
+    "line-color": colorMap.LIGHT_BLUE,
+    "line-opacity": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      1,
+      0,
+    ],
+  },
+};
+
+export const fiberCableSymbolLayer: any = {
+  id: "FiberCableLabel",
+  type: "symbol",
+  source: "FiberCable",
+  layout: {
+    "symbol-placement": "line-center",
+    "text-font": ["Open Sans Regular"],
+    "text-field": "{label}",
+    "text-size": 14,
+  },
+  paint: {
+    "text-color": "rgba(0, 0, 0, 1)",
+    "text-halo-blur": 1,
+    "text-halo-color": "rgba(255, 255, 255, 1)",
+    "text-halo-width": 10,
+    "text-translate": [0, 0],
+  },
+};
+
+export const fiberCableUnderLayer: LineLayer = {
+  id: "FiberCableUnderLayer",
+  source: "FiberCable",
+  type: "line",
+  paint: {
+    "line-width": 6,
+    "line-color": colorMap.BLACK,
   },
 };

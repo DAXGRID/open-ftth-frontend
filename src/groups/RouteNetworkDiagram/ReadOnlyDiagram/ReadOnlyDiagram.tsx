@@ -10,6 +10,7 @@ import { MapContext } from "../../../contexts/MapContext";
 import { EraserSvg } from "../../../assets";
 import { useTranslation } from "react-i18next";
 import FeatureInformation from "../FeatureInformation";
+import TerminalEquipment from "../../TerminalEquipment";
 import {
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
@@ -44,7 +45,7 @@ function ReadOnlyDiagram({
   diagramObjects,
   envelope,
 }: RouteSegmentDiagramProps) {
-  const { setTrace } = useContext(MapContext);
+  const { setTrace, identifiedFeature } = useContext(MapContext);
   const [selectedFeature, setSelectedFeature] =
     useState<MapboxGeoJSONFeature | null>(null);
   const { t } = useTranslation();
@@ -115,6 +116,13 @@ function ReadOnlyDiagram({
         <SpanEquipmentDetails
           spanEquipmentMrid={selectedFeature.properties?.refId ?? ""}
           showActions={false}
+        />
+      )}
+      {(selectedFeature?.source === "Rack" ||
+        selectedFeature?.source === "TerminalEquipment") && (
+        <TerminalEquipment
+          routeNodeId={identifiedFeature?.id ?? ""}
+          terminalEquipmentOrRackId={selectedFeature.properties?.refId ?? ""}
         />
       )}
     </div>

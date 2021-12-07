@@ -55,6 +55,22 @@ body {
   margin: 20px;
 }
 
+.container-max-size {
+  max-width: 1500px;
+}
+
+.container-center {
+  margin: 0px auto;
+}
+
+.container-background {
+  border-radius: 4px;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid $border-color;
+  margin: 20px;
+}
+
 .block {
   border-radius: 4px;
   background-color: white;
@@ -78,6 +94,29 @@ body {
 
   &:last-child {
     padding-bottom: 0;
+  }
+
+  &.center-items {
+    justify-content: center;
+  }
+}
+
+.full-row-group {
+  border: 1px solid $border-color;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .full-row-group__title {
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ced0d1;
+    margin-bottom: 15px;
   }
 }
 
@@ -122,4 +161,20 @@ strong {
 
 .mapboxgl-ctrl-group button {
   font-size: 15px;
+}
+
+.color-red {
+  color: $error-color;
+}
+
+.text-red {
+  color: $red;
+}
+
+.text-green {
+  color: $green;
+}
+
+.text-center {
+  text-align: center;
 }

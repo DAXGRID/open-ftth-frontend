@@ -1,0 +1,224 @@
+@import "../../global-styles/colors";
+
+.rack-container {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border: 1px solid $border-color;
+  border-bottom: none;
+  width: 100%;
+
+  .rack-container-header {
+    display: flex;
+    justify-content: flex-start;
+    padding: 15px 10px;
+    font-size: 18px;
+    background-color: $hover-color;
+    border-bottom: none;
+    border-bottom: 1px solid $border-color;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    align-items: center;
+
+    p {
+      flex: 1;
+      font-weight: bold;
+    }
+
+    .header-icons {
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+      user-select: none;
+      font-size: 22px;
+      gap: 10px;
+
+      .header-icons__icon {
+        &:hover {
+          cursor: pointer;
+        }
+
+        &.header-icons__icon--selected {
+          color: $success-color;
+        }
+      }
+    }
+  }
+
+  .terminal-equipment-table-container {
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid $border-color;
+  }
+}
+
+.terminal-equipment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.terminal-equipment-table-container {
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid $border-color;
+  flex-basis: 100%;
+  border-bottom: none;
+
+  .terminal-equipment-table-container-header {
+    display: flex;
+    padding: 10px;
+    font-size: 16px;
+    background-color: $hover-color;
+    align-items: center;
+
+    p {
+      flex: 1;
+      font-weight: bold;
+    }
+
+    .header-icons {
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+      user-select: none;
+      font-size: 22px;
+      gap: 10px;
+
+      .header-icons__icon {
+        &:hover {
+          cursor: pointer;
+        }
+
+        &.header-icons__icon--selected {
+          color: $success-color;
+        }
+      }
+    }
+  }
+
+  .terminal-equipment-table-container-body {
+  }
+}
+
+.terminal-equipment-table-grid-header,
+.terminal-equipment-table-grid-equipped {
+  display: grid;
+  grid-template-columns: 4fr 3.5fr 3fr 3.5fr 4fr;
+}
+
+.terminal-equipment-table-grid-free {
+  display: grid;
+  grid-template-columns: 7.5fr 3fr 7.5fr;
+}
+
+.terminal-equipment-table {
+  border-top: 1px solid $border-color;
+
+  .terminal-equipment-header {
+    font-size: 16px;
+  }
+
+  .terminal-equipment-table-body {
+    overflow-y: auto;
+    overflow: overlay;
+    max-height: 700px;
+
+    .terminal-equipment-table-row {
+      flex: 1;
+      border-bottom: 1px solid $border-color;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .terminal-equipment-header-row {
+        display: flex;
+        justify-content: flex-start;
+        padding: 10px 10px;
+        background-color: $ultra-light-grey;
+        font-size: 14px;
+        border-top: 1px solid $border-color;
+
+        &:first-child {
+          border-top: none;
+          border-top: 1px solid $border-color;
+        }
+
+        .terminal-equipment-row-header__item {
+          flex: 1;
+          font-weight: bold;
+        }
+      }
+
+      .terminal-equipment-data-row {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .terminal-equipment-table-item {
+    padding: 10px;
+    border-right: 1px solid $border-color;
+    display: flex;
+    align-items: center;
+
+    &:last-child {
+      padding: 10px 20px 10px 10px;
+    }
+
+    &:nth-of-type(5) {
+      border-right: none;
+    }
+
+    .table-item-terminal {
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      .table-item-terminal__item {
+        text-align: center;
+        flex: 1;
+
+        &:first-child {
+          flex: 0.5;
+        }
+
+        &:last-child {
+          flex: 0.5;
+        }
+
+        svg {
+          font-size: 18px;
+          user-select: none;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    .terminal-equipment-table-item__icon {
+      user-select: none;
+      padding-right: 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .terminal-equipment-table-item--free {
+    background-color: #b3e4b3;
+    text-align: center;
+
+    &:hover {
+      background-color: #a3cfa3;
+      cursor: pointer;
+    }
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+}

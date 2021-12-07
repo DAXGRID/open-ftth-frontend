@@ -14,6 +14,10 @@ import {
   nodeContainerSideSelect,
   outerConduitSelect,
   nodeContainerSelect,
+  rackSelect,
+  terminalEquipmentSelect,
+  fiberCableSymbolLayer,
+  fiberCableUnderLayer,
 } from "./diagramLayer";
 
 interface Envelope {
@@ -119,6 +123,16 @@ function enableResize(map: Map) {
   });
 }
 
+function clearSelected(map: Map, source: string): void {
+  map
+    .querySourceFeatures(source, {
+      sourceLayer: source,
+    })
+    .forEach((x) => {
+      map.setFeatureState({ source: source, id: x.id }, { selected: false });
+    });
+}
+
 function clickHighlight(
   featureName: string,
   map: Map,
@@ -126,9 +140,10 @@ function clickHighlight(
   editMode: boolean
 ) {
   map.on("click", featureName, (e) => {
+    const bboxSize = 1;
     const bbox: [PointLike, PointLike] = [
-      [e.point.x - 1, e.point.y - 1],
-      [e.point.x + 1, e.point.y + 1],
+      [e.point.x - bboxSize, e.point.y - bboxSize],
+      [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
     const feature = map.queryRenderedFeatures(bbox)[0];
@@ -139,38 +154,16 @@ function clickHighlight(
     feature.state.selected = !feature.state.selected;
 
     if (!editMode) {
-      const innerConduits = map.querySourceFeatures("InnerConduit", {
-        sourceLayer: "InnerConduit",
-      });
-
-      const outerConduits = map.querySourceFeatures("OuterConduit", {
-        sourceLayer: "OuterConduit",
-      });
-
-      const nodeContainers = map.querySourceFeatures("NodeContainer", {
-        sourceLayer: "OuterConduit",
-      });
-
-      innerConduits.forEach((x) => {
-        map.setFeatureState(
-          { source: "InnerConduit", id: x.id },
-          { selected: false }
-        );
-      });
-
-      outerConduits.forEach((x) => {
-        map.setFeatureState(
-          { source: "OuterConduit", id: x.id },
-          { selected: false }
-        );
-      });
-
-      nodeContainers.forEach((x) => {
-        map.setFeatureState(
-          { source: "NodeContainer", id: x.id },
-          { selected: false }
-        );
-      });
+      const clearHighlight = (
+        (map: Map) => (source: string) =>
+          clearSelected(map, source)
+      )(map);
+      clearHighlight("InnerConduit");
+      clearHighlight("OuterConduit");
+      clearHighlight("NodeContainer");
+      clearHighlight("Rack");
+      clearHighlight("TerminalEquipment");
+      clearHighlight("FiberCable");
     }
 
     map.setFeatureState(
@@ -237,6 +230,16 @@ function SchematicDiagram({
         x.style.startsWith("NodeContainer")
       );
 
+      const hasRack = diagramObjects.find((x) => x.style.startsWith("Rack"));
+
+      const hasTerminalEquipment = diagramObjects.find((x) =>
+        x.style.startsWith("TerminalEquipment")
+      );
+
+      const hasFiberCable = diagramObjects.find((x) =>
+        x.style.startsWith("FiberCable")
+      );
+
       if (hasInnerConduit) {
         newMap.addLayer(innerConduitSelect);
         hoverPointer("InnerConduit", newMap);
@@ -249,16 +252,37 @@ function SchematicDiagram({
         clickHighlight("OuterConduit", newMap, onSelectFeature, editMode);
       }
 
+      if (hasNodeContainerSide && editMode) {
+        newMap.addLayer(nodeContainerSideSelect);
+        hoverPointer("NodeContainerSide", newMap);
+        clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
+      } else if (hasNodeContainerSide) {
+        newMap.addLayer(nodeContainerSideSelect);
+      }
+
       if (hasNodeContainer) {
         newMap.addLayer(nodeContainerSelect);
         hoverPointer("NodeContainer", newMap);
         clickHighlight("NodeContainer", newMap, onSelectFeature, editMode);
       }
 
-      if (hasNodeContainerSide && editMode) {
-        newMap.addLayer(nodeContainerSideSelect);
-        hoverPointer("NodeContainerSide", newMap);
-        clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
+      if (hasRack) {
+        newMap.addLayer(rackSelect);
+        hoverPointer("Rack", newMap);
+        clickHighlight("Rack", newMap, onSelectFeature, editMode);
+      }
+
+      if (hasTerminalEquipment) {
+        newMap.addLayer(terminalEquipmentSelect);
+        hoverPointer("TerminalEquipment", newMap);
+        clickHighlight("TerminalEquipment", newMap, onSelectFeature, editMode);
+      }
+
+      if (hasFiberCable) {
+        newMap.addLayer(fiberCableUnderLayer);
+        newMap.addLayer(fiberCableSymbolLayer);
+        hoverPointer("FiberCable", newMap);
+        clickHighlight("FiberCable", newMap, onSelectFeature, editMode);
       }
     });
 

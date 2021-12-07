@@ -1,4 +1,11 @@
-import { useEffect, useState, useContext, useRef, useCallback } from "react";
+import {
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+  useReducer,
+  useMemo,
+} from "react";
 import { useMutation, useClient } from "urql";
 import { MapboxGeoJSONFeature } from "maplibre-gl";
 import DiagramMenu from "../../../components/DiagramMenu";
@@ -6,11 +13,15 @@ import ModalContainer from "../../../components/ModalContainer";
 import SchematicDiagram from "../SchematicDiagram";
 import ToggleButton from "../../../components/ToggleButton";
 import ActionButton from "../../../components/ActionButton";
+import MultiOptionActionButton from "../../../components/MultiOptionActionButton";
 import { MapContext } from "../../../contexts/MapContext";
 import NodeContainerDetails from "../NodeContainerDetails";
 import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import FeatureInformation from "../FeatureInformation";
 import EstablishCustomerConnection from "../EstablishCustomerConnection";
+import AddRack from "../AddRack";
+import AddTerminalEquipment from "../AddTerminalEquipment";
+import TerminalEquipment from "../../TerminalEquipment";
 import {
   Diagram,
   Envelope,
@@ -37,6 +48,9 @@ import {
   SpanSegmentTraceResponse,
   REMOVE_NODE_CONTAINER,
   RemoveNodeContainerResponse,
+  AFFIX_SPAN_EQUIPMENT_TO_PARENT,
+  AffixSpanEquipmentToParentParams,
+  AffixSpanEquipmentToParentResponse,
 } from "./EditDiagramGql";
 import AddContainer from "../AddContainer";
 import AddInnerSpanStructure from "../AddInnerSpanStructure";
@@ -62,18 +76,97 @@ type RouteNetworkDiagramProps = {
   envelope: Envelope;
 };
 
+function containsNodeContainer(diagramObjects: Diagram[]): boolean {
+  return diagramObjects.find((x) => x.style === "NodeContainer") ? true : false;
+}
+
+function isSingleSelected(
+  source: string,
+  selected: MapboxGeoJSONFeature[]
+): boolean {
+  if (selected.length > 1) return false;
+  return selected.find((x) => x.source === source) ? true : false;
+}
+
+interface ShowModals {
+  addContainer: boolean;
+  handleInnerConduit: boolean;
+  establishCustomerConnection: boolean;
+  addRack: boolean;
+  addTerminalEquipment: boolean;
+}
+
+interface ShowModalsAction {
+  type:
+    | "addContainer"
+    | "addInnerConduit"
+    | "establishCustomerConnection"
+    | "addRack"
+    | "addTerminalEquipment"
+    | "reset";
+  show?: boolean;
+}
+
+const showModalsInitialState: ShowModals = {
+  addContainer: false,
+  establishCustomerConnection: false,
+  handleInnerConduit: false,
+  addRack: false,
+  addTerminalEquipment: false,
+};
+
+function showModalsReducer(
+  state: ShowModals,
+  action: ShowModalsAction
+): ShowModals {
+  switch (action.type) {
+    case "addContainer":
+      return {
+        ...state,
+        addContainer: action.show ?? !state.addContainer,
+      };
+    case "addInnerConduit":
+      return {
+        ...state,
+        handleInnerConduit: action.show ?? !state.handleInnerConduit,
+      };
+    case "establishCustomerConnection":
+      return {
+        ...state,
+        establishCustomerConnection:
+          action.show ?? !state.establishCustomerConnection,
+      };
+    case "addRack":
+      return {
+        ...state,
+        addRack: action.show ?? !state.addRack,
+      };
+    case "addTerminalEquipment":
+      return {
+        ...state,
+        addTerminalEquipment: action.show ?? !state.addTerminalEquipment,
+      };
+    case "reset":
+      return { ...showModalsInitialState };
+    default:
+      throw new Error(`No action with type ${action.type}`);
+  }
+}
+
 function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
   const [editMode, setEditMode] = useState(false);
-  const selectedFeatures = useRef<MapboxGeoJSONFeature[]>([]);
+  const [selectedFeatures, setSelectedFeatures] = useState<
+    MapboxGeoJSONFeature[]
+  >([]);
   const [singleSelectedFeature, setSingleSelectedFeature] =
     useState<MapboxGeoJSONFeature | null>();
-  const [showAddContainer, setShowAddContainer] = useState(false);
-  const [showHandleInnerConduit, setShowHandleInnerConduit] = useState(false);
-  const [showEstablishCustomerConnection, setShowEstablishCustomerConnection] =
-    useState(false);
   const { identifiedFeature, setTrace } = useContext(MapContext);
+  const [showModals, showModalsDispatch] = useReducer(
+    showModalsReducer,
+    showModalsInitialState
+  );
 
   const [, cutSpanSegmentsMutation] =
     useMutation<CutSpanSegmentsResponse>(CUT_SPAN_SEGMENTS);
@@ -99,26 +192,19 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   }, [identifiedFeature, setEditMode]);
 
   useEffect(() => {
-    setShowAddContainer(false);
-    setShowHandleInnerConduit(false);
-    selectedFeatures.current = [];
-
+    showModalsDispatch({ type: "reset" });
+    setSelectedFeatures([]);
     setSingleSelectedFeature(null);
-  }, [
-    diagramObjects,
-    envelope,
-    setSingleSelectedFeature,
-    setShowHandleInnerConduit,
-  ]);
+  }, [showModalsDispatch, diagramObjects, envelope, setSingleSelectedFeature]);
 
   const affixSpanEquipment = async () => {
-    const nodeContainer = selectedFeatures.current.find(
+    const nodeContainer = currentlySelectedFeatures.find(
       (x) => x.layer.source === "NodeContainerSide"
     );
 
     const nodeContainerId = nodeContainer?.properties?.refId as string;
 
-    const spanSegmentIds = selectedFeatures.current
+    const spanSegmentIds = currentlySelectedFeatures
       .filter((x) => x.layer.source === "OuterConduit")
       ?.map((x) => x.properties?.refId as string);
 
@@ -161,7 +247,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const cutSpanSegments = async () => {
-    const spanSegmentsToCut = selectedFeatures.current
+    const spanSegmentsToCut = currentlySelectedFeatures
       .filter((x) => {
         return (
           x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
@@ -188,7 +274,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const connectSpanSegments = async () => {
-    const spanSegmentsToConnect = selectedFeatures.current
+    const spanSegmentsToConnect = currentlySelectedFeatures
       .filter((x) => {
         return (
           x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
@@ -218,13 +304,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const disconnectSpanSegments = async () => {
-    const innerConduits = selectedFeatures.current
+    const innerConduits = currentlySelectedFeatures
       .filter((x) => {
         return x.layer.source === "InnerConduit";
       })
       .map((x) => x.properties?.refId as string);
 
-    const outerConduits = selectedFeatures.current
+    const outerConduits = currentlySelectedFeatures
       .filter((x) => {
         return x.layer.source === "OuterConduit";
       })
@@ -254,7 +340,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const detachSpanEquipment = async () => {
-    const spanSegmentsIds = selectedFeatures.current
+    const spanSegmentsIds = currentlySelectedFeatures
       .filter((x) => {
         return (
           x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
@@ -289,7 +375,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const removeObject = async () => {
-    const selectedObjects = selectedFeatures.current
+    const selectedObjects = currentlySelectedFeatures
       .filter((x) => {
         return (
           x.layer.source === "OuterConduit" || "InnerConduit" || "NodeContainer"
@@ -348,7 +434,12 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
       if (!editMode) {
         if (isSelected) {
-          if (feature.properties?.type !== "NodeContainer") {
+          if (
+            feature.properties?.type?.startsWith("InnerConduit") ||
+            feature.properties?.type?.startsWith("OuterConduit") ||
+            feature.properties?.type === "FiberCable"
+          ) {
+            // Then we trace the conduit.
             const segmentTrace = await client
               .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
                 spanSegmentId: feature.properties?.refId,
@@ -370,24 +461,49 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           setSingleSelectedFeature(null);
         }
       } else {
-        if (isSelected) {
-          selectedFeatures.current = [...selectedFeatures.current, feature];
-        } else {
-          selectedFeatures.current = selectedFeatures.current.filter((x) => {
-            const t =
-              x.properties?.refId !== feature.properties?.refId ||
-              x.properties?.type !== feature.properties?.type;
-
-            return t;
-          });
-        }
+        setSingleSelectedFeature(feature);
       }
     },
     [editMode, setSingleSelectedFeature, setTrace, client]
   );
 
+  useEffect(() => {
+    // This whole useeffect is a special case, this is needed to done because if not,
+    // the schematic diagram depdency will keep reloading everytime a diagram object is being clicked.
+    // This is mainly an issue because of mapbox not playing to nicely with the way react works so it rerenders the map.
+    if (!singleSelectedFeature) return;
+
+    const found = selectedFeatures.find(
+      (x) =>
+        x.properties?.refId === singleSelectedFeature.properties?.refId &&
+        x.properties?.type === singleSelectedFeature.properties?.type
+    );
+
+    if (!found) {
+      setSelectedFeatures([...selectedFeatures, singleSelectedFeature]);
+    } else if (
+      (found.state.selected as boolean) !==
+      (singleSelectedFeature.state.selected as boolean)
+    ) {
+      setSelectedFeatures([
+        ...selectedFeatures.filter(
+          (x) =>
+            !(
+              x.properties?.refId === found.properties?.refId &&
+              x.properties?.type === found.properties?.type
+            )
+        ),
+        singleSelectedFeature,
+      ]);
+    }
+  }, [singleSelectedFeature, setSelectedFeatures, selectedFeatures]);
+
+  const currentlySelectedFeatures = useMemo(() => {
+    return selectedFeatures.filter((x) => x.state?.selected);
+  }, [selectedFeatures]);
+
   const reverseVertialAlignment = async () => {
-    const nodeContainer = selectedFeatures.current.find(
+    const nodeContainer = currentlySelectedFeatures.find(
       (x) => x.layer.source === "NodeContainerSide"
     );
 
@@ -414,6 +530,38 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     }
   };
 
+  const affixSpanEquipmentToParent = async () => {
+    const fiberCable = currentlySelectedFeatures.find(
+      (x) => x.layer.source === "FiberCable"
+    );
+
+    const innerConduit = currentlySelectedFeatures.find(
+      (x) => x.layer.source === "InnerConduit"
+    );
+
+    const params: AffixSpanEquipmentToParentParams = {
+      routeNodeId: identifiedFeature?.id ?? "",
+      spanSegmentIdOne: fiberCable?.properties?.refId ?? "",
+      spanSegmentIdTwo: innerConduit?.properties?.refId ?? "",
+    };
+
+    const response = await client
+      .mutation<AffixSpanEquipmentToParentResponse>(
+        AFFIX_SPAN_EQUIPMENT_TO_PARENT,
+        params
+      )
+      .toPromise();
+
+    if (!response.data?.spanEquipment.affixSpanEquipmentToParent.isSuccess) {
+      toast.error(
+        t(
+          response.data?.spanEquipment.affixSpanEquipmentToParent.errorCode ??
+            "ERROR"
+        )
+      );
+    }
+  };
+
   const clearHighlights = () => {
     setTrace({ geometries: [], ids: [] });
   };
@@ -424,34 +572,91 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
   return (
     <div className="route-network-diagram">
-      <ModalContainer
-        show={showAddContainer}
-        closeCallback={() => setShowAddContainer(false)}
-      >
-        <AddContainer />
-      </ModalContainer>
-
-      <ModalContainer
-        show={showHandleInnerConduit}
-        closeCallback={() => setShowHandleInnerConduit(false)}
-      >
-        <AddInnerSpanStructure
-          selectedOuterConduit={
-            selectedFeatures.current.find((x) => x.source === "OuterConduit")
-              ?.properties?.refId ?? ""
+      {showModals.addContainer && (
+        <ModalContainer
+          show={showModals.addContainer}
+          closeCallback={() =>
+            showModalsDispatch({ type: "addContainer", show: false })
           }
-        />
-      </ModalContainer>
+        >
+          <AddContainer />
+        </ModalContainer>
+      )}
 
-      <ModalContainer
-        show={showEstablishCustomerConnection}
-        closeCallback={() => setShowEstablishCustomerConnection(false)}
-      >
-        <EstablishCustomerConnection
-          routeNodeId={identifiedFeature.id}
-          load={showEstablishCustomerConnection}
-        />
-      </ModalContainer>
+      {showModals.handleInnerConduit && (
+        <ModalContainer
+          show={showModals.handleInnerConduit}
+          closeCallback={() =>
+            showModalsDispatch({ type: "addInnerConduit", show: false })
+          }
+        >
+          <AddInnerSpanStructure
+            selectedOuterConduit={
+              currentlySelectedFeatures.find((x) => x.source === "OuterConduit")
+                ?.properties?.refId ?? ""
+            }
+          />
+        </ModalContainer>
+      )}
+
+      {showModals.establishCustomerConnection && (
+        <ModalContainer
+          show={showModals.establishCustomerConnection}
+          closeCallback={() =>
+            showModalsDispatch({
+              type: "establishCustomerConnection",
+              show: false,
+            })
+          }
+        >
+          <EstablishCustomerConnection
+            routeNodeId={identifiedFeature.id}
+            load={showModals.establishCustomerConnection}
+          />
+        </ModalContainer>
+      )}
+
+      {showModals.addRack && (
+        <ModalContainer
+          title={t("ADD_RACK")}
+          show={showModals.addRack}
+          closeCallback={() =>
+            showModalsDispatch({
+              type: "addRack",
+              show: false,
+            })
+          }
+        >
+          <AddRack
+            nodeContainerId={
+              currentlySelectedFeatures.find(
+                (x) => x.source === "NodeContainer"
+              )?.properties?.refId ?? ""
+            }
+          />
+        </ModalContainer>
+      )}
+
+      {showModals.addTerminalEquipment && (
+        <ModalContainer
+          title={t("ADD_TERMINAL_EQUIPMENT")}
+          show={showModals.addTerminalEquipment}
+          closeCallback={() =>
+            showModalsDispatch({
+              type: "addTerminalEquipment",
+              show: false,
+            })
+          }
+        >
+          <AddTerminalEquipment
+            routeNodeId={identifiedFeature.id}
+            rackId={
+              currentlySelectedFeatures.find((x) => x.source === "Rack")
+                ?.properties?.refId ?? ""
+            }
+          />
+        </ModalContainer>
+      )}
 
       <FeatureInformation />
 
@@ -462,7 +667,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             toggled={editMode}
             toggle={() => {
               setEditMode(!editMode);
-              selectedFeatures.current = [];
+              setSelectedFeatures([]);
               setSingleSelectedFeature(null);
             }}
             id="Edit"
@@ -488,10 +693,23 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             title={t("CONNECT_CONDUIT")}
             disabled={!editMode}
           />
-          <ActionButton
+          <MultiOptionActionButton
             icon={PutInContainerSvg}
-            action={() => affixSpanEquipment()}
-            title={t("AFFIX_SPAN_EQUIPMENT")}
+            actions={[
+              {
+                text: t("AFFIX_SPAN_EQUIPMENT"),
+                action: () => affixSpanEquipment(),
+                disabled: false,
+                key: 0,
+              },
+              {
+                text: t("PLACE_CABLE_IN_CONDUIT"),
+                action: () => affixSpanEquipmentToParent(),
+                disabled: false,
+                key: 1,
+              },
+            ]}
+            title={t("ADD_NODE_CONTAINER")}
             disabled={!editMode}
           />
           <ActionButton
@@ -500,15 +718,47 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             title={t("DETACH_SPAN_EQUIPMENT")}
             disabled={!editMode}
           />
-          <ActionButton
+          <MultiOptionActionButton
             icon={AddStructureSvg}
-            action={() => setShowAddContainer(true)}
+            actions={[
+              {
+                text: t("ADD_NODE_CONTAINER"),
+                action: () =>
+                  showModalsDispatch({ type: "addContainer", show: true }),
+                disabled: containsNodeContainer(diagramObjects),
+                key: 0,
+              },
+              {
+                text: t("ADD_RACK"),
+                action: () =>
+                  showModalsDispatch({ type: "addRack", show: true }),
+                disabled: !isSingleSelected(
+                  "NodeContainer",
+                  currentlySelectedFeatures
+                ),
+                key: 1,
+              },
+              {
+                text: t("ADD_TERMINAL_EQUIPMENT"),
+                action: () =>
+                  showModalsDispatch({
+                    type: "addTerminalEquipment",
+                    show: true,
+                  }),
+                disabled:
+                  !isSingleSelected("Rack", currentlySelectedFeatures) &&
+                  !isSingleSelected("NodeContainer", currentlySelectedFeatures),
+                key: 2,
+              },
+            ]}
             title={t("ADD_NODE_CONTAINER")}
             disabled={!editMode}
           />
           <ActionButton
             icon={AddConduitSvg}
-            action={() => setShowHandleInnerConduit(true)}
+            action={() =>
+              showModalsDispatch({ type: "addInnerConduit", show: true })
+            }
             title={t("ADD_INNER_CONDUIT")}
             disabled={!editMode}
           />
@@ -526,7 +776,12 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           />
           <ActionButton
             icon={EstablishCustomerConnectionSvg}
-            action={() => setShowEstablishCustomerConnection(true)}
+            action={() =>
+              showModalsDispatch({
+                type: "establishCustomerConnection",
+                show: true,
+              })
+            }
             title={t("ESTABLISH_CUSTOMER_CONNECTION")}
           />
           <ActionButton
@@ -565,6 +820,20 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           showActions={true}
         />
       )}
+      {!editMode &&
+        (singleSelectedFeature?.source === "Rack" ||
+          singleSelectedFeature?.source === "TerminalEquipment") && (
+          <div className="container-max-size container-center">
+            <div className="container-background ">
+              <TerminalEquipment
+                routeNodeId={identifiedFeature?.id ?? ""}
+                terminalEquipmentOrRackId={
+                  singleSelectedFeature.properties?.refId ?? ""
+                }
+              />
+            </div>
+          </div>
+        )}
     </div>
   );
 }
