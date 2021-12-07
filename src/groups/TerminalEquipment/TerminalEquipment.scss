@@ -48,6 +48,10 @@
     border-radius: 0;
     border: none;
     border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
   }
 }
 
@@ -55,6 +59,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  border-bottom: 1px solid $border-color;
+  border-radius: 4px;
 }
 
 .terminal-equipment-table-container {
