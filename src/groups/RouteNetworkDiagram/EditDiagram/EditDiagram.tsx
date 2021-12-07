@@ -435,8 +435,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       if (!editMode) {
         if (isSelected) {
           if (
-            feature.properties?.type === "OuterConduit" ||
-            feature.properties?.type === "InnerConduit"
+            feature.properties?.type?.startsWith("InnerConduit") ||
+            feature.properties?.type?.startsWith("OuterConduit") ||
+            feature.properties?.type === "FiberCable"
           ) {
             // Then we trace the conduit.
             const segmentTrace = await client
