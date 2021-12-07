@@ -259,3 +259,39 @@ mutation($nodeContainerId: ID!) {
     }
   }
 }`;
+
+export interface AffixSpanEquipmentToParentParams {
+  routeNodeId: string;
+  spanSegmentIdOne: string;
+  spanSegmentIdTwo: string;
+}
+
+export interface AffixSpanEquipmentToParentResponse {
+  spanEquipment: {
+    affixSpanEquipmentToParent: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
+export const AFFIX_SPAN_EQUIPMENT_TO_PARENT = `
+mutation(
+$routeNodeId: ID!,
+$spanSegmentIdOne: ID!,
+$spanSegmentIdTwo: ID!
+) {
+  spanEquipment {
+    affixSpanEquipmentToParent(
+      routeNodeId: $routeNodeId
+      spanSegmentId1: $spanSegmentIdOne
+      spanSegmentId2: $spanSegmentIdTwo
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}
+`;

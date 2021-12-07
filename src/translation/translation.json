@@ -178,7 +178,8 @@
       "RACK_UNIT": "Rack unit",
       "PLACEMENT_METHOD": "Placement method",
       "HEIGHT_UNITS": "Height units",
-      "FiberCable": "Fiber cable"
+      "FiberCable": "Fiber cable",
+      "PLACE_CABLE_IN_CONDUIT": "Place cable in conduit"
     }
   },
   "dk": {
@@ -360,7 +361,8 @@
       "RACK_UNIT": "Rack unit",
       "PLACEMENT_METHOD": "Placering metode",
       "HEIGHT_UNITS": "Højde units",
-      "FiberCable": "Fiber kabel"
+      "FiberCable": "Fiber kabel",
+      "PLACE_CABLE_IN_CONDUIT": "Placer kabel i rør"
     }
   }
 }

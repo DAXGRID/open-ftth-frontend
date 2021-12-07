@@ -48,6 +48,9 @@ import {
   SpanSegmentTraceResponse,
   REMOVE_NODE_CONTAINER,
   RemoveNodeContainerResponse,
+  AFFIX_SPAN_EQUIPMENT_TO_PARENT,
+  AffixSpanEquipmentToParentParams,
+  AffixSpanEquipmentToParentResponse,
 } from "./EditDiagramGql";
 import AddContainer from "../AddContainer";
 import AddInnerSpanStructure from "../AddInnerSpanStructure";
@@ -526,6 +529,38 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     }
   };
 
+  const affixSpanEquipmentToParent = async () => {
+    const fiberCable = currentlySelectedFeatures.find(
+      (x) => x.layer.source === "FiberCable"
+    );
+
+    const innerConduit = currentlySelectedFeatures.find(
+      (x) => x.layer.source === "InnerConduit"
+    );
+
+    const params: AffixSpanEquipmentToParentParams = {
+      routeNodeId: identifiedFeature?.id ?? "",
+      spanSegmentIdOne: fiberCable?.properties?.refId ?? "",
+      spanSegmentIdTwo: innerConduit?.properties?.refId ?? "",
+    };
+
+    const response = await client
+      .mutation<AffixSpanEquipmentToParentResponse>(
+        AFFIX_SPAN_EQUIPMENT_TO_PARENT,
+        params
+      )
+      .toPromise();
+
+    if (!response.data?.spanEquipment.affixSpanEquipmentToParent.isSuccess) {
+      toast.error(
+        t(
+          response.data?.spanEquipment.affixSpanEquipmentToParent.errorCode ??
+            "ERROR"
+        )
+      );
+    }
+  };
+
   const clearHighlights = () => {
     setTrace({ geometries: [], ids: [] });
   };
@@ -657,10 +692,23 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             title={t("CONNECT_CONDUIT")}
             disabled={!editMode}
           />
-          <ActionButton
+          <MultiOptionActionButton
             icon={PutInContainerSvg}
-            action={() => affixSpanEquipment()}
-            title={t("AFFIX_SPAN_EQUIPMENT")}
+            actions={[
+              {
+                text: t("AFFIX_SPAN_EQUIPMENT"),
+                action: () => affixSpanEquipment(),
+                disabled: false,
+                key: 0,
+              },
+              {
+                text: t("PLACE_CABLE_IN_CONDUIT"),
+                action: () => affixSpanEquipmentToParent(),
+                disabled: false,
+                key: 1,
+              },
+            ]}
+            title={t("ADD_NODE_CONTAINER")}
             disabled={!editMode}
           />
           <ActionButton

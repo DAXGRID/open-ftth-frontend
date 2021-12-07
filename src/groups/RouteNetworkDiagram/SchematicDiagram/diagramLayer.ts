@@ -53,7 +53,7 @@ export function getLayer(name: string): AnyLayer {
         source: "FiberCable",
         type: "line",
         paint: {
-          "line-width": 8,
+          "line-width": 4,
           "line-color": [
             "case",
             ["boolean", ["feature-state", "selected"], false],
