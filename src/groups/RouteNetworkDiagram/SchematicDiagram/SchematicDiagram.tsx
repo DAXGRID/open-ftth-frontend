@@ -122,6 +122,16 @@ function enableResize(map: Map) {
   });
 }
 
+function clearSelected(map: Map, source: string): void {
+  map
+    .querySourceFeatures(source, {
+      sourceLayer: source,
+    })
+    .forEach((x) => {
+      map.setFeatureState({ source: source, id: x.id }, { selected: false });
+    });
+}
+
 function clickHighlight(
   featureName: string,
   map: Map,
@@ -143,57 +153,16 @@ function clickHighlight(
     feature.state.selected = !feature.state.selected;
 
     if (!editMode) {
-      const innerConduits = map.querySourceFeatures("InnerConduit", {
-        sourceLayer: "InnerConduit",
-      });
-
-      const outerConduits = map.querySourceFeatures("OuterConduit", {
-        sourceLayer: "OuterConduit",
-      });
-
-      const nodeContainers = map.querySourceFeatures("NodeContainer", {
-        sourceLayer: "NodeContainer",
-      });
-
-      const racks = map.querySourceFeatures("Rack", {
-        sourceLayer: "Rack",
-      });
-
-      const terminalEquipment = map.querySourceFeatures("TerminalEquipment", {
-        sourceLayer: "TerminalEquipment",
-      });
-
-      innerConduits.forEach((x) => {
-        map.setFeatureState(
-          { source: "InnerConduit", id: x.id },
-          { selected: false }
-        );
-      });
-
-      outerConduits.forEach((x) => {
-        map.setFeatureState(
-          { source: "OuterConduit", id: x.id },
-          { selected: false }
-        );
-      });
-
-      nodeContainers.forEach((x) => {
-        map.setFeatureState(
-          { source: "NodeContainer", id: x.id },
-          { selected: false }
-        );
-      });
-
-      racks.forEach((x) => {
-        map.setFeatureState({ source: "Rack", id: x.id }, { selected: false });
-      });
-
-      terminalEquipment.forEach((x) => {
-        map.setFeatureState(
-          { source: "TerminalEquipment", id: x.id },
-          { selected: false }
-        );
-      });
+      const clearHighlight = (
+        (map: Map) => (source: string) =>
+          clearSelected(map, source)
+      )(map);
+      clearHighlight("InnerConduit");
+      clearHighlight("OuterConduit");
+      clearHighlight("NodeContainer");
+      clearHighlight("Rack");
+      clearHighlight("TerminalEquipment");
+      clearHighlight("FiberCable");
     }
 
     map.setFeatureState(
