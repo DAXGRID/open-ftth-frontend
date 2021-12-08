@@ -543,7 +543,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         addTerminalEquipmentModal(
           () =>
             showModalsDispatch({ type: "addTerminalEquipment", show: false }),
-          t("ADD_"),
+          t("ADD_TERMINAL_EQUIPMENT"),
           identifiedFeature?.id ?? "",
           currentlySelectedFeatures
         )
