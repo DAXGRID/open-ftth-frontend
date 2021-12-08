@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useTranslation, TFunction } from "react-i18next";
 import { useQuery } from "urql";
 import FeatureDetailsContainer from "../FeatureDetailContainer";
@@ -9,6 +9,7 @@ import {
 import { EditPropertiesSvg } from "../../../assets";
 import ModalContainer from "../../../components/ModalContainer";
 import EditNodeContainer from "../EditNodeContainer";
+import { OverlayContext } from "../../../contexts/OverlayContext";
 
 type SpanEquopmentDetailsParams = {
   nodeContainerMrid: string;
@@ -38,6 +39,7 @@ function NodeContainerDetails({
   showActions,
 }: SpanEquopmentDetailsParams) {
   const { t } = useTranslation();
+  const { showElement } = useContext(OverlayContext);
   const [showEditNodeContainer, setShowEditNodeContainer] = useState(false);
   const [nodeContainerDetailsResponse] = useQuery<NodeContainerDetailsResponse>(
     {
@@ -47,18 +49,28 @@ function NodeContainerDetails({
     }
   );
 
+  useEffect(() => {
+    if (showEditNodeContainer) {
+      showElement(
+        <ModalContainer
+          title={t("EDIT_NODE_CONTAINER")}
+          show={showEditNodeContainer}
+          closeCallback={() => setShowEditNodeContainer(false)}
+        >
+          <EditNodeContainer nodeContainerMrid={nodeContainerMrid ?? ""} />
+        </ModalContainer>
+      );
+    } else {
+      showElement(null);
+    }
+  }, [showEditNodeContainer, t]);
+
   if (!nodeContainerMrid || nodeContainerDetailsResponse.fetching) return <></>;
 
   const details = mapContainerResponse(nodeContainerDetailsResponse.data, t);
 
   return (
     <div className="node-container-details">
-      <ModalContainer
-        show={showEditNodeContainer}
-        closeCallback={() => setShowEditNodeContainer(false)}
-      >
-        <EditNodeContainer nodeContainerMrid={nodeContainerMrid ?? ""} />
-      </ModalContainer>
       <FeatureDetailsContainer
         details={details}
         showActions={showActions}

@@ -504,14 +504,16 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   useEffect(() => {
     if (showModals.addContainer) {
       showElement(
-        addContainerModal(() =>
-          showModalsDispatch({ type: "addContainer", show: false })
+        addContainerModal(
+          () => showModalsDispatch({ type: "addContainer", show: false }),
+          t("ADD_NODE_CONTAINER")
         )
       );
     } else if (showModals.addInnerConduit) {
       showElement(
         addInnerConduitModal(
           () => showModalsDispatch({ type: "addInnerConduit", show: false }),
+          t("ADD_INNER_CONDUIT"),
           currentlySelectedFeatures
         )
       );
@@ -523,6 +525,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               type: "establishCustomerConnection",
               show: false,
             }),
+          t("ESTABLISH_CUSTOMER_CONNECTION"),
           identifiedFeature?.id ?? ""
         )
       );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useQuery } from "urql";
 import { useTranslation, TFunction } from "react-i18next";
 import {
@@ -11,6 +11,7 @@ import FeatureDetailsContainer from "../FeatureDetailContainer";
 import ModalContainer from "../../../components/ModalContainer";
 import EditSpanEquipment from "../EditSpanEquipment";
 import RerouteTube from "../RerouteTube";
+import { OverlayContext } from "../../../contexts/OverlayContext";
 import { EditPropertiesSvg, MoveConduitSvg } from "../../../assets";
 
 function mapAccessAddress(accessAddress: AccessAddress): string {
@@ -87,11 +88,38 @@ function SpanEquipmentDetails({
   const { t } = useTranslation();
   const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
   const [showRerouteTube, setShowRerouteTube] = useState(false);
+  const { showElement } = useContext(OverlayContext);
   const [spanEquipmentDetails] = useQuery<SpanEquipmentDetailsResponse>({
     query: QUERY_SPAN_EQUIPMENT_DETAILS,
     variables: { spanEquipmentOrSegmentId: spanEquipmentMrid },
     pause: !spanEquipmentMrid,
   });
+
+  useEffect(() => {
+    if (showRerouteTube) {
+      showElement(
+        <ModalContainer
+          title={t("REROUTE_TUBE")}
+          show={showRerouteTube}
+          closeCallback={() => setShowRerouteTube(false)}
+        >
+          <RerouteTube selectedRouteSegmentMrid={spanEquipmentMrid ?? ""} />
+        </ModalContainer>
+      );
+    } else if (showEditSpanEquipment) {
+      showElement(
+        <ModalContainer
+          title={t("EDIT_SPAN_EQUIPMENT")}
+          show={showEditSpanEquipment}
+          closeCallback={() => setShowEditSpanEquipment(false)}
+        >
+          <EditSpanEquipment spanEquipmentMrid={spanEquipmentMrid ?? ""} />
+        </ModalContainer>
+      );
+    } else {
+      showElement(null);
+    }
+  }, [showRerouteTube, showEditSpanEquipment, t]);
 
   if (spanEquipmentDetails.fetching) return <></>;
 
@@ -99,19 +127,6 @@ function SpanEquipmentDetails({
 
   return (
     <div className="span-equipment-details">
-      <ModalContainer
-        show={showRerouteTube}
-        closeCallback={() => setShowRerouteTube(false)}
-      >
-        <RerouteTube selectedRouteSegmentMrid={spanEquipmentMrid ?? ""} />
-      </ModalContainer>
-      <ModalContainer
-        show={showEditSpanEquipment}
-        closeCallback={() => setShowEditSpanEquipment(false)}
-        enableMaxSize={true}
-      >
-        <EditSpanEquipment spanEquipmentMrid={spanEquipmentMrid ?? ""} />
-      </ModalContainer>
       <FeatureDetailsContainer
         details={details}
         showActions={showActions}

@@ -6,9 +6,9 @@ import EstablishCustomerConnection from "../EstablishCustomerConnection";
 import AddRack from "../AddRack";
 import AddTerminalEquipment from "../AddTerminalEquipment";
 
-export function addContainerModal(cb: () => void) {
+export function addContainerModal(cb: () => void, title: string) {
   return (
-    <ModalContainer show={true} closeCallback={cb}>
+    <ModalContainer show={true} closeCallback={cb} title={title}>
       <AddContainer />
     </ModalContainer>
   );
@@ -16,10 +16,11 @@ export function addContainerModal(cb: () => void) {
 
 export function addInnerConduitModal(
   cb: () => void,
+  title: string,
   selectedFeatures: MapboxGeoJSONFeature[]
 ) {
   return (
-    <ModalContainer show={true} closeCallback={cb}>
+    <ModalContainer show={true} closeCallback={cb} title={title}>
       <AddInnerSpanStructure
         selectedOuterConduit={
           selectedFeatures.find((x) => x.source === "OuterConduit")?.properties
@@ -32,10 +33,11 @@ export function addInnerConduitModal(
 
 export function establishCustomerConnectionModal(
   cb: () => void,
+  title: string,
   routeNodeId: string
 ) {
   return (
-    <ModalContainer show={true} closeCallback={cb}>
+    <ModalContainer show={true} closeCallback={cb} title={title}>
       <EstablishCustomerConnection routeNodeId={routeNodeId} load={true} />
     </ModalContainer>
   );
