@@ -11,8 +11,6 @@
   width: 100%;
 
   .equipment-selector-table-header {
-    border-bottom: 1px solid $border-color;
-
     .equipment-selector-table-header__row {
       display: grid;
       grid-template-columns: 3fr 2fr 0.5fr 2fr 3fr;
@@ -34,6 +32,10 @@
       display: grid;
       grid-template-columns: 3fr 2fr 0.5fr 2fr 3fr;
       border-bottom: 1px solid $border-color;
+
+      &:first-child {
+        border-top: 1px solid $border-color;
+      }
 
       &:last-child {
         border-bottom: none;
