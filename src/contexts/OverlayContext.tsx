@@ -2,16 +2,12 @@ import { createContext, ReactNode, useState } from "react";
 
 type OverlayContextType = {
   showElement: (childElement: ReactNode) => void;
-  hideModal: () => void;
   overlayChild: ReactNode | null;
 };
 
 const OverlayContext = createContext<OverlayContextType>({
   showElement: () => {
     console.warn("No provider set for showModal");
-  },
-  hideModal: () => {
-    console.warn("No provider set for hideModal");
   },
   overlayChild: null,
 });
@@ -29,7 +25,6 @@ const OverlayProvider = ({ children }: OverlayProviderProps) => {
         showElement: (childElement) => {
           setOverlayChild(childElement);
         },
-        hideModal: () => setOverlayChild(null),
         overlayChild: overlayChild,
       }}
     >
