@@ -21,7 +21,7 @@ import {
 } from "./TerminalEquipmentGql";
 
 type RackContainerProps = {
-  children: ReactNode;
+  children?: ReactNode;
   parentNodeStructure?: ParentNodeStructure;
 };
 
@@ -333,7 +333,7 @@ function TerminalEquipment({
     setShowFreeLines({ ...showFreeLines, [id]: !showFreeLines[id] });
   };
 
-  const hasParentNodeStructures =
+  const parentNodeStructures =
     response.data?.utilityNetwork.terminalEquipmentConnectivityView
       .parentNodeStructures;
 
@@ -348,14 +348,16 @@ function TerminalEquipment({
           <FiberConnectionEditor />
         </ModalContainer>
       )}
-
-      {hasParentNodeStructures &&
+      {parentNodeStructures && Object.keys(groupedById).length === 0 && (
+        <RackContainer
+          parentNodeStructure={parentNodeStructures[0]}
+        ></RackContainer>
+      )}
+      {parentNodeStructures &&
         Object.keys(groupedById).map((x) => {
           return (
             <RackContainer
-              parentNodeStructure={response.data?.utilityNetwork?.terminalEquipmentConnectivityView?.parentNodeStructures.find(
-                (z) => z.id === x
-              )}
+              parentNodeStructure={parentNodeStructures.find((z) => z.id === x)}
               key={x}
             >
               {groupedById[x].map((y) => {
@@ -378,7 +380,7 @@ function TerminalEquipment({
             </RackContainer>
           );
         })}
-      {!hasParentNodeStructures &&
+      {!parentNodeStructures &&
         Object.keys(groupedById).map((x) => {
           return groupedById[x].map((y) => {
             return (
