@@ -1,8 +1,9 @@
-import { useState, ReactNode } from "react";
+import { useState, useEffect, useContext, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "urql";
 import ModalContainer from "../../components/ModalContainer";
 import FiberConnectionEditor from "../FiberConnectionEditor";
+import { OverlayContext } from "../../contexts/OverlayContext";
 import {
   faChevronRight,
   faPlusCircle,
@@ -312,8 +313,8 @@ function TerminalEquipment({
     {}
   );
   const [showFiberEditor, setShowFiberEditor] = useState<boolean>(false);
-
   const { t } = useTranslation();
+  const { showElement } = useContext(OverlayContext);
 
   const [response] = useQuery<TerminalEquipmentResponse>({
     query: TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_QUERY,
@@ -323,6 +324,22 @@ function TerminalEquipment({
     },
     pause: !routeNodeId || !terminalEquipmentOrRackId,
   });
+
+  useEffect(() => {
+    if (showFiberEditor) {
+      showElement(
+        <ModalContainer
+          show={showFiberEditor}
+          closeCallback={() => setShowFiberEditor(false)}
+          maxWidth="1200px"
+        >
+          <FiberConnectionEditor />
+        </ModalContainer>
+      );
+    } else {
+      showElement(null);
+    }
+  }, [showFiberEditor]);
 
   const groupedById = groupByParentId(
     response.data?.utilityNetwork.terminalEquipmentConnectivityView
@@ -339,15 +356,6 @@ function TerminalEquipment({
 
   return (
     <>
-      {showFiberEditor && (
-        <ModalContainer
-          show={showFiberEditor}
-          closeCallback={() => setShowFiberEditor(false)}
-          maxWidth="1200px"
-        >
-          <FiberConnectionEditor />
-        </ModalContainer>
-      )}
       <div className="terminal-equipment">
         {parentNodeStructures && Object.keys(groupedById).length === 0 && (
           <RackContainer
