@@ -11,6 +11,7 @@ import "./global-styles/reset.scss";
 import "./global-styles/index.scss";
 import { MapProvider } from "./contexts/MapContext";
 import { UserProvider } from "./contexts/UserContext";
+import { OverlayProvider } from "./contexts/OverlayContext";
 
 const subscriptionClient = new SubscriptionClient(
   `${Config.API_GATEWAY_WS_URI}/graphql`,
@@ -52,7 +53,9 @@ ReactDOM.render(
       <Provider value={client}>
         <UserProvider>
           <MapProvider>
-            <App />
+            <OverlayProvider>
+              <App />
+            </OverlayProvider>
           </MapProvider>
         </UserProvider>
       </Provider>

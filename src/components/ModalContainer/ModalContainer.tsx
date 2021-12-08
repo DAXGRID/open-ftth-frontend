@@ -18,7 +18,7 @@ function ModalContainer({
   maxWidth,
 }: ModalContainerProps) {
   return (
-    <div className={show ? "modal-container show" : "modal-container"}>
+    <div className={show ? "modal-overlay show" : "modal-overlay"}>
       <div className="modal-content" style={{ maxWidth: maxWidth ?? "800px" }}>
         <div className="modal-header">
           <p className="modal-header__title">{title}</p>

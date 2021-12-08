@@ -338,7 +338,7 @@ function TerminalEquipment({
       .parentNodeStructures;
 
   return (
-    <div className="terminal-equipment">
+    <>
       {showFiberEditor && (
         <ModalContainer
           show={showFiberEditor}
@@ -348,59 +348,63 @@ function TerminalEquipment({
           <FiberConnectionEditor />
         </ModalContainer>
       )}
-      {parentNodeStructures && Object.keys(groupedById).length === 0 && (
-        <RackContainer
-          parentNodeStructure={parentNodeStructures[0]}
-        ></RackContainer>
-      )}
-      {parentNodeStructures &&
-        Object.keys(groupedById).map((x) => {
-          return (
-            <RackContainer
-              parentNodeStructure={parentNodeStructures.find((z) => z.id === x)}
-              key={x}
-            >
-              {groupedById[x].map((y) => {
-                return (
-                  <TerminalEquipmentTableContainer
-                    key={y.id}
-                    toggleShowFreeLines={toggleShowFreeLines}
-                    terminalEquipment={y}
-                    showFreeLines={showFreeLines[y.id] ?? false}
-                  >
-                    <TerminalEquipmentTable
-                      action={() => setShowFiberEditor(true)}
-                      showFreeLines={showFreeLines[y.id] ?? false}
-                      t={t}
-                      terminalStructures={y.terminalStructures}
-                    />
-                  </TerminalEquipmentTableContainer>
-                );
-              })}
-            </RackContainer>
-          );
-        })}
-      {!parentNodeStructures &&
-        Object.keys(groupedById).map((x) => {
-          return groupedById[x].map((y) => {
+      <div className="terminal-equipment">
+        {parentNodeStructures && Object.keys(groupedById).length === 0 && (
+          <RackContainer
+            parentNodeStructure={parentNodeStructures[0]}
+          ></RackContainer>
+        )}
+        {parentNodeStructures &&
+          Object.keys(groupedById).map((x) => {
             return (
-              <TerminalEquipmentTableContainer
-                key={y.id}
-                toggleShowFreeLines={toggleShowFreeLines}
-                terminalEquipment={y}
-                showFreeLines={showFreeLines[y.id] ?? false}
+              <RackContainer
+                parentNodeStructure={parentNodeStructures.find(
+                  (z) => z.id === x
+                )}
+                key={x}
               >
-                <TerminalEquipmentTable
-                  action={() => setShowFiberEditor(true)}
-                  showFreeLines={showFreeLines[y.id] ?? false}
-                  t={t}
-                  terminalStructures={y.terminalStructures}
-                />
-              </TerminalEquipmentTableContainer>
+                {groupedById[x].map((y) => {
+                  return (
+                    <TerminalEquipmentTableContainer
+                      key={y.id}
+                      toggleShowFreeLines={toggleShowFreeLines}
+                      terminalEquipment={y}
+                      showFreeLines={showFreeLines[y.id] ?? false}
+                    >
+                      <TerminalEquipmentTable
+                        action={() => setShowFiberEditor(true)}
+                        showFreeLines={showFreeLines[y.id] ?? false}
+                        t={t}
+                        terminalStructures={y.terminalStructures}
+                      />
+                    </TerminalEquipmentTableContainer>
+                  );
+                })}
+              </RackContainer>
             );
-          });
-        })}
-    </div>
+          })}
+        {!parentNodeStructures &&
+          Object.keys(groupedById).map((x) => {
+            return groupedById[x].map((y) => {
+              return (
+                <TerminalEquipmentTableContainer
+                  key={y.id}
+                  toggleShowFreeLines={toggleShowFreeLines}
+                  terminalEquipment={y}
+                  showFreeLines={showFreeLines[y.id] ?? false}
+                >
+                  <TerminalEquipmentTable
+                    action={() => setShowFiberEditor(true)}
+                    showFreeLines={showFreeLines[y.id] ?? false}
+                    t={t}
+                    terminalStructures={y.terminalStructures}
+                  />
+                </TerminalEquipmentTableContainer>
+              );
+            });
+          })}
+      </div>
+    </>
   );
 }
 
