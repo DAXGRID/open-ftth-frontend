@@ -10,10 +10,13 @@ import SideMenu, { SideMenuItem } from "./components/SideMenu";
 import TopMenu from "./groups/TopMenu";
 import Routes from "./routes/Routes";
 import { UserContext } from "./contexts/UserContext";
+import { OverlayContext } from "./contexts/OverlayContext";
 import { useKeycloak } from "@react-keycloak/web";
+import Overlay from "./components/Overlay";
 
 function App() {
   const { userName } = useContext(UserContext);
+  const { overlayChild } = useContext(OverlayContext);
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const { t } = useTranslation();
   const { initialized, keycloak } = useKeycloak();
@@ -42,6 +45,9 @@ function App() {
         pauseOnHover
       />
       <BridgeConnector />
+
+      {overlayChild && <Overlay>{overlayChild}</Overlay>}
+
       <header>
         <TopMenu toggleSideMenu={toggleSideMenu} />
       </header>

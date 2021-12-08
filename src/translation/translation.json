@@ -179,7 +179,10 @@
       "PLACEMENT_METHOD": "Placement method",
       "HEIGHT_UNITS": "Height units",
       "FiberCable": "Fiber cable",
-      "PLACE_CABLE_IN_CONDUIT": "Place cable in conduit"
+      "PLACE_CABLE_IN_CONDUIT": "Place cable in conduit",
+      "REROUTE_TUBE": "Reroute tube",
+      "EDIT_SPAN_EQUIPMENT": "Edit span equipment",
+      "EDIT_NODE_CONTAINER": "Edit node container"
     }
   },
   "dk": {
@@ -362,7 +365,10 @@
       "PLACEMENT_METHOD": "Placering metode",
       "HEIGHT_UNITS": "Højde units",
       "FiberCable": "Fiber kabel",
-      "PLACE_CABLE_IN_CONDUIT": "Placer kabel i rør"
+      "PLACE_CABLE_IN_CONDUIT": "Placer kabel i rør",
+      "REROUTE_TUBE": "Omdiriger rør",
+      "EDIT_SPAN_EQUIPMENT": "Rediger information",
+      "EDIT_NODE_CONTAINER": "Rediger struktur"
     }
   }
 }

@@ -9,18 +9,15 @@ import {
 import { useMutation, useClient } from "urql";
 import { MapboxGeoJSONFeature } from "maplibre-gl";
 import DiagramMenu from "../../../components/DiagramMenu";
-import ModalContainer from "../../../components/ModalContainer";
 import SchematicDiagram from "../SchematicDiagram";
 import ToggleButton from "../../../components/ToggleButton";
 import ActionButton from "../../../components/ActionButton";
 import MultiOptionActionButton from "../../../components/MultiOptionActionButton";
 import { MapContext } from "../../../contexts/MapContext";
+import { OverlayContext } from "../../../contexts/OverlayContext";
 import NodeContainerDetails from "../NodeContainerDetails";
 import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import FeatureInformation from "../FeatureInformation";
-import EstablishCustomerConnection from "../EstablishCustomerConnection";
-import AddRack from "../AddRack";
-import AddTerminalEquipment from "../AddTerminalEquipment";
 import TerminalEquipment from "../../TerminalEquipment";
 import {
   Diagram,
@@ -52,8 +49,6 @@ import {
   AffixSpanEquipmentToParentParams,
   AffixSpanEquipmentToParentResponse,
 } from "./EditDiagramGql";
-import AddContainer from "../AddContainer";
-import AddInnerSpanStructure from "../AddInnerSpanStructure";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import {
@@ -70,6 +65,13 @@ import {
   FlipSvg,
   EstablishCustomerConnectionSvg,
 } from "../../../assets";
+import {
+  addContainerModal,
+  addInnerConduitModal,
+  establishCustomerConnectionModal,
+  addRackModal,
+  addTerminalEquipmentModal,
+} from "./Modals";
 
 type RouteNetworkDiagramProps = {
   diagramObjects: Diagram[];
@@ -90,7 +92,7 @@ function isSingleSelected(
 
 interface ShowModals {
   addContainer: boolean;
-  handleInnerConduit: boolean;
+  addInnerConduit: boolean;
   establishCustomerConnection: boolean;
   addRack: boolean;
   addTerminalEquipment: boolean;
@@ -110,7 +112,7 @@ interface ShowModalsAction {
 const showModalsInitialState: ShowModals = {
   addContainer: false,
   establishCustomerConnection: false,
-  handleInnerConduit: false,
+  addInnerConduit: false,
   addRack: false,
   addTerminalEquipment: false,
 };
@@ -128,7 +130,7 @@ function showModalsReducer(
     case "addInnerConduit":
       return {
         ...state,
-        handleInnerConduit: action.show ?? !state.handleInnerConduit,
+        addInnerConduit: action.show ?? !state.addInnerConduit,
       };
     case "establishCustomerConnection":
       return {
@@ -156,6 +158,7 @@ function showModalsReducer(
 function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
+  const { showElement } = useContext(OverlayContext);
   const [editMode, setEditMode] = useState(false);
   const [selectedFeatures, setSelectedFeatures] = useState<
     MapboxGeoJSONFeature[]
@@ -498,6 +501,61 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     }
   }, [singleSelectedFeature, setSelectedFeatures, selectedFeatures]);
 
+  useEffect(() => {
+    if (showModals.addContainer) {
+      showElement(
+        addContainerModal(
+          () => showModalsDispatch({ type: "addContainer", show: false }),
+          t("ADD_NODE_CONTAINER")
+        )
+      );
+    } else if (showModals.addInnerConduit) {
+      showElement(
+        addInnerConduitModal(
+          () => showModalsDispatch({ type: "addInnerConduit", show: false }),
+          t("ADD_INNER_CONDUIT"),
+          currentlySelectedFeatures
+        )
+      );
+    } else if (showModals.establishCustomerConnection) {
+      showElement(
+        establishCustomerConnectionModal(
+          () =>
+            showModalsDispatch({
+              type: "establishCustomerConnection",
+              show: false,
+            }),
+          t("ESTABLISH_CUSTOMER_CONNECTION"),
+          identifiedFeature?.id ?? ""
+        )
+      );
+    } else if (showModals.addRack) {
+      showElement(
+        addRackModal(
+          () =>
+            showModalsDispatch({
+              type: "addRack",
+              show: false,
+            }),
+          t("ADD_RACK"),
+          selectedFeatures
+        )
+      );
+    } else if (showModals.addTerminalEquipment) {
+      showElement(
+        addTerminalEquipmentModal(
+          () =>
+            showModalsDispatch({ type: "addTerminalEquipment", show: false }),
+          t("ADD_TERMINAL_EQUIPMENT"),
+          identifiedFeature?.id ?? "",
+          currentlySelectedFeatures
+        )
+      );
+    } else {
+      showElement(null);
+    }
+  }, [showModals, identifiedFeature?.id, t]);
+
   const currentlySelectedFeatures = useMemo(() => {
     return selectedFeatures.filter((x) => x.state?.selected);
   }, [selectedFeatures]);
@@ -572,92 +630,6 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
   return (
     <div className="route-network-diagram">
-      {showModals.addContainer && (
-        <ModalContainer
-          show={showModals.addContainer}
-          closeCallback={() =>
-            showModalsDispatch({ type: "addContainer", show: false })
-          }
-        >
-          <AddContainer />
-        </ModalContainer>
-      )}
-
-      {showModals.handleInnerConduit && (
-        <ModalContainer
-          show={showModals.handleInnerConduit}
-          closeCallback={() =>
-            showModalsDispatch({ type: "addInnerConduit", show: false })
-          }
-        >
-          <AddInnerSpanStructure
-            selectedOuterConduit={
-              currentlySelectedFeatures.find((x) => x.source === "OuterConduit")
-                ?.properties?.refId ?? ""
-            }
-          />
-        </ModalContainer>
-      )}
-
-      {showModals.establishCustomerConnection && (
-        <ModalContainer
-          show={showModals.establishCustomerConnection}
-          closeCallback={() =>
-            showModalsDispatch({
-              type: "establishCustomerConnection",
-              show: false,
-            })
-          }
-        >
-          <EstablishCustomerConnection
-            routeNodeId={identifiedFeature.id}
-            load={showModals.establishCustomerConnection}
-          />
-        </ModalContainer>
-      )}
-
-      {showModals.addRack && (
-        <ModalContainer
-          title={t("ADD_RACK")}
-          show={showModals.addRack}
-          closeCallback={() =>
-            showModalsDispatch({
-              type: "addRack",
-              show: false,
-            })
-          }
-        >
-          <AddRack
-            nodeContainerId={
-              currentlySelectedFeatures.find(
-                (x) => x.source === "NodeContainer"
-              )?.properties?.refId ?? ""
-            }
-          />
-        </ModalContainer>
-      )}
-
-      {showModals.addTerminalEquipment && (
-        <ModalContainer
-          title={t("ADD_TERMINAL_EQUIPMENT")}
-          show={showModals.addTerminalEquipment}
-          closeCallback={() =>
-            showModalsDispatch({
-              type: "addTerminalEquipment",
-              show: false,
-            })
-          }
-        >
-          <AddTerminalEquipment
-            routeNodeId={identifiedFeature.id}
-            rackId={
-              currentlySelectedFeatures.find((x) => x.source === "Rack")
-                ?.properties?.refId ?? ""
-            }
-          />
-        </ModalContainer>
-      )}
-
       <FeatureInformation />
 
       {identifiedFeature.type === "RouteNode" && (
