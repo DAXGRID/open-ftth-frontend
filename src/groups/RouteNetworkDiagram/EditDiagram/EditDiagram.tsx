@@ -78,6 +78,36 @@ type RouteNetworkDiagramProps = {
   envelope: Envelope;
 };
 
+function canAffixSpanEquipment(selected: MapboxGeoJSONFeature[]): boolean {
+  const nodeContainer = selected.find(
+    (x) => x.layer.source === "NodeContainerSide"
+  );
+
+  const spanSegmentIds = selected
+    .filter((x) => x.layer.source === "OuterConduit")
+    ?.map((x) => x.properties?.refId as string);
+
+  return spanSegmentIds.length > 0 && !!nodeContainer;
+}
+
+function canAffixSpanEquipmentToParent(
+  selected: MapboxGeoJSONFeature[]
+): boolean {
+  const invalidSelections = selected.filter(
+    (x) => x.layer.source !== "FiberCable" && x.layer.source !== "InnerConduit"
+  );
+  const fiberCables = selected.filter((x) => x.layer.source === "FiberCable");
+  const innerConduits = selected.filter(
+    (x) => x.layer.source === "InnerConduit"
+  );
+
+  return (
+    invalidSelections.length === 0 &&
+    fiberCables.length === 1 &&
+    innerConduits.length === 1
+  );
+}
+
 function containsNodeContainer(diagramObjects: Diagram[]): boolean {
   return diagramObjects.find((x) => x.style === "NodeContainer") ? true : false;
 }
@@ -677,13 +707,15 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               {
                 text: t("AFFIX_SPAN_EQUIPMENT"),
                 action: () => affixSpanEquipment(),
-                disabled: false,
+                disabled: !canAffixSpanEquipment(currentlySelectedFeatures),
                 key: 0,
               },
               {
                 text: t("PLACE_CABLE_IN_CONDUIT"),
                 action: () => affixSpanEquipmentToParent(),
-                disabled: false,
+                disabled: !canAffixSpanEquipmentToParent(
+                  currentlySelectedFeatures
+                ),
                 key: 1,
               },
             ]}
