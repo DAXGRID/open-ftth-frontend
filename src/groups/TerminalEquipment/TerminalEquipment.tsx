@@ -339,7 +339,7 @@ function TerminalEquipment({
     } else {
       showElement(null);
     }
-  }, [showFiberEditor]);
+  }, [showFiberEditor, showElement]);
 
   const groupedById = groupByParentId(
     response.data?.utilityNetwork.terminalEquipmentConnectivityView

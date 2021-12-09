@@ -501,6 +501,10 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     }
   }, [singleSelectedFeature, setSelectedFeatures, selectedFeatures]);
 
+  const currentlySelectedFeatures = useMemo(() => {
+    return selectedFeatures.filter((x) => x.state?.selected);
+  }, [selectedFeatures]);
+
   useEffect(() => {
     if (showModals.addContainer) {
       showElement(
@@ -538,7 +542,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               show: false,
             }),
           t("ADD_RACK"),
-          selectedFeatures
+          currentlySelectedFeatures
         )
       );
     } else if (showModals.addTerminalEquipment) {
@@ -554,11 +558,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     } else {
       showElement(null);
     }
-  }, [showModals, identifiedFeature?.id, t]);
-
-  const currentlySelectedFeatures = useMemo(() => {
-    return selectedFeatures.filter((x) => x.state?.selected);
-  }, [selectedFeatures]);
+  }, [
+    showModals,
+    identifiedFeature?.id,
+    t,
+    currentlySelectedFeatures,
+    showElement,
+  ]);
 
   const reverseVertialAlignment = async () => {
     const nodeContainer = currentlySelectedFeatures.find(

@@ -22,9 +22,7 @@ const OverlayProvider = ({ children }: OverlayProviderProps) => {
   return (
     <OverlayContext.Provider
       value={{
-        showElement: (childElement) => {
-          setOverlayChild(childElement);
-        },
+        showElement: setOverlayChild,
         overlayChild: overlayChild,
       }}
     >
