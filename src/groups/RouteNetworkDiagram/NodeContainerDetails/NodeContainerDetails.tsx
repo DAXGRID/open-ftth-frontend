@@ -63,7 +63,7 @@ function NodeContainerDetails({
     } else {
       showElement(null);
     }
-  }, [showEditNodeContainer, t]);
+  }, [showEditNodeContainer, t, nodeContainerMrid, showElement]);
 
   if (!nodeContainerMrid || nodeContainerDetailsResponse.fetching) return <></>;
 

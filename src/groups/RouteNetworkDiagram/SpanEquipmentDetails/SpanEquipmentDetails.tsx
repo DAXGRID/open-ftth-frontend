@@ -119,7 +119,13 @@ function SpanEquipmentDetails({
     } else {
       showElement(null);
     }
-  }, [showRerouteTube, showEditSpanEquipment, t]);
+  }, [
+    showRerouteTube,
+    showEditSpanEquipment,
+    t,
+    showElement,
+    spanEquipmentMrid,
+  ]);
 
   if (spanEquipmentDetails.fetching) return <></>;
 
