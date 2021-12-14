@@ -4,7 +4,6 @@ import PlaceSpanEquipmentPage from "../pages/PlaceSpanEquipmentPage";
 import LoginPage from "../pages/LoginPage";
 import IdentifyFeaturesPage from "../pages/IdentifyFeaturePage";
 import WorkTaskPage from "../pages/WorkTaskPage";
-import FiberConnectionEditorPage from "../pages/FiberConnectionEditorPage";
 import PrivateRoute from "./utils";
 
 const Routes = () => (
@@ -21,11 +20,6 @@ const Routes = () => (
       component={IdentifyFeaturesPage}
     />
     <PrivateRoute exact path="/work-tasks/" component={WorkTaskPage} />
-    <PrivateRoute
-      exact
-      path="/fiber-connection-editor/"
-      component={FiberConnectionEditorPage}
-    />
     <Route exact path="/login" component={LoginPage} />
   </Switch>
 );
