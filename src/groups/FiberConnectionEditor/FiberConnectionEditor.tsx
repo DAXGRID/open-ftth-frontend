@@ -125,12 +125,13 @@ function getAvailableConnections(
   if (jumps <= 1) {
     fromAvailable = fromFiltered.splice(fromIndex, count);
   } else {
-    let fromRest = fromFiltered.splice(fromIndex);
-    let fromFirst = fromRest.splice(0, count / 2);
-    let fromSecond = fromRest.splice(jumps, count / 2);
-    fromAvailable = fromFirst
-      .map((element, index) => [element, fromSecond[index]])
-      .flat();
+    const fromRest = fromFiltered.splice(fromIndex);
+    const jumpedConnections: ConnectivityFaceConnection[] = [];
+    for (let i = 0; i < Math.floor(fromRest.length / 2); i++) {
+      jumpedConnections.push(fromRest[i]);
+      jumpedConnections.push(fromRest[i + jumps]);
+    }
+    fromAvailable = jumpedConnections.splice(0, count);
   }
 
   return { from: fromAvailable, to: toAvailable };
