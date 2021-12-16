@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext, ReactNode } from "react";
+import { useEffect, useContext, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useQuery } from "urql";
 import ModalContainer from "../../components/ModalContainer";
 import FiberConnectionEditor from "../FiberConnectionEditor";
 import { OverlayContext } from "../../contexts/OverlayContext";
@@ -11,15 +10,17 @@ import {
   faPlug,
   faFilter,
 } from "@fortawesome/free-solid-svg-icons";
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import {
   TerminalEquipment as TerminalEquipmentType,
   TerminalStructure,
   Line,
   ParentNodeStructure,
-  TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_QUERY,
-  TerminalEquipmentResponse,
 } from "./TerminalEquipmentGql";
+import {
+  TerminalEquipmentProvider,
+  TerminalEquipmentContext,
+} from "./TerminalEquipmentContext";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -51,17 +52,17 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
 
 type TerminalEquipmentTableContainerProps = {
   children: ReactNode;
-  toggleShowFreeLines: (id: string) => void;
-  showFreeLines: boolean;
   terminalEquipment: TerminalEquipmentType;
+  showFreeLines: boolean;
 };
 
 function TerminalEquipmentTableContainer({
   children,
-  toggleShowFreeLines,
-  showFreeLines,
   terminalEquipment,
+  showFreeLines,
 }: TerminalEquipmentTableContainerProps) {
+  const { dispatch } = useContext(TerminalEquipmentContext);
+
   return (
     <div className="terminal-equipment-table-container">
       <div className="terminal-equipment-table-container-header">
@@ -76,7 +77,9 @@ function TerminalEquipmentTableContainer({
                 ? "header-icons__icon"
                 : "header-icons__icon text-green"
             }
-            onClick={() => toggleShowFreeLines(terminalEquipment.id)}
+            onClick={() =>
+              dispatch({ type: "setShowFreeLines", id: terminalEquipment.id })
+            }
           >
             <FontAwesomeIcon icon={faFilter} />
           </span>
@@ -95,15 +98,16 @@ function TerminalEquipmentTableContainer({
 
 type PinPortProps = {
   line: Line;
-  action: () => void;
 };
 
-function PinPort({ line, action }: PinPortProps) {
+function PinPort({ line }: PinPortProps) {
+  const { dispatch } = useContext(TerminalEquipmentContext);
+
   return (
     <div className="table-item-terminal">
       <div
         role="button"
-        onClick={action}
+        onClick={() => dispatch({ type: "setShowFiberEditor", show: true })}
         className={
           line.a?.connectedTo
             ? "table-item-terminal__item text-red"
@@ -117,7 +121,7 @@ function PinPort({ line, action }: PinPortProps) {
       <div className="table-item-terminal__item">{line.z?.terminal.name}</div>
       <div
         role="button"
-        onClick={action}
+        onClick={() => dispatch({ type: "setShowFiberEditor", show: true })}
         className={
           line.z?.connectedTo
             ? "table-item-terminal__item text-red"
@@ -132,11 +136,11 @@ function PinPort({ line, action }: PinPortProps) {
 
 type TerminalLineFreeProps = {
   line: Line;
-  t: TFunction;
-  action: () => void;
 };
 
-function TerminalLineFree({ t, line, action }: TerminalLineFreeProps) {
+function TerminalLineFree({ line }: TerminalLineFreeProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="terminal-equipment-table-row">
       <div
@@ -154,7 +158,7 @@ function TerminalLineFree({ t, line, action }: TerminalLineFreeProps) {
           <div className="terminal-equipment-table-item"></div>
         )}
         <div className="terminal-equipment-table-item">
-          <PinPort action={action} line={line} />
+          <PinPort line={line} />
         </div>
         {line.z ? (
           <div
@@ -173,11 +177,9 @@ function TerminalLineFree({ t, line, action }: TerminalLineFreeProps) {
 
 type TerminalLineProps = {
   line: Line;
-  t: TFunction;
-  action: () => void;
 };
 
-function TerminalLine({ line, action }: TerminalLineProps) {
+function TerminalLine({ line }: TerminalLineProps) {
   return (
     <div className="terminal-equipment-table-row">
       <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
@@ -193,7 +195,7 @@ function TerminalLine({ line, action }: TerminalLineProps) {
           {line.a?.connectedTo}
         </div>
         <div className="terminal-equipment-table-item">
-          <PinPort action={action} line={line} />
+          <PinPort line={line} />
         </div>
         <div className="terminal-equipment-table-item">
           {line.z?.connectedTo}
@@ -205,18 +207,16 @@ function TerminalLine({ line, action }: TerminalLineProps) {
 }
 
 type TerminalEquipmentTableProps = {
-  showFreeLines: boolean;
-  t: TFunction;
   terminalStructures: TerminalStructure[];
-  action: () => void;
+  showFreeLines: boolean;
 };
 
 function TerminalEquipmentTable({
-  showFreeLines,
-  t,
   terminalStructures,
-  action,
+  showFreeLines,
 }: TerminalEquipmentTableProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="terminal-equipment-table">
       <div
@@ -248,28 +248,22 @@ function TerminalEquipmentTable({
                   <p className="terminal-equipment-row-header__item"></p>
                 </div>
               </div>
-
               {x.lines
                 .filter((t) => t.a?.connectedTo || t.z?.connectedTo)
                 .map((y) => {
                   return (
                     <TerminalLine
-                      action={action}
-                      t={t}
                       line={y}
                       key={y.a?.terminal.id ?? y.z?.terminal.id}
                     />
                   );
                 })}
-
               {showFreeLines &&
                 x.lines
                   .filter((t) => !t.a?.connectedTo && !t.z?.connectedTo)
                   .map((y) => {
                     return (
                       <TerminalLineFree
-                        action={action}
-                        t={t}
                         line={y}
                         key={y.a?.terminal.id ?? y.z?.terminal.id}
                       />
@@ -300,38 +294,29 @@ function groupByParentId(terminalEquipments: TerminalEquipmentType[]): {
   }, {});
 }
 
-interface TerminalEquipmentProps {
-  routeNodeId: string;
-  terminalEquipmentOrRackId: string;
-}
-
-function TerminalEquipment({
-  routeNodeId,
-  terminalEquipmentOrRackId,
-}: TerminalEquipmentProps) {
-  const [showFreeLines, setShowFreeLines] = useState<{ [id: string]: boolean }>(
-    {}
-  );
-  const [showFiberEditor, setShowFiberEditor] = useState<boolean>(false);
-  const { t } = useTranslation();
+function TerminalEquipment() {
   const { showElement } = useContext(OverlayContext);
+  const { dispatch, state } = useContext(TerminalEquipmentContext);
 
-  const [response] = useQuery<TerminalEquipmentResponse>({
-    query: TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_QUERY,
-    variables: {
-      routeNodeId: routeNodeId,
-      terminalEquipmentOrRackId: terminalEquipmentOrRackId,
-    },
-    pause: !routeNodeId || !terminalEquipmentOrRackId,
-  });
+  /* const [connectivityTraceViewResponse] =
+   *   useQuery<ConnectivityTraceViewResponse>({
+   *     query: CONNECTIVITY_TRACE_VIEW_QUERY,
+   *     variables: {
+   *       routeNodeId: "79677dd6-77ce-4f7f-8cd5-152fba5caf28",
+   *       terminalOrSpanEquipmentId: "79677dd6-77ce-4f7f-8cd5-152fba5caf28",
+   *     } as ConnectivityTraceViewQueryParams,
+   *   });
+   */
 
   useEffect(() => {
-    if (showFiberEditor) {
+    if (state.showFiberEditor) {
       showElement(
         <ModalContainer
-          show={showFiberEditor}
-          closeCallback={() => setShowFiberEditor(false)}
-          maxWidth="1200px"
+          show={state.showFiberEditor}
+          closeCallback={() =>
+            dispatch({ type: "setShowFiberEditor", show: false })
+          }
+          maxWidth="1400px"
         >
           <FiberConnectionEditor />
         </ModalContainer>
@@ -339,81 +324,86 @@ function TerminalEquipment({
     } else {
       showElement(null);
     }
-  }, [showFiberEditor, showElement]);
+  }, [state.showFiberEditor, showElement, dispatch]);
 
   const groupedById = groupByParentId(
-    response.data?.utilityNetwork.terminalEquipmentConnectivityView
-      ?.terminalEquipments ?? []
+    state.connectivityView?.terminalEquipments ?? []
   );
 
-  const toggleShowFreeLines = (id: string) => {
-    setShowFreeLines({ ...showFreeLines, [id]: !showFreeLines[id] });
-  };
-
-  const parentNodeStructures =
-    response.data?.utilityNetwork.terminalEquipmentConnectivityView
-      .parentNodeStructures;
-
   return (
-    <>
-      <div className="terminal-equipment">
-        {parentNodeStructures && Object.keys(groupedById).length === 0 && (
+    <div className="terminal-equipment">
+      {state.connectivityView?.parentNodeStructures &&
+        Object.keys(groupedById).length === 0 && (
           <RackContainer
-            parentNodeStructure={parentNodeStructures[0]}
+            parentNodeStructure={
+              state.connectivityView?.parentNodeStructures[0]
+            }
           ></RackContainer>
         )}
-        {parentNodeStructures &&
-          Object.keys(groupedById).map((x) => {
+      {state.connectivityView?.parentNodeStructures &&
+        Object.keys(groupedById).map((x) => {
+          return (
+            <RackContainer
+              parentNodeStructure={state.connectivityView?.parentNodeStructures.find(
+                (z) => z.id === x
+              )}
+              key={x}
+            >
+              {groupedById[x].map((y) => {
+                return (
+                  <TerminalEquipmentTableContainer
+                    showFreeLines={state.showFreeLines[y.id] ?? false}
+                    key={y.id}
+                    terminalEquipment={y}
+                  >
+                    <TerminalEquipmentTable
+                      terminalStructures={y.terminalStructures}
+                      showFreeLines={state.showFreeLines[y.id] ?? false}
+                    />
+                  </TerminalEquipmentTableContainer>
+                );
+              })}
+            </RackContainer>
+          );
+        })}
+      {!state.connectivityView?.parentNodeStructures &&
+        Object.keys(groupedById).map((x) => {
+          return groupedById[x].map((y) => {
             return (
-              <RackContainer
-                parentNodeStructure={parentNodeStructures.find(
-                  (z) => z.id === x
-                )}
-                key={x}
+              <TerminalEquipmentTableContainer
+                key={y.id}
+                terminalEquipment={y}
+                showFreeLines={state.showFreeLines[y.id]}
               >
-                {groupedById[x].map((y) => {
-                  return (
-                    <TerminalEquipmentTableContainer
-                      key={y.id}
-                      toggleShowFreeLines={toggleShowFreeLines}
-                      terminalEquipment={y}
-                      showFreeLines={showFreeLines[y.id] ?? false}
-                    >
-                      <TerminalEquipmentTable
-                        action={() => setShowFiberEditor(true)}
-                        showFreeLines={showFreeLines[y.id] ?? false}
-                        t={t}
-                        terminalStructures={y.terminalStructures}
-                      />
-                    </TerminalEquipmentTableContainer>
-                  );
-                })}
-              </RackContainer>
+                <TerminalEquipmentTable
+                  terminalStructures={y.terminalStructures}
+                  showFreeLines={state.showFreeLines[y.id] ?? false}
+                />
+              </TerminalEquipmentTableContainer>
             );
-          })}
-        {!parentNodeStructures &&
-          Object.keys(groupedById).map((x) => {
-            return groupedById[x].map((y) => {
-              return (
-                <TerminalEquipmentTableContainer
-                  key={y.id}
-                  toggleShowFreeLines={toggleShowFreeLines}
-                  terminalEquipment={y}
-                  showFreeLines={showFreeLines[y.id] ?? false}
-                >
-                  <TerminalEquipmentTable
-                    action={() => setShowFiberEditor(true)}
-                    showFreeLines={showFreeLines[y.id] ?? false}
-                    t={t}
-                    terminalStructures={y.terminalStructures}
-                  />
-                </TerminalEquipmentTableContainer>
-              );
-            });
-          })}
-      </div>
-    </>
+          });
+        })}
+    </div>
   );
 }
 
-export default TerminalEquipment;
+interface TerminalEquipmentWrapperProps {
+  routeNodeId: string;
+  terminalEquipmentOrRackId: string;
+}
+
+function TerminalEquipmentWrapper({
+  routeNodeId,
+  terminalEquipmentOrRackId,
+}: TerminalEquipmentWrapperProps) {
+  return (
+    <TerminalEquipmentProvider
+      routeNodeId={routeNodeId}
+      terminalEquipmentOrRackId={terminalEquipmentOrRackId}
+    >
+      <TerminalEquipment />
+    </TerminalEquipmentProvider>
+  );
+}
+
+export default TerminalEquipmentWrapper;
