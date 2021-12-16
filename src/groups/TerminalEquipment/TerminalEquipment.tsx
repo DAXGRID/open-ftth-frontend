@@ -1,4 +1,4 @@
-import { useEffect, useContext, ReactNode } from "react";
+import { useEffect, useContext, ReactNode, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalContainer from "../../components/ModalContainer";
 import FiberConnectionEditor from "../FiberConnectionEditor";
@@ -326,14 +326,14 @@ function TerminalEquipment() {
     }
   }, [state.showFiberEditor, showElement, dispatch]);
 
-  const groupedById = groupByParentId(
-    state.connectivityView?.terminalEquipments ?? []
-  );
+  const groupedByParentId = useMemo(() => {
+    return groupByParentId(state.connectivityView?.terminalEquipments ?? []);
+  }, [state.connectivityView?.terminalEquipments]);
 
   return (
     <div className="terminal-equipment">
       {state.connectivityView?.parentNodeStructures &&
-        Object.keys(groupedById).length === 0 && (
+        Object.keys(groupedByParentId).length === 0 && (
           <RackContainer
             parentNodeStructure={
               state.connectivityView?.parentNodeStructures[0]
@@ -341,7 +341,7 @@ function TerminalEquipment() {
           ></RackContainer>
         )}
       {state.connectivityView?.parentNodeStructures &&
-        Object.keys(groupedById).map((x) => {
+        Object.keys(groupedByParentId).map((x) => {
           return (
             <RackContainer
               parentNodeStructure={state.connectivityView?.parentNodeStructures.find(
@@ -349,7 +349,7 @@ function TerminalEquipment() {
               )}
               key={x}
             >
-              {groupedById[x].map((y) => {
+              {groupedByParentId[x].map((y) => {
                 return (
                   <TerminalEquipmentTableContainer
                     showFreeLines={state.showFreeLines[y.id] ?? false}
@@ -367,8 +367,8 @@ function TerminalEquipment() {
           );
         })}
       {!state.connectivityView?.parentNodeStructures &&
-        Object.keys(groupedById).map((x) => {
-          return groupedById[x].map((y) => {
+        Object.keys(groupedByParentId).map((x) => {
+          return groupedByParentId[x].map((y) => {
             return (
               <TerminalEquipmentTableContainer
                 key={y.id}
