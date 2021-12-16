@@ -9,6 +9,7 @@ interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
   showFreeLines: { [id: string]: boolean };
   showFiberEditor: boolean;
+  showConnectivityTraceViews: { [id: string]: boolean };
 }
 
 type TerminalEquipmentAction =
@@ -17,12 +18,14 @@ type TerminalEquipmentAction =
       id: TerminalEquipmentConnectivityView;
     }
   | { type: "setShowFreeLines"; id: string }
-  | { type: "setShowFiberEditor"; show: boolean };
+  | { type: "setShowFiberEditor"; show: boolean }
+  | { type: "setShowConnectivityTraceViews"; id: string };
 
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
   showFiberEditor: false,
+  showConnectivityTraceViews: {},
 };
 
 function terminalEquipmentReducer(
@@ -42,6 +45,14 @@ function terminalEquipmentReducer(
       };
     case "setShowFiberEditor":
       return { ...state, showFiberEditor: action.show };
+    case "setShowConnectivityTraceViews":
+      return {
+        ...state,
+        showConnectivityTraceViews: {
+          ...state.showConnectivityTraceViews,
+          [action.id]: !state.showConnectivityTraceViews[action.id],
+        },
+      };
     default:
       throw new Error(`No action for ${action}`);
   }

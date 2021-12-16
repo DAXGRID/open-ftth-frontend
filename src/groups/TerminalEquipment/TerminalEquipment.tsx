@@ -180,11 +180,21 @@ type TerminalLineProps = {
 };
 
 function TerminalLine({ line }: TerminalLineProps) {
+  const { dispatch } = useContext(TerminalEquipmentContext);
+
   return (
     <div className="terminal-equipment-table-row">
       <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
         <div className="terminal-equipment-table-item">
-          <span className="terminal-equipment-table-item__icon">
+          <span
+            className="terminal-equipment-table-item__icon"
+            onClick={() =>
+              dispatch({
+                type: "setShowConnectivityTraceViews",
+                id: line.a?.terminal.id ?? line.z?.terminal.id ?? "",
+              })
+            }
+          >
             <FontAwesomeIcon icon={faChevronRight} />
           </span>
           <span className="terminal-equipment-table-item__equipped">
@@ -249,7 +259,7 @@ function TerminalEquipmentTable({
                 </div>
               </div>
               {x.lines
-                .filter((t) => t.a?.connectedTo || t.z?.connectedTo)
+                //.filter((t) => t.a?.connectedTo || t.z?.connectedTo)
                 .map((y) => {
                   return (
                     <TerminalLine
@@ -258,17 +268,17 @@ function TerminalEquipmentTable({
                     />
                   );
                 })}
-              {showFreeLines &&
-                x.lines
+              {/* {showFreeLines &&
+                  x.lines
                   .filter((t) => !t.a?.connectedTo && !t.z?.connectedTo)
                   .map((y) => {
-                    return (
-                      <TerminalLineFree
-                        line={y}
-                        key={y.a?.terminal.id ?? y.z?.terminal.id}
-                      />
-                    );
-                  })}
+                  return (
+                  <TerminalLineFree
+                  line={y}
+                  key={y.a?.terminal.id ?? y.z?.terminal.id}
+                  />
+                  );
+                  })} */}
             </div>
           );
         })}
