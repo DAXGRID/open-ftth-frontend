@@ -316,7 +316,7 @@ function TerminalEquipment() {
           closeCallback={() =>
             dispatch({ type: "setShowFiberEditor", show: false })
           }
-          maxWidth="1400px"
+          maxWidth="1200px"
         >
           <FiberConnectionEditor />
         </ModalContainer>
