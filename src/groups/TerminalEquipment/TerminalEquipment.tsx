@@ -138,7 +138,7 @@ function TerminalEquipmentTable({
                 </div>
               </div>
               {x.lines
-                //.filter((t) => t.a?.connectedTo || t.z?.connectedTo)
+                .filter((t) => t.a?.connectedTo || t.z?.connectedTo)
                 .map((y) => {
                   return (
                     <TerminalLine
@@ -147,17 +147,17 @@ function TerminalEquipmentTable({
                     />
                   );
                 })}
-              {/* {showFreeLines &&
-                  x.lines
+              {showFreeLines &&
+                x.lines
                   .filter((t) => !t.a?.connectedTo && !t.z?.connectedTo)
                   .map((y) => {
-                  return (
-                  <TerminalLineFree
-                  line={y}
-                  key={y.a?.terminal.id ?? y.z?.terminal.id}
-                  />
-                  );
-                  })} */}
+                    return (
+                      <TerminalLineFree
+                        line={y}
+                        key={y.a?.terminal.id ?? y.z?.terminal.id}
+                      />
+                    );
+                  })}
             </div>
           );
         })}
