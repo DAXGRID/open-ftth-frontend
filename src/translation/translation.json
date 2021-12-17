@@ -182,7 +182,14 @@
       "PLACE_CABLE_IN_CONDUIT": "Place cable in conduit",
       "REROUTE_TUBE": "Reroute tube",
       "EDIT_SPAN_EQUIPMENT": "Edit span equipment",
-      "EDIT_NODE_CONTAINER": "Edit node container"
+      "EDIT_NODE_CONTAINER": "Edit node container",
+      "NODE": "Node",
+      "EQUIPMENT": "Equipment",
+      "TERMINAL_STRUCTURE": "Terminal structure",
+      "TERMINAL": "Terminal",
+      "CONNECTION_INFO": "Connection info",
+      "TOTAL_LENGTH": "Total length",
+      "CIRCUIT_NAME": "Circuit name"
     }
   },
   "dk": {
@@ -368,7 +375,14 @@
       "PLACE_CABLE_IN_CONDUIT": "Placer kabel i rør",
       "REROUTE_TUBE": "Omdiriger rør",
       "EDIT_SPAN_EQUIPMENT": "Rediger information",
-      "EDIT_NODE_CONTAINER": "Rediger struktur"
+      "EDIT_NODE_CONTAINER": "Rediger struktur",
+      "NODE": "Knudepunkt",
+      "EQUIPMENT": "Udstyr",
+      "TERMINAL_STRUCTURE": "Bakke/kort",
+      "TERMINAL": "Søm/port",
+      "CONNECTION_INFO": "Forbindelses info",
+      "TOTAL_LENGTH": "Længde",
+      "CIRCUIT_NAME": "Kredsløbs-id"
     }
   }
 }

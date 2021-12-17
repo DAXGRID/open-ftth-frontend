@@ -1,12 +1,43 @@
-export type ParentNodeStructure = {
+import { Client } from "urql";
+
+export const connectivityViewQuery = (
+  client: Client,
+  routeNodeId: string,
+  terminalEquipmentOrRackId: string
+) => {
+  return client
+    .query<TerminalEquipmentResponse>(
+      TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_QUERY,
+      {
+        routeNodeId: routeNodeId,
+        terminalEquipmentOrRackId: terminalEquipmentOrRackId,
+      }
+    )
+    .toPromise();
+};
+
+export const connectivityTraceViewQuery = (
+  client: Client,
+  routeNodeId: string,
+  terminalOrSpanEquipmentId: string
+) => {
+  return client
+    .query<ConnectivityTraceViewResponse>(CONNECTIVITY_TRACE_VIEW_QUERY, {
+      routeNodeId: routeNodeId,
+      terminalOrSpanEquipmentId: terminalOrSpanEquipmentId,
+    } as ConnectivityTraceViewQueryParams)
+    .toPromise();
+};
+
+export interface ParentNodeStructure {
   id: string;
   category: string;
   name: string;
   specName: string;
   info: string | null;
-};
+}
 
-export type Line = {
+export interface Line {
   connectorSymbol: string;
   a: {
     terminal: {
@@ -24,18 +55,18 @@ export type Line = {
     connectedTo: string | null;
     end: string | null;
   } | null;
-};
+}
 
-export type TerminalStructure = {
+export interface TerminalStructure {
   id: string;
   category: string;
   name: string;
   specName: string;
   info: string | null;
   lines: Line[];
-};
+}
 
-export type TerminalEquipment = {
+export interface TerminalEquipment {
   id: string;
   parentNodeStructureId: string;
   category: string;
@@ -43,22 +74,23 @@ export type TerminalEquipment = {
   specName: string;
   info: string | null;
   terminalStructures: TerminalStructure[];
-};
+}
 
-export type TerminalEquipmentResponse = {
+export interface TerminalEquipmentConnectivityView {
+  parentNodeStructures: ParentNodeStructure[];
+  terminalEquipments: TerminalEquipment[];
+}
+
+interface TerminalEquipmentResponse {
   utilityNetwork: {
-    terminalEquipmentConnectivityView: {
-      parentNodeStructures: ParentNodeStructure[];
-      terminalEquipments: TerminalEquipment[];
-    };
+    terminalEquipmentConnectivityView: TerminalEquipmentConnectivityView;
   };
-};
+}
 
 export const TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_QUERY = `
 query (
 $routeNodeId: ID!,
-$terminalEquipmentOrRackId: ID!
-) {
+$terminalEquipmentOrRackId: ID!) {
   utilityNetwork {
     terminalEquipmentConnectivityView(
       routeNodeId: $routeNodeId
@@ -105,3 +137,62 @@ $terminalEquipmentOrRackId: ID!
   }
 }
 `;
+
+export interface Hop {
+  level: number;
+  isSplitter: boolean;
+  isTraceSource: boolean;
+  node: string;
+  equipment: string;
+  terminalStructure: string;
+  terminal: string;
+  connectionInfo: string;
+  totalLength: number;
+  routeSegmentIds: string[];
+  routeSegmentGeometries: string[];
+  hopSeqNo: number;
+}
+
+export interface ConnectivityTraceView {
+  circuitName: string;
+  hops: Hop[];
+}
+
+interface ConnectivityTraceViewResponse {
+  utilityNetwork: {
+    connectivityTraceView: ConnectivityTraceView;
+  };
+}
+
+interface ConnectivityTraceViewQueryParams {
+  routeNodeId: string;
+  terminalOrSpanEquipmentId: string;
+}
+
+export const CONNECTIVITY_TRACE_VIEW_QUERY = `
+query (
+$routeNodeId: ID!,
+$terminalOrSpanEquipmentId: ID!) {
+  utilityNetwork {
+    connectivityTraceView(
+      routeNodeId: $routeNodeId
+      terminalOrSpanEquipmentId: $terminalOrSpanEquipmentId
+    ) {
+      circuitName
+      hops {
+        level
+        isSplitter
+        isTraceSource
+        node
+        equipment
+        terminalStructure
+        terminal
+        connectionInfo
+        totalLength
+        routeSegmentIds
+        routeSegmentGeometries
+        hopSeqNo
+      }
+    }
+  }
+}`;
