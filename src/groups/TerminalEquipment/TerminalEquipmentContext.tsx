@@ -1,13 +1,21 @@
-import { createContext, useReducer, ReactNode, useEffect } from "react";
+import {
+  createContext,
+  useReducer,
+  ReactNode,
+  useEffect,
+  useContext,
+} from "react";
 import {
   ConnectivityTraceView,
   connectivityTraceViewQuery,
   TerminalEquipmentConnectivityView,
+  Hop,
 } from "./TerminalEquipmentGql";
 import { useClient } from "urql";
 import { connectivityViewQuery } from "./TerminalEquipmentGql";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { MapContext } from "../../contexts/MapContext";
 
 interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
@@ -16,6 +24,7 @@ interface TerminalEquipmentState {
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
+  selectedConnectivityTraceHop: Hop | null;
 }
 
 type TerminalEquipmentAction =
@@ -29,6 +38,10 @@ type TerminalEquipmentAction =
   | {
       type: "setViewConnectivityTraceViews";
       params: { id: string; view: ConnectivityTraceView };
+    }
+  | {
+      type: "selectConnectivityTraceHop";
+      hop: Hop;
     };
 
 const terminalEquipmentInitialState: TerminalEquipmentState = {
@@ -36,6 +49,7 @@ const terminalEquipmentInitialState: TerminalEquipmentState = {
   showFreeLines: {},
   showFiberEditor: false,
   connectivityTraceViews: {},
+  selectedConnectivityTraceHop: null,
 };
 
 function terminalEquipmentReducer(
@@ -50,6 +64,7 @@ function terminalEquipmentReducer(
         connectivityTraceViews: {},
         showFreeLines: {},
         showFiberEditor: false,
+        selectedConnectivityTraceHop: null,
       };
     case "setShowFreeLines":
       return {
@@ -83,6 +98,11 @@ function terminalEquipmentReducer(
           },
         },
       };
+    case "selectConnectivityTraceHop":
+      return {
+        ...state,
+        selectedConnectivityTraceHop: action.hop,
+      };
     default:
       throw new Error(`No action for ${action}`);
   }
@@ -112,6 +132,7 @@ const TerminalEquipmentProvider = ({
   terminalEquipmentOrRackId,
   children,
 }: TerminalEquipmentProviderProps) => {
+  const { setTrace } = useContext(MapContext);
   const { t } = useTranslation();
   const client = useClient();
   const [state, dispatch] = useReducer(
@@ -151,6 +172,16 @@ const TerminalEquipmentProvider = ({
       });
     });
   }, [state.connectivityTraceViews, dispatch, client, routeNodeId]);
+
+  useEffect(() => {
+    if (!state.selectedConnectivityTraceHop) return;
+    const { routeSegmentIds, routeSegmentGeometries } =
+      state.selectedConnectivityTraceHop;
+    setTrace({
+      ids: routeSegmentIds,
+      geometries: routeSegmentGeometries,
+    });
+  }, [state.selectedConnectivityTraceHop, setTrace]);
 
   return (
     <TerminalEquipmentContext.Provider

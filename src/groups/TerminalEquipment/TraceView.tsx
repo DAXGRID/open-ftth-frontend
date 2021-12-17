@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { ConnectivityTraceView } from "./TerminalEquipmentGql";
+import { TerminalEquipmentContext } from "./TerminalEquipmentContext";
 
 interface TraceViewProps {
   view: { view: ConnectivityTraceView | null; show: boolean };
@@ -7,6 +9,7 @@ interface TraceViewProps {
 
 function TraceView({ view }: TraceViewProps) {
   const { t } = useTranslation();
+  const { state, dispatch } = useContext(TerminalEquipmentContext);
 
   if (!view || !view.show) return <></>;
 
@@ -24,10 +27,22 @@ function TraceView({ view }: TraceViewProps) {
         <div className="trace-view-header-item">{t("TOTAL_LENGTH")}</div>
       </div>
       <div className="trace-view-body ">
-        {view.view?.hops.map((x) => {
+        {view.view?.hops.map((x, i) => {
           return (
-            <div className="trace-view-body-row trace-view-grid">
-              <div className="trace-view-body-item">{x.node}</div>
+            <div
+              key={i} // TODO use unique key
+              className={`trace-view-body-row trace-view-grid ${
+                state.selectedConnectivityTraceHop === x
+                  ? "trace-view-body-row--selected"
+                  : ""
+              }`}
+              onClick={() =>
+                dispatch({ type: "selectConnectivityTraceHop", hop: x })
+              }
+            >
+              <div className="trace-view-body-item">
+                {`${"->".repeat(x.level)} ${x.node}`}
+              </div>
               <div className="trace-view-body-item">{x.equipment}</div>
               <div className="trace-view-body-item">{x.terminalStructure}</div>
               <div className="trace-view-body-item">{x.terminal}</div>

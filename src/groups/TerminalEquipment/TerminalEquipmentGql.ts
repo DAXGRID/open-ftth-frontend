@@ -138,21 +138,23 @@ $terminalEquipmentOrRackId: ID!) {
 }
 `;
 
+export interface Hop {
+  level: number;
+  isSplitter: boolean;
+  isTraceSource: boolean;
+  node: string;
+  equipment: string;
+  terminalStructure: string;
+  terminal: string;
+  connectionInfo: string;
+  totalLength: number;
+  routeSegmentIds: string[];
+  routeSegmentGeometries: string[];
+}
+
 export interface ConnectivityTraceView {
   circuitName: string;
-  hops: {
-    level: number;
-    isSplitter: boolean;
-    isTraceSource: boolean;
-    node: string;
-    equipment: string;
-    terminalStructure: string;
-    terminal: string;
-    connectionInfo: string;
-    totalLength: number;
-    routeSegmentIds: string[];
-    routeSegmentGeometries: string[];
-  }[];
+  hops: Hop[];
 }
 
 interface ConnectivityTraceViewResponse {
