@@ -267,7 +267,7 @@
       border-bottom: 1px solid $border-color;
 
       &.trace-view-body-row--selected {
-        background-color: #a3cfa3;
+        background-color: $select-color;
       }
 
       &:hover {
