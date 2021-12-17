@@ -150,6 +150,7 @@ export interface Hop {
   totalLength: number;
   routeSegmentIds: string[];
   routeSegmentGeometries: string[];
+  hopSeqNo: number;
 }
 
 export interface ConnectivityTraceView {
@@ -190,6 +191,7 @@ $terminalOrSpanEquipmentId: ID!) {
         totalLength
         routeSegmentIds
         routeSegmentGeometries
+        hopSeqNo
       }
     }
   }

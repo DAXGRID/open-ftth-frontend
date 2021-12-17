@@ -27,10 +27,10 @@ function TraceView({ view }: TraceViewProps) {
         <div className="trace-view-header-item">{t("TOTAL_LENGTH")}</div>
       </div>
       <div className="trace-view-body ">
-        {view.view?.hops.map((x, i) => {
+        {view.view?.hops.map((x) => {
           return (
             <div
-              key={i} // TODO use unique key
+              key={x.hopSeqNo}
               className={`trace-view-body-row trace-view-grid ${
                 state.selectedConnectivityTraceHop === x
                   ? "trace-view-body-row--selected"
