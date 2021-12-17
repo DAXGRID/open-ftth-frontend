@@ -44,7 +44,13 @@ function terminalEquipmentReducer(
 ): TerminalEquipmentState {
   switch (action.type) {
     case "setConnectivityView":
-      return { ...state, connectivityView: action.id };
+      return {
+        ...state,
+        connectivityView: action.id,
+        connectivityTraceViews: {},
+        showFreeLines: {},
+        showFiberEditor: false,
+      };
     case "setShowFreeLines":
       return {
         ...state,

@@ -4,25 +4,22 @@ import ModalContainer from "../../components/ModalContainer";
 import FiberConnectionEditor from "../FiberConnectionEditor";
 import { OverlayContext } from "../../contexts/OverlayContext";
 import {
-  faChevronRight,
-  faChevronCircleDown,
   faPlusCircle,
   faEdit,
-  faPlug,
   faFilter,
-  faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import {
   TerminalEquipment as TerminalEquipmentType,
   TerminalStructure,
-  Line,
   ParentNodeStructure,
 } from "./TerminalEquipmentGql";
 import {
   TerminalEquipmentProvider,
   TerminalEquipmentContext,
 } from "./TerminalEquipmentContext";
+import TerminalLine from "./TerminalLine";
+import TerminalLineFree from "./TerminalLineFree";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -94,134 +91,6 @@ function TerminalEquipmentTableContainer({
         </div>
       </div>
       <div className="terminal-equipment-table-container-body">{children}</div>
-    </div>
-  );
-}
-
-type PinPortProps = {
-  line: Line;
-};
-
-function PinPort({ line }: PinPortProps) {
-  const { dispatch } = useContext(TerminalEquipmentContext);
-
-  return (
-    <div className="table-item-terminal">
-      <div
-        role="button"
-        onClick={() => dispatch({ type: "setShowFiberEditor", show: true })}
-        className={
-          line.a?.connectedTo
-            ? "table-item-terminal__item text-red"
-            : "table-item-terminal__item text-green"
-        }
-      >
-        {line.a && <FontAwesomeIcon icon={faPlug} />}
-      </div>
-      <div className="table-item-terminal__item">{line.a?.terminal.name}</div>
-      <div className="table-item-terminal__item">-O-</div>
-      <div className="table-item-terminal__item">{line.z?.terminal.name}</div>
-      <div
-        role="button"
-        onClick={() => dispatch({ type: "setShowFiberEditor", show: true })}
-        className={
-          line.z?.connectedTo
-            ? "table-item-terminal__item text-red"
-            : "table-item-terminal__item text-green"
-        }
-      >
-        {line.z && <FontAwesomeIcon icon={faPlug} />}
-      </div>
-    </div>
-  );
-}
-
-type TerminalLineFreeProps = {
-  line: Line;
-};
-
-function TerminalLineFree({ line }: TerminalLineFreeProps) {
-  const { t } = useTranslation();
-
-  return (
-    <div className="terminal-equipment-table-row">
-      <div
-        className="terminal-equipment-data-row
-                terminal-equipment-table-grid-free"
-      >
-        {line.a ? (
-          <div
-            className="terminal-equipment-table-item
-                  terminal-equipment-table-item--free"
-          >
-            {t("FREE")}
-          </div>
-        ) : (
-          <div className="terminal-equipment-table-item"></div>
-        )}
-        <div className="terminal-equipment-table-item">
-          <PinPort line={line} />
-        </div>
-        {line.z ? (
-          <div
-            className="terminal-equipment-table-item
-                  terminal-equipment-table-item--free"
-          >
-            {t("FREE")}
-          </div>
-        ) : (
-          <div className="terminal-equipment-table-item"></div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-type TerminalLineProps = {
-  line: Line;
-};
-
-function TerminalLine({ line }: TerminalLineProps) {
-  const { state, dispatch } = useContext(TerminalEquipmentContext);
-
-  return (
-    <div className="terminal-equipment-table-row">
-      <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
-        <div className="terminal-equipment-table-item">
-          <span
-            className="terminal-equipment-table-item__icon"
-            onClick={() =>
-              dispatch({
-                type: "setShowConnectivityTraceViews",
-                id: line.a?.terminal.id ?? line.z?.terminal.id ?? "",
-              })
-            }
-          >
-            <FontAwesomeIcon
-              icon={
-                state.connectivityTraceViews[
-                  line.a?.terminal.id ?? line.z?.terminal.id ?? ""
-                ]?.show ?? false
-                  ? faChevronDown
-                  : faChevronRight
-              }
-            />
-          </span>
-          <span className="terminal-equipment-table-item__equipped">
-            {line.a?.end}
-          </span>
-        </div>
-        <div className="terminal-equipment-table-item">
-          {line.a?.connectedTo}
-        </div>
-        <div className="terminal-equipment-table-item">
-          <PinPort line={line} />
-        </div>
-        <div className="terminal-equipment-table-item">
-          {line.z?.connectedTo}
-        </div>
-        <div className="terminal-equipment-table-item">{line.z?.end}</div>
-      </div>
     </div>
   );
 }
