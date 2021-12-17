@@ -16,6 +16,19 @@ export const connectivityViewQuery = (
     .toPromise();
 };
 
+export const connectivityTraceViewQuery = (
+  client: Client,
+  routeNodeId: string,
+  terminalOrSpanEquipmentId: string
+) => {
+  return client
+    .query<ConnectivityTraceViewResponse>(CONNECTIVITY_TRACE_VIEW_QUERY, {
+      routeNodeId: routeNodeId,
+      terminalOrSpanEquipmentId: terminalOrSpanEquipmentId,
+    } as ConnectivityTraceViewQueryParams)
+    .toPromise();
+};
+
 export interface ParentNodeStructure {
   id: string;
   category: string;
@@ -68,7 +81,7 @@ export interface TerminalEquipmentConnectivityView {
   terminalEquipments: TerminalEquipment[];
 }
 
-export interface TerminalEquipmentResponse {
+interface TerminalEquipmentResponse {
   utilityNetwork: {
     terminalEquipmentConnectivityView: TerminalEquipmentConnectivityView;
   };
@@ -125,28 +138,30 @@ $terminalEquipmentOrRackId: ID!) {
 }
 `;
 
-export interface ConnectivityTraceViewResponse {
+export interface ConnectivityTraceView {
+  circuitName: string;
+  hops: {
+    level: number;
+    isSplitter: boolean;
+    isTraceSource: boolean;
+    node: string;
+    equipment: string;
+    terminalStructure: string;
+    terminal: string;
+    connectionInfo: string;
+    totalLength: number;
+    routeSegmentIds: string[];
+    routeSegmentGeometries: string[];
+  }[];
+}
+
+interface ConnectivityTraceViewResponse {
   utilityNetwork: {
-    connectivityTraceView: {
-      circuitName: string;
-      hops: {
-        level: number;
-        isSplitter: boolean;
-        isTraceSource: boolean;
-        node: string;
-        equipment: string;
-        terminalStructure: string;
-        terminal: string;
-        connectionInfo: string;
-        totalLength: number;
-        routeSegmentIds: string[];
-        routeSegmentGeometries: string[];
-      }[];
-    };
+    connectivityTraceView: ConnectivityTraceView;
   };
 }
 
-export interface ConnectivityTraceViewQueryParams {
+interface ConnectivityTraceViewQueryParams {
   routeNodeId: string;
   terminalOrSpanEquipmentId: string;
 }

@@ -1,5 +1,9 @@
 import { createContext, useReducer, ReactNode, useEffect } from "react";
-import { TerminalEquipmentConnectivityView } from "./TerminalEquipmentGql";
+import {
+  ConnectivityTraceView,
+  connectivityTraceViewQuery,
+  TerminalEquipmentConnectivityView,
+} from "./TerminalEquipmentGql";
 import { useClient } from "urql";
 import { connectivityViewQuery } from "./TerminalEquipmentGql";
 import { toast } from "react-toastify";
@@ -9,7 +13,9 @@ interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
   showFreeLines: { [id: string]: boolean };
   showFiberEditor: boolean;
-  showConnectivityTraceViews: { [id: string]: boolean };
+  connectivityTraceViews: {
+    [id: string]: { show: boolean; view: ConnectivityTraceView };
+  };
 }
 
 type TerminalEquipmentAction =
@@ -19,13 +25,17 @@ type TerminalEquipmentAction =
     }
   | { type: "setShowFreeLines"; id: string }
   | { type: "setShowFiberEditor"; show: boolean }
-  | { type: "setShowConnectivityTraceViews"; id: string };
+  | { type: "setShowConnectivityTraceViews"; id: string }
+  | {
+      type: "setViewConnectivityTraceViews";
+      params: { id: string; view: ConnectivityTraceView };
+    };
 
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
   showFiberEditor: false,
-  showConnectivityTraceViews: {},
+  connectivityTraceViews: {},
 };
 
 function terminalEquipmentReducer(
@@ -48,9 +58,23 @@ function terminalEquipmentReducer(
     case "setShowConnectivityTraceViews":
       return {
         ...state,
-        showConnectivityTraceViews: {
-          ...state.showConnectivityTraceViews,
-          [action.id]: !state.showConnectivityTraceViews[action.id],
+        connectivityTraceViews: {
+          ...state.connectivityTraceViews,
+          [action.id]: {
+            ...state.connectivityTraceViews[action.id],
+            show: !state.connectivityTraceViews[action.id]?.show,
+          },
+        },
+      };
+    case "setViewConnectivityTraceViews":
+      return {
+        ...state,
+        connectivityTraceViews: {
+          ...state.connectivityTraceViews,
+          [action.params.id]: {
+            ...state.connectivityTraceViews[action.params.id],
+            view: action.params.view,
+          },
         },
       };
     default:
@@ -103,6 +127,24 @@ const TerminalEquipmentProvider = ({
         toast.error(t("ERROR"));
       });
   }, [routeNodeId, terminalEquipmentOrRackId, client, dispatch, t]);
+
+  useEffect(() => {
+    const notLoaded = Object.entries(state.connectivityTraceViews).filter(
+      (x) => x[1].show && !x[1].view
+    );
+
+    notLoaded.forEach((x) => {
+      connectivityTraceViewQuery(client, routeNodeId, x[0]).then((response) => {
+        const view = response.data?.utilityNetwork.connectivityTraceView;
+        if (view) {
+          dispatch({
+            type: "setViewConnectivityTraceViews",
+            params: { id: x[0], view: view },
+          });
+        }
+      });
+    });
+  }, [state.connectivityTraceViews, dispatch, client, routeNodeId]);
 
   return (
     <TerminalEquipmentContext.Provider

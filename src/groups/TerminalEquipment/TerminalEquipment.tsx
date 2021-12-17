@@ -5,10 +5,12 @@ import FiberConnectionEditor from "../FiberConnectionEditor";
 import { OverlayContext } from "../../contexts/OverlayContext";
 import {
   faChevronRight,
+  faChevronCircleDown,
   faPlusCircle,
   faEdit,
   faPlug,
   faFilter,
+  faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import {
@@ -180,7 +182,7 @@ type TerminalLineProps = {
 };
 
 function TerminalLine({ line }: TerminalLineProps) {
-  const { dispatch } = useContext(TerminalEquipmentContext);
+  const { state, dispatch } = useContext(TerminalEquipmentContext);
 
   return (
     <div className="terminal-equipment-table-row">
@@ -195,7 +197,15 @@ function TerminalLine({ line }: TerminalLineProps) {
               })
             }
           >
-            <FontAwesomeIcon icon={faChevronRight} />
+            <FontAwesomeIcon
+              icon={
+                state.connectivityTraceViews[
+                  line.a?.terminal.id ?? line.z?.terminal.id ?? ""
+                ]?.show ?? false
+                  ? faChevronDown
+                  : faChevronRight
+              }
+            />
           </span>
           <span className="terminal-equipment-table-item__equipped">
             {line.a?.end}
@@ -307,16 +317,6 @@ function groupByParentId(terminalEquipments: TerminalEquipmentType[]): {
 function TerminalEquipment() {
   const { showElement } = useContext(OverlayContext);
   const { dispatch, state } = useContext(TerminalEquipmentContext);
-
-  /* const [connectivityTraceViewResponse] =
-   *   useQuery<ConnectivityTraceViewResponse>({
-   *     query: CONNECTIVITY_TRACE_VIEW_QUERY,
-   *     variables: {
-   *       routeNodeId: "79677dd6-77ce-4f7f-8cd5-152fba5caf28",
-   *       terminalOrSpanEquipmentId: "79677dd6-77ce-4f7f-8cd5-152fba5caf28",
-   *     } as ConnectivityTraceViewQueryParams,
-   *   });
-   */
 
   useEffect(() => {
     if (state.showFiberEditor) {
