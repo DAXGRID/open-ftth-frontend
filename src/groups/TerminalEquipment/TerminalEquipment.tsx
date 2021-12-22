@@ -186,11 +186,13 @@ function groupByParentId(terminalEquipments: TerminalEquipmentType[]): {
 function TerminalEquipment() {
   const { showElement } = useContext(OverlayContext);
   const { dispatch, state } = useContext(TerminalEquipmentContext);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (state.showFiberEditor) {
       showElement(
         <ModalContainer
+          title={t("FIBER_CONNECTION_EDITOR")}
           show={state.showFiberEditor}
           closeCallback={() =>
             dispatch({ type: "setShowFiberEditor", show: false })
@@ -203,7 +205,7 @@ function TerminalEquipment() {
     } else {
       showElement(null);
     }
-  }, [state.showFiberEditor, showElement, dispatch]);
+  }, [state.showFiberEditor, showElement, dispatch, t]);
 
   const groupedByParentId = useMemo(() => {
     return groupByParentId(state.connectivityView?.terminalEquipments ?? []);
