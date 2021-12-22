@@ -189,7 +189,8 @@
       "TERMINAL": "Terminal",
       "CONNECTION_INFO": "Connection info",
       "TOTAL_LENGTH": "Total length",
-      "CIRCUIT_NAME": "Circuit name"
+      "CIRCUIT_NAME": "Circuit name",
+      "FIBER_CONNECTION_EDITOR": "Fiber connection editor"
     }
   },
   "dk": {
@@ -382,7 +383,8 @@
       "TERMINAL": "Søm/port",
       "CONNECTION_INFO": "Forbindelses info",
       "TOTAL_LENGTH": "Længde",
-      "CIRCUIT_NAME": "Kredsløbs-id"
+      "CIRCUIT_NAME": "Kredsløbs-id",
+      "FIBER_CONNECTION_EDITOR": "Fiberforbindelse editor"
     }
   }
 }
