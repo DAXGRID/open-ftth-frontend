@@ -493,7 +493,7 @@ export const terminalEquipmentSelect: LineLayer = {
   },
 };
 
-export const fiberCableSymbolLayer: any = {
+export const fiberCableSymbolLayer: SymbolLayer = {
   id: "FiberCableLabel",
   type: "symbol",
   source: "FiberCable",
