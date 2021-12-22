@@ -53,7 +53,7 @@ export function getLayer(name: string): AnyLayer {
         source: "FiberCable",
         type: "line",
         paint: {
-          "line-width": 14,
+          "line-width": ["interpolate", ["linear"], ["zoom"], 8, 0, 22, 20],
           "line-color": [
             "case",
             ["boolean", ["feature-state", "selected"], false],
@@ -517,7 +517,7 @@ export const fiberCableUnderLayer: LineLayer = {
   source: "FiberCable",
   type: "line",
   paint: {
-    "line-width": 6,
+    "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0, 20, 5],
     "line-color": colorMap.BLACK,
   },
 };
