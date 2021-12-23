@@ -376,7 +376,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     const spanSegmentsIds = currentlySelectedFeatures
       .filter((x) => {
         return (
-          x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
+          x.layer.source === "InnerConduit" ||
+          x.layer.source === "OuterConduit" ||
+          x.layer.source === "FiberCable"
         );
       })
       .map((x) => x.properties?.refId as string);
