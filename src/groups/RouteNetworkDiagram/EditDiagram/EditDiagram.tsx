@@ -19,6 +19,9 @@ import NodeContainerDetails from "../NodeContainerDetails";
 import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import FeatureInformation from "../FeatureInformation";
 import TerminalEquipment from "../../TerminalEquipment";
+import CableConnectivity from "../CableConnectivity";
+import BlowingReport from "../BlowingReport";
+import TabView from "../../../components/TabView";
 import {
   Diagram,
   Envelope,
@@ -195,6 +198,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   >([]);
   const [singleSelectedFeature, setSingleSelectedFeature] =
     useState<MapboxGeoJSONFeature | null>();
+  const [fiberCableTabViewSelectedId, setFiberCableTabViewSelectedId] =
+    useState("0");
   const { identifiedFeature, setTrace } = useContext(MapContext);
   const [showModals, showModalsDispatch] = useReducer(
     showModalsReducer,
@@ -228,7 +233,14 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     showModalsDispatch({ type: "reset" });
     setSelectedFeatures([]);
     setSingleSelectedFeature(null);
-  }, [showModalsDispatch, diagramObjects, envelope, setSingleSelectedFeature]);
+    setFiberCableTabViewSelectedId("0");
+  }, [
+    showModalsDispatch,
+    diagramObjects,
+    envelope,
+    setSingleSelectedFeature,
+    setFiberCableTabViewSelectedId,
+  ]);
 
   const affixSpanEquipment = async () => {
     const nodeContainer = currentlySelectedFeatures.find(
@@ -846,6 +858,26 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             </div>
           </div>
         )}
+      {!editMode && singleSelectedFeature?.source === "FiberCable" && (
+        <div className="container-max-size container-center">
+          <TabView
+            selectedId={fiberCableTabViewSelectedId}
+            select={setFiberCableTabViewSelectedId}
+            views={[
+              {
+                title: "CableConnectivity",
+                view: <CableConnectivity />,
+                id: "0",
+              },
+              {
+                title: "BlowingReport",
+                view: <BlowingReport />,
+                id: "1",
+              },
+            ]}
+          />
+        </div>
+      )}
     </div>
   );
 }
