@@ -190,7 +190,12 @@
       "CONNECTION_INFO": "Connection info",
       "TOTAL_LENGTH": "Total length",
       "CIRCUIT_NAME": "Circuit name",
-      "FIBER_CONNECTION_EDITOR": "Fiber connection editor"
+      "FIBER_CONNECTION_EDITOR": "Fiber connection editor",
+      "CABLE": "Cable",
+      "INNER_CONDUIT": "Inner conduit",
+      "OUTER_CONDUIT": "Outer conduit",
+      "CABLE_CONNECTIVITY": "Cable connectivity",
+      "BLOWING_REPORT": "Blowing report"
     }
   },
   "dk": {
@@ -384,7 +389,12 @@
       "CONNECTION_INFO": "Forbindelses info",
       "TOTAL_LENGTH": "Længde",
       "CIRCUIT_NAME": "Kredsløbs-id",
-      "FIBER_CONNECTION_EDITOR": "Fiberforbindelse editor"
+      "FIBER_CONNECTION_EDITOR": "Fiberforbindelse editor",
+      "CABLE": "Kabel",
+      "INNER_CONDUIT": "Yderrør",
+      "OUTER_CONDUIT": "Inderrør",
+      "CABLE_CONNECTIVITY": "Kabel konnetivitet",
+      "BLOWING_REPORT": "Blæseplan"
     }
   }
 }

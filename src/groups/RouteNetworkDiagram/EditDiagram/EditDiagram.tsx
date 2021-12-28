@@ -865,12 +865,12 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             select={setFiberCableTabViewSelectedId}
             views={[
               {
-                title: "CableConnectivity",
+                title: t("CABLE_CONNECTIVITY"),
                 view: <CableConnectivity />,
                 id: "0",
               },
               {
-                title: "BlowingReport",
+                title: t("BLOWING_REPORT"),
                 view: <BlowingReport />,
                 id: "1",
               },

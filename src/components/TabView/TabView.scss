@@ -9,13 +9,14 @@
 
 .tab-view-header {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border-bottom: 1px solid $border-color;
 
   .tab-view-header-tab {
     padding: 10px 20px;
     border-right: 1px solid $border-color;
     user-select: none;
+    font-weight: bold;
 
     &.tab-view-header-tab--selected {
       background-color: $select-color;
