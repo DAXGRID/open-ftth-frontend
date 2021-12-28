@@ -79,11 +79,13 @@ function mapEquipmentDetails(
 type SpanEquipmentDetailsParams = {
   spanEquipmentMrid: string;
   showActions: boolean;
+  disableMove?: boolean;
 };
 
 function SpanEquipmentDetails({
   spanEquipmentMrid,
   showActions,
+  disableMove,
 }: SpanEquipmentDetailsParams) {
   const { t } = useTranslation();
   const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
@@ -141,7 +143,7 @@ function SpanEquipmentDetails({
             action: () => setShowRerouteTube(true),
             icon: MoveConduitSvg,
             title: t("MOVE"),
-            disabled: false,
+            disabled: disableMove,
             key: 0,
           },
           {

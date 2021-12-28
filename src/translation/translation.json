@@ -195,7 +195,8 @@
       "INNER_CONDUIT": "Inner conduit",
       "OUTER_CONDUIT": "Outer conduit",
       "CABLE_CONNECTIVITY": "Cable connectivity",
-      "BLOWING_REPORT": "Blowing report"
+      "BLOWING_REPORT": "Blowing report",
+      "PROPERTIES": "Properties"
     }
   },
   "dk": {
@@ -394,7 +395,8 @@
       "INNER_CONDUIT": "Yderrør",
       "OUTER_CONDUIT": "Inderrør",
       "CABLE_CONNECTIVITY": "Kabel konnetivitet",
-      "BLOWING_REPORT": "Blæseplan"
+      "BLOWING_REPORT": "Blæseplan",
+      "PROPERTIES": "Egenskaber"
     }
   }
 }
