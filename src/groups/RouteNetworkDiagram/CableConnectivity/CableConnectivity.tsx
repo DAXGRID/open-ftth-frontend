@@ -1,4 +1,9 @@
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronRight,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
 
 function CableConnectivity() {
   const { t } = useTranslation();
@@ -6,40 +11,85 @@ function CableConnectivity() {
   return (
     <div className="cable-connectivity">
       <div className="cable-connectivity-container">
-        <p className="cable-connectivity_title">{t("CABLE")}: 12345678</p>
-        <p className="cable-connectivity_title">
-          {t("TOTAL_LENGTH")}: 335 meter
-        </p>
-        <div className="cable-connectivity-row-header">
+        <p className="cable-connectivity__title">K123456789</p>
+        <p className="cable-connectivity__title">12 Fiber</p>
+        <div className="cable-connectivity-header">
           <div className="cable-connectivity-row">
-            <p>{t("FROM")}</p>
-            <p>{t("TO")}</p>
-            <p>{t("OUTER_CONDUIT")}</p>
-            <p>{t("INNER_CONDUIT")}</p>
-            <p>{t("DISTANCE")}</p>
+            <div className="cable-connectivity-row-item">
+              <p>{t("A-INFO")}</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>{t("FROM")}</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>{t("NO")}</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>{t("TUBE")}</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>{t("FIBER")}</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>{t("TO")}</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>{t("Z-INFO")}</p>
+            </div>
           </div>
         </div>
-        <div className="cable-connectivity-row-body">
+        <div className="cable-connectivity-body">
           <div className="cable-connectivity-row">
-            <p>GALARH</p>
-            <p>FP 1200</p>
-            <p>OE50 7x12 Roed Tape</p>
-            <p>Subreor 1 - Blaa</p>
-            <p>0</p>
+            <div className="cable-connectivity-row-item">
+              <span className="cable-connectivity-row-item__icon">
+                <FontAwesomeIcon icon={faChevronDown} />
+              </span>
+              <p> GALAH ODF 1-3-1 WDM 1-4 OLT-1-1-1</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>LISA Soem 1</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>2</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>1</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>1</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>Splitter 1 (1:32) Ind 1</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>sdfsdfs</p>
+            </div>
           </div>
           <div className="cable-connectivity-row">
-            <p>GALARH</p>
-            <p>FP 1200</p>
-            <p>OE50 7x12 Roed Tape</p>
-            <p>Subreor 1 - Blaa</p>
-            <p>0</p>
-          </div>
-          <div className="cable-connectivity-row">
-            <p>GALARH</p>
-            <p>FP 1200</p>
-            <p>OE50 7x12 Roed Tape</p>
-            <p>Subreor 1 - Blaa</p>
-            <p>0</p>
+            <div className="cable-connectivity-row-item">
+              <span className="cable-connectivity-row-item__icon">
+                <FontAwesomeIcon icon={faChevronDown} />
+              </span>
+              <p> GALAH ODF 1-3-1 WDM 1-4 OLT-1-1-1</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>LISA Soem 1</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>2</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>1</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>1</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>Splitter 1 (1:32) Ind 1</p>
+            </div>
+            <div className="cable-connectivity-row-item">
+              <p>sdfsdfs</p>
+            </div>
           </div>
         </div>
       </div>

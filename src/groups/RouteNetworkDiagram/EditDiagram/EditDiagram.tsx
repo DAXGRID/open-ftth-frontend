@@ -860,33 +860,26 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         )}
       {!editMode && singleSelectedFeature?.source === "FiberCable" && (
         <div className="container-max-size container-center">
+          {
+            <SpanEquipmentDetails
+              disableMove={true}
+              spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
+              showActions={true}
+            />
+          }
           <TabView
             selectedId={fiberCableTabViewSelectedId}
             select={setFiberCableTabViewSelectedId}
             views={[
               {
-                title: t("PROPERTIES"),
-                view: (
-                  <SpanEquipmentDetails
-                    disableMove={true}
-                    spanEquipmentMrid={
-                      singleSelectedFeature?.properties?.refId ?? ""
-                    }
-                    showActions={true}
-                  />
-                ),
-                id: "0",
-              },
-
-              {
                 title: t("CABLE_CONNECTIVITY"),
                 view: <CableConnectivity />,
-                id: "1",
+                id: "0",
               },
               {
                 title: t("BLOWING_REPORT"),
                 view: <BlowingReport />,
-                id: "2",
+                id: "1",
               },
             ]}
           />
