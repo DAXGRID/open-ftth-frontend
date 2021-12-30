@@ -5,6 +5,37 @@ import {
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 
+function CableConnectivityRow() {
+  return (
+    <div className="cable-connectivity-row">
+      <div className="cable-connectivity-row-item">
+        <span className="cable-connectivity-row-item__icon">
+          <FontAwesomeIcon icon={faChevronDown} />
+        </span>
+        <p> GALAH ODF 1-3-1 WDM 1-4 OLT-1-1-1</p>
+      </div>
+      <div className="cable-connectivity-row-item">
+        <p>LISA Soem 1</p>
+      </div>
+      <div className="cable-connectivity-row-item">
+        <p>2</p>
+      </div>
+      <div className="cable-connectivity-row-item">
+        <p>1</p>
+      </div>
+      <div className="cable-connectivity-row-item">
+        <p>1</p>
+      </div>
+      <div className="cable-connectivity-row-item">
+        <p>Splitter 1 (1:32) Ind 1</p>
+      </div>
+      <div className="cable-connectivity-row-item">
+        <p>sdfsdfs</p>
+      </div>
+    </div>
+  );
+}
+
 function CableConnectivity() {
   const { t } = useTranslation();
 
@@ -39,58 +70,12 @@ function CableConnectivity() {
           </div>
         </div>
         <div className="cable-connectivity-body">
-          <div className="cable-connectivity-row">
-            <div className="cable-connectivity-row-item">
-              <span className="cable-connectivity-row-item__icon">
-                <FontAwesomeIcon icon={faChevronDown} />
-              </span>
-              <p> GALAH ODF 1-3-1 WDM 1-4 OLT-1-1-1</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>LISA Soem 1</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>2</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>1</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>1</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>Splitter 1 (1:32) Ind 1</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>sdfsdfs</p>
-            </div>
-          </div>
-          <div className="cable-connectivity-row">
-            <div className="cable-connectivity-row-item">
-              <span className="cable-connectivity-row-item__icon">
-                <FontAwesomeIcon icon={faChevronDown} />
-              </span>
-              <p> GALAH ODF 1-3-1 WDM 1-4 OLT-1-1-1</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>LISA Soem 1</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>2</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>1</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>1</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>Splitter 1 (1:32) Ind 1</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>sdfsdfs</p>
-            </div>
-          </div>
+          <CableConnectivityRow />
+          <CableConnectivityRow />
+          <CableConnectivityRow />
+          <CableConnectivityRow />
+          <CableConnectivityRow />
+          <CableConnectivityRow />
         </div>
       </div>
     </div>
