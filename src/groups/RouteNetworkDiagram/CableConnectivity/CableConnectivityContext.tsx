@@ -1,10 +1,17 @@
-import { createContext, ReactNode, useReducer, useEffect } from "react";
+import {
+  createContext,
+  ReactNode,
+  useReducer,
+  useEffect,
+  useContext,
+} from "react";
 import { useClient } from "urql";
 import {
   connectivityTraceViewQuery,
   ConnectivityTraceView,
   Hop,
 } from "./CableConnectivityGql";
+import { MapContext } from "../../../contexts/MapContext";
 
 interface CableConnectivityState {
   connectivityTraceViews: {
@@ -95,6 +102,7 @@ function CableConnectivityProvider({
 }: CableConnectivityProviderProps) {
   const [state, dispatch] = useReducer(cableConnectivityReducer, initialState);
   const client = useClient();
+  const { setTrace } = useContext(MapContext);
 
   useEffect(() => {
     const notLoaded = Object.entries(state.connectivityTraceViews).filter(
@@ -113,6 +121,16 @@ function CableConnectivityProvider({
       });
     });
   }, [state.connectivityTraceViews, dispatch, client, routeNodeId]);
+
+  useEffect(() => {
+    if (!state.selectedConnectivityTraceHop) return;
+    const { routeSegmentIds, routeSegmentGeometries } =
+      state.selectedConnectivityTraceHop;
+    setTrace({
+      ids: routeSegmentIds,
+      geometries: routeSegmentGeometries,
+    });
+  }, [state.selectedConnectivityTraceHop, setTrace]);
 
   return (
     <CableConnectivityContext.Provider
