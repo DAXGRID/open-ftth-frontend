@@ -3,7 +3,7 @@ import { TerminalEquipmentContext } from "./TerminalEquipmentContext";
 import { Line } from "./TerminalEquipmentGql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PinPort from "./PinPort";
-import TraceView from "./TraceView";
+import TerminalEquipmentTraceView from "./TerminalEquipmentTraceView";
 import {
   faChevronRight,
   faChevronDown,
@@ -57,7 +57,7 @@ function TerminalLine({ line }: TerminalLineProps) {
         </div>
       </div>
 
-      <TraceView
+      <TerminalEquipmentTraceView
         view={
           state.connectivityTraceViews[
             line.a?.terminal.id ?? line.z?.terminal.id ?? ""

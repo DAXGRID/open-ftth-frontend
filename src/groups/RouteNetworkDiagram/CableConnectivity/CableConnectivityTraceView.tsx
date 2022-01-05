@@ -1,20 +1,20 @@
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { ConnectivityTraceView } from "./TerminalEquipmentGql";
-import { TerminalEquipmentContext } from "./TerminalEquipmentContext";
+import { ConnectivityTraceView } from "./CableConnectivityGql";
+import { CableConnectivityContext } from "./CableConnectivityContext";
 
 interface TraceViewProps {
   view: { view: ConnectivityTraceView | null; show: boolean };
 }
 
-function TraceView({ view }: TraceViewProps) {
+function CableConnectivityTraceView({ view }: TraceViewProps) {
   const { t } = useTranslation();
-  const { state, dispatch } = useContext(TerminalEquipmentContext);
+  const { state, dispatch } = useContext(CableConnectivityContext);
 
   if (!view || !view.show) return <></>;
 
   return (
-    <div className="trace-view">
+    <div className="cable-connectivity-trace-view">
       <div className="trace-view-title">
         {`${t("CIRCUIT_NAME")}: ${view.view?.circuitName}`}
       </div>
@@ -56,4 +56,4 @@ function TraceView({ view }: TraceViewProps) {
   );
 }
 
-export default TraceView;
+export default CableConnectivityTraceView;

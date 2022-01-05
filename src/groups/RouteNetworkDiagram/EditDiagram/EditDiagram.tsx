@@ -873,7 +873,14 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             views={[
               {
                 title: t("CABLE_CONNECTIVITY"),
-                view: <CableConnectivity />,
+                view: (
+                  <CableConnectivity
+                    routeNodeId={identifiedFeature?.id ?? ""}
+                    spanEquipmentId={
+                      singleSelectedFeature.properties?.refId ?? ""
+                    }
+                  />
+                ),
                 id: "0",
               },
               {

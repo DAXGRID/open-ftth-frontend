@@ -1,4 +1,10 @@
+import { useContext } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  CableConnectivityContext,
+  CableConnectivityProvider,
+} from "./CableConnectivityContext";
+import CableConnectivityTraceView from "./CableConnectivityTraceView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
@@ -6,33 +12,58 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function CableConnectivityRow() {
+  const { dispatch, state } = useContext(CableConnectivityContext);
+
   return (
-    <div className="cable-connectivity-row">
-      <div className="cable-connectivity-row-item">
-        <span className="cable-connectivity-row-item__icon">
-          <FontAwesomeIcon icon={faChevronDown} />
-        </span>
-        <p> GALAH ODF 1-3-1 WDM 1-4 OLT-1-1-1</p>
+    <>
+      <div className="cable-connectivity-row">
+        <div className="cable-connectivity-row-item">
+          <span
+            className="cable-connectivity-row-item__icon"
+            onClick={() =>
+              dispatch({
+                type: "setShowConnectivityTraceViews",
+                id: "7597e290-f0b1-4091-a629-646d88cd4176",
+              })
+            }
+          >
+            <FontAwesomeIcon
+              icon={
+                state.connectivityTraceViews[
+                  "7597e290-f0b1-4091-a629-646d88cd4176"
+                ]?.show ?? false
+                  ? faChevronDown
+                  : faChevronRight
+              }
+            />
+          </span>
+          <p> GALAH ODF 1-3-1 WDM 1-4 OLT-1-1-1</p>
+        </div>
+        <div className="cable-connectivity-row-item">
+          <p>LISA Soem 1</p>
+        </div>
+        <div className="cable-connectivity-row-item">
+          <p>2</p>
+        </div>
+        <div className="cable-connectivity-row-item">
+          <p>1</p>
+        </div>
+        <div className="cable-connectivity-row-item">
+          <p>1</p>
+        </div>
+        <div className="cable-connectivity-row-item">
+          <p>Splitter 1 (1:32) Ind 1</p>
+        </div>
+        <div className="cable-connectivity-row-item">
+          <p>sdfsdfs</p>
+        </div>
       </div>
-      <div className="cable-connectivity-row-item">
-        <p>LISA Soem 1</p>
-      </div>
-      <div className="cable-connectivity-row-item">
-        <p>2</p>
-      </div>
-      <div className="cable-connectivity-row-item">
-        <p>1</p>
-      </div>
-      <div className="cable-connectivity-row-item">
-        <p>1</p>
-      </div>
-      <div className="cable-connectivity-row-item">
-        <p>Splitter 1 (1:32) Ind 1</p>
-      </div>
-      <div className="cable-connectivity-row-item">
-        <p>sdfsdfs</p>
-      </div>
-    </div>
+      <CableConnectivityTraceView
+        view={
+          state.connectivityTraceViews["7597e290-f0b1-4091-a629-646d88cd4176"]
+        }
+      />
+    </>
   );
 }
 
@@ -82,4 +113,23 @@ function CableConnectivity() {
   );
 }
 
-export default CableConnectivity;
+interface CableConnectivityWrapperProps {
+  routeNodeId: string;
+  spanEquipmentId: string;
+}
+
+function CableConnectivityWrapper({
+  routeNodeId,
+  spanEquipmentId,
+}: CableConnectivityWrapperProps) {
+  return (
+    <CableConnectivityProvider
+      routeNodeId={routeNodeId}
+      spanEquipmentId={spanEquipmentId}
+    >
+      <CableConnectivity />
+    </CableConnectivityProvider>
+  );
+}
+
+export default CableConnectivityWrapper;
