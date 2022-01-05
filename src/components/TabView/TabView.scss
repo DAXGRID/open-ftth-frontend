@@ -1,0 +1,34 @@
+@import "../../global-styles/colors";
+
+.tab-view {
+  margin-top: 20px;
+  background-color: white;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+}
+
+.tab-view-header {
+  display: flex;
+  margin-bottom: 10px;
+  border-bottom: 1px solid $border-color;
+
+  .tab-view-header-tab {
+    padding: 10px 20px;
+    border-right: 1px solid $border-color;
+    user-select: none;
+    font-weight: bold;
+
+    &.tab-view-header-tab--selected {
+      background-color: $select-color;
+
+      &:hover {
+        background-color: $hover-selected;
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+      background-color: $select-color;
+    }
+  }
+}

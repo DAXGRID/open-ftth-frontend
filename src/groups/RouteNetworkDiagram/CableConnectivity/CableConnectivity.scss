@@ -1,0 +1,124 @@
+@import "../../../global-styles/colors";
+
+.cable-connectivity {
+  padding: 20px;
+}
+
+.cable-connectivity-container {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  background-color: $header-color;
+}
+
+.cable-connectivity__title {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+  padding-right: 50px;
+}
+
+.cable-connectivity-header {
+  flex-basis: 100%;
+  font-weight: bold;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+}
+
+.cable-connectivity-body {
+  flex-basis: 100%;
+  background-color: white;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.cable-connectivity-row {
+  display: grid;
+  grid-template-columns: 3fr 2fr 1fr 1fr 1fr 2fr 2fr;
+  border-bottom: 1px solid $border-color;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.cable-connectivity-row-item {
+  border-right: 1px solid $border-color;
+  padding: 10px;
+  display: flex;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.cable-connectivity-row-item__icon {
+  padding-right: 20px;
+  align-self: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.cable-connectivity-trace-view {
+  .trace-view-title {
+    padding: 15px 10px;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 1px solid $border-color;
+    background-color: #f9f9f9;
+  }
+
+  .trace-view-grid {
+    display: grid;
+    grid-template-columns: 3fr 3fr 2fr 3fr 4fr 3fr;
+  }
+
+  .trace-view-header {
+    border-bottom: 1px solid $border-color;
+    .trace-view-header-item {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-right: 1px solid $border-color;
+      align-items: center;
+      font-weight: bold;
+      &:last-child {
+        padding: 10px 20px 10px 10px;
+      }
+
+      &:nth-of-type(6) {
+        border-right: none;
+      }
+    }
+  }
+
+  .trace-view-body {
+    .trace-view-body-row {
+      border-bottom: 1px solid $border-color;
+
+      &.trace-view-body-row--selected {
+        background-color: $select-color;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: $select-color;
+      }
+
+      .trace-view-body-item {
+        padding: 10px;
+        border-right: 1px solid $border-color;
+        align-items: center;
+        &:last-child {
+          padding: 10px 20px 10px 10px;
+        }
+
+        &:nth-of-type(6) {
+          border-right: none;
+        }
+      }
+    }
+  }
+}

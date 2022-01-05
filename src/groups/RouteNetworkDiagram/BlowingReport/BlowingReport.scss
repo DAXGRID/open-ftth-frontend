@@ -1,0 +1,77 @@
+@import "../../../global-styles/colors";
+
+.blowing-report {
+  padding: 20px;
+}
+
+.blowing-report-container {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  background-color: $header-color;
+}
+
+.blowing-report_title {
+  padding: 10px;
+  font-weight: bold;
+  padding-right: 50px;
+  font-size: 18px;
+}
+
+.blowing-report-row-header {
+  font-weight: bold;
+  background-color: $header-color;
+  border-bottom: none;
+  font-size: 16px;
+  width: 100%;
+  border-bottom: none;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+}
+
+.blowing-report-row-body {
+  border-radius: 4px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  width: 100%;
+  background-color: white;
+
+  .blowing-report-row {
+    .blowing-report-row--selected {
+      background-color: $hover-selected;
+
+      &:hover {
+        cursor: pointer;
+        background-color: $hover-selected;
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+      background-color: $select-color;
+    }
+  }
+}
+
+.blowing-report-row {
+  flex-basis: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  width: 100%;
+  border-bottom: 1px solid $border-color;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  p {
+    width: 100%;
+    padding: 10px;
+    border-right: 1px solid $border-color;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+}

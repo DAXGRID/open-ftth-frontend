@@ -30,7 +30,7 @@ interface TerminalEquipmentState {
 type TerminalEquipmentAction =
   | {
       type: "setConnectivityView";
-      id: TerminalEquipmentConnectivityView;
+      view: TerminalEquipmentConnectivityView;
     }
   | { type: "setShowFreeLines"; id: string }
   | { type: "setShowFiberEditor"; show: boolean }
@@ -60,7 +60,7 @@ function terminalEquipmentReducer(
     case "setConnectivityView":
       return {
         ...state,
-        connectivityView: action.id,
+        connectivityView: action.view,
         connectivityTraceViews: {},
         showFreeLines: {},
         showFiberEditor: false,
@@ -147,7 +147,7 @@ const TerminalEquipmentProvider = ({
         if (!response.data) return;
         dispatch({
           type: "setConnectivityView",
-          id: response.data?.utilityNetwork.terminalEquipmentConnectivityView,
+          view: response.data?.utilityNetwork.terminalEquipmentConnectivityView,
         });
       })
       .catch(() => {
