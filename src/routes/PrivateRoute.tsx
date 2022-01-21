@@ -1,21 +1,30 @@
+import { useContext } from "react";
 import { Route, Redirect, RouteComponentProps } from "react-router-dom";
 import type { RouteProps } from "react-router-dom";
-import { useKeycloak } from "@react-keycloak/web";
+import { UserContext, UserRolesType } from "../contexts/UserContext";
 
 interface PrivateRouteParams extends RouteProps {
   component:
     | React.ComponentType<RouteComponentProps<any>>
     | React.ComponentType<any>;
+  roles: UserRolesType[];
 }
 
-function PrivateRoute({ component: Component, ...rest }: PrivateRouteParams) {
-  const { keycloak } = useKeycloak();
+function PrivateRoute({
+  component: Component,
+  roles,
+  ...rest
+}: PrivateRouteParams) {
+  const { hasRole, authenticated } = useContext(UserContext);
+
+  const allowedByRole = roles.every((x) => hasRole(x));
+  if (!allowedByRole) return <></>;
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        keycloak?.authenticated ? (
+        authenticated ? (
           <Component {...props} />
         ) : (
           <Redirect

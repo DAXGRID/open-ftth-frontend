@@ -4,52 +4,40 @@ import {
   useEffect,
   useState,
   useCallback,
+  useMemo,
 } from "react";
 import { useKeycloak } from "@react-keycloak/web";
 import useUserWorkContext, { UserWorkTask } from "./useUserWorkContext";
+
+const RESOURCE_NAME = "openftth-frontend";
+type UserRolesType = "reader" | "writer";
 
 type UserContextType = {
   userName: string;
   userWorkTask: UserWorkTask | null;
   reloadUserWorkTask: () => void;
-  userRoles: UserRoles;
+  hasRole: (roleName: UserRolesType) => boolean;
+  authenticated: boolean;
 };
 
 const UserContext = createContext<UserContextType>({
   userName: "",
   userWorkTask: null,
   reloadUserWorkTask: () => {
-    console.warn("no provider set for reloadUserWorkTask");
+    console.warn("No provider set for reloadUserWorkTask");
   },
-  userRoles: { reader: false, writer: false },
+  hasRole: (_: UserRolesType): boolean => {
+    throw new Error("No provider set for hasRole");
+  },
+  authenticated: false,
 });
 
 type UserContextProps = {
   children: ReactNode;
 };
 
-type UserRoles = {
-  reader: boolean;
-  writer: boolean;
-};
-
-const AVAILABLE_ROLES = {
-  WRITER: {
-    REALM: "openftth-frontend",
-    ROLE: "writer",
-  },
-  READER: {
-    RESOURCE: "openftth-frontend",
-    ROLE: "reader",
-  },
-};
-
 const UserProvider = ({ children }: UserContextProps) => {
   const [userName, setUsername] = useState<string>("");
-  const [userRoles, setUserRoles] = useState<UserRoles>({
-    reader: false,
-    writer: false,
-  });
   const { initialized, keycloak } = useKeycloak();
   const { userWorkContext, reExecuteUserWorkContextQuery } =
     useUserWorkContext(userName);
@@ -62,18 +50,20 @@ const UserProvider = ({ children }: UserContextProps) => {
         throw new Error("Could not load user from keycloak.");
       } else {
         setUsername(keycloak.profile.username);
-        const hasRoleReader = keycloak.hasResourceRole(
-          AVAILABLE_ROLES.READER.ROLE,
-          AVAILABLE_ROLES.READER.RESOURCE
-        );
-        const hasRoleWriter = keycloak.hasResourceRole(
-          AVAILABLE_ROLES.WRITER.ROLE,
-          AVAILABLE_ROLES.WRITER.REALM
-        );
-        setUserRoles({ reader: hasRoleReader, writer: hasRoleWriter });
       }
     });
-  }, [initialized, keycloak, setUsername, setUserRoles]);
+  }, [initialized, keycloak, setUsername]);
+
+  const hasRole = useCallback(
+    (roleName: UserRolesType): boolean => {
+      return keycloak.hasResourceRole(roleName, RESOURCE_NAME);
+    },
+    [keycloak]
+  );
+
+  const authenticated = useMemo((): boolean => {
+    return keycloak?.authenticated ?? false;
+  }, [keycloak?.authenticated]);
 
   const reloadUserWorkTask = useCallback(() => {
     reExecuteUserWorkContextQuery();
@@ -85,7 +75,8 @@ const UserProvider = ({ children }: UserContextProps) => {
         userName: userName,
         userWorkTask: userWorkContext ?? null,
         reloadUserWorkTask: reloadUserWorkTask,
-        userRoles: userRoles,
+        hasRole: hasRole,
+        authenticated: authenticated,
       }}
     >
       {children}
@@ -94,3 +85,4 @@ const UserProvider = ({ children }: UserContextProps) => {
 };
 
 export { UserContext, UserProvider };
+export type { UserRolesType };
