@@ -15,11 +15,11 @@ import { useKeycloak } from "@react-keycloak/web";
 import Overlay from "./components/Overlay";
 
 function App() {
-  const { userName } = useContext(UserContext);
+  const { userName, authenticated, hasRoles } = useContext(UserContext);
   const { overlayChild } = useContext(OverlayContext);
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const { t } = useTranslation();
-  const { initialized, keycloak } = useKeycloak();
+  const { initialized } = useKeycloak();
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);
@@ -28,8 +28,8 @@ function App() {
   };
 
   if (!initialized) return <Loading />;
-  // if keycloak is setup and user is authenticated but no username
-  if (initialized && keycloak.authenticated && !userName) return <Loading />;
+  // if keycloak is setup and user is authenticated but no username.
+  if (initialized && authenticated && !userName) return <Loading />;
 
   return (
     <Router>
@@ -52,16 +52,20 @@ function App() {
         <TopMenu toggleSideMenu={toggleSideMenu} />
       </header>
       <SideMenu open={sideMenuOpen}>
-        <SideMenuItem path="/" linkText={t("Home")} />
-        <SideMenuItem
-          path="/place-span-equipment"
-          linkText={t("Place span equipments")}
-        />
-        <SideMenuItem
-          path="/schematic-diagram"
-          linkText={t("Schematic diagram")}
-        />
-        <SideMenuItem path="/work-tasks" linkText={t("Work tasks")} />
+        {hasRoles("reader") && <SideMenuItem path="/" linkText={t("Home")} />}
+        {hasRoles("writer") && (
+          <>
+            <SideMenuItem
+              path="/place-span-equipment"
+              linkText={t("Place span equipments")}
+            />
+            <SideMenuItem
+              path="/schematic-diagram"
+              linkText={t("Schematic diagram")}
+            />
+            <SideMenuItem path="/work-tasks" linkText={t("Work tasks")} />
+          </>
+        )}
       </SideMenu>
       <main
         className={`main-container ${sideMenuOpen ? "side-menu-open" : ""}`}

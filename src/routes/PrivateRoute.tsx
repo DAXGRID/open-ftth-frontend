@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Route, Redirect, RouteComponentProps } from "react-router-dom";
 import type { RouteProps } from "react-router-dom";
 import { UserContext, UserRolesType } from "../contexts/UserContext";
+import Unauthorized from "./Unauthorized";
 
 interface PrivateRouteParams extends RouteProps {
   component:
@@ -22,12 +23,11 @@ function PrivateRoute({
       {...rest}
       render={(props) =>
         authenticated ? (
-          hasRoles(roles) ? (
+          hasRoles(...roles) ? (
             // Has required roles we render the component.
             <Component {...props} />
           ) : (
-            // Does not have the required roles we redirect.
-            <></>
+            <Unauthorized />
           )
         ) : (
           <Redirect

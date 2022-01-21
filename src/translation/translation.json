@@ -196,7 +196,10 @@
       "OUTER_CONDUIT": "Outer conduit",
       "CABLE_CONNECTIVITY": "Cable connectivity",
       "BLOWING_REPORT": "Blowing report",
-      "PROPERTIES": "Properties"
+      "PROPERTIES": "Properties",
+      "UNAUTHORIZED": "Unauthorized",
+      "NO_ACCESS_PAGE": "You do not have access to the page.",
+      "CONTACT_ADMINISTRATOR_ACCESS": "Contact administrator to gain access."
     }
   },
   "dk": {
@@ -396,7 +399,10 @@
       "OUTER_CONDUIT": "Inderrør",
       "CABLE_CONNECTIVITY": "Kabel konnetivitet",
       "BLOWING_REPORT": "Blæseplan",
-      "PROPERTIES": "Egenskaber"
+      "PROPERTIES": "Egenskaber",
+      "UNAUTHORIZED": "Ingen adgang.",
+      "NO_ACCESS_PAGE": "Du har ikke adgang til denne side.",
+      "CONTACT_ADMINISTRATOR_ACCESS": "Kontakt en administrator for at få adgang."
     }
   }
 }

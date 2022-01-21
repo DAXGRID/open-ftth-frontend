@@ -1,0 +1,22 @@
+.unauthorized {
+  text-align: center;
+  border: 1px solid #e3e3e3;
+  padding: 30px 100px;
+  height: 100%;
+  margin: 0px 30px;
+  margin-top: 200px;
+  border-radius: 4px;
+}
+
+.unauthorized__title {
+  font-size: 36px;
+}
+
+.unauthorized-body {
+  margin-top: 20px;
+  font-size: 20px;
+
+  p {
+    padding: 10px;
+  }
+}
