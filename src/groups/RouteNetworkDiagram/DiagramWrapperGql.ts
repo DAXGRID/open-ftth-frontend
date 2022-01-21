@@ -19,6 +19,7 @@ export interface Diagram {
   refClass?: string;
   style: string;
   label?: string;
+  drawingOrder: number;
   geometry: Geometry;
 }
 
@@ -48,6 +49,7 @@ query ($routeNetworkElementId: ID!) {
         }
         style
         label
+        drawingOrder
       }
     }
   }
