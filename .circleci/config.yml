@@ -105,10 +105,13 @@ workflows:
   build-test-upload_image:
     jobs:
       - build-app:
+          context: docker
           filters:
             tags:
               only: /.*/
       - build-docker-image:
+          requires:
+            - build-app
           context: docker
           filters:
             tags:
