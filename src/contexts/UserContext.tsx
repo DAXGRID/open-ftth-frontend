@@ -16,7 +16,7 @@ type UserContextType = {
   userName: string;
   userWorkTask: UserWorkTask | null;
   reloadUserWorkTask: () => void;
-  hasRole: (roleName: UserRolesType) => boolean;
+  hasRoles: (roles: UserRolesType[]) => boolean;
   authenticated: boolean;
 };
 
@@ -26,7 +26,7 @@ const UserContext = createContext<UserContextType>({
   reloadUserWorkTask: () => {
     console.warn("No provider set for reloadUserWorkTask");
   },
-  hasRole: (_: UserRolesType): boolean => {
+  hasRoles: (_: UserRolesType[]): boolean => {
     throw new Error("No provider set for hasRole");
   },
   authenticated: false,
@@ -54,9 +54,9 @@ const UserProvider = ({ children }: UserContextProps) => {
     });
   }, [initialized, keycloak, setUsername]);
 
-  const hasRole = useCallback(
-    (roleName: UserRolesType): boolean => {
-      return keycloak.hasResourceRole(roleName, RESOURCE_NAME);
+  const hasRoles = useCallback(
+    (roles: UserRolesType[]): boolean => {
+      return roles.every((x) => keycloak.hasResourceRole(x, RESOURCE_NAME));
     },
     [keycloak]
   );
@@ -75,7 +75,7 @@ const UserProvider = ({ children }: UserContextProps) => {
         userName: userName,
         userWorkTask: userWorkContext ?? null,
         reloadUserWorkTask: reloadUserWorkTask,
-        hasRole: hasRole,
+        hasRoles: hasRoles,
         authenticated: authenticated,
       }}
     >

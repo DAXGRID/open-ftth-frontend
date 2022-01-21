@@ -15,10 +15,9 @@ function PrivateRoute({
   roles,
   ...rest
 }: PrivateRouteParams) {
-  const { hasRole, authenticated } = useContext(UserContext);
+  const { hasRoles, authenticated } = useContext(UserContext);
 
-  const allowedByRole = roles.every((x) => hasRole(x));
-  if (!allowedByRole) return <></>;
+  if (!hasRoles(roles)) return <></>;
 
   return (
     <Route
