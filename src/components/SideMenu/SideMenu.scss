@@ -2,7 +2,7 @@
 @import "../../global-styles/settings";
 
 .side-menu {
-  margin-top: 64px;
+  margin-top: $top-menu-height;
   background-color: white;
   height: 100vh;
   position: fixed;

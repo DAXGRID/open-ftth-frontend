@@ -31,7 +31,7 @@ body {
 }
 
 .main-container {
-  padding-top: 65px;
+  padding-top: $top-menu-height;
   display: flex;
   transform: translateX(0px);
   color: $text-primary;

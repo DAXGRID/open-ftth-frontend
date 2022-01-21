@@ -1,4 +1,5 @@
 @import "../../global-styles/colors";
+@import "../../global-styles/settings";
 
 .map-diagram {
   display: flex;
@@ -40,7 +41,7 @@
     .container {
       flex-basis: 100%;
       width: 100%;
-      height: calc(100vh - 64px);
+      height: calc(100vh - $top-menu-height);
     }
   }
 }

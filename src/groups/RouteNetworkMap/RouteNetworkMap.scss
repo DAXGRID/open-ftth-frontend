@@ -1,5 +1,7 @@
+@import "../../global-styles/settings";
+
 .route-network-map {
-  height: calc(100vh - 65px);
+  height: calc(100vh - $top-menu-height);
   width: 100%;
 
   .route-network-map-container {
