@@ -1,6 +1,12 @@
 version: 2.1
 
 executors:
+  npm:
+    docker:
+    - image: node:16.13
+      auth:
+        username: $DOCKER_LOGIN
+        password: $DOCKER_ACCESSTOKEN
   docker-publisher:
     environment:
       IMAGE_NAME: openftth/frontend
@@ -19,6 +25,17 @@ executors:
         password: $DOCKER_ACCESSTOKEN
 
 jobs:
+  build-app:
+    executor: npm
+    steps:
+      - checkout
+      - run:
+          name: NPM install
+          command: npm install
+      - run:
+          name: NPM run build
+          command: npm run build
+
   build-docker-image:
     executor: docker-publisher
     steps:
@@ -87,7 +104,14 @@ jobs:
 workflows:
   build-test-upload_image:
     jobs:
+      - build-app:
+          context: docker
+          filters:
+            tags:
+              only: /.*/
       - build-docker-image:
+          requires:
+            - build-app
           context: docker
           filters:
             tags:
