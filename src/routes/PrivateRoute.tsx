@@ -17,14 +17,18 @@ function PrivateRoute({
 }: PrivateRouteParams) {
   const { hasRoles, authenticated } = useContext(UserContext);
 
-  if (!hasRoles(roles)) return <></>;
-
   return (
     <Route
       {...rest}
       render={(props) =>
         authenticated ? (
-          <Component {...props} />
+          hasRoles(roles) ? (
+            // Has required roles we render the component.
+            <Component {...props} />
+          ) : (
+            // Does not have the required roles we redirect.
+            <></>
+          )
         ) : (
           <Redirect
             to={{
