@@ -11,6 +11,7 @@ export interface Diagram {
   style: string;
   label?: string;
   geometry: Geometry;
+  drawingOrder: number;
 }
 
 export interface Geometry {

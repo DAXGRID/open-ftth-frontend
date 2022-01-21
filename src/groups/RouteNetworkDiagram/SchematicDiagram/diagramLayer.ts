@@ -28,7 +28,8 @@ export function createFeature(
   geometryType: any,
   coordinate: any,
   style: string,
-  refId: string
+  refId: string,
+  drawingOrder: number
 ): Feature<Geometry, GeoJsonProperties> {
   return {
     id: id,
@@ -41,6 +42,7 @@ export function createFeature(
       label: label,
       type: style,
       refId: refId,
+      drawingOrder: drawingOrder,
     },
   };
 }

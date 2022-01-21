@@ -33,6 +33,7 @@ interface Diagram {
   style: string;
   label?: string;
   geometry: Geometry;
+  drawingOrder: number;
 }
 
 interface Geometry {
@@ -57,7 +58,8 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
       x.geometry.type,
       x.geometry.coordinates,
       x.style,
-      x.refId ?? ""
+      x.refId ?? "",
+      x.drawingOrder
     );
 
     let styleName = x.style;
@@ -133,23 +135,29 @@ function clearSelected(map: Map, source: string): void {
     });
 }
 
-function clickHighlight(
-  featureName: string,
+function clickHiglight(
+  featureNames: string[],
   map: Map,
   callback: (feature: MapboxGeoJSONFeature) => void,
   editMode: boolean
 ) {
-  map.on("click", featureName, (e) => {
+  map.on("click", (e) => {
     const bboxSize = 1;
     const bbox: [PointLike, PointLike] = [
       [e.point.x - bboxSize, e.point.y - bboxSize],
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    const feature = map.queryRenderedFeatures(bbox)[0];
-    if (feature.source !== featureName) {
-      return;
-    }
+    const features = map
+      .queryRenderedFeatures(bbox)
+      .filter((x) => featureNames.find((y) => y === x.source))
+      .sort(
+        (x, y) =>
+          (y.properties?.drawingOrder ?? 0) - (x.properties?.drawingOrder ?? 0)
+      );
+
+    const feature = features.length > 0 ? features[0] : null;
+    if (!feature) return;
 
     feature.state.selected = !feature.state.selected;
 
@@ -158,16 +166,14 @@ function clickHighlight(
         (map: Map) => (source: string) =>
           clearSelected(map, source)
       )(map);
-      clearHighlight("InnerConduit");
-      clearHighlight("OuterConduit");
-      clearHighlight("NodeContainer");
-      clearHighlight("Rack");
-      clearHighlight("TerminalEquipment");
-      clearHighlight("FiberCable");
+
+      featureNames.forEach((x) => {
+        clearHighlight(x);
+      });
     }
 
     map.setFeatureState(
-      { source: featureName, id: feature.id },
+      { source: feature.source, id: feature.id },
       { selected: feature.state.selected }
     );
 
@@ -240,22 +246,24 @@ function SchematicDiagram({
         x.style.startsWith("FiberCable")
       );
 
+      const highlightFeatureList: string[] = [];
+
       if (hasInnerConduit) {
         newMap.addLayer(innerConduitSelect);
         hoverPointer("InnerConduit", newMap);
-        clickHighlight("InnerConduit", newMap, onSelectFeature, editMode);
+        highlightFeatureList.push("InnerConduit");
       }
 
       if (hasOuterConduit) {
         newMap.addLayer(outerConduitSelect);
         hoverPointer("OuterConduit", newMap);
-        clickHighlight("OuterConduit", newMap, onSelectFeature, editMode);
+        highlightFeatureList.push("OuterConduit");
       }
 
       if (hasNodeContainerSide && editMode) {
         newMap.addLayer(nodeContainerSideSelect);
         hoverPointer("NodeContainerSide", newMap);
-        clickHighlight("NodeContainerSide", newMap, onSelectFeature, editMode);
+        highlightFeatureList.push("NodeContainerSide");
       } else if (hasNodeContainerSide) {
         newMap.addLayer(nodeContainerSideSelect);
       }
@@ -263,27 +271,29 @@ function SchematicDiagram({
       if (hasNodeContainer) {
         newMap.addLayer(nodeContainerSelect);
         hoverPointer("NodeContainer", newMap);
-        clickHighlight("NodeContainer", newMap, onSelectFeature, editMode);
+        highlightFeatureList.push("NodeContainer");
       }
 
       if (hasRack) {
         newMap.addLayer(rackSelect);
         hoverPointer("Rack", newMap);
-        clickHighlight("Rack", newMap, onSelectFeature, editMode);
+        highlightFeatureList.push("Rack");
       }
 
       if (hasTerminalEquipment) {
         newMap.addLayer(terminalEquipmentSelect);
         hoverPointer("TerminalEquipment", newMap);
-        clickHighlight("TerminalEquipment", newMap, onSelectFeature, editMode);
+        highlightFeatureList.push("TerminalEquipment");
       }
 
       if (hasFiberCable) {
         newMap.addLayer(fiberCableUnderLayer);
         newMap.addLayer(fiberCableSymbolLayer);
         hoverPointer("FiberCable", newMap);
-        clickHighlight("FiberCable", newMap, onSelectFeature, editMode);
+        highlightFeatureList.push("FiberCable");
       }
+
+      clickHiglight(highlightFeatureList, newMap, onSelectFeature, editMode);
     });
 
     return () => {

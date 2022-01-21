@@ -34,6 +34,7 @@ interface Diagram {
   style: string;
   label?: string;
   geometry: Geometry;
+  drawingOrder: number;
 }
 
 type RouteSegmentDiagramProps = {
