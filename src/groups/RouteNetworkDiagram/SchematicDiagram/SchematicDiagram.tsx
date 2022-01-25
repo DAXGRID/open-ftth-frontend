@@ -5,7 +5,7 @@ import mapboxgl, {
   PointLike,
   NavigationControl,
 } from "maplibre-gl";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   createFeature,
   createSource,
@@ -46,7 +46,13 @@ type SchematicDiagramProps = {
   envelope: Envelope;
   onSelectFeature: (feature: MapboxGeoJSONFeature) => void;
   editMode: boolean;
+  routeElementId: string;
 };
+
+interface SchematicPosition {
+  envelope: Envelope;
+  zoom: number;
+}
 
 const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
   const t: { [id: string]: Feature[] } = {};
@@ -93,13 +99,24 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
   });
 };
 
-function mapFitBounds(envelope: Envelope, map: mapboxgl.Map) {
+function mapFitBounds(
+  envelope: Envelope,
+  map: mapboxgl.Map,
+  zoom: number | null
+) {
+  var extraOptions = zoom
+    ? {
+        zoom: zoom,
+      }
+    : {};
+
   map.fitBounds(
     [
       [envelope.minX, envelope.minY],
       [envelope.maxX, envelope.maxY],
     ],
     {
+      ...extraOptions,
       animate: false,
     }
   );
@@ -186,9 +203,24 @@ function SchematicDiagram({
   envelope,
   onSelectFeature,
   editMode,
+  routeElementId,
 }: SchematicDiagramProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<Map | null>(null);
+  const [map, setMap] = useState<Map | null>(null);
+  const position = useRef<SchematicPosition | null>(null);
+
+  useLayoutEffect(() => {
+    if (!map) return;
+    if (position.current) {
+      mapFitBounds(position.current.envelope, map, position.current.zoom);
+    } else {
+      mapFitBounds(envelope, map, null);
+    }
+  }, [map, envelope]);
+
+  useEffect(() => {
+    position.current = null;
+  }, [routeElementId]);
 
   useLayoutEffect(() => {
     if (diagramObjects.length === 0) return;
@@ -216,10 +248,8 @@ function SchematicDiagram({
     );
 
     newMap.on("load", () => {
-      loadDiagram(newMap, diagramObjects);
-      mapFitBounds(envelope, newMap);
       enableResize(newMap);
-
+      loadDiagram(newMap, diagramObjects);
       const hasInnerConduit = diagramObjects.find((x) =>
         x.style.startsWith("InnerConduit")
       );
@@ -296,11 +326,30 @@ function SchematicDiagram({
       clickHiglight(highlightFeatureList, newMap, onSelectFeature, editMode);
     });
 
+    const savePosition = () => {
+      const bounds = newMap.getBounds();
+      const zoom = newMap.getZoom();
+      position.current = {
+        envelope: {
+          minX: bounds.getWest(),
+          minY: bounds.getSouth(),
+          maxX: bounds.getEast(),
+          maxY: bounds.getNorth(),
+        },
+        zoom: zoom,
+      };
+    };
+
+    newMap.on("dragend", () => savePosition());
+    newMap.on("zoomend", () => savePosition());
+
+    setMap(newMap);
+
     return () => {
       newMap.remove();
-      map.current = null;
+      setMap(null);
     };
-  }, [diagramObjects, envelope, onSelectFeature, editMode]);
+  }, [diagramObjects, envelope, onSelectFeature, editMode, setMap]);
 
   return (
     <div
