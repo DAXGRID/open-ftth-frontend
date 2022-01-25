@@ -105,6 +105,7 @@ function ReadOnlyDiagram({
         editMode={false}
         envelope={envelope}
         onSelectFeature={onSelectedFeature}
+        routeElementId={identifiedFeature?.id ?? ""}
       />
       {selectedFeature?.source === "NodeContainer" && (
         <NodeContainerDetails

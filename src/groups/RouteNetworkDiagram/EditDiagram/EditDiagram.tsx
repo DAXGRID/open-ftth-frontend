@@ -829,6 +829,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         envelope={envelope}
         onSelectFeature={onSelectedFeature}
         editMode={editMode}
+        routeElementId={identifiedFeature.id}
       />
       {!editMode &&
         (singleSelectedFeature?.source === "InnerConduit" ||
