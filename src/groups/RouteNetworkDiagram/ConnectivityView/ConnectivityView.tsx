@@ -69,11 +69,20 @@ function ConnectivityView() {
   const { t } = useTranslation();
   const { state } = useContext(ConnectivityViewContext);
 
+  if (
+    !state.connectivityView ||
+    state.connectivityView.spanEquipments.length === 0
+  )
+    return <></>;
+
+  const spanEquipment = state.connectivityView?.spanEquipments[0];
+
   return (
     <div className="connectivity-view">
       <div className="connectivity-view-container">
-        <p className="connectivity-view__title">K123456789</p>
-        <p className="connectivity-view__title">12 Fiber</p>
+        <p className="connectivity-view__title">{spanEquipment.name}</p>
+        <p className="connectivity-view__title">{spanEquipment.specName}</p>
+        <p className="connectivity-view__title">{spanEquipment.info}</p>
         <div className="connectivity-view-header">
           <div className="connectivity-view-row">
             <div className="connectivity-view-row-item">
