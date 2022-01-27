@@ -1,10 +1,10 @@
 @import "../../../global-styles/colors";
 
-.blowing-report {
+.passage-view {
   padding: 20px;
 }
 
-.blowing-report-container {
+.passage-view-container {
   display: flex;
   flex-wrap: wrap;
   border: 1px solid $border-color;
@@ -12,14 +12,14 @@
   background-color: $header-color;
 }
 
-.blowing-report_title {
+.passage-view_title {
   padding: 10px;
   font-weight: bold;
   padding-right: 50px;
   font-size: 18px;
 }
 
-.blowing-report-row-header {
+.passage-view-row-header {
   font-weight: bold;
   background-color: $header-color;
   border-bottom: none;
@@ -30,15 +30,15 @@
   border-bottom: 1px solid $border-color;
 }
 
-.blowing-report-row-body {
+.passage-view-row-body {
   border-radius: 4px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
   width: 100%;
   background-color: white;
 
-  .blowing-report-row {
-    .blowing-report-row--selected {
+  .passage-view-row {
+    .passage-view-row--selected {
       background-color: $hover-selected;
 
       &:hover {
@@ -54,7 +54,7 @@
   }
 }
 
-.blowing-report-row {
+.passage-view-row {
   flex-basis: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
