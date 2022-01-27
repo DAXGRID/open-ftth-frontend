@@ -870,7 +870,14 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               views={[
                 {
                   title: t("PASSAGE_VIEW"),
-                  view: <PassageView />,
+                  view: (
+                    <PassageView
+                      routeElementId={identifiedFeature?.id ?? ""}
+                      spanEquipmentOrSegmentIds={
+                        singleSelectedFeature.properties?.refId ?? ""
+                      }
+                    />
+                  ),
                   id: "0",
                 },
                 {

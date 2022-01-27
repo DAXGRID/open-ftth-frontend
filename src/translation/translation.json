@@ -199,7 +199,9 @@
       "PROPERTIES": "Properties",
       "UNAUTHORIZED": "Unauthorized",
       "NO_ACCESS_PAGE": "You do not have access to the page.",
-      "CONTACT_ADMINISTRATOR_ACCESS": "Contact administrator to gain access."
+      "CONTACT_ADMINISTRATOR_ACCESS": "Contact administrator to gain access.",
+      "LENGTH": "Length",
+      "DISTANCE": "Distance"
     }
   },
   "dk": {
@@ -391,7 +393,7 @@
       "TERMINAL_STRUCTURE": "Bakke/kort",
       "TERMINAL": "Søm/port",
       "CONNECTION_INFO": "Forbindelses info",
-      "TOTAL_LENGTH": "Længde",
+      "TOTAL_LENGTH": "Total længde",
       "CIRCUIT_NAME": "Kredsløbs-id",
       "FIBER_CONNECTION_EDITOR": "Fiberforbindelse editor",
       "CABLE": "Kabel",
@@ -402,7 +404,9 @@
       "PROPERTIES": "Egenskaber",
       "UNAUTHORIZED": "Ingen adgang.",
       "NO_ACCESS_PAGE": "Du har ikke adgang til denne side.",
-      "CONTACT_ADMINISTRATOR_ACCESS": "Kontakt en administrator for at få adgang."
+      "CONTACT_ADMINISTRATOR_ACCESS": "Kontakt en administrator for at få adgang.",
+      "LENGTH": "Længde",
+      "DISTANCE": "Afstand"
     }
   }
 }
