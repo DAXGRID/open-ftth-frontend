@@ -876,7 +876,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                 title: t("CABLE_CONNECTIVITY"),
                 view: (
                   <CableConnectivity
-                    routeNodeId={identifiedFeature?.id ?? ""}
+                    routeNetworkElementId={identifiedFeature?.id ?? ""}
                     spanEquipmentId={
                       singleSelectedFeature.properties?.refId ?? ""
                     }

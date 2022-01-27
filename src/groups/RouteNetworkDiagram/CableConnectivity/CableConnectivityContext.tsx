@@ -10,6 +10,8 @@ import {
   connectivityTraceViewQuery,
   ConnectivityTraceView,
   Hop,
+  spanEquipmentConnectivityViewQuery,
+  SpanEquipmentConnectivityView,
 } from "./CableConnectivityGql";
 import { MapContext } from "../../../contexts/MapContext";
 
@@ -18,6 +20,7 @@ interface CableConnectivityState {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
   selectedConnectivityTraceHop: Hop | null;
+  connectivityView: SpanEquipmentConnectivityView | null;
 }
 
 type CableConnectivityAction =
@@ -32,6 +35,10 @@ type CableConnectivityAction =
   | {
       type: "setShowConnectivityTraceViews";
       id: string;
+    }
+  | {
+      type: "setSpanEquipmentConnectivityView";
+      view: SpanEquipmentConnectivityView;
     };
 
 function cableConnectivityReducer(
@@ -66,6 +73,11 @@ function cableConnectivityReducer(
           },
         },
       };
+    case "setSpanEquipmentConnectivityView":
+      return {
+        ...state,
+        connectivityView: action.view,
+      };
     default:
       throw new Error(`No action for ${action}`);
   }
@@ -79,6 +91,7 @@ interface CableConnectivityContextDefintion {
 const initialState: CableConnectivityState = {
   connectivityTraceViews: {},
   selectedConnectivityTraceHop: null,
+  connectivityView: null,
 };
 
 const CableConnectivityContext =
@@ -105,6 +118,20 @@ function CableConnectivityProvider({
   const { setTrace } = useContext(MapContext);
 
   useEffect(() => {
+    if (!spanEquipmentId || !routeNodeId) return;
+    spanEquipmentConnectivityViewQuery(client, routeNodeId, [
+      spanEquipmentId,
+    ]).then((response) => {
+      const view = response.data?.utilityNetwork.spanEquipmentConnectivityView;
+      if (view) {
+        dispatch({ type: "setSpanEquipmentConnectivityView", view: view });
+      } else {
+        throw Error("Could not load SpanEquipmentConnectivity view.");
+      }
+    });
+  }, [client, dispatch, spanEquipmentId, routeNodeId]);
+
+  useEffect(() => {
     const notLoaded = Object.entries(state.connectivityTraceViews).filter(
       (x) => x[1].show && !x[1].view
     );
@@ -117,6 +144,8 @@ function CableConnectivityProvider({
             type: "setViewConnectivityTraceViews",
             params: { id: x[0], view: view },
           });
+        } else {
+          throw Error("Could not load connectivity trace view.");
         }
       });
     });

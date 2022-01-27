@@ -5,13 +5,18 @@ import {
   CableConnectivityProvider,
 } from "./CableConnectivityContext";
 import CableConnectivityTraceView from "./CableConnectivityTraceView";
+import { Line } from "./CableConnectivityGql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 
-function CableConnectivityRow() {
+interface CableConnectivityRowProps {
+  line: Line;
+}
+
+function CableConnectivityRow({ line }: CableConnectivityRowProps) {
   const { dispatch, state } = useContext(CableConnectivityContext);
 
   return (
@@ -23,45 +28,38 @@ function CableConnectivityRow() {
             onClick={() =>
               dispatch({
                 type: "setShowConnectivityTraceViews",
-                id: "7597e290-f0b1-4091-a629-646d88cd4176",
+                id: line.spanSegmentId,
               })
             }
           >
             <FontAwesomeIcon
               icon={
-                state.connectivityTraceViews[
-                  "7597e290-f0b1-4091-a629-646d88cd4176"
-                ]?.show ?? false
+                state.connectivityTraceViews[line.spanSegmentId]?.show ?? false
                   ? faChevronDown
                   : faChevronRight
               }
             />
           </span>
-          <p> GALAH ODF 1-3-1 WDM 1-4 OLT-1-1-1</p>
+          <p>{line.a.end}</p>
         </div>
         <div className="cable-connectivity-row-item">
-          <p>LISA Soem 1</p>
+          <p>{line.a.connectedTo}</p>
         </div>
         <div className="cable-connectivity-row-item">
-          <p>2</p>
+          <p>{line.sequenceNumber}</p>
         </div>
         <div className="cable-connectivity-row-item">
-          <p>1</p>
+          <p>{line.name}</p>
         </div>
         <div className="cable-connectivity-row-item">
-          <p>1</p>
+          <p>{line.z.connectedto}</p>
         </div>
         <div className="cable-connectivity-row-item">
-          <p>Splitter 1 (1:32) Ind 1</p>
-        </div>
-        <div className="cable-connectivity-row-item">
-          <p>sdfsdfs</p>
+          <p>{line.z.end}</p>
         </div>
       </div>
       <CableConnectivityTraceView
-        view={
-          state.connectivityTraceViews["7597e290-f0b1-4091-a629-646d88cd4176"]
-        }
+        view={state.connectivityTraceViews[line.spanSegmentId]}
       />
     </>
   );
@@ -69,6 +67,7 @@ function CableConnectivityRow() {
 
 function CableConnectivity() {
   const { t } = useTranslation();
+  const { state } = useContext(CableConnectivityContext);
 
   return (
     <div className="cable-connectivity">
@@ -84,13 +83,10 @@ function CableConnectivity() {
               <p>{t("FROM")}</p>
             </div>
             <div className="cable-connectivity-row-item">
-              <p>{t("NO")}</p>
+              <p>{t("NUMBER")}</p>
             </div>
             <div className="cable-connectivity-row-item">
-              <p>{t("TUBE")}</p>
-            </div>
-            <div className="cable-connectivity-row-item">
-              <p>{t("FIBER")}</p>
+              <p>{t("NAME")}</p>
             </div>
             <div className="cable-connectivity-row-item">
               <p>{t("TO")}</p>
@@ -101,12 +97,14 @@ function CableConnectivity() {
           </div>
         </div>
         <div className="cable-connectivity-body">
-          <CableConnectivityRow />
-          <CableConnectivityRow />
-          <CableConnectivityRow />
-          <CableConnectivityRow />
-          <CableConnectivityRow />
-          <CableConnectivityRow />
+          {state.connectivityView?.spanEquipments[0].lines.map((x) => {
+            return (
+              <CableConnectivityRow
+                line={x}
+                key={x.spanSegmentId}
+              ></CableConnectivityRow>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -114,17 +112,17 @@ function CableConnectivity() {
 }
 
 interface CableConnectivityWrapperProps {
-  routeNodeId: string;
+  routeNetworkElementId: string;
   spanEquipmentId: string;
 }
 
 function CableConnectivityWrapper({
-  routeNodeId,
+  routeNetworkElementId,
   spanEquipmentId,
 }: CableConnectivityWrapperProps) {
   return (
     <CableConnectivityProvider
-      routeNodeId={routeNodeId}
+      routeNodeId={routeNetworkElementId}
       spanEquipmentId={spanEquipmentId}
     >
       <CableConnectivity />
