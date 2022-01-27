@@ -19,7 +19,7 @@ import NodeContainerDetails from "../NodeContainerDetails";
 import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import FeatureInformation from "../FeatureInformation";
 import TerminalEquipment from "../../TerminalEquipment";
-import CableConnectivity from "../CableConnectivity";
+import ConnectivityView from "../ConnectivityView";
 import BlowingReport from "../BlowingReport";
 import TabView from "../../../components/TabView";
 import {
@@ -876,7 +876,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                 {
                   title: t("CONNECTIVITY"),
                   view: (
-                    <CableConnectivity
+                    <ConnectivityView
                       routeNetworkElementId={identifiedFeature?.id ?? ""}
                       spanEquipmentId={
                         singleSelectedFeature.properties?.refId ?? ""

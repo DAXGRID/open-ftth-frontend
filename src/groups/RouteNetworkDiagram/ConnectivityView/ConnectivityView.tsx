@@ -1,23 +1,23 @@
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  CableConnectivityContext,
-  CableConnectivityProvider,
-} from "./CableConnectivityContext";
-import CableConnectivityTraceView from "./CableConnectivityTraceView";
-import { Line } from "./CableConnectivityGql";
+  ConnectivityViewContext,
+  ConnectivityViewProvider,
+} from "./ConnectivityViewContext";
+import ConnectivityViewTraceView from "./ConnectivityViewTraceView";
+import { Line } from "./ConnectivityViewGql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 
-interface CableConnectivityRowProps {
+interface ConnectivityViewRowProps {
   line: Line;
 }
 
-function CableConnectivityRow({ line }: CableConnectivityRowProps) {
-  const { dispatch, state } = useContext(CableConnectivityContext);
+function ConnectivityViewRow({ line }: ConnectivityViewRowProps) {
+  const { dispatch, state } = useContext(ConnectivityViewContext);
 
   return (
     <>
@@ -58,16 +58,16 @@ function CableConnectivityRow({ line }: CableConnectivityRowProps) {
           <p>{line.z.end}</p>
         </div>
       </div>
-      <CableConnectivityTraceView
+      <ConnectivityViewTraceView
         view={state.connectivityTraceViews[line.spanSegmentId]}
       />
     </>
   );
 }
 
-function CableConnectivity() {
+function ConnectivityView() {
   const { t } = useTranslation();
-  const { state } = useContext(CableConnectivityContext);
+  const { state } = useContext(ConnectivityViewContext);
 
   return (
     <div className="cable-connectivity">
@@ -99,10 +99,10 @@ function CableConnectivity() {
         <div className="cable-connectivity-body">
           {state.connectivityView?.spanEquipments[0].lines.map((x) => {
             return (
-              <CableConnectivityRow
+              <ConnectivityViewRow
                 line={x}
                 key={x.spanSegmentId}
-              ></CableConnectivityRow>
+              ></ConnectivityViewRow>
             );
           })}
         </div>
@@ -111,23 +111,23 @@ function CableConnectivity() {
   );
 }
 
-interface CableConnectivityWrapperProps {
+interface ConnectivityViewWrapperProps {
   routeNetworkElementId: string;
   spanEquipmentId: string;
 }
 
-function CableConnectivityWrapper({
+function ConnectivityViewWrapper({
   routeNetworkElementId,
   spanEquipmentId,
-}: CableConnectivityWrapperProps) {
+}: ConnectivityViewWrapperProps) {
   return (
-    <CableConnectivityProvider
+    <ConnectivityViewProvider
       routeNodeId={routeNetworkElementId}
       spanEquipmentId={spanEquipmentId}
     >
-      <CableConnectivity />
-    </CableConnectivityProvider>
+      <ConnectivityView />
+    </ConnectivityViewProvider>
   );
 }
 
-export default CableConnectivityWrapper;
+export default ConnectivityViewWrapper;

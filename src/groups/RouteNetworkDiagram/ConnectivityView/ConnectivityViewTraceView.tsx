@@ -1,15 +1,15 @@
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { ConnectivityTraceView } from "./CableConnectivityGql";
-import { CableConnectivityContext } from "./CableConnectivityContext";
+import { ConnectivityTraceView } from "./ConnectivityViewGql";
+import { ConnectivityViewContext } from "./ConnectivityViewContext";
 
 interface TraceViewProps {
   view: { view: ConnectivityTraceView | null; show: boolean };
 }
 
-function CableConnectivityTraceView({ view }: TraceViewProps) {
+function ConnectivityViewTraceView({ view }: TraceViewProps) {
   const { t } = useTranslation();
-  const { state, dispatch } = useContext(CableConnectivityContext);
+  const { state, dispatch } = useContext(ConnectivityViewContext);
 
   if (!view || !view.show) return <></>;
 
@@ -56,4 +56,4 @@ function CableConnectivityTraceView({ view }: TraceViewProps) {
   );
 }
 
-export default CableConnectivityTraceView;
+export default ConnectivityViewTraceView;

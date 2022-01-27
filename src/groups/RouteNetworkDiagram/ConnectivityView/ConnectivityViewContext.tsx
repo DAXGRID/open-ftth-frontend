@@ -12,10 +12,10 @@ import {
   Hop,
   spanEquipmentConnectivityViewQuery,
   SpanEquipmentConnectivityView,
-} from "./CableConnectivityGql";
+} from "./ConnectivityViewGql";
 import { MapContext } from "../../../contexts/MapContext";
 
-interface CableConnectivityState {
+interface ConnectivityViewState {
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
@@ -23,7 +23,7 @@ interface CableConnectivityState {
   connectivityView: SpanEquipmentConnectivityView | null;
 }
 
-type CableConnectivityAction =
+type ConnectivityViewAction =
   | {
       type: "setViewConnectivityTraceViews";
       params: { id: string; view: ConnectivityTraceView };
@@ -41,10 +41,10 @@ type CableConnectivityAction =
       view: SpanEquipmentConnectivityView;
     };
 
-function cableConnectivityReducer(
-  state: CableConnectivityState,
-  action: CableConnectivityAction
-): CableConnectivityState {
+function connectivityViewReducer(
+  state: ConnectivityViewState,
+  action: ConnectivityViewAction
+): ConnectivityViewState {
   switch (action.type) {
     case "setViewConnectivityTraceViews":
       return {
@@ -83,37 +83,38 @@ function cableConnectivityReducer(
   }
 }
 
-interface CableConnectivityContextDefintion {
-  state: CableConnectivityState;
-  dispatch: React.Dispatch<CableConnectivityAction>;
+interface ConnectivityViewContextDefintion {
+  state: ConnectivityViewState;
+  dispatch: React.Dispatch<ConnectivityViewAction>;
 }
 
-const initialState: CableConnectivityState = {
+const initialState: ConnectivityViewState = {
   connectivityTraceViews: {},
   selectedConnectivityTraceHop: null,
   connectivityView: null,
 };
 
-const CableConnectivityContext =
-  createContext<CableConnectivityContextDefintion>({
+const ConnectivityViewContext = createContext<ConnectivityViewContextDefintion>(
+  {
     state: initialState,
     dispatch: () => {
       console.warn("No provider set for dispatch.");
     },
-  });
+  }
+);
 
-interface CableConnectivityProviderProps {
+interface ConnectivityViewProviderProps {
   routeNodeId: string;
   spanEquipmentId: string;
   children: ReactNode;
 }
 
-function CableConnectivityProvider({
+function ConnectivityViewProvider({
   routeNodeId,
   spanEquipmentId,
   children,
-}: CableConnectivityProviderProps) {
-  const [state, dispatch] = useReducer(cableConnectivityReducer, initialState);
+}: ConnectivityViewProviderProps) {
+  const [state, dispatch] = useReducer(connectivityViewReducer, initialState);
   const client = useClient();
   const { setTrace } = useContext(MapContext);
 
@@ -162,12 +163,12 @@ function CableConnectivityProvider({
   }, [state.selectedConnectivityTraceHop, setTrace]);
 
   return (
-    <CableConnectivityContext.Provider
+    <ConnectivityViewContext.Provider
       value={{ dispatch: dispatch, state: state }}
     >
       {children}
-    </CableConnectivityContext.Provider>
+    </ConnectivityViewContext.Provider>
   );
 }
 
-export { CableConnectivityContext, CableConnectivityProvider };
+export { ConnectivityViewContext, ConnectivityViewProvider };
