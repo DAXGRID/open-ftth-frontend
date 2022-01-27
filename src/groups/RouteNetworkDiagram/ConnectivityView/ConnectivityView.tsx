@@ -21,10 +21,10 @@ function ConnectivityViewRow({ line }: ConnectivityViewRowProps) {
 
   return (
     <>
-      <div className="cable-connectivity-row">
-        <div className="cable-connectivity-row-item">
+      <div className="connectivity-view-row">
+        <div className="connectivity-view-row-item">
           <span
-            className="cable-connectivity-row-item__icon"
+            className="connectivity-view-row-item__icon"
             onClick={() =>
               dispatch({
                 type: "setShowConnectivityTraceViews",
@@ -42,19 +42,19 @@ function ConnectivityViewRow({ line }: ConnectivityViewRowProps) {
           </span>
           <p>{line.a.end}</p>
         </div>
-        <div className="cable-connectivity-row-item">
+        <div className="connectivity-view-row-item">
           <p>{line.a.connectedTo}</p>
         </div>
-        <div className="cable-connectivity-row-item">
+        <div className="connectivity-view-row-item">
           <p>{line.sequenceNumber}</p>
         </div>
-        <div className="cable-connectivity-row-item">
+        <div className="connectivity-view-row-item">
           <p>{line.name}</p>
         </div>
-        <div className="cable-connectivity-row-item">
+        <div className="connectivity-view-row-item">
           <p>{line.z.connectedto}</p>
         </div>
-        <div className="cable-connectivity-row-item">
+        <div className="connectivity-view-row-item">
           <p>{line.z.end}</p>
         </div>
       </div>
@@ -70,33 +70,33 @@ function ConnectivityView() {
   const { state } = useContext(ConnectivityViewContext);
 
   return (
-    <div className="cable-connectivity">
-      <div className="cable-connectivity-container">
-        <p className="cable-connectivity__title">K123456789</p>
-        <p className="cable-connectivity__title">12 Fiber</p>
-        <div className="cable-connectivity-header">
-          <div className="cable-connectivity-row">
-            <div className="cable-connectivity-row-item">
+    <div className="connectivity-view">
+      <div className="connectivity-view-container">
+        <p className="connectivity-view__title">K123456789</p>
+        <p className="connectivity-view__title">12 Fiber</p>
+        <div className="connectivity-view-header">
+          <div className="connectivity-view-row">
+            <div className="connectivity-view-row-item">
               <p>{t("A-INFO")}</p>
             </div>
-            <div className="cable-connectivity-row-item">
+            <div className="connectivity-view-row-item">
               <p>{t("FROM")}</p>
             </div>
-            <div className="cable-connectivity-row-item">
+            <div className="connectivity-view-row-item">
               <p>{t("NUMBER")}</p>
             </div>
-            <div className="cable-connectivity-row-item">
+            <div className="connectivity-view-row-item">
               <p>{t("NAME")}</p>
             </div>
-            <div className="cable-connectivity-row-item">
+            <div className="connectivity-view-row-item">
               <p>{t("TO")}</p>
             </div>
-            <div className="cable-connectivity-row-item">
+            <div className="connectivity-view-row-item">
               <p>{t("Z-INFO")}</p>
             </div>
           </div>
         </div>
-        <div className="cable-connectivity-body">
+        <div className="connectivity-view-body">
           {state.connectivityView?.spanEquipments[0].lines.map((x) => {
             return (
               <ConnectivityViewRow

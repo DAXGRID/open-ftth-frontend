@@ -14,7 +14,7 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
   if (!view || !view.show) return <></>;
 
   return (
-    <div className="cable-connectivity-trace-view">
+    <div className="connectivity-view-trace-view">
       <div className="trace-view-title">
         {`${t("CIRCUIT_NAME")}: ${view.view?.circuitName}`}
       </div>
