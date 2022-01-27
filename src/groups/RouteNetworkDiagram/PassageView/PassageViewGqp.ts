@@ -13,14 +13,14 @@ export const passageViewQuery = (
     .toPromise();
 };
 
-interface Line {
+export interface Line {
   spanSegmentId: string;
   from: string;
   to: string;
   conduitId: string;
   outerConduitInfo: string;
   innerConduitInfo: string;
-  routeSegmentIds: string;
+  routeSegmentIds: string[];
   routeSegmentGeometries: string[];
   segmentLength: number;
   cumulativeDistance: number;

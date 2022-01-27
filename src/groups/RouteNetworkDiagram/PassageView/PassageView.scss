@@ -38,12 +38,12 @@
   background-color: white;
 
   .passage-view-row {
-    .passage-view-row--selected {
-      background-color: $hover-selected;
+    &.passage-view-row--selected {
+      background-color: $select-color;
 
       &:hover {
         cursor: pointer;
-        background-color: $hover-selected;
+        background-color: $select-color;
       }
     }
 
