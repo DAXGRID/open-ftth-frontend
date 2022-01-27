@@ -20,7 +20,7 @@ import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import FeatureInformation from "../FeatureInformation";
 import TerminalEquipment from "../../TerminalEquipment";
 import ConnectivityView from "../ConnectivityView";
-import BlowingReport from "../BlowingReport";
+import PassageView from "../PassageView";
 import TabView from "../../../components/TabView";
 import {
   Diagram,
@@ -870,7 +870,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               views={[
                 {
                   title: t("PASSAGE_VIEW"),
-                  view: <BlowingReport />,
+                  view: <PassageView />,
                   id: "0",
                 },
                 {
