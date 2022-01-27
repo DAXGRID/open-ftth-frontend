@@ -2,14 +2,30 @@ import { Client } from "urql";
 
 export const connectivityTraceViewQuery = (
   client: Client,
-  routeNodeId: string,
+  routeNetworkElementId: string,
   terminalOrSpanEquipmentId: string
 ) => {
   return client
     .query<ConnectivityTraceViewResponse>(CONNECTIVITY_TRACE_VIEW_QUERY, {
-      routeNodeId: routeNodeId,
+      routeNetworkElementId: routeNetworkElementId,
       terminalOrSpanEquipmentId: terminalOrSpanEquipmentId,
     } as ConnectivityTraceViewQueryParams)
+    .toPromise();
+};
+
+export const spanEquipmentConnectivityViewQuery = (
+  client: Client,
+  routeNetworkElementId: string,
+  spanEquipmentOrSegmentIds: string[]
+) => {
+  return client
+    .query<SpanEquipmentConnectivityViewResponse>(
+      SPAN_EQUIPMENT_CONNECTIIVTY_VIEW,
+      {
+        routeNetworkElementId: routeNetworkElementId,
+        spanEquipmentOrSegmentIds: spanEquipmentOrSegmentIds,
+      } as SpanEquipmentConnectivityViewParams
+    )
     .toPromise();
 };
 
@@ -40,17 +56,17 @@ interface ConnectivityTraceViewResponse {
 }
 
 interface ConnectivityTraceViewQueryParams {
-  routeNodeId: string;
+  routeNetworkElementId: string;
   terminalOrSpanEquipmentId: string;
 }
 
 const CONNECTIVITY_TRACE_VIEW_QUERY = `
 query (
-$routeNodeId: ID!,
+$routeNetworkElementId: ID!,
 $terminalOrSpanEquipmentId: ID!) {
   utilityNetwork {
     connectivityTraceView(
-      routeNodeId: $routeNodeId
+      routeNetworkElementId: $routeNetworkElementId
       terminalOrSpanEquipmentId: $terminalOrSpanEquipmentId
     ) {
       circuitName
@@ -71,3 +87,76 @@ $terminalOrSpanEquipmentId: ID!) {
     }
   }
 }`;
+
+export interface Line {
+  spanSegmentId: string;
+  sequenceNumber: number;
+  name: string;
+  a: {
+    connectedTo: string;
+    end: string;
+  };
+  z: {
+    connectedto: string;
+    end: string;
+  };
+}
+
+export interface SpanEquipment {
+  id: string;
+  category: string;
+  specName: string;
+  name: string;
+  info: string;
+  lines: Line[];
+}
+
+export interface SpanEquipmentConnectivityView {
+  spanEquipments: SpanEquipment[];
+}
+
+interface SpanEquipmentConnectivityViewResponse {
+  utilityNetwork: {
+    spanEquipmentConnectivityView: SpanEquipmentConnectivityView;
+  };
+}
+
+interface SpanEquipmentConnectivityViewParams {
+  routeNetworkElementId: string;
+  spanEquipmentOrSegmentIds: string[];
+}
+
+const SPAN_EQUIPMENT_CONNECTIIVTY_VIEW = `
+query (
+$routeNetworkElementId: ID!,
+$spanEquipmentOrSegmentIds: [ID!]!
+) {
+  utilityNetwork {
+    spanEquipmentConnectivityView(
+      routeNetworkElementId: $routeNetworkElementId
+      spanEquipmentOrSegmentIds: $spanEquipmentOrSegmentIds
+    ) {
+      spanEquipments {
+        id
+        category
+        specName
+        name
+        info
+        lines {
+          spanSegmentId
+          sequenceNumber
+          name
+          a {
+            connectedTo
+            end
+          }
+          z {
+            connectedTo
+            end
+          }
+        }
+      }
+    }
+  }
+}
+`;

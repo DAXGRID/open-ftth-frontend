@@ -831,14 +831,6 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         editMode={editMode}
         routeElementId={identifiedFeature.id}
       />
-      {!editMode &&
-        (singleSelectedFeature?.source === "InnerConduit" ||
-          singleSelectedFeature?.source === "OuterConduit") && (
-          <SpanEquipmentDetails
-            spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
-            showActions={true}
-          />
-        )}
       {!editMode && singleSelectedFeature?.source === "NodeContainer" && (
         <NodeContainerDetails
           nodeContainerMrid={singleSelectedFeature?.properties?.refId ?? ""}
@@ -859,40 +851,44 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             </div>
           </div>
         )}
-      {!editMode && singleSelectedFeature?.source === "FiberCable" && (
-        <div className="container-max-size container-center">
-          {
-            <SpanEquipmentDetails
-              disableMove={true}
-              spanEquipmentMrid={singleSelectedFeature?.properties?.refId ?? ""}
-              showActions={true}
+      {!editMode &&
+        (singleSelectedFeature?.source === "FiberCable" ||
+          singleSelectedFeature?.source.includes("Conduit")) && (
+          <div className="container-max-size container-center">
+            {
+              <SpanEquipmentDetails
+                disableMove={true}
+                spanEquipmentMrid={
+                  singleSelectedFeature?.properties?.refId ?? ""
+                }
+                showActions={true}
+              />
+            }
+            <TabView
+              selectedId={fiberCableTabViewSelectedId}
+              select={setFiberCableTabViewSelectedId}
+              views={[
+                {
+                  title: t("PASSAGE_VIEW"),
+                  view: <BlowingReport />,
+                  id: "0",
+                },
+                {
+                  title: t("CONNECTIVITY"),
+                  view: (
+                    <CableConnectivity
+                      routeNetworkElementId={identifiedFeature?.id ?? ""}
+                      spanEquipmentId={
+                        singleSelectedFeature.properties?.refId ?? ""
+                      }
+                    />
+                  ),
+                  id: "1",
+                },
+              ]}
             />
-          }
-          <TabView
-            selectedId={fiberCableTabViewSelectedId}
-            select={setFiberCableTabViewSelectedId}
-            views={[
-              {
-                title: t("CABLE_CONNECTIVITY"),
-                view: (
-                  <CableConnectivity
-                    routeNodeId={identifiedFeature?.id ?? ""}
-                    spanEquipmentId={
-                      singleSelectedFeature.properties?.refId ?? ""
-                    }
-                  />
-                ),
-                id: "0",
-              },
-              {
-                title: t("BLOWING_REPORT"),
-                view: <BlowingReport />,
-                id: "1",
-              },
-            ]}
-          />
-        </div>
-      )}
+          </div>
+        )}
     </div>
   );
 }
