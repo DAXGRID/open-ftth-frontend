@@ -24,7 +24,7 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
         <div className="trace-view-header-item">{t("TERMINAL_STRUCTURE")}</div>
         <div className="trace-view-header-item">{t("TERMINAL")}</div>
         <div className="trace-view-header-item">{t("CONNECTION_INFO")}</div>
-        <div className="trace-view-header-item">{t("TOTAL_LENGTH")}</div>
+        <div className="trace-view-header-item">{t("LENGTH")}</div>
       </div>
       <div className="trace-view-body ">
         {view.view?.hops.map((x) => {
