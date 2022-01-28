@@ -73,7 +73,7 @@ function ConnectivityView() {
     !state.connectivityView ||
     state.connectivityView.spanEquipments.length === 0
   )
-    return <></>;
+    return <div style={{ height: "300px" }}></div>;
 
   const spanEquipment = state.connectivityView?.spanEquipments[0];
 

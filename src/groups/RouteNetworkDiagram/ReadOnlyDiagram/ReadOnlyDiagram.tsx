@@ -11,6 +11,9 @@ import { EraserSvg } from "../../../assets";
 import { useTranslation } from "react-i18next";
 import FeatureInformation from "../FeatureInformation";
 import TerminalEquipment from "../../TerminalEquipment";
+import ConnectivityView from "../ConnectivityView";
+import PassageView from "../PassageView";
+import TabView from "../../../components/TabView";
 import {
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
@@ -47,10 +50,14 @@ function ReadOnlyDiagram({
   envelope,
 }: RouteSegmentDiagramProps) {
   const { setTrace, identifiedFeature } = useContext(MapContext);
-  const [selectedFeature, setSelectedFeature] =
-    useState<MapboxGeoJSONFeature | null>(null);
   const { t } = useTranslation();
   const client = useClient();
+  const [selectedFeature, setSelectedFeature] =
+    useState<MapboxGeoJSONFeature | null>(null);
+  const [
+    spanEquipmentTabViewSelectedId,
+    setSpanEquipmentCableTabViewSelectedId,
+  ] = useState("0");
 
   const onSelectedFeature = useCallback(
     async (feature: MapboxGeoJSONFeature) => {
@@ -59,7 +66,12 @@ function ReadOnlyDiagram({
 
       if (isSelected) {
         // If it can be traced otherwise we remove the current trace
-        if (featureType === "InnerConduit" || featureType === "OuterConduit") {
+        console.log(featureType);
+        if (
+          featureType === "InnerConduit" ||
+          featureType === "OuterConduit" ||
+          featureType === "FiberCable"
+        ) {
           const spanSegmentTrace = await client
             .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
               spanSegmentId: feature.properties?.refId,
@@ -113,19 +125,52 @@ function ReadOnlyDiagram({
           showActions={false}
         />
       )}
-      {(selectedFeature?.source === "InnerConduit" ||
-        selectedFeature?.source === "OuterConduit") && (
-        <SpanEquipmentDetails
-          spanEquipmentMrid={selectedFeature.properties?.refId ?? ""}
-          showActions={false}
-        />
-      )}
       {(selectedFeature?.source === "Rack" ||
         selectedFeature?.source === "TerminalEquipment") && (
         <TerminalEquipment
           routeNodeId={identifiedFeature?.id ?? ""}
           terminalEquipmentOrRackId={selectedFeature.properties?.refId ?? ""}
         />
+      )}
+      {(selectedFeature?.source === "FiberCable" ||
+        selectedFeature?.source.includes("Conduit")) && (
+        <div className="container-max-size container-center">
+          {
+            <SpanEquipmentDetails
+              disableMove={true}
+              spanEquipmentMrid={selectedFeature?.properties?.refId ?? ""}
+              showActions={false}
+            />
+          }
+          <TabView
+            selectedId={spanEquipmentTabViewSelectedId}
+            select={setSpanEquipmentCableTabViewSelectedId}
+            views={[
+              {
+                title: t("PASSAGE_VIEW"),
+                view: (
+                  <PassageView
+                    routeElementId={identifiedFeature?.id ?? ""}
+                    spanEquipmentOrSegmentIds={
+                      selectedFeature.properties?.refId ?? ""
+                    }
+                  />
+                ),
+                id: "0",
+              },
+              {
+                title: t("CONNECTIVITY"),
+                view: (
+                  <ConnectivityView
+                    routeNetworkElementId={identifiedFeature?.id ?? ""}
+                    spanEquipmentId={selectedFeature.properties?.refId ?? ""}
+                  />
+                ),
+                id: "1",
+              },
+            ]}
+          />
+        </div>
       )}
     </div>
   );

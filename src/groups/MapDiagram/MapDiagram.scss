@@ -28,6 +28,8 @@
 
     &:last-of-type {
       border-left: 1px solid $border-color;
+      overflow-y: scroll;
+      max-height: calc(100vh - $top-menu-height);
     }
 
     &.hide {

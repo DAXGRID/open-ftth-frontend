@@ -41,7 +41,9 @@ function PassageView({
     );
   }, [client, routeElementId, spanEquipmentOrSegmentIds]);
 
-  if (!passageView || passageView.spanEquipments.length === 0) return <></>;
+  if (!passageView || passageView.spanEquipments.length === 0) {
+    return <div style={{ height: "300px" }}></div>;
+  }
 
   const selectLine = (line: SelectableLine, index: number) => {
     setSelectedLineIndex(index);
@@ -61,13 +63,27 @@ function PassageView({
         <p className="passage-view_title">{spanEquipment.info}</p>
         <div className="passage-view-row-header">
           <div className="passage-view-row">
-            <p>{t("FROM")}</p>
-            <p>{t("TO")}</p>
-            <p>{t("CONDUIT_ID")}</p>
-            <p>{t("OUTER_CONDUIT")}</p>
-            <p>{t("INNER_CONDUIT")}</p>
-            <p>{t("LENGTH")}</p>
-            <p>{t("DISTANCE")}</p>
+            <div className="passage-view-row-item">
+              <p>{t("FROM")}</p>
+            </div>
+            <div className="passage-view-row-item">
+              <p>{t("TO")}</p>
+            </div>
+            <div className="passage-view-row-item">
+              <p>{t("CONDUIT_ID")}</p>
+            </div>
+            <div className="passage-view-row-item">
+              <p>{t("OUTER_CONDUIT")}</p>
+            </div>
+            <div className="passage-view-row-item">
+              <p>{t("INNER_CONDUIT")}</p>
+            </div>
+            <div className="passage-view-row-item">
+              <p>{t("LENGTH")}</p>
+            </div>
+            <div className="passage-view-row-item">
+              <p>{t("DISTANCE")}</p>
+            </div>
           </div>
         </div>
         <div className="passage-view-row-body">
@@ -82,13 +98,27 @@ function PassageView({
                   selectLine(x, i);
                 }}
               >
-                <p>{x.from}</p>
-                <p>{x.to}</p>
-                <p>{x.conduitId}</p>
-                <p>{x.outerConduitInfo}</p>
-                <p>{x.innerConduitInfo}</p>
-                <p>{x.segmentLength}</p>
-                <p>{x.cumulativeDistance}</p>
+                <div className="passage-view-row-item">
+                  <p>{x.from}</p>
+                </div>
+                <div className="passage-view-row-item">
+                  <p>{x.to}</p>
+                </div>
+                <div className="passage-view-row-item">
+                  <p>{x.conduitId}</p>
+                </div>
+                <div className="passage-view-row-item">
+                  <p>{x.outerConduitInfo}</p>
+                </div>
+                <div className="passage-view-row-item">
+                  <p>{x.innerConduitInfo}</p>
+                </div>
+                <div className="passage-view-row-item">
+                  <p>{x.segmentLength}</p>
+                </div>
+                <div className="passage-view-row-item">
+                  <p>{x.cumulativeDistance}</p>
+                </div>
               </div>
             );
           })}

@@ -10,6 +10,7 @@
   border: 1px solid $border-color;
   border-radius: 4px;
   background-color: $header-color;
+  justify-self: center;
 }
 
 .passage-view_title {
@@ -60,18 +61,27 @@
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   width: 100%;
   border-bottom: 1px solid $border-color;
+  display: flex;
+  align-items: center;
+  height: 100%;
 
   &:last-child {
     border-bottom: none;
   }
 
-  p {
-    width: 100%;
-    padding: 10px;
+  .passage-view-row-item {
     border-right: 1px solid $border-color;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    min-height: 100%;
 
     &:last-child {
       border-right: none;
+    }
+
+    p {
+      padding: 10px;
     }
   }
 }
