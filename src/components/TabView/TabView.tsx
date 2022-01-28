@@ -40,8 +40,10 @@ function TabView({ views, selectedId, select }: TabViewProps) {
 
   return (
     <div className="tab-view">
-      <TabViewHeader views={views} selectedId={selectedId} select={select} />
-      {viewToShow?.view}
+      <div className="tab-view-container">
+        <TabViewHeader views={views} selectedId={selectedId} select={select} />
+        {viewToShow?.view}
+      </div>
     </div>
   );
 }

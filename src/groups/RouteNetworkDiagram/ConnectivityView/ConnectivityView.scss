@@ -47,6 +47,7 @@
   border-right: 1px solid $border-color;
   padding: 10px;
   display: flex;
+  align-items: center;
 
   &:last-child {
     border-right: none;
@@ -95,8 +96,14 @@
   }
 
   .trace-view-body {
+    border-bottom: 1px solid $border-color;
+
     .trace-view-body-row {
       border-bottom: 1px solid $border-color;
+
+      &:last-child {
+        border-bottom: none;
+      }
 
       &.trace-view-body-row--selected {
         background-color: $select-color;

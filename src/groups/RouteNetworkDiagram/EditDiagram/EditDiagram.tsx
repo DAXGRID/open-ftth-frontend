@@ -198,7 +198,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   >([]);
   const [singleSelectedFeature, setSingleSelectedFeature] =
     useState<MapboxGeoJSONFeature | null>();
-  const [fiberCableTabViewSelectedId, setFiberCableTabViewSelectedId] =
+  const [spanEquipmentTabViewSelectedId, setSpanEquipmentTabViewSelectedId] =
     useState("0");
   const { identifiedFeature, setTrace } = useContext(MapContext);
   const [showModals, showModalsDispatch] = useReducer(
@@ -233,13 +233,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     showModalsDispatch({ type: "reset" });
     setSelectedFeatures([]);
     setSingleSelectedFeature(null);
-    setFiberCableTabViewSelectedId("0");
+    setSpanEquipmentTabViewSelectedId("0");
   }, [
     showModalsDispatch,
     diagramObjects,
     envelope,
     setSingleSelectedFeature,
-    setFiberCableTabViewSelectedId,
+    setSpanEquipmentTabViewSelectedId,
   ]);
 
   const affixSpanEquipment = async () => {
@@ -865,8 +865,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               />
             }
             <TabView
-              selectedId={fiberCableTabViewSelectedId}
-              select={setFiberCableTabViewSelectedId}
+              selectedId={spanEquipmentTabViewSelectedId}
+              select={setSpanEquipmentTabViewSelectedId}
               views={[
                 {
                   title: t("PASSAGE_VIEW"),
