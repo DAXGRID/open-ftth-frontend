@@ -12,7 +12,7 @@ import {
   MUTATION_REROUTE,
   RerouteParameter,
   RerouteResponse,
-} from "./RerouteTubeGql";
+} from "./RerouteSpanEquipmentGql";
 
 type RerouteTubeParams = {
   selectedRouteSegmentMrid: string;
@@ -65,7 +65,7 @@ const reroute = async (
   }
 };
 
-function RerouteTube({ selectedRouteSegmentMrid }: RerouteTubeParams) {
+function RerouteSpanEquipment({ selectedRouteSegmentMrid }: RerouteTubeParams) {
   const client = useClient();
   const { selectRouteSegments, highlightFeatures } = useBridgeConnector();
   const { selectedSegmentIds } = useContext(MapContext);
@@ -97,4 +97,4 @@ function RerouteTube({ selectedRouteSegmentMrid }: RerouteTubeParams) {
   );
 }
 
-export default RerouteTube;
+export default RerouteSpanEquipment;
