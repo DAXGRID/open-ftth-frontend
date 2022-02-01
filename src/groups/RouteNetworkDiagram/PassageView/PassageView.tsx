@@ -58,11 +58,13 @@ function PassageView({
   return (
     <div className="passage-view">
       <div className="passage-view-container">
-        <p className="passage-view_title">{spanEquipment.name}</p>
-        <p className="passage-view_title">{spanEquipment.specName}</p>
-        <p className="passage-view_title">{spanEquipment.info}</p>
+        <div className="passage-view-row-title-header">
+          <p className="passage-view_title">{spanEquipment.name}</p>
+          <p className="passage-view_title">{spanEquipment.specName}</p>
+          <p className="passage-view_title">{spanEquipment.info}</p>
+        </div>
         <div className="passage-view-row-header">
-          <div className="passage-view-row">
+          <div className="passage-view-row passage-view-grid-size">
             <div className="passage-view-row-item">
               <p>{t("FROM")}</p>
             </div>
@@ -90,7 +92,7 @@ function PassageView({
           {(spanEquipment.lines as SelectableLine[]).map((x, i) => {
             return (
               <div
-                className={`passage-view-row ${
+                className={`passage-view-row passage-view-grid-size ${
                   selectedLineIndex === i ? "passage-view-row--selected" : ""
                 }`}
                 key={i}
