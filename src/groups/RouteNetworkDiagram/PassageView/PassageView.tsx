@@ -124,7 +124,7 @@ function PassageView({
                   action={() => setShowEditSpanEquipment(true)}
                   icon={EditPropertiesSvg}
                   title={t("EDIT")}
-                  key={0}
+                  key={1}
                 />
               </>
             )}
