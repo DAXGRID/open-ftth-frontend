@@ -35,7 +35,9 @@
 
 .connectivity-view-row {
   display: grid;
-  grid-template-columns: 3fr 2fr 1fr 1fr 1fr 2fr 2fr;
+  grid-auto-columns: minmax(0, 3fr);
+  grid-auto-flow: column;
+
   border-bottom: 1px solid $border-color;
 
   &:last-child {
@@ -74,7 +76,8 @@
 
   .trace-view-grid {
     display: grid;
-    grid-template-columns: 3fr 3fr 2fr 3fr 4fr 3fr;
+    grid-auto-columns: minmax(0, 3fr);
+    grid-auto-flow: column;
   }
 
   .trace-view-header {
