@@ -7,7 +7,7 @@ import ModalContainer from "../../../components/ModalContainer";
 import { MapContext } from "../../../contexts/MapContext";
 import { OverlayContext } from "../../../contexts/OverlayContext";
 import EditSpanEquipment from "../EditSpanEquipment";
-import RerouteTube from "../RerouteTube";
+import RerouteSpanEquipment from "../RerouteSpanEquipment";
 import {
   Line,
   passageViewQuery,
@@ -56,11 +56,11 @@ function PassageView({
     if (showRerouteTube) {
       showElement(
         <ModalContainer
-          title={t("REROUTE_TUBE")}
+          title={t("REROUTE_SPAN_EQUIPMENT")}
           show={showRerouteTube}
           closeCallback={() => setShowRerouteTube(false)}
         >
-          <RerouteTube
+          <RerouteSpanEquipment
             selectedRouteSegmentMrid={spanEquipmentOrSegmentIds ?? ""}
           />
         </ModalContainer>
