@@ -66,7 +66,6 @@ function ReadOnlyDiagram({
 
       if (isSelected) {
         // If it can be traced otherwise we remove the current trace
-        console.log(featureType);
         if (
           featureType === "InnerConduit" ||
           featureType === "OuterConduit" ||
