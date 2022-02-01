@@ -210,13 +210,13 @@ function SchematicDiagram({
   const position = useRef<SchematicPosition | null>(null);
 
   useLayoutEffect(() => {
-    if (!map) return;
+    if (!map || diagramObjects.length === 0) return;
     if (position.current) {
       mapFitBounds(position.current.envelope, map, position.current.zoom);
     } else {
       mapFitBounds(envelope, map, null);
     }
-  }, [map, envelope]);
+  }, [map, envelope, diagramObjects]);
 
   useEffect(() => {
     position.current = null;
