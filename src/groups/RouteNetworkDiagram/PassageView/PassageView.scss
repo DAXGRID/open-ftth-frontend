@@ -20,6 +20,20 @@
 
 .passage-view-row-title-header {
   display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 5px 10px;
+  align-items: center;
+}
+
+.passage-view-row-title-header-info {
+  display: flex;
+}
+
+.passage-view-row-title-header-actions {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 10px;
 }
 
 .passage-view-row-header {

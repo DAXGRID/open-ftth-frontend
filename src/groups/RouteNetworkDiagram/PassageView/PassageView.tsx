@@ -1,27 +1,36 @@
-import { useEffect, useState, useContext } from "react";
-import { useClient } from "urql";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useClient } from "urql";
+import { EditPropertiesSvg, MoveConduitSvg } from "../../../assets";
+import ActionButton from "../../../components/ActionButton";
+import ModalContainer from "../../../components/ModalContainer";
+import { MapContext } from "../../../contexts/MapContext";
+import { OverlayContext } from "../../../contexts/OverlayContext";
+import EditSpanEquipment from "../EditSpanEquipment";
+import RerouteTube from "../RerouteTube";
 import {
+  Line,
   passageViewQuery,
   SpanEquipmentPassageView,
-  Line,
 } from "./PassageViewGqp";
-import { MapContext } from "../../../contexts/MapContext";
-
-interface PassageViewProps {
-  routeElementId: string;
-  spanEquipmentOrSegmentIds: string;
-}
 
 interface SelectableLine extends Line {
   selected: boolean;
 }
 
+interface PassageViewProps {
+  routeElementId: string;
+  spanEquipmentOrSegmentIds: string;
+  editable: boolean;
+}
+
 function PassageView({
   routeElementId,
   spanEquipmentOrSegmentIds,
+  editable,
 }: PassageViewProps) {
   const { t } = useTranslation();
+  const { showElement } = useContext(OverlayContext);
   const client = useClient();
   const { setTrace } = useContext(MapContext);
   const [passageView, setPassageView] =
@@ -29,6 +38,8 @@ function PassageView({
   const [selectedLineIndex, setSelectedLineIndex] = useState<number | null>(
     null
   );
+  const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
+  const [showRerouteTube, setShowRerouteTube] = useState(false);
 
   useEffect(() => {
     if (!routeElementId || !spanEquipmentOrSegmentIds) return;
@@ -40,6 +51,42 @@ function PassageView({
       }
     );
   }, [client, routeElementId, spanEquipmentOrSegmentIds]);
+
+  useEffect(() => {
+    if (showRerouteTube) {
+      showElement(
+        <ModalContainer
+          title={t("REROUTE_TUBE")}
+          show={showRerouteTube}
+          closeCallback={() => setShowRerouteTube(false)}
+        >
+          <RerouteTube
+            selectedRouteSegmentMrid={spanEquipmentOrSegmentIds ?? ""}
+          />
+        </ModalContainer>
+      );
+    } else if (showEditSpanEquipment) {
+      showElement(
+        <ModalContainer
+          title={t("EDIT_SPAN_EQUIPMENT")}
+          show={showEditSpanEquipment}
+          closeCallback={() => setShowEditSpanEquipment(false)}
+        >
+          <EditSpanEquipment
+            spanEquipmentMrid={spanEquipmentOrSegmentIds ?? ""}
+          />
+        </ModalContainer>
+      );
+    } else {
+      showElement(null);
+    }
+  }, [
+    showRerouteTube,
+    showEditSpanEquipment,
+    t,
+    showElement,
+    spanEquipmentOrSegmentIds,
+  ]);
 
   if (!passageView || passageView.spanEquipments.length === 0) {
     return <div style={{ height: "300px" }}></div>;
@@ -59,9 +106,29 @@ function PassageView({
     <div className="passage-view">
       <div className="passage-view-container">
         <div className="passage-view-row-title-header">
-          <p className="passage-view_title">{spanEquipment.name}</p>
-          <p className="passage-view_title">{spanEquipment.specName}</p>
-          <p className="passage-view_title">{spanEquipment.info}</p>
+          <div className="passage-view-row-title-header-info">
+            <p className="passage-view_title">{spanEquipment.name}</p>
+            <p className="passage-view_title">{spanEquipment.specName}</p>
+            <p className="passage-view_title">{spanEquipment.info}</p>
+          </div>
+          <div className="passage-view-row-title-header-actions">
+            {editable && (
+              <>
+                <ActionButton
+                  action={() => setShowRerouteTube(true)}
+                  icon={MoveConduitSvg}
+                  title={t("MOVE")}
+                  key={0}
+                />
+                <ActionButton
+                  action={() => setShowEditSpanEquipment(true)}
+                  icon={EditPropertiesSvg}
+                  title={t("EDIT")}
+                  key={0}
+                />
+              </>
+            )}
+          </div>
         </div>
         <div className="passage-view-row-header">
           <div className="passage-view-row passage-view-grid-size">
