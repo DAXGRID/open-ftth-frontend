@@ -2,7 +2,6 @@ import { useState, useContext, useCallback } from "react";
 import { useClient } from "urql";
 import { MapboxGeoJSONFeature } from "maplibre-gl";
 import SchematicDiagram from "../SchematicDiagram";
-import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import NodeContainerDetails from "../NodeContainerDetails";
 import DiagramMenu from "../../../components/DiagramMenu";
 import ActionButton from "../../../components/ActionButton";
@@ -134,13 +133,6 @@ function ReadOnlyDiagram({
       {(selectedFeature?.source === "FiberCable" ||
         selectedFeature?.source.includes("Conduit")) && (
         <div className="container-max-size container-center">
-          {
-            <SpanEquipmentDetails
-              disableMove={true}
-              spanEquipmentMrid={selectedFeature?.properties?.refId ?? ""}
-              showActions={false}
-            />
-          }
           <TabView
             selectedId={spanEquipmentTabViewSelectedId}
             select={setSpanEquipmentCableTabViewSelectedId}
@@ -149,6 +141,7 @@ function ReadOnlyDiagram({
                 title: t("PASSAGE_VIEW"),
                 view: (
                   <PassageView
+                    editable={false}
                     routeElementId={identifiedFeature?.id ?? ""}
                     spanEquipmentOrSegmentIds={
                       selectedFeature.properties?.refId ?? ""

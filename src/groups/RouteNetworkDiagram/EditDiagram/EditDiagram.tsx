@@ -16,7 +16,6 @@ import MultiOptionActionButton from "../../../components/MultiOptionActionButton
 import { MapContext } from "../../../contexts/MapContext";
 import { OverlayContext } from "../../../contexts/OverlayContext";
 import NodeContainerDetails from "../NodeContainerDetails";
-import SpanEquipmentDetails from "../SpanEquipmentDetails";
 import FeatureInformation from "../FeatureInformation";
 import TerminalEquipment from "../../TerminalEquipment";
 import ConnectivityView from "../ConnectivityView";
@@ -855,15 +854,6 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         (singleSelectedFeature?.source === "FiberCable" ||
           singleSelectedFeature?.source.includes("Conduit")) && (
           <div className="container-max-size container-center">
-            {
-              <SpanEquipmentDetails
-                disableMove={true}
-                spanEquipmentMrid={
-                  singleSelectedFeature?.properties?.refId ?? ""
-                }
-                showActions={true}
-              />
-            }
             <TabView
               selectedId={spanEquipmentTabViewSelectedId}
               select={setSpanEquipmentTabViewSelectedId}
@@ -872,6 +862,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                   title: t("PASSAGE_VIEW"),
                   view: (
                     <PassageView
+                      editable={true}
                       routeElementId={identifiedFeature?.id ?? ""}
                       spanEquipmentOrSegmentIds={
                         singleSelectedFeature.properties?.refId ?? ""
