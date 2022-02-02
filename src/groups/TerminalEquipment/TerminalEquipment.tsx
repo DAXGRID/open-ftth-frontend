@@ -27,6 +27,7 @@ type RackContainerProps = {
 };
 
 function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
+  const { state } = useContext(TerminalEquipmentContext);
   if (!parentNodeStructure) <></>;
 
   return (
@@ -36,12 +37,24 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
         <p>{parentNodeStructure?.specName}</p>
         <p>{parentNodeStructure?.info}</p>
         <div className="header-icons">
-          <span role="button" className="header-icons__icon" onClick={() => {}}>
-            <FontAwesomeIcon icon={faEdit} />
-          </span>
-          <span role="button" className="header-icons__icon" onClick={() => {}}>
-            <FontAwesomeIcon icon={faPlusCircle} />
-          </span>
+          {state.editable && (
+            <>
+              <span
+                role="button"
+                className="header-icons__icon"
+                onClick={() => {}}
+              >
+                <FontAwesomeIcon icon={faEdit} />
+              </span>
+              <span
+                role="button"
+                className="header-icons__icon"
+                onClick={() => {}}
+              >
+                <FontAwesomeIcon icon={faPlusCircle} />
+              </span>
+            </>
+          )}
         </div>
       </div>
       {children}
@@ -60,7 +73,7 @@ function TerminalEquipmentTableContainer({
   terminalEquipment,
   showFreeLines,
 }: TerminalEquipmentTableContainerProps) {
-  const { dispatch } = useContext(TerminalEquipmentContext);
+  const { state, dispatch } = useContext(TerminalEquipmentContext);
 
   return (
     <div className="terminal-equipment-table-container">
@@ -82,12 +95,24 @@ function TerminalEquipmentTableContainer({
           >
             <FontAwesomeIcon icon={faFilter} />
           </span>
-          <span role="button" className="header-icons__icon" onClick={() => {}}>
-            <FontAwesomeIcon icon={faEdit} />
-          </span>
-          <span role="button" className="header-icons__icon" onClick={() => {}}>
-            <FontAwesomeIcon icon={faPlusCircle} />
-          </span>
+          {state.editable && (
+            <>
+              <span
+                role="button"
+                className="header-icons__icon"
+                onClick={() => {}}
+              >
+                <FontAwesomeIcon icon={faEdit} />
+              </span>
+              <span
+                role="button"
+                className="header-icons__icon"
+                onClick={() => {}}
+              >
+                <FontAwesomeIcon icon={faPlusCircle} />
+              </span>
+            </>
+          )}
         </div>
       </div>
       <div className="terminal-equipment-table-container-body">{children}</div>
@@ -271,16 +296,19 @@ function TerminalEquipment() {
 interface TerminalEquipmentWrapperProps {
   routeNodeId: string;
   terminalEquipmentOrRackId: string;
+  editable: boolean;
 }
 
 function TerminalEquipmentWrapper({
   routeNodeId,
   terminalEquipmentOrRackId,
+  editable,
 }: TerminalEquipmentWrapperProps) {
   return (
     <TerminalEquipmentProvider
       routeNodeId={routeNodeId}
       terminalEquipmentOrRackId={terminalEquipmentOrRackId}
+      editable={editable}
     >
       <TerminalEquipment />
     </TerminalEquipmentProvider>

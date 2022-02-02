@@ -182,3 +182,9 @@ strong {
 .text-center {
   text-align: center;
 }
+
+.not-allowed-hover {
+  &:hover {
+    cursor: not-allowed !important;
+  }
+}

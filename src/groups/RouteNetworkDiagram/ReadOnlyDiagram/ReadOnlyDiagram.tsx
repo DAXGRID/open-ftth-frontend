@@ -128,6 +128,7 @@ function ReadOnlyDiagram({
         <TerminalEquipment
           routeNodeId={identifiedFeature?.id ?? ""}
           terminalEquipmentOrRackId={selectedFeature.properties?.refId ?? ""}
+          editable={false}
         />
       )}
       {(selectedFeature?.source === "FiberCable" ||

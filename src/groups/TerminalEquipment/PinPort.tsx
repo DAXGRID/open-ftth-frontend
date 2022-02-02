@@ -9,34 +9,44 @@ type PinPortProps = {
 };
 
 function PinPort({ line }: PinPortProps) {
-  const { dispatch } = useContext(TerminalEquipmentContext);
+  const { state, dispatch } = useContext(TerminalEquipmentContext);
 
   return (
     <div className="table-item-terminal">
       <div
         role="button"
-        onClick={() => dispatch({ type: "setShowFiberEditor", show: true })}
-        className={
-          line.a?.connectedTo
-            ? "table-item-terminal__item text-red"
-            : "table-item-terminal__item text-green"
+        onClick={() =>
+          state.editable && dispatch({ type: "setShowFiberEditor", show: true })
         }
+        className={`table-item-terminal__item ${
+          line.z?.connectedTo ? "text-red" : "text-green"
+        }`}
       >
-        {line.a && <FontAwesomeIcon icon={faPlug} />}
+        {line.a && (
+          <FontAwesomeIcon
+            className={`${state.editable ? "" : "not-allowed-hover"}`}
+            icon={faPlug}
+          />
+        )}
       </div>
       <div className="table-item-terminal__item">{line.a?.terminal.name}</div>
       <div className="table-item-terminal__item">-O-</div>
       <div className="table-item-terminal__item">{line.z?.terminal.name}</div>
       <div
         role="button"
-        onClick={() => dispatch({ type: "setShowFiberEditor", show: true })}
-        className={
-          line.z?.connectedTo
-            ? "table-item-terminal__item text-red"
-            : "table-item-terminal__item text-green"
+        onClick={() =>
+          state.editable && dispatch({ type: "setShowFiberEditor", show: true })
         }
+        className={`table-item-terminal__item ${
+          line.z?.connectedTo ? "text-red" : "text-green"
+        }`}
       >
-        {line.z && <FontAwesomeIcon icon={faPlug} />}
+        {line.z && (
+          <FontAwesomeIcon
+            className={`${state.editable ? "" : "not-allowed-hover"}`}
+            icon={faPlug}
+          />
+        )}
       </div>
     </div>
   );
