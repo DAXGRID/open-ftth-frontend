@@ -25,6 +25,7 @@ interface TerminalEquipmentState {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
   selectedConnectivityTraceHop: Hop | null;
+  editable: boolean;
 }
 
 type TerminalEquipmentAction =
@@ -42,6 +43,10 @@ type TerminalEquipmentAction =
   | {
       type: "selectConnectivityTraceHop";
       hop: Hop;
+    }
+  | {
+      type: "setEditable";
+      editable: boolean;
     };
 
 const terminalEquipmentInitialState: TerminalEquipmentState = {
@@ -50,6 +55,7 @@ const terminalEquipmentInitialState: TerminalEquipmentState = {
   showFiberEditor: false,
   connectivityTraceViews: {},
   selectedConnectivityTraceHop: null,
+  editable: false,
 };
 
 function terminalEquipmentReducer(
@@ -103,6 +109,11 @@ function terminalEquipmentReducer(
         ...state,
         selectedConnectivityTraceHop: action.hop,
       };
+    case "setEditable":
+      return {
+        ...state,
+        editable: action.editable,
+      };
     default:
       throw new Error(`No action for ${action}`);
   }
@@ -124,12 +135,14 @@ const TerminalEquipmentContext =
 interface TerminalEquipmentProviderProps {
   routeNodeId: string;
   terminalEquipmentOrRackId: string;
+  editable: boolean;
   children: ReactNode;
 }
 
 const TerminalEquipmentProvider = ({
   routeNodeId,
   terminalEquipmentOrRackId,
+  editable,
   children,
 }: TerminalEquipmentProviderProps) => {
   const { setTrace } = useContext(MapContext);
@@ -139,6 +152,10 @@ const TerminalEquipmentProvider = ({
     terminalEquipmentReducer,
     terminalEquipmentInitialState
   );
+
+  useEffect(() => {
+    dispatch({ type: "setEditable", editable: editable });
+  }, [editable, dispatch]);
 
   useEffect(() => {
     if (!routeNodeId || !terminalEquipmentOrRackId) return;
