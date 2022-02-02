@@ -840,14 +840,12 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         (singleSelectedFeature?.source === "Rack" ||
           singleSelectedFeature?.source === "TerminalEquipment") && (
           <div className="container-max-size container-center">
-            <div className="container-background ">
-              <TerminalEquipment
-                routeNodeId={identifiedFeature?.id ?? ""}
-                terminalEquipmentOrRackId={
-                  singleSelectedFeature.properties?.refId ?? ""
-                }
-              />
-            </div>
+            <TerminalEquipment
+              routeNodeId={identifiedFeature?.id ?? ""}
+              terminalEquipmentOrRackId={
+                singleSelectedFeature.properties?.refId ?? ""
+              }
+            />
           </div>
         )}
       {!editMode &&
