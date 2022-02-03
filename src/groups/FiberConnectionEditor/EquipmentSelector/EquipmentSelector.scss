@@ -28,6 +28,9 @@
   }
 
   .equipment-selector-table-body {
+    max-height: 40vh;
+    overflow-y: overlay;
+
     .equipment-selector-table-body__row {
       display: grid;
       grid-template-columns: 3fr 2fr 0.5fr 2fr 3fr;

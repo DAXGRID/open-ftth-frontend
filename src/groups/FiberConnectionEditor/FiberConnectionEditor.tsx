@@ -267,9 +267,7 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
       if (faceConnections) {
         setToConnectivityFaceConnections(faceConnections);
       } else {
-        throw Error(
-          `Could not load face connections on id '${fromEquipmentId}'`
-        );
+        throw Error(`Could not load face connections on id '${toEquipmentId}'`);
       }
     });
   }, [
