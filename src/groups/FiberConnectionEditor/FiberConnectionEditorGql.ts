@@ -1,6 +1,4 @@
 import { Client } from "urql";
-import tConnectivityFaceConnectionsData from "./terminal-equipment-connectivity-face-connections-query-result.json";
-import sConnectivityFaceConnectionsData from "./span-equipment-connectivity-face-connections-query-result.json";
 
 export type ConnectivityFace = {
   faceKind: string;
@@ -17,26 +15,36 @@ export type EquipmentConnectivityFacesResponse = {
 };
 
 export type ConnectivityFaceConnection = {
-  id: string;
+  terminalOrSegmentId: string;
   name: string;
   endInfo: string;
   isConnected: boolean;
 };
 
 export type ConnectivityFaceConnectionResponse = {
-  connectivityFaceConnections: ConnectivityFaceConnection[];
+  utilityNetwork: {
+    connectivityFaceConnections: ConnectivityFaceConnection[];
+  };
 };
 
-export function getTConnectivityFaceConnectionsData(): ConnectivityFaceConnectionResponse {
-  return {
-    connectivityFaceConnections: tConnectivityFaceConnectionsData,
-  };
-}
-
-export function getSConnectivityFaceConnectionsData(): ConnectivityFaceConnectionResponse {
-  return {
-    connectivityFaceConnections: sConnectivityFaceConnectionsData,
-  };
+export function getConnectivityFaceConnections(
+  client: Client,
+  {
+    faceType,
+    routeNodeId,
+    spanOrTerminalEquipmentId,
+  }: ConnectivityFaceConnectionsParams
+) {
+  return client
+    .query<ConnectivityFaceConnectionResponse>(
+      CONNECTIVITY_FACE_CONNECTIONS_QUERY,
+      {
+        faceType: faceType,
+        routeNodeId,
+        spanOrTerminalEquipmentId,
+      } as ConnectivityFaceConnectionsParams
+    )
+    .toPromise();
 }
 
 export function getConnectivityFacesData(client: Client, routeNodeId: string) {
@@ -60,6 +68,33 @@ query ($routeNodeId: ID!) {
       equipmentId
       equipmentKind
       equipmentName
+    }
+  }
+}
+`;
+
+interface ConnectivityFaceConnectionsParams {
+  routeNodeId: string;
+  spanOrTerminalEquipmentId: string;
+  faceType: string;
+}
+
+const CONNECTIVITY_FACE_CONNECTIONS_QUERY = `
+query (
+$routeNodeId: ID!,
+$spanOrTerminalEquipmentId: ID!,
+$faceType: FaceKindEnumType!) {
+  utilityNetwork {
+    connectivityFaceConnections (
+      routeNodeId: $routeNodeId
+      spanOrTerminalEquipmentId: $spanOrTerminalEquipmentId
+      faceType: $faceType
+    )
+    {
+      terminalOrSegmentId
+      name
+      endInfo
+      isConnected
     }
   }
 }

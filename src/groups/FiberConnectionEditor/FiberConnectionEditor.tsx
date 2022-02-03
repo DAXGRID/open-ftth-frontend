@@ -10,8 +10,7 @@ import {
   getConnectivityFacesData,
   ConnectivityFace,
   ConnectivityFaceConnection,
-  getTConnectivityFaceConnectionsData,
-  getSConnectivityFaceConnectionsData,
+  getConnectivityFaceConnections,
 } from "./FiberConnectionEditorGql";
 
 type EquipmentSelectorRow = {
@@ -58,13 +57,13 @@ function createRows(
   return from.map<EquipmentSelectorRow>((x, i) => {
     return {
       from: {
-        id: x.id,
+        id: x.terminalOrSegmentId,
         endInfo: x.endInfo,
         isConnected: x.isConnected,
         name: x.name,
       },
       to: {
-        id: to[i].id,
+        id: to[i].terminalOrSegmentId,
         endInfo: to[i].endInfo,
         isConnected: to[i].isConnected,
         name: to[i].name,
@@ -83,13 +82,14 @@ function createNumberOptions(count: number): SelectOption[] {
 }
 
 function createConnectivityFaceSelectOptions(
-  x: ConnectivityFace[]
+  connecitivyFaces: ConnectivityFace[]
 ): SelectOption[] {
-  return x.map<SelectOption>((y) => {
+  return connecitivyFaces.map<SelectOption>((x) => {
+    const id = getCombinedEquipmentId(x);
     return {
-      text: `${y.equipmentName} (${y.faceName})`,
-      value: `${y.equipmentId}_${y.faceKind}`,
-      key: `${y.equipmentId}_(${y.faceKind})`,
+      text: `${x.equipmentName} (${x.faceName})`,
+      value: id,
+      key: id,
     };
   });
 }
@@ -99,10 +99,10 @@ function createConnectivityFaceConnectionSelectOptions(
 ): SelectOption[] {
   return x.map<SelectOption>((y) => {
     return {
-      text: `${y.name} (${y.endInfo})`,
-      value: y.id,
+      text: `${y.name} ${y.endInfo ? "(" + y.endInfo + ")" : ""}`,
+      value: y.terminalOrSegmentId,
       disabled: y.isConnected,
-      key: y.id,
+      key: y.terminalOrSegmentId,
     };
   });
 }
@@ -118,8 +118,10 @@ function getAvailableConnections(
   const fromFiltered = from.filter((x) => !x.isConnected);
   const toFiltered = to.filter((x) => !x.isConnected);
 
-  const fromIndex = fromFiltered.findIndex((x) => x.id === fromId);
-  const toIndex = toFiltered.findIndex((x) => x.id === toId);
+  const fromIndex = fromFiltered.findIndex(
+    (x) => x.terminalOrSegmentId === fromId
+  );
+  const toIndex = toFiltered.findIndex((x) => x.terminalOrSegmentId === toId);
 
   let fromAvailable: ConnectivityFaceConnection[] = [];
   const toAvailable = toFiltered.splice(toIndex, count);
@@ -147,8 +149,10 @@ function findAvailableCountFaceConnections(
   const fromFiltered = from.filter((x) => !x.isConnected);
   const toFiltered = to.filter((x) => !x.isConnected);
 
-  const fromIndex = fromFiltered.findIndex((x) => x.id === fromId);
-  const toIndex = toFiltered.findIndex((x) => x.id === toId);
+  const fromIndex = fromFiltered.findIndex(
+    (x) => x.terminalOrSegmentId === fromId
+  );
+  const toIndex = toFiltered.findIndex((x) => x.terminalOrSegmentId === toId);
 
   const fromAvailableCount = fromFiltered.splice(fromIndex).length;
   const toAvailableCount = toFiltered.splice(toIndex).length;
@@ -168,6 +172,15 @@ function findAvailableJumps(
   return maxAvailableConnections - numberOfConnections;
 }
 
+function getCombinedEquipmentId({ equipmentId, faceKind }: ConnectivityFace) {
+  return `${equipmentId}_${faceKind}`;
+}
+
+function getRootEquipmentId(combinedEquipmentId: string) {
+  const splitted = combinedEquipmentId.split("_");
+  return splitted[splitted.length - 1];
+}
+
 interface FiberConnectionEditorProps {
   routeNodeId: string;
 }
@@ -185,12 +198,10 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
   const [connectivityFaces, setConnectivityFaces] = useState<
     ConnectivityFace[]
   >([]);
-  const [fromConnectivityFaceConnections] = useState(
-    getTConnectivityFaceConnectionsData()
-  );
-  const [toConnectivityFaceConnections] = useState(
-    getSConnectivityFaceConnectionsData()
-  );
+  const [fromConnectivityFaceConnections, setFromConnectivityFaceConnections] =
+    useState<ConnectivityFaceConnection[]>([]);
+  const [toConnectivityFaceConnections, setToConnectivityFaceConnections] =
+    useState<ConnectivityFaceConnection[]>([]);
 
   useEffect(() => {
     getConnectivityFacesData(client, routeNodeId).then((response) => {
@@ -204,6 +215,70 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
       }
     });
   }, [routeNodeId, setConnectivityFaces, client]);
+
+  useEffect(() => {
+    if (!fromEquipmentId) return;
+
+    const connecitivyFace = connectivityFaces.find(
+      (x) => getCombinedEquipmentId(x) === fromEquipmentId
+    );
+
+    if (!connecitivyFace) throw Error("Could not find connectivity face.");
+
+    getConnectivityFaceConnections(client, {
+      faceType: connecitivyFace.faceKind,
+      routeNodeId: routeNodeId,
+      spanOrTerminalEquipmentId: connecitivyFace.equipmentId,
+    }).then((response) => {
+      const faceConnections =
+        response.data?.utilityNetwork.connectivityFaceConnections;
+      if (faceConnections) {
+        setFromConnectivityFaceConnections(faceConnections);
+      } else {
+        throw Error(
+          `Could not load face connections on id '${fromEquipmentId}'`
+        );
+      }
+    });
+  }, [
+    fromEquipmentId,
+    client,
+    connectivityFaces,
+    routeNodeId,
+    setFromConnectivityFaceConnections,
+  ]);
+
+  useEffect(() => {
+    if (!toEquipmentId) return;
+
+    const connecitivyFace = connectivityFaces.find(
+      (x) => getCombinedEquipmentId(x) === toEquipmentId
+    );
+
+    if (!connecitivyFace) throw Error("Could not find connectivity face.");
+
+    getConnectivityFaceConnections(client, {
+      faceType: connecitivyFace.faceKind,
+      routeNodeId: routeNodeId,
+      spanOrTerminalEquipmentId: connecitivyFace.equipmentId,
+    }).then((response) => {
+      const faceConnections =
+        response.data?.utilityNetwork.connectivityFaceConnections;
+      if (faceConnections) {
+        setToConnectivityFaceConnections(faceConnections);
+      } else {
+        throw Error(
+          `Could not load face connections on id '${fromEquipmentId}'`
+        );
+      }
+    });
+  }, [
+    toEquipmentId,
+    client,
+    connectivityFaces,
+    routeNodeId,
+    setToConnectivityFaceConnections,
+  ]);
 
   const fromConnectivityFaceOptions = useMemo<SelectOption[]>(() => {
     const defaultOption = { text: t("CHOOSE"), value: "", key: "0" };
@@ -253,7 +328,7 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
     return [
       { text: t("CHOOSE"), value: "", key: "0" },
       ...createConnectivityFaceConnectionSelectOptions(
-        fromConnectivityFaceConnections.connectivityFaceConnections
+        fromConnectivityFaceConnections
       ),
     ];
   }, [fromConnectivityFaceConnections, t]);
@@ -262,23 +337,23 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
     return [
       { text: t("CHOOSE"), value: "", key: "0" },
       ...createConnectivityFaceConnectionSelectOptions(
-        toConnectivityFaceConnections.connectivityFaceConnections
+        toConnectivityFaceConnections
       ),
     ];
   }, [toConnectivityFaceConnections, t]);
 
   const maxAvailableConnectionsCount = useMemo(() => {
     if (
-      !fromConnectivityFaceConnections.connectivityFaceConnections ||
-      !toConnectivityFaceConnections.connectivityFaceConnections ||
+      !fromConnectivityFaceConnections ||
+      !toConnectivityFaceConnections ||
       !fromPositionId ||
       !toPositionId
     )
       return 0;
 
     return findAvailableCountFaceConnections(
-      fromConnectivityFaceConnections.connectivityFaceConnections,
-      toConnectivityFaceConnections.connectivityFaceConnections,
+      fromConnectivityFaceConnections,
+      toConnectivityFaceConnections,
       fromPositionId,
       toPositionId
     );
@@ -298,8 +373,8 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
 
   const connectionRows = useMemo(() => {
     if (
-      !fromConnectivityFaceConnections.connectivityFaceConnections ||
-      !toConnectivityFaceConnections.connectivityFaceConnections ||
+      !fromConnectivityFaceConnections ||
+      !toConnectivityFaceConnections ||
       !fromPositionId ||
       !toPositionId ||
       !numberOfConnections ||
@@ -308,8 +383,8 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
       return [];
 
     const available = getAvailableConnections(
-      fromConnectivityFaceConnections.connectivityFaceConnections,
-      toConnectivityFaceConnections.connectivityFaceConnections,
+      fromConnectivityFaceConnections,
+      toConnectivityFaceConnections,
       fromPositionId,
       toPositionId,
       numberOfConnections,

@@ -230,7 +230,6 @@ function TerminalEquipment() {
         </ModalContainer>
       );
     } else {
-      showElement(null);
     }
   }, [state.showFiberEditor, showElement, dispatch, t, identifiedFeature]);
 

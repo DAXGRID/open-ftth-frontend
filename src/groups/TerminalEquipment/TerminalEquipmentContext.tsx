@@ -47,6 +47,10 @@ type TerminalEquipmentAction =
   | {
       type: "setEditable";
       editable: boolean;
+    }
+  | {
+      type: "setTerminalEquipmentOrRackId";
+      id: string;
     };
 
 const terminalEquipmentInitialState: TerminalEquipmentState = {
