@@ -7,10 +7,10 @@ import NumberPicker from "../../components/NumberPicker";
 import EquipmentSelector from "./EquipmentSelector";
 import { useTranslation } from "react-i18next";
 import {
-  getConnectivityFacesData,
+  getConnectivityFaceConnections,
   ConnectivityFace,
   ConnectivityFaceConnection,
-  getConnectivityFaceConnections,
+  getConnectivityFaces,
 } from "./FiberConnectionEditorGql";
 
 type EquipmentSelectorRow = {
@@ -204,7 +204,7 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
     useState<ConnectivityFaceConnection[]>([]);
 
   useEffect(() => {
-    getConnectivityFacesData(client, routeNodeId).then((response) => {
+    getConnectivityFaces(client, routeNodeId).then((response) => {
       const connecitivyFaceConnections =
         response.data?.utilityNetwork.connectivityFaces;
 
