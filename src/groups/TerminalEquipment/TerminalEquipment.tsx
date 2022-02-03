@@ -20,6 +20,7 @@ import {
 } from "./TerminalEquipmentContext";
 import TerminalLine from "./TerminalLine";
 import TerminalLineFree from "./TerminalLineFree";
+import { MapContext } from "../../contexts/MapContext";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -212,6 +213,7 @@ function TerminalEquipment() {
   const { showElement } = useContext(OverlayContext);
   const { dispatch, state } = useContext(TerminalEquipmentContext);
   const { t } = useTranslation();
+  const { identifiedFeature } = useContext(MapContext);
 
   useEffect(() => {
     if (state.showFiberEditor) {
@@ -224,13 +226,13 @@ function TerminalEquipment() {
           }
           maxWidth="1200px"
         >
-          <FiberConnectionEditor />
+          <FiberConnectionEditor routeNodeId={identifiedFeature?.id ?? ""} />
         </ModalContainer>
       );
     } else {
       showElement(null);
     }
-  }, [state.showFiberEditor, showElement, dispatch, t]);
+  }, [state.showFiberEditor, showElement, dispatch, t, identifiedFeature]);
 
   const groupedByParentId = useMemo(() => {
     return groupByParentId(state.connectivityView?.terminalEquipments ?? []);

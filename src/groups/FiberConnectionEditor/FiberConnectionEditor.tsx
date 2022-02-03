@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useClient } from "urql";
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import LabelContainer from "../../components/LabelContainer";
 import DefaultButton from "../../components/DefaultButton";
@@ -86,9 +87,9 @@ function createConnectivityFaceSelectOptions(
 ): SelectOption[] {
   return x.map<SelectOption>((y) => {
     return {
-      text: `${y.equipmentName} (${y.directionName})`,
-      value: y.equipmentId,
-      key: `${y.equipmentId}(${y.directionType})`,
+      text: `${y.equipmentName} (${y.faceName})`,
+      value: `${y.equipmentId}_${y.faceKind}`,
+      key: `${y.equipmentId}_(${y.faceKind})`,
     };
   });
 }
@@ -167,8 +168,13 @@ function findAvailableJumps(
   return maxAvailableConnections - numberOfConnections;
 }
 
-function FiberConnectionEditor() {
+interface FiberConnectionEditorProps {
+  routeNodeId: string;
+}
+
+function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
   const { t } = useTranslation();
+  const client = useClient();
   const [fromEquipmentId, setFromEquipmentId] = useState<string>("");
   const [toEquipmentId, setToEquipmentId] = useState<string>("");
   const [fromPositionId, setFromPositionId] = useState<string>("");
@@ -176,7 +182,9 @@ function FiberConnectionEditor() {
   const [numberOfConnections, setNumberOfConnections] = useState(1);
   const [jumps, setJumps] = useState(1);
   const [coord, setCoord] = useState(0);
-  const [connectivityData] = useState(getConnectivityFacesData());
+  const [connectivityFaces, setConnectivityFaces] = useState<
+    ConnectivityFace[]
+  >([]);
   const [fromConnectivityFaceConnections] = useState(
     getTConnectivityFaceConnectionsData()
   );
@@ -184,18 +192,28 @@ function FiberConnectionEditor() {
     getSConnectivityFaceConnectionsData()
   );
 
+  useEffect(() => {
+    getConnectivityFacesData(client, routeNodeId).then((response) => {
+      const connecitivyFaceConnections =
+        response.data?.utilityNetwork.connectivityFaces;
+
+      if (connecitivyFaceConnections) {
+        setConnectivityFaces(connecitivyFaceConnections);
+      } else {
+        throw Error("Could not load connectivity faces data");
+      }
+    });
+  }, [routeNodeId, setConnectivityFaces, client]);
+
   const fromConnectivityFaceOptions = useMemo<SelectOption[]>(() => {
     const defaultOption = { text: t("CHOOSE"), value: "", key: "0" };
     if (toEquipmentId) {
-      const kind = getEquipmentKind(
-        toEquipmentId,
-        connectivityData.equipmentConnectivityFaces
-      );
+      const kind = getEquipmentKind(toEquipmentId, connectivityFaces);
       if (kind === "SpanEquipment") {
         return [
           defaultOption,
           ...createConnectivityFaceSelectOptions(
-            connectivityData.equipmentConnectivityFaces.filter(
+            connectivityFaces.filter(
               (x) => x.equipmentKind === "TerminalEquipment"
             )
           ),
@@ -205,24 +223,19 @@ function FiberConnectionEditor() {
 
     return [
       defaultOption,
-      ...createConnectivityFaceSelectOptions(
-        connectivityData.equipmentConnectivityFaces
-      ),
+      ...createConnectivityFaceSelectOptions(connectivityFaces),
     ];
-  }, [connectivityData, t, toEquipmentId]);
+  }, [connectivityFaces, t, toEquipmentId]);
 
   const toConnectivityFaceOptions = useMemo<SelectOption[]>(() => {
     const defaultOption = { text: t("CHOOSE"), value: "", key: "0" };
     if (fromEquipmentId) {
-      const kind = getEquipmentKind(
-        fromEquipmentId,
-        connectivityData.equipmentConnectivityFaces
-      );
+      const kind = getEquipmentKind(fromEquipmentId, connectivityFaces);
       if (kind === "SpanEquipment") {
         return [
           defaultOption,
           ...createConnectivityFaceSelectOptions(
-            connectivityData.equipmentConnectivityFaces.filter(
+            connectivityFaces.filter(
               (x) => x.equipmentKind === "TerminalEquipment"
             )
           ),
@@ -232,11 +245,9 @@ function FiberConnectionEditor() {
 
     return [
       defaultOption,
-      ...createConnectivityFaceSelectOptions(
-        connectivityData.equipmentConnectivityFaces
-      ),
+      ...createConnectivityFaceSelectOptions(connectivityFaces),
     ];
-  }, [connectivityData, t, fromEquipmentId]);
+  }, [connectivityFaces, t, fromEquipmentId]);
 
   const fromConnectivityFaceConnectionOptions = useMemo<SelectOption[]>(() => {
     return [
@@ -404,7 +415,7 @@ function FiberConnectionEditor() {
         {bothTerminalEquipment(
           fromEquipmentId,
           toEquipmentId,
-          connectivityData.equipmentConnectivityFaces
+          connectivityFaces
         ) && (
           <LabelContainer text={t("PATCH/PIGTAIL_COORD_LENGTH_CM")}>
             <NumberPicker
