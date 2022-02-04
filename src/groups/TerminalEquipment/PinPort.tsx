@@ -39,7 +39,9 @@ function PinPort({ line }: PinPortProps) {
       <div
         role="button"
         onClick={() =>
-          state.editable && dispatch({ type: "setShowFiberEditor", show: true })
+          state.editable &&
+          !line.z?.connectedTo &&
+          dispatch({ type: "setShowFiberEditor", show: true })
         }
         className={`table-item-terminal__item ${
           line.z?.connectedTo ? "text-red" : "text-green"
