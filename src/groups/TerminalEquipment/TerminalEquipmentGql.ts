@@ -18,12 +18,12 @@ export const connectivityViewQuery = (
 
 export const connectivityTraceViewQuery = (
   client: Client,
-  routeNodeId: string,
+  routeNetworkElementId: string,
   terminalOrSpanEquipmentId: string
 ) => {
   return client
     .query<ConnectivityTraceViewResponse>(CONNECTIVITY_TRACE_VIEW_QUERY, {
-      routeNodeId: routeNodeId,
+      routeNetworkElementId: routeNetworkElementId,
       terminalOrSpanEquipmentId: terminalOrSpanEquipmentId,
     } as ConnectivityTraceViewQueryParams)
     .toPromise();
@@ -165,17 +165,17 @@ interface ConnectivityTraceViewResponse {
 }
 
 interface ConnectivityTraceViewQueryParams {
-  routeNodeId: string;
+  routeNetworkElementId: string;
   terminalOrSpanEquipmentId: string;
 }
 
 export const CONNECTIVITY_TRACE_VIEW_QUERY = `
 query (
-$routeNodeId: ID!,
+$routeNetworkElementId: ID!,
 $terminalOrSpanEquipmentId: ID!) {
   utilityNetwork {
     connectivityTraceView(
-      routeNodeId: $routeNodeId
+      routeNetworkElementId: $routeNetworkElementId
       terminalOrSpanEquipmentId: $terminalOrSpanEquipmentId
     ) {
       circuitName
