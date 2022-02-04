@@ -16,15 +16,19 @@ function PinPort({ line }: PinPortProps) {
       <div
         role="button"
         onClick={() =>
-          state.editable && dispatch({ type: "setShowFiberEditor", show: true })
+          state.editable &&
+          !line.a?.connectedTo &&
+          dispatch({ type: "setShowFiberEditor", show: true })
         }
         className={`table-item-terminal__item ${
-          line.z?.connectedTo ? "text-red" : "text-green"
+          line.a?.connectedTo ? "text-red" : "text-green"
         }`}
       >
         {line.a && (
           <FontAwesomeIcon
-            className={`${state.editable ? "" : "not-allowed-hover"}`}
+            className={`${
+              state.editable && !line.a?.connectedTo ? "" : "not-allowed-hover"
+            }`}
             icon={faPlug}
           />
         )}
@@ -43,7 +47,9 @@ function PinPort({ line }: PinPortProps) {
       >
         {line.z && (
           <FontAwesomeIcon
-            className={`${state.editable ? "" : "not-allowed-hover"}`}
+            className={`${
+              state.editable && !line.z?.connectedTo ? "" : "not-allowed-hover"
+            }`}
             icon={faPlug}
           />
         )}
