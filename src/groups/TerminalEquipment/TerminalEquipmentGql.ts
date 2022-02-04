@@ -138,6 +138,62 @@ $terminalEquipmentOrRackId: ID!) {
 }
 `;
 
+export interface TerminalEquipmentConnectivityViewUpdatedResponse {
+  terminalEquipmentConnectivityUpdated: TerminalEquipmentConnectivityView;
+}
+
+export interface TerminalEquipmentConnectivityViewUpdatedParams {
+  routeNodeId: string;
+  terminalEquipmentOrRackId: string;
+}
+
+export const TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_UPDATED = `
+subscription ($routeNodeId: ID!, $terminalEquipmentOrRackId: ID!) {
+  terminalEquipmentConnectivityUpdated(
+    routeNodeId: $routeNodeId
+    terminalEquipmentOrRackId: $terminalEquipmentOrRackId
+  ) {
+    parentNodeStructures {
+      id
+      name
+      specName
+    }
+    terminalEquipments {
+      id
+      parentNodeStructureId
+      name
+      category
+      specName
+      terminalStructures {
+        id
+        name
+        specName
+        info
+        lines {
+          connectorSymbol
+          a {
+            terminal {
+              id
+              name
+            }
+            connectedTo
+            end
+          }
+          z {
+            terminal {
+              id
+              name
+            }
+            connectedTo
+            end
+          }
+        }
+      }
+    }
+  }
+}
+`;
+
 export interface Hop {
   level: number;
   isSplitter: boolean;

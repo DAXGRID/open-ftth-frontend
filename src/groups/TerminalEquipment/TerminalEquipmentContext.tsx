@@ -9,9 +9,12 @@ import {
   ConnectivityTraceView,
   connectivityTraceViewQuery,
   TerminalEquipmentConnectivityView,
+  TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_UPDATED,
+  TerminalEquipmentConnectivityViewUpdatedResponse,
+  TerminalEquipmentConnectivityViewUpdatedParams,
   Hop,
 } from "./TerminalEquipmentGql";
-import { useClient } from "urql";
+import { useClient, useSubscription } from "urql";
 import { connectivityViewQuery } from "./TerminalEquipmentGql";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -156,6 +159,29 @@ const TerminalEquipmentProvider = ({
     terminalEquipmentReducer,
     terminalEquipmentInitialState
   );
+
+  const [connectiviyViewUpdatedResult] =
+    useSubscription<TerminalEquipmentConnectivityViewUpdatedResponse>({
+      query: TERMINAL_EQUIPMENT_CONNECTIVITY_VIEW_UPDATED,
+      variables: {
+        routeNodeId: routeNodeId,
+        terminalEquipmentOrRackId: terminalEquipmentOrRackId,
+      } as TerminalEquipmentConnectivityViewUpdatedParams,
+      pause: !routeNodeId || !terminalEquipmentOrRackId,
+    });
+
+  useEffect(() => {
+    if (
+      connectiviyViewUpdatedResult.data?.terminalEquipmentConnectivityUpdated
+    ) {
+      dispatch({
+        type: "setConnectivityView",
+        view: connectiviyViewUpdatedResult.data
+          ?.terminalEquipmentConnectivityUpdated,
+      });
+      dispatch({ type: "setShowFiberEditor", show: false });
+    }
+  }, [connectiviyViewUpdatedResult, dispatch]);
 
   useEffect(() => {
     dispatch({ type: "setEditable", editable: editable });
