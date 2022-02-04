@@ -33,7 +33,7 @@ export function connectToTerminalEquipment(
   {
     routeNodeId,
     spanEquipmentId,
-    spanSgmentIds,
+    spanSegmentIds,
     terminalEquipmentId,
     terminalIds,
   }: ConnectToTerminalEquipmentParams
@@ -42,7 +42,7 @@ export function connectToTerminalEquipment(
     .mutation(CONNECT_TO_TERMINAL_EQUIPMENT_MUTATION, {
       routeNodeId,
       spanEquipmentId,
-      spanSgmentIds,
+      spanSegmentIds,
       terminalEquipmentId,
       terminalIds,
     } as ConnectToTerminalEquipmentParams)
@@ -133,9 +133,9 @@ interface ConnectToTerminalEquipmentResponse {
 interface ConnectToTerminalEquipmentParams {
   routeNodeId: string;
   spanEquipmentId: string;
-  spanSgmentIds: string[];
+  spanSegmentIds: string[];
   terminalEquipmentId: string;
-  terminalIds: string;
+  terminalIds: string[];
 }
 
 export const CONNECT_TO_TERMINAL_EQUIPMENT_MUTATION = `
@@ -143,8 +143,8 @@ mutation (
 $routeNodeId: ID!,
 $spanEquipmentId: ID!,
 $spanSegmentIds: [ID!]!,
-terminalEquipmentId: ID!,
-terminalIds: [ID!]!) {
+$terminalEquipmentId: ID!,
+$terminalIds: [ID!]!) {
   spanEquipment {
     connectToTerminalEquipment (
       routeNodeId: $routeNodeId

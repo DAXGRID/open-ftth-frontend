@@ -202,7 +202,8 @@
       "CONTACT_ADMINISTRATOR_ACCESS": "Contact administrator to gain access.",
       "LENGTH": "Length",
       "DISTANCE": "Distance",
-      "CONDUIT_ID": "Conduit id"
+      "CONDUIT_ID": "Conduit id",
+      "CONNECTION_ESTABLISHED": "Connection established."
     }
   },
   "dk": {
@@ -408,7 +409,8 @@
       "CONTACT_ADMINISTRATOR_ACCESS": "Kontakt en administrator for at få adgang.",
       "LENGTH": "Længde",
       "DISTANCE": "Afstand",
-      "CONDUIT_ID": "Rør id"
+      "CONDUIT_ID": "Rør id",
+      "CONNECTION_ESTABLISHED": "Forbundet."
     }
   }
 }

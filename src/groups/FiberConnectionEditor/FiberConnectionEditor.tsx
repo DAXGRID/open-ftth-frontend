@@ -6,11 +6,13 @@ import DefaultButton from "../../components/DefaultButton";
 import NumberPicker from "../../components/NumberPicker";
 import EquipmentSelector from "./EquipmentSelector";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import {
   getConnectivityFaceConnections,
   ConnectivityFace,
   ConnectivityFaceConnection,
   getConnectivityFaces,
+  connectToTerminalEquipment,
 } from "./FiberConnectionEditorGql";
 
 type EquipmentSelectorRow = {
@@ -178,7 +180,7 @@ function getCombinedEquipmentId({ equipmentId, faceKind }: ConnectivityFace) {
 
 function getRootEquipmentId(combinedEquipmentId: string) {
   const splitted = combinedEquipmentId.split("_");
-  return splitted[splitted.length - 1];
+  return splitted[0];
 }
 
 interface FiberConnectionEditorProps {
@@ -426,6 +428,51 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
     setJumps(1);
   };
 
+  const executeConnectToTerminalEquipment = () => {
+    const fromEquipId = getRootEquipmentId(fromEquipmentId);
+    const toEquipId = getRootEquipmentId(toEquipmentId);
+    const from = connectivityFaces.find((x) => x.equipmentId === fromEquipId);
+    const to = connectivityFaces.find((x) => x.equipmentId === toEquipId);
+
+    if (!from || !to) {
+      throw Error("Could not find from or to in connectivity faces.");
+    }
+
+    if (
+      (from.equipmentKind === "SPAN_EQUIPMENT" &&
+        to.equipmentKind === "TERMINAL_EQUIPMENT") ||
+      (from.equipmentKind === "TERMINAL_EQUIPMENT" &&
+        to.equipmentKind === "SPAN_EQUIPMENT")
+    ) {
+      const isFromSpanEquipment = from.equipmentKind === "SPAN_EQUIPMENT";
+
+      const spanEquipment = isFromSpanEquipment ? from : to;
+      const terminalEquipment = isFromSpanEquipment ? to : from;
+
+      const spanSegmentIds = isFromSpanEquipment
+        ? connectionRows.map((x) => x.from.id)
+        : connectionRows.map((x) => x.to.id);
+
+      const terminalIds = isFromSpanEquipment
+        ? connectionRows.map((x) => x.to.id)
+        : connectionRows.map((x) => x.from.id);
+
+      connectToTerminalEquipment(client, {
+        routeNodeId: routeNodeId,
+        spanEquipmentId: spanEquipment.equipmentId,
+        spanSegmentIds: spanSegmentIds,
+        terminalEquipmentId: terminalEquipment.equipmentId,
+        terminalIds: terminalIds,
+      }).then(() => {
+        toast.success(t("CONNECTION_ESTABLISHED"));
+      });
+    }
+  };
+
+  const canExecuteConnectToTerminal = (): boolean => {
+    return connectionRows.length > 0;
+  };
+
   return (
     <div className="fiber-connection-editor">
       <div className="full-row">
@@ -504,10 +551,11 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
       </div>
       <div className="full-row center-items">
         <DefaultButton
+          disabled={!canExecuteConnectToTerminal()}
           innerText={t("CONNECT")}
           maxWidth="500px"
           onClick={() => {
-            console.log("Clicked");
+            executeConnectToTerminalEquipment();
           }}
         />
       </div>
