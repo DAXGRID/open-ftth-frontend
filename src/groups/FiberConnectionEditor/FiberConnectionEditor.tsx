@@ -463,9 +463,24 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
         spanSegmentIds: spanSegmentIds,
         terminalEquipmentId: terminalEquipment.equipmentId,
         terminalIds: terminalIds,
-      }).then(() => {
-        toast.success(t("CONNECTION_ESTABLISHED"));
-      });
+      })
+        .then((response) => {
+          if (
+            response.data?.spanEquipment.connectToTerminalEquipment.isSuccess
+          ) {
+            toast.success(t("CONNECTION_ESTABLISHED"));
+          } else {
+            toast.error(
+              t(
+                response.data?.spanEquipment.connectToTerminalEquipment
+                  .errorCode ?? "ERROR"
+              )
+            );
+          }
+        })
+        .catch(() => {
+          toast.error(t("ERROR"));
+        });
     }
   };
 
