@@ -39,13 +39,16 @@ export function connectToTerminalEquipment(
   }: ConnectToTerminalEquipmentParams
 ) {
   return client
-    .mutation(CONNECT_TO_TERMINAL_EQUIPMENT_MUTATION, {
-      routeNodeId,
-      spanEquipmentId,
-      spanSegmentIds,
-      terminalEquipmentId,
-      terminalIds,
-    } as ConnectToTerminalEquipmentParams)
+    .mutation<ConnectToTerminalEquipmentResponse>(
+      CONNECT_TO_TERMINAL_EQUIPMENT_MUTATION,
+      {
+        routeNodeId,
+        spanEquipmentId,
+        spanSegmentIds,
+        terminalEquipmentId,
+        terminalIds,
+      } as ConnectToTerminalEquipmentParams
+    )
     .toPromise();
 }
 
