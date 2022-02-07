@@ -174,7 +174,13 @@ function findAvailableJumps(
   return maxAvailableConnections - numberOfConnections;
 }
 
-function getCombinedEquipmentId({ equipmentId, faceKind }: ConnectivityFace) {
+function getCombinedEquipmentId({
+  equipmentId,
+  faceKind,
+}: {
+  equipmentId: string;
+  faceKind: string;
+}) {
   return `${equipmentId}_${faceKind}`;
 }
 
@@ -216,8 +222,10 @@ function FiberConnectionEditor({
   useEffect(() => {
     if (!faceKind || !terminalId || !terminalEquipmentOrRackId) return;
 
-    const combinedId = (id: string, faceKind: string) => `${id}_${faceKind}`;
-    var equipmentId = combinedId(terminalEquipmentOrRackId, faceKind);
+    var equipmentId = getCombinedEquipmentId({
+      equipmentId: terminalEquipmentOrRackId,
+      faceKind: faceKind,
+    });
 
     if (faceKind === "PATCH_SIDE") {
       setFromEquipmentId(equipmentId);
@@ -315,65 +323,155 @@ function FiberConnectionEditor({
 
   const fromConnectivityFaceOptions = useMemo<SelectOption[]>(() => {
     const defaultOption = { text: t("CHOOSE"), value: "", key: "0" };
-    if (toEquipmentId) {
-      const kind = getEquipmentKind(toEquipmentId, connectivityFaces);
-      if (kind === "SpanEquipment") {
+    const toEquipment = connectivityFaces.find(
+      (x) => getCombinedEquipmentId(x) === toEquipmentId
+    );
+
+    if (toEquipment && toEquipment.equipmentKind === "TERMINAL_EQUIPMENT") {
+      if (toEquipment.faceKind === "PATCH_SIDE") {
         return [
           defaultOption,
           ...createConnectivityFaceSelectOptions(
             connectivityFaces.filter(
-              (x) => x.equipmentKind === "TerminalEquipment"
+              (x) => x.equipmentKind === "TERMINAL_EQUIPMENT"
             )
           ),
         ];
+      } else if (toEquipment.faceKind === "SPLICE_SIDE") {
+        return [
+          defaultOption,
+          ...createConnectivityFaceSelectOptions(
+            connectivityFaces.filter(
+              (x) => x.equipmentKind === "SPAN_EQUIPMENT"
+            )
+          ),
+        ];
+      } else {
+        throw Error(
+          `Could not handle faceKind being '${toEquipment.faceKind}'`
+        );
       }
+    } else {
+      return [
+        defaultOption,
+        ...createConnectivityFaceSelectOptions(
+          connectivityFaces.filter(
+            (x) => x.equipmentKind === "TERMINAL_EQUIPMENT"
+          )
+        ),
+      ];
     }
-
-    return [
-      defaultOption,
-      ...createConnectivityFaceSelectOptions(connectivityFaces),
-    ];
   }, [connectivityFaces, t, toEquipmentId]);
 
   const toConnectivityFaceOptions = useMemo<SelectOption[]>(() => {
     const defaultOption = { text: t("CHOOSE"), value: "", key: "0" };
-    if (fromEquipmentId) {
-      const kind = getEquipmentKind(fromEquipmentId, connectivityFaces);
-      if (kind === "SpanEquipment") {
+    const fromEquipment = connectivityFaces.find(
+      (x) => getCombinedEquipmentId(x) === fromEquipmentId
+    );
+
+    if (fromEquipment && fromEquipment.equipmentKind === "TERMINAL_EQUIPMENT") {
+      if (fromEquipment.faceKind === "PATCH_SIDE") {
         return [
           defaultOption,
           ...createConnectivityFaceSelectOptions(
             connectivityFaces.filter(
-              (x) => x.equipmentKind === "TerminalEquipment"
+              (x) => x.equipmentKind === "TERMINAL_EQUIPMENT"
             )
           ),
         ];
+      } else if (fromEquipment.faceKind === "SPLICE_SIDE") {
+        return [
+          defaultOption,
+          ...createConnectivityFaceSelectOptions(
+            connectivityFaces.filter(
+              (x) => x.equipmentKind === "SPAN_EQUIPMENT"
+            )
+          ),
+        ];
+      } else {
+        throw Error(
+          `Could not handle faceKind being '${fromEquipment.faceKind}'`
+        );
       }
+    } else {
+      return [
+        defaultOption,
+        ...createConnectivityFaceSelectOptions(
+          connectivityFaces.filter(
+            (x) => x.equipmentKind === "TERMINAL_EQUIPMENT"
+          )
+        ),
+      ];
     }
-
-    return [
-      defaultOption,
-      ...createConnectivityFaceSelectOptions(connectivityFaces),
-    ];
   }, [connectivityFaces, t, fromEquipmentId]);
 
+  useEffect(() => {
+    if (
+      !fromEquipmentId ||
+      fromConnectivityFaceOptions.filter((x) => x.value !== "").length === 0
+    )
+      return;
+    const found = fromConnectivityFaceOptions.find(
+      (x) => x.value === fromEquipmentId
+    );
+    if (!found) {
+      setFromEquipmentId("");
+      setFromPositionId("");
+    }
+  }, [
+    fromConnectivityFaceOptions,
+    fromEquipmentId,
+    setFromEquipmentId,
+    setFromPositionId,
+    toEquipmentId,
+  ]);
+
+  useEffect(() => {
+    if (
+      !toEquipmentId ||
+      toConnectivityFaceOptions.filter((x) => x.value !== "").length === 0
+    )
+      return;
+    const found = toConnectivityFaceOptions.find(
+      (x) => x.value === toEquipmentId
+    );
+    if (!found) {
+      setToEquipmentId("");
+      setToPositionId("");
+    }
+  }, [
+    toConnectivityFaceOptions,
+    toEquipmentId,
+    setToEquipmentId,
+    setToPositionId,
+    fromEquipmentId,
+  ]);
+
   const fromConnectivityFaceConnectionOptions = useMemo<SelectOption[]>(() => {
-    return [
-      { text: t("CHOOSE"), value: "", key: "0" },
-      ...createConnectivityFaceConnectionSelectOptions(
-        fromConnectivityFaceConnections
-      ),
-    ];
-  }, [fromConnectivityFaceConnections, t]);
+    if (fromEquipmentId) {
+      return [
+        { text: t("CHOOSE"), value: "", key: "0" },
+        ...createConnectivityFaceConnectionSelectOptions(
+          fromConnectivityFaceConnections
+        ),
+      ];
+    } else {
+      return [{ text: t("CHOOSE"), value: "", key: "0" }];
+    }
+  }, [fromConnectivityFaceConnections, t, fromEquipmentId]);
 
   const toConnectivityFaceConnectionOptions = useMemo<SelectOption[]>(() => {
-    return [
-      { text: t("CHOOSE"), value: "", key: "0" },
-      ...createConnectivityFaceConnectionSelectOptions(
-        toConnectivityFaceConnections
-      ),
-    ];
-  }, [toConnectivityFaceConnections, t]);
+    if (toEquipmentId) {
+      return [
+        { text: t("CHOOSE"), value: "", key: "0" },
+        ...createConnectivityFaceConnectionSelectOptions(
+          toConnectivityFaceConnections
+        ),
+      ];
+    } else {
+      return [{ text: t("CHOOSE"), value: "", key: "0" }];
+    }
+  }, [toConnectivityFaceConnections, t, toEquipmentId]);
 
   const maxAvailableConnectionsCount = useMemo(() => {
     if (
