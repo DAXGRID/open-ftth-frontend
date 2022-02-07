@@ -24,6 +24,7 @@ interface ShowFiberEditor {
   show: boolean;
   faceKind: string | null;
   terminalId: string | null;
+  side: "A" | "Z" | null;
 }
 
 interface TerminalEquipmentState {
@@ -71,7 +72,12 @@ type TerminalEquipmentAction =
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
-  showFiberEditor: { show: false, faceKind: null, terminalId: null },
+  showFiberEditor: {
+    show: false,
+    faceKind: null,
+    terminalId: null,
+    side: null,
+  },
   connectivityTraceViews: {},
   selectedConnectivityTraceHop: null,
   editable: false,
@@ -88,7 +94,12 @@ function terminalEquipmentReducer(
         ...state,
         connectivityView: action.view,
         connectivityTraceViews: {},
-        showFiberEditor: { show: false, faceKind: null, terminalId: null },
+        showFiberEditor: {
+          show: false,
+          faceKind: null,
+          terminalId: null,
+          side: null,
+        },
         selectedConnectivityTraceHop: null,
       };
     case "setShowFreeLines":
@@ -211,7 +222,7 @@ const TerminalEquipmentProvider = ({
       });
       dispatch({
         type: "setShowFiberEditor",
-        show: { show: false, faceKind: null, terminalId: null },
+        show: { show: false, faceKind: null, terminalId: null, side: null },
       });
     }
   }, [connectiviyViewUpdatedResult, dispatch]);
