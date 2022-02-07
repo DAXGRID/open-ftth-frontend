@@ -227,10 +227,10 @@ function FiberConnectionEditor({
       faceKind: faceKind,
     });
 
-    if (faceKind === "PATCH_SIDE") {
+    if (faceKind === "SPLICE_SIDE") {
       setFromEquipmentId(equipmentId);
       setFromPositionId(terminalId);
-    } else if (faceKind === "SPLICE_SIDE") {
+    } else if (faceKind === "PATCH_SIDE") {
       setToEquipmentId(equipmentId);
       setToPositionId(terminalId);
     } else {
