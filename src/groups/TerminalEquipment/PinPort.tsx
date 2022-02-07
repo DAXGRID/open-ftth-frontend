@@ -24,6 +24,7 @@ function PinPort({ line }: PinPortProps) {
               faceKind: line.a?.faceKind ?? null,
               terminalId: line.a?.terminal.id ?? null,
               show: true,
+              side: "A",
             },
           })
         }
@@ -54,6 +55,7 @@ function PinPort({ line }: PinPortProps) {
               faceKind: line.z?.faceKind ?? null,
               terminalId: line.z?.terminal.id ?? null,
               show: true,
+              side: "Z",
             },
           })
         }

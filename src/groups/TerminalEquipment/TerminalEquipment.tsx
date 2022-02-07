@@ -221,7 +221,12 @@ function TerminalEquipment() {
           closeCallback={() =>
             dispatch({
               type: "setShowFiberEditor",
-              show: { show: false, terminalId: null, faceKind: null },
+              show: {
+                show: false,
+                terminalId: null,
+                faceKind: null,
+                side: null,
+              },
             })
           }
           maxWidth="1200px"
@@ -233,6 +238,7 @@ function TerminalEquipment() {
             }
             terminalId={state.showFiberEditor.terminalId}
             terminalEquipmentOrRackId={state.terminalEquipmentOrRackId}
+            side={state.showFiberEditor.side}
           />
         </ModalContainer>
       );

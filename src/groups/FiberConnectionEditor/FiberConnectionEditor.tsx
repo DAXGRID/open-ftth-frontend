@@ -194,6 +194,7 @@ interface FiberConnectionEditorProps {
   terminalId: string | null;
   faceKind: "PATCH_SIDE" | "SPLICE_SIDE";
   terminalEquipmentOrRackId: string;
+  side: "A" | "Z" | null;
 }
 
 function FiberConnectionEditor({
@@ -201,6 +202,7 @@ function FiberConnectionEditor({
   faceKind,
   terminalId,
   terminalEquipmentOrRackId,
+  side,
 }: FiberConnectionEditorProps) {
   const { t } = useTranslation();
   const client = useClient();
@@ -220,23 +222,24 @@ function FiberConnectionEditor({
     useState<ConnectivityFaceConnection[]>([]);
 
   useEffect(() => {
-    if (!faceKind || !terminalId || !terminalEquipmentOrRackId) return;
+    if (!faceKind || !terminalId || !terminalEquipmentOrRackId || !side) return;
 
     var equipmentId = getCombinedEquipmentId({
       equipmentId: terminalEquipmentOrRackId,
       faceKind: faceKind,
     });
 
-    if (faceKind === "SPLICE_SIDE") {
-      setFromEquipmentId(equipmentId);
-      setFromPositionId(terminalId);
-    } else if (faceKind === "PATCH_SIDE") {
+    if (side === "A") {
       setToEquipmentId(equipmentId);
       setToPositionId(terminalId);
+    } else if (side === "Z") {
+      setFromEquipmentId(equipmentId);
+      setFromPositionId(terminalId);
     } else {
       throw Error(`Could not handle faceKind '${faceKind}'`);
     }
   }, [
+    side,
     faceKind,
     terminalId,
     terminalEquipmentOrRackId,
