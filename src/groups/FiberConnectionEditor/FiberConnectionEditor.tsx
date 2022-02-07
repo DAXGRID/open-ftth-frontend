@@ -185,9 +185,17 @@ function getRootEquipmentId(combinedEquipmentId: string) {
 
 interface FiberConnectionEditorProps {
   routeNodeId: string;
+  terminalId: string | null;
+  faceKind: "PATCH_SIDE" | "SPLICE_SIDE";
+  terminalEquipmentOrRackId: string;
 }
 
-function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
+function FiberConnectionEditor({
+  routeNodeId,
+  faceKind,
+  terminalId,
+  terminalEquipmentOrRackId,
+}: FiberConnectionEditorProps) {
   const { t } = useTranslation();
   const client = useClient();
   const [fromEquipmentId, setFromEquipmentId] = useState<string>("");
@@ -206,6 +214,31 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
     useState<ConnectivityFaceConnection[]>([]);
 
   useEffect(() => {
+    if (!faceKind || !terminalId || !terminalEquipmentOrRackId) return;
+
+    const combinedId = (id: string, faceKind: string) => `${id}_${faceKind}`;
+    var equipmentId = combinedId(terminalEquipmentOrRackId, faceKind);
+
+    if (faceKind === "PATCH_SIDE") {
+      setFromEquipmentId(equipmentId);
+      setFromPositionId(terminalId);
+    } else if (faceKind === "SPLICE_SIDE") {
+      setToEquipmentId(equipmentId);
+      setToPositionId(terminalId);
+    } else {
+      throw Error(`Could not handle faceKind '${faceKind}'`);
+    }
+  }, [
+    faceKind,
+    terminalId,
+    terminalEquipmentOrRackId,
+    setFromEquipmentId,
+    setToEquipmentId,
+    setFromPositionId,
+    setToPositionId,
+  ]);
+
+  useEffect(() => {
     getConnectivityFaces(client, routeNodeId).then((response) => {
       const connecitivyFaceConnections =
         response.data?.utilityNetwork.connectivityFaces;
@@ -219,7 +252,7 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
   }, [routeNodeId, setConnectivityFaces, client]);
 
   useEffect(() => {
-    if (!fromEquipmentId) return;
+    if (!fromEquipmentId || connectivityFaces?.length === 0) return;
 
     const connecitivyFace = connectivityFaces.find(
       (x) => getCombinedEquipmentId(x) === fromEquipmentId
@@ -251,7 +284,7 @@ function FiberConnectionEditor({ routeNodeId }: FiberConnectionEditorProps) {
   ]);
 
   useEffect(() => {
-    if (!toEquipmentId) return;
+    if (!toEquipmentId || connectivityFaces?.length === 0) return;
 
     const connecitivyFace = connectivityFaces.find(
       (x) => getCombinedEquipmentId(x) === toEquipmentId

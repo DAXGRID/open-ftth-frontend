@@ -20,15 +20,22 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { MapContext } from "../../contexts/MapContext";
 
+interface ShowFiberEditor {
+  show: boolean;
+  faceKind: string | null;
+  terminalId: string | null;
+}
+
 interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
   showFreeLines: { [id: string]: boolean };
-  showFiberEditor: boolean;
+  showFiberEditor: ShowFiberEditor;
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
   selectedConnectivityTraceHop: Hop | null;
   editable: boolean;
+  terminalEquipmentOrRackId: string;
 }
 
 type TerminalEquipmentAction =
@@ -37,7 +44,7 @@ type TerminalEquipmentAction =
       view: TerminalEquipmentConnectivityView;
     }
   | { type: "setShowFreeLines"; id: string }
-  | { type: "setShowFiberEditor"; show: boolean }
+  | { type: "setShowFiberEditor"; show: ShowFiberEditor }
   | { type: "setShowConnectivityTraceViews"; id: string }
   | {
       type: "setViewConnectivityTraceViews";
@@ -54,15 +61,20 @@ type TerminalEquipmentAction =
   | {
       type: "setTerminalEquipmentOrRackId";
       id: string;
+    }
+  | {
+      type: "setTerminalEquipmentOrRackId";
+      id: string;
     };
 
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
-  showFiberEditor: false,
+  showFiberEditor: { show: false, faceKind: null, terminalId: null },
   connectivityTraceViews: {},
   selectedConnectivityTraceHop: null,
   editable: false,
+  terminalEquipmentOrRackId: "",
 };
 
 function terminalEquipmentReducer(
@@ -76,7 +88,7 @@ function terminalEquipmentReducer(
         connectivityView: action.view,
         connectivityTraceViews: {},
         showFreeLines: {},
-        showFiberEditor: false,
+        showFiberEditor: { show: false, faceKind: null, terminalId: null },
         selectedConnectivityTraceHop: null,
       };
     case "setShowFreeLines":
@@ -120,6 +132,11 @@ function terminalEquipmentReducer(
       return {
         ...state,
         editable: action.editable,
+      };
+    case "setTerminalEquipmentOrRackId":
+      return {
+        ...state,
+        terminalEquipmentOrRackId: action.id,
       };
     default:
       throw new Error(`No action for ${action}`);
@@ -171,6 +188,13 @@ const TerminalEquipmentProvider = ({
     });
 
   useEffect(() => {
+    dispatch({
+      type: "setTerminalEquipmentOrRackId",
+      id: terminalEquipmentOrRackId,
+    });
+  }, [terminalEquipmentOrRackId, dispatch]);
+
+  useEffect(() => {
     if (
       connectiviyViewUpdatedResult.data?.terminalEquipmentConnectivityUpdated
     ) {
@@ -179,7 +203,10 @@ const TerminalEquipmentProvider = ({
         view: connectiviyViewUpdatedResult.data
           ?.terminalEquipmentConnectivityUpdated,
       });
-      dispatch({ type: "setShowFiberEditor", show: false });
+      dispatch({
+        type: "setShowFiberEditor",
+        show: { show: false, faceKind: null, terminalId: null },
+      });
     }
   }, [connectiviyViewUpdatedResult, dispatch]);
 

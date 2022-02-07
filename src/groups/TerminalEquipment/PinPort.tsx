@@ -18,7 +18,14 @@ function PinPort({ line }: PinPortProps) {
         onClick={() =>
           state.editable &&
           !line.a?.connectedTo &&
-          dispatch({ type: "setShowFiberEditor", show: true })
+          dispatch({
+            type: "setShowFiberEditor",
+            show: {
+              faceKind: line.a?.faceKind ?? null,
+              terminalId: line.a?.terminal.id ?? null,
+              show: true,
+            },
+          })
         }
         className={`table-item-terminal__item ${
           line.a?.connectedTo ? "text-red" : "text-green"
@@ -41,7 +48,14 @@ function PinPort({ line }: PinPortProps) {
         onClick={() =>
           state.editable &&
           !line.z?.connectedTo &&
-          dispatch({ type: "setShowFiberEditor", show: true })
+          dispatch({
+            type: "setShowFiberEditor",
+            show: {
+              faceKind: line.z?.faceKind ?? null,
+              terminalId: line.z?.terminal.id ?? null,
+              show: true,
+            },
+          })
         }
         className={`table-item-terminal__item ${
           line.z?.connectedTo ? "text-red" : "text-green"

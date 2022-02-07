@@ -216,23 +216,40 @@ function TerminalEquipment() {
   const { identifiedFeature } = useContext(MapContext);
 
   useEffect(() => {
-    if (state.showFiberEditor) {
+    if (state.showFiberEditor.show) {
       showElement(
         <ModalContainer
           title={t("FIBER_CONNECTION_EDITOR")}
-          show={state.showFiberEditor}
+          show={state.showFiberEditor.show}
           closeCallback={() =>
-            dispatch({ type: "setShowFiberEditor", show: false })
+            dispatch({
+              type: "setShowFiberEditor",
+              show: { show: false, terminalId: null, faceKind: null },
+            })
           }
           maxWidth="1200px"
         >
-          <FiberConnectionEditor routeNodeId={identifiedFeature?.id ?? ""} />
+          <FiberConnectionEditor
+            routeNodeId={identifiedFeature?.id ?? ""}
+            faceKind={
+              state.showFiberEditor.faceKind as "PATCH_SIDE" | "SPLICE_SIDE"
+            }
+            terminalId={state.showFiberEditor.terminalId}
+            terminalEquipmentOrRackId={state.terminalEquipmentOrRackId}
+          />
         </ModalContainer>
       );
     } else {
       showElement(null);
     }
-  }, [state.showFiberEditor, showElement, dispatch, t, identifiedFeature]);
+  }, [
+    state.showFiberEditor,
+    state.terminalEquipmentOrRackId,
+    showElement,
+    dispatch,
+    t,
+    identifiedFeature,
+  ]);
 
   const groupedByParentId = useMemo(() => {
     return groupByParentId(state.connectivityView?.terminalEquipments ?? []);
