@@ -184,6 +184,7 @@ subscription ($routeNodeId: ID!, $terminalEquipmentOrRackId: ID!) {
             }
             connectedTo
             end
+            faceKind
           }
           z {
             terminal {
@@ -192,6 +193,7 @@ subscription ($routeNodeId: ID!, $terminalEquipmentOrRackId: ID!) {
             }
             connectedTo
             end
+            faceKind
           }
         }
       }
