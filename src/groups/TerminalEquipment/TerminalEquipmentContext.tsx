@@ -44,6 +44,7 @@ type TerminalEquipmentAction =
       view: TerminalEquipmentConnectivityView;
     }
   | { type: "setShowFreeLines"; id: string }
+  | { type: "clearShowFreeLines" }
   | { type: "setShowFiberEditor"; show: ShowFiberEditor }
   | { type: "setShowConnectivityTraceViews"; id: string }
   | {
@@ -87,7 +88,6 @@ function terminalEquipmentReducer(
         ...state,
         connectivityView: action.view,
         connectivityTraceViews: {},
-        showFreeLines: {},
         showFiberEditor: { show: false, faceKind: null, terminalId: null },
         selectedConnectivityTraceHop: null,
       };
@@ -99,6 +99,8 @@ function terminalEquipmentReducer(
           [action.id]: !state.showFreeLines[action.id],
         },
       };
+    case "clearShowFreeLines":
+      return { ...state, showFreeLines: {} };
     case "setShowFiberEditor":
       return { ...state, showFiberEditor: action.show };
     case "setShowConnectivityTraceViews":
@@ -192,6 +194,10 @@ const TerminalEquipmentProvider = ({
       type: "setTerminalEquipmentOrRackId",
       id: terminalEquipmentOrRackId,
     });
+  }, [terminalEquipmentOrRackId, dispatch]);
+
+  useEffect(() => {
+    dispatch({ type: "clearShowFreeLines" });
   }, [terminalEquipmentOrRackId, dispatch]);
 
   useEffect(() => {
