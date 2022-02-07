@@ -163,27 +163,24 @@ function TerminalEquipmentTable({
                   <p className="terminal-equipment-row-header__item"></p>
                 </div>
               </div>
-              {x.lines
-                .filter((t) => t.a?.connectedTo || t.z?.connectedTo)
-                .map((y) => {
+              {x.lines.map((y, i) => {
+                if (y.a?.connectedTo || y.z?.connectedTo) {
                   return (
                     <TerminalLine
                       line={y}
                       key={y.a?.terminal.id ?? y.z?.terminal.id}
                     />
                   );
-                })}
-              {showFreeLines &&
-                x.lines
-                  .filter((t) => !t.a?.connectedTo && !t.z?.connectedTo)
-                  .map((y) => {
-                    return (
-                      <TerminalLineFree
-                        line={y}
-                        key={y.a?.terminal.id ?? y.z?.terminal.id}
-                      />
-                    );
-                  })}
+                } else if (
+                  showFreeLines &&
+                  !y.a?.connectedTo &&
+                  !y.z?.connectedTo
+                ) {
+                  return <TerminalLineFree line={y} key={i} />;
+                } else {
+                  return null;
+                }
+              })}
             </div>
           );
         })}
