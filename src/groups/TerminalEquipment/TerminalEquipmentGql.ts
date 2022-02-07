@@ -37,6 +37,8 @@ export interface ParentNodeStructure {
   info: string | null;
 }
 
+type FaceKind = "SpliceSide" | "PatchSide" | "IngoingSide" | "OutgoingSide";
+
 export interface Line {
   connectorSymbol: string;
   a: {
@@ -46,6 +48,7 @@ export interface Line {
     };
     connectedTo: string | null;
     end: string | null;
+    faceKind: FaceKind;
   } | null;
   z: {
     terminal: {
@@ -54,6 +57,7 @@ export interface Line {
     };
     connectedTo: string | null;
     end: string | null;
+    faceKind: FaceKind;
   } | null;
 }
 
@@ -121,6 +125,7 @@ $terminalEquipmentOrRackId: ID!) {
               }
               connectedTo
               end
+              faceKind
             }
             z {
               terminal {
@@ -129,6 +134,7 @@ $terminalEquipmentOrRackId: ID!) {
               }
               connectedTo
               end
+              faceKind
             }
           }
         }
