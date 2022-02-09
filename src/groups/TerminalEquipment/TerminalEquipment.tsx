@@ -124,11 +124,13 @@ function TerminalEquipmentTableContainer({
 type TerminalEquipmentTableProps = {
   terminalStructures: TerminalStructure[];
   showFreeLines: boolean;
+  terminalEquipmentOrRackId: string;
 };
 
 function TerminalEquipmentTable({
   terminalStructures,
   showFreeLines,
+  terminalEquipmentOrRackId,
 }: TerminalEquipmentTableProps) {
   const { t } = useTranslation();
 
@@ -169,6 +171,7 @@ function TerminalEquipmentTable({
                     <TerminalLine
                       line={y}
                       key={y.a?.terminal.id ?? y.z?.terminal.id}
+                      terminalEquipmentOrRackId={terminalEquipmentOrRackId}
                     />
                   );
                 } else if (
@@ -176,7 +179,13 @@ function TerminalEquipmentTable({
                   !y.a?.connectedTo &&
                   !y.z?.connectedTo
                 ) {
-                  return <TerminalLineFree line={y} key={i} />;
+                  return (
+                    <TerminalLineFree
+                      line={y}
+                      key={i}
+                      terminalEquipmentOrRackId={terminalEquipmentOrRackId}
+                    />
+                  );
                 } else {
                   return null;
                 }
@@ -226,6 +235,7 @@ function TerminalEquipment() {
                 terminalId: null,
                 faceKind: null,
                 side: null,
+                terminalEquipmentOrRackId: null,
               },
             })
           }
@@ -237,7 +247,9 @@ function TerminalEquipment() {
               state.showFiberEditor.faceKind as "PATCH_SIDE" | "SPLICE_SIDE"
             }
             terminalId={state.showFiberEditor.terminalId}
-            terminalEquipmentOrRackId={state.terminalEquipmentOrRackId}
+            terminalEquipmentOrRackId={
+              state.showFiberEditor.terminalEquipmentOrRackId ?? ""
+            }
             side={state.showFiberEditor.side}
           />
         </ModalContainer>
@@ -285,6 +297,7 @@ function TerminalEquipment() {
                     terminalEquipment={y}
                   >
                     <TerminalEquipmentTable
+                      terminalEquipmentOrRackId={y.id}
                       terminalStructures={y.terminalStructures}
                       showFreeLines={state.showFreeLines[y.id] ?? false}
                     />
@@ -304,6 +317,7 @@ function TerminalEquipment() {
                 showFreeLines={state.showFreeLines[y.id]}
               >
                 <TerminalEquipmentTable
+                  terminalEquipmentOrRackId={y.id}
                   terminalStructures={y.terminalStructures}
                   showFreeLines={state.showFreeLines[y.id] ?? false}
                 />

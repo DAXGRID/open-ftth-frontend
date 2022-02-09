@@ -4,9 +4,13 @@ import PinPort from "./PinPort";
 
 type TerminalLineFreeProps = {
   line: Line;
+  terminalEquipmentOrRackId: string;
 };
 
-function TerminalLineFree({ line }: TerminalLineFreeProps) {
+function TerminalLineFree({
+  line,
+  terminalEquipmentOrRackId,
+}: TerminalLineFreeProps) {
   const { t } = useTranslation();
 
   return (
@@ -26,7 +30,10 @@ function TerminalLineFree({ line }: TerminalLineFreeProps) {
           <div className="terminal-equipment-table-item"></div>
         )}
         <div className="terminal-equipment-table-item">
-          <PinPort line={line} />
+          <PinPort
+            terminalEquipmentOrRackId={terminalEquipmentOrRackId}
+            line={line}
+          />
         </div>
         {line.z ? (
           <div

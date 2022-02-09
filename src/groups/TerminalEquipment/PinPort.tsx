@@ -6,15 +6,17 @@ import { faPlug } from "@fortawesome/free-solid-svg-icons";
 
 type PinPortProps = {
   line: Line;
+  terminalEquipmentOrRackId: string;
 };
 
-function PinPort({ line }: PinPortProps) {
+function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
   const { state, dispatch } = useContext(TerminalEquipmentContext);
 
   return (
     <div className="table-item-terminal">
       <div
         role="button"
+        title={line.a?.terminal.id}
         onClick={() =>
           state.editable &&
           !line.a?.connectedTo &&
@@ -25,6 +27,7 @@ function PinPort({ line }: PinPortProps) {
               terminalId: line.a?.terminal.id ?? null,
               show: true,
               side: "A",
+              terminalEquipmentOrRackId: terminalEquipmentOrRackId,
             },
           })
         }
@@ -46,6 +49,7 @@ function PinPort({ line }: PinPortProps) {
       <div className="table-item-terminal__item">{line.z?.terminal.name}</div>
       <div
         role="button"
+        title={line.z?.terminal.id}
         onClick={() =>
           state.editable &&
           !line.z?.connectedTo &&
@@ -56,6 +60,7 @@ function PinPort({ line }: PinPortProps) {
               terminalId: line.z?.terminal.id ?? null,
               show: true,
               side: "Z",
+              terminalEquipmentOrRackId: terminalEquipmentOrRackId,
             },
           })
         }
