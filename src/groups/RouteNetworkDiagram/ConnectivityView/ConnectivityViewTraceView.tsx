@@ -11,12 +11,12 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
   const { t } = useTranslation();
   const { state, dispatch } = useContext(ConnectivityViewContext);
 
-  if (!view || !view.show) return <></>;
+  if (!view || !view.show || !view.view) return <></>;
 
   return (
     <div className="connectivity-view-trace-view">
       <div className="trace-view-title">
-        {`${t("CIRCUIT_NAME")}: ${view.view?.circuitName}`}
+        {`${t("CIRCUIT_NAME")}: ${view.view?.circuitName ?? ""}`}
       </div>
       <div className="trace-view-header trace-view-grid">
         <div className="trace-view-header-item">{t("NODE")}</div>
