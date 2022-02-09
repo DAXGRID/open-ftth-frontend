@@ -1,26 +1,27 @@
-import { useEffect, useContext, ReactNode, useMemo } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ModalContainer from "../../components/ModalContainer";
-import FiberConnectionEditor from "../FiberConnectionEditor";
-import { OverlayContext } from "../../contexts/OverlayContext";
 import {
-  faPlusCircle,
   faEdit,
   faFilter,
+  faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReactNode, useContext, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import ModalContainer from "../../components/ModalContainer";
+import { MapContext } from "../../contexts/MapContext";
+import { OverlayContext } from "../../contexts/OverlayContext";
+import FiberConnectionEditor from "../FiberConnectionEditor";
 import {
+  TerminalEquipmentContext,
+  TerminalEquipmentProvider,
+} from "./TerminalEquipmentContext";
+import {
+  ParentNodeStructure,
   TerminalEquipment as TerminalEquipmentType,
   TerminalStructure,
-  ParentNodeStructure,
 } from "./TerminalEquipmentGql";
-import {
-  TerminalEquipmentProvider,
-  TerminalEquipmentContext,
-} from "./TerminalEquipmentContext";
 import TerminalLine from "./TerminalLine";
 import TerminalLineFree from "./TerminalLineFree";
-import { MapContext } from "../../contexts/MapContext";
+import DisconnectFiberEditor from "./DisconnectFiberEditor";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -226,7 +227,7 @@ function TerminalEquipment() {
       showElement(
         <ModalContainer
           title={t("FIBER_CONNECTION_EDITOR")}
-          show={state.showFiberEditor.show}
+          show={true}
           closeCallback={() =>
             dispatch({
               type: "resetShowFiberEditor",
@@ -250,14 +251,28 @@ function TerminalEquipment() {
     } else {
       showElement(null);
     }
-  }, [
-    state.showFiberEditor,
-    state.terminalEquipmentOrRackId,
-    showElement,
-    dispatch,
-    t,
-    identifiedFeature,
-  ]);
+  }, [state.showFiberEditor, showElement, dispatch, t, identifiedFeature]);
+
+  useEffect(() => {
+    if (state.showDisconnectFiberEditor.show) {
+      showElement(
+        <ModalContainer
+          title={t("FIBER_CONNECTION_EDITOR")}
+          show={true}
+          closeCallback={() =>
+            dispatch({
+              type: "resetShowDisconnectFiberEditor",
+            })
+          }
+          maxWidth="1200px"
+        >
+          <DisconnectFiberEditor />
+        </ModalContainer>
+      );
+    } else {
+      showElement(null);
+    }
+  }, [state.showDisconnectFiberEditor, showElement, dispatch, t]);
 
   const groupedByParentId = useMemo(() => {
     return groupByParentId(state.connectivityView?.terminalEquipments ?? []);

@@ -28,10 +28,15 @@ interface ShowFiberEditor {
   terminalEquipmentOrRackId: string | null;
 }
 
+interface ShowDisconnectFiberEditor {
+  show: boolean;
+}
+
 interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
   showFreeLines: { [id: string]: boolean };
   showFiberEditor: ShowFiberEditor;
+  showDisconnectFiberEditor: ShowDisconnectFiberEditor;
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
@@ -49,6 +54,8 @@ type TerminalEquipmentAction =
   | { type: "clearShowFreeLines" }
   | { type: "setShowFiberEditor"; show: ShowFiberEditor }
   | { type: "resetShowFiberEditor" }
+  | { type: "setShowDisconnectFiberEditor"; show: ShowDisconnectFiberEditor }
+  | { type: "resetShowDisconnectFiberEditor" }
   | { type: "setShowConnectivityTraceViews"; id: string }
   | {
       type: "setViewConnectivityTraceViews";
@@ -79,6 +86,10 @@ const defaultShowFiberEditorValues: ShowFiberEditor = {
   terminalEquipmentOrRackId: null,
 };
 
+const defaultShowDisconnectFiberEditor: ShowDisconnectFiberEditor = {
+  show: false,
+};
+
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
@@ -87,6 +98,7 @@ const terminalEquipmentInitialState: TerminalEquipmentState = {
   selectedConnectivityTraceHop: null,
   editable: false,
   terminalEquipmentOrRackId: "",
+  showDisconnectFiberEditor: defaultShowDisconnectFiberEditor,
 };
 
 function terminalEquipmentReducer(
@@ -127,6 +139,13 @@ function terminalEquipmentReducer(
       };
     case "resetShowFiberEditor":
       return { ...state, showFiberEditor: defaultShowFiberEditorValues };
+    case "setShowDisconnectFiberEditor":
+      return { ...state, showDisconnectFiberEditor: action.show };
+    case "resetShowDisconnectFiberEditor":
+      return {
+        ...state,
+        showDisconnectFiberEditor: defaultShowDisconnectFiberEditor,
+      };
     case "setViewConnectivityTraceViews":
       return {
         ...state,
