@@ -16,7 +16,6 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
     <div className="table-item-terminal">
       <div
         role="button"
-        title={line.a?.terminal.id}
         onClick={() =>
           state.editable &&
           !line.a?.connectedTo &&
@@ -49,7 +48,6 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
       <div className="table-item-terminal__item">{line.z?.terminal.name}</div>
       <div
         role="button"
-        title={line.z?.terminal.id}
         onClick={() =>
           state.editable &&
           !line.z?.connectedTo &&
