@@ -25,6 +25,7 @@ interface ShowFiberEditor {
   faceKind: string | null;
   terminalId: string | null;
   side: "A" | "Z" | null;
+  terminalEquipmentOrRackId: string | null;
 }
 
 interface TerminalEquipmentState {
@@ -77,6 +78,7 @@ const terminalEquipmentInitialState: TerminalEquipmentState = {
     faceKind: null,
     terminalId: null,
     side: null,
+    terminalEquipmentOrRackId: null,
   },
   connectivityTraceViews: {},
   selectedConnectivityTraceHop: null,
@@ -99,6 +101,7 @@ function terminalEquipmentReducer(
           faceKind: null,
           terminalId: null,
           side: null,
+          terminalEquipmentOrRackId: null,
         },
         selectedConnectivityTraceHop: null,
       };
@@ -222,7 +225,13 @@ const TerminalEquipmentProvider = ({
       });
       dispatch({
         type: "setShowFiberEditor",
-        show: { show: false, faceKind: null, terminalId: null, side: null },
+        show: {
+          show: false,
+          faceKind: null,
+          terminalId: null,
+          side: null,
+          terminalEquipmentOrRackId: null,
+        },
       });
     }
   }, [connectiviyViewUpdatedResult, dispatch]);

@@ -11,9 +11,10 @@ import {
 
 interface TerminalLineProps {
   line: Line;
+  terminalEquipmentOrRackId: string;
 }
 
-function TerminalLine({ line }: TerminalLineProps) {
+function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
   const { state, dispatch } = useContext(TerminalEquipmentContext);
 
   return (
@@ -48,7 +49,10 @@ function TerminalLine({ line }: TerminalLineProps) {
             {line.a?.connectedTo}
           </div>
           <div className="terminal-equipment-table-item">
-            <PinPort line={line} />
+            <PinPort
+              terminalEquipmentOrRackId={terminalEquipmentOrRackId}
+              line={line}
+            />
           </div>
           <div className="terminal-equipment-table-item">
             {line.z?.connectedTo}
