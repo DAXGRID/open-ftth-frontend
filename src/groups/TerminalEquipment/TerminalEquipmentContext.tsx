@@ -48,6 +48,7 @@ type TerminalEquipmentAction =
   | { type: "setShowFreeLines"; id: string }
   | { type: "clearShowFreeLines" }
   | { type: "setShowFiberEditor"; show: ShowFiberEditor }
+  | { type: "resetShowFiberEditor" }
   | { type: "setShowConnectivityTraceViews"; id: string }
   | {
       type: "setViewConnectivityTraceViews";
@@ -70,16 +71,18 @@ type TerminalEquipmentAction =
       id: string;
     };
 
+const defaultShowFiberEditorValues: ShowFiberEditor = {
+  show: false,
+  faceKind: null,
+  terminalId: null,
+  side: null,
+  terminalEquipmentOrRackId: null,
+};
+
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
-  showFiberEditor: {
-    show: false,
-    faceKind: null,
-    terminalId: null,
-    side: null,
-    terminalEquipmentOrRackId: null,
-  },
+  showFiberEditor: defaultShowFiberEditorValues,
   connectivityTraceViews: {},
   selectedConnectivityTraceHop: null,
   editable: false,
@@ -96,13 +99,7 @@ function terminalEquipmentReducer(
         ...state,
         connectivityView: action.view,
         connectivityTraceViews: {},
-        showFiberEditor: {
-          show: false,
-          faceKind: null,
-          terminalId: null,
-          side: null,
-          terminalEquipmentOrRackId: null,
-        },
+        showFiberEditor: defaultShowFiberEditorValues,
         selectedConnectivityTraceHop: null,
       };
     case "setShowFreeLines":
@@ -128,6 +125,8 @@ function terminalEquipmentReducer(
           },
         },
       };
+    case "resetShowFiberEditor":
+      return { ...state, showFiberEditor: defaultShowFiberEditorValues };
     case "setViewConnectivityTraceViews":
       return {
         ...state,
@@ -224,14 +223,7 @@ const TerminalEquipmentProvider = ({
           ?.terminalEquipmentConnectivityUpdated,
       });
       dispatch({
-        type: "setShowFiberEditor",
-        show: {
-          show: false,
-          faceKind: null,
-          terminalId: null,
-          side: null,
-          terminalEquipmentOrRackId: null,
-        },
+        type: "resetShowFiberEditor",
       });
     }
   }, [connectiviyViewUpdatedResult, dispatch]);

@@ -229,14 +229,7 @@ function TerminalEquipment() {
           show={state.showFiberEditor.show}
           closeCallback={() =>
             dispatch({
-              type: "setShowFiberEditor",
-              show: {
-                show: false,
-                terminalId: null,
-                faceKind: null,
-                side: null,
-                terminalEquipmentOrRackId: null,
-              },
+              type: "resetShowFiberEditor",
             })
           }
           maxWidth="1200px"
