@@ -1,0 +1,22 @@
+@import "../../../global-styles/colors";
+
+.disconnect-fiber-editor {
+}
+
+.disconnect-fiber-editor-container {
+}
+
+.disconnect-fiber-editor-container-header {
+}
+
+.disconnect-fiber-editor-container-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.disconnect-line {
+  flex-basis: 100%;
+  display: flex;
+  gap: 10px;
+}
