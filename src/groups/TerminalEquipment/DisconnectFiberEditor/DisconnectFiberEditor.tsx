@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Checkbox from "../../../components/Checkbox";
-import { TerminalEquipment } from "../TerminalEquipmentGql";
+import { TerminalEquipment, Line } from "../TerminalEquipmentGql";
 
 interface CheckboxListChange {
   value: string | number;
@@ -13,15 +13,15 @@ interface CheckboxPair {
   value: string | number;
 }
 
-interface DisconnectFiberRowProps {
+interface DisconnectFiberLineProps {
   checkboxPair: CheckboxPair;
   onCheckboxListChange: (change: CheckboxListChange) => void;
 }
 
-function DisconnectFiberRow({
+function DisconnectFiberLine({
   checkboxPair,
   onCheckboxListChange,
-}: DisconnectFiberRowProps) {
+}: DisconnectFiberLineProps) {
   return (
     <div className="disconnect-fiber-row">
       <Checkbox
@@ -32,6 +32,13 @@ function DisconnectFiberRow({
       <span>{checkboxPair.text}</span>
     </div>
   );
+}
+
+interface DisconnectFiberHeader {
+  text: string;
+}
+function DisconnectFiberHeader({ text }: DisconnectFiberHeader) {
+  return <div>{text}</div>;
 }
 
 interface DisconnectFiberEditorProps {
@@ -58,22 +65,19 @@ function DisconnectFiberEditor({
     );
   };
 
-  useEffect(() => {
-    console.log(pairs);
-  }, [pairs]);
-
   return (
     <div className="disconnect-fiber-editor">
       <div className="disconnect-fiber-editor-container">
         <div className="disconnect-fiber-editor-container-header"></div>
         <div className="disconnect-fiber-editor-container-body">
-          {pairs.map((x) => {
+          {terminalEquipment.terminalStructures.map((structure, i) => {
             return (
-              <DisconnectFiberRow
-                key={x.value}
-                checkboxPair={x}
-                onCheckboxListChange={onCheckboxListChange}
-              />
+              <div key={i}>
+                <DisconnectFiberHeader text={structure.name} key={i} />
+                {structure.lines.map((line) => {
+                  return <></>;
+                })}
+              </div>
             );
           })}
         </div>

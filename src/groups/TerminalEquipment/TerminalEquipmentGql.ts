@@ -39,6 +39,10 @@ export interface ParentNodeStructure {
 
 type FaceKind = "SpliceSide" | "PatchSide" | "IngoingSide" | "OutgoingSide";
 
+export interface Terminal {
+  terminal:
+}
+
 export interface Line {
   connectorSymbol: string;
   a: {
