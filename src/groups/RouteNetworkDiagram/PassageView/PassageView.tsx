@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useClient } from "urql";
-import { EditPropertiesSvg, MoveConduitSvg } from "../../../assets";
+import { EditPropertiesSvg, MoveConduitSvg, PlusSvg } from "../../../assets";
 import ActionButton from "../../../components/ActionButton";
 import ModalContainer from "../../../components/ModalContainer";
 import { MapContext } from "../../../contexts/MapContext";
 import { OverlayContext } from "../../../contexts/OverlayContext";
 import EditSpanEquipment from "../EditSpanEquipment";
 import RerouteSpanEquipment from "../RerouteSpanEquipment";
+import useBridgeConnector from "../../../bridge/useBridgeConnector";
 import {
   Line,
   passageViewQuery,
@@ -40,6 +41,7 @@ function PassageView({
   );
   const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
   const [showRerouteTube, setShowRerouteTube] = useState(false);
+  const { selectRouteSegments } = useBridgeConnector();
 
   useEffect(() => {
     if (!routeElementId || !spanEquipmentOrSegmentIds) return;
@@ -92,6 +94,11 @@ function PassageView({
     return <div style={{ height: "300px" }}></div>;
   }
 
+  const selectAllLineSegmentsInMap = () => {
+    selectRouteSegments(spanEquipment.lines.flatMap((x) => x.routeSegmentIds));
+    setTrace({ geometries: [], ids: [] });
+  };
+
   const selectLine = (line: SelectableLine, index: number) => {
     setSelectedLineIndex(index);
     setTrace({
@@ -125,6 +132,12 @@ function PassageView({
                   icon={EditPropertiesSvg}
                   title={t("EDIT")}
                   key={1}
+                />
+                <ActionButton
+                  action={() => selectAllLineSegmentsInMap()}
+                  icon={PlusSvg}
+                  title={t("SELECT")}
+                  key={2}
                 />
               </>
             )}
