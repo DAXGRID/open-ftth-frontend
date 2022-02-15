@@ -13,6 +13,7 @@ import EraserSvg from "./eraser.svg";
 import EditPropertiesSvg from "./edit-properties.svg";
 import MoveConduitSvg from "./move-conduit.svg";
 import EstablishCustomerConnectionSvg from "./establish-customer-connection.svg";
+import PlusSvg from "./plus.svg";
 import MapboxStyle from "./open-ftth.json";
 
 export {
@@ -31,5 +32,6 @@ export {
   EditPropertiesSvg,
   MoveConduitSvg,
   EstablishCustomerConnectionSvg,
+  PlusSvg,
   MapboxStyle,
 };
