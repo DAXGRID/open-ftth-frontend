@@ -30,6 +30,9 @@ interface ShowFiberEditor {
 
 interface ShowDisconnectFiberEditor {
   show: boolean;
+  terminalEquipmentOrRackId: string | null;
+  side: "A" | "Z" | null;
+  terminalId: string | null;
 }
 
 interface TerminalEquipmentState {
@@ -88,6 +91,9 @@ const defaultShowFiberEditorValues: ShowFiberEditor = {
 
 const defaultShowDisconnectFiberEditor: ShowDisconnectFiberEditor = {
   show: false,
+  side: null,
+  terminalEquipmentOrRackId: null,
+  terminalId: null,
 };
 
 const terminalEquipmentInitialState: TerminalEquipmentState = {

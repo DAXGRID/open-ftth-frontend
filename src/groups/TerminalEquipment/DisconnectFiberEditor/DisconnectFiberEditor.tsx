@@ -1,5 +1,11 @@
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
 import Checkbox from "../../../components/Checkbox";
+import { TerminalEquipment } from "../TerminalEquipmentGql";
+
+interface CheckboxListChange {
+  value: string | number;
+  checked: boolean;
+}
 
 interface CheckboxPair {
   checked: boolean;
@@ -7,15 +13,37 @@ interface CheckboxPair {
   value: string | number;
 }
 
-interface CheckboxListChange {
-  value: string | number;
-  checked: boolean;
+interface DisconnectFiberRowProps {
+  checkboxPair: CheckboxPair;
+  onCheckboxListChange: (change: CheckboxListChange) => void;
 }
 
-interface DisconnectFiberEditor {}
+function DisconnectFiberRow({
+  checkboxPair,
+  onCheckboxListChange,
+}: DisconnectFiberRowProps) {
+  return (
+    <div className="disconnect-fiber-row">
+      <Checkbox
+        checked={checkboxPair.checked}
+        onChange={onCheckboxListChange}
+        value={checkboxPair.value}
+      />
+      <span>{checkboxPair.text}</span>
+    </div>
+  );
+}
 
-function DisconnectFiberEditor({}: DisconnectFiberEditor) {
-  const [pairs, setPairs] = useState([
+interface DisconnectFiberEditorProps {
+  side: "A" | "Z";
+  terminalEquipment: TerminalEquipment;
+}
+
+function DisconnectFiberEditor({
+  side,
+  terminalEquipment,
+}: DisconnectFiberEditorProps) {
+  const [pairs, setPairs] = useState<CheckboxPair[]>([
     { text: "Rune", value: "1", checked: false },
     { text: "Jesper", value: "2", checked: false },
     { text: "Simon", value: "3", checked: false },
@@ -30,23 +58,22 @@ function DisconnectFiberEditor({}: DisconnectFiberEditor) {
     );
   };
 
+  useEffect(() => {
+    console.log(pairs);
+  }, [pairs]);
+
   return (
     <div className="disconnect-fiber-editor">
       <div className="disconnect-fiber-editor-container">
-        <div className="disconnect-fiber-editor-container-header">
-          <p>Hello headers!</p>
-        </div>
+        <div className="disconnect-fiber-editor-container-header"></div>
         <div className="disconnect-fiber-editor-container-body">
           {pairs.map((x) => {
             return (
-              <div className="disconnect-line" key={x.value}>
-                <Checkbox
-                  checked={x.checked}
-                  onChange={onCheckboxListChange}
-                  value={x.value}
-                />
-                <span>{x.text}</span>
-              </div>
+              <DisconnectFiberRow
+                key={x.value}
+                checkboxPair={x}
+                onCheckboxListChange={onCheckboxListChange}
+              />
             );
           })}
         </div>

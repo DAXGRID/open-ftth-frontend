@@ -26,35 +26,59 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
         },
       });
     } else {
-      dispatch({
-        type: "setShowDisconnectFiberEditor",
-        show: {
-          show: true,
-        },
-      });
+      if (line.a?.faceKind && terminalEquipmentOrRackId) {
+        dispatch({
+          type: "setShowDisconnectFiberEditor",
+          show: {
+            show: true,
+            side: "A",
+            terminalEquipmentOrRackId: terminalEquipmentOrRackId,
+            terminalId: line.a.terminal.id,
+          },
+        });
+      } else {
+        throw Error(
+          "line.a.faceKind or terminalEquipmentOrRackId was not set."
+        );
+      }
     }
   };
 
   const handleZ = () => {
     if (!state.editable) return;
     if (!line.z?.connectedTo) {
-      dispatch({
-        type: "setShowFiberEditor",
-        show: {
-          faceKind: line.z?.faceKind ?? null,
-          terminalId: line.z?.terminal.id ?? null,
-          show: true,
-          side: "Z",
-          terminalEquipmentOrRackId: terminalEquipmentOrRackId,
-        },
-      });
+      if (line.z?.faceKind && line.z.terminal.id && terminalEquipmentOrRackId) {
+        dispatch({
+          type: "setShowFiberEditor",
+          show: {
+            faceKind: line.z.faceKind,
+            terminalId: line.z.terminal.id,
+            show: true,
+            side: "Z",
+            terminalEquipmentOrRackId: terminalEquipmentOrRackId,
+          },
+        });
+      } else {
+        throw Error(
+          "TerminalEquipmentOrRackId or line.z.faceKind was not set."
+        );
+      }
     } else {
-      dispatch({
-        type: "setShowDisconnectFiberEditor",
-        show: {
-          show: true,
-        },
-      });
+      if (terminalEquipmentOrRackId && line.z.faceKind) {
+        dispatch({
+          type: "setShowDisconnectFiberEditor",
+          show: {
+            show: true,
+            side: "Z",
+            terminalEquipmentOrRackId: terminalEquipmentOrRackId,
+            terminalId: line.z.terminal.id,
+          },
+        });
+      } else {
+        throw Error(
+          "TerminalEquipmentOrRackId or line.z.faceKind was not set."
+        );
+      }
     }
   };
 
@@ -74,9 +98,13 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
           />
         )}
       </div>
-      <div className="table-item-terminal__item">{line.a?.terminal.name}</div>
+      <div className="table-item-terminal__item">
+        {line.a?.terminal.name ?? ""}
+      </div>
       <div className="table-item-terminal__item">-O-</div>
-      <div className="table-item-terminal__item">{line.z?.terminal.name}</div>
+      <div className="table-item-terminal__item">
+        {line.z?.terminal.name ?? ""}
+      </div>
       <div
         role="button"
         onClick={() => handleZ()}

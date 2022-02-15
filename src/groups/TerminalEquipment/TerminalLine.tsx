@@ -57,7 +57,9 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
           <div className="terminal-equipment-table-item">
             {line.z?.connectedTo}
           </div>
-          <div className="terminal-equipment-table-item">{line.z?.end}</div>
+          <div className="terminal-equipment-table-item">
+            {line.z?.end ?? ""}
+          </div>
         </div>
       </div>
 

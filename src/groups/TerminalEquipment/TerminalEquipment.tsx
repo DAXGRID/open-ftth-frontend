@@ -224,40 +224,62 @@ function TerminalEquipment() {
 
   useEffect(() => {
     if (state.showFiberEditor.show) {
-      showElement(
-        <ModalContainer
-          title={t("FIBER_CONNECTION_EDITOR")}
-          show={true}
-          closeCallback={() =>
-            dispatch({
-              type: "resetShowFiberEditor",
-            })
-          }
-          maxWidth="1200px"
-        >
-          <FiberConnectionEditor
-            routeNodeId={identifiedFeature?.id ?? ""}
-            faceKind={
-              state.showFiberEditor.faceKind as "PATCH_SIDE" | "SPLICE_SIDE"
+      if (
+        identifiedFeature?.id &&
+        state.showFiberEditor.terminalId &&
+        state.showFiberEditor.terminalEquipmentOrRackId
+      ) {
+        showElement(
+          <ModalContainer
+            title={t("FIBER_CONNECTION_EDITOR")}
+            show={true}
+            closeCallback={() =>
+              dispatch({
+                type: "resetShowFiberEditor",
+              })
             }
-            terminalId={state.showFiberEditor.terminalId}
-            terminalEquipmentOrRackId={
-              state.showFiberEditor.terminalEquipmentOrRackId ?? ""
-            }
-            side={state.showFiberEditor.side}
-          />
-        </ModalContainer>
-      );
+            maxWidth="1200px"
+          >
+            <FiberConnectionEditor
+              routeNodeId={identifiedFeature.id}
+              faceKind={
+                state.showFiberEditor.faceKind as "PATCH_SIDE" | "SPLICE_SIDE"
+              }
+              terminalId={state.showFiberEditor.terminalId}
+              terminalEquipmentOrRackId={
+                state.showFiberEditor.terminalEquipmentOrRackId
+              }
+              side={state.showFiberEditor.side}
+            />
+          </ModalContainer>
+        );
+      } else {
+        throw Error("Did not have all information to show fiber editor.");
+      }
     } else {
       showElement(null);
     }
   }, [state.showFiberEditor, showElement, dispatch, t, identifiedFeature]);
 
   useEffect(() => {
-    if (state.showDisconnectFiberEditor.show) {
+    if (
+      state.showDisconnectFiberEditor.show &&
+      state.showDisconnectFiberEditor.side
+    ) {
+      const terminalEquipment = state.connectivityView?.terminalEquipments.find(
+        (x) =>
+          x.id === state.showDisconnectFiberEditor.terminalEquipmentOrRackId
+      );
+
+      if (!terminalEquipment) {
+        throw Error(
+          `Could not find terminal equipment on id '${state.showDisconnectFiberEditor.terminalId}' for DisconnectFiberEditor.`
+        );
+      }
+
       showElement(
         <ModalContainer
-          title={t("FIBER_CONNECTION_EDITOR")}
+          title={t("TODO")}
           show={true}
           closeCallback={() =>
             dispatch({
@@ -266,13 +288,22 @@ function TerminalEquipment() {
           }
           maxWidth="1200px"
         >
-          <DisconnectFiberEditor />
+          <DisconnectFiberEditor
+            side={state.showDisconnectFiberEditor.side}
+            terminalEquipment={terminalEquipment}
+          />
         </ModalContainer>
       );
     } else {
       showElement(null);
     }
-  }, [state.showDisconnectFiberEditor, showElement, dispatch, t]);
+  }, [
+    state.showDisconnectFiberEditor,
+    state.connectivityView?.terminalEquipments,
+    showElement,
+    dispatch,
+    t,
+  ]);
 
   const groupedByParentId = useMemo(() => {
     return groupByParentId(state.connectivityView?.terminalEquipments ?? []);
