@@ -27,10 +27,10 @@ function TerminalEquipmentTraceView({ view }: TraceViewProps) {
         <div className="trace-view-header-item">{t("LENGTH")}</div>
       </div>
       <div className="trace-view-body ">
-        {view.view?.hops.map((x) => {
+        {view.view?.hops.map((x, i) => {
           return (
             <div
-              key={x.hopSeqNo}
+              key={i}
               className={`trace-view-body-row trace-view-grid ${
                 state.selectedConnectivityTraceHop === x
                   ? "trace-view-body-row--selected"
@@ -41,13 +41,17 @@ function TerminalEquipmentTraceView({ view }: TraceViewProps) {
               }
             >
               <div className="trace-view-body-item">
-                {`${"->".repeat(x.level)} ${x.node}`}
+                {`${"->".repeat(x.level)} ${x.node ?? ""}`}
               </div>
-              <div className="trace-view-body-item">{x.equipment}</div>
-              <div className="trace-view-body-item">{x.terminalStructure}</div>
-              <div className="trace-view-body-item">{x.terminal}</div>
-              <div className="trace-view-body-item">{x.connectionInfo}</div>
-              <div className="trace-view-body-item">{x.totalLength}</div>
+              <div className="trace-view-body-item">{x.equipment ?? ""}</div>
+              <div className="trace-view-body-item">
+                {x.terminalStructure ?? ""}
+              </div>
+              <div className="trace-view-body-item">{x.terminal ?? ""}</div>
+              <div className="trace-view-body-item">
+                {x.connectionInfo ?? ""}
+              </div>
+              <div className="trace-view-body-item">{x.totalLength ?? ""}</div>
             </div>
           );
         })}
