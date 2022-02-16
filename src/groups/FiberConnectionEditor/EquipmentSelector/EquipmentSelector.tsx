@@ -35,7 +35,9 @@ function EquipmentSelector({ rows, t }: EquipmentSelectorProps) {
           {rows.map((x) => {
             return (
               <div
-                className="equipment-selector-table-body__row"
+                className={`equipment-selector-table-body__row ${
+                  x.from.isConnected || x.to.isConnected ? "row-connected" : ""
+                }`}
                 key={`${x.from.id}${x.to.id}`}
               >
                 <p>{x.from.endInfo}</p>
