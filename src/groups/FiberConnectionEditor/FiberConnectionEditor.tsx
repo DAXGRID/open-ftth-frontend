@@ -117,8 +117,10 @@ function getAvailableConnections(
   count: number,
   jumps: number
 ): { from: ConnectivityFaceConnection[]; to: ConnectivityFaceConnection[] } {
-  const fromFiltered = from.filter((x) => !x.isConnected);
-  const toFiltered = to.filter((x) => !x.isConnected);
+  // ??? im not sure why this is needed does not update without it
+  const fromFiltered = from.filter((x) => x);
+  const toFiltered = to.filter((x) => x);
+  // end of something weird
 
   const fromIndex = fromFiltered.findIndex(
     (x) => x.terminalOrSegmentId === fromId
@@ -148,8 +150,10 @@ function findAvailableCountFaceConnections(
   fromId: string,
   toId: string
 ): number {
-  const fromFiltered = from.filter((x) => !x.isConnected);
-  const toFiltered = to.filter((x) => !x.isConnected);
+  // ??? im not sure why this is needed does not update without it
+  const fromFiltered = from.filter((x) => x);
+  const toFiltered = to.filter((x) => x);
+  // end of something weird
 
   const fromIndex = fromFiltered.findIndex(
     (x) => x.terminalOrSegmentId === fromId
@@ -165,13 +169,14 @@ function findAvailableCountFaceConnections(
 }
 
 function findAvailableJumps(
-  maxAvailableConnections: number,
-  numberOfConnections: number
+  maxFromEquipmentCount: number,
+  numberToConnect: number,
+  currentIndex: number
 ) {
-  if (!maxAvailableConnections || !numberOfConnections) return 1;
-  if (numberOfConnections === 1) return 1;
-  if (numberOfConnections === maxAvailableConnections) return 1;
-  return maxAvailableConnections - numberOfConnections;
+  if (!maxFromEquipmentCount || !numberToConnect) return 1;
+  if (numberToConnect === 1) return 1;
+  if (numberToConnect === maxFromEquipmentCount) return 1;
+  return maxFromEquipmentCount - currentIndex - numberToConnect;
 }
 
 function getCombinedEquipmentId({
@@ -500,10 +505,13 @@ function FiberConnectionEditor({
 
   const maxAvailableJumps = useMemo(() => {
     return findAvailableJumps(
-      maxAvailableConnectionsCount,
-      numberOfConnections
+      fromConnectivityFaceConnections.length,
+      numberOfConnections,
+      fromConnectivityFaceConnections.findIndex(
+        (x) => x.terminalOrSegmentId === fromPositionId
+      )
     );
-  }, [maxAvailableConnectionsCount, numberOfConnections]);
+  }, [numberOfConnections, fromConnectivityFaceConnections, fromPositionId]);
 
   const connectionRows = useMemo(() => {
     if (
@@ -512,7 +520,9 @@ function FiberConnectionEditor({
       !fromPositionId ||
       !toPositionId ||
       !numberOfConnections ||
-      !jumps
+      !jumps ||
+      fromConnectivityFaceConnections.length === 0 ||
+      toConnectivityFaceConnections.length === 0
     )
       return [];
 
@@ -619,7 +629,10 @@ function FiberConnectionEditor({
   };
 
   const canExecuteConnectToTerminal = (): boolean => {
-    return connectionRows.length > 0;
+    const notConnectedRows = connectionRows.filter(
+      (x) => !x.from.isConnected && !x.to.isConnected
+    ).length;
+    return notConnectedRows === numberOfConnections;
   };
 
   return (
