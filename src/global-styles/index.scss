@@ -188,3 +188,13 @@ strong {
     cursor: not-allowed !important;
   }
 }
+
+.clickable {
+  color: $blue;
+  user-select: none;
+  text-decoration: underline;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

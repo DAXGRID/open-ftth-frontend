@@ -76,6 +76,15 @@ function DisconnectFiberEditor({
     );
   };
 
+  const toggleAll = () => {
+    const isAllSelected = pairs.find((x) => !x.checked);
+    if (isAllSelected) {
+      setPairs(pairs.map((x) => ({ ...x, checked: true })));
+    } else {
+      setPairs(pairs.map((x) => ({ ...x, checked: false })));
+    }
+  };
+
   if (!view) return <></>;
 
   return (
@@ -84,7 +93,13 @@ function DisconnectFiberEditor({
         <div className="disconnect-fiber-editor-container">
           <div className="disconnect-fiber-editor-container-header">
             <div className="disconnect-fiber-editor-container-header-item">
-              <span>All</span>
+              <span
+                title={t("TOGGLE_ALL")}
+                className="clickable"
+                onClick={() => toggleAll()}
+              >
+                {t("ALL")}
+              </span>
             </div>
             <div className="disconnect-fiber-editor-container-header-item">
               {t("EQUIPMENT")}
