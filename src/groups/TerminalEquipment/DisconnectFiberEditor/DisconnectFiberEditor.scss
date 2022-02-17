@@ -10,12 +10,14 @@
 .disconnect-fiber-editor-container-header,
 .disconnect-fiber-editor-container-body-line {
   display: grid;
-  grid-auto-columns: minmax(0, 8fr);
+  grid-template-columns:
+    minmax(0, 1fr) repeat(3, minmax(0, 3fr)) minmax(0, 2fr)
+    repeat(3, minmax(0, 3fr));
   grid-auto-flow: column;
+  overflow: hidden;
 }
 
 .disconnect-fiber-editor-container-header {
-  border-bottom: 1px solid $border-color;
   width: 100%;
 }
 
@@ -23,10 +25,17 @@
   font-weight: bold;
   border-right: 1px solid $border-color;
   padding: 10px;
+  overflow-wrap: break-word;
+
+  &:last-of-type {
+    border-right: none;
+  }
 }
 
 .disconnect-fiber-editor-container-body {
   max-height: 60vh;
+  overflow-y: auto;
+  overflow: overlay;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -36,10 +45,27 @@
   flex-basis: 100%;
   width: 100%;
   border-bottom: 1px solid $border-color;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
 }
 
 .disconnect-fiber-editor-container-body-line-item {
   border-right: 1px solid $border-color;
   padding: 10px;
   width: 100%;
+  overflow-wrap: break-word;
+
+  &:first-of-type {
+    align-items: center;
+    justify-items: center;
+    height: 100%;
+    display: flex;
+  }
+
+  &:last-of-type {
+    padding-right: 20px;
+    border-right: none;
+  }
 }

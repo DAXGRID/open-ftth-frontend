@@ -7,6 +7,7 @@ import {
   disconnectSpanEquipmentFromTerminalViewQuery,
   Line,
 } from "./DisconnectFiberEditorGql";
+import DefaultButton from "../../../components/DefaultButton";
 
 interface CheckboxPair {
   checked: boolean;
@@ -17,11 +18,6 @@ interface CheckboxPair {
 interface CheckboxListChangeEvent {
   checked: boolean;
   value: string | number;
-}
-
-interface DisconnectFiberLineProps {
-  checkboxPair: CheckboxPair;
-  onCheckboxListChange: (change: CheckboxListChangeEvent) => void;
 }
 
 interface DisconnectFiberEditorProps {
@@ -84,70 +80,82 @@ function DisconnectFiberEditor({
 
   return (
     <div className="disconnect-fiber-editor">
-      <div className="disconnect-fiber-editor-container">
-        <div className="disconnect-fiber-editor-container-header">
-          <div className="disconnect-fiber-editor-container-header-item"></div>
-          <div className="disconnect-fiber-editor-container-header-item">
-            {t("EQUIPMENT")}
+      <div className="full-row">
+        <div className="disconnect-fiber-editor-container">
+          <div className="disconnect-fiber-editor-container-header">
+            <div className="disconnect-fiber-editor-container-header-item">
+              <span>All</span>
+            </div>
+            <div className="disconnect-fiber-editor-container-header-item">
+              {t("EQUIPMENT")}
+            </div>
+            <div className="disconnect-fiber-editor-container-header-item">
+              {t("BAKKE/KORT")}
+            </div>
+            <div className="disconnect-fiber-editor-container-header-item">
+              {t("PIN/PORT")}
+            </div>
+            <div className="disconnect-fiber-editor-container-header-item">
+              {/* Needs to be empty for symbol */}
+            </div>
+            <div className="disconnect-fiber-editor-container-header-item">
+              {t("FIBER_NUMBER")}
+            </div>
+            <div className="disconnect-fiber-editor-container-header-item">
+              {t("TUBE/FIBER")}
+            </div>
+            <div className="disconnect-fiber-editor-container-header-item">
+              {t("KREDSLOEBENE")}
+            </div>
           </div>
-          <div className="disconnect-fiber-editor-container-header-item">
-            {t("BAKKE/KORT")}
-          </div>
-          <div className="disconnect-fiber-editor-container-header-item">
-            {t("PIN/PORT")}
-          </div>
-          <div className="disconnect-fiber-editor-container-header-item">
-            {/* Needs to be empty for symbol */}
-          </div>
-          <div className="disconnect-fiber-editor-container-header-item">
-            {t("FIBER_NUMBER")}
-          </div>
-          <div className="disconnect-fiber-editor-container-header-item">
-            {t("TUBE/FIBER")}
-          </div>
-          <div className="disconnect-fiber-editor-container-header-item">
-            {t("KREDSLOEBENE")}
+          <div className="disconnect-fiber-editor-container-body">
+            <div className="disconnect-fiber-editor-container-body-line"></div>
+            {pairs.map((x) => {
+              return (
+                <div
+                  className="disconnect-fiber-editor-container-body-line"
+                  key={x.value}
+                >
+                  <div className="disconnect-fiber-editor-container-body-line-item">
+                    <Checkbox
+                      checked={x.checked}
+                      onChange={onCheckboxListChange}
+                      value={x.value}
+                    />
+                  </div>
+                  <div className="disconnect-fiber-editor-container-body-line-item">
+                    {x.line.terminalEquipmentName}
+                  </div>
+                  <div className="disconnect-fiber-editor-container-body-line-item">
+                    {x.line.terminalStructureName}
+                  </div>
+                  <div className="disconnect-fiber-editor-container-body-line-item">
+                    {x.line.terminalName}
+                  </div>
+                  <div className="disconnect-fiber-editor-container-body-line-item text-center">
+                    {"<-O->"}
+                  </div>
+                  <div className="disconnect-fiber-editor-container-body-line-item">
+                    {x.line.spanStructureName}
+                  </div>
+                  <div className="disconnect-fiber-editor-container-body-line-item">
+                    {x.line.end}
+                  </div>
+                  <div className="disconnect-fiber-editor-container-body-line-item">
+                    {x.line.terminalEquipmentName}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-        <div className="disconnect-fiber-editor-container-body">
-          {pairs.map((x) => {
-            return (
-              <div
-                className="disconnect-fiber-editor-container-body-line"
-                key={x.value}
-              >
-                <div className="disconnect-fiber-editor-container-body-line-item">
-                  <Checkbox
-                    checked={x.checked}
-                    onChange={onCheckboxListChange}
-                    value={x.value}
-                  />
-                </div>
-                <div className="disconnect-fiber-editor-container-body-line-item">
-                  {x.line.terminalEquipmentName}
-                </div>
-                <div className="disconnect-fiber-editor-container-body-line-item">
-                  {x.line.terminalStructureName}
-                </div>
-                <div className="disconnect-fiber-editor-container-body-line-item">
-                  {x.line.terminalName}
-                </div>
-                <div className="disconnect-fiber-editor-container-body-line-item text-center">
-                  {"<-O->"}
-                </div>
-                <div className="disconnect-fiber-editor-container-body-line-item">
-                  {x.line.spanStructureName}
-                </div>
-                <div className="disconnect-fiber-editor-container-body-line-item">
-                  {x.line.end}
-                </div>
-                <div className="disconnect-fiber-editor-container-body-line-item">
-                  {x.line.terminalEquipmentName}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+      </div>
+      <div className="full-row center-items">
+        <DefaultButton
+          innerText={t("DISCONNECT")}
+          maxWidth="500px"
+          onClick={() => console.log("Clicked")}
+        />
       </div>
     </div>
   );
