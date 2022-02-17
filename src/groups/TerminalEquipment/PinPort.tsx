@@ -26,19 +26,18 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
         },
       });
     } else {
-      if (line.a?.faceKind && terminalEquipmentOrRackId) {
+      if (line.a.connectedToSpanSegmentId && line.a.connectedToSpanSegmentId) {
         dispatch({
           type: "setShowDisconnectFiberEditor",
           show: {
             show: true,
-            side: "A",
-            terminalEquipmentOrRackId: terminalEquipmentOrRackId,
             terminalId: line.a.terminal.id,
+            connectedToSegmentId: line.a.connectedToSpanSegmentId,
           },
         });
       } else {
         throw Error(
-          "line.a.faceKind or terminalEquipmentOrRackId was not set."
+          "line.a.connectedToSpanSegmentId or line.a.connectedToSpanSegmentId is not set."
         );
       }
     }
@@ -64,19 +63,18 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
         );
       }
     } else {
-      if (terminalEquipmentOrRackId && line.z.faceKind) {
+      if (line.z.connectedToSpanSegmentId && line.z.terminal.id) {
         dispatch({
           type: "setShowDisconnectFiberEditor",
           show: {
             show: true,
-            side: "Z",
-            terminalEquipmentOrRackId: terminalEquipmentOrRackId,
             terminalId: line.z.terminal.id,
+            connectedToSegmentId: line.z.connectedToSpanSegmentId,
           },
         });
       } else {
         throw Error(
-          "TerminalEquipmentOrRackId or line.z.faceKind was not set."
+          "line.z.connectedToSpanSegmentId or line.z.terminal.id is not set."
         );
       }
     }

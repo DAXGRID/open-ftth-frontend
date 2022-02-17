@@ -48,6 +48,7 @@ export interface Line {
     };
     connectedTo: string | null;
     end: string | null;
+    connectedToSpanSegmentId: string;
     faceKind: FaceKind;
   } | null;
   z: {
@@ -57,6 +58,7 @@ export interface Line {
     };
     connectedTo: string | null;
     end: string | null;
+    connectedToSpanSegmentId: string;
     faceKind: FaceKind;
   } | null;
 }
@@ -126,6 +128,7 @@ $terminalEquipmentOrRackId: ID!) {
               connectedTo
               end
               faceKind
+              connectedToSpanSegmentId
             }
             z {
               terminal {
@@ -135,6 +138,7 @@ $terminalEquipmentOrRackId: ID!) {
               connectedTo
               end
               faceKind
+              connectedToSpanSegmentId
             }
           }
         }
@@ -184,6 +188,7 @@ subscription ($routeNodeId: ID!, $terminalEquipmentOrRackId: ID!) {
             }
             connectedTo
             end
+            connectedToSpanSegmentId
             faceKind
           }
           z {
@@ -193,6 +198,7 @@ subscription ($routeNodeId: ID!, $terminalEquipmentOrRackId: ID!) {
             }
             connectedTo
             end
+            connectedToSpanSegmentId
             faceKind
           }
         }

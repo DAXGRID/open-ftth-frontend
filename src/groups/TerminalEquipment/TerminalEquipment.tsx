@@ -264,22 +264,12 @@ function TerminalEquipment() {
   useEffect(() => {
     if (
       state.showDisconnectFiberEditor.show &&
-      state.showDisconnectFiberEditor.side
+      state.showDisconnectFiberEditor.connectedToSegmentId &&
+      state.showDisconnectFiberEditor.terminalId
     ) {
-      const terminalEquipment = state.connectivityView?.terminalEquipments.find(
-        (x) =>
-          x.id === state.showDisconnectFiberEditor.terminalEquipmentOrRackId
-      );
-
-      if (!terminalEquipment) {
-        throw Error(
-          `Could not find terminal equipment on id '${state.showDisconnectFiberEditor.terminalId}' for DisconnectFiberEditor.`
-        );
-      }
-
       showElement(
         <ModalContainer
-          title={t("TODO")}
+          title={t("DISCONNECT_FIBER_EDITOR")}
           show={true}
           closeCallback={() =>
             dispatch({
@@ -289,8 +279,8 @@ function TerminalEquipment() {
           maxWidth="1200px"
         >
           <DisconnectFiberEditor
-            side={state.showDisconnectFiberEditor.side}
-            terminalEquipment={terminalEquipment}
+            spanSegmentId={state.showDisconnectFiberEditor.connectedToSegmentId}
+            terminalId={state.showDisconnectFiberEditor.terminalId}
           />
         </ModalContainer>
       );
