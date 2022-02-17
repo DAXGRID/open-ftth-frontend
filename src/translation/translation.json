@@ -204,7 +204,6 @@
       "DISTANCE": "Distance",
       "CONDUIT_ID": "Conduit id",
       "CONNECTION_ESTABLISHED": "Connection established.",
-      "ALL": "All",
       "TOGGLE_ALL": "Toggle all",
       "DISCONNECT": "Disconnect"
     }
@@ -414,7 +413,6 @@
       "DISTANCE": "Afstand",
       "CONDUIT_ID": "Rør id",
       "CONNECTION_ESTABLISHED": "Forbundet.",
-      "ALL": "Alle",
       "TOGGLE_ALL": "Slå til/fra",
       "DISCONNECT": "Disconnect"
     }

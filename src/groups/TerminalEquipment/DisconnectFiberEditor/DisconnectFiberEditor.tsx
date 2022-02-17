@@ -38,6 +38,10 @@ function createLineCheckboxPairs(
     }));
 }
 
+function canDisconnect(pairs: CheckboxPair[]): boolean {
+  return !!pairs.find((x) => x.checked);
+}
+
 function DisconnectFiberEditor({
   terminalId,
   spanSegmentId,
@@ -46,6 +50,7 @@ function DisconnectFiberEditor({
   const { t } = useTranslation();
   const [view, setView] = useState<DisconnectSpanEquipmentFromTerminalView>();
   const [pairs, setPairs] = useState<CheckboxPair[]>([]);
+  const [toggleAll, setToggleAll] = useState<boolean>(false);
 
   useEffect(() => {
     disconnectSpanEquipmentFromTerminalViewQuery(client, {
@@ -76,9 +81,9 @@ function DisconnectFiberEditor({
     );
   };
 
-  const toggleAll = () => {
-    const isAllSelected = pairs.find((x) => !x.checked);
-    if (isAllSelected) {
+  const onToggleAllChange = ({ checked }: CheckboxListChangeEvent) => {
+    setToggleAll(checked);
+    if (checked) {
       setPairs(pairs.map((x) => ({ ...x, checked: true })));
     } else {
       setPairs(pairs.map((x) => ({ ...x, checked: false })));
@@ -93,13 +98,11 @@ function DisconnectFiberEditor({
         <div className="disconnect-fiber-editor-container">
           <div className="disconnect-fiber-editor-container-header">
             <div className="disconnect-fiber-editor-container-header-item">
-              <span
-                title={t("TOGGLE_ALL")}
-                className="clickable"
-                onClick={() => toggleAll()}
-              >
-                {t("ALL")}
-              </span>
+              <Checkbox
+                value={"-1"}
+                checked={toggleAll}
+                onChange={onToggleAllChange}
+              />
             </div>
             <div className="disconnect-fiber-editor-container-header-item">
               {t("EQUIPMENT")}
@@ -167,6 +170,7 @@ function DisconnectFiberEditor({
       </div>
       <div className="full-row center-items">
         <DefaultButton
+          disabled={!canDisconnect(pairs)}
           innerText={t("DISCONNECT")}
           maxWidth="500px"
           onClick={() => console.log("Clicked")}
