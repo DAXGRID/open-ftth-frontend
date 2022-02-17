@@ -205,7 +205,8 @@
       "CONDUIT_ID": "Conduit id",
       "CONNECTION_ESTABLISHED": "Connection established.",
       "TOGGLE_ALL": "Toggle all",
-      "DISCONNECT": "Disconnect"
+      "DISCONNECT": "Disconnect",
+      "DISCONNECT_FIBER_EDITOR": "Disconnect fiber editor"
     }
   },
   "dk": {
@@ -414,7 +415,8 @@
       "CONDUIT_ID": "Rør id",
       "CONNECTION_ESTABLISHED": "Forbundet.",
       "TOGGLE_ALL": "Slå til/fra",
-      "DISCONNECT": "Disconnect"
+      "DISCONNECT": "Disconnect",
+      "DISCONNECT_FIBER_EDITOR": "Disconnect fiber editor"
     }
   }
 }
