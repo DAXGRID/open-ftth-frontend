@@ -28,19 +28,32 @@ interface ShowFiberEditor {
   terminalEquipmentOrRackId: string | null;
 }
 
+interface ShowDisconnectFiberEditor {
+  show: boolean;
+  terminalId: string | null;
+  connectedToSegmentId: string | null;
+  routeNodeId: string | null;
+}
+
 interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
   showFreeLines: { [id: string]: boolean };
   showFiberEditor: ShowFiberEditor;
+  showDisconnectFiberEditor: ShowDisconnectFiberEditor;
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
   selectedConnectivityTraceHop: Hop | null;
   editable: boolean;
   terminalEquipmentOrRackId: string;
+  routeNodeId: string | null;
 }
 
 type TerminalEquipmentAction =
+  | {
+      type: "setRouteNodeId";
+      id: string;
+    }
   | {
       type: "setConnectivityView";
       view: TerminalEquipmentConnectivityView;
@@ -49,6 +62,8 @@ type TerminalEquipmentAction =
   | { type: "clearShowFreeLines" }
   | { type: "setShowFiberEditor"; show: ShowFiberEditor }
   | { type: "resetShowFiberEditor" }
+  | { type: "setShowDisconnectFiberEditor"; show: ShowDisconnectFiberEditor }
+  | { type: "resetShowDisconnectFiberEditor" }
   | { type: "setShowConnectivityTraceViews"; id: string }
   | {
       type: "setViewConnectivityTraceViews";
@@ -79,6 +94,13 @@ const defaultShowFiberEditorValues: ShowFiberEditor = {
   terminalEquipmentOrRackId: null,
 };
 
+const defaultShowDisconnectFiberEditor: ShowDisconnectFiberEditor = {
+  show: false,
+  terminalId: null,
+  connectedToSegmentId: null,
+  routeNodeId: null,
+};
+
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
@@ -87,6 +109,8 @@ const terminalEquipmentInitialState: TerminalEquipmentState = {
   selectedConnectivityTraceHop: null,
   editable: false,
   terminalEquipmentOrRackId: "",
+  showDisconnectFiberEditor: defaultShowDisconnectFiberEditor,
+  routeNodeId: null,
 };
 
 function terminalEquipmentReducer(
@@ -94,6 +118,8 @@ function terminalEquipmentReducer(
   action: TerminalEquipmentAction
 ): TerminalEquipmentState {
   switch (action.type) {
+    case "setRouteNodeId":
+      return { ...state, routeNodeId: action.id };
     case "setConnectivityView":
       return {
         ...state,
@@ -127,6 +153,13 @@ function terminalEquipmentReducer(
       };
     case "resetShowFiberEditor":
       return { ...state, showFiberEditor: defaultShowFiberEditorValues };
+    case "setShowDisconnectFiberEditor":
+      return { ...state, showDisconnectFiberEditor: action.show };
+    case "resetShowDisconnectFiberEditor":
+      return {
+        ...state,
+        showDisconnectFiberEditor: defaultShowDisconnectFiberEditor,
+      };
     case "setViewConnectivityTraceViews":
       return {
         ...state,
@@ -274,6 +307,11 @@ const TerminalEquipmentProvider = ({
       geometries: routeSegmentGeometries,
     });
   }, [state.selectedConnectivityTraceHop, setTrace]);
+
+  useEffect(() => {
+    if (!routeNodeId) return;
+    dispatch({ type: "setRouteNodeId", id: routeNodeId });
+  }, [routeNodeId, dispatch]);
 
   return (
     <TerminalEquipmentContext.Provider

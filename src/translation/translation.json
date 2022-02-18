@@ -203,7 +203,15 @@
       "LENGTH": "Length",
       "DISTANCE": "Distance",
       "CONDUIT_ID": "Conduit id",
-      "CONNECTION_ESTABLISHED": "Connection established."
+      "CONNECTION_ESTABLISHED": "Connection established.",
+      "TOGGLE_ALL": "Toggle all",
+      "DISCONNECT": "Disconnect",
+      "DISCONNECT_FIBER_CABLE": "Disconnect fiber cable",
+      "TRAY/CARD": "Tray/card",
+      "TUBE/FIBER": "Tube/fiber",
+      "CURCUIT_END": "Curcuit end",
+      "CABLE_NAME": "Cable name",
+      "DISCONNECTED": "Disconnected"
     }
   },
   "dk": {
@@ -410,7 +418,15 @@
       "LENGTH": "Længde",
       "DISTANCE": "Afstand",
       "CONDUIT_ID": "Rør id",
-      "CONNECTION_ESTABLISHED": "Forbundet."
+      "CONNECTION_ESTABLISHED": "Forbundet.",
+      "TOGGLE_ALL": "Slå til/fra",
+      "DISCONNECT": "Disconnect",
+      "DISCONNECT_FIBER_CABLE": "Disconnect fiber kabel",
+      "TRAY/CARD": "Bakke/kort",
+      "TUBE/FIBER": "Tube/fiber",
+      "CURCUIT_END": "Kredsløbsende",
+      "CABLE_NAME": "Kabel navn",
+      "DISCONNECTED": "Disconnected"
     }
   }
 }
