@@ -590,9 +590,6 @@ function FiberConnectionEditor({
     ) {
       const isFromSpanEquipment = from.equipmentKind === "SPAN_EQUIPMENT";
 
-      const spanEquipment = isFromSpanEquipment ? from : to;
-      const terminalEquipment = isFromSpanEquipment ? to : from;
-
       const spanSegmentIds = isFromSpanEquipment
         ? connectionRows.map((x) => x.from.id)
         : connectionRows.map((x) => x.to.id);
@@ -601,12 +598,14 @@ function FiberConnectionEditor({
         ? connectionRows.map((x) => x.to.id)
         : connectionRows.map((x) => x.from.id);
 
+      const connects = spanSegmentIds.map((x, i) => ({
+        spanSegmentId: x,
+        terminalId: terminalIds[i],
+      }));
+
       connectToTerminalEquipment(client, {
         routeNodeId: routeNodeId,
-        spanEquipmentId: spanEquipment.equipmentId,
-        spanSegmentIds: spanSegmentIds,
-        terminalEquipmentId: terminalEquipment.equipmentId,
-        terminalIds: terminalIds,
+        connects: connects,
       })
         .then((response) => {
           if (

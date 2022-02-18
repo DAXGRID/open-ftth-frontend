@@ -30,23 +30,14 @@ export function getConnectivityFaces(client: Client, routeNodeId: string) {
 
 export function connectToTerminalEquipment(
   client: Client,
-  {
-    routeNodeId,
-    spanEquipmentId,
-    spanSegmentIds,
-    terminalEquipmentId,
-    terminalIds,
-  }: ConnectToTerminalEquipmentParams
+  { routeNodeId, connects }: ConnectToTerminalEquipmentParams
 ) {
   return client
     .mutation<ConnectToTerminalEquipmentResponse>(
       CONNECT_TO_TERMINAL_EQUIPMENT_MUTATION,
       {
         routeNodeId,
-        spanEquipmentId,
-        spanSegmentIds,
-        terminalEquipmentId,
-        terminalIds,
+        connects,
       } as ConnectToTerminalEquipmentParams
     )
     .toPromise();
@@ -135,26 +126,20 @@ interface ConnectToTerminalEquipmentResponse {
 
 interface ConnectToTerminalEquipmentParams {
   routeNodeId: string;
-  spanEquipmentId: string;
-  spanSegmentIds: string[];
-  terminalEquipmentId: string;
-  terminalIds: string[];
+  connects: {
+    spanSegmentId: string;
+    terminalId: string;
+  }[];
 }
 
 export const CONNECT_TO_TERMINAL_EQUIPMENT_MUTATION = `
 mutation (
 $routeNodeId: ID!,
-$spanEquipmentId: ID!,
-$spanSegmentIds: [ID!]!,
-$terminalEquipmentId: ID!,
-$terminalIds: [ID!]!) {
+$connects: [ConnectSpanSegmentToTerminalOperationInputType!]!) {
   spanEquipment {
     connectToTerminalEquipment (
       routeNodeId: $routeNodeId
-      spanEquipmentId: $spanEquipmentId
- 	  spanSegmentIds: $spanSegmentIds
-      terminalEquipmentId: $terminalEquipmentId
-      terminalIds: $terminalIds)
+      connects: $connects)
     {
       isSuccess
       errorCode
