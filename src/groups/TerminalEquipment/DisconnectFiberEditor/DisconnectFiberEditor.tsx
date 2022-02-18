@@ -95,6 +95,11 @@ function DisconnectFiberEditor({
   return (
     <div className="disconnect-fiber-editor">
       <div className="full-row">
+        <p className="disconnect-fiber-editor__title">
+          {t("CABLE_NAME")}: {view.spanEquipmentName}
+        </p>
+      </div>
+      <div className="full-row">
         <div className="disconnect-fiber-editor-container">
           <div className="disconnect-fiber-editor-container-header">
             <div className="disconnect-fiber-editor-container-header-item">
@@ -108,22 +113,16 @@ function DisconnectFiberEditor({
               {t("EQUIPMENT")}
             </div>
             <div className="disconnect-fiber-editor-container-header-item">
-              {t("BAKKE/KORT")}
+              {t("TRAY/CARD")}
             </div>
             <div className="disconnect-fiber-editor-container-header-item">
               {t("PIN/PORT")}
             </div>
             <div className="disconnect-fiber-editor-container-header-item">
-              {/* Needs to be empty for symbol */}
-            </div>
-            <div className="disconnect-fiber-editor-container-header-item">
-              {t("FIBER_NUMBER")}
-            </div>
-            <div className="disconnect-fiber-editor-container-header-item">
               {t("TUBE/FIBER")}
             </div>
             <div className="disconnect-fiber-editor-container-header-item">
-              {t("KREDSLOEBENE")}
+              {t("CURCUIT_END")}
             </div>
           </div>
           <div className="disconnect-fiber-editor-container-body">
@@ -150,17 +149,11 @@ function DisconnectFiberEditor({
                   <div className="disconnect-fiber-editor-container-body-line-item">
                     {x.line.terminalName}
                   </div>
-                  <div className="disconnect-fiber-editor-container-body-line-item text-center">
-                    {"<-O->"}
-                  </div>
                   <div className="disconnect-fiber-editor-container-body-line-item">
                     {x.line.spanStructureName}
                   </div>
                   <div className="disconnect-fiber-editor-container-body-line-item">
                     {x.line.end}
-                  </div>
-                  <div className="disconnect-fiber-editor-container-body-line-item">
-                    {x.line.terminalEquipmentName}
                   </div>
                 </div>
               );

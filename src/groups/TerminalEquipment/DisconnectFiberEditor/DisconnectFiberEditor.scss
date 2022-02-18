@@ -3,6 +3,10 @@
 .disconnect-fiber-editor {
 }
 
+.disconnect-fiber-editor__title {
+  font-size: 18px;
+}
+
 .disconnect-fiber-editor-container {
   border: 1px solid $border-color;
   border-radius: 4px;
@@ -12,7 +16,7 @@
 .disconnect-fiber-editor-container-body-line {
   display: grid;
   grid-template-columns:
-    minmax(0, 1fr) repeat(3, minmax(0, 3fr)) minmax(0, 2fr)
+    minmax(0, 1fr) repeat(3, minmax(0, 3fr))
     repeat(3, minmax(0, 3fr));
   grid-auto-flow: column;
   overflow: hidden;
