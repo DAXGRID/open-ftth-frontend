@@ -12,6 +12,18 @@ export const disconnectSpanEquipmentFromTerminalViewQuery = (
     .toPromise();
 };
 
+export const disconnectFromTerminalEquipment = (
+  client: Client,
+  mutationParams: DisconnectFromTerminalEquipmentParams
+) => {
+  return client
+    .mutation<DisconnectFromTerminalEquipmentMutationResponse>(
+      DISCONNECT_FROM_TERMINAL_EQUIPMENT_MUTATION,
+      mutationParams
+    )
+    .toPromise();
+};
+
 interface DisconnectSpanEquipmentFromTerminalViewResponse {
   utilityNetwork: {
     disconnectSpanEquipmentFromTerminalView: DisconnectSpanEquipmentFromTerminalView;
@@ -62,6 +74,42 @@ $terminalId: ID!
         spanStructureName
         end
       }
+    }
+  }
+}
+`;
+
+interface DisconnectFromTerminalEquipmentMutationResponse {
+  spanEquipment: {
+    disconnectFromTerminalEquipment: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
+interface DisconnectFromTerminalEquipmentParams {
+  routeNodeId: string;
+  disconnects: {
+    terminalId: string;
+    spanSegmentId: string;
+  }[];
+}
+
+const DISCONNECT_FROM_TERMINAL_EQUIPMENT_MUTATION = `
+mutation (
+$routeNodeId: ID!,
+$disconnects: [DisconnectSpanSegmentFromTerminalOperationInputType!]!
+) {
+  spanEquipment {
+    disconnectFromTerminalEquipment(
+      routeNodeId: $routeNodeId
+      disconnects: $disconnects)
+    {
+      isSuccess
+      errorCode
+      errorMessage
     }
   }
 }

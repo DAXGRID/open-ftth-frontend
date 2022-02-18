@@ -210,7 +210,8 @@
       "TRAY/CARD": "Tray/card",
       "TUBE/FIBER": "Tube/fiber",
       "CURCUIT_END": "Curcuit end",
-      "CABLE_NAME": "Cable name"
+      "CABLE_NAME": "Cable name",
+      "DISCONNECTED": "Disconnected"
     }
   },
   "dk": {
@@ -424,7 +425,8 @@
       "TRAY/CARD": "Bakke/kort",
       "TUBE/FIBER": "Tube/fiber",
       "CURCUIT_END": "Kredsløbsende",
-      "CABLE_NAME": "Kabel navn"
+      "CABLE_NAME": "Kabel navn",
+      "DISCONNECTED": "Disconnected"
     }
   }
 }

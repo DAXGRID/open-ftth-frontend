@@ -265,7 +265,8 @@ function TerminalEquipment() {
     if (
       state.showDisconnectFiberEditor.show &&
       state.showDisconnectFiberEditor.connectedToSegmentId &&
-      state.showDisconnectFiberEditor.terminalId
+      state.showDisconnectFiberEditor.terminalId &&
+      state.routeNodeId
     ) {
       showElement(
         <ModalContainer
@@ -281,6 +282,7 @@ function TerminalEquipment() {
           <DisconnectFiberEditor
             spanSegmentId={state.showDisconnectFiberEditor.connectedToSegmentId}
             terminalId={state.showDisconnectFiberEditor.terminalId}
+            routeNodeId={state.routeNodeId}
           />
         </ModalContainer>
       );
@@ -290,6 +292,7 @@ function TerminalEquipment() {
   }, [
     state.showDisconnectFiberEditor,
     state.connectivityView?.terminalEquipments,
+    state.routeNodeId,
     showElement,
     dispatch,
     t,

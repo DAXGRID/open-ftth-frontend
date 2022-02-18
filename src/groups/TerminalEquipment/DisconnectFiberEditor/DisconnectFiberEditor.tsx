@@ -6,8 +6,10 @@ import {
   DisconnectSpanEquipmentFromTerminalView,
   disconnectSpanEquipmentFromTerminalViewQuery,
   Line,
+  disconnectFromTerminalEquipment,
 } from "./DisconnectFiberEditorGql";
 import DefaultButton from "../../../components/DefaultButton";
+import { toast } from "react-toastify";
 
 interface CheckboxPair {
   checked: boolean;
@@ -18,11 +20,6 @@ interface CheckboxPair {
 interface CheckboxListChangeEvent {
   checked: boolean;
   value: string | number;
-}
-
-interface DisconnectFiberEditorProps {
-  terminalId: string;
-  spanSegmentId: string;
 }
 
 function createLineCheckboxPairs(
@@ -42,9 +39,16 @@ function canDisconnect(pairs: CheckboxPair[]): boolean {
   return !!pairs.find((x) => x.checked);
 }
 
+interface DisconnectFiberEditorProps {
+  terminalId: string;
+  spanSegmentId: string;
+  routeNodeId: string;
+}
+
 function DisconnectFiberEditor({
   terminalId,
   spanSegmentId,
+  routeNodeId,
 }: DisconnectFiberEditorProps) {
   const client = useClient();
   const { t } = useTranslation();
@@ -87,6 +91,31 @@ function DisconnectFiberEditor({
       setPairs(pairs.map((x) => ({ ...x, checked: true })));
     } else {
       setPairs(pairs.map((x) => ({ ...x, checked: false })));
+    }
+  };
+
+  const disconnect = async () => {
+    const disconnects = pairs
+      .filter((x) => x.checked)
+      .map((x) => ({
+        terminalId: x.line.terminalId,
+        spanSegmentId: x.line.segmentId,
+      }));
+
+    const response = await disconnectFromTerminalEquipment(client, {
+      disconnects: disconnects,
+      routeNodeId: routeNodeId,
+    });
+
+    if (
+      response.data?.spanEquipment.disconnectFromTerminalEquipment.isSuccess
+    ) {
+      toast.success(t("DISCONNECTED"));
+    } else {
+      toast.error(
+        response.data?.spanEquipment.disconnectFromTerminalEquipment
+          .errorCode ?? "ERROR"
+      );
     }
   };
 
@@ -166,7 +195,7 @@ function DisconnectFiberEditor({
           disabled={!canDisconnect(pairs)}
           innerText={t("DISCONNECT")}
           maxWidth="500px"
-          onClick={() => console.log("Clicked")}
+          onClick={async () => await disconnect()}
         />
       </div>
     </div>

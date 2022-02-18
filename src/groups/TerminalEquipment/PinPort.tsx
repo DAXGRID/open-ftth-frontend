@@ -33,6 +33,7 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
             show: true,
             terminalId: line.a.terminal.id,
             connectedToSegmentId: line.a.connectedToSpanSegmentId,
+            routeNodeId: state.routeNodeId,
           },
         });
       } else {
@@ -70,6 +71,7 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
             show: true,
             terminalId: line.z.terminal.id,
             connectedToSegmentId: line.z.connectedToSpanSegmentId,
+            routeNodeId: state.routeNodeId,
           },
         });
       } else {
