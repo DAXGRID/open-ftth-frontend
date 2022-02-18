@@ -96,11 +96,16 @@ function canAffixSpanEquipmentToParent(
   selected: MapboxGeoJSONFeature[]
 ): boolean {
   const invalidSelections = selected.filter(
-    (x) => x.layer.source !== "FiberCable" && x.layer.source !== "InnerConduit"
+    (x) =>
+      x.layer.source !== "FiberCable" &&
+      x.layer.source !== "InnerConduit" &&
+      x.layer.source !== "OuterConduit"
   );
+
   const fiberCables = selected.filter((x) => x.layer.source === "FiberCable");
   const innerConduits = selected.filter(
-    (x) => x.layer.source === "InnerConduit"
+    (x) =>
+      x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
   );
 
   return (
@@ -642,14 +647,23 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       (x) => x.layer.source === "FiberCable"
     );
 
-    const innerConduit = currentlySelectedFeatures.find(
-      (x) => x.layer.source === "InnerConduit"
+    const innerOrOuterConduit = currentlySelectedFeatures.find(
+      (x) =>
+        x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
     );
 
+    if (
+      !identifiedFeature?.id ||
+      !fiberCable?.properties?.refId ||
+      !innerOrOuterConduit?.properties?.refId
+    ) {
+      throw Error("Missing data to affix span equipment to parent");
+    }
+
     const params: AffixSpanEquipmentToParentParams = {
-      routeNodeId: identifiedFeature?.id ?? "",
-      spanSegmentIdOne: fiberCable?.properties?.refId ?? "",
-      spanSegmentIdTwo: innerConduit?.properties?.refId ?? "",
+      routeNodeId: identifiedFeature.id,
+      spanSegmentIdOne: fiberCable.properties.refId,
+      spanSegmentIdTwo: innerOrOuterConduit.properties.refId,
     };
 
     const response = await client
