@@ -13,7 +13,7 @@ import {
   Line,
   passageViewQuery,
   SpanEquipmentPassageView,
-} from "./PassageViewGqp";
+} from "./PassageViewGql";
 
 interface SelectableLine extends Line {
   selected: boolean;
