@@ -1,0 +1,16 @@
+.information-control-button {
+  border-radius: 4px;
+  border: none;
+  background-color: white;
+  border-bottom: 1px solid #e3e3e3;
+  height: 29px;
+  width: 29px;
+
+  &.active {
+    color: #33b5e5;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

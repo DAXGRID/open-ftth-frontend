@@ -21,6 +21,7 @@ import { MapContext } from "../../contexts/MapContext";
 import ToggleLayerButton from "./MapControls/ToggleLayerButton";
 import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
+import InformationControl from "./MapControls/InformationControl";
 
 function createSources(layers: any[]): any {
   let sources: any = {
@@ -241,6 +242,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
     newMap.touchZoomRotate.disableRotation();
 
     newMap.addControl(new ScaleControl(), "bottom-left");
+
     newMap.addControl(
       new AttributionControl({
         customAttribution: [
@@ -261,6 +263,8 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       new ToggleDiagramControl(showSchematicDiagram),
       "top-right"
     );
+    newMap.addControl(new InformationControl(), "top-right");
+
     newMap.addControl(
       new GeolocateControl({
         positionOptions: {
