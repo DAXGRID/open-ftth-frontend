@@ -11,16 +11,50 @@ import "./InformationControl.scss";
 
 library.add(faInfoCircle);
 
+interface InformationControlLayer {
+  layer: string;
+  body: string;
+}
+
 interface InformationControlConfig {
-  sourceLayers: {
-    layer: string;
-    body: string;
-  }[];
+  sourceLayers: InformationControlLayer[];
 }
 
 const controlConfig: InformationControlConfig = {
-  sourceLayers: [{ layer: "housenumber", body: '<a href="#">My link</a>' }],
+  sourceLayers: [
+    {
+      layer: "housenumber",
+      body: '<a href="http://dr.dk?housenumber={properties.housenumber}">This is my house number! {properties.housenumber} and this is the x coordinate: {geometry.coordinates.0} and this is the y coordinate {geometry.coordinates.1}</a>',
+    },
+  ],
 };
+
+function resolve(path: string, obj: any) {
+  return path.split(".").reduce(function (prev, curr) {
+    return prev ? prev[curr] : null;
+  }, obj);
+}
+
+function parseBody(htmlBody: string, obj: any): string {
+  const re = /({.*?})/g;
+
+  const matches = [...htmlBody.matchAll(re)];
+
+  if (!matches) {
+    return htmlBody;
+  }
+
+  let result = htmlBody;
+
+  for (let i = 0; i < matches.length; i++) {
+    result = result.replace(
+      matches[i][0],
+      resolve(matches[i][0].replaceAll("{", "").replaceAll("}", ""), obj)
+    );
+  }
+
+  return result;
+}
 
 function createButton(): HTMLButtonElement {
   const buttonIcon = icon({ prefix: "fas", iconName: "info-circle" }).node[0];
@@ -30,24 +64,27 @@ function createButton(): HTMLButtonElement {
   return button;
 }
 
-function createOnClickFunc(map: Map, featureNames: string[], bboxSize: number) {
+function createOnClickFunc(
+  map: Map,
+  config: InformationControlConfig,
+  bboxSize: number
+) {
   const onClick = (e: MapMouseEvent) => {
     const bbox: [PointLike, PointLike] = [
       [e.point.x - bboxSize, e.point.y - bboxSize],
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    const features = map
+    const feature = map
       .queryRenderedFeatures(bbox, {})
-      .filter((x) => featureNames.includes(x.sourceLayer, 0));
+      .find((x) =>
+        config.sourceLayers.map((x) => x.layer).includes(x.sourceLayer, 0)
+      );
 
-    if (features.length === 0) {
-      return;
-    }
+    if (!feature) return;
 
     // We have to cast to any because of coordinates missing from type spec.
-    const coordinates: [number, number] = (features[0].geometry as any)
-      .coordinates;
+    const coordinates: [number, number] = (feature.geometry as any).coordinates;
 
     if (!coordinates) throw Error("Could not find BBOX for feature.");
 
@@ -58,7 +95,19 @@ function createOnClickFunc(map: Map, featureNames: string[], bboxSize: number) {
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
 
-    addPopup(map, coordinates);
+    const htmlBody = config.sourceLayers.find(
+      (x) => x.layer === feature.sourceLayer
+    )?.body;
+
+    if (!htmlBody) {
+      throw Error(
+        `Could not find htmlBody for feature using sourceLayer: ${feature.sourceLayer}`
+      );
+    }
+
+    const parsedBody = parseBody(htmlBody, feature);
+
+    addPopup(map, coordinates, parsedBody);
   };
 
   return onClick;
@@ -89,8 +138,8 @@ function createHoverPointerFunc(
   return onHoverPointer;
 }
 
-function addPopup(map: Map, coordinates: [number, number]) {
-  new Popup().setLngLat(coordinates).setHTML("Hello world!").addTo(map);
+function addPopup(map: Map, coordinates: [number, number], htmlBody: string) {
+  new Popup().setLngLat(coordinates).setHTML(htmlBody).addTo(map);
 }
 
 function removePopup() {
@@ -116,13 +165,14 @@ class InformationControl {
     this.container = document.createElement("div");
     this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
     const button = createButton();
-    this.onClickFunc = createOnClickFunc(map, ["housenumber"], 4);
+
+    this.onClickFunc = createOnClickFunc(map, controlConfig, 4);
     this.onHoverFunc = createHoverPointerFunc(map, ["housenumber"], 4);
 
     button.addEventListener("click", () => {
       this.active = !this.active;
       if (!this.onClickFunc || !this.onHoverFunc) {
-        throw Error("Function is not binded.");
+        throw Error("Functions are not binded.");
       }
 
       if (this.active) {
