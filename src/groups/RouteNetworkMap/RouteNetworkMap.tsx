@@ -263,7 +263,11 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       new ToggleDiagramControl(showSchematicDiagram),
       "top-right"
     );
-    newMap.addControl(new InformationControl(), "top-right");
+
+    newMap.addControl(
+      new InformationControl(Config.INFORMATION_CONTROL_CONFIG),
+      "top-right"
+    );
 
     newMap.addControl(
       new GeolocateControl({

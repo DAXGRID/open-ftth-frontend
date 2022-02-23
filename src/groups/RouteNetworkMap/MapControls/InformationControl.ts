@@ -20,15 +20,6 @@ interface InformationControlConfig {
   sourceLayers: InformationControlLayer[];
 }
 
-const controlConfig: InformationControlConfig = {
-  sourceLayers: [
-    {
-      layer: "housenumber",
-      body: '<a href="http://dr.dk?housenumber={properties.housenumber}">This is my house number! {properties.housenumber} and this is the x coordinate: {geometry.coordinates.0} and this is the y coordinate {geometry.coordinates.1}</a>',
-    },
-  ],
-};
-
 function resolve(path: string, obj: any) {
   return path.split(".").reduce(function (prev, curr) {
     return prev ? prev[curr] : null;
@@ -159,6 +150,11 @@ class InformationControl {
       ) => void)
     | null = null;
   onHoverFunc: ((e: MapMouseEvent) => void) | null = null;
+  config: InformationControlConfig;
+
+  constructor(config: InformationControlConfig) {
+    this.config = config;
+  }
 
   onAdd(map: Map) {
     this.map = map;
@@ -166,8 +162,12 @@ class InformationControl {
     this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
     const button = createButton();
 
-    this.onClickFunc = createOnClickFunc(map, controlConfig, 4);
-    this.onHoverFunc = createHoverPointerFunc(map, ["housenumber"], 4);
+    this.onClickFunc = createOnClickFunc(map, this.config, 4);
+    this.onHoverFunc = createHoverPointerFunc(
+      map,
+      this.config.sourceLayers.map((x) => x.layer),
+      4
+    );
 
     button.addEventListener("click", () => {
       this.active = !this.active;
