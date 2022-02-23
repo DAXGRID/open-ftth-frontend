@@ -22,6 +22,7 @@ import ToggleLayerButton from "./MapControls/ToggleLayerButton";
 import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 import InformationControl from "./MapControls/InformationControl";
+import { config } from "process";
 
 function createSources(layers: any[]): any {
   let sources: any = {
@@ -264,10 +265,15 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       "top-right"
     );
 
-    newMap.addControl(
-      new InformationControl(Config.INFORMATION_CONTROL_CONFIG),
-      "top-right"
-    );
+    if (
+      Config.INFORMATION_CONTROL_CONFIG.sourceLayers &&
+      Config.INFORMATION_CONTROL_CONFIG.sourceLayers.length > 0
+    ) {
+      newMap.addControl(
+        new InformationControl(Config.INFORMATION_CONTROL_CONFIG),
+        "top-right"
+      );
+    }
 
     newMap.addControl(
       new GeolocateControl({
