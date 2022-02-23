@@ -1,4 +1,10 @@
-import { Map, MapMouseEvent, MapboxGeoJSONFeature, Popup } from "maplibre-gl";
+import {
+  Map,
+  MapMouseEvent,
+  MapboxGeoJSONFeature,
+  Popup,
+  PointLike,
+} from "maplibre-gl";
 import { icon, library } from "@fortawesome/fontawesome-svg-core";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import "./InformationControl.scss";
@@ -38,6 +44,31 @@ function createOnClickFunc(map: Map) {
   return onClick;
 }
 
+function createHoverPointerFunc(
+  featureNames: string[],
+  bboxSize: number,
+  map: Map
+) {
+  const onHoverPointer = (e: MapMouseEvent) => {
+    const bbox: [PointLike, PointLike] = [
+      [e.point.x - bboxSize, e.point.y - bboxSize],
+      [e.point.x + bboxSize, e.point.y + bboxSize],
+    ];
+
+    let features = map
+      .queryRenderedFeatures(bbox, {})
+      .filter((x) => featureNames.includes(x.sourceLayer, 0));
+
+    if (features.length > 0) {
+      map.getCanvas().style.cursor = "pointer";
+    } else {
+      map.getCanvas().style.cursor = "";
+    }
+  };
+
+  return onHoverPointer;
+}
+
 function addPopup(map: Map, coordinates: [number, number]) {
   new Popup().setLngLat(coordinates).setHTML("Hello world!").addTo(map);
 }
@@ -58,6 +89,7 @@ class InformationControl {
         e: MapMouseEvent & { features?: MapboxGeoJSONFeature[] | undefined }
       ) => void)
     | null = null;
+  onHoverFunc: ((e: MapMouseEvent) => void) | null = null;
 
   onAdd(map: Map) {
     this.map = map;
@@ -65,17 +97,22 @@ class InformationControl {
     this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
     const button = createButton();
     this.onClickFunc = createOnClickFunc(map);
+    this.onHoverFunc = createHoverPointerFunc(["housenumber"], 4, map);
+
     button.addEventListener("click", () => {
       this.active = !this.active;
-      if (!this.onClickFunc) {
+      if (!this.onClickFunc || !this.onHoverFunc) {
         throw Error("Function is not binded.");
       }
+
       if (this.active) {
         button.classList.add("active");
         map.on("click", "housenumber", this.onClickFunc);
+        map.on("mousemove", this.onHoverFunc);
       } else {
         button.classList.remove("active");
         map.off("click", "housenumber", this.onClickFunc);
+        map.off("mousemove", this.onHoverFunc);
         removePopup();
       }
     });
