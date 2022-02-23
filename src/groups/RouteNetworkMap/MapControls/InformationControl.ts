@@ -11,6 +11,17 @@ import "./InformationControl.scss";
 
 library.add(faInfoCircle);
 
+interface InformationControlConfig {
+  sourceLayers: {
+    layer: string;
+    body: string;
+  }[];
+}
+
+const controlConfig: InformationControlConfig = {
+  sourceLayers: [{ layer: "housenumber", body: '<a href="#">My link</a>' }],
+};
+
 function createButton(): HTMLButtonElement {
   const buttonIcon = icon({ prefix: "fas", iconName: "info-circle" }).node[0];
   const button = document.createElement("button");
@@ -19,14 +30,23 @@ function createButton(): HTMLButtonElement {
   return button;
 }
 
-function createOnClickFunc(map: Map) {
-  const onClick = (
-    e: MapMouseEvent & { features?: MapboxGeoJSONFeature[] | undefined }
-  ) => {
-    if (!e?.features || e?.features?.length === 0) return;
+function createOnClickFunc(map: Map, featureNames: string[], bboxSize: number) {
+  const onClick = (e: MapMouseEvent) => {
+    const bbox: [PointLike, PointLike] = [
+      [e.point.x - bboxSize, e.point.y - bboxSize],
+      [e.point.x + bboxSize, e.point.y + bboxSize],
+    ];
+
+    const features = map
+      .queryRenderedFeatures(bbox, {})
+      .filter((x) => featureNames.includes(x.sourceLayer, 0));
+
+    if (features.length === 0) {
+      return;
+    }
 
     // We have to cast to any because of coordinates missing from type spec.
-    const coordinates: [number, number] = (e.features[0].geometry as any)
+    const coordinates: [number, number] = (features[0].geometry as any)
       .coordinates;
 
     if (!coordinates) throw Error("Could not find BBOX for feature.");
@@ -45,9 +65,9 @@ function createOnClickFunc(map: Map) {
 }
 
 function createHoverPointerFunc(
+  map: Map,
   featureNames: string[],
-  bboxSize: number,
-  map: Map
+  bboxSize: number
 ) {
   const onHoverPointer = (e: MapMouseEvent) => {
     const bbox: [PointLike, PointLike] = [
@@ -55,7 +75,7 @@ function createHoverPointerFunc(
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    let features = map
+    const features = map
       .queryRenderedFeatures(bbox, {})
       .filter((x) => featureNames.includes(x.sourceLayer, 0));
 
@@ -96,8 +116,8 @@ class InformationControl {
     this.container = document.createElement("div");
     this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
     const button = createButton();
-    this.onClickFunc = createOnClickFunc(map);
-    this.onHoverFunc = createHoverPointerFunc(["housenumber"], 4, map);
+    this.onClickFunc = createOnClickFunc(map, ["housenumber"], 4);
+    this.onHoverFunc = createHoverPointerFunc(map, ["housenumber"], 4);
 
     button.addEventListener("click", () => {
       this.active = !this.active;
@@ -107,11 +127,11 @@ class InformationControl {
 
       if (this.active) {
         button.classList.add("active");
-        map.on("click", "housenumber", this.onClickFunc);
+        map.on("click", this.onClickFunc);
         map.on("mousemove", this.onHoverFunc);
       } else {
         button.classList.remove("active");
-        map.off("click", "housenumber", this.onClickFunc);
+        map.off("click", this.onClickFunc);
         map.off("mousemove", this.onHoverFunc);
         removePopup();
       }
