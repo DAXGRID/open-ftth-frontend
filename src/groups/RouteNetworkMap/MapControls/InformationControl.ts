@@ -83,7 +83,7 @@ function createOnClickFunc(
       if (sourceLayer?.filter) {
         if (
           !x.properties ||
-          x.properties[sourceLayer.filter.property] !== sourceLayer.filter.value
+          resolve(sourceLayer.filter.property, x) !== sourceLayer.filter.value
         ) {
           return false;
         } else {
