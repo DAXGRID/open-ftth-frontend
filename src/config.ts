@@ -11,6 +11,10 @@ interface InformationControlConfig {
   sourceLayers: {
     layer: string;
     body: string;
+    filter: {
+      property: string;
+      value: string;
+    } | null;
   }[];
 }
 

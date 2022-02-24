@@ -14,6 +14,10 @@ library.add(faInfoCircle);
 interface InformationControlLayer {
   layer: string;
   body: string;
+  filter: {
+    property: string;
+    value: string;
+  } | null;
 }
 
 interface InformationControlConfig {
@@ -66,12 +70,31 @@ function createOnClickFunc(
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    const feature = map
-      .queryRenderedFeatures(bbox, {})
-      .find((x) =>
-        config.sourceLayers.map((x) => x.layer).includes(x.sourceLayer, 0)
+    const feature = map.queryRenderedFeatures(bbox, {}).find((x) => {
+      const sourceLayer = config.sourceLayers.find(
+        (z) => z.layer === x.sourceLayer
       );
 
+      if (!sourceLayer) return false;
+
+      // This is a bit complex, but we are trying to find out if the filter is activated.
+      // If it is we check to see if the sourceLayer feature found matches the filter.
+      // If there is no filter, we return that the feature is found.
+      if (sourceLayer?.filter) {
+        if (
+          !x.properties ||
+          x.properties[sourceLayer.filter.property] !== sourceLayer.filter.value
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    });
+
+    // In case we don't find a feature we return since we odn't want to create a popup.
     if (!feature) return;
 
     // We have to cast to any because of coordinates missing from type spec.
@@ -86,19 +109,20 @@ function createOnClickFunc(
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
 
-    const htmlBody = config.sourceLayers.find(
+    const sourceLayer = config.sourceLayers.find(
       (x) => x.layer === feature.sourceLayer
-    )?.body;
+    );
 
-    if (!htmlBody) {
+    if (!sourceLayer) {
       throw Error(
-        `Could not find htmlBody for feature using sourceLayer: ${feature.sourceLayer}`
+        `Could not find source layer for feature with ${feature.sourceLayer}`
       );
     }
 
-    const parsedBody = parseBody(htmlBody, feature);
+    const parsedBody = parseBody(sourceLayer.body, feature);
+    const popupContainer = `<div class="information-control-container">${parsedBody}</div>`;
 
-    addPopup(map, coordinates, parsedBody);
+    addPopup(map, coordinates, popupContainer);
   };
 
   return onClick;
