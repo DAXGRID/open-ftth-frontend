@@ -22,7 +22,6 @@ import ToggleLayerButton from "./MapControls/ToggleLayerButton";
 import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 import InformationControl from "./MapControls/InformationControl";
-import { config } from "process";
 
 function createSources(layers: any[]): any {
   let sources: any = {
