@@ -59,6 +59,36 @@ function createButton(): HTMLButtonElement {
   return button;
 }
 
+function queryFeatures(
+  map: Map,
+  config: InformationControlConfig,
+  bbox: [PointLike, PointLike]
+) {
+  return map.queryRenderedFeatures(bbox, {}).find((x) => {
+    const sourceLayer = config.sourceLayers.find(
+      (z) => z.layer === x.sourceLayer
+    );
+
+    if (!sourceLayer) return false;
+
+    // This is a bit complex, but we are trying to find out if the filter is activated.
+    // If it is we check to see if the sourceLayer feature found matches the filter.
+    // If there is no filter, we return that the feature is found.
+    if (sourceLayer?.filter) {
+      if (
+        !x.properties ||
+        resolve(sourceLayer.filter.property, x) !== sourceLayer.filter.value
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  });
+}
+
 function createOnClickFunc(
   map: Map,
   config: InformationControlConfig,
@@ -70,29 +100,7 @@ function createOnClickFunc(
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    const feature = map.queryRenderedFeatures(bbox, {}).find((x) => {
-      const sourceLayer = config.sourceLayers.find(
-        (z) => z.layer === x.sourceLayer
-      );
-
-      if (!sourceLayer) return false;
-
-      // This is a bit complex, but we are trying to find out if the filter is activated.
-      // If it is we check to see if the sourceLayer feature found matches the filter.
-      // If there is no filter, we return that the feature is found.
-      if (sourceLayer?.filter) {
-        if (
-          !x.properties ||
-          resolve(sourceLayer.filter.property, x) !== sourceLayer.filter.value
-        ) {
-          return false;
-        } else {
-          return true;
-        }
-      } else {
-        return true;
-      }
-    });
+    const feature = queryFeatures(map, config, bbox);
 
     // In case we don't find a feature we return since we odn't want to create a popup.
     if (!feature) return;
@@ -130,7 +138,7 @@ function createOnClickFunc(
 
 function createHoverPointerFunc(
   map: Map,
-  featureNames: string[],
+  config: InformationControlConfig,
   bboxSize: number
 ) {
   const onHoverPointer = (e: MapMouseEvent) => {
@@ -139,11 +147,9 @@ function createHoverPointerFunc(
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    const features = map
-      .queryRenderedFeatures(bbox, {})
-      .filter((x) => featureNames.includes(x.sourceLayer, 0));
+    const feature = queryFeatures(map, config, bbox);
 
-    if (features.length > 0) {
+    if (feature) {
       map.getCanvas().style.cursor = "pointer";
     } else {
       map.getCanvas().style.cursor = "";
@@ -187,11 +193,7 @@ class InformationControl {
     const button = createButton();
 
     this.onClickFunc = createOnClickFunc(map, this.config, 4);
-    this.onHoverFunc = createHoverPointerFunc(
-      map,
-      this.config.sourceLayers.map((x) => x.layer),
-      4
-    );
+    this.onHoverFunc = createHoverPointerFunc(map, this.config, 4);
 
     button.addEventListener("click", () => {
       this.active = !this.active;
