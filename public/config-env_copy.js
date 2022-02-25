@@ -7,3 +7,6 @@ window.config_BASEMAP_TILE_SERVER_URI = "";
 window.config_AERIAL_PHOTO_SERVER_URI = "";
 window.config_COLOR_OPTIONS = ["Blue tape", "Red tape", "Black-Black tape"];
 window.config_LAYERS = [];
+window.config_INFORMATION_CONTROL_CONFIG = {
+  sourceLayers: [],
+};

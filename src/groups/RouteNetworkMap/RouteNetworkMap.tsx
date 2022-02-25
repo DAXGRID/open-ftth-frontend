@@ -21,6 +21,7 @@ import { MapContext } from "../../contexts/MapContext";
 import ToggleLayerButton from "./MapControls/ToggleLayerButton";
 import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
+import InformationControl from "./MapControls/InformationControl";
 
 function createSources(layers: any[]): any {
   let sources: any = {
@@ -241,6 +242,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
     newMap.touchZoomRotate.disableRotation();
 
     newMap.addControl(new ScaleControl(), "bottom-left");
+
     newMap.addControl(
       new AttributionControl({
         customAttribution: [
@@ -261,6 +263,17 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       new ToggleDiagramControl(showSchematicDiagram),
       "top-right"
     );
+
+    if (
+      Config.INFORMATION_CONTROL_CONFIG.sourceLayers &&
+      Config.INFORMATION_CONTROL_CONFIG.sourceLayers.length > 0
+    ) {
+      newMap.addControl(
+        new InformationControl(Config.INFORMATION_CONTROL_CONFIG),
+        "top-right"
+      );
+    }
+
     newMap.addControl(
       new GeolocateControl({
         positionOptions: {
@@ -341,6 +354,26 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
           "circle-stroke-width": 2,
           "circle-opacity": 0,
           "circle-stroke-color": "#FF0000",
+        },
+      });
+
+      newMap.addSource("information_marker", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [],
+        },
+      });
+
+      newMap.addLayer({
+        id: "information_marker",
+        type: "circle",
+        source: "information_marker",
+        paint: {
+          "circle-radius": 12,
+          "circle-stroke-width": 2,
+          "circle-opacity": 0,
+          "circle-stroke-color": "#33b5e5",
         },
       });
 

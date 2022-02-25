@@ -1,11 +1,22 @@
-type LayerConfig = {
+interface LayerConfig {
   name: string;
   layerGroups: {
     text: string;
     layers: string[];
   }[];
   layer: any;
-};
+}
+
+interface InformationControlConfig {
+  sourceLayers: {
+    layer: string;
+    body: string;
+    filter: {
+      property: string;
+      value: string;
+    } | null;
+  }[];
+}
 
 declare global {
   interface Window {
@@ -18,6 +29,7 @@ declare global {
     config_AERIAL_PHOTO_SERVER_URI: string;
     config_COLOR_OPTIONS: string[];
     config_LAYERS: LayerConfig[];
+    config_INFORMATION_CONTROL_CONFIG: InformationControlConfig;
   }
 }
 
@@ -31,6 +43,7 @@ const settings = {
   AERIAL_PHOTO_SERVER_URI: window.config_AERIAL_PHOTO_SERVER_URI,
   COLOR_OPTIONS: window.config_COLOR_OPTIONS,
   LAYERS: window.config_LAYERS ?? [],
+  INFORMATION_CONTROL_CONFIG: window.config_INFORMATION_CONTROL_CONFIG ?? null,
 };
 
 export default settings;
