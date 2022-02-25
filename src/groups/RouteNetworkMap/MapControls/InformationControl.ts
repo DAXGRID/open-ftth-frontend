@@ -4,7 +4,9 @@ import {
   MapboxGeoJSONFeature,
   Popup,
   PointLike,
+  GeoJSONSource,
 } from "maplibre-gl";
+import { Geometry, GeoJsonProperties, Feature } from "geojson";
 import { icon, library } from "@fortawesome/fontawesome-svg-core";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import "./InformationControl.scss";
@@ -175,8 +177,9 @@ function createOnClickFunc(
       return parseBody(sourceLayer.body, feature);
     });
 
-    const popupContainer = createPopupContainer(parsedBodies);
+    showSelection(map, features[0]);
 
+    const popupContainer = createPopupContainer(parsedBodies);
     addPopup(map, coordinates, popupContainer);
   };
 
@@ -217,6 +220,36 @@ function removePopup() {
   }
 }
 
+function showSelection(map: Map, myFeature: any) {
+  const features: Feature<Geometry, GeoJsonProperties>[] = [];
+  const feature: Feature<Geometry, GeoJsonProperties> = {
+    id: 0,
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [
+        myFeature.geometry.coordinates[0],
+        myFeature.geometry.coordinates[1],
+      ],
+    },
+    properties: {},
+  };
+
+  features.push(feature);
+
+  (map.getSource("information_marker") as GeoJSONSource)?.setData({
+    type: "FeatureCollection",
+    features: features ?? [],
+  });
+}
+
+function removeSelection(map: Map) {
+  (map.getSource("information_marker") as GeoJSONSource)?.setData({
+    type: "FeatureCollection",
+    features: [],
+  });
+}
+
 class InformationControl {
   map: Map | null = null;
   container: HTMLElement | null = null;
@@ -239,8 +272,8 @@ class InformationControl {
     this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
     const button = createButton();
 
-    this.onClickFunc = createOnClickFunc(map, this.config, 4);
-    this.onHoverFunc = createHoverPointerFunc(map, this.config, 4);
+    this.onClickFunc = createOnClickFunc(map, this.config, 6);
+    this.onHoverFunc = createHoverPointerFunc(map, this.config, 6);
 
     button.addEventListener("click", () => {
       this.active = !this.active;
@@ -257,6 +290,7 @@ class InformationControl {
         map.off("click", this.onClickFunc);
         map.off("mousemove", this.onHoverFunc);
         removePopup();
+        removeSelection(map);
       }
     });
 
