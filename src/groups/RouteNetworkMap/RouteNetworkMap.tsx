@@ -373,7 +373,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
           "circle-radius": 12,
           "circle-stroke-width": 2,
           "circle-opacity": 0,
-          "circle-stroke-color": "#00aeff",
+          "circle-stroke-color": "#33b5e5",
         },
       });
 
