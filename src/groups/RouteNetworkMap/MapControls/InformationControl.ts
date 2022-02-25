@@ -59,25 +59,53 @@ function createButton(): HTMLButtonElement {
   return button;
 }
 
-function queryFeatures(
-  map: Map,
+function filterFeatures(
   config: InformationControlConfig,
-  bbox: [PointLike, PointLike]
-) {
-  return map.queryRenderedFeatures(bbox, {}).find((x) => {
-    const sourceLayer = config.sourceLayers.find(
-      (z) => z.layer === x.sourceLayer
-    );
+  feature: MapboxGeoJSONFeature
+): boolean {
+  const sourceLayer = config.sourceLayers.find(
+    (z) => z.layer === feature.sourceLayer
+  );
 
-    // If we cannot find the feature on source layer we just return false.
-    if (!sourceLayer) return false;
-
+  if (sourceLayer) {
     // If it is we check to see if the sourceLayer feature found matches the filter (either true or false).
     // If there is no filter, we return that the feature is found (true).
     return sourceLayer.filter
-      ? x.properties &&
-          resolve(sourceLayer.filter.property, x) === sourceLayer.filter.value
+      ? !!feature.properties &&
+          resolve(sourceLayer.filter.property, feature) ===
+            sourceLayer.filter.value
       : true;
+  } else {
+    // If we cannot find the feature on source layer we just return false.
+    return false;
+  }
+}
+
+function queryFeature(
+  map: Map,
+  config: InformationControlConfig,
+  bbox: [PointLike, PointLike],
+  filter: (
+    config: InformationControlConfig,
+    feature: MapboxGeoJSONFeature
+  ) => boolean
+) {
+  return map.queryRenderedFeatures(bbox, {}).find((x) => {
+    return filter(config, x);
+  });
+}
+
+function queryFeatures(
+  map: Map,
+  config: InformationControlConfig,
+  bbox: [PointLike, PointLike],
+  filter: (
+    config: InformationControlConfig,
+    feature: MapboxGeoJSONFeature
+  ) => boolean
+) {
+  return map.queryRenderedFeatures(bbox, {}).filter((x) => {
+    return filter(config, x);
   });
 }
 
@@ -92,7 +120,7 @@ function createOnClickFunc(
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    const feature = queryFeatures(map, config, bbox);
+    const feature = queryFeature(map, config, bbox, filterFeatures);
 
     // In case we don't find a feature we return since we odn't want to create a popup.
     if (!feature) return;
@@ -139,7 +167,7 @@ function createHoverPointerFunc(
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    const feature = queryFeatures(map, config, bbox);
+    const feature = queryFeature(map, config, bbox, filterFeatures);
 
     if (feature) {
       map.getCanvas().style.cursor = "pointer";
