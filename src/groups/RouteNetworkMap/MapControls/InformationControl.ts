@@ -69,23 +69,15 @@ function queryFeatures(
       (z) => z.layer === x.sourceLayer
     );
 
+    // If we cannot find the feature on source layer we just return false.
     if (!sourceLayer) return false;
 
-    // This is a bit complex, but we are trying to find out if the filter is activated.
-    // If it is we check to see if the sourceLayer feature found matches the filter.
-    // If there is no filter, we return that the feature is found.
-    if (sourceLayer?.filter) {
-      if (
-        !x.properties ||
-        resolve(sourceLayer.filter.property, x) !== sourceLayer.filter.value
-      ) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return true;
-    }
+    // If it is we check to see if the sourceLayer feature found matches the filter (either true or false).
+    // If there is no filter, we return that the feature is found (true).
+    return sourceLayer.filter
+      ? x.properties &&
+          resolve(sourceLayer.filter.property, x) === sourceLayer.filter.value
+      : true;
   });
 }
 
