@@ -18,3 +18,15 @@
 .information-control-container {
   padding: 15px;
 }
+
+.information-control-body {
+}
+
+.information-control-body-item {
+  border-bottom: 1px solid #e3e3e3;
+  padding: 15px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}

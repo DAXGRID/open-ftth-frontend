@@ -59,6 +59,29 @@ function createButton(): HTMLButtonElement {
   return button;
 }
 
+function createPopupContainer(bodyContents: string[]): string {
+  const stringToHTML = (str: string) => {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, "text/html");
+    return doc.body;
+  };
+
+  const body = document.createElement("div");
+  body.classList.add("information-control-body");
+  for (const bodyContent of bodyContents) {
+    const bodyItem = document.createElement("div");
+    bodyItem.classList.add("information-control-body-item");
+    bodyItem.appendChild(stringToHTML(bodyContent));
+    body.appendChild(bodyItem);
+  }
+
+  const container = document.createElement("div");
+  container.classList.add("information-control-container");
+  container.appendChild(body);
+
+  return container.outerHTML;
+}
+
 function filterFeatures(
   config: InformationControlConfig,
   feature: MapboxGeoJSONFeature
@@ -120,13 +143,14 @@ function createOnClickFunc(
       [e.point.x + bboxSize, e.point.y + bboxSize],
     ];
 
-    const feature = queryFeature(map, config, bbox, filterFeatures);
+    const features = queryFeatures(map, config, bbox, filterFeatures);
 
     // In case we don't find a feature we return since we odn't want to create a popup.
-    if (!feature) return;
+    if (features.length === 0) return;
 
     // We have to cast to any because of coordinates missing from type spec.
-    const coordinates: [number, number] = (feature.geometry as any).coordinates;
+    const coordinates: [number, number] = (features[0].geometry as any)
+      .coordinates;
 
     if (!coordinates) throw Error("Could not find BBOX for feature.");
 
@@ -137,18 +161,21 @@ function createOnClickFunc(
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
 
-    const sourceLayer = config.sourceLayers.find(
-      (x) => x.layer === feature.sourceLayer
-    );
-
-    if (!sourceLayer) {
-      throw Error(
-        `Could not find source layer for feature with ${feature.sourceLayer}`
+    const parsedBodies = features.map((feature) => {
+      const sourceLayer = config.sourceLayers.find(
+        (x) => x.layer === feature.sourceLayer
       );
-    }
 
-    const parsedBody = parseBody(sourceLayer.body, feature);
-    const popupContainer = `<div class="information-control-container">${parsedBody}</div>`;
+      if (!sourceLayer) {
+        throw Error(
+          `Could not find source layer for feature with ${feature.sourceLayer}`
+        );
+      }
+
+      return parseBody(sourceLayer.body, feature);
+    });
+
+    const popupContainer = createPopupContainer(parsedBodies);
 
     addPopup(map, coordinates, popupContainer);
   };

@@ -192,3 +192,14 @@ strong {
 .mapboxgl-popup-close-button {
   font-size: 24px;
 }
+
+.mapboxgl-popup-content {
+  padding: 0;
+  border: 1px solid grey;
+  margin-bottom: 15px;
+}
+
+.mapboxgl-popup-tip {
+  /* We do not want to display the popup tip */
+  display: none;
+}
