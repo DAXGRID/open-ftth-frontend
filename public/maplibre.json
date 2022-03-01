@@ -1,5 +1,6 @@
 {
   "version": 8,
+  "id": "positron",
   "name": "Positron",
   "metadata": {
     "mapbox:autocomposite": false,
@@ -1551,15 +1552,6 @@
         "text-halo-width": 2,
         "text-halo-color": "rgba(255, 255, 255, 1)"
       }
-    },
-    {
-      "id": "customer_area",
-      "type": "fill",
-      "source": "custom",
-      "source-layer": "customer_area",
-      "paint": { "fill-opacity": 0.2 },
-      "layout": { "visibility": "none" }
     }
-  ],
-  "id": "positron"
+  ]
 }
