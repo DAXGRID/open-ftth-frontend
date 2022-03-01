@@ -14,14 +14,19 @@ import {
   NavigationControl,
   GeolocateControl,
 } from "maplibre-gl";
-import { useContext, useEffect, useRef } from "react";
-import { MapboxStyle } from "../../assets";
+import { useContext, useEffect, useRef, useState } from "react";
 import Config from "../../config";
 import { MapContext } from "../../contexts/MapContext";
 import ToggleLayerButton from "./MapControls/ToggleLayerButton";
 import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 import InformationControl from "./MapControls/InformationControl";
+
+const GetMaplibreStyle = async (): Promise<Style> => {
+  const x = await fetch("./maplibre.json");
+  const json = await x.json();
+  return json as Style;
+};
 
 function createSources(layers: any[]): any {
   let sources: any = {
@@ -218,6 +223,13 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
   const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
   const { setIdentifiedFeature, trace, searchResult } = useContext(MapContext);
+  const [mapLibreStyle, setMaplibreStyle] = useState<Style | null>(null);
+
+  useEffect(() => {
+    GetMaplibreStyle().then((r) => {
+      setMaplibreStyle(r);
+    });
+  }, [setMaplibreStyle]);
 
   useEffect(() => {
     if (!map.current) return;
@@ -225,10 +237,12 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
   }, [trace, map]);
 
   useEffect(() => {
+    if (!mapLibreStyle || !mapContainer.current) return;
+
     const newMap = new Map({
-      container: mapContainer.current ?? "",
+      container: mapContainer.current,
       style: {
-        ...(MapboxStyle as Style),
+        ...mapLibreStyle,
         sources: createSources(Config.LAYERS),
       },
       center: [9.996730316498656, 56.04595255289249],
@@ -385,7 +399,6 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
         },
       });
 
-      // Add styles to the map
       newMap.addLayer({
         id: "measure-points",
         type: "circle",
@@ -419,7 +432,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       newMap.remove();
       map.current = null;
     };
-  }, [setIdentifiedFeature, showSchematicDiagram, t]);
+  }, [setIdentifiedFeature, showSchematicDiagram, t, mapLibreStyle]);
 
   useEffect(() => {
     if (!map.current || !searchResult) return;
