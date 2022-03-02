@@ -129,9 +129,10 @@ function queryFeatures(
     feature: MapboxGeoJSONFeature
   ) => boolean
 ) {
-  return map.queryRenderedFeatures(bbox, {}).filter((x) => {
-    return filter(config, x);
-  });
+  return map
+    .queryRenderedFeatures(bbox, {})
+    .filter((x) => filter(config, x))
+    .filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i);
 }
 
 function createOnClickFunc(
