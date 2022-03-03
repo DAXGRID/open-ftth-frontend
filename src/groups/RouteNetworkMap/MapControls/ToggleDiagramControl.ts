@@ -47,9 +47,10 @@ class ToggleDiagramControl {
   }
 
   onRemove() {
-    if (!this.container || !this.map) return;
     this.container?.parentNode?.removeChild(this.container);
-    this.map = undefined;
+    if (this.map) {
+      this.map = undefined;
+    }
   }
 }
 
