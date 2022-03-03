@@ -2,7 +2,6 @@ import { Map } from "maplibre-gl";
 import { icon, library } from "@fortawesome/fontawesome-svg-core";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
-import "./ToggleLayerButton.scss";
 
 library.add(faDownload);
 
