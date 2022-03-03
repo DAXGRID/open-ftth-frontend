@@ -21,6 +21,7 @@ import ToggleLayerButton from "./MapControls/ToggleLayerButton";
 import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 import InformationControl from "./MapControls/InformationControl";
+import SaveImgControl from "./MapControls/SaveImgControl";
 
 const GetMaplibreStyle = async (): Promise<Style> => {
   const x = await fetch("./maplibre.json");
@@ -249,6 +250,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       zoom: 10,
       doubleClickZoom: false,
       dragRotate: false,
+      preserveDrawingBuffer: true,
     });
 
     newMap.doubleClickZoom.disable();
@@ -273,10 +275,13 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       }),
       "top-left"
     );
+
     newMap.addControl(
       new ToggleDiagramControl(showSchematicDiagram),
       "top-right"
     );
+
+    newMap.addControl(new SaveImgControl(), "top-right");
 
     if (
       Config.INFORMATION_CONTROL_CONFIG.sourceLayers &&
