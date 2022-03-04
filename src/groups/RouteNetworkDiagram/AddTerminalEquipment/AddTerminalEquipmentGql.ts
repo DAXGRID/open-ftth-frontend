@@ -99,6 +99,9 @@ export interface PlaceTerminalEquipmentInNodeContainerParams {
     startUnitPosition: number;
     placementMethod: PlacementMethod;
   } | null;
+  accessAddressId: string | null;
+  unitAddressId: string | null;
+  remark: string | null;
 }
 
 export const PLACE_TERMINAL_EQUIPMENT_IN_NODE_CONTAINER = `
@@ -110,6 +113,9 @@ $startSequenceNumber: Int!
 $terminalEquipmentNamingMethod: TerminalEquipmentNamingMethodEnum!
 $namingInfo: NamingInfoInputType!
 $subrackPlacementInfo: SubrackPlacementInfoInputType
+$accessAddressId: ID
+$unitAddressId: ID
+$remark: String
 ) {
   nodeContainer {
     placeTerminalEquipmentInNodeContainer(
@@ -120,6 +126,11 @@ $subrackPlacementInfo: SubrackPlacementInfoInputType
       terminalEquipmentNamingMethod: $terminalEquipmentNamingMethod
       namingInfo: $namingInfo
       subrackPlacementInfo: $subrackPlacementInfo
+      addressInfo: {
+        accessAddressId: $accessAddressId
+        unitAddressId: $unitAddressId
+        remark: $remark
+      }
     ) {
       isSuccess
       errorCode
