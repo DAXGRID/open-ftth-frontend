@@ -636,7 +636,7 @@ function FiberConnectionEditor({
 
   return (
     <div className="fiber-connection-editor">
-      <div className="full-row">
+      <div className="full-row full-row gap-default">
         <LabelContainer text={t("FROM_EQUIPMENT")}>
           <SelectMenu
             options={fromConnectivityFaceOptions}
@@ -656,7 +656,7 @@ function FiberConnectionEditor({
           />
         </LabelContainer>
       </div>
-      <div className="full-row">
+      <div className="full-row full-row gap-default">
         <LabelContainer text={t("FROM_POSITION")}>
           <SelectMenu
             options={fromConnectivityFaceConnectionOptions}
@@ -676,7 +676,7 @@ function FiberConnectionEditor({
           />
         </LabelContainer>
       </div>
-      <div className="full-row">
+      <div className="full-row gap-default">
         <LabelContainer text={t("NUMBER_OF_CONNECTIONS")}>
           <SelectMenu
             options={createNumberOptions(maxAvailableConnectionsCount)}
