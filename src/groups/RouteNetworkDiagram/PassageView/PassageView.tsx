@@ -59,7 +59,6 @@ function PassageView({
       showElement(
         <ModalContainer
           title={t("REROUTE_SPAN_EQUIPMENT")}
-          show={showRerouteTube}
           closeCallback={() => setShowRerouteTube(false)}
         >
           <RerouteSpanEquipment
@@ -71,7 +70,6 @@ function PassageView({
       showElement(
         <ModalContainer
           title={t("EDIT_SPAN_EQUIPMENT")}
-          show={showEditSpanEquipment}
           closeCallback={() => setShowEditSpanEquipment(false)}
         >
           <EditSpanEquipment

@@ -232,7 +232,6 @@ function TerminalEquipment() {
         showElement(
           <ModalContainer
             title={t("FIBER_CONNECTION_EDITOR")}
-            show={true}
             closeCallback={() =>
               dispatch({
                 type: "resetShowFiberEditor",
@@ -271,7 +270,6 @@ function TerminalEquipment() {
       showElement(
         <ModalContainer
           title={t("DISCONNECT_FIBER_CABLE")}
-          show={true}
           closeCallback={() =>
             dispatch({
               type: "resetShowDisconnectFiberEditor",
