@@ -124,6 +124,7 @@
   .terminal-equipment-header {
     font-size: 16px;
     font-weight: bold;
+    border-bottom: 1px solid $border-color;
   }
 
   .terminal-equipment-table-body {
@@ -134,7 +135,7 @@
       flex: 1;
       border-bottom: 1px solid $border-color;
 
-      &:last-child {
+      &:first-child {
         border-bottom: none;
       }
 
@@ -144,7 +145,7 @@
         padding: 10px 10px;
         background-color: $ultra-light-grey;
         font-size: 14px;
-        border-top: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
 
         .terminal-equipment-row-header__item {
           flex: 1;
