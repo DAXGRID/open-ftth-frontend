@@ -259,7 +259,7 @@ function PlaceSpanEquipmentPage() {
           maxHeightBody="300px"
         />
       </div>
-      <div className="full-row default-gap">
+      <div className="full-row gap-default">
         <SelectMenu
           options={colorMarkingOptions}
           removePlaceHolderOnSelect
