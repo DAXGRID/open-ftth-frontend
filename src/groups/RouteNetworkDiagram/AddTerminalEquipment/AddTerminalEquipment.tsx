@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useMemo } from "react";
 import { useClient, useQuery } from "urql";
 import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
+import { useTranslation, TFunction } from "react-i18next";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import TextBox from "../../../components/TextBox";
 import DefaultButton from "../../../components/DefaultButton";
@@ -19,7 +19,32 @@ import {
   PLACE_TERMINAL_EQUIPMENT_IN_NODE_CONTAINER,
   PlaceTerminalEquipmentInNodeContainerResponse,
   NamingMethod,
+  NEAREST_ACCESS_ADDRESSES_QUERY,
+  NearestAccessAddressesResponse,
+  NearestAccessAddress,
+  UnitAddress,
 } from "./AddTerminalEquipmentGql";
+
+function accessAddressToOption(
+  nearestAccessAddress: NearestAccessAddress,
+  t: TFunction<"translation">
+): SelectOption {
+  return {
+    text: `${nearestAccessAddress.accessAddress.roadName} ${
+      nearestAccessAddress.accessAddress.houseNumber
+    } - (${nearestAccessAddress.distance.toFixed(2)} ${t("METER")})`,
+    value: nearestAccessAddress.accessAddress.id,
+    key: nearestAccessAddress.accessAddress.id,
+  };
+}
+
+function unitAddressToOption(unitAddress: UnitAddress): SelectOption {
+  return {
+    text: `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`,
+    value: unitAddress.id,
+    key: unitAddress.id,
+  };
+}
 
 function categoryToOptions(
   specs: TerminalEquipmentSpecification[],
@@ -68,6 +93,9 @@ interface State {
   startUnitPosition: number;
   placementMethod: PlacementMethod;
   namingMethod: NamingMethod;
+  accessAddressId: string;
+  unitAddressId: string;
+  addtionalAddressInformation: string;
 }
 
 type Action =
@@ -80,6 +108,9 @@ type Action =
   | { type: "setStartUnitPosition"; unitPosition: number }
   | { type: "setPlacementMethod"; method: PlacementMethod }
   | { type: "setNamingMethod"; method: NamingMethod }
+  | { type: "setAccessAddressId"; id: string }
+  | { type: "setUnitAddressId"; id: string }
+  | { type: "setAdditionalAddressInformation"; text: string }
   | { type: "reset" };
 
 const initialState: State = {
@@ -92,6 +123,9 @@ const initialState: State = {
   startUnitPosition: 0,
   placementMethod: "TOP_DOWN",
   namingMethod: "NAME_AND_NUMBER",
+  accessAddressId: "",
+  unitAddressId: "",
+  addtionalAddressInformation: "",
 };
 
 function reducer(state: State, action: Action): State {
@@ -119,6 +153,12 @@ function reducer(state: State, action: Action): State {
       return { ...state, placementMethod: action.method };
     case "setNamingMethod":
       return { ...state, namingMethod: action.method };
+    case "setAccessAddressId":
+      return { ...state, accessAddressId: action.id };
+    case "setUnitAddressId":
+      return { ...state, unitAddressId: action.id };
+    case "setAdditionalAddressInformation":
+      return { ...state, addtionalAddressInformation: action.text };
     case "reset":
       return initialState;
     default:
@@ -144,6 +184,13 @@ function AddTerminalEquipment({
       query: QUERY_TERMINAL_EQUIPMENT,
     }
   );
+
+  const [nearestAddressesResponse] = useQuery<NearestAccessAddressesResponse>({
+    query: NEAREST_ACCESS_ADDRESSES_QUERY,
+    variables: { routeNodeId: routeNodeId },
+  });
+
+  console.log(nearestAddressesResponse);
 
   const [rackResponse] = useQuery<RackResponse>({
     query: QUERY_RACK,
@@ -199,6 +246,69 @@ function AddTerminalEquipment({
     );
   }, [state.specification, specificationResponse]);
 
+  const accessAddresses = useMemo<SelectOption[]>(() => {
+    if (!nearestAddressesResponse.data?.addressService.nearestAccessAddresses)
+      return [];
+
+    const defaultList: SelectOption[] = [
+      {
+        text: t("SELECT_ACCESS_ADDRESS"),
+        value: "",
+        key: "SELECT_ACCESS_ADDRESS",
+      },
+    ];
+
+    const options =
+      nearestAddressesResponse.data?.addressService.nearestAccessAddresses
+        .sort((x, y) => x.distance - y.distance)
+        .map((x) => accessAddressToOption(x, t));
+
+    // We do this because there is an issue
+    // where unit address has an id but no labels and its the only one
+    if (options.length === 1) {
+      return [
+        {
+          text: t("SELECT_ACCESS_ADDRESS"),
+          value: options[0].value,
+          key: "SELECT_ACCESS_ADDRESS",
+        },
+      ];
+    }
+
+    return defaultList.concat(options);
+  }, [nearestAddressesResponse, t]);
+
+  const unitAddressOptions = useMemo<SelectOption[]>(() => {
+    if (!nearestAddressesResponse.data?.addressService.nearestAccessAddresses)
+      return [];
+
+    const defaultList: SelectOption[] = [
+      {
+        text: t("SELECT_UNIT_ADDRESS"),
+        value: "",
+        key: "SELECT_UNIT_ADDRESS",
+      },
+    ];
+
+    const options =
+      nearestAddressesResponse.data?.addressService.nearestAccessAddresses
+        .find((x) => x.accessAddress.id === state.accessAddressId)
+        ?.accessAddress.unitAddresses.sort((x, y) =>
+          x.externalId > y.externalId ? 1 : -1
+        )
+        .map(unitAddressToOption) ?? [];
+
+    return defaultList.concat(options);
+  }, [nearestAddressesResponse, state.accessAddressId, t]);
+
+  const isAddressable = useMemo<boolean>(() => {
+    return (
+      specificationResponse.data?.utilityNetwork.terminalEquipmentSpecifications.find(
+        (x) => x.id === state.specification
+      )?.isAddressable ?? false
+    );
+  }, [state.specification, specificationResponse]);
+
   useEffect(() => {
     if (!categoryOptions || categoryOptions.length === 0) return;
     dispatch({ type: "setCategory", id: categoryOptions[0].value as string });
@@ -218,6 +328,11 @@ function AddTerminalEquipment({
             rackId: rackId,
             startUnitPosition: state.startUnitPosition,
           }
+        : null,
+      accessAddressId: !!state.accessAddressId ? state.accessAddressId : null,
+      unitAddressId: !!state.unitAddressId ? state.unitAddressId : null,
+      remark: !!state.addtionalAddressInformation
+        ? state.addtionalAddressInformation
         : null,
     };
 
@@ -376,6 +491,45 @@ function AddTerminalEquipment({
           </div>
         </div>
       )}
+
+      {isAddressable && (
+        <div className="block">
+          <p className="block-title">{t("ADDRESS_INFORMATION")}</p>
+          <div className="full-row">
+            <SelectMenu
+              options={accessAddresses ?? []}
+              onSelected={(x) =>
+                dispatch({
+                  type: "setAccessAddressId",
+                  id: x?.toString() ?? "",
+                })
+              }
+              selected={state.accessAddressId}
+              enableSearch={true}
+            />
+          </div>
+          <div className="full-row">
+            <SelectMenu
+              options={unitAddressOptions ?? []}
+              onSelected={(x) =>
+                dispatch({ type: "setUnitAddressId", id: x?.toString() ?? "" })
+              }
+              selected={state.unitAddressId}
+              enableSearch={true}
+            />
+          </div>
+          <div className="full-row">
+            <TextBox
+              placeHolder={t("ADDITIONAL_ADDRESS_INFORMATION")}
+              setValue={(x) =>
+                dispatch({ type: "setAdditionalAddressInformation", text: x })
+              }
+              value={state.addtionalAddressInformation}
+            />
+          </div>
+        </div>
+      )}
+
       <div className="full-row">
         <DefaultButton
           disabled={state.count === 0 || !state.startNumber}
