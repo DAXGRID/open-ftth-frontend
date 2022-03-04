@@ -13,6 +13,7 @@ export interface TerminalEquipmentSpecification {
   category: string;
   isRackEquipment: boolean;
   manufacturerRefs: string[];
+  isAddressable: boolean;
 }
 
 export interface Manufacturer {
@@ -36,6 +37,7 @@ query {
       isRackEquipment
       description
       manufacturerRefs
+      isAddressable
     },
     manufacturers {
       id
@@ -126,3 +128,52 @@ $subrackPlacementInfo: SubrackPlacementInfoInputType
   }
 }
 `;
+
+export interface UnitAddress {
+  id: string;
+  floorName: string;
+  suitName: string;
+  externalId: string;
+}
+
+interface AccessAddress {
+  id: string;
+  roadName: string;
+  houseNumber: string;
+  townName: string;
+  postDistrict: string;
+  unitAddresses: UnitAddress[];
+}
+
+export interface NearestAccessAddress {
+  distance: number;
+  accessAddress: AccessAddress;
+}
+
+export interface NearestAccessAddressesResponse {
+  addressService: {
+    nearestAccessAddresses: NearestAccessAddress[];
+  };
+}
+
+export const NEAREST_ACCESS_ADDRESSES_QUERY = `
+query($routeNodeId: ID!) {
+  addressService {
+    nearestAccessAddresses(routeNodeId: $routeNodeId, maxHits: 100) {
+      distance
+      accessAddress {
+        id
+        roadName
+        houseNumber
+        townName
+        postDistrict
+        unitAddresses {
+          id
+          floorName
+          suitName
+          externalId
+        }
+      }
+    }
+  }
+}`;
