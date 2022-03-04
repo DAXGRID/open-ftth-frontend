@@ -54,7 +54,6 @@ function NodeContainerDetails({
       showElement(
         <ModalContainer
           title={t("EDIT_NODE_CONTAINER")}
-          show={showEditNodeContainer}
           closeCallback={() => setShowEditNodeContainer(false)}
         >
           <EditNodeContainer nodeContainerMrid={nodeContainerMrid ?? ""} />

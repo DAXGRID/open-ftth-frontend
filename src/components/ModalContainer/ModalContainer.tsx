@@ -2,7 +2,6 @@ import { ReactNode } from "react";
 
 type ModalContainerProps = {
   children?: ReactNode;
-  show: boolean;
   closeCallback: () => void;
   enableMaxSize?: boolean;
   title?: string;
@@ -11,7 +10,6 @@ type ModalContainerProps = {
 
 function ModalContainer({
   children,
-  show,
   closeCallback,
   enableMaxSize,
   title,

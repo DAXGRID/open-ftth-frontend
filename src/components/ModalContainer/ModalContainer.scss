@@ -40,6 +40,9 @@
 .modal-body {
   flex: 1;
   flex-basis: 100%;
+  padding: 10px;
+  max-height: 80vh;
+  overflow: auto;
 }
 
 .modal-body--max-size {
