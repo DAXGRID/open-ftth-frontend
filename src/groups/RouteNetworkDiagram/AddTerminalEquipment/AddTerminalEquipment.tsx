@@ -329,11 +329,14 @@ function AddTerminalEquipment({
             startUnitPosition: state.startUnitPosition,
           }
         : null,
-      accessAddressId: !!state.accessAddressId ? state.accessAddressId : null,
-      unitAddressId: !!state.unitAddressId ? state.unitAddressId : null,
-      remark: !!state.addtionalAddressInformation
-        ? state.addtionalAddressInformation
-        : null,
+      accessAddressId:
+        isAddressable && !!state.accessAddressId ? state.accessAddressId : null,
+      unitAddressId:
+        isAddressable && !!state.unitAddressId ? state.unitAddressId : null,
+      remark:
+        isAddressable && !!state.addtionalAddressInformation
+          ? state.addtionalAddressInformation
+          : null,
     };
 
     const response = await client
