@@ -17,6 +17,7 @@ type SelectMenuProps = {
   selected: string | number | undefined;
   enableSearch?: boolean;
   autoSelectFirst?: boolean;
+  disabled?: boolean;
 };
 
 function SelectMenu({
@@ -27,6 +28,7 @@ function SelectMenu({
   enableSearch,
   removePlaceHolderOnSelect,
   autoSelectFirst,
+  disabled,
 }: SelectMenuProps) {
   const [toggled, setToggled] = useState(false);
   const [search, setSearch] = useState("");
@@ -47,8 +49,10 @@ function SelectMenu({
       onClick={() => setToggled(!toggled)}
       onKeyPress={(e) => (e.key === "Enter" ? setToggled(!toggled) : () => {})}
     >
-      <div className={toggled ? "menu-select open" : "menu-select"}>
-        <div className="menu-select__trigger">
+      <div
+        className={!disabled && toggled ? "menu-select open" : "menu-select"}
+      >
+        <div className={`menu-select__trigger ${disabled ? "disabled" : ""}`}>
           <span>{options.find((x) => x.value === selected)?.text}</span>
           <div className="arrow" />
         </div>
