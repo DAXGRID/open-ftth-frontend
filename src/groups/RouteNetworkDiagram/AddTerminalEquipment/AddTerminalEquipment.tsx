@@ -316,6 +316,7 @@ function AddTerminalEquipment({
     const params: PlaceTerminalEquipmentInNodeContainerParams = {
       routeNodeId: routeNodeId,
       terminalEquipmentSpecificationId: state.specification,
+      manufacturerId: state.manufacturer,
       namingInfo: { name: state.name },
       numberOfEquipments: state.count,
       startSequenceNumber: state.startNumber,
