@@ -236,13 +236,17 @@ function AddTerminalEquipment({
       !state.specification
     )
       return [];
-    return manufacturerToOptions(
-      specificationResponse.data.utilityNetwork.manufacturers,
-      specificationResponse.data.utilityNetwork.terminalEquipmentSpecifications.find(
-        (x) => x.id === state.specification
-      )?.manufacturerRefs ?? []
-    );
-  }, [state.specification, specificationResponse]);
+
+    return [
+      { text: t("UNSPECIFIED"), value: "", key: "-1" },
+      ...manufacturerToOptions(
+        specificationResponse.data.utilityNetwork.manufacturers,
+        specificationResponse.data.utilityNetwork.terminalEquipmentSpecifications.find(
+          (x) => x.id === state.specification
+        )?.manufacturerRefs ?? []
+      ),
+    ];
+  }, [state.specification, specificationResponse, t]);
 
   const accessAddresses = useMemo<SelectOption[]>(() => {
     if (!nearestAddressesResponse.data?.addressService.nearestAccessAddresses)
@@ -316,7 +320,7 @@ function AddTerminalEquipment({
     const params: PlaceTerminalEquipmentInNodeContainerParams = {
       routeNodeId: routeNodeId,
       terminalEquipmentSpecificationId: state.specification,
-      manufacturerId: state.manufacturer,
+      manufacturerId: state.manufacturer !== "" ? state.manufacturer : null,
       namingInfo: { name: state.name },
       numberOfEquipments: state.count,
       startSequenceNumber: state.startNumber,
@@ -351,8 +355,8 @@ function AddTerminalEquipment({
     ) {
       toast.error(
         t(
-          response.data?.nodeContainer.placeTerminalEquipmentInNodeContainer
-            .errorCode ?? "ERROR"
+          response.data?.nodeContainer?.placeTerminalEquipmentInNodeContainer
+            ?.errorCode ?? "ERROR"
         )
       );
     } else {
@@ -392,9 +396,7 @@ function AddTerminalEquipment({
         <div className="full-row">
           <LabelContainer text={`${t("MANUFACTURER")}:`}>
             <SelectMenu
-              autoSelectFirst={true}
               options={manufacturerOptions}
-              removePlaceHolderOnSelect
               onSelected={(x) =>
                 dispatch({ type: "setManufacturer", id: x as string })
               }
