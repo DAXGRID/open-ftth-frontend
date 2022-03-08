@@ -21,6 +21,7 @@
   }
 
   &[disabled] {
+    background-color: $disabled-color;
     &:hover {
       cursor: not-allowed;
     }

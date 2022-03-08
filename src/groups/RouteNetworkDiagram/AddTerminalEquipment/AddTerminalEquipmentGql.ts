@@ -27,7 +27,7 @@ export interface Rack {
   name: string;
 }
 
-export const QUERY_TERMINAL_EQUIPMENT = `
+export const QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS = `
 query {
   utilityNetwork {
     terminalEquipmentSpecifications {

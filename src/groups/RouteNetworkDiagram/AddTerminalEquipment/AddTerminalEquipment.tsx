@@ -9,7 +9,7 @@ import NumberPicker from "../../../components/NumberPicker";
 import LabelContainer from "../../../components/LabelContainer";
 import {
   PlacementMethod,
-  QUERY_TERMINAL_EQUIPMENT,
+  QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS,
   TerminalEquipmentSpecification,
   SpanEquipmentSpecificationsResponse,
   Manufacturer,
@@ -181,7 +181,7 @@ function AddTerminalEquipment({
 
   const [specificationResponse] = useQuery<SpanEquipmentSpecificationsResponse>(
     {
-      query: QUERY_TERMINAL_EQUIPMENT,
+      query: QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS,
     }
   );
 

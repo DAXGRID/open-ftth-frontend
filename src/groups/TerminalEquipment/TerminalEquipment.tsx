@@ -308,13 +308,12 @@ function TerminalEquipment() {
               type: "resetShowEditTerminalEquipment",
             })
           }
-          maxWidth="1200px"
         >
-          <EditTerminalEquipment />
+          <EditTerminalEquipment
+            terminalEquipmentId={state.terminalEquipmentOrRackId}
+          />
         </ModalContainer>
       );
-
-      console.log("was here!");
     } else {
       showElement(null);
     }
@@ -323,6 +322,7 @@ function TerminalEquipment() {
     state.connectivityView?.terminalEquipments,
     state.routeNodeId,
     state.showEditTerminalEquipment,
+    state.terminalEquipmentOrRackId,
     showElement,
     dispatch,
     t,
