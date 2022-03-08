@@ -88,6 +88,7 @@ export type NamingMethod = "NAME_AND_NUMBER" | "NAME_ONLY" | "NUMBER_ONLY";
 export interface PlaceTerminalEquipmentInNodeContainerParams {
   routeNodeId: string;
   terminalEquipmentSpecificationId: string;
+  manufacturerId: string;
   numberOfEquipments: number;
   startSequenceNumber: number;
   terminalEquipmentNamingMethod: NamingMethod;
@@ -108,6 +109,7 @@ export const PLACE_TERMINAL_EQUIPMENT_IN_NODE_CONTAINER = `
 mutation (
 $routeNodeId: ID!
 $terminalEquipmentSpecificationId: ID!
+$manufacturerId: ID!
 $numberOfEquipments: Int!
 $startSequenceNumber: Int!
 $terminalEquipmentNamingMethod: TerminalEquipmentNamingMethodEnum!
@@ -121,6 +123,7 @@ $remark: String
     placeTerminalEquipmentInNodeContainer(
       routeNodeId: $routeNodeId
       terminalEquipmentSpecificationId: $terminalEquipmentSpecificationId
+      manufacturerId: $manufacturerId
       numberOfEquipments: $numberOfEquipments
       startSequenceNumber: $startSequenceNumber
       terminalEquipmentNamingMethod: $terminalEquipmentNamingMethod
