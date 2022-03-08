@@ -21,15 +21,15 @@ interface QueryTerminalEquipmentDetailsParams {
 interface TerminalEquipment {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   specification: {
     category: string;
     id: string;
   };
-  manufacturer: {
+  manufacturer?: {
     id: string;
   };
-  addressInfo: {
+  addressInfo?: {
     remark: string;
     accessAddress: {
       id: string;
