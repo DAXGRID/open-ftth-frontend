@@ -190,8 +190,6 @@ function AddTerminalEquipment({
     variables: { routeNodeId: routeNodeId },
   });
 
-  console.log(nearestAddressesResponse);
-
   const [rackResponse] = useQuery<RackResponse>({
     query: QUERY_RACK,
     variables: { routeNodeId: routeNodeId, rackId: rackId },
