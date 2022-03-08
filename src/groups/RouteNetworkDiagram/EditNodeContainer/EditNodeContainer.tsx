@@ -76,7 +76,7 @@ const getFilteredManufacturers = (
   });
 
   const defaultValue = {
-    rows: [{ id: 0, value: t("Unspecified") }],
+    rows: [{ id: 0, value: t("UNSPECIFIED") }],
     id: "",
   };
 

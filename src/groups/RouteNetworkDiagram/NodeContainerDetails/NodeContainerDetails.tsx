@@ -25,11 +25,11 @@ function mapContainerResponse(
   return [
     {
       name: t("MANUFACTURER"),
-      value: manufacturer?.name ?? t("Unspecified"),
+      value: manufacturer?.name ?? t("UNSPECIFIED"),
     },
     {
       name: t("SPECIFICATION"),
-      value: specification?.name ?? t("Unspecified"),
+      value: specification?.name ?? t("UNSPECIFIED"),
     },
   ];
 }
