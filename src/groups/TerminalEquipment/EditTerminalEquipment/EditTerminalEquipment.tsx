@@ -6,13 +6,38 @@ import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import TextBox from "../../../components/TextBox";
 import DefaultButton from "../../../components/DefaultButton";
 import LabelContainer from "../../../components/LabelContainer";
+import NumberPicker from "../../../components/NumberPicker";
 import {
   queryTerminalEquipmentDetails,
   TerminalEquipment,
   queryTerminalEquipmentSpecifications,
   Manufacturer,
   TerminalEquipmentSpecification,
+  queryNearestAccessAddresses,
+  NearestAccessAddress,
+  UnitAddress,
 } from "./EditTerminalEquipmentGql";
+
+function accessAddressToOption(
+  nearestAccessAddress: NearestAccessAddress,
+  t: TFunction<"translation">
+): SelectOption {
+  return {
+    text: `${nearestAccessAddress.accessAddress.roadName} ${
+      nearestAccessAddress.accessAddress.houseNumber
+    } - (${nearestAccessAddress.distance.toFixed(2)} ${t("METER")})`,
+    value: nearestAccessAddress.accessAddress.id,
+    key: nearestAccessAddress.accessAddress.id,
+  };
+}
+
+function unitAddressToOption(unitAddress: UnitAddress): SelectOption {
+  return {
+    text: `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`,
+    value: unitAddress.id,
+    key: unitAddress.id,
+  };
+}
 
 function categoryToOptions(
   specs: TerminalEquipmentSpecification[],
@@ -55,20 +80,30 @@ interface State {
   categoryName: string | null;
   specificationId: string | null;
   manufacturerId: string | null;
+  rackPosition: number | null;
+  accessAddressId: string | null;
+  unitAddressId: string | null;
   name: string | null;
   terminalEquipment: TerminalEquipment | null;
   manufacturers: Manufacturer[] | null;
   terminalEquipmentSpecifications: TerminalEquipmentSpecification[] | null;
+  nearestAccessAddresses: NearestAccessAddress[] | null;
+  additionalAddressInformation: string | null;
 }
 
 const initialState: State = {
   categoryName: null,
   specificationId: null,
   manufacturerId: null,
+  accessAddressId: null,
+  unitAddressId: null,
+  rackPosition: null,
   name: null,
   terminalEquipment: null,
   manufacturers: null,
   terminalEquipmentSpecifications: null,
+  nearestAccessAddresses: null,
+  additionalAddressInformation: null,
 };
 
 type Action =
@@ -80,8 +115,16 @@ type Action =
     }
   | { type: "setCategoryName"; name: string }
   | { type: "setSpecificationId"; id: string }
+  | { type: "setRackPosition"; position: number }
+  | { type: "setAccessAddressId"; id: string | null }
+  | { type: "setUnitAddressId"; id: string | null }
+  | { type: "setAdditionalAddressInformation"; text: string | null }
   | { type: "setManufacturerId"; id: string }
   | { type: "setName"; name: string }
+  | {
+      type: "setNearestAccessAddresses";
+      nearestAccessAddresses: NearestAccessAddress[];
+    }
   | { type: "reset" };
 
 function reducer(state: State, action: Action): State {
@@ -103,6 +146,17 @@ function reducer(state: State, action: Action): State {
       return { ...state, manufacturerId: action.id };
     case "setName":
       return { ...state, name: action.name };
+    case "setAccessAddressId":
+      return { ...state, accessAddressId: action.id };
+    case "setUnitAddressId":
+      return { ...state, unitAddressId: action.id };
+    case "setAdditionalAddressInformation":
+      return { ...state, additionalAddressInformation: action.text };
+    case "setNearestAccessAddresses":
+      return {
+        ...state,
+        nearestAccessAddresses: action.nearestAccessAddresses,
+      };
     case "reset":
       return initialState;
     default:
@@ -116,10 +170,12 @@ function reducer(state: State, action: Action): State {
 
 interface EditTerminalEquipmentProps {
   terminalEquipmentId: string;
+  routeNodeId: string;
 }
 
 function EditTerminalEquipment({
   terminalEquipmentId,
+  routeNodeId,
 }: EditTerminalEquipmentProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { t } = useTranslation();
@@ -151,6 +207,18 @@ function EditTerminalEquipment({
             type: "setName",
             name: terminalEquipment.name,
           });
+          dispatch({
+            type: "setAccessAddressId",
+            id: terminalEquipment.addressInfo?.accessAddress.id ?? null,
+          });
+          dispatch({
+            type: "setUnitAddressId",
+            id: terminalEquipment.addressInfo?.unitAddress.id ?? null,
+          });
+          dispatch({
+            type: "setAdditionalAddressInformation",
+            text: terminalEquipment.addressInfo?.remark ?? null,
+          });
         } else {
           toast.error(t("ERROR"));
         }
@@ -176,7 +244,7 @@ function EditTerminalEquipment({
             manufacturers: manufacturers,
           });
         } else {
-          t("ERROR");
+          toast.error(t("ERROR"));
         }
       })
       .catch((r) => {
@@ -185,13 +253,35 @@ function EditTerminalEquipment({
       });
   }, [dispatch, t, client]);
 
+  useEffect(() => {
+    if (!routeNodeId) return;
+
+    queryNearestAccessAddresses(client, routeNodeId)
+      .then((r) => {
+        const nearestAccessAddresses =
+          r.data?.addressService.nearestAccessAddresses;
+        if (nearestAccessAddresses) {
+          dispatch({
+            type: "setNearestAccessAddresses",
+            nearestAccessAddresses: nearestAccessAddresses,
+          });
+        } else {
+          toast.error(t("ERROR"));
+        }
+      })
+      .catch((r) => {
+        console.error(r);
+        toast.error(t("ERROR"));
+      });
+  }, [routeNodeId, client, t, dispatch]);
+
   const categoryOptions = useMemo<SelectOption[]>(() => {
     if (!state.terminalEquipment || !state.terminalEquipmentSpecifications)
       return [];
 
     return categoryToOptions(
       state.terminalEquipmentSpecifications,
-      state.terminalEquipment.specification.isRackEquipment
+      state?.terminalEquipment.specification.isRackEquipment
     );
   }, [state.terminalEquipment, state.terminalEquipmentSpecifications]);
 
@@ -233,6 +323,58 @@ function EditTerminalEquipment({
     state.specificationId,
     t,
   ]);
+
+  const accessAddresses = useMemo<SelectOption[]>(() => {
+    if (!state.nearestAccessAddresses) return [];
+
+    const defaultList: SelectOption[] = [
+      {
+        text: t("SELECT_ACCESS_ADDRESS"),
+        value: "",
+        key: "SELECT_ACCESS_ADDRESS",
+      },
+    ];
+
+    const options = state.nearestAccessAddresses
+      .sort((x, y) => x.distance - y.distance)
+      .map((x) => accessAddressToOption(x, t));
+
+    // We do this because there is an issue
+    // where unit address has an id but no labels and its the only one
+    if (options.length === 1) {
+      return [
+        {
+          text: t("SELECT_ACCESS_ADDRESS"),
+          value: options[0].value,
+          key: "SELECT_ACCESS_ADDRESS",
+        },
+      ];
+    }
+
+    return defaultList.concat(options);
+  }, [state.nearestAccessAddresses, t]);
+
+  const unitAddressOptions = useMemo<SelectOption[]>(() => {
+    if (!state.nearestAccessAddresses) return [];
+
+    const defaultList: SelectOption[] = [
+      {
+        text: t("SELECT_UNIT_ADDRESS"),
+        value: "",
+        key: "SELECT_UNIT_ADDRESS",
+      },
+    ];
+
+    const options =
+      state.nearestAccessAddresses
+        .find((x) => x.accessAddress.id === state.accessAddressId)
+        ?.accessAddress.unitAddresses.sort((x, y) =>
+          x.externalId > y.externalId ? 1 : -1
+        )
+        .map(unitAddressToOption) ?? [];
+
+    return defaultList.concat(options);
+  }, [state.nearestAccessAddresses, state.accessAddressId, t]);
 
   if (!state.terminalEquipment || !state.specificationId || !state.categoryName)
     return <></>;
@@ -281,6 +423,61 @@ function EditTerminalEquipment({
           </LabelContainer>
         </div>
       </div>
+
+      {state.terminalEquipment.specification.isRackEquipment && (
+        <div className="full-row-group">
+          <div className="full-row">
+            <LabelContainer text={`${t("RACK_UNIT")}:`}>
+              <NumberPicker
+                value={state.rackPosition ?? 0}
+                minValue={0}
+                maxValue={100}
+                setValue={(x) =>
+                  dispatch({ type: "setRackPosition", position: x })
+                }
+              />
+            </LabelContainer>
+          </div>
+        </div>
+      )}
+
+      {state.terminalEquipment.specification.category && (
+        <div className="block">
+          <p className="block-title">{t("ADDRESS_INFORMATION")}</p>
+          <div className="full-row">
+            <SelectMenu
+              options={accessAddresses ?? []}
+              onSelected={(x) =>
+                dispatch({
+                  type: "setAccessAddressId",
+                  id: x?.toString() ?? "",
+                })
+              }
+              selected={state.accessAddressId ?? ""}
+              enableSearch={true}
+            />
+          </div>
+          <div className="full-row">
+            <SelectMenu
+              options={unitAddressOptions ?? []}
+              onSelected={(x) =>
+                dispatch({ type: "setUnitAddressId", id: x?.toString() ?? "" })
+              }
+              selected={state.unitAddressId ?? ""}
+              enableSearch={true}
+            />
+          </div>
+          <div className="full-row">
+            <TextBox
+              placeHolder={t("ADDITIONAL_ADDRESS_INFORMATION")}
+              setValue={(x) =>
+                dispatch({ type: "setAdditionalAddressInformation", text: x })
+              }
+              value={state.additionalAddressInformation ?? ""}
+            />
+          </div>
+        </div>
+      )}
 
       <div className="full-row">
         <DefaultButton

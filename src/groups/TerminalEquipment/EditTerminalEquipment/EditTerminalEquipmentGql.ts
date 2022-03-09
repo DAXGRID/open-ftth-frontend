@@ -1,5 +1,9 @@
 import { Client } from "urql";
 
+interface QueryTerminalEquipmentDetailsParams {
+  terminalEquipmentOrTerminalId: string;
+}
+
 export function queryTerminalEquipmentDetails(
   client: Client,
   terminalEquipmentId: string
@@ -22,8 +26,18 @@ export function queryTerminalEquipmentSpecifications(client: Client) {
     .toPromise();
 }
 
-interface QueryTerminalEquipmentDetailsParams {
-  terminalEquipmentOrTerminalId: string;
+export function queryNearestAccessAddresses(
+  client: Client,
+  routeNodeId: string
+) {
+  return client
+    .query<QueryNearestAccessAddressesResponse>(
+      QUERY_NEAREST_ACCESS_ADDRESSES,
+      {
+        routeNodeId: routeNodeId,
+      } as QueryNearestAccessAddressesParams
+    )
+    .toPromise();
 }
 
 export interface TerminalEquipment {
@@ -34,6 +48,7 @@ export interface TerminalEquipment {
     category: string;
     id: string;
     isRackEquipment: boolean;
+    isAddressable: boolean;
   };
   manufacturer?: {
     id: string;
@@ -66,6 +81,7 @@ query ($terminalEquipmentOrTerminalId: ID!) {
         category
         id
         isRackEquipment
+        isAddressable
       }
       manufacturer {
         id
@@ -128,6 +144,59 @@ query {
       name
       description
       deprecated
+    }
+  }
+}`;
+
+export interface UnitAddress {
+  id: string;
+  floorName: string;
+  suitName: string;
+  externalId: string;
+}
+
+interface AccessAddress {
+  id: string;
+  roadName: string;
+  houseNumber: string;
+  townName: string;
+  postDistrict: string;
+  unitAddresses: UnitAddress[];
+}
+
+export interface NearestAccessAddress {
+  distance: number;
+  accessAddress: AccessAddress;
+}
+
+interface QueryNearestAccessAddressesResponse {
+  addressService: {
+    nearestAccessAddresses: NearestAccessAddress[];
+  };
+}
+
+interface QueryNearestAccessAddressesParams {
+  routeNodeId: string;
+}
+
+const QUERY_NEAREST_ACCESS_ADDRESSES = `
+query($routeNodeId: ID!) {
+  addressService {
+    nearestAccessAddresses(routeNodeId: $routeNodeId, maxHits: 100) {
+      distance
+      accessAddress {
+        id
+        roadName
+        houseNumber
+        townName
+        postDistrict
+        unitAddresses {
+          id
+          floorName
+          suitName
+          externalId
+        }
+      }
     }
   }
 }`;

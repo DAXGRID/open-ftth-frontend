@@ -298,7 +298,8 @@ function TerminalEquipment() {
       );
     } else if (
       state.showEditTerminalEquipment.show &&
-      state.showEditTerminalEquipment.terminalEquipmentId
+      state.showEditTerminalEquipment.terminalEquipmentId &&
+      state.routeNodeId
     ) {
       showElement(
         <ModalContainer
@@ -311,6 +312,7 @@ function TerminalEquipment() {
         >
           <EditTerminalEquipment
             terminalEquipmentId={state.terminalEquipmentOrRackId}
+            routeNodeId={state.routeNodeId}
           />
         </ModalContainer>
       );
