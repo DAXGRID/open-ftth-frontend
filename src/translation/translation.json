@@ -211,7 +211,9 @@
       "TUBE/FIBER": "Tube/fiber",
       "CURCUIT_END": "Curcuit end",
       "CABLE_NAME": "Cable name",
-      "DISCONNECTED": "Disconnected"
+      "DISCONNECTED": "Disconnected",
+      "Buildings": "Buildings",
+      "Cabinets": "Cabinets"
     }
   },
   "dk": {
@@ -426,7 +428,9 @@
       "TUBE/FIBER": "Tube/fiber",
       "CURCUIT_END": "Kredsløbsende",
       "CABLE_NAME": "Kabel navn",
-      "DISCONNECTED": "Disconnected"
+      "DISCONNECTED": "Disconnected",
+      "Buildings": "Bygninger",
+      "Cabinets": "Skabe"
     }
   }
 }
