@@ -55,6 +55,7 @@ interface State {
   categoryName: string | null;
   specificationId: string | null;
   manufacturerId: string | null;
+  name: string | null;
   terminalEquipment: TerminalEquipment | null;
   manufacturers: Manufacturer[] | null;
   terminalEquipmentSpecifications: TerminalEquipmentSpecification[] | null;
@@ -64,6 +65,7 @@ const initialState: State = {
   categoryName: null,
   specificationId: null,
   manufacturerId: null,
+  name: null,
   terminalEquipment: null,
   manufacturers: null,
   terminalEquipmentSpecifications: null,
@@ -79,6 +81,7 @@ type Action =
   | { type: "setCategoryName"; name: string }
   | { type: "setSpecificationId"; id: string }
   | { type: "setManufacturerId"; id: string }
+  | { type: "setName"; name: string }
   | { type: "reset" };
 
 function reducer(state: State, action: Action): State {
@@ -98,6 +101,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, specificationId: action.id };
     case "setManufacturerId":
       return { ...state, manufacturerId: action.id };
+    case "setName":
+      return { ...state, name: action.name };
     case "reset":
       return initialState;
     default:
@@ -141,6 +146,10 @@ function EditTerminalEquipment({
           dispatch({
             type: "setManufacturerId",
             id: terminalEquipment.manufacturer?.id ?? "",
+          });
+          dispatch({
+            type: "setName",
+            name: terminalEquipment.name,
           });
         } else {
           toast.error(t("ERROR"));
@@ -260,6 +269,14 @@ function EditTerminalEquipment({
               }
               options={manufacturerOptions}
               selected={state.manufacturerId ?? ""}
+            />
+          </LabelContainer>
+        </div>
+        <div className="full-row">
+          <LabelContainer text={`${t("NAME")}:`}>
+            <TextBox
+              value={state.name ?? ""}
+              setValue={(x) => dispatch({ type: "setName", name: x })}
             />
           </LabelContainer>
         </div>

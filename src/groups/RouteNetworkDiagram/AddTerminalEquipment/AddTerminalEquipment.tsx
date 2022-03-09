@@ -458,6 +458,7 @@ function AddTerminalEquipment({
           </LabelContainer>
         </div>
       </div>
+
       {rackId && (
         <div className="full-row-group">
           <p className="full-row-group__title">
