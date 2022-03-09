@@ -36,9 +36,9 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
   return (
     <div className="rack-container">
       <div className="rack-container-header">
-        <p>{parentNodeStructure?.name}</p>
-        <p>{parentNodeStructure?.specName}</p>
-        <p>{parentNodeStructure?.info}</p>
+        <p>{parentNodeStructure?.name ?? ""}</p>
+        <p>{parentNodeStructure?.specName ?? ""}</p>
+        <p>{parentNodeStructure?.info ?? ""}</p>
         <div className="header-icons">
           {state.editable && (
             <>

@@ -14,17 +14,26 @@ export function queryTerminalEquipmentDetails(
     .toPromise();
 }
 
+export function queryTerminalEquipmentSpecifications(client: Client) {
+  return client
+    .query<SpanEquipmentSpecificationsResponse>(
+      QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS
+    )
+    .toPromise();
+}
+
 interface QueryTerminalEquipmentDetailsParams {
   terminalEquipmentOrTerminalId: string;
 }
 
-interface TerminalEquipment {
+export interface TerminalEquipment {
   id: string;
   name: string;
   description?: string;
   specification: {
     category: string;
     id: string;
+    isRackEquipment: boolean;
   };
   manufacturer?: {
     id: string;
@@ -56,6 +65,7 @@ query ($terminalEquipmentOrTerminalId: ID!) {
       specification {
         category
         id
+        isRackEquipment
       }
       manufacturer {
         id
@@ -73,3 +83,51 @@ query ($terminalEquipmentOrTerminalId: ID!) {
   }
 }
 `;
+
+export interface SpanEquipmentSpecificationsResponse {
+  utilityNetwork: {
+    terminalEquipmentSpecifications: TerminalEquipmentSpecification[];
+    manufacturers: Manufacturer[];
+  };
+}
+
+export interface TerminalEquipmentSpecification {
+  id: string;
+  name: string;
+  category: string;
+  isRackEquipment: boolean;
+  manufacturerRefs: string[];
+  isAddressable: boolean;
+}
+
+export interface Manufacturer {
+  id: string;
+  name: string;
+  description: string;
+  deprecated: boolean;
+}
+
+export interface Rack {
+  name: string;
+}
+
+const QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS = `
+query {
+  utilityNetwork {
+    terminalEquipmentSpecifications {
+      id
+      name
+      category
+      isRackEquipment
+      description
+      manufacturerRefs
+      isAddressable
+    },
+    manufacturers {
+      id
+      name
+      description
+      deprecated
+    }
+  }
+}`;

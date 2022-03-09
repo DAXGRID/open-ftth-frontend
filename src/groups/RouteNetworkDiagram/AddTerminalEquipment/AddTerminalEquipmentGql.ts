@@ -46,7 +46,7 @@ query {
       deprecated
     }
   }
-} `;
+}`;
 
 export interface RackResponse {
   utilityNetwork: {
