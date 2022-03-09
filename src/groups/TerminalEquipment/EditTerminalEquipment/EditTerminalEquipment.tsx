@@ -31,8 +31,28 @@ function categoryToOptions(
   }));
 }
 
+function specificationToOptions(
+  specs: TerminalEquipmentSpecification[],
+  category: string,
+  isRackEquipment: boolean
+): SelectOption[] {
+  return specs
+    .filter((x) => x.isRackEquipment === isRackEquipment)
+    .filter((x) => x.category === category)
+    .map((x) => ({ text: x.name, value: x.id, key: x.id }));
+}
+
+function manufacturerToOptions(
+  specs: Manufacturer[],
+  refs: string[]
+): SelectOption[] {
+  return specs
+    .filter((x) => refs.findIndex((y) => y === x.id))
+    .map((x) => ({ text: x.name, value: x.id, key: x.id }));
+}
+
 interface State {
-  categoryId: string | null;
+  categoryName: string | null;
   specificationId: string | null;
   manufacturerId: string | null;
   terminalEquipment: TerminalEquipment | null;
@@ -41,7 +61,7 @@ interface State {
 }
 
 const initialState: State = {
-  categoryId: null,
+  categoryName: null,
   specificationId: null,
   manufacturerId: null,
   terminalEquipment: null,
@@ -56,8 +76,9 @@ type Action =
       type: "setTerminalEquipmentSpecifications";
       specifications: TerminalEquipmentSpecification[];
     }
-  | { type: "setCategoryId"; id: string }
+  | { type: "setCategoryName"; name: string }
   | { type: "setSpecificationId"; id: string }
+  | { type: "setManufacturerId"; id: string }
   | { type: "reset" };
 
 function reducer(state: State, action: Action): State {
@@ -71,10 +92,12 @@ function reducer(state: State, action: Action): State {
         ...state,
         terminalEquipmentSpecifications: action.specifications,
       };
-    case "setCategoryId":
-      return { ...state, categoryId: action.id };
+    case "setCategoryName":
+      return { ...state, categoryName: action.name };
     case "setSpecificationId":
       return { ...state, specificationId: action.id };
+    case "setManufacturerId":
+      return { ...state, manufacturerId: action.id };
     case "reset":
       return initialState;
     default:
@@ -106,6 +129,18 @@ function EditTerminalEquipment({
           dispatch({
             type: "setTerminalEquipment",
             terminalEquipment: terminalEquipment,
+          });
+          dispatch({
+            type: "setCategoryName",
+            name: terminalEquipment.specification.category,
+          });
+          dispatch({
+            type: "setSpecificationId",
+            id: terminalEquipment.specification.id,
+          });
+          dispatch({
+            type: "setManufacturerId",
+            id: terminalEquipment.manufacturer?.id ?? "",
           });
         } else {
           toast.error(t("ERROR"));
@@ -151,7 +186,27 @@ function EditTerminalEquipment({
     );
   }, [state.terminalEquipment, state.terminalEquipmentSpecifications]);
 
-  if (!state.terminalEquipment) return <></>;
+  const specificationOptions = useMemo<SelectOption[]>(() => {
+    if (
+      !state.terminalEquipmentSpecifications ||
+      !state.categoryName ||
+      !state.terminalEquipment
+    )
+      return [];
+
+    return specificationToOptions(
+      state.terminalEquipmentSpecifications,
+      state.categoryName,
+      state.terminalEquipment.specification.isRackEquipment
+    );
+  }, [
+    state.terminalEquipmentSpecifications,
+    state.categoryName,
+    state.terminalEquipment,
+  ]);
+
+  if (!state.terminalEquipment || !state.specificationId || !state.categoryName)
+    return <></>;
 
   return (
     <div className="edit-terminal-equipment">
@@ -161,8 +216,19 @@ function EditTerminalEquipment({
             <SelectMenu
               onSelected={() => {}}
               options={categoryOptions}
-              selected={state.terminalEquipment?.specification.category}
+              selected={state.categoryName}
               disabled={true}
+            />
+          </LabelContainer>
+        </div>
+        <div className="full-row">
+          <LabelContainer text={`${t("SPECIFICATION")}:`}>
+            <SelectMenu
+              onSelected={(x) =>
+                dispatch({ type: "setSpecificationId", id: x as string })
+              }
+              options={specificationOptions}
+              selected={state.specificationId}
             />
           </LabelContainer>
         </div>
