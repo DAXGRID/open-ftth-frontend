@@ -147,7 +147,7 @@ function reducer(state: State, action: Action): State {
     case "setName":
       return { ...state, name: action.name };
     case "setAccessAddressId":
-      return { ...state, accessAddressId: action.id };
+      return { ...state, accessAddressId: action.id, unitAddressId: null };
     case "setUnitAddressId":
       return { ...state, unitAddressId: action.id };
     case "setAdditionalAddressInformation":
