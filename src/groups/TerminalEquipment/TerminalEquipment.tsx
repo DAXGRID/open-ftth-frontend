@@ -22,6 +22,7 @@ import {
 import TerminalLine from "./TerminalLine";
 import TerminalLineFree from "./TerminalLineFree";
 import DisconnectFiberEditor from "./DisconnectFiberEditor";
+import EditTerminalEquipment from "./EditTerminalEquipment";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -104,7 +105,18 @@ function TerminalEquipmentTableContainer({
                 className="header-icons__icon"
                 onClick={() => {}}
               >
-                <FontAwesomeIcon icon={faEdit} />
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  onClick={() => {
+                    dispatch({
+                      type: "setShowEditTerminalEquipment",
+                      show: {
+                        show: true,
+                        terminalEquipmentId: state.terminalEquipmentOrRackId,
+                      },
+                    });
+                  }}
+                />
               </span>
               <span
                 role="button"
@@ -284,6 +296,25 @@ function TerminalEquipment() {
           />
         </ModalContainer>
       );
+    } else if (
+      state.showEditTerminalEquipment.show &&
+      state.showEditTerminalEquipment.terminalEquipmentId
+    ) {
+      showElement(
+        <ModalContainer
+          title={t("EDIT_TERMINAL_EQUIPMENT")}
+          closeCallback={() =>
+            dispatch({
+              type: "resetShowEditTerminalEquipment",
+            })
+          }
+          maxWidth="1200px"
+        >
+          <EditTerminalEquipment />
+        </ModalContainer>
+      );
+
+      console.log("was here!");
     } else {
       showElement(null);
     }
@@ -291,6 +322,7 @@ function TerminalEquipment() {
     state.showDisconnectFiberEditor,
     state.connectivityView?.terminalEquipments,
     state.routeNodeId,
+    state.showEditTerminalEquipment,
     showElement,
     dispatch,
     t,
