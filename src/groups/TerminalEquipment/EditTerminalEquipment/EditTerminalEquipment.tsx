@@ -205,6 +205,26 @@ function EditTerminalEquipment({
     state.terminalEquipment,
   ]);
 
+  const manufacturerOptions = useMemo<SelectOption[]>(() => {
+    if (!state.manufacturers || !state.terminalEquipmentSpecifications)
+      return [];
+
+    return [
+      { text: t("UNSPECIFIED"), value: "", key: "-1" },
+      ...manufacturerToOptions(
+        state.manufacturers,
+        state.terminalEquipmentSpecifications.find(
+          (x) => x.id === state.specificationId
+        )?.manufacturerRefs ?? []
+      ),
+    ];
+  }, [
+    state.manufacturers,
+    state.terminalEquipmentSpecifications,
+    state.specificationId,
+    t,
+  ]);
+
   if (!state.terminalEquipment || !state.specificationId || !state.categoryName)
     return <></>;
 
@@ -232,7 +252,19 @@ function EditTerminalEquipment({
             />
           </LabelContainer>
         </div>
+        <div className="full-row">
+          <LabelContainer text={`${t("MANUFACTURER")}:`}>
+            <SelectMenu
+              onSelected={(x) =>
+                dispatch({ type: "setManufacturerId", id: x as string })
+              }
+              options={manufacturerOptions}
+              selected={state.manufacturerId ?? ""}
+            />
+          </LabelContainer>
+        </div>
       </div>
+
       <div className="full-row">
         <DefaultButton
           onClick={() => {}}
