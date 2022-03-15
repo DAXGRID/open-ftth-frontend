@@ -40,10 +40,22 @@ export function queryNearestAccessAddresses(
     .toPromise();
 }
 
+export function queryRacks(client: Client, routeNodeId: string) {
+  return client
+    .query<QueryRacksResponse>(QUERY_RACKS, {
+      routeNodeId: routeNodeId,
+    } as QueryRacksParams)
+    .toPromise();
+}
+
 export interface TerminalEquipment {
   id: string;
   name: string;
   description?: string;
+  subrackPlacementInfo?: {
+    rackId: string;
+    startUnitPosition: number;
+  };
   specification: {
     category: string;
     id: string;
@@ -77,6 +89,10 @@ query ($terminalEquipmentOrTerminalId: ID!) {
       id
       name
       description
+      subrackPlacementInfo {
+        rackId
+        startUnitPosition
+      }
       specification {
         category
         id
@@ -100,7 +116,7 @@ query ($terminalEquipmentOrTerminalId: ID!) {
 }
 `;
 
-export interface SpanEquipmentSpecificationsResponse {
+interface SpanEquipmentSpecificationsResponse {
   utilityNetwork: {
     terminalEquipmentSpecifications: TerminalEquipmentSpecification[];
     manufacturers: Manufacturer[];
@@ -121,10 +137,6 @@ export interface Manufacturer {
   name: string;
   description: string;
   deprecated: boolean;
-}
-
-export interface Rack {
-  name: string;
 }
 
 const QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS = `
@@ -200,3 +212,31 @@ query($routeNodeId: ID!) {
     }
   }
 }`;
+
+export interface Rack {
+  id: string;
+  name: string;
+}
+
+interface QueryRacksResponse {
+  utilityNetwork: {
+    racks: Rack[];
+  };
+}
+
+interface QueryRacksParams {
+  routeNodeId: string;
+}
+
+const QUERY_RACKS = `
+query (
+  $routeNodeId: ID!
+) {
+  utilityNetwork {
+    racks(routeNodeId: $routeNodeId) {
+      id
+      name
+    }
+  }
+}
+`;
