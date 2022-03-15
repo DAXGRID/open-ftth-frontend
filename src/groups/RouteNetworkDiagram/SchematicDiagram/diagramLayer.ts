@@ -114,6 +114,7 @@ export function getLayer(name: string): AnyLayer {
       } as FillLayer;
     case "OuterConduitOrange":
     case "OuterConduitRed":
+    case "OuterConduitGreen":
       return {
         id: "OuterConduit",
         source: "OuterConduit",
@@ -127,6 +128,8 @@ export function getLayer(name: string): AnyLayer {
             colorMap.LIGHT_ORANGE,
             "OuterConduitRed",
             colorMap.LIGHT_RED,
+            "OuterConduitGreen",
+            colorMap.LIGHT_GREEN,
             "#ccc",
           ],
         },
