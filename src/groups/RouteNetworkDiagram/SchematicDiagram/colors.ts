@@ -9,6 +9,7 @@ const colorMap = {
   LIGHT_ORANGE: "#ffc04d",
   ORANGE: "#ff9900",
   GREEN: "#00ff00",
+  LIGHT_GREEN: "#a3ffa3",
   BLACK: "#000000",
   GREY: "#808080",
   VIOLET: "#9900cc",
