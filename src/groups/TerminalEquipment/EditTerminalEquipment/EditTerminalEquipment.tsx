@@ -441,7 +441,7 @@ function EditTerminalEquipment({
         </div>
       )}
 
-      {state.terminalEquipment.specification.category && (
+      {state.terminalEquipment.specification.isAddressable && (
         <div className="block">
           <p className="block-title">{t("ADDRESS_INFORMATION")}</p>
           <div className="full-row">
