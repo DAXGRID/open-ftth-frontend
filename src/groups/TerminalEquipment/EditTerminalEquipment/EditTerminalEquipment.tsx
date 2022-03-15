@@ -209,11 +209,11 @@ function EditTerminalEquipment({
           });
           dispatch({
             type: "setAccessAddressId",
-            id: terminalEquipment.addressInfo?.accessAddress.id ?? null,
+            id: terminalEquipment.addressInfo?.accessAddress?.id ?? null,
           });
           dispatch({
             type: "setUnitAddressId",
-            id: terminalEquipment.addressInfo?.unitAddress.id ?? null,
+            id: terminalEquipment.addressInfo?.unitAddress?.id ?? null,
           });
           dispatch({
             type: "setAdditionalAddressInformation",
