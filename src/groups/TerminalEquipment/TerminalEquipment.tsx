@@ -49,13 +49,6 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
               >
                 <FontAwesomeIcon icon={faEdit} />
               </span>
-              <span
-                role="button"
-                className="header-icons__icon"
-                onClick={() => {}}
-              >
-                <FontAwesomeIcon icon={faPlusCircle} />
-              </span>
             </>
           )}
         </div>
