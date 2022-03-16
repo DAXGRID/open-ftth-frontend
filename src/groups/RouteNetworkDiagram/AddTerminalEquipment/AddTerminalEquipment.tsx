@@ -9,7 +9,7 @@ import NumberPicker from "../../../components/NumberPicker";
 import LabelContainer from "../../../components/LabelContainer";
 import {
   PlacementMethod,
-  QUERY_TERMINAL_EQUIPMENT,
+  QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS,
   TerminalEquipmentSpecification,
   SpanEquipmentSpecificationsResponse,
   Manufacturer,
@@ -154,7 +154,7 @@ function reducer(state: State, action: Action): State {
     case "setNamingMethod":
       return { ...state, namingMethod: action.method };
     case "setAccessAddressId":
-      return { ...state, accessAddressId: action.id };
+      return { ...state, accessAddressId: action.id, unitAddressId: "" };
     case "setUnitAddressId":
       return { ...state, unitAddressId: action.id };
     case "setAdditionalAddressInformation":
@@ -181,7 +181,7 @@ function AddTerminalEquipment({
 
   const [specificationResponse] = useQuery<SpanEquipmentSpecificationsResponse>(
     {
-      query: QUERY_TERMINAL_EQUIPMENT,
+      query: QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS,
     }
   );
 
@@ -458,6 +458,7 @@ function AddTerminalEquipment({
           </LabelContainer>
         </div>
       </div>
+
       {rackId && (
         <div className="full-row-group">
           <p className="full-row-group__title">

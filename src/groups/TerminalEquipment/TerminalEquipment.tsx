@@ -22,6 +22,7 @@ import {
 import TerminalLine from "./TerminalLine";
 import TerminalLineFree from "./TerminalLineFree";
 import DisconnectFiberEditor from "./DisconnectFiberEditor";
+import EditTerminalEquipment from "./EditTerminalEquipment";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -35,9 +36,9 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
   return (
     <div className="rack-container">
       <div className="rack-container-header">
-        <p>{parentNodeStructure?.name}</p>
-        <p>{parentNodeStructure?.specName}</p>
-        <p>{parentNodeStructure?.info}</p>
+        <p>{parentNodeStructure?.name ?? ""}</p>
+        <p>{parentNodeStructure?.specName ?? ""}</p>
+        <p>{parentNodeStructure?.info ?? ""}</p>
         <div className="header-icons">
           {state.editable && (
             <>
@@ -104,7 +105,18 @@ function TerminalEquipmentTableContainer({
                 className="header-icons__icon"
                 onClick={() => {}}
               >
-                <FontAwesomeIcon icon={faEdit} />
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  onClick={() => {
+                    dispatch({
+                      type: "setShowEditTerminalEquipment",
+                      show: {
+                        show: true,
+                        terminalEquipmentId: state.terminalEquipmentOrRackId,
+                      },
+                    });
+                  }}
+                />
               </span>
               <span
                 role="button"
@@ -284,6 +296,26 @@ function TerminalEquipment() {
           />
         </ModalContainer>
       );
+    } else if (
+      state.showEditTerminalEquipment.show &&
+      state.showEditTerminalEquipment.terminalEquipmentId &&
+      state.routeNodeId
+    ) {
+      showElement(
+        <ModalContainer
+          title={t("EDIT_TERMINAL_EQUIPMENT")}
+          closeCallback={() =>
+            dispatch({
+              type: "resetShowEditTerminalEquipment",
+            })
+          }
+        >
+          <EditTerminalEquipment
+            terminalEquipmentId={state.terminalEquipmentOrRackId}
+            routeNodeId={state.routeNodeId}
+          />
+        </ModalContainer>
+      );
     } else {
       showElement(null);
     }
@@ -291,6 +323,8 @@ function TerminalEquipment() {
     state.showDisconnectFiberEditor,
     state.connectivityView?.terminalEquipments,
     state.routeNodeId,
+    state.showEditTerminalEquipment,
+    state.terminalEquipmentOrRackId,
     showElement,
     dispatch,
     t,

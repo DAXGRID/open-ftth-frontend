@@ -29,6 +29,15 @@
   border: 1px solid $border-color;
   border-radius: 4px;
 
+  &.disabled {
+    background-color: $disabled-color;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: $disabled-color;
+    }
+  }
+
   &:hover {
     background-color: $hover-color;
   }

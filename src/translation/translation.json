@@ -213,7 +213,8 @@
       "CABLE_NAME": "Cable name",
       "DISCONNECTED": "Disconnected",
       "Buildings": "Buildings",
-      "Cabinets": "Cabinets"
+      "Cabinets": "Cabinets",
+      "EDIT_TERMINAL_EQUIPMENT": "Edit terminal equipment"
     }
   },
   "dk": {
@@ -430,7 +431,8 @@
       "CABLE_NAME": "Kabel navn",
       "DISCONNECTED": "Disconnected",
       "Buildings": "Bygninger",
-      "Cabinets": "Skabe"
+      "Cabinets": "Skabe",
+      "EDIT_TERMINAL_EQUIPMENT": "Rediger fiber udstyr"
     }
   }
 }

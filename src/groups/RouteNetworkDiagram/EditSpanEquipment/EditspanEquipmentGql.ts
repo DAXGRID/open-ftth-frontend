@@ -87,8 +87,6 @@ query ($spanEquipmentOrSegmentId: ID!){
         id
       }
       addressInfo {
-        accessAddressId
-        unitAddressId
         remark
         accessAddress {
           id

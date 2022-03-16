@@ -35,11 +35,17 @@ interface ShowDisconnectFiberEditor {
   routeNodeId: string | null;
 }
 
+interface ShowEditTerminalEquipment {
+  show: boolean;
+  terminalEquipmentId: string | null;
+}
+
 interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
   showFreeLines: { [id: string]: boolean };
   showFiberEditor: ShowFiberEditor;
   showDisconnectFiberEditor: ShowDisconnectFiberEditor;
+  showEditTerminalEquipment: ShowEditTerminalEquipment;
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
@@ -65,6 +71,8 @@ type TerminalEquipmentAction =
   | { type: "setShowDisconnectFiberEditor"; show: ShowDisconnectFiberEditor }
   | { type: "resetShowDisconnectFiberEditor" }
   | { type: "setShowConnectivityTraceViews"; id: string }
+  | { type: "setShowEditTerminalEquipment"; show: ShowEditTerminalEquipment }
+  | { type: "resetShowEditTerminalEquipment" }
   | {
       type: "setViewConnectivityTraceViews";
       params: { id: string; view: ConnectivityTraceView };
@@ -101,10 +109,16 @@ const defaultShowDisconnectFiberEditor: ShowDisconnectFiberEditor = {
   routeNodeId: null,
 };
 
+const defaultShowEditTerminalEquipment: ShowEditTerminalEquipment = {
+  show: false,
+  terminalEquipmentId: null,
+};
+
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
   showFiberEditor: defaultShowFiberEditorValues,
+  showEditTerminalEquipment: defaultShowEditTerminalEquipment,
   connectivityTraceViews: {},
   selectedConnectivityTraceHop: null,
   editable: false,
@@ -159,6 +173,13 @@ function terminalEquipmentReducer(
       return {
         ...state,
         showDisconnectFiberEditor: defaultShowDisconnectFiberEditor,
+      };
+    case "setShowEditTerminalEquipment":
+      return { ...state, showEditTerminalEquipment: action.show };
+    case "resetShowEditTerminalEquipment":
+      return {
+        ...state,
+        showEditTerminalEquipment: defaultShowEditTerminalEquipment,
       };
     case "setViewConnectivityTraceViews":
       return {
