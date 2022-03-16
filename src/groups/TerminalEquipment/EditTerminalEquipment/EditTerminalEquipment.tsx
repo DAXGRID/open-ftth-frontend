@@ -18,6 +18,7 @@ import {
   UnitAddress,
   Rack,
   queryRacks,
+  updateTerminalEquipment,
 } from "./EditTerminalEquipmentGql";
 
 function rackToOption(racks: Rack[]): SelectOption[] {
@@ -237,7 +238,6 @@ function EditTerminalEquipment({
             type: "setAdditionalAddressInformation",
             text: terminalEquipment.addressInfo?.remark ?? null,
           });
-          debugger;
           dispatch({
             type: "setRackId",
             id: terminalEquipment.subrackPlacementInfo?.rackId ?? null,
@@ -426,6 +426,54 @@ function EditTerminalEquipment({
     return state.racks ? rackToOption(state.racks) : [];
   }, [state.racks]);
 
+  const executeUpdateTerminalEquipment = () => {
+    if (state.terminalEquipment?.id && state.specificationId) {
+      updateTerminalEquipment(client, {
+        terminalEquipmentId: terminalEquipmentId,
+        terminalEquipmentSpecificationId: state.specificationId,
+        manufacturerId:
+          state.manufacturerId?.length !== 0 ? state.manufacturerId : null,
+        namingInfo: {
+          name: state.name,
+        },
+        addressInfo: state.terminalEquipment.specification.isAddressable
+          ? {
+              accessAddressId: state.accessAddressId,
+              unitAddressId:
+                state.unitAddressId?.length !== 0 ? state.unitAddressId : null,
+              remark:
+                state.additionalAddressInformation?.length !== 0
+                  ? state.additionalAddressInformation
+                  : null,
+            }
+          : null,
+        rackId: state.terminalEquipment.specification.isRackEquipment
+          ? state.rackId
+          : null,
+        rackStartUnitPosition: state.terminalEquipment.specification
+          .isRackEquipment
+          ? state.rackPosition
+          : null,
+      })
+        .then((r) => {
+          if (r.data?.terminalEquipment.updateProperties.errorCode) {
+            toast.error(
+              t(r.data?.terminalEquipment.updateProperties.errorCode ?? "ERROR")
+            );
+            console.error(
+              r.data.terminalEquipment.updateProperties.errorMessage
+            );
+          }
+        })
+        .catch(() => {
+          toast.error(t("ERROR"));
+        });
+    } else {
+      toast.error(t("ERROR"));
+      console.error("Missing ");
+    }
+  };
+
   if (!state.terminalEquipment || !state.specificationId || !state.categoryName)
     return <></>;
 
@@ -543,9 +591,9 @@ function EditTerminalEquipment({
 
       <div className="full-row">
         <DefaultButton
-          onClick={() => {}}
+          onClick={() => executeUpdateTerminalEquipment()}
           innerText={t("UPDATE")}
-          disabled={true}
+          disabled={false}
         />
       </div>
     </div>

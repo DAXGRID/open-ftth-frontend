@@ -48,6 +48,18 @@ export function queryRacks(client: Client, routeNodeId: string) {
     .toPromise();
 }
 
+export function updateTerminalEquipment(
+  client: Client,
+  params: MutationUpdateTerminalEquipmentParams
+) {
+  return client
+    .mutation<MutationUpdateTerminalEquipmentResponse>(
+      MUTATION_UPDATE_TERMINAL_EQUIPMENT,
+      params
+    )
+    .toPromise();
+}
+
 export interface TerminalEquipment {
   id: string;
   name: string;
@@ -236,6 +248,57 @@ query (
     racks(routeNodeId: $routeNodeId) {
       id
       name
+    }
+  }
+}
+`;
+
+interface MutationUpdateTerminalEquipmentResponse {
+  terminalEquipment: {
+    updateProperties: {
+      isSuccess: boolean;
+      errorMessage: string;
+      errorCode: string;
+    };
+  };
+}
+
+interface MutationUpdateTerminalEquipmentParams {
+  terminalEquipmentId: string;
+  terminalEquipmentSpecificationId: string;
+  manufacturerId: string | null;
+  namingInfo: {
+    name: string | null;
+  } | null;
+  addressInfo: {
+    accessAddressId: string | null;
+    unitAddressId: string | null;
+    remark: string | null;
+  } | null;
+  rackId: string | null;
+  rackStartUnitPosition: number | null;
+}
+
+const MUTATION_UPDATE_TERMINAL_EQUIPMENT = `
+mutation (
+$terminalEquipmentId: ID!,
+$terminalEquipmentSpecificationId: ID!,
+$manufacturerId: ID,
+$namingInfo: NamingInfoInputType,
+$addressInfo: AddressInfoInputType,
+$rackId: ID,
+$rackStartUnitPosition: Int) {
+  terminalEquipment {
+    updateProperties (terminalEquipmentId: $terminalEquipmentId,
+                      terminalEquipmentSpecificationId: $terminalEquipmentSpecificationId,
+                      manufacturerId: $manufacturerId,
+                      namingInfo: $namingInfo,
+                      addressInfo: $addressInfo,
+                      rackId: $rackId,
+                      rackStartUnitPosition: $rackStartUnitPosition) {
+      isSuccess
+      errorMessage
+      errorCode
     }
   }
 }
