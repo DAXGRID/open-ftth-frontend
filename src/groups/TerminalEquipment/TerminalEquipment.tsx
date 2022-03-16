@@ -105,7 +105,7 @@ function TerminalEquipmentTableContainer({
                       type: "setShowEditTerminalEquipment",
                       show: {
                         show: true,
-                        terminalEquipmentId: state.terminalEquipmentOrRackId,
+                        terminalEquipmentId: terminalEquipment.id,
                       },
                     });
                   }}
@@ -304,7 +304,9 @@ function TerminalEquipment() {
           }
         >
           <EditTerminalEquipment
-            terminalEquipmentId={state.terminalEquipmentOrRackId}
+            terminalEquipmentId={
+              state.showEditTerminalEquipment.terminalEquipmentId
+            }
             routeNodeId={state.routeNodeId}
           />
         </ModalContainer>
