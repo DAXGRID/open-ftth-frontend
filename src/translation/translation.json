@@ -214,7 +214,8 @@
       "DISCONNECTED": "Disconnected",
       "Buildings": "Buildings",
       "Cabinets": "Cabinets",
-      "EDIT_TERMINAL_EQUIPMENT": "Edit terminal equipment"
+      "EDIT_TERMINAL_EQUIPMENT": "Edit terminal equipment",
+      "RACK": "Rack"
     }
   },
   "dk": {
@@ -432,7 +433,8 @@
       "DISCONNECTED": "Disconnected",
       "Buildings": "Bygninger",
       "Cabinets": "Skabe",
-      "EDIT_TERMINAL_EQUIPMENT": "Rediger fiber udstyr"
+      "EDIT_TERMINAL_EQUIPMENT": "Rediger fiber udstyr",
+      "RACK": "Rack"
     }
   }
 }
