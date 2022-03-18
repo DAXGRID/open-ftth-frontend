@@ -474,7 +474,12 @@ function EditTerminalEquipment({
     }
   };
 
-  if (!state.terminalEquipment || !state.specificationId || !state.categoryName)
+  if (
+    !state.terminalEquipment ||
+    !state.specificationId ||
+    !state.categoryName ||
+    !state.racks
+  )
     return <></>;
 
   return (

@@ -40,12 +40,18 @@ interface ShowEditTerminalEquipment {
   terminalEquipmentId: string | null;
 }
 
+interface ShowEditRack {
+  show: boolean;
+  rackId: string | null;
+}
+
 interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
   showFreeLines: { [id: string]: boolean };
   showFiberEditor: ShowFiberEditor;
   showDisconnectFiberEditor: ShowDisconnectFiberEditor;
   showEditTerminalEquipment: ShowEditTerminalEquipment;
+  showEditRack: ShowEditRack;
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
@@ -73,6 +79,8 @@ type TerminalEquipmentAction =
   | { type: "setShowConnectivityTraceViews"; id: string }
   | { type: "setShowEditTerminalEquipment"; show: ShowEditTerminalEquipment }
   | { type: "resetShowEditTerminalEquipment" }
+  | { type: "setShowEditRack"; show: ShowEditRack }
+  | { type: "resetShowEditRack" }
   | {
       type: "setViewConnectivityTraceViews";
       params: { id: string; view: ConnectivityTraceView };
@@ -114,11 +122,17 @@ const defaultShowEditTerminalEquipment: ShowEditTerminalEquipment = {
   terminalEquipmentId: null,
 };
 
+const defaultShowEditRack: ShowEditRack = {
+  show: false,
+  rackId: null,
+};
+
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
   showFiberEditor: defaultShowFiberEditorValues,
   showEditTerminalEquipment: defaultShowEditTerminalEquipment,
+  showEditRack: defaultShowEditRack,
   connectivityTraceViews: {},
   selectedConnectivityTraceHop: null,
   editable: false,
@@ -181,6 +195,10 @@ function terminalEquipmentReducer(
         ...state,
         showEditTerminalEquipment: defaultShowEditTerminalEquipment,
       };
+    case "setShowEditRack":
+      return { ...state, showEditRack: action.show };
+    case "resetShowEditRack":
+      return { ...state, showEditRack: defaultShowEditRack };
     case "setViewConnectivityTraceViews":
       return {
         ...state,

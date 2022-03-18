@@ -215,7 +215,8 @@
       "Buildings": "Buildings",
       "Cabinets": "Cabinets",
       "EDIT_TERMINAL_EQUIPMENT": "Edit terminal equipment",
-      "RACK": "Rack"
+      "RACK": "Rack",
+      "EDIT_RACK": "Editer rack"
     }
   },
   "dk": {
@@ -434,7 +435,8 @@
       "Buildings": "Bygninger",
       "Cabinets": "Skabe",
       "EDIT_TERMINAL_EQUIPMENT": "Rediger fiber udstyr",
-      "RACK": "Rack"
+      "RACK": "Rack",
+      "EDIT_RACK": "Editer rack"
     }
   }
 }
