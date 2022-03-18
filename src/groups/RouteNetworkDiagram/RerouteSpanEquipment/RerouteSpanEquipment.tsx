@@ -72,8 +72,8 @@ function RerouteSpanEquipment({ selectedRouteSegmentMrid }: RerouteTubeParams) {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <div className="full-row">
+    <div className="reroute-span-equipment">
+      <div className="full-row gap-default">
         <DefaultButton
           onClick={() =>
             selectRouteSegmentsInMap(
