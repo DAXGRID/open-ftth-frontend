@@ -43,6 +43,7 @@ interface ShowEditTerminalEquipment {
 interface ShowEditRack {
   show: boolean;
   rackId: string | null;
+  routeNodeId: string | null;
 }
 
 interface TerminalEquipmentState {
@@ -125,6 +126,7 @@ const defaultShowEditTerminalEquipment: ShowEditTerminalEquipment = {
 const defaultShowEditRack: ShowEditRack = {
   show: false,
   rackId: null,
+  routeNodeId: null,
 };
 
 const terminalEquipmentInitialState: TerminalEquipmentState = {

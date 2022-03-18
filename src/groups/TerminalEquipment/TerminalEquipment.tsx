@@ -48,7 +48,11 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
               onClick={() =>
                 dispatch({
                   type: "setShowEditRack",
-                  show: { rackId: parentNodeStructure.id, show: true },
+                  show: {
+                    routeNodeId: state.routeNodeId,
+                    rackId: parentNodeStructure.id,
+                    show: true,
+                  },
                 })
               }
             >
@@ -315,13 +319,20 @@ function TerminalEquipment() {
           />
         </ModalContainer>
       );
-    } else if (state.showEditRack.show && state.showEditRack.rackId) {
+    } else if (
+      state.showEditRack.show &&
+      state.showEditRack.rackId &&
+      state.showEditRack.routeNodeId
+    ) {
       showElement(
         <ModalContainer
           title={t("EDIT_RACK")}
           closeCallback={() => dispatch({ type: "resetShowEditRack" })}
         >
-          <EditRack />
+          <EditRack
+            rackId={state.showEditRack.rackId}
+            routeNodeId={state.showEditRack.routeNodeId}
+          />
         </ModalContainer>
       );
     } else {
