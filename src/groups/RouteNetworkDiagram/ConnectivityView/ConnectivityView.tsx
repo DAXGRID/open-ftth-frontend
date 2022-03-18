@@ -14,32 +14,36 @@ import {
 
 interface ConnectivityViewRowProps {
   line: Line;
+  isCable: boolean;
 }
 
-function ConnectivityViewRow({ line }: ConnectivityViewRowProps) {
+function ConnectivityViewRow({ line, isCable }: ConnectivityViewRowProps) {
   const { dispatch, state } = useContext(ConnectivityViewContext);
 
   return (
     <>
       <div className="connectivity-view-row">
         <div className="connectivity-view-row-item">
-          <span
-            className="connectivity-view-row-item__icon"
-            onClick={() =>
-              dispatch({
-                type: "setShowConnectivityTraceViews",
-                id: line.spanSegmentId,
-              })
-            }
-          >
-            <FontAwesomeIcon
-              icon={
-                state.connectivityTraceViews[line.spanSegmentId]?.show ?? false
-                  ? faChevronDown
-                  : faChevronRight
+          {isCable && (
+            <span
+              className="connectivity-view-row-item__icon"
+              onClick={() =>
+                dispatch({
+                  type: "setShowConnectivityTraceViews",
+                  id: line.spanSegmentId,
+                })
               }
-            />
-          </span>
+            >
+              <FontAwesomeIcon
+                icon={
+                  state.connectivityTraceViews[line.spanSegmentId]?.show ??
+                  false
+                    ? faChevronDown
+                    : faChevronRight
+                }
+              />
+            </span>
+          )}
           <p>{line.a.end}</p>
         </div>
         <div className="connectivity-view-row-item">
@@ -109,6 +113,7 @@ function ConnectivityView() {
           {state.connectivityView?.spanEquipments[0].lines.map((x) => {
             return (
               <ConnectivityViewRow
+                isCable={spanEquipment.isCable}
                 line={x}
                 key={x.spanSegmentId}
               ></ConnectivityViewRow>

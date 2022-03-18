@@ -109,6 +109,7 @@ export interface SpanEquipment {
   name: string;
   info: string;
   lines: Line[];
+  isCable: boolean;
 }
 
 export interface SpanEquipmentConnectivityView {
@@ -142,6 +143,7 @@ $spanEquipmentOrSegmentIds: [ID!]!
         specName
         name
         info
+        isCable
         lines {
           spanSegmentId
           sequenceNumber
