@@ -527,52 +527,35 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     [t, client, setTrace]
   );
 
+  // Trace single
   useEffect(() => {
-    console.log(currentlySelectedFeatures);
-  }, [currentlySelectedFeatures]);
+    if (editMode) return;
 
-  useEffect(() => {
-    if (editMode) {
-      const traceables = currentlySelectedFeatures.filter((x) =>
-        isTraceable(x)
-      );
-      traceFeatures(traceables).then(() => {});
+    if (
+      singleSelectedFeature &&
+      (singleSelectedFeature.state?.selected as boolean)
+    ) {
+      if (isTraceable(singleSelectedFeature)) {
+        traceFeatures([singleSelectedFeature]);
+      }
+    } else {
+      traceFeatures([]);
     }
-  }, [editMode, currentlySelectedFeatures, setTrace, client, t, traceFeatures]);
+  }, [singleSelectedFeature, editMode, traceFeatures]);
+
+  // Trace multi
+  useEffect(() => {
+    if (!editMode) return;
+
+    const traceables = currentlySelectedFeatures.filter((x) => isTraceable(x));
+    traceFeatures(traceables).then(() => {});
+  }, [editMode, traceFeatures, currentlySelectedFeatures]);
 
   const onSelectedFeature = useCallback(
-    async (feature: MapboxGeoJSONFeature) => {
+    (feature: MapboxGeoJSONFeature) => {
       setSingleSelectedFeature(feature);
-
-      const isSelected = feature.state?.selected as boolean;
-      if (isSelected) {
-        if (!editMode) {
-          if (isTraceable(feature)) {
-            await traceFeatures([feature]);
-          } else {
-            setTrace({ geometries: [], ids: [] });
-          }
-        }
-      } else {
-        setTrace({ geometries: [], ids: [] });
-      }
-
-      /* const isSelected = feature.state?.selected as boolean;
-       * if (isSelected) {
-       *   setSingleSelectedFeature(feature);
-       *   if (!editMode) {
-       *     if (isTraceable(feature)) {
-       *       await traceFeatures([feature]);
-       *     } else {
-       *       setTrace({ geometries: [], ids: [] });
-       *     }
-       *   }
-       * } else {
-       *   setTrace({ geometries: [], ids: [] });
-       *   setSingleSelectedFeature(null);
-       * } */
     },
-    [editMode, setSingleSelectedFeature, setTrace, traceFeatures]
+    [setSingleSelectedFeature]
   );
 
   useEffect(() => {
@@ -581,32 +564,32 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     // This is mainly an issue because of mapbox not playing to nicely with the way react works so it rerenders the map.
     if (!singleSelectedFeature) return;
 
-    const foundIndex = selectedFeatures.findIndex(
-      (x) =>
-        x.properties?.refId === singleSelectedFeature.properties?.refId &&
-        x.properties?.type === singleSelectedFeature.properties?.type
-    );
+    if (editMode) {
+      const foundIndex = selectedFeatures.findIndex(
+        (x) =>
+          x.properties?.refId === singleSelectedFeature.properties?.refId &&
+          x.properties?.type === singleSelectedFeature.properties?.type
+      );
 
-    if (foundIndex !== -1) {
-      // This is very ugly.
-      // In case the value has already been updated we return.
-      // This is to avoid reload because it will reset mapbox.
-      if (
-        (selectedFeatures[foundIndex].state.selected as boolean) ===
-        (singleSelectedFeature.state.selected as boolean)
-      ) {
-        return;
+      if (foundIndex !== -1) {
+        // This is very ugly.
+        // In case the value has already been updated we return.
+        // This is to avoid reload because it will reset mapbox.
+        if (
+          (selectedFeatures[foundIndex].state.selected as boolean) ===
+          (singleSelectedFeature.state.selected as boolean)
+        ) {
+          return;
+        } else {
+          selectedFeatures[foundIndex] = singleSelectedFeature;
+        }
       } else {
-        selectedFeatures[foundIndex] = singleSelectedFeature;
+        selectedFeatures.push(singleSelectedFeature);
       }
-    } else {
-      selectedFeatures.push(singleSelectedFeature);
-    }
 
-    setSelectedFeatures([
-      ...selectedFeatures.filter((x) => x.state.selected as boolean),
-    ]);
-  }, [singleSelectedFeature, setSelectedFeatures, selectedFeatures]);
+      setSelectedFeatures([...selectedFeatures]);
+    }
+  }, [singleSelectedFeature, setSelectedFeatures, selectedFeatures, editMode]);
 
   useEffect(() => {
     if (showModals.addContainer) {
