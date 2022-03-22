@@ -50,6 +50,7 @@ import {
   AFFIX_SPAN_EQUIPMENT_TO_PARENT,
   AffixSpanEquipmentToParentParams,
   AffixSpanEquipmentToParentResponse,
+  SpanSegmentTrace,
 } from "./EditDiagramGql";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -79,6 +80,14 @@ type RouteNetworkDiagramProps = {
   diagramObjects: Diagram[];
   envelope: Envelope;
 };
+
+function isTraceable(f: MapboxGeoJSONFeature): boolean {
+  return (
+    f.properties?.type?.startsWith("InnerConduit") ||
+    f.properties?.type?.startsWith("OuterConduit") ||
+    f.properties?.type === "FiberCable"
+  );
+}
 
 function canAffixSpanEquipment(selected: MapboxGeoJSONFeature[]): boolean {
   const nodeContainer = selected.find(
@@ -479,79 +488,108 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     }
   };
 
-  const onSelectedFeature = useCallback(
-    async (feature: MapboxGeoJSONFeature) => {
-      const isSelected = feature.state?.selected as boolean;
+  const currentlySelectedFeatures = useMemo(() => {
+    return selectedFeatures.filter((x) => x.state?.selected);
+  }, [selectedFeatures]);
 
-      if (!editMode) {
-        if (isSelected) {
-          if (
-            feature.properties?.type?.startsWith("InnerConduit") ||
-            feature.properties?.type?.startsWith("OuterConduit") ||
-            feature.properties?.type === "FiberCable"
-          ) {
-            // Then we trace the conduit.
-            const segmentTrace = await client
-              .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
-                spanSegmentId: feature.properties?.refId,
-              })
-              .toPromise();
+  const traceFeatures = useCallback(
+    async (features: MapboxGeoJSONFeature[]) => {
+      const segmentTraces: SpanSegmentTrace[] = [];
 
-            setTrace({
-              geometries:
-                segmentTrace.data?.utilityNetwork.spanSegmentTrace
-                  .routeNetworkSegmentGeometries ?? [],
-              ids:
-                segmentTrace.data?.utilityNetwork.spanSegmentTrace
-                  .routeNetworkSegmentIds ?? [],
-            });
-          }
-          setSingleSelectedFeature(feature);
+      for (let i = 0; i < features.length; i++) {
+        const traceResponse = await client
+          .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
+            spanSegmentId: features[i].properties?.refId,
+          })
+          .toPromise();
+
+        if (traceResponse.data?.utilityNetwork.spanSegmentTrace) {
+          segmentTraces.push(
+            traceResponse.data?.utilityNetwork.spanSegmentTrace
+          );
         } else {
-          setTrace({ geometries: [], ids: [] });
-          setSingleSelectedFeature(null);
+          console.error("Did not receive trace.");
+          toast.error(t("ERROR"));
         }
-      } else {
-        setSingleSelectedFeature(feature);
       }
+
+      const geometries = segmentTraces.flatMap(
+        (x) => x.routeNetworkSegmentGeometries ?? []
+      );
+
+      const ids = segmentTraces.flatMap((x) => x.routeNetworkSegmentIds ?? []);
+
+      setTrace({
+        geometries: geometries,
+        ids: ids,
+      });
     },
-    [editMode, setSingleSelectedFeature, setTrace, client]
+    [t, client, setTrace]
+  );
+
+  // Trace single
+  useEffect(() => {
+    if (editMode) return;
+
+    if (
+      singleSelectedFeature &&
+      (singleSelectedFeature.state?.selected as boolean)
+    ) {
+      if (isTraceable(singleSelectedFeature)) {
+        traceFeatures([singleSelectedFeature]);
+      }
+    } else {
+      traceFeatures([]);
+    }
+  }, [singleSelectedFeature, editMode, traceFeatures]);
+
+  // Trace multi
+  useEffect(() => {
+    if (!editMode) return;
+
+    const traceables = currentlySelectedFeatures.filter((x) => isTraceable(x));
+    traceFeatures(traceables).then(() => {});
+  }, [editMode, traceFeatures, currentlySelectedFeatures]);
+
+  const onSelectedFeature = useCallback(
+    (feature: MapboxGeoJSONFeature) => {
+      setSingleSelectedFeature(feature);
+    },
+    [setSingleSelectedFeature]
   );
 
   useEffect(() => {
     // This whole useeffect is a special case, this is needed to done because if not,
-    // the schematic diagram depdency will keep reloading everytime a diagram object is being clicked.
+    // the schematic diagram dependency will keep reloading everytime a diagram object is being clicked.
     // This is mainly an issue because of mapbox not playing to nicely with the way react works so it rerenders the map.
     if (!singleSelectedFeature) return;
 
-    const found = selectedFeatures.find(
-      (x) =>
-        x.properties?.refId === singleSelectedFeature.properties?.refId &&
-        x.properties?.type === singleSelectedFeature.properties?.type
-    );
+    if (editMode) {
+      const foundIndex = selectedFeatures.findIndex(
+        (x) =>
+          x.properties?.refId === singleSelectedFeature.properties?.refId &&
+          x.properties?.type === singleSelectedFeature.properties?.type
+      );
 
-    if (!found) {
-      setSelectedFeatures([...selectedFeatures, singleSelectedFeature]);
-    } else if (
-      (found.state.selected as boolean) !==
-      (singleSelectedFeature.state.selected as boolean)
-    ) {
-      setSelectedFeatures([
-        ...selectedFeatures.filter(
-          (x) =>
-            !(
-              x.properties?.refId === found.properties?.refId &&
-              x.properties?.type === found.properties?.type
-            )
-        ),
-        singleSelectedFeature,
-      ]);
+      if (foundIndex !== -1) {
+        // This is very ugly.
+        // In case the value has already been updated we return.
+        // This is to avoid reload because it will reset mapbox.
+        if (
+          (selectedFeatures[foundIndex].state.selected as boolean) ===
+          (singleSelectedFeature.state.selected as boolean)
+        ) {
+          return;
+        } else {
+          selectedFeatures[foundIndex] = singleSelectedFeature;
+        }
+      } else {
+        selectedFeatures.push(singleSelectedFeature);
+      }
+
+      setSelectedFeatures([...selectedFeatures]);
     }
-  }, [singleSelectedFeature, setSelectedFeatures, selectedFeatures]);
-
-  const currentlySelectedFeatures = useMemo(() => {
-    return selectedFeatures.filter((x) => x.state?.selected);
-  }, [selectedFeatures]);
+  }, [singleSelectedFeature, setSelectedFeatures, selectedFeatures, editMode]);
 
   useEffect(() => {
     if (showModals.addContainer) {
