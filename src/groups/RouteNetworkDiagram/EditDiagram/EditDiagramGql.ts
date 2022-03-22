@@ -222,12 +222,14 @@ mutation ($nodeContainerId: ID!) {
 }
 `;
 
+export interface SpanSegmentTrace {
+  routeNetworkSegmentGeometries?: string[];
+  routeNetworkSegmentIds?: string[];
+}
+
 export interface SpanSegmentTraceResponse {
   utilityNetwork: {
-    spanSegmentTrace: {
-      routeNetworkSegmentGeometries?: string[];
-      routeNetworkSegmentIds?: string[];
-    };
+    spanSegmentTrace: SpanSegmentTrace;
   };
 }
 
