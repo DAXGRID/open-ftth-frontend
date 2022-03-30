@@ -119,11 +119,11 @@ function SearchMenu() {
         <div className="search-menu-results">
           <ul ref={searchResultElementList}>
             {searchResult &&
-              searchResult.map((x) => {
+              searchResult.map((x, i) => {
                 return (
                   <li
                     role="button"
-                    key={x.id}
+                    key={i}
                     tabIndex={0}
                     onKeyDown={(e) => keyPressResultList(e, x)}
                     onClick={() => selectSearchResult(x)}
