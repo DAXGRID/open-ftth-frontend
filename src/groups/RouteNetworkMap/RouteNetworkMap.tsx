@@ -8,7 +8,6 @@ import {
   PointLike,
   Style,
   SymbolLayer,
-  VectorSource,
   ScaleControl,
   AttributionControl,
   NavigationControl,
@@ -28,48 +27,6 @@ const GetMaplibreStyle = async (): Promise<Style> => {
   const json = await x.json();
   return json as Style;
 };
-
-function createSources(layers: any[]): any {
-  let sources: any = {
-    route_network: {
-      type: "vector",
-      tiles: [
-        `${
-          Config.ROUTE_NETWORK_TILE_SERVER_URI
-        }/services/route_network/tiles/{z}/{x}/{y}.pbf?dt=${Date.now()}`,
-      ],
-      minZoom: 0,
-      minzoom: 4,
-      maxzoom: 17,
-    } as VectorSource,
-    osm: {
-      type: "vector",
-      tiles: [
-        `${Config.BASEMAP_TILE_SERVER_URI}/services/osm/tiles/{z}/{x}/{y}.pbf`,
-      ],
-      minZoom: 0,
-      maxZoom: 14,
-      maxzoom: 14,
-    } as VectorSource,
-    "basemap-extra": {
-      type: "vector",
-      tiles: [
-        `${Config.BASEMAP_TILE_SERVER_URI}/services/objects/tiles/{z}/{x}/{y}.pbf`,
-      ],
-      minZoom: 0,
-      maxZoom: 14,
-      minzoom: 16,
-      maxzoom: 16,
-    } as VectorSource,
-  };
-
-  return layers.reduce((acc, v) => {
-    return {
-      ...acc,
-      [`${v.name}`]: { ...v.layer },
-    };
-  }, sources);
-}
 
 function enableResize(map: Map) {
   window.addEventListener("resize", () => {
@@ -242,10 +199,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
 
     const newMap = new Map({
       container: mapContainer.current,
-      style: {
-        ...mapLibreStyle,
-        sources: createSources(Config.LAYERS),
-      },
+      style: mapLibreStyle,
       center: [9.996730316498656, 56.04595255289249],
       zoom: 10,
       doubleClickZoom: false,
