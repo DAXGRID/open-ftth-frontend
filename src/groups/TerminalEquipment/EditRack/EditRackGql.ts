@@ -12,6 +12,10 @@ export function queryRack(client: Client, routeNodeId: string, rackId: string) {
     .toPromise();
 }
 
+export function updateRack(client: Client, params: UpdateRackParams) {
+  return client.mutation<UpdateRackResponse>(UPDATE_RACK, params).toPromise();
+}
+
 export interface RackSpecification {
   id: string;
   name: string;
@@ -64,3 +68,44 @@ query (
   }
 }
 `;
+
+interface UpdateRackResponse {
+  nodeContainer: {
+    updateRackProperties: {
+      isSuccess: boolean;
+      errorCode: string;
+      erorrMessage: string;
+    };
+  };
+}
+
+interface UpdateRackParams {
+  routeNodeId: string;
+  rackId: string;
+  name: string;
+  specificationId: string;
+  heightInUnits: number;
+}
+
+const UPDATE_RACK = `
+mutation (
+$routeNodeId: ID!,
+$rackId: ID!,
+$name: String!,
+$specificationId: ID!,
+$heightInUnits: Int!
+) {
+  nodeContainer {
+    updateRackProperties(
+      routeNodeId: $routeNodeId
+      rackId: $rackId
+      name: $name
+      specificationId: $specificationId
+      heightInUnits: $heightInUnits
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}`;

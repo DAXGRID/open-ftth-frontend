@@ -11,6 +11,7 @@ import {
   queryRack,
   queryRackSpecifications,
   RackSpecification,
+  updateRack,
 } from "./EditRackGql";
 
 function rackSpecificationToOptions(
@@ -116,8 +117,26 @@ function EditRack({ routeNodeId, rackId }: EditRackProps) {
       : [];
   }, [state.rackSpecifications]);
 
-  const updateRack = () => {
-    console.log(state);
+  const executeUpdateRack = () => {
+    updateRack(client, {
+      heightInUnits: state.heightUnits,
+      name: state.rackName,
+      rackId: rackId,
+      routeNodeId: routeNodeId,
+      specificationId: state.selectedSpecification,
+    })
+      .then((r) => {
+        const updateResponse = r.data?.nodeContainer.updateRackProperties;
+        if (updateResponse?.isSuccess) {
+          toast.success(t("UPDATED"));
+        } else {
+          console.error(updateResponse?.erorrMessage);
+          toast.error(t(updateResponse?.errorCode ?? "ERROR"));
+        }
+      })
+      .catch(() => {
+        toast.error(t("ERROR"));
+      });
   };
 
   return (
@@ -161,7 +180,7 @@ function EditRack({ routeNodeId, rackId }: EditRackProps) {
         <DefaultButton
           innerText={t("UPDATE")}
           disabled={!canUpdate(state.heightUnits, state.rackName)}
-          onClick={() => updateRack()}
+          onClick={() => executeUpdateRack()}
         />
       </div>
     </div>
