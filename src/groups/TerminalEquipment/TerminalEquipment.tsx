@@ -23,6 +23,7 @@ import TerminalLine from "./TerminalLine";
 import TerminalLineFree from "./TerminalLineFree";
 import DisconnectFiberEditor from "./DisconnectFiberEditor";
 import EditTerminalEquipment from "./EditTerminalEquipment";
+import EditRack from "./EditRack";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -30,8 +31,8 @@ type RackContainerProps = {
 };
 
 function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
-  const { state } = useContext(TerminalEquipmentContext);
-  if (!parentNodeStructure) <></>;
+  const { state, dispatch } = useContext(TerminalEquipmentContext);
+  if (!parentNodeStructure) return <></>;
 
   return (
     <div className="rack-container">
@@ -41,15 +42,22 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
         <p>{parentNodeStructure?.info ?? ""}</p>
         <div className="header-icons">
           {state.editable && (
-            <>
-              <span
-                role="button"
-                className="header-icons__icon"
-                onClick={() => {}}
-              >
-                <FontAwesomeIcon icon={faEdit} />
-              </span>
-            </>
+            <span
+              role="button"
+              className="header-icons__icon"
+              onClick={() =>
+                dispatch({
+                  type: "setShowEditRack",
+                  show: {
+                    routeNodeId: state.routeNodeId,
+                    rackId: parentNodeStructure.id,
+                    show: true,
+                  },
+                })
+              }
+            >
+              <FontAwesomeIcon icon={faEdit} />
+            </span>
           )}
         </div>
       </div>
@@ -311,6 +319,22 @@ function TerminalEquipment() {
           />
         </ModalContainer>
       );
+    } else if (
+      state.showEditRack.show &&
+      state.showEditRack.rackId &&
+      state.showEditRack.routeNodeId
+    ) {
+      showElement(
+        <ModalContainer
+          title={t("EDIT_RACK")}
+          closeCallback={() => dispatch({ type: "resetShowEditRack" })}
+        >
+          <EditRack
+            rackId={state.showEditRack.rackId}
+            routeNodeId={state.showEditRack.routeNodeId}
+          />
+        </ModalContainer>
+      );
     } else {
       showElement(null);
     }
@@ -320,6 +344,7 @@ function TerminalEquipment() {
     state.routeNodeId,
     state.showEditTerminalEquipment,
     state.terminalEquipmentOrRackId,
+    state.showEditRack,
     showElement,
     dispatch,
     t,
