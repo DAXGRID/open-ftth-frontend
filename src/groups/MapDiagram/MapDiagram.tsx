@@ -26,7 +26,9 @@ function MapDiagram() {
       </div>
       <div
         className={
-          showDiagram && identifiedFeature ? "container" : "container hide"
+          showDiagram && identifiedFeature?.id && identifiedFeature.type
+            ? "container"
+            : "container hide"
         }
       >
         <RouteNetworkDiagram editable={false} />
