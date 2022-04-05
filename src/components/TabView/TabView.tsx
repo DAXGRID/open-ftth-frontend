@@ -1,28 +1,59 @@
-import { ReactNode } from "react";
+import { ReactNode, useRef, useState } from "react";
+import {
+  faExpandArrowsAlt,
+  faCompressArrowsAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface TabViewHeaderProps {
   views: { title: string; id: string }[];
   selectedId: string;
   select: (id: string) => void;
+  showFullscreenButton: boolean;
+  toggleFullscreen: () => void;
+  isFullscreen: boolean;
 }
 
-function TabViewHeader({ views, selectedId, select }: TabViewHeaderProps) {
+function TabViewHeader({
+  views,
+  selectedId,
+  select,
+  showFullscreenButton,
+  toggleFullscreen,
+  isFullscreen,
+}: TabViewHeaderProps) {
   return (
     <div className="tab-view-header">
-      {views.map((x) => {
-        return (
+      <div className="tab-view-header-tabs">
+        {views.map((x) => {
+          return (
+            <div
+              key={x.id}
+              role="button"
+              onClick={() => select(x.id)}
+              className={`tab-view-header-tab ${
+                x.id === selectedId ? "tab-view-header-tab--selected" : ""
+              }`}
+            >
+              {x.title}
+            </div>
+          );
+        })}
+      </div>
+      <div className="tab-view-header-actions">
+        {showFullscreenButton && (
           <div
-            key={x.id}
-            role="button"
-            onClick={() => select(x.id)}
-            className={`tab-view-header-tab ${
-              x.id === selectedId ? "tab-view-header-tab--selected" : ""
-            }`}
+            className="tab-view-header-actions-action"
+            onClick={() => toggleFullscreen()}
           >
-            {x.title}
+            <span role="button">
+              <FontAwesomeIcon
+                icon={isFullscreen ? faCompressArrowsAlt : faExpandArrowsAlt}
+              />
+            </span>
           </div>
-        );
-      })}
+        )}
+      </div>
     </div>
   );
 }
@@ -35,13 +66,33 @@ interface TabViewProps {
 
 function TabView({ views, selectedId, select }: TabViewProps) {
   const viewToShow = views.find((x) => x.id === selectedId);
+  const tabViewElement = useRef<HTMLDivElement>(null);
+  const fixedFitClassName = "fixed-fit-container";
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
 
   if (!viewToShow) throw Error(`Could not find view with id ${selectedId}`);
 
+  const toggleFullscreen = () => {
+    if (isFullScreen) {
+      tabViewElement.current?.classList.remove(fixedFitClassName);
+      setIsFullScreen(false);
+    } else {
+      tabViewElement.current?.classList.add(fixedFitClassName);
+      setIsFullScreen(true);
+    }
+  };
+
   return (
-    <div className="tab-view">
+    <div className="tab-view" ref={tabViewElement}>
       <div className="tab-view-container">
-        <TabViewHeader views={views} selectedId={selectedId} select={select} />
+        <TabViewHeader
+          views={views}
+          selectedId={selectedId}
+          select={select}
+          showFullscreenButton={true}
+          toggleFullscreen={toggleFullscreen}
+          isFullscreen={isFullScreen}
+        />
         {viewToShow?.view}
       </div>
     </div>

@@ -1,7 +1,7 @@
 @import "../../global-styles/colors";
 
 .tab-view {
-  margin: 20px;
+  padding: 20px;
 }
 
 .tab-view-container {
@@ -13,6 +13,11 @@
 .tab-view-header {
   display: flex;
   border-bottom: 1px solid $border-color;
+}
+
+.tab-view-header-tabs {
+  flex: 1;
+  display: flex;
 
   .tab-view-header-tab {
     padding: 10px 20px;
@@ -31,6 +36,26 @@
     &:hover {
       cursor: pointer;
       background-color: $select-color;
+    }
+  }
+}
+
+.tab-view-header-actions {
+  display: flex;
+  flex: 1;
+  justify-self: flex-end;
+  align-items: center;
+  flex-direction: row-reverse;
+  padding-right: 5px;
+
+  .tab-view-header-actions-action {
+    border: 1px solid $border-color;
+    padding: 4px 5px;
+    border-radius: 4px;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $hover-color;
     }
   }
 }
