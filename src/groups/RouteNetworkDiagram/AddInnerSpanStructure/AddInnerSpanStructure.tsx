@@ -84,7 +84,7 @@ function AddInnerSpanStructure({
 
   return (
     <div className="add-inner-span-structure">
-      <div className="full-row">
+      <div className="full-row gap-default">
         <SelectMenu
           onSelected={(x) => setSelected(x?.toString() ?? "")}
           selected={selected}
