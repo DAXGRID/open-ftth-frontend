@@ -11,13 +11,14 @@
     display: flex;
     justify-content: flex-start;
     padding: 15px 10px;
-    font-size: 18px;
+    font-size: 16px;
     background-color: $hover-color;
     border-bottom: none;
     border-bottom: 1px solid $border-color;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
     align-items: center;
+    gap: 20px;
 
     p {
       flex: 1;
@@ -75,6 +76,7 @@
     font-size: 16px;
     background-color: $hover-color;
     align-items: center;
+    gap: 20px;
 
     p {
       flex: 1;
