@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from "react";
+import { ReactNode, useRef, useState } from "react";
 import {
   faExpandArrowsAlt,
   faCompressArrowsAlt,
@@ -11,6 +11,7 @@ interface TabViewHeaderProps {
   select: (id: string) => void;
   showFullscreenButton: boolean;
   toggleFullscreen: () => void;
+  isFullscreen: boolean;
 }
 
 function TabViewHeader({
@@ -19,6 +20,7 @@ function TabViewHeader({
   select,
   showFullscreenButton,
   toggleFullscreen,
+  isFullscreen,
 }: TabViewHeaderProps) {
   return (
     <div className="tab-view-header">
@@ -45,7 +47,9 @@ function TabViewHeader({
             onClick={() => toggleFullscreen()}
           >
             <span role="button">
-              <FontAwesomeIcon icon={faExpandArrowsAlt} />
+              <FontAwesomeIcon
+                icon={isFullscreen ? faCompressArrowsAlt : faExpandArrowsAlt}
+              />
             </span>
           </div>
         )}
@@ -63,18 +67,18 @@ interface TabViewProps {
 function TabView({ views, selectedId, select }: TabViewProps) {
   const viewToShow = views.find((x) => x.id === selectedId);
   const tabViewElement = useRef<HTMLDivElement>(null);
+  const fixedFitClassName = "fixed-fit-container";
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
 
   if (!viewToShow) throw Error(`Could not find view with id ${selectedId}`);
 
   const toggleFullscreen = () => {
-    const fixedFitClassName = "fixed-fit-container";
-    const hasFixedFitContainer =
-      tabViewElement.current?.classList.contains(fixedFitClassName);
-
-    if (hasFixedFitContainer) {
+    if (isFullScreen) {
       tabViewElement.current?.classList.remove(fixedFitClassName);
+      setIsFullScreen(false);
     } else {
       tabViewElement.current?.classList.add(fixedFitClassName);
+      setIsFullScreen(true);
     }
   };
 
@@ -87,6 +91,7 @@ function TabView({ views, selectedId, select }: TabViewProps) {
           select={select}
           showFullscreenButton={true}
           toggleFullscreen={toggleFullscreen}
+          isFullscreen={isFullScreen}
         />
         {viewToShow?.view}
       </div>
