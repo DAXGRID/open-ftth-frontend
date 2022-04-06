@@ -139,12 +139,14 @@ type TerminalEquipmentTableProps = {
   terminalStructures: TerminalStructure[];
   showFreeLines: boolean;
   terminalEquipmentOrRackId: string;
+  isRack: boolean;
 };
 
 function TerminalEquipmentTable({
   terminalStructures,
   showFreeLines,
   terminalEquipmentOrRackId,
+  isRack,
 }: TerminalEquipmentTableProps) {
   const { t } = useTranslation();
 
@@ -161,7 +163,11 @@ function TerminalEquipmentTable({
         <div className="terminal-equipment-table-item">{t("TO")}</div>
         <div className="terminal-equipment-table-item">{t("Z-INFO")}</div>
       </div>
-      <div className="terminal-equipment-table-body">
+      <div
+        className={`terminal-equipment-table-body ${
+          isRack ? "terminal-equipment-table-body--rack" : ""
+        }`}
+      >
         {terminalStructures.map((x) => {
           return (
             <div key={x.id}>
@@ -384,6 +390,7 @@ function TerminalEquipment() {
                       terminalEquipmentOrRackId={y.id}
                       terminalStructures={y.terminalStructures}
                       showFreeLines={state.showFreeLines[y.id] ?? false}
+                      isRack={true}
                     />
                   </TerminalEquipmentTableContainer>
                 );
@@ -404,6 +411,7 @@ function TerminalEquipment() {
                   terminalEquipmentOrRackId={y.id}
                   terminalStructures={y.terminalStructures}
                   showFreeLines={state.showFreeLines[y.id] ?? false}
+                  isRack={false}
                 />
               </TerminalEquipmentTableContainer>
             );

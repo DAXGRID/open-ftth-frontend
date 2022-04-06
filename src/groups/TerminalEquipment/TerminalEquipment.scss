@@ -128,8 +128,10 @@
   }
 
   .terminal-equipment-table-body {
-    overflow: overlay;
-    max-height: 700px;
+    &.terminal-equipment-table-body--rack {
+      overflow: overlay;
+      max-height: 700px;
+    }
 
     .terminal-equipment-table-row {
       flex: 1;
