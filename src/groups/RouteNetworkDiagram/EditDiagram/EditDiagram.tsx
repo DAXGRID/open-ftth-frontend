@@ -892,13 +892,26 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         (singleSelectedFeature?.source === "Rack" ||
           singleSelectedFeature?.source === "TerminalEquipment") && (
           <div className="container-max-size container-center">
-            <TerminalEquipment
-              routeNodeId={identifiedFeature?.id ?? ""}
-              terminalEquipmentOrRackId={
-                singleSelectedFeature.properties?.refId ?? ""
-              }
-              editable={true}
-            />
+            <TabView
+              select={() => {}}
+              key="0"
+              selectedId="0"
+              views={[
+                {
+                  title: t("CONNECTIVITY"),
+                  id: "0",
+                  view: (
+                    <TerminalEquipment
+                      routeNodeId={identifiedFeature?.id ?? ""}
+                      terminalEquipmentOrRackId={
+                        singleSelectedFeature.properties?.refId ?? ""
+                      }
+                      editable={true}
+                    />
+                  ),
+                },
+              ]}
+            ></TabView>
           </div>
         )}
       {!editMode &&

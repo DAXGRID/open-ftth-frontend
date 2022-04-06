@@ -125,11 +125,28 @@ function ReadOnlyDiagram({
       )}
       {(selectedFeature?.source === "Rack" ||
         selectedFeature?.source === "TerminalEquipment") && (
-        <TerminalEquipment
-          routeNodeId={identifiedFeature?.id ?? ""}
-          terminalEquipmentOrRackId={selectedFeature.properties?.refId ?? ""}
-          editable={false}
-        />
+        <div className="container-max-size container-center">
+          <TabView
+            select={() => {}}
+            key="0"
+            selectedId="0"
+            views={[
+              {
+                title: t("CONNECTIVITY"),
+                id: "0",
+                view: (
+                  <TerminalEquipment
+                    routeNodeId={identifiedFeature?.id ?? ""}
+                    terminalEquipmentOrRackId={
+                      selectedFeature.properties?.refId ?? ""
+                    }
+                    editable={true}
+                  />
+                ),
+              },
+            ]}
+          ></TabView>
+        </div>
       )}
       {(selectedFeature?.source === "FiberCable" ||
         selectedFeature?.source.includes("Conduit")) && (
