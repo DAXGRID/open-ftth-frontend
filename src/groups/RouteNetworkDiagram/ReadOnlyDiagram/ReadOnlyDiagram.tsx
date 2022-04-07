@@ -140,7 +140,7 @@ function ReadOnlyDiagram({
                     terminalEquipmentOrRackId={
                       selectedFeature.properties?.refId ?? ""
                     }
-                    editable={true}
+                    editable={false}
                   />
                 ),
               },
