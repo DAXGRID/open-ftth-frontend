@@ -51,6 +51,9 @@ import {
   AffixSpanEquipmentToParentParams,
   AffixSpanEquipmentToParentResponse,
   SpanSegmentTrace,
+  REMOVE_RACK_FROM_NODE_CONTAINER,
+  RemoveRackFromNodeContainerParams,
+  RemoveRackFromNodeContainerResponse,
 } from "./EditDiagramGql";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -438,7 +441,10 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     const selectedObjects = currentlySelectedFeatures
       .filter((x) => {
         return (
-          x.layer.source === "OuterConduit" || "InnerConduit" || "NodeContainer"
+          x.layer.source === "OuterConduit" ||
+          "InnerConduit" ||
+          "NodeContainer" ||
+          "Rack"
         );
       })
       .map((x) => {
@@ -473,7 +479,10 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       if (!response.data?.nodeContainer.remove.isSuccess) {
         toast.error(t(response.data?.nodeContainer.remove.errorCode ?? ""));
       }
-    } else if (objectToRemove.source === "OuterConduit" || "InnerConduit") {
+    } else if (
+      objectToRemove.source === "OuterConduit" ||
+      objectToRemove.source === "InnerConduit"
+    ) {
       const response = await client
         .mutation<RemoveSpanStructureResponse>(REMOVE_SPAN_STRUCTURE, {
           spanSegmentId: objectToRemove.id,
@@ -484,6 +493,32 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         toast.error(
           t(response.data?.spanEquipment.removeSpanStructure.errorCode ?? "")
         );
+      }
+    } else if (objectToRemove.source === "Rack") {
+      if (!identifiedFeature?.id) {
+        toast.error("ERROR");
+        console.error("Identified feature id was not set.");
+      } else {
+        const response = await client
+          .mutation<RemoveRackFromNodeContainerResponse>(
+            REMOVE_RACK_FROM_NODE_CONTAINER,
+            {
+              rackId: objectToRemove.id,
+              routeNodeId: identifiedFeature.id,
+            } as RemoveRackFromNodeContainerParams
+          )
+          .toPromise();
+
+        if (
+          !response.data?.nodeContainer.removeRackFromNodeContainer.isSuccess
+        ) {
+          toast.error(
+            t(
+              response.data?.nodeContainer.removeRackFromNodeContainer
+                .errorCode ?? ""
+            )
+          );
+        }
       }
     }
   };

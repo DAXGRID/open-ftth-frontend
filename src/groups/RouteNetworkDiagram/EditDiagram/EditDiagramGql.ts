@@ -298,3 +298,35 @@ $spanSegmentIdTwo: ID!
   }
 }
 `;
+
+export interface RemoveRackFromNodeContainerResponse {
+  nodeContainer: {
+    removeRackFromNodeContainer: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
+export interface RemoveRackFromNodeContainerParams {
+  routeNodeId: string;
+  rackId: string;
+}
+
+export const REMOVE_RACK_FROM_NODE_CONTAINER = `
+mutation(
+$routeNodeId: ID!,
+$rackId: ID!) {
+  nodeContainer {
+    removeRackFromNodeContainer(
+      routeNodeId: $routeNodeId
+      rackId: $rackId
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}
+`;
