@@ -54,6 +54,9 @@ import {
   REMOVE_RACK_FROM_NODE_CONTAINER,
   RemoveRackFromNodeContainerParams,
   RemoveRackFromNodeContainerResponse,
+  REMOVE_TERMINAL_EQUIPMENT,
+  RemoveTerminalEquipmentParams,
+  RemoveTerminalEquipmentResponse,
 } from "./EditDiagramGql";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -438,13 +441,20 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const removeObject = async () => {
+    if (!identifiedFeature?.id) {
+      toast.error("ERROR");
+      console.error("Identified feature id was not set.");
+      return;
+    }
+
     const selectedObjects = currentlySelectedFeatures
       .filter((x) => {
         return (
           x.layer.source === "OuterConduit" ||
           x.layer.source === "InnerConduit" ||
           x.layer.source === "NodeContainer" ||
-          x.layer.source === "Rack"
+          x.layer.source === "Rack" ||
+          x.layer.source === "TerminalEquipment"
         );
       })
       .map((x) => {
@@ -477,7 +487,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         .toPromise();
 
       if (!response.data?.nodeContainer.remove.isSuccess) {
-        toast.error(t(response.data?.nodeContainer.remove.errorCode ?? ""));
+        toast.error(
+          t(response.data?.nodeContainer.remove.errorCode ?? "ERROR")
+        );
       }
     } else if (
       objectToRemove.source === "OuterConduit" ||
@@ -491,34 +503,43 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
       if (!response.data?.spanEquipment.removeSpanStructure.isSuccess) {
         toast.error(
-          t(response.data?.spanEquipment.removeSpanStructure.errorCode ?? "")
+          t(
+            response.data?.spanEquipment.removeSpanStructure.errorCode ??
+              "ERROR"
+          )
         );
       }
     } else if (objectToRemove.source === "Rack") {
-      if (!identifiedFeature?.id) {
-        toast.error("ERROR");
-        console.error("Identified feature id was not set.");
-      } else {
-        const response = await client
-          .mutation<RemoveRackFromNodeContainerResponse>(
-            REMOVE_RACK_FROM_NODE_CONTAINER,
-            {
-              rackId: objectToRemove.id,
-              routeNodeId: identifiedFeature.id,
-            } as RemoveRackFromNodeContainerParams
-          )
-          .toPromise();
+      const response = await client
+        .mutation<RemoveRackFromNodeContainerResponse>(
+          REMOVE_RACK_FROM_NODE_CONTAINER,
+          {
+            rackId: objectToRemove.id,
+            routeNodeId: identifiedFeature.id,
+          } as RemoveRackFromNodeContainerParams
+        )
+        .toPromise();
 
-        if (
-          !response.data?.nodeContainer.removeRackFromNodeContainer.isSuccess
-        ) {
-          toast.error(
-            t(
-              response.data?.nodeContainer.removeRackFromNodeContainer
-                .errorCode ?? ""
-            )
-          );
-        }
+      if (!response.data?.nodeContainer.removeRackFromNodeContainer.isSuccess) {
+        toast.error(
+          t(
+            response.data?.nodeContainer.removeRackFromNodeContainer
+              .errorCode ?? "ERROR"
+          )
+        );
+      }
+    } else if (objectToRemove.source === "TerminalEquipment") {
+      const response = await client
+        .mutation<RemoveTerminalEquipmentResponse>(REMOVE_TERMINAL_EQUIPMENT, {
+          routeNodeId: identifiedFeature.id,
+          terminalEquipmentId: objectToRemove.id,
+        } as RemoveTerminalEquipmentParams)
+        .toPromise();
+
+      if (!response.data?.terminalEquipment.remove.isSuccess) {
+        toast.error(
+          t(response.data?.terminalEquipment.remove.errorCode ?? "ERROR")
+        );
       }
     }
   };
