@@ -14,7 +14,7 @@ export interface Diagram {
   drawingOrder: number;
 }
 
-export interface Geometry {
+interface Geometry {
   type: string;
   coordinates: string;
 }
@@ -322,6 +322,39 @@ $rackId: ID!) {
     removeRackFromNodeContainer(
       routeNodeId: $routeNodeId
       rackId: $rackId
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}
+`;
+
+export interface RemoveTerminalEquipmentResponse {
+  terminalEquipment: {
+    remove: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
+export interface RemoveTerminalEquipmentParams {
+  routeNodeId: string;
+  terminalEquipmentId: string;
+}
+
+export const REMOVE_TERMINAL_EQUIPMENT = `
+mutation(
+$routeNodeId: ID!,
+$terminalEquipmentId: ID!
+) {
+  terminalEquipment {
+    remove(
+      routeNodeId: $routeNodeId
+      terminalEquipmentId: $terminalEquipmentId
     ) {
       isSuccess
       errorCode
