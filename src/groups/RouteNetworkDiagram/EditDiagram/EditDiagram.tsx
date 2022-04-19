@@ -442,9 +442,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       .filter((x) => {
         return (
           x.layer.source === "OuterConduit" ||
-          "InnerConduit" ||
-          "NodeContainer" ||
-          "Rack"
+          x.layer.source === "InnerConduit" ||
+          x.layer.source === "NodeContainer" ||
+          x.layer.source === "Rack"
         );
       })
       .map((x) => {
