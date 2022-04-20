@@ -452,6 +452,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         return (
           x.layer.source === "OuterConduit" ||
           x.layer.source === "InnerConduit" ||
+          x.layer.source === "FiberCable" ||
           x.layer.source === "NodeContainer" ||
           x.layer.source === "Rack" ||
           x.layer.source === "TerminalEquipment"
@@ -493,7 +494,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       }
     } else if (
       objectToRemove.source === "OuterConduit" ||
-      objectToRemove.source === "InnerConduit"
+      objectToRemove.source === "InnerConduit" ||
+      objectToRemove.source === "FiberCable"
     ) {
       const response = await client
         .mutation<RemoveSpanStructureResponse>(REMOVE_SPAN_STRUCTURE, {
