@@ -199,9 +199,11 @@ function EstablishCustomerConnection({
       setTrace({
         geometries: connectionPoint.routeNetworkSegmentGeometries ?? [],
         ids: connectionPoint.routeNetworkSegmentIds ?? [],
+        etrs89: null,
+        wgs84: null,
       });
     } else {
-      setTrace({ geometries: [], ids: [] });
+      setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
     }
   }, [selectedConnectionPoint, setTrace, nearestNeighborNodesResponse]);
 

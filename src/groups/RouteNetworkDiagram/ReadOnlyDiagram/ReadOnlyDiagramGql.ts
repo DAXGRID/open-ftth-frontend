@@ -16,9 +16,9 @@ export interface SpanSegmentTraceResponse {
 }
 
 export const SPAN_SEGMENT_TRACE = `
-query ($spanSegmentId: ID!) {
+query ($spanSegmentIds: [ID!]!) {
   utilityNetwork {
-    spanSegmentTrace(spanSegmentId: $spanSegmentId) {
+    spanSegmentTrace(spanSegmentIds: $spanSegmentIds) {
       routeNetworkSegmentGeometries
       routeNetworkSegmentIds
       wgs84MinX: wGS84MinX

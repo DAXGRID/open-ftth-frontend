@@ -30,6 +30,18 @@ type MapContextType = {
 type Trace = {
   ids: string[];
   geometries: string[];
+  wgs84: {
+    minX: number;
+    minY: number;
+    maxX: number;
+    maxY: number;
+  } | null;
+  etrs89: {
+    minX: number;
+    minY: number;
+    maxX: number;
+    maxY: number;
+  } | null;
 };
 
 const MapContext = createContext<MapContextType>({
@@ -41,7 +53,12 @@ const MapContext = createContext<MapContextType>({
   setIdentifiedFeature: () => {
     console.warn("no provider set for setIdentifiedFeature");
   },
-  trace: { geometries: [], ids: [] },
+  trace: {
+    geometries: [],
+    ids: [],
+    etrs89: null,
+    wgs84: null,
+  },
   setTrace: () => {
     console.warn("no provider set for setTraceRouteNetwork");
   },
@@ -59,7 +76,12 @@ const MapProvider = ({ children }: MapProviderProps) => {
   const [selectedSegments, setSelectedSegments] = useState<string[]>([]);
   const [identifiedNetworkElement, setIdentifiedNetworkElement] =
     useState<IdentifiedFeature | null>(null);
-  const [trace, setTrace] = useState<Trace>({ geometries: [], ids: [] });
+  const [trace, setTrace] = useState<Trace>({
+    geometries: [],
+    ids: [],
+    etrs89: null,
+    wgs84: null,
+  });
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
 
   useEffect(() => {

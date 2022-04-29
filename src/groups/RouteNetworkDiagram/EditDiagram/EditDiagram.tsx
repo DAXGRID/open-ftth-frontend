@@ -50,7 +50,6 @@ import {
   AFFIX_SPAN_EQUIPMENT_TO_PARENT,
   AffixSpanEquipmentToParentParams,
   AffixSpanEquipmentToParentResponse,
-  SpanSegmentTrace,
   REMOVE_RACK_FROM_NODE_CONTAINER,
   RemoveRackFromNodeContainerParams,
   RemoveRackFromNodeContainerResponse,
@@ -552,37 +551,34 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
   const traceFeatures = useCallback(
     async (features: MapboxGeoJSONFeature[]) => {
-      const segmentTraces: SpanSegmentTrace[] = [];
+      const traceResponse = await client
+        .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
+          spanSegmentIds: features.map((x) => x.properties?.refId),
+        })
+        .toPromise();
 
-      for (let i = 0; i < features.length; i++) {
-        const traceResponse = await client
-          .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
-            spanSegmentId: features[i].properties?.refId,
-          })
-          .toPromise();
+      const trace = traceResponse.data?.utilityNetwork.spanSegmentTrace;
 
-        if (traceResponse.data?.utilityNetwork.spanSegmentTrace) {
-          segmentTraces.push(
-            traceResponse.data?.utilityNetwork.spanSegmentTrace
-          );
-        } else {
-          console.error("Did not receive trace.");
-          toast.error(t("ERROR"));
-        }
+      if (trace) {
+        setTrace({
+          geometries: trace.routeNetworkSegmentGeometries ?? [],
+          ids: trace.routeNetworkSegmentIds ?? [],
+          etrs89: {
+            maxX: trace.etrs89MaxX,
+            maxY: trace.etrs89MaxY,
+            minX: trace.etrs89MinX,
+            minY: trace.etrs89MinY,
+          },
+          wgs84: {
+            maxX: trace.wgs84MaxX,
+            maxY: trace.wgs84MaxY,
+            minX: trace.wgs84MinX,
+            minY: trace.wgs84MinY,
+          },
+        });
       }
-
-      const geometries = segmentTraces.flatMap(
-        (x) => x.routeNetworkSegmentGeometries ?? []
-      );
-
-      const ids = segmentTraces.flatMap((x) => x.routeNetworkSegmentIds ?? []);
-
-      setTrace({
-        geometries: geometries,
-        ids: ids,
-      });
     },
-    [t, client, setTrace]
+    [client, setTrace]
   );
 
   // Trace single
@@ -780,7 +776,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const clearHighlights = () => {
-    setTrace({ geometries: [], ids: [] });
+    setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
   };
 
   if (!identifiedFeature?.id) {

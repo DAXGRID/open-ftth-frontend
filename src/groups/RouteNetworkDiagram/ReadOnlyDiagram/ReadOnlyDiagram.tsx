@@ -58,6 +58,10 @@ function ReadOnlyDiagram({
     setSpanEquipmentCableTabViewSelectedId,
   ] = useState("0");
 
+  const clearHighlights = useCallback(() => {
+    setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
+  }, [setTrace]);
+
   const onSelectedFeature = useCallback(
     async (feature: MapboxGeoJSONFeature) => {
       const isSelected = feature.state?.selected as boolean;
@@ -72,33 +76,43 @@ function ReadOnlyDiagram({
         ) {
           const spanSegmentTrace = await client
             .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
-              spanSegmentId: feature.properties?.refId,
+              spanSegmentIds: [feature.properties?.refId],
             })
             .toPromise();
 
-          setTrace({
-            geometries:
-              spanSegmentTrace.data?.utilityNetwork.spanSegmentTrace
-                .routeNetworkSegmentGeometries ?? [],
-            ids:
-              spanSegmentTrace.data?.utilityNetwork.spanSegmentTrace
-                .routeNetworkSegmentIds ?? [],
-          });
+          const trace = spanSegmentTrace.data?.utilityNetwork.spanSegmentTrace;
+
+          if (trace) {
+            setTrace({
+              geometries: trace.routeNetworkSegmentGeometries ?? [],
+              ids: trace.routeNetworkSegmentIds ?? [],
+              etrs89: {
+                maxX: trace.etrs89MaxX,
+                maxY: trace.etrs89MaxY,
+                minX: trace.etrs89MinX,
+                minY: trace.etrs89MinY,
+              },
+              wgs84: {
+                maxX: trace.wgs84MaxX,
+                maxY: trace.wgs84MaxY,
+                minX: trace.wgs84MinX,
+                minY: trace.wgs84MinY,
+              },
+            });
+          } else {
+            clearHighlights();
+          }
         } else {
-          setTrace({ geometries: [], ids: [] });
+          clearHighlights();
         }
         setSelectedFeature(feature);
       } else {
-        setTrace({ geometries: [], ids: [] });
+        clearHighlights();
         setSelectedFeature(null);
       }
     },
-    [setTrace, setSelectedFeature, client]
+    [setTrace, setSelectedFeature, clearHighlights, client]
   );
-
-  const clearHighlights = () => {
-    setTrace({ geometries: [], ids: [] });
-  };
 
   return (
     <div>
