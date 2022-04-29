@@ -159,6 +159,8 @@ function ConnectivityViewProvider({
     setTrace({
       ids: routeSegmentIds,
       geometries: routeSegmentGeometries,
+      etrs89: null,
+      wgs84: null,
     });
   }, [state.selectedConnectivityTraceHop, setTrace]);
 

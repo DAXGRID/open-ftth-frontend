@@ -94,7 +94,7 @@ function PassageView({
 
   const selectAllLineSegmentsInMap = () => {
     selectRouteSegments(spanEquipment.lines.flatMap((x) => x.routeSegmentIds));
-    setTrace({ geometries: [], ids: [] });
+    setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
   };
 
   const selectLine = (line: SelectableLine, index: number) => {
@@ -102,6 +102,8 @@ function PassageView({
     setTrace({
       geometries: line.routeSegmentGeometries,
       ids: line.routeSegmentIds,
+      etrs89: null,
+      wgs84: null,
     });
   };
 

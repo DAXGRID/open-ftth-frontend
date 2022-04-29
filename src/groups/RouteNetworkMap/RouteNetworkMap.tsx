@@ -171,6 +171,27 @@ function highlightGeometries(map: Map, geoms: string[]) {
   });
 }
 
+function mapFitBounds(
+  map: Map,
+  envelope: {
+    minX: number;
+    minY: number;
+    maxX: number;
+    maxY: number;
+  }
+) {
+  map.fitBounds(
+    [
+      [envelope.minX, envelope.minY],
+      [envelope.maxX, envelope.maxY],
+    ],
+    {
+      animate: false,
+      padding: 20,
+    }
+  );
+}
+
 type RouteNetworkMapProps = {
   showSchematicDiagram: (show: boolean) => void;
 };
@@ -191,6 +212,14 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
 
   useEffect(() => {
     if (!map.current) return;
+    if (trace.wgs84) {
+      mapFitBounds(map.current, {
+        minX: trace.wgs84.minX,
+        minY: trace.wgs84.minY,
+        maxX: trace.wgs84.maxX,
+        maxY: trace.wgs84.maxY,
+      });
+    }
     highlightGeometries(map.current, trace.geometries);
   }, [trace, map]);
 
