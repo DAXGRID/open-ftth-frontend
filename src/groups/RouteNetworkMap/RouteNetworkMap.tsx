@@ -187,7 +187,7 @@ function mapFitBounds(
     ],
     {
       animate: false,
-      padding: 20,
+      padding: 50,
     }
   );
 }
