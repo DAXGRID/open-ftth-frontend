@@ -242,7 +242,7 @@ export interface SpanSegmentTraceResponse {
 }
 
 export const SPAN_SEGMENT_TRACE = `
-query ($spanSegmentIds: [ID]!) {
+query ($spanSegmentIds: [ID!]!) {
   utilityNetwork {
     spanSegmentTrace(spanSegmentIds: $spanSegmentIds) {
       routeNetworkSegmentGeometries
