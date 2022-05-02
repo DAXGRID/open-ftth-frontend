@@ -551,6 +551,14 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
   const traceFeatures = useCallback(
     async (features: MapboxGeoJSONFeature[]) => {
+      const featuresToTrace = features.map((x) => x.properties?.refId);
+      // If there are no features to trace we do not send the request
+      // and clear the trace.
+      if (!featuresToTrace || featuresToTrace.length === 0) {
+        setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
+        return;
+      }
+
       const traceResponse = await client
         .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
           spanSegmentIds: features.map((x) => x.properties?.refId),
