@@ -49,10 +49,19 @@ function useBridgeConnector() {
   );
 
   const highlightFeatures = useCallback(
-    (featureIds: string[]) => {
+    (
+      featureIds: string[],
+      etrs89: {
+        maxX: number;
+        maxY: number;
+        minX: number;
+        minY: number;
+      } | null
+    ) => {
       const message = {
         eventType: "HighlightFeatures",
-        IdentifiedFeatureMrids: featureIds,
+        identifiedFeatureMrids: featureIds,
+        etrs89: etrs89,
         featureType: "RouteSegment",
         username: keycloak.profile?.username,
       };

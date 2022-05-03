@@ -80,7 +80,9 @@ function RerouteSpanEquipment({ selectedRouteSegmentMrid }: RerouteTubeParams) {
               selectedRouteSegmentMrid,
               client,
               selectRouteSegments,
-              highlightFeatures,
+              (mrids: string[]) => {
+                highlightFeatures(mrids, null);
+              },
               t
             )
           }
