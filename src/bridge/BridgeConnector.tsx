@@ -156,7 +156,16 @@ function BridgeConnector() {
     if (!connected || !websocketClient || websocketClient.readyState !== 1)
       return;
 
-    highlightFeatures(trace.ids);
+    const etrs89 = trace.etrs89
+      ? {
+          maxX: trace.etrs89.maxX,
+          maxY: trace.etrs89.maxY,
+          minX: trace.etrs89.minX,
+          minY: trace.etrs89.minY,
+        }
+      : null;
+
+    highlightFeatures(trace.ids, etrs89);
   }, [trace, highlightFeatures, connected]);
 
   useEffect(() => {
