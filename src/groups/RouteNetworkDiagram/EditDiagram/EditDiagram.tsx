@@ -977,6 +977,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           </div>
         )}
       {!editMode &&
+        singleSelectedFeature?.state?.selected &&
         (singleSelectedFeature?.source === "FiberCable" ||
           singleSelectedFeature?.source.includes("Conduit")) && (
           <div className="container-max-size container-center">
