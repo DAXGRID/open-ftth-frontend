@@ -1,12 +1,13 @@
-import { useState, useContext, useCallback } from "react";
+import { useState, useContext, useCallback, useEffect } from "react";
 import { useClient } from "urql";
 import { MapboxGeoJSONFeature } from "maplibre-gl";
 import SchematicDiagram from "../SchematicDiagram";
 import NodeContainerDetails from "../NodeContainerDetails";
 import DiagramMenu from "../../../components/DiagramMenu";
 import ActionButton from "../../../components/ActionButton";
+import ToggleButton from "../../../components/ToggleButton";
 import { MapContext } from "../../../contexts/MapContext";
-import { EraserSvg } from "../../../assets";
+import { EraserSvg, ZoomMapSvg } from "../../../assets";
 import { useTranslation } from "react-i18next";
 import FeatureInformation from "../FeatureInformation";
 import TerminalEquipment from "../../TerminalEquipment";
@@ -57,61 +58,75 @@ function ReadOnlyDiagram({
     spanEquipmentTabViewSelectedId,
     setSpanEquipmentCableTabViewSelectedId,
   ] = useState("0");
+  const [enabledTracePan, setEnabledTracePan] = useState<boolean>(true);
 
   const clearHighlights = useCallback(() => {
     setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
   }, [setTrace]);
 
-  const onSelectedFeature = useCallback(
-    async (feature: MapboxGeoJSONFeature) => {
-      const isSelected = feature.state?.selected as boolean;
-      const featureType = feature.source;
+  // Trace
+  useEffect(() => {
+    if (!selectedFeature) {
+      clearHighlights();
+      return;
+    }
 
-      if (isSelected) {
-        // If it can be traced otherwise we remove the current trace
-        if (
-          featureType === "InnerConduit" ||
-          featureType === "OuterConduit" ||
-          featureType === "FiberCable"
-        ) {
-          const spanSegmentTrace = await client
-            .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
-              spanSegmentIds: [feature.properties?.refId],
-            })
-            .toPromise();
+    const featureType = selectedFeature.source;
 
+    if (
+      featureType === "InnerConduit" ||
+      featureType === "OuterConduit" ||
+      featureType === "FiberCable"
+    ) {
+      client
+        .query<SpanSegmentTraceResponse>(SPAN_SEGMENT_TRACE, {
+          spanSegmentIds: [selectedFeature.properties?.refId],
+        })
+        .toPromise()
+        .then((spanSegmentTrace) => {
           const trace = spanSegmentTrace.data?.utilityNetwork.spanSegmentTrace;
-
           if (trace) {
             setTrace({
               geometries: trace.routeNetworkSegmentGeometries ?? [],
               ids: trace.routeNetworkSegmentIds ?? [],
-              etrs89: {
-                maxX: trace.etrs89MaxX,
-                maxY: trace.etrs89MaxY,
-                minX: trace.etrs89MinX,
-                minY: trace.etrs89MinY,
-              },
-              wgs84: {
-                maxX: trace.wgs84MaxX,
-                maxY: trace.wgs84MaxY,
-                minX: trace.wgs84MinX,
-                minY: trace.wgs84MinY,
-              },
+              etrs89: enabledTracePan
+                ? {
+                    maxX: trace.etrs89MaxX,
+                    maxY: trace.etrs89MaxY,
+                    minX: trace.etrs89MinX,
+                    minY: trace.etrs89MinY,
+                  }
+                : null,
+              wgs84: enabledTracePan
+                ? {
+                    maxX: trace.wgs84MaxX,
+                    maxY: trace.wgs84MaxY,
+                    minX: trace.wgs84MinX,
+                    minY: trace.wgs84MinY,
+                  }
+                : null,
             });
           } else {
             clearHighlights();
           }
-        } else {
-          clearHighlights();
-        }
+        });
+    } else {
+      clearHighlights();
+    }
+  }, [selectedFeature, setTrace, enabledTracePan, client, clearHighlights]);
+
+  const onSelectedFeature = useCallback(
+    async (feature: MapboxGeoJSONFeature) => {
+      const isSelected = feature.state?.selected as boolean;
+
+      if (isSelected) {
+        // If it can be traced otherwise we remove the current trace
         setSelectedFeature(feature);
       } else {
-        clearHighlights();
         setSelectedFeature(null);
       }
     },
-    [setTrace, setSelectedFeature, clearHighlights, client]
+    [setSelectedFeature]
   );
 
   return (
@@ -122,6 +137,13 @@ function ReadOnlyDiagram({
           icon={EraserSvg}
           action={() => clearHighlights()}
           title={t("CLEAR_HIGHLIGHT")}
+        />
+        <ToggleButton
+          toggled={enabledTracePan}
+          id={"0"}
+          toggle={() => setEnabledTracePan(!enabledTracePan)}
+          icon={ZoomMapSvg}
+          title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
         />
       </DiagramMenu>
       <SchematicDiagram

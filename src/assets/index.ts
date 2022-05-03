@@ -14,6 +14,7 @@ import EditPropertiesSvg from "./edit-properties.svg";
 import MoveConduitSvg from "./move-conduit.svg";
 import EstablishCustomerConnectionSvg from "./establish-customer-connection.svg";
 import PlusSvg from "./plus.svg";
+import ZoomMapSvg from "./zoom-map.svg";
 
 export {
   Loading,
@@ -32,4 +33,5 @@ export {
   MoveConduitSvg,
   EstablishCustomerConnectionSvg,
   PlusSvg,
+  ZoomMapSvg,
 };

@@ -72,6 +72,7 @@ import {
   EraserSvg,
   FlipSvg,
   EstablishCustomerConnectionSvg,
+  ZoomMapSvg,
 } from "../../../assets";
 import {
   addContainerModal,
@@ -223,6 +224,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     showModalsReducer,
     showModalsInitialState
   );
+  const [enabledTracePan, setEnabledTracePan] = useState<boolean>(true);
 
   const [, cutSpanSegmentsMutation] =
     useMutation<CutSpanSegmentsResponse>(CUT_SPAN_SEGMENTS);
@@ -571,22 +573,26 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         setTrace({
           geometries: trace.routeNetworkSegmentGeometries ?? [],
           ids: trace.routeNetworkSegmentIds ?? [],
-          etrs89: {
-            maxX: trace.etrs89MaxX,
-            maxY: trace.etrs89MaxY,
-            minX: trace.etrs89MinX,
-            minY: trace.etrs89MinY,
-          },
-          wgs84: {
-            maxX: trace.wgs84MaxX,
-            maxY: trace.wgs84MaxY,
-            minX: trace.wgs84MinX,
-            minY: trace.wgs84MinY,
-          },
+          etrs89: enabledTracePan
+            ? {
+                maxX: trace.etrs89MaxX,
+                maxY: trace.etrs89MaxY,
+                minX: trace.etrs89MinX,
+                minY: trace.etrs89MinY,
+              }
+            : null,
+          wgs84: enabledTracePan
+            ? {
+                maxX: trace.wgs84MaxX,
+                maxY: trace.wgs84MaxY,
+                minX: trace.wgs84MinX,
+                minY: trace.wgs84MinY,
+              }
+            : null,
         });
       }
     },
-    [client, setTrace]
+    [client, setTrace, enabledTracePan]
   );
 
   // Trace single
@@ -925,6 +931,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             icon={EraserSvg}
             action={() => clearHighlights()}
             title={t("CLEAR_HIGHLIGHT")}
+          />
+          <ToggleButton
+            toggled={enabledTracePan}
+            id={"0"}
+            toggle={() => setEnabledTracePan(!enabledTracePan)}
+            icon={ZoomMapSvg}
+            title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
           />
         </DiagramMenu>
       )}
