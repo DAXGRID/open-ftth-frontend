@@ -89,7 +89,7 @@ function PassageView({
   ]);
 
   if (!passageView || passageView.spanEquipments.length === 0) {
-    return <div style={{ height: "300px" }}></div>;
+    return <div style={{ height: "200" }}></div>;
   }
 
   const selectAllLineSegmentsInMap = () => {
