@@ -216,7 +216,8 @@
       "Cabinets": "Cabinets",
       "EDIT_TERMINAL_EQUIPMENT": "Edit terminal equipment",
       "RACK": "Rack",
-      "EDIT_RACK": "Editer rack"
+      "EDIT_RACK": "Editer rack",
+      "TOGGLE_AUTOMATIC": "Toggle automatic zoom."
     }
   },
   "dk": {
@@ -436,7 +437,8 @@
       "Cabinets": "Skabe",
       "EDIT_TERMINAL_EQUIPMENT": "Rediger fiber udstyr",
       "RACK": "Rack",
-      "EDIT_RACK": "Editer rack"
+      "EDIT_RACK": "Editer rack",
+      "TOGGLE_AUTOMATIC_ZOOM_MAP": "Aktiver automatisk zoom."
     }
   }
 }
