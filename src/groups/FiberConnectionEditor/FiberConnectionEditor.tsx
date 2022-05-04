@@ -83,6 +83,19 @@ function createNumberOptions(count: number): SelectOption[] {
   );
 }
 
+function jumpsSequence(count: number): SelectOption[] {
+  if (count === 0) return [{ text: "0", value: 0, key: 0 }];
+
+  const result = [];
+  for (let i = 0; i < count; i++) {
+    if (count % i === 0) {
+      result.push({ text: i.toString(), value: i, key: i });
+    }
+  }
+
+  return result;
+}
+
 function createConnectivityFaceSelectOptions(
   connecitivyFaces: ConnectivityFace[]
 ): SelectOption[] {
@@ -134,10 +147,20 @@ function getAvailableConnections(
   } else {
     const fromRest = fromFiltered.splice(fromIndex);
     const jumpedConnections: ConnectivityFaceConnection[] = [];
-    for (let i = 0; i < Math.floor(fromRest.length / 2); i++) {
+
+    let i = 0;
+    const jumpEachTime = (jumps / count) % 2 === 0 ? jumps : jumps / 2;
+    while (jumpedConnections.length !== count) {
       jumpedConnections.push(fromRest[i]);
       jumpedConnections.push(fromRest[i + jumps]);
+
+      i++;
+      const rem = i % jumps;
+      if (rem === 0) {
+        i += jumpEachTime;
+      }
     }
+
     fromAvailable = jumpedConnections.splice(0, count);
   }
 
@@ -175,8 +198,8 @@ function findAvailableJumps(
 ) {
   if (!maxFromEquipmentCount || !numberToConnect) return 1;
   if (numberToConnect === 1) return 1;
-  if (numberToConnect === maxFromEquipmentCount) return 1;
-  return maxFromEquipmentCount - currentIndex - numberToConnect;
+  if (numberToConnect % 2 !== 0) return 1;
+  return maxFromEquipmentCount - Math.floor(numberToConnect / 2);
 }
 
 function getCombinedEquipmentId({
@@ -687,7 +710,7 @@ function FiberConnectionEditor({
         </LabelContainer>
         <LabelContainer text={t("FROM_EQUIPMENT_JUMP")}>
           <SelectMenu
-            options={createNumberOptions(maxAvailableJumps)}
+            options={jumpsSequence(numberOfConnections)}
             removePlaceHolderOnSelect
             onSelected={(x) => setJumps(Number(x))}
             selected={jumps}
