@@ -109,6 +109,42 @@ function createConnectivityFaceConnectionSelectOptions(
   });
 }
 
+function range(from: number, to: number, jumps: number): number[] {
+  const r = [];
+  for (let i = from; i < to; i += jumps) {
+    r.push(i);
+  }
+  return r;
+}
+
+function partition<T>(n: number, c: T[]): T[][] {
+  const output = [];
+  for (var i = 0; i < c.length; i += n) {
+    output[output.length] = c.slice(i, i + n);
+  }
+  return output;
+}
+
+function interleave(arr: any[], arr2: any[]) {
+  return arr.reduce((combArr, elem, i) => combArr.concat(elem, arr2[i]), []);
+}
+
+function connectionSequence(count: number, jumps: number): number[] {
+  const r: number[] = [];
+  if (jumps === 1) {
+    return range(1, count + 1, 1);
+  } else {
+    const partitions = partition<number>(2, range(1, count, jumps));
+    for (let i = 0; i < partitions.length; i++) {
+      const lower = partitions[i][0];
+      const upper = partitions[i][1];
+      const diff = upper - lower;
+      r.push(interleave(range(lower, upper, 1), range(upper, upper + diff, 1)));
+    }
+  }
+  return r.flat();
+}
+
 function getAvailableConnections(
   from: ConnectivityFaceConnection[],
   to: ConnectivityFaceConnection[],
@@ -117,31 +153,29 @@ function getAvailableConnections(
   count: number,
   jumps: number
 ): { from: ConnectivityFaceConnection[]; to: ConnectivityFaceConnection[] } {
-  // ??? im not sure why this is needed does not update without it
-  const fromFiltered = from.filter((x) => x);
-  const toFiltered = to.filter((x) => x);
-  // end of something weird
-
-  const fromIndex = fromFiltered.findIndex(
-    (x) => x.terminalOrSegmentId === fromId
-  );
-  const toIndex = toFiltered.findIndex((x) => x.terminalOrSegmentId === toId);
+  const fromIndex = from.findIndex((x) => x.terminalOrSegmentId === fromId);
+  const toIndex = to.findIndex((x) => x.terminalOrSegmentId === toId);
 
   let fromAvailable: ConnectivityFaceConnection[] = [];
-  const toAvailable = toFiltered.splice(toIndex, count);
+  const toAvailable = [...to].splice(toIndex, count);
   if (jumps <= 1) {
-    fromAvailable = fromFiltered.splice(fromIndex, count);
+    fromAvailable = [...from].splice(fromIndex, count);
   } else {
-    const fromRest = fromFiltered.splice(fromIndex);
+    const fromRest = [...from].splice(fromIndex);
     const jumpedConnections: ConnectivityFaceConnection[] = [];
-    for (let i = 0; i < Math.floor(fromRest.length / 2); i++) {
-      jumpedConnections.push(fromRest[i]);
-      jumpedConnections.push(fromRest[i + jumps]);
+
+    for (const i of connectionSequence(from.length, jumps)) {
+      if (i > fromRest.length) {
+        break;
+      } else {
+        jumpedConnections.push(fromRest[i - 1]);
+      }
     }
-    fromAvailable = jumpedConnections.splice(0, count);
+
+    fromAvailable = [...jumpedConnections].splice(0, count);
   }
 
-  return { from: fromAvailable, to: toAvailable };
+  return { from: [...fromAvailable], to: [...toAvailable] };
 }
 
 function findAvailableCountFaceConnections(
@@ -150,18 +184,10 @@ function findAvailableCountFaceConnections(
   fromId: string,
   toId: string
 ): number {
-  // ??? im not sure why this is needed does not update without it
-  const fromFiltered = from.filter((x) => x);
-  const toFiltered = to.filter((x) => x);
-  // end of something weird
-
-  const fromIndex = fromFiltered.findIndex(
-    (x) => x.terminalOrSegmentId === fromId
-  );
-  const toIndex = toFiltered.findIndex((x) => x.terminalOrSegmentId === toId);
-
-  const fromAvailableCount = fromFiltered.splice(fromIndex).length;
-  const toAvailableCount = toFiltered.splice(toIndex).length;
+  const fromIndex = from.findIndex((x) => x.terminalOrSegmentId === fromId);
+  const toIndex = to.findIndex((x) => x.terminalOrSegmentId === toId);
+  const fromAvailableCount = [...from].splice(fromIndex).length;
+  const toAvailableCount = [...to].splice(toIndex).length;
 
   return fromAvailableCount > toAvailableCount
     ? toAvailableCount
@@ -175,8 +201,7 @@ function findAvailableJumps(
 ) {
   if (!maxFromEquipmentCount || !numberToConnect) return 1;
   if (numberToConnect === 1) return 1;
-  if (numberToConnect === maxFromEquipmentCount) return 1;
-  return maxFromEquipmentCount - currentIndex - numberToConnect;
+  return maxFromEquipmentCount - 2;
 }
 
 function getCombinedEquipmentId({
