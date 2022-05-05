@@ -120,7 +120,7 @@ function range(from: number, to: number, jumps: number): number[] {
 function partition<T>(n: number, c: T[]): T[][] {
   const output = [];
   for (var i = 0; i < c.length; i += n) {
-    output[output.length] = c.slice(i, i + n);
+    output[output.length] = [...c].slice(i, i + n);
   }
   return output;
 }
@@ -161,17 +161,15 @@ function getAvailableConnections(
   if (jumps <= 1) {
     fromAvailable = [...from].splice(fromIndex, count);
   } else {
-    const fromRest = [...from].splice(fromIndex);
     const jumpedConnections: ConnectivityFaceConnection[] = [];
-
-    for (const i of connectionSequence(from.length, jumps)) {
-      if (i > fromRest.length) {
+    const sequence = connectionSequence(from.length, jumps);
+    for (const i of [...sequence].splice(sequence.indexOf(fromIndex + 1))) {
+      if (i > from.length) {
         break;
       } else {
-        jumpedConnections.push(fromRest[i - 1]);
+        jumpedConnections.push(from[i - 1]);
       }
     }
-
     fromAvailable = [...jumpedConnections].splice(0, count);
   }
 
