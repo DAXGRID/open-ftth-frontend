@@ -46,6 +46,12 @@ interface ShowEditRack {
   routeNodeId: string | null;
 }
 
+interface ShowAddAdditionalStructures {
+  show: boolean;
+  routeNodeId: string | null;
+  terminalEquipmentId: string | null;
+}
+
 interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
   showFreeLines: { [id: string]: boolean };
@@ -53,6 +59,7 @@ interface TerminalEquipmentState {
   showDisconnectFiberEditor: ShowDisconnectFiberEditor;
   showEditTerminalEquipment: ShowEditTerminalEquipment;
   showEditRack: ShowEditRack;
+  showAddAdditionalStructure: ShowAddAdditionalStructures;
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
@@ -82,6 +89,11 @@ type TerminalEquipmentAction =
   | { type: "resetShowEditTerminalEquipment" }
   | { type: "setShowEditRack"; show: ShowEditRack }
   | { type: "resetShowEditRack" }
+  | {
+      type: "setShowAddAdditionalStructures";
+      show: ShowAddAdditionalStructures;
+    }
+  | { type: "resetShowAddAdditionalStructures" }
   | {
       type: "setViewConnectivityTraceViews";
       params: { id: string; view: ConnectivityTraceView };
@@ -129,12 +141,19 @@ const defaultShowEditRack: ShowEditRack = {
   routeNodeId: null,
 };
 
+const defaultShowAddtionalStructure: ShowAddAdditionalStructures = {
+  show: false,
+  routeNodeId: null,
+  terminalEquipmentId: null,
+};
+
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
   showFiberEditor: defaultShowFiberEditorValues,
   showEditTerminalEquipment: defaultShowEditTerminalEquipment,
   showEditRack: defaultShowEditRack,
+  showAddAdditionalStructure: defaultShowAddtionalStructure,
   connectivityTraceViews: {},
   selectedConnectivityTraceHop: null,
   editable: false,
@@ -201,6 +220,13 @@ function terminalEquipmentReducer(
       return { ...state, showEditRack: action.show };
     case "resetShowEditRack":
       return { ...state, showEditRack: defaultShowEditRack };
+    case "setShowAddAdditionalStructures":
+      return { ...state, showAddAdditionalStructure: action.show };
+    case "resetShowAddAdditionalStructures":
+      return {
+        ...state,
+        showAddAdditionalStructure: defaultShowAddtionalStructure,
+      };
     case "setViewConnectivityTraceViews":
       return {
         ...state,
