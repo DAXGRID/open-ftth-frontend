@@ -9,6 +9,7 @@ import LabelContainer from "../../../components/LabelContainer";
 import {
   getTerminalStructureSpecifications,
   TerminalStructureSpecification,
+  addAdditionalStructures,
 } from "./AddAdditionalStructuresGql";
 
 function createCategoryOptions(
@@ -98,7 +99,6 @@ function AddAdditionalStructures({
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    console.log("Got in here!");
     getTerminalStructureSpecifications(client).then((x) => {
       const specifications =
         x.data?.utilityNetwork.terminalStructureSpecifications;
@@ -132,6 +132,28 @@ function AddAdditionalStructures({
       return [];
     }
   }, [state.terminalStructureSpecifications, state.category]);
+
+  const executeAddAdditionalStructures = () => {
+    if (state.specificationId) {
+      addAdditionalStructures(client, {
+        numberOfStructures: state.numberOfStructures,
+        position: state.position,
+        routeNodeId: routeNodeId,
+        structureSpecificationId: state.specificationId,
+        terminalEquipmentId: terminalEquipmentId,
+      }).then((r) => {
+        const body = r.data?.terminalEquipment.addAdditionalStructures;
+        if (body?.isSuccess) {
+          toast.success(t("ADDED"));
+        } else {
+          toast.error(t(body?.errorCode ?? "ERROR"));
+        }
+      });
+    } else {
+      toast.error(t("ERROR"));
+      console.error("SpecificationId was not set.");
+    }
+  };
 
   if (!state.terminalStructureSpecifications) return <></>;
 
@@ -196,8 +218,7 @@ function AddAdditionalStructures({
         <div className="full-row">
           <DefaultButton
             innerText={t("ADD")}
-            disabled={true}
-            onClick={() => {}}
+            onClick={() => executeAddAdditionalStructures()}
           />
         </div>
       </div>
