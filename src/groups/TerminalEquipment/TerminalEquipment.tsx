@@ -361,6 +361,11 @@ function TerminalEquipment() {
           }
         >
           <AddAdditionalStructures
+            addedSuccessCallback={() =>
+              dispatch({
+                type: "resetShowAddAdditionalStructures",
+              })
+            }
             routeNodeId={state.showAddAdditionalStructure.routeNodeId}
             terminalEquipmentId={
               state.showAddAdditionalStructure.terminalEquipmentId
