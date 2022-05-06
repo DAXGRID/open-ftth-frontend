@@ -24,6 +24,7 @@ import TerminalLineFree from "./TerminalLineFree";
 import DisconnectFiberEditor from "./DisconnectFiberEditor";
 import EditTerminalEquipment from "./EditTerminalEquipment";
 import EditRack from "./EditRack";
+import AddAdditionalStructures from "./AddAdditionalStructures";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -104,25 +105,31 @@ function TerminalEquipmentTableContainer({
               <span
                 role="button"
                 className="header-icons__icon"
-                onClick={() => {}}
+                onClick={() =>
+                  dispatch({
+                    type: "setShowEditTerminalEquipment",
+                    show: {
+                      show: true,
+                      terminalEquipmentId: terminalEquipment.id,
+                    },
+                  })
+                }
               >
-                <FontAwesomeIcon
-                  icon={faEdit}
-                  onClick={() => {
-                    dispatch({
-                      type: "setShowEditTerminalEquipment",
-                      show: {
-                        show: true,
-                        terminalEquipmentId: terminalEquipment.id,
-                      },
-                    });
-                  }}
-                />
+                <FontAwesomeIcon icon={faEdit} />
               </span>
               <span
                 role="button"
                 className="header-icons__icon"
-                onClick={() => {}}
+                onClick={() =>
+                  dispatch({
+                    show: {
+                      routeNodeId: state.routeNodeId,
+                      show: true,
+                      terminalEquipmentId: terminalEquipment.id,
+                    },
+                    type: "setShowAddAdditionalStructures",
+                  })
+                }
               >
                 <FontAwesomeIcon icon={faPlusCircle} />
               </span>
@@ -341,6 +348,26 @@ function TerminalEquipment() {
           />
         </ModalContainer>
       );
+    } else if (
+      state.showAddAdditionalStructure.show &&
+      state.showAddAdditionalStructure.routeNodeId &&
+      state.showAddAdditionalStructure.terminalEquipmentId
+    ) {
+      showElement(
+        <ModalContainer
+          title={t("ADD_ADDITIONAL_STRUCTURES")}
+          closeCallback={() =>
+            dispatch({ type: "resetShowAddAdditionalStructures" })
+          }
+        >
+          <AddAdditionalStructures
+            routeNodeId={state.showAddAdditionalStructure.routeNodeId}
+            terminalEquipmentId={
+              state.showAddAdditionalStructure.terminalEquipmentId
+            }
+          />
+        </ModalContainer>
+      );
     } else {
       showElement(null);
     }
@@ -351,6 +378,7 @@ function TerminalEquipment() {
     state.showEditTerminalEquipment,
     state.terminalEquipmentOrRackId,
     state.showEditRack,
+    state.showAddAdditionalStructure,
     showElement,
     dispatch,
     t,

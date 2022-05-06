@@ -217,7 +217,13 @@
       "EDIT_TERMINAL_EQUIPMENT": "Edit terminal equipment",
       "RACK": "Rack",
       "EDIT_RACK": "Editer rack",
-      "TOGGLE_AUTOMATIC": "Toggle automatic zoom."
+      "TOGGLE_AUTOMATIC": "Toggle automatic zoom.",
+      "ADD_ADDITIONAL_STRUCTURES": "Add additional structures",
+      "SpliceTray": "Splice trays",
+      "SplicePatchTray": "Splice patch trays",
+      "INSERT_AT_POSITION": "Insert at position",
+      "NUMBER_OF_MODULES": "Number of modules",
+      "ADDED": "Added"
     }
   },
   "dk": {
@@ -438,7 +444,13 @@
       "EDIT_TERMINAL_EQUIPMENT": "Rediger fiber udstyr",
       "RACK": "Rack",
       "EDIT_RACK": "Editer rack",
-      "TOGGLE_AUTOMATIC_ZOOM_MAP": "Aktiver automatisk zoom."
+      "TOGGLE_AUTOMATIC_ZOOM_MAP": "Aktiver automatisk zoom.",
+      "ADD_ADDITIONAL_STRUCTURES": "Tilføj ekstra strukturer",
+      "SpliceTray": "Splidse bakker",
+      "SplicePatchTray": "Patch/splidse bakker",
+      "INSERT_AT_POSITION": "Indsæt på position (slot nummer)",
+      "NUMBER_OF_MODULES": "Antal moduler",
+      "ADDED": "Tilføjet"
     }
   }
 }
