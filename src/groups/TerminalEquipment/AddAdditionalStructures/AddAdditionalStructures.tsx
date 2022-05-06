@@ -88,11 +88,13 @@ function reducer(state: State, action: Action): State {
 interface AddAdditionalStructuresProps {
   routeNodeId: string;
   terminalEquipmentId: string;
+  addedSuccessCallback?: () => void;
 }
 
 function AddAdditionalStructures({
   routeNodeId,
   terminalEquipmentId,
+  addedSuccessCallback,
 }: AddAdditionalStructuresProps) {
   const { t } = useTranslation();
   const client = useClient();
@@ -145,6 +147,9 @@ function AddAdditionalStructures({
         const body = r.data?.terminalEquipment.addAdditionalStructures;
         if (body?.isSuccess) {
           toast.success(t("ADDED"));
+          if (addedSuccessCallback) {
+            addedSuccessCallback();
+          }
         } else {
           toast.error(t(body?.errorCode ?? "ERROR"));
         }
@@ -203,7 +208,7 @@ function AddAdditionalStructures({
         <div className="full-row">
           <LabelContainer text={`${t("NUMBER_OF_MODULES")}:`}>
             <NumberPicker
-              minValue={1}
+              minValue={0}
               maxValue={1000}
               setValue={(x) =>
                 dispatch({
@@ -217,6 +222,7 @@ function AddAdditionalStructures({
         </div>
         <div className="full-row">
           <DefaultButton
+            disabled={!(state.numberOfStructures > 0)}
             innerText={t("ADD")}
             onClick={() => executeAddAdditionalStructures()}
           />
