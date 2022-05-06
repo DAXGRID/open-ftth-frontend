@@ -24,6 +24,7 @@ import TerminalLineFree from "./TerminalLineFree";
 import DisconnectFiberEditor from "./DisconnectFiberEditor";
 import EditTerminalEquipment from "./EditTerminalEquipment";
 import EditRack from "./EditRack";
+import AddAdditionalStructures from "./AddAdditionalStructures";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -358,7 +359,14 @@ function TerminalEquipment() {
           closeCallback={() =>
             dispatch({ type: "resetShowAddAdditionalStructures" })
           }
-        ></ModalContainer>
+        >
+          <AddAdditionalStructures
+            routeNodeId={state.showAddAdditionalStructure.routeNodeId}
+            terminalEquipmentId={
+              state.showAddAdditionalStructure.terminalEquipmentId
+            }
+          />
+        </ModalContainer>
       );
     } else {
       showElement(null);
