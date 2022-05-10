@@ -13,6 +13,7 @@ import {
   TerminalEquipmentConnectivityViewUpdatedResponse,
   TerminalEquipmentConnectivityViewUpdatedParams,
   Hop,
+  removeStructure,
 } from "./TerminalEquipmentGql";
 import { useClient, useSubscription } from "urql";
 import { connectivityViewQuery } from "./TerminalEquipmentGql";
@@ -52,6 +53,11 @@ interface ShowAddAdditionalStructures {
   terminalEquipmentId: string | null;
 }
 
+interface RemoveStructure {
+  terminalEquipmentId: string;
+  terminalStructureId: string;
+}
+
 interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
   showFreeLines: { [id: string]: boolean };
@@ -67,6 +73,7 @@ interface TerminalEquipmentState {
   editable: boolean;
   terminalEquipmentOrRackId: string;
   routeNodeId: string | null;
+  removeStructure: RemoveStructure | null;
 }
 
 type TerminalEquipmentAction =
@@ -113,6 +120,13 @@ type TerminalEquipmentAction =
   | {
       type: "setTerminalEquipmentOrRackId";
       id: string;
+    }
+  | {
+      type: "removeStructure";
+      params: RemoveStructure | null;
+    }
+  | {
+      type: "resetRemoveStructure";
     };
 
 const defaultShowFiberEditorValues: ShowFiberEditor = {
@@ -160,6 +174,7 @@ const terminalEquipmentInitialState: TerminalEquipmentState = {
   terminalEquipmentOrRackId: "",
   showDisconnectFiberEditor: defaultShowDisconnectFiberEditor,
   routeNodeId: null,
+  removeStructure: null,
 };
 
 function terminalEquipmentReducer(
@@ -252,6 +267,16 @@ function terminalEquipmentReducer(
       return {
         ...state,
         terminalEquipmentOrRackId: action.id,
+      };
+    case "removeStructure":
+      return {
+        ...state,
+        removeStructure: action.params,
+      };
+    case "resetRemoveStructure":
+      return {
+        ...state,
+        removeStructure: null,
       };
     default:
       throw new Error(`No action for ${action}`);
@@ -381,6 +406,31 @@ const TerminalEquipmentProvider = ({
     if (!routeNodeId) return;
     dispatch({ type: "setRouteNodeId", id: routeNodeId });
   }, [routeNodeId, dispatch]);
+
+  useEffect(() => {
+    if (!state.removeStructure) return;
+
+    const confirmed = window.confirm(
+      t("Are you sure you want to delete the selected object?")
+    );
+    if (!confirmed) {
+      dispatch({ type: "resetRemoveStructure" });
+      return;
+    }
+    removeStructure(client, {
+      ...state.removeStructure,
+      routeNodeId: routeNodeId,
+    }).then((response) => {
+      const body = response.data?.terminalEquipment.removeStructure;
+      if (body?.isSuccess) {
+        toast.success(t("REMOVED"));
+      } else {
+        toast.error(t(body?.errorCode ?? "ERROR"));
+        console.error(body?.errorMessage ?? "No error message.");
+      }
+      dispatch({ type: "resetRemoveStructure" });
+    });
+  }, [state.removeStructure, client, routeNodeId, t, dispatch]);
 
   return (
     <TerminalEquipmentContext.Provider

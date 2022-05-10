@@ -2,6 +2,7 @@ import {
   faEdit,
   faFilter,
   faPlusCircle,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode, useContext, useEffect, useMemo } from "react";
@@ -145,17 +146,18 @@ function TerminalEquipmentTableContainer({
 type TerminalEquipmentTableProps = {
   terminalStructures: TerminalStructure[];
   showFreeLines: boolean;
-  terminalEquipmentOrRackId: string;
+  terminalEquipmentId: string;
   isRack: boolean;
 };
 
 function TerminalEquipmentTable({
   terminalStructures,
   showFreeLines,
-  terminalEquipmentOrRackId,
+  terminalEquipmentId,
   isRack,
 }: TerminalEquipmentTableProps) {
   const { t } = useTranslation();
+  const { state, dispatch } = useContext(TerminalEquipmentContext);
 
   return (
     <div className="terminal-equipment-table">
@@ -189,7 +191,26 @@ function TerminalEquipmentTable({
                   <p className="terminal-equipment-row-header__item">
                     {x.info}
                   </p>
-                  <p className="terminal-equipment-row-header__item"></p>
+                  {state.editable && (
+                    <div className="header-icons">
+                      <span
+                        role="button"
+                        className="header-icons__icon color-red"
+                        onClick={() =>
+                          dispatch({
+                            type: "removeStructure",
+                            params: {
+                              terminalEquipmentId:
+                                state.terminalEquipmentOrRackId,
+                              terminalStructureId: x.id,
+                            },
+                          })
+                        }
+                      >
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
               {x.lines.map((y, i) => {
@@ -198,7 +219,7 @@ function TerminalEquipmentTable({
                     <TerminalLine
                       line={y}
                       key={y.a?.terminal.id ?? y.z?.terminal.id}
-                      terminalEquipmentOrRackId={terminalEquipmentOrRackId}
+                      terminalEquipmentOrRackId={terminalEquipmentId}
                     />
                   );
                 } else if (
@@ -210,7 +231,7 @@ function TerminalEquipmentTable({
                     <TerminalLineFree
                       line={y}
                       key={i}
-                      terminalEquipmentOrRackId={terminalEquipmentOrRackId}
+                      terminalEquipmentOrRackId={terminalEquipmentId}
                     />
                   );
                 } else {
@@ -420,7 +441,7 @@ function TerminalEquipment() {
                     terminalEquipment={y}
                   >
                     <TerminalEquipmentTable
-                      terminalEquipmentOrRackId={y.id}
+                      terminalEquipmentId={y.id}
                       terminalStructures={y.terminalStructures}
                       showFreeLines={state.showFreeLines[y.id] ?? false}
                       isRack={true}
@@ -441,7 +462,7 @@ function TerminalEquipment() {
                 showFreeLines={state.showFreeLines[y.id]}
               >
                 <TerminalEquipmentTable
-                  terminalEquipmentOrRackId={y.id}
+                  terminalEquipmentId={y.id}
                   terminalStructures={y.terminalStructures}
                   showFreeLines={state.showFreeLines[y.id] ?? false}
                   isRack={false}
