@@ -13,6 +13,7 @@ import {
   ConnectivityFaceConnection,
   getConnectivityFaces,
   connectToTerminalEquipment,
+  connectTerminals,
 } from "./FiberConnectionEditorGql";
 
 type EquipmentSelectorRow = {
@@ -30,26 +31,26 @@ type EquipmentSelectorRow = {
   };
 };
 
-function getEquipmentKind(
-  id: string,
-  connectivityFaces: ConnectivityFace[]
-): string {
-  if (!id) return "";
+function terminalEquipmentToTerminalEquipment(
+  from: ConnectivityFace,
+  to: ConnectivityFace
+): boolean {
   return (
-    connectivityFaces.find((x) => x.equipmentId === id)?.equipmentKind ?? ""
+    from.equipmentKind === "TERMINAL_EQUIPMENT" &&
+    to.equipmentKind === "TERMINAL_EQUIPMENT"
   );
 }
 
-function bothTerminalEquipment(
-  fromId: string,
-  toId: string,
-  connectivityFaces: ConnectivityFace[]
+function spanEquipmentToTerminalEquipment(
+  from: ConnectivityFace,
+  to: ConnectivityFace
 ): boolean {
-  if (!fromId || !toId) return false;
-  const fromKind = getEquipmentKind(fromId, connectivityFaces);
-  const toKind = getEquipmentKind(toId, connectivityFaces);
-  if (!fromKind || !toKind) return false;
-  return fromKind === "TerminalEquipment" && toKind === "TerminalEquipment";
+  return (
+    (from.equipmentKind === "SPAN_EQUIPMENT" &&
+      to.equipmentKind === "TERMINAL_EQUIPMENT") ||
+    (from.equipmentKind === "TERMINAL_EQUIPMENT" &&
+      to.equipmentKind === "SPAN_EQUIPMENT")
+  );
 }
 
 function createRows(
@@ -194,8 +195,7 @@ function findAvailableCountFaceConnections(
 
 function findAvailableJumps(
   maxFromEquipmentCount: number,
-  numberToConnect: number,
-  currentIndex: number
+  numberToConnect: number
 ) {
   if (!maxFromEquipmentCount || !numberToConnect) return 1;
   if (numberToConnect === 1) return 1;
@@ -217,10 +217,12 @@ function getRootEquipmentId(combinedEquipmentId: string) {
   return splitted[0];
 }
 
+type FaceKind = "PATCH_SIDE" | "SPLICE_SIDE";
+
 interface FiberConnectionEditorProps {
   routeNodeId: string;
   terminalId: string | null;
-  faceKind: "PATCH_SIDE" | "SPLICE_SIDE";
+  faceKind: FaceKind;
   terminalEquipmentOrRackId: string;
   side: "A" | "Z" | null;
 }
@@ -240,7 +242,7 @@ function FiberConnectionEditor({
   const [toPositionId, setToPositionId] = useState<string>("");
   const [numberOfConnections, setNumberOfConnections] = useState(1);
   const [jumps, setJumps] = useState(1);
-  const [coord, setCoord] = useState(0);
+  const [fiberCoordLength, setCoord] = useState(0);
   const [connectivityFaces, setConnectivityFaces] = useState<
     ConnectivityFace[]
   >([]);
@@ -364,7 +366,9 @@ function FiberConnectionEditor({
           defaultOption,
           ...createConnectivityFaceSelectOptions(
             connectivityFaces.filter(
-              (x) => x.equipmentKind === "TERMINAL_EQUIPMENT"
+              (x) =>
+                x.equipmentKind === "TERMINAL_EQUIPMENT" &&
+                (side === "Z" ? true : x.faceKind === "PATCH_SIDE")
             )
           ),
         ];
@@ -373,7 +377,9 @@ function FiberConnectionEditor({
           defaultOption,
           ...createConnectivityFaceSelectOptions(
             connectivityFaces.filter(
-              (x) => x.equipmentKind === "SPAN_EQUIPMENT"
+              (x) =>
+                x.equipmentKind === "SPAN_EQUIPMENT" &&
+                x.faceKind === "SPLICE_SIDE"
             )
           ),
         ];
@@ -392,7 +398,7 @@ function FiberConnectionEditor({
         ),
       ];
     }
-  }, [connectivityFaces, t, toEquipmentId]);
+  }, [connectivityFaces, t, toEquipmentId, side]);
 
   const toConnectivityFaceOptions = useMemo<SelectOption[]>(() => {
     const defaultOption = { text: t("CHOOSE"), value: "", key: "0" };
@@ -406,7 +412,9 @@ function FiberConnectionEditor({
           defaultOption,
           ...createConnectivityFaceSelectOptions(
             connectivityFaces.filter(
-              (x) => x.equipmentKind === "TERMINAL_EQUIPMENT"
+              (x) =>
+                x.equipmentKind === "TERMINAL_EQUIPMENT" &&
+                (side === "A" ? true : x.faceKind === "PATCH_SIDE")
             )
           ),
         ];
@@ -415,7 +423,9 @@ function FiberConnectionEditor({
           defaultOption,
           ...createConnectivityFaceSelectOptions(
             connectivityFaces.filter(
-              (x) => x.equipmentKind === "SPAN_EQUIPMENT"
+              (x) =>
+                x.equipmentKind === "SPAN_EQUIPMENT" &&
+                x.faceKind === "SPLICE_SIDE"
             )
           ),
         ];
@@ -434,7 +444,7 @@ function FiberConnectionEditor({
         ),
       ];
     }
-  }, [connectivityFaces, t, fromEquipmentId]);
+  }, [connectivityFaces, t, fromEquipmentId, side]);
 
   useEffect(() => {
     if (
@@ -529,12 +539,9 @@ function FiberConnectionEditor({
   const maxAvailableJumps = useMemo(() => {
     return findAvailableJumps(
       fromConnectivityFaceConnections.length,
-      numberOfConnections,
-      fromConnectivityFaceConnections.findIndex(
-        (x) => x.terminalOrSegmentId === fromPositionId
-      )
+      numberOfConnections
     );
-  }, [numberOfConnections, fromConnectivityFaceConnections, fromPositionId]);
+  }, [numberOfConnections, fromConnectivityFaceConnections]);
 
   const connectionRows = useMemo(() => {
     if (
@@ -595,22 +602,42 @@ function FiberConnectionEditor({
     setJumps(1);
   };
 
+  const getConnectivityFace = (id: string): ConnectivityFace | null => {
+    const rootEquipmentId = getRootEquipmentId(id);
+    return (
+      connectivityFaces.find((x) => x.equipmentId === rootEquipmentId) ?? null
+    );
+  };
+
+  const getSelectedFromEquipment = (): ConnectivityFace | null => {
+    return getConnectivityFace(fromEquipmentId);
+  };
+
+  const getSelectedToEquipment = (): ConnectivityFace | null => {
+    return getConnectivityFace(toEquipmentId);
+  };
+
+  const selectedSpanEquipmentToTerminalEquipment = (): boolean => {
+    const from = getSelectedFromEquipment();
+    const to = getSelectedToEquipment();
+    return !!from && !!to && spanEquipmentToTerminalEquipment(from, to);
+  };
+
+  const selectedTerminalEquipmentToTerminalEquipment = (): boolean => {
+    const from = getSelectedFromEquipment();
+    const to = getSelectedToEquipment();
+    return !!from && !!to && terminalEquipmentToTerminalEquipment(from, to);
+  };
+
   const executeConnectToTerminalEquipment = () => {
-    const fromEquipId = getRootEquipmentId(fromEquipmentId);
-    const toEquipId = getRootEquipmentId(toEquipmentId);
-    const from = connectivityFaces.find((x) => x.equipmentId === fromEquipId);
-    const to = connectivityFaces.find((x) => x.equipmentId === toEquipId);
+    const from = getSelectedFromEquipment();
+    const to = getSelectedToEquipment();
 
     if (!from || !to) {
       throw Error("Could not find from or to in connectivity faces.");
     }
 
-    if (
-      (from.equipmentKind === "SPAN_EQUIPMENT" &&
-        to.equipmentKind === "TERMINAL_EQUIPMENT") ||
-      (from.equipmentKind === "TERMINAL_EQUIPMENT" &&
-        to.equipmentKind === "SPAN_EQUIPMENT")
-    ) {
+    if (spanEquipmentToTerminalEquipment(from, to)) {
       const isFromSpanEquipment = from.equipmentKind === "SPAN_EQUIPMENT";
 
       const spanSegmentIds = isFromSpanEquipment
@@ -647,12 +674,41 @@ function FiberConnectionEditor({
         .catch(() => {
           toast.error(t("ERROR"));
         });
+    } else if (terminalEquipmentToTerminalEquipment(from, to)) {
+      if (connectionRows.length > 1) {
+        toast.error(t("ERROR"));
+        console.error("To many connection-rows, something is wrong.");
+        return;
+      }
+
+      const connectionRow =
+        connectionRows.length > 0 ? connectionRows[0] : null;
+
+      if (!connectionRow) {
+        toast.error(t("ERROR"));
+        console.error("No connection rows.");
+        return;
+      }
+
+      connectTerminals(client, {
+        routeNodeId: routeNodeId,
+        fiberCoordLength: fiberCoordLength,
+        fromTerminalId: connectionRow.from.id,
+        toTerminalId: connectionRow.to.id,
+      }).then((response) => {
+        const body = response.data?.terminalEquipment.connectTerminals;
+        if (body?.isSuccess) {
+          toast.success(t("CONNECTION_ESTABLISHED"));
+        } else {
+          toast.error(t(body?.errorCode ?? "ERROR"));
+        }
+      });
     }
   };
 
   const canExecuteConnectToTerminal = (): boolean => {
     const notConnectedRows = connectionRows.filter(
-      (x) => !x.from.isConnected && !x.to.isConnected
+      (x) => !x.from.isConnected && !x.to.isConnected && x.from.id !== x.to.id
     ).length;
     return notConnectedRows === numberOfConnections;
   };
@@ -700,34 +756,41 @@ function FiberConnectionEditor({
         </LabelContainer>
       </div>
       <div className="full-row gap-default">
-        <LabelContainer text={t("NUMBER_OF_CONNECTIONS")}>
-          <SelectMenu
-            options={createNumberOptions(maxAvailableConnectionsCount)}
-            removePlaceHolderOnSelect
-            onSelected={(x) => handleSetNumberOfConnections(Number(x))}
-            selected={numberOfConnections}
-          />
-        </LabelContainer>
-        <LabelContainer text={t("FROM_EQUIPMENT_JUMP")}>
-          <SelectMenu
-            options={createNumberOptions(maxAvailableJumps)}
-            removePlaceHolderOnSelect
-            onSelected={(x) => setJumps(Number(x))}
-            selected={jumps}
-          />
-        </LabelContainer>
-        {bothTerminalEquipment(
-          fromEquipmentId,
-          toEquipmentId,
-          connectivityFaces
-        ) && (
-          <LabelContainer text={t("PATCH/PIGTAIL_COORD_LENGTH_CM")}>
-            <NumberPicker
-              minWidth="250px"
-              setValue={(x) => setCoord(x)}
-              value={coord}
-            />
-          </LabelContainer>
+        {selectedSpanEquipmentToTerminalEquipment() && (
+          <>
+            <LabelContainer text={t("NUMBER_OF_CONNECTIONS")}>
+              <SelectMenu
+                options={createNumberOptions(maxAvailableConnectionsCount)}
+                removePlaceHolderOnSelect
+                onSelected={(x) => handleSetNumberOfConnections(Number(x))}
+                selected={numberOfConnections}
+              />
+            </LabelContainer>
+            <LabelContainer text={t("FROM_EQUIPMENT_JUMP")}>
+              <SelectMenu
+                options={createNumberOptions(maxAvailableJumps)}
+                removePlaceHolderOnSelect
+                onSelected={(x) => setJumps(Number(x))}
+                selected={jumps}
+              />
+            </LabelContainer>{" "}
+          </>
+        )}
+        {selectedTerminalEquipmentToTerminalEquipment() && (
+          <>
+            <LabelContainer text={t("PATCH/PIGTAIL_COORD_LENGTH_CM")}>
+              <NumberPicker
+                minWidth="250px"
+                setValue={(x) => setCoord(x)}
+                value={fiberCoordLength}
+              />
+            </LabelContainer>
+            {/* Start dummy block */}
+            <LabelContainer text={""}>
+              <></>
+            </LabelContainer>
+            {/* End dummy block */}
+          </>
         )}
       </div>
       <div className="full-row">

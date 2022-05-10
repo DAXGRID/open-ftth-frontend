@@ -43,6 +43,15 @@ export function connectToTerminalEquipment(
     .toPromise();
 }
 
+export function connectTerminals(
+  client: Client,
+  params: ConnectTerminalsParams
+) {
+  return client
+    .mutation<ConnectTerminalsResponse>(CONNECT_TERMINALS_MUTATION, params)
+    .toPromise();
+}
+
 export type ConnectivityFaceConnection = {
   terminalOrSegmentId: string;
   name: string;
@@ -50,7 +59,7 @@ export type ConnectivityFaceConnection = {
   isConnected: boolean;
 };
 
-export type ConnectivityFacesResponse = {
+type ConnectivityFacesResponse = {
   utilityNetwork: {
     connectivityFaces: ConnectivityFace[];
   };
@@ -74,15 +83,18 @@ query ($routeNodeId: ID!) {
 }
 `;
 
+type EquipmentKind = "SPAN_EQUIPMENT" | "TERMINAL_EQUIPMENT";
+type FaceKind = "PATCH_SIDE" | "SPLICE_SIDE";
+
 export type ConnectivityFace = {
-  faceKind: string;
+  faceKind: FaceKind;
   faceName: string;
   equipmentId: string;
   equipmentName: string;
-  equipmentKind: string;
+  equipmentKind: EquipmentKind;
 };
 
-export type ConnectivityFaceConnectionsResponse = {
+type ConnectivityFaceConnectionsResponse = {
   utilityNetwork: {
     connectivityFaceConnections: ConnectivityFaceConnection[];
   };
@@ -132,7 +144,7 @@ interface ConnectToTerminalEquipmentParams {
   }[];
 }
 
-export const CONNECT_TO_TERMINAL_EQUIPMENT_MUTATION = `
+const CONNECT_TO_TERMINAL_EQUIPMENT_MUTATION = `
 mutation (
 $routeNodeId: ID!,
 $connects: [ConnectSpanSegmentToTerminalOperationInputType!]!) {
@@ -141,6 +153,44 @@ $connects: [ConnectSpanSegmentToTerminalOperationInputType!]!) {
       routeNodeId: $routeNodeId
       connects: $connects)
     {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}
+`;
+
+interface ConnectTerminalsResponse {
+  terminalEquipment: {
+    connectTerminals: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
+interface ConnectTerminalsParams {
+  routeNodeId: string;
+  fromTerminalId: string;
+  toTerminalId: string;
+  fiberCoordLength: Number;
+}
+
+const CONNECT_TERMINALS_MUTATION = `
+mutation (
+$routeNodeId: ID!,
+$fromTerminalId: ID!,
+$toTerminalId: ID!,
+$fiberCoordLength: Float!) {
+  terminalEquipment {
+    connectTerminals(
+      routeNodeId: $routeNodeId
+      fromTerminalId: $fromTerminalId
+      toTerminalId: $toTerminalId
+      fiberCoordLength: $fiberCoordLength
+    ) {
       isSuccess
       errorCode
       errorMessage
