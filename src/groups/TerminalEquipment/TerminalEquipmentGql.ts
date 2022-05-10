@@ -29,6 +29,15 @@ export const connectivityTraceViewQuery = (
     .toPromise();
 };
 
+export const removeStructure = (
+  client: Client,
+  params: RemoveStructureParams
+) => {
+  return client
+    .mutation<RemoveStructureResponse>(REMOVE_STRUCTURE_MUTATION, params)
+    .toPromise();
+};
+
 export interface ParentNodeStructure {
   id: string;
   category: string;
@@ -266,3 +275,39 @@ $terminalOrSpanEquipmentId: ID!) {
     }
   }
 }`;
+
+interface RemoveStructureResponse {
+  terminalEquipment: {
+    removeStructure: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
+interface RemoveStructureParams {
+  routeNodeId: string;
+  terminalEquipmentId: string;
+  terminalStructureId: string;
+}
+
+const REMOVE_STRUCTURE_MUTATION = `
+mutation(
+$routeNodeId: ID!,
+$terminalEquipmentId: ID!,
+$terminalStructureId: ID!
+) {
+  terminalEquipment {
+    removeStructure(
+      routeNodeId: $routeNodeId
+      terminalEquipmentId: $terminalEquipmentId
+      terminalStructureId: $terminalStructureId
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}
+`;

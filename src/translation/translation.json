@@ -223,7 +223,8 @@
       "SplicePatchTray": "Splice patch trays",
       "INSERT_AT_POSITION": "Insert at position",
       "NUMBER_OF_MODULES": "Number of modules",
-      "ADDED": "Added"
+      "ADDED": "Added",
+      "REMOVED": "Removed"
     }
   },
   "dk": {
@@ -450,7 +451,8 @@
       "SplicePatchTray": "Patch/splidse bakker",
       "INSERT_AT_POSITION": "Indsæt på position (slot nummer)",
       "NUMBER_OF_MODULES": "Antal moduler",
-      "ADDED": "Tilføjet"
+      "ADDED": "Tilføjet",
+      "REMOVED": "Fjernet"
     }
   }
 }
