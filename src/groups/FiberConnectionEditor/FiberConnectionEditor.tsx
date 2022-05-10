@@ -366,7 +366,9 @@ function FiberConnectionEditor({
           defaultOption,
           ...createConnectivityFaceSelectOptions(
             connectivityFaces.filter(
-              (x) => x.equipmentKind === "TERMINAL_EQUIPMENT"
+              (x) =>
+                x.equipmentKind === "TERMINAL_EQUIPMENT" &&
+                (side === "Z" ? true : x.faceKind === "PATCH_SIDE")
             )
           ),
         ];
@@ -375,7 +377,9 @@ function FiberConnectionEditor({
           defaultOption,
           ...createConnectivityFaceSelectOptions(
             connectivityFaces.filter(
-              (x) => x.equipmentKind === "SPAN_EQUIPMENT"
+              (x) =>
+                x.equipmentKind === "SPAN_EQUIPMENT" &&
+                x.faceKind === "SPLICE_SIDE"
             )
           ),
         ];
@@ -394,7 +398,7 @@ function FiberConnectionEditor({
         ),
       ];
     }
-  }, [connectivityFaces, t, toEquipmentId]);
+  }, [connectivityFaces, t, toEquipmentId, side]);
 
   const toConnectivityFaceOptions = useMemo<SelectOption[]>(() => {
     const defaultOption = { text: t("CHOOSE"), value: "", key: "0" };
@@ -408,7 +412,9 @@ function FiberConnectionEditor({
           defaultOption,
           ...createConnectivityFaceSelectOptions(
             connectivityFaces.filter(
-              (x) => x.equipmentKind === "TERMINAL_EQUIPMENT"
+              (x) =>
+                x.equipmentKind === "TERMINAL_EQUIPMENT" &&
+                (side === "A" ? true : x.faceKind === "PATCH_SIDE")
             )
           ),
         ];
@@ -417,7 +423,9 @@ function FiberConnectionEditor({
           defaultOption,
           ...createConnectivityFaceSelectOptions(
             connectivityFaces.filter(
-              (x) => x.equipmentKind === "SPAN_EQUIPMENT"
+              (x) =>
+                x.equipmentKind === "SPAN_EQUIPMENT" &&
+                x.faceKind === "SPLICE_SIDE"
             )
           ),
         ];
@@ -436,7 +444,7 @@ function FiberConnectionEditor({
         ),
       ];
     }
-  }, [connectivityFaces, t, fromEquipmentId]);
+  }, [connectivityFaces, t, fromEquipmentId, side]);
 
   useEffect(() => {
     if (
@@ -700,7 +708,7 @@ function FiberConnectionEditor({
 
   const canExecuteConnectToTerminal = (): boolean => {
     const notConnectedRows = connectionRows.filter(
-      (x) => !x.from.isConnected && !x.to.isConnected
+      (x) => !x.from.isConnected && !x.to.isConnected && x.from.id !== x.to.id
     ).length;
     return notConnectedRows === numberOfConnections;
   };

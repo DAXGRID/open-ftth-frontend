@@ -36,7 +36,11 @@ function EquipmentSelector({ rows, t }: EquipmentSelectorProps) {
             return (
               <div
                 className={`equipment-selector-table-body__row ${
-                  x.from.isConnected || x.to.isConnected ? "row-connected" : ""
+                  x.from.isConnected ||
+                  x.to.isConnected ||
+                  x.from.id === x.to.id
+                    ? "row-invalid"
+                    : ""
                 }`}
                 key={`${x.from.id}${x.to.id}`}
               >

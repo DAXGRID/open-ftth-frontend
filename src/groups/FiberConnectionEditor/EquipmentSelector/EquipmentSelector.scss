@@ -36,7 +36,7 @@
       grid-template-columns: 3fr 2fr 0.5fr 2fr 3fr;
       border-bottom: 1px solid $border-color;
 
-      &.row-connected {
+      &.row-invalid {
         background-color: $red;
       }
 
