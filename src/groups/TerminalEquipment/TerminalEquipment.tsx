@@ -213,31 +213,33 @@ function TerminalEquipmentTable({
                   )}
                 </div>
               </div>
-              {x.lines.map((y, i) => {
-                if (y.a?.connectedTo || y.z?.connectedTo) {
-                  return (
-                    <TerminalLine
-                      line={y}
-                      key={y.a?.terminal.id ?? y.z?.terminal.id}
-                      terminalEquipmentOrRackId={terminalEquipmentId}
-                    />
-                  );
-                } else if (
-                  showFreeLines &&
-                  !y.a?.connectedTo &&
-                  !y.z?.connectedTo
-                ) {
-                  return (
-                    <TerminalLineFree
-                      line={y}
-                      key={i}
-                      terminalEquipmentOrRackId={terminalEquipmentId}
-                    />
-                  );
-                } else {
-                  return null;
-                }
-              })}
+              <div className="terminal-equipment-body-rows">
+                {x.lines.map((y, i) => {
+                  if (y.a?.connectedTo || y.z?.connectedTo) {
+                    return (
+                      <TerminalLine
+                        line={y}
+                        key={y.a?.terminal.id ?? y.z?.terminal.id}
+                        terminalEquipmentOrRackId={terminalEquipmentId}
+                      />
+                    );
+                  } else if (
+                    showFreeLines &&
+                    !y.a?.connectedTo &&
+                    !y.z?.connectedTo
+                  ) {
+                    return (
+                      <TerminalLineFree
+                        line={y}
+                        key={i}
+                        terminalEquipmentOrRackId={terminalEquipmentId}
+                      />
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
+              </div>
             </div>
           );
         })}

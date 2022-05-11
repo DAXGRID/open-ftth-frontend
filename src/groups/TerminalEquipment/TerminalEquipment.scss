@@ -129,17 +129,16 @@
 
   .terminal-equipment-table-body {
     &.terminal-equipment-table-body--rack {
+    }
+
+    .terminal-equipment-body-rows {
+      max-height: 600px;
       overflow: overlay;
-      max-height: 700px;
     }
 
     .terminal-equipment-table-row {
       flex: 1;
       border-bottom: 1px solid $border-color;
-
-      &:first-child {
-        border-bottom: none;
-      }
 
       .terminal-equipment-header-row {
         display: flex;
@@ -147,7 +146,6 @@
         padding: 10px 10px;
         background-color: $ultra-light-grey;
         font-size: 14px;
-        border-bottom: 1px solid $border-color;
 
         .terminal-equipment-row-header__item {
           flex: 1;
