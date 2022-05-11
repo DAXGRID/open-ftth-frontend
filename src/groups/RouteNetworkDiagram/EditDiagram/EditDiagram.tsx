@@ -964,6 +964,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         />
       )}
       {!editMode &&
+        singleSelectedFeature?.state?.selected &&
         (singleSelectedFeature?.source === "Rack" ||
           singleSelectedFeature?.source === "TerminalEquipment") && (
           <div className="container-max-size container-center">
