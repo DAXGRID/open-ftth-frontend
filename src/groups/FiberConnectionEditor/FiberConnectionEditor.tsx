@@ -361,33 +361,10 @@ function FiberConnectionEditor({
     );
 
     if (toEquipment && toEquipment.equipmentKind === "TERMINAL_EQUIPMENT") {
-      if (toEquipment.faceKind === "PATCH_SIDE") {
-        return [
-          defaultOption,
-          ...createConnectivityFaceSelectOptions(
-            connectivityFaces.filter(
-              (x) =>
-                x.equipmentKind === "TERMINAL_EQUIPMENT" &&
-                (side === "Z" ? true : x.faceKind === "PATCH_SIDE")
-            )
-          ),
-        ];
-      } else if (toEquipment.faceKind === "SPLICE_SIDE") {
-        return [
-          defaultOption,
-          ...createConnectivityFaceSelectOptions(
-            connectivityFaces.filter(
-              (x) =>
-                x.equipmentKind === "SPAN_EQUIPMENT" &&
-                x.faceKind === "SPLICE_SIDE"
-            )
-          ),
-        ];
-      } else {
-        throw Error(
-          `Could not handle faceKind being '${toEquipment.faceKind}'`
-        );
-      }
+      return [
+        defaultOption,
+        ...createConnectivityFaceSelectOptions(connectivityFaces),
+      ];
     } else {
       return [
         defaultOption,
@@ -398,7 +375,7 @@ function FiberConnectionEditor({
         ),
       ];
     }
-  }, [connectivityFaces, t, toEquipmentId, side]);
+  }, [connectivityFaces, t, toEquipmentId]);
 
   const toConnectivityFaceOptions = useMemo<SelectOption[]>(() => {
     const defaultOption = { text: t("CHOOSE"), value: "", key: "0" };
@@ -407,33 +384,10 @@ function FiberConnectionEditor({
     );
 
     if (fromEquipment && fromEquipment.equipmentKind === "TERMINAL_EQUIPMENT") {
-      if (fromEquipment.faceKind === "PATCH_SIDE") {
-        return [
-          defaultOption,
-          ...createConnectivityFaceSelectOptions(
-            connectivityFaces.filter(
-              (x) =>
-                x.equipmentKind === "TERMINAL_EQUIPMENT" &&
-                (side === "A" ? true : x.faceKind === "PATCH_SIDE")
-            )
-          ),
-        ];
-      } else if (fromEquipment.faceKind === "SPLICE_SIDE") {
-        return [
-          defaultOption,
-          ...createConnectivityFaceSelectOptions(
-            connectivityFaces.filter(
-              (x) =>
-                x.equipmentKind === "SPAN_EQUIPMENT" &&
-                x.faceKind === "SPLICE_SIDE"
-            )
-          ),
-        ];
-      } else {
-        throw Error(
-          `Could not handle faceKind being '${fromEquipment.faceKind}'`
-        );
-      }
+      return [
+        defaultOption,
+        ...createConnectivityFaceSelectOptions(connectivityFaces),
+      ];
     } else {
       return [
         defaultOption,
@@ -444,7 +398,7 @@ function FiberConnectionEditor({
         ),
       ];
     }
-  }, [connectivityFaces, t, fromEquipmentId, side]);
+  }, [connectivityFaces, t, fromEquipmentId]);
 
   useEffect(() => {
     if (
