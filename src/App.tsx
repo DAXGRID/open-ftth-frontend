@@ -29,7 +29,7 @@ function App() {
 
   if (!initialized) return <Loading />;
   // if keycloak is setup and user is authenticated but no username.
-  if (initialized && authenticated && !userName) return <Loading />;
+  if (initialized && authenticated() && !userName) return <Loading />;
 
   return (
     <Router>
