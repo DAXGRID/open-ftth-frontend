@@ -13,15 +13,27 @@ import { MapProvider } from "./contexts/MapContext";
 import { UserProvider } from "./contexts/UserContext";
 import { OverlayProvider } from "./contexts/OverlayContext";
 
+const getKeycloakToken = (): string | null => {
+  if (keycloak.token && keycloak.authenticated && !keycloak.isTokenExpired()) {
+    return keycloak.token;
+  } else {
+    keycloak.logout();
+    return null;
+  }
+};
+
 const subscriptionClient = new SubscriptionClient(
   `${Config.API_GATEWAY_WS_URI}/graphql`,
   {
     lazy: true,
     reconnect: true,
     connectionParams: () => {
-      return {
-        Authorization: `Bearer ${keycloak.token}`,
-      };
+      const token = getKeycloakToken();
+      return token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {};
     },
   }
 );
@@ -30,7 +42,7 @@ const client = new Client({
   url: `${Config.API_GATEWAY_HTTP_URI}/graphql`,
   requestPolicy: "network-only",
   fetchOptions: () => {
-    const token = keycloak.token;
+    const token = getKeycloakToken();
     return token
       ? {
           headers: {
