@@ -1,0 +1,52 @@
+@import "../../../global-styles/colors";
+@import "../../../global-styles/settings";
+
+.static-bottom-tab-menu {
+  .static-bottom-tab-menu-container {
+    width: 100%;
+    height: 0;
+    overflow-y: scroll;
+    visibility: hidden;
+
+    &.static-bottom-tab-menu-container--show {
+      height: calc(100vh - ($top-menu-height + 37px));
+      animation: 0.1s fadeIn;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
+  .static-bottom-tab-menu-menu {
+    display: flex;
+
+    .static-bottom-tab-menu-menu_item {
+      padding: 10px;
+      flex: 1;
+      text-align: center;
+      border-top: 1px solid $border-color;
+      border-right: 1px solid $border-color;
+      font-weight: bold;
+
+      &.static-bottom-tab-menu-menu_item--selected {
+        background-color: $select-color;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+}
