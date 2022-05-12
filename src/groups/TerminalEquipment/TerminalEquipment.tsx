@@ -40,8 +40,10 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
     <div className="rack-container">
       <div className="rack-container-header">
         <p>{parentNodeStructure?.name ?? ""}</p>
-        <p>{parentNodeStructure?.specName ?? ""}</p>
-        <p>{parentNodeStructure?.info ?? ""}</p>
+        {parentNodeStructure?.specName && (
+          <p>{parentNodeStructure?.specName ?? ""}</p>
+        )}
+        {parentNodeStructure?.info && <p>{parentNodeStructure?.info ?? ""}</p>}
         <div className="header-icons">
           {state.editable && (
             <span
@@ -86,7 +88,7 @@ function TerminalEquipmentTableContainer({
       <div className="terminal-equipment-table-container-header">
         <p>{terminalEquipment.name}</p>
         <p>{terminalEquipment.specName}</p>
-        <p>{terminalEquipment.info}</p>
+        {terminalEquipment.info && <p>{terminalEquipment.info}</p>}
         <div className="header-icons">
           <span
             role="button"

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useContext } from "react";
 import RouteNetworkMap from "../RouteNetworkMap";
 import RouteNetworkDiagram from "../RouteNetworkDiagram";
 import { MapContext } from "../../contexts/MapContext";
+import StaticBottomMenu from "./StaticBottomMenu";
 
 function MapDiagram() {
   const [showDiagram, setShowDiagram] = useState(true);
@@ -20,20 +21,28 @@ function MapDiagram() {
   );
 
   return (
-    <div className="map-diagram">
-      <div className="container">
-        <RouteNetworkMap showSchematicDiagram={toggleDiagram} />
+    <>
+      <div className="map-diagram map-diagram--desktop">
+        <div className="container">
+          <RouteNetworkMap showSchematicDiagram={toggleDiagram} />
+        </div>
+        <div
+          className={
+            showDiagram && identifiedFeature?.id && identifiedFeature.type
+              ? "container"
+              : "container hide"
+          }
+        >
+          <RouteNetworkDiagram editable={false} />
+        </div>
       </div>
-      <div
-        className={
-          showDiagram && identifiedFeature?.id && identifiedFeature.type
-            ? "container"
-            : "container hide"
-        }
-      >
-        <RouteNetworkDiagram editable={false} />
+
+      <div className="map-diagram map-diagram--mobile">
+        <StaticBottomMenu>
+          <RouteNetworkDiagram editable={false} />
+        </StaticBottomMenu>
       </div>
-    </div>
+    </>
   );
 }
 
