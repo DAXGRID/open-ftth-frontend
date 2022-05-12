@@ -101,7 +101,7 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
       <div className="table-item-terminal__item">
         {line.a?.terminal.name ?? ""}
       </div>
-      <div className="table-item-terminal__item">-O-</div>
+      <div className="table-item-terminal__item">-</div>
       <div className="table-item-terminal__item">
         {line.z?.terminal.name ?? ""}
       </div>

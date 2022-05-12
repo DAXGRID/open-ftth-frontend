@@ -2,9 +2,6 @@
 @import "../../global-styles/settings";
 
 .map-diagram {
-  display: flex;
-  flex-wrap: wrap;
-
   .hide-container {
     position: absolute;
     right: 0;
@@ -29,7 +26,6 @@
     &:last-of-type {
       border-left: 1px solid $border-color;
       overflow-y: scroll;
-      max-height: calc(100vh - $top-menu-height);
     }
 
     &.hide {
@@ -38,12 +34,23 @@
   }
 }
 
-@media only screen and (max-width: 1024px) {
-  .map-diagram {
-    .container {
-      flex-basis: 100%;
-      width: 100%;
-      height: calc(100vh - $top-menu-height);
-    }
+@media only screen and (min-width: 1025px) {
+  .map-diagram--mobile {
+    display: none;
+  }
+
+  .map-diagram--desktop {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: calc(100vh - $top-menu-height);
+  }
+}
+
+@media only screen and (max-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) {
+  .map-diagram--desktop {
+    display: none;
+  }
+
+  .map-diagram--mobile {
   }
 }
