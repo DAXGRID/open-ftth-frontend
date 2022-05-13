@@ -2,36 +2,6 @@
 @import "../../global-styles/settings";
 
 .map-diagram {
-  .hide-container {
-    position: absolute;
-    right: 0;
-    padding: 5px;
-    z-index: 1;
-
-    button {
-      border: none;
-      padding: 5px;
-      border-radius: 4px;
-    }
-  }
-
-  .container {
-    flex: 1;
-    min-height: 100%;
-
-    &:first-of-type {
-      border-right: 1px solid $border-color;
-    }
-
-    &:last-of-type {
-      border-left: 1px solid $border-color;
-      overflow-y: scroll;
-    }
-
-    &.hide {
-      display: none;
-    }
-  }
 }
 
 @media only screen and (min-width: 1200px) {
@@ -42,7 +12,38 @@
   .map-diagram--desktop {
     display: flex;
     flex-wrap: wrap;
-    min-height: calc(100vh - $top-menu-height);
+    height: calc(100vh - $top-menu-height);
+
+    .hide-container {
+      position: absolute;
+      right: 0;
+      padding: 5px;
+      z-index: 1;
+
+      button {
+        border: none;
+        padding: 5px;
+        border-radius: 4px;
+      }
+    }
+
+    .container {
+      flex: 1;
+      height: calc(100vh - $top-menu-height);
+
+      &:first-of-type {
+        border-right: 1px solid $border-color;
+      }
+
+      &:last-of-type {
+        border-left: 1px solid $border-color;
+        overflow-y: scroll;
+      }
+
+      &.hide {
+        display: none;
+      }
+    }
   }
 }
 
