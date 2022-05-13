@@ -351,6 +351,10 @@ function SchematicDiagram({
     };
   }, [diagramObjects, envelope, onSelectFeature, editMode, setMap]);
 
+  useEffect(() => {
+    if (diagramObjects.length === 0) return;
+  }, [diagramObjects]);
+
   return (
     <div
       className={
