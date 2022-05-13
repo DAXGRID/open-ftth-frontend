@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useContext } from "react";
 import RouteNetworkMap from "../RouteNetworkMap";
 import RouteNetworkDiagram from "../RouteNetworkDiagram";
 import { MapContext } from "../../contexts/MapContext";
-import StaticBottomTabMenu from "./StaticBottomTapMenu";
+import TabMenuTop from "./TabMenuTop";
 
 function MapDiagram() {
   const { identifiedFeature } = useContext(MapContext);
@@ -39,7 +39,7 @@ function MapDiagram() {
       </div>
 
       <div className="map-diagram map-diagram--mobile">
-        <StaticBottomTabMenu
+        <TabMenuTop
           selectedViewId={selectedViewId}
           setSelectedViewId={setSelectedViewId}
           views={[
@@ -54,7 +54,7 @@ function MapDiagram() {
               view: <RouteNetworkDiagram editable={false} />,
             },
           ]}
-        ></StaticBottomTabMenu>
+        ></TabMenuTop>
       </div>
     </>
   );

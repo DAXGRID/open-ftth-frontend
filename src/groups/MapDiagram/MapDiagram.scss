@@ -34,7 +34,7 @@
   }
 }
 
-@media only screen and (min-width: 1025px) {
+@media only screen and (min-width: 1200px) {
   .map-diagram--mobile {
     display: none;
   }
@@ -46,7 +46,18 @@
   }
 }
 
-@media only screen and (max-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) {
+// Tablet and below
+@media only screen and (max-device-width: 1200px) {
+  .map-diagram--desktop {
+    display: none;
+  }
+
+  .map-diagram--mobile {
+  }
+}
+
+// Tablet retina and beloq
+@media only screen and (max-device-width: 1200px) and (-webkit-min-device-pixel-ratio: 2) {
   .map-diagram--desktop {
     display: none;
   }
