@@ -12,36 +12,22 @@ interface StaticBottomTapMenuProps {
   setSelectedViewId: (id: number) => void;
 }
 
-function StaticBottomTabMenu({
+function TabMenuTop({
   views,
   selectedViewId,
   setSelectedViewId,
 }: StaticBottomTapMenuProps) {
   return (
-    <div className="static-bottom-tab-menu">
-      {views.map((x) => {
-        return (
-          <div
-            className={`static-bottom-tab-menu-container ${
-              selectedViewId === x.id
-                ? "static-bottom-tab-menu-container--show"
-                : ""
-            }`}
-            key={x.id}
-          >
-            {x.view}
-          </div>
-        );
-      })}
-      <div className="static-bottom-tab-menu-menu">
+    <div className="tab-menu-top">
+      <div className="tab-menu-top-menu">
         {views.map((x) => {
           return (
             <div
               onClick={() => setSelectedViewId(x.id)}
               key={x.id}
-              className={`static-bottom-tab-menu-menu_item ${
+              className={`tab-menu-top-menu_item ${
                 selectedViewId === x.id
-                  ? "static-bottom-tab-menu-menu_item--selected"
+                  ? "tab-menu-top-menu_item--selected"
                   : ""
               }`}
             >
@@ -50,8 +36,20 @@ function StaticBottomTabMenu({
           );
         })}
       </div>
+      {views.map((x) => {
+        return (
+          <div
+            className={`tab-menu-top-container ${
+              selectedViewId === x.id ? "tab-menu-top-container--show" : ""
+            }`}
+            key={x.id}
+          >
+            {x.view}
+          </div>
+        );
+      })}
     </div>
   );
 }
 
-export default StaticBottomTabMenu;
+export default TabMenuTop;
