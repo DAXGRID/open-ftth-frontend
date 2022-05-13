@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { useQuery, useSubscription } from "urql";
+import { useSubscription, useClient } from "urql";
 import { MapContext } from "../../contexts/MapContext";
 import EditDiagram from "./EditDiagram";
 import ReadOnlyDiagram from "./ReadOnlyDiagram";
@@ -18,8 +18,10 @@ type DiagramWrapperProps = {
 };
 
 function DiagramWrapper({ editable }: DiagramWrapperProps) {
+  const client = useClient();
   const { identifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
+  const [loading, setLoading] = useState(false);
   const [envelope, setEnvelope] = useState<Envelope>({
     maxX: 0,
     maxY: 0,
@@ -27,14 +29,14 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
     minY: 0,
   });
 
-  const [diagramQueryResult] = useQuery<DiagramQueryResponse>({
-    query: GET_DIAGRAM,
-    variables: {
-      routeNetworkElementId: identifiedFeature?.id,
-    },
-    pause: !identifiedFeature?.id,
-  });
-
+  /* const [diagramQueryResult] = useQuery<DiagramQueryResponse>({
+   *   query: GET_DIAGRAM,
+   *   variables: {
+   *     routeNetworkElementId: identifiedFeature?.id,
+   *   },
+   *   pause: !identifiedFeature?.id,
+   * });
+   */
   const [diagramSubscriptionResult] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
     variables: { routeNetworkElementId: identifiedFeature?.id },
@@ -42,14 +44,25 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
   });
 
   useEffect(() => {
-    if (!diagramQueryResult?.data) return;
+    if (!identifiedFeature?.id || !client) return;
+    setLoading(true);
 
-    const { diagramObjects, envelope } =
-      diagramQueryResult.data.schematic.buildDiagram;
-
-    setDiagramObjects([...diagramObjects]);
-    setEnvelope({ ...envelope });
-  }, [diagramQueryResult]);
+    client
+      .query<DiagramQueryResponse>(GET_DIAGRAM, {
+        routeNetworkElementId: identifiedFeature.id,
+      })
+      .toPromise()
+      .then((r) => {
+        if (r.data) {
+          const { diagramObjects, envelope } = r.data.schematic.buildDiagram;
+          setDiagramObjects(diagramObjects);
+          setEnvelope(envelope);
+        } else {
+          console.error("Could not load diagram.");
+        }
+        setLoading(false);
+      });
+  }, [identifiedFeature?.id, client]);
 
   useEffect(() => {
     if (!diagramSubscriptionResult?.data) return;
@@ -61,9 +74,8 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
     setEnvelope({ ...envelope });
   }, [diagramSubscriptionResult]);
 
-  if (diagramQueryResult.fetching) return <Loading />;
-
-  if (!identifiedFeature?.id || !diagramQueryResult.data) return <></>;
+  if (loading) return <Loading />;
+  if (!identifiedFeature?.id) return <></>;
 
   return (
     <>
