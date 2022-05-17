@@ -1,7 +1,7 @@
 import { Feature } from "geojson";
-import mapboxgl, {
+import {
   Map,
-  MapboxGeoJSONFeature,
+  MapGeoJSONFeature,
   PointLike,
   NavigationControl,
 } from "maplibre-gl";
@@ -44,7 +44,7 @@ interface Geometry {
 type SchematicDiagramProps = {
   diagramObjects: Diagram[];
   envelope: Envelope;
-  onSelectFeature: (feature: MapboxGeoJSONFeature) => void;
+  onSelectFeature: (feature: MapGeoJSONFeature) => void;
   editMode: boolean;
   routeElementId: string;
 };
@@ -101,7 +101,7 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
 
 function mapFitBounds(
   envelope: Envelope,
-  map: mapboxgl.Map,
+  map: maplibregl.Map,
   zoom: number | null
 ) {
   var extraOptions = zoom
@@ -144,6 +144,7 @@ function enableResize(map: Map) {
 
 function clearSelected(map: Map, source: string): void {
   map
+    // @ts-ignore
     .querySourceFeatures(source, {
       sourceLayer: source,
     })
@@ -155,7 +156,7 @@ function clearSelected(map: Map, source: string): void {
 function clickHiglight(
   featureNames: string[],
   map: Map,
-  callback: (feature: MapboxGeoJSONFeature) => void,
+  callback: (feature: MapGeoJSONFeature) => void,
   editMode: boolean
 ) {
   map.on("click", (e) => {

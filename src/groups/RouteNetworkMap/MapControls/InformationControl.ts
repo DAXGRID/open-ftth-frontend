@@ -1,7 +1,7 @@
 import {
   Map,
   MapMouseEvent,
-  MapboxGeoJSONFeature,
+  MapGeoJSONFeature,
   Popup,
   PointLike,
   GeoJSONSource,
@@ -86,7 +86,7 @@ function createPopupContainer(bodyContents: string[]): string {
 
 function filterFeatures(
   config: InformationControlConfig,
-  feature: MapboxGeoJSONFeature
+  feature: MapGeoJSONFeature
 ): boolean {
   const sourceLayer = config.sourceLayers.find(
     (z) => z.layer === feature.sourceLayer
@@ -112,7 +112,7 @@ function queryFeature(
   bbox: [PointLike, PointLike],
   filter: (
     config: InformationControlConfig,
-    feature: MapboxGeoJSONFeature
+    feature: MapGeoJSONFeature
   ) => boolean
 ) {
   return map.queryRenderedFeatures(bbox, {}).find((x) => {
@@ -126,7 +126,7 @@ function queryFeatures(
   bbox: [PointLike, PointLike],
   filter: (
     config: InformationControlConfig,
-    feature: MapboxGeoJSONFeature
+    feature: MapGeoJSONFeature
   ) => boolean
 ) {
   return map
@@ -257,7 +257,7 @@ class InformationControl {
   active: boolean = false;
   onClickFunc:
     | ((
-        e: MapMouseEvent & { features?: MapboxGeoJSONFeature[] | undefined }
+        e: MapMouseEvent & { features?: MapGeoJSONFeature[] | undefined }
       ) => void)
     | null = null;
   onHoverFunc: ((e: MapMouseEvent) => void) | null = null;
@@ -303,9 +303,15 @@ class InformationControl {
     if (this.container?.parentNode) {
       this.container.parentNode.removeChild(this.container);
     }
-    if (this.onClickFunc && this.map) {
-      this.map.off("click", "housenumber", this.onClickFunc);
+    if (this.map && this.active) {
+      if (this.onClickFunc) {
+        this.map.off("click", this.onClickFunc);
+      }
+      if (this.onHoverFunc) {
+        this.map.off("mousemove", this.onHoverFunc);
+      }
     }
+
     this.map = null;
   }
 }
