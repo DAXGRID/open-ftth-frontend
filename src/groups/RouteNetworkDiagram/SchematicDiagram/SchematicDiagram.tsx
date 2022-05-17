@@ -4,6 +4,8 @@ import mapboxgl, {
   MapboxGeoJSONFeature,
   PointLike,
   NavigationControl,
+  EventData,
+  MapMouseEvent,
 } from "maplibre-gl";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
@@ -132,6 +134,12 @@ function hoverPointer(featureName: string, map: Map) {
   });
 }
 
+function hoverPointerOff(featureName: string, map: Map) {
+  map.off("mousemove", featureName, () => {});
+  map.off("mouseleave", featureName, () => {});
+  map.getCanvas().style.cursor = "";
+}
+
 function enableResize(map: Map) {
   window.addEventListener("resize", () => {
     // Hack to handle resize of mapcanvas because
@@ -158,7 +166,7 @@ function clickHiglight(
   callback: (feature: MapboxGeoJSONFeature) => void,
   editMode: boolean
 ) {
-  map.on("click", (e) => {
+  const handler = (e: MapMouseEvent & EventData) => {
     const bboxSize = 1;
     const bbox: [PointLike, PointLike] = [
       [e.point.x - bboxSize, e.point.y - bboxSize],
@@ -195,7 +203,11 @@ function clickHiglight(
     );
 
     if (callback) callback(feature);
-  });
+  };
+
+  map.on("click", handler);
+
+  return handler;
 }
 
 function SchematicDiagram({
@@ -222,9 +234,7 @@ function SchematicDiagram({
     position.current = null;
   }, [routeElementId]);
 
-  useLayoutEffect(() => {
-    if (diagramObjects.length === 0) return;
-
+  useEffect(() => {
     const newMap = new Map({
       container: mapContainer.current ?? "",
       style: {
@@ -247,85 +257,6 @@ function SchematicDiagram({
       "top-left"
     );
 
-    newMap.on("load", () => {
-      enableResize(newMap);
-      loadDiagram(newMap, diagramObjects);
-      const hasInnerConduit = diagramObjects.find((x) =>
-        x.style.startsWith("InnerConduit")
-      );
-
-      const hasOuterConduit = diagramObjects.find((x) =>
-        x.style.startsWith("OuterConduit")
-      );
-
-      const hasNodeContainerSide = diagramObjects.find((x) =>
-        x.style.startsWith("NodeContainerSide")
-      );
-
-      const hasNodeContainer = diagramObjects.find((x) =>
-        x.style.startsWith("NodeContainer")
-      );
-
-      const hasRack = diagramObjects.find((x) => x.style.startsWith("Rack"));
-
-      const hasTerminalEquipment = diagramObjects.find((x) =>
-        x.style.startsWith("TerminalEquipment")
-      );
-
-      const hasFiberCable = diagramObjects.find((x) =>
-        x.style.startsWith("FiberCable")
-      );
-
-      const highlightFeatureList: string[] = [];
-
-      if (hasInnerConduit) {
-        newMap.addLayer(innerConduitSelect);
-        hoverPointer("InnerConduit", newMap);
-        highlightFeatureList.push("InnerConduit");
-      }
-
-      if (hasOuterConduit) {
-        newMap.addLayer(outerConduitSelect);
-        hoverPointer("OuterConduit", newMap);
-        highlightFeatureList.push("OuterConduit");
-      }
-
-      if (hasNodeContainerSide && editMode) {
-        newMap.addLayer(nodeContainerSideSelect);
-        hoverPointer("NodeContainerSide", newMap);
-        highlightFeatureList.push("NodeContainerSide");
-      } else if (hasNodeContainerSide) {
-        newMap.addLayer(nodeContainerSideSelect);
-      }
-
-      if (hasNodeContainer) {
-        newMap.addLayer(nodeContainerSelect);
-        hoverPointer("NodeContainer", newMap);
-        highlightFeatureList.push("NodeContainer");
-      }
-
-      if (hasRack) {
-        newMap.addLayer(rackSelect);
-        hoverPointer("Rack", newMap);
-        highlightFeatureList.push("Rack");
-      }
-
-      if (hasTerminalEquipment) {
-        newMap.addLayer(terminalEquipmentSelect);
-        hoverPointer("TerminalEquipment", newMap);
-        highlightFeatureList.push("TerminalEquipment");
-      }
-
-      if (hasFiberCable) {
-        newMap.addLayer(fiberCableUnderLayer);
-        newMap.addLayer(fiberCableSymbolLayer);
-        hoverPointer("FiberCable", newMap);
-        highlightFeatureList.push("FiberCable");
-      }
-
-      clickHiglight(highlightFeatureList, newMap, onSelectFeature, editMode);
-    });
-
     const savePosition = () => {
       const bounds = newMap.getBounds();
       const zoom = newMap.getZoom();
@@ -340,16 +271,123 @@ function SchematicDiagram({
       };
     };
 
+    enableResize(newMap);
+
     newMap.on("dragend", () => savePosition());
     newMap.on("zoomend", () => savePosition());
 
-    setMap(newMap);
+    newMap.on("load", () => {
+      setMap(newMap);
+    });
 
     return () => {
+      console.log("Disposed");
       newMap.remove();
       setMap(null);
     };
-  }, [diagramObjects, envelope, onSelectFeature, editMode, setMap]);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (diagramObjects.length === 0) return;
+    if (!map) return;
+
+    const layers = map.getStyle().layers;
+    if (layers) {
+      layers.forEach((x) => {
+        map.removeLayer(x.id);
+      });
+    }
+
+    Object.keys(map.getStyle().sources ?? {}).forEach((x) => {
+      map.removeSource(x);
+    });
+
+    loadDiagram(map, diagramObjects);
+    const hasInnerConduit = diagramObjects.find((x) =>
+      x.style.startsWith("InnerConduit")
+    );
+
+    const hasOuterConduit = diagramObjects.find((x) =>
+      x.style.startsWith("OuterConduit")
+    );
+
+    const hasNodeContainerSide = diagramObjects.find((x) =>
+      x.style.startsWith("NodeContainerSide")
+    );
+
+    const hasNodeContainer = diagramObjects.find((x) =>
+      x.style.startsWith("NodeContainer")
+    );
+
+    const hasRack = diagramObjects.find((x) => x.style.startsWith("Rack"));
+
+    const hasTerminalEquipment = diagramObjects.find((x) =>
+      x.style.startsWith("TerminalEquipment")
+    );
+
+    const hasFiberCable = diagramObjects.find((x) =>
+      x.style.startsWith("FiberCable")
+    );
+
+    const interactableObject: string[] = [];
+    if (hasInnerConduit) {
+      map.addLayer(innerConduitSelect);
+      interactableObject.push("InnerConduit");
+    }
+
+    if (hasOuterConduit) {
+      map.addLayer(outerConduitSelect);
+      interactableObject.push("OuterConduit");
+    }
+
+    if (hasNodeContainerSide && editMode) {
+      map.addLayer(nodeContainerSideSelect);
+      interactableObject.push("NodeContainerSide");
+    } else if (hasNodeContainerSide) {
+      map.addLayer(nodeContainerSideSelect);
+    }
+
+    if (hasNodeContainer) {
+      map.addLayer(nodeContainerSelect);
+      interactableObject.push("NodeContainer");
+    }
+
+    if (hasRack) {
+      map.addLayer(rackSelect);
+      interactableObject.push("Rack");
+    }
+
+    if (hasTerminalEquipment) {
+      map.addLayer(terminalEquipmentSelect);
+      interactableObject.push("TerminalEquipment");
+    }
+
+    if (hasFiberCable) {
+      map.addLayer(fiberCableUnderLayer);
+      map.addLayer(fiberCableSymbolLayer);
+      interactableObject.push("FiberCable");
+    }
+
+    const clickHighlightHandler = clickHiglight(
+      interactableObject,
+      map,
+      onSelectFeature,
+      editMode
+    );
+
+    interactableObject.forEach((name) => {
+      hoverPointer(name, map);
+    });
+
+    map.resize();
+
+    return () => {
+      map.off("click", clickHighlightHandler);
+      interactableObject.forEach((name) => {
+        hoverPointerOff(name, map);
+      });
+    };
+  }, [diagramObjects, envelope, onSelectFeature, editMode, map]);
 
   useEffect(() => {
     if (diagramObjects.length === 0) return;
