@@ -2,6 +2,7 @@
 
 .connectivity-view {
   padding: 20px;
+  overflow: auto;
 }
 
 .connectivity-view-container {
@@ -10,6 +11,7 @@
   border: 1px solid $border-color;
   border-radius: 4px;
   background-color: $header-color;
+  min-width: 650px;
 }
 
 .connectivity-view__title {
