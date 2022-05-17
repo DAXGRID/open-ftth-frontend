@@ -1,6 +1,6 @@
 import { useState, useContext, useCallback, useEffect } from "react";
 import { useClient } from "urql";
-import { MapboxGeoJSONFeature } from "maplibre-gl";
+import { MapGeoJSONFeature } from "maplibre-gl";
 import SchematicDiagram from "../SchematicDiagram";
 import NodeContainerDetails from "../NodeContainerDetails";
 import DiagramMenu from "../../../components/DiagramMenu";
@@ -53,7 +53,7 @@ function ReadOnlyDiagram({
   const { t } = useTranslation();
   const client = useClient();
   const [selectedFeature, setSelectedFeature] =
-    useState<MapboxGeoJSONFeature | null>(null);
+    useState<MapGeoJSONFeature | null>(null);
   const [
     spanEquipmentTabViewSelectedId,
     setSpanEquipmentCableTabViewSelectedId,
@@ -116,7 +116,7 @@ function ReadOnlyDiagram({
   }, [selectedFeature, setTrace, enabledTracePan, client, clearHighlights]);
 
   const onSelectedFeature = useCallback(
-    async (feature: MapboxGeoJSONFeature) => {
+    async (feature: MapGeoJSONFeature) => {
       const isSelected = feature.state?.selected as boolean;
 
       if (isSelected) {
