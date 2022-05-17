@@ -61,6 +61,7 @@
   flex-wrap: wrap;
   border-radius: 4px;
   padding: 20px;
+  overflow: auto;
 }
 
 .terminal-equipment-table-container {
@@ -69,6 +70,7 @@
   border: 1px solid $border-color;
   flex-basis: 100%;
   border-bottom: none;
+  min-width: 700px;
 
   .terminal-equipment-table-container-header {
     display: flex;
