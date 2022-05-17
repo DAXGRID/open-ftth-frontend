@@ -281,7 +281,6 @@ function SchematicDiagram({
     });
 
     return () => {
-      console.log("Disposed");
       newMap.remove();
       setMap(null);
     };
