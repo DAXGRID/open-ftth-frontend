@@ -3,11 +3,11 @@ import { Feature, GeoJsonProperties, Geometry } from "geojson";
 import {
   GeoJSONSource,
   Map,
-  MapGeoJSONFeature,
+  MapboxGeoJSONFeature,
   MapMouseEvent,
   PointLike,
-  StyleSpecification,
-  SymbolLayerSpecification,
+  Style,
+  SymbolLayer,
   ScaleControl,
   AttributionControl,
   NavigationControl,
@@ -22,10 +22,10 @@ import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 import InformationControl from "./MapControls/InformationControl";
 import SaveImgControl from "./MapControls/SaveImgControl";
 
-const GetMaplibreStyle = async (): Promise<StyleSpecification> => {
+const GetMaplibreStyle = async (): Promise<Style> => {
   const x = await fetch("./maplibre.json");
   const json = await x.json();
-  return json as StyleSpecification;
+  return json as Style;
 };
 
 function enableResize(map: Map) {
@@ -66,9 +66,9 @@ function clickHighlight(
   featureNames: string[],
   bboxSize: number,
   map: Map,
-  lastHighlightedFeature: React.RefObject<MapGeoJSONFeature>,
+  lastHighlightedFeature: React.RefObject<MapboxGeoJSONFeature>,
   measureDistanceControl: MeasureDistanceControl,
-  callback: (feature: MapGeoJSONFeature) => void
+  callback: (feature: MapboxGeoJSONFeature) => void
 ) {
   map.on("click", (e) => {
     // Do nothing if the measure distance control is active to avoid
@@ -82,7 +82,7 @@ function clickHighlight(
 
     const changeSymbolIconImageHighlight = (
       iconLayer: any,
-      feature: MapGeoJSONFeature,
+      feature: MapboxGeoJSONFeature,
       remove: boolean
     ) => {
       // We have to do this check because mapbox is annoying and changes the type "randomly"
@@ -107,9 +107,8 @@ function clickHighlight(
     // reset last state to avoid multiple selected at the same time
     if (lastHighlightedFeature.current) {
       // We have to change it to any because mapbox changes the type randomly
-      const iconImage = (
-        lastHighlightedFeature.current?.layer as SymbolLayerSpecification
-      ).layout?.["icon-image"] as any;
+      const iconImage = (lastHighlightedFeature.current?.layer as SymbolLayer)
+        .layout?.["icon-image"] as any;
 
       // If it has iconImage change highlight
       if (iconImage) {
@@ -135,7 +134,7 @@ function clickHighlight(
     }
 
     // We have to change it to any because mapbox changes the type randomly
-    const iconImage = (feature.layer as SymbolLayerSpecification).layout?.[
+    const iconImage = (feature.layer as SymbolLayer).layout?.[
       "icon-image"
     ] as any;
     // If it has iconImage change highlight
@@ -200,12 +199,10 @@ type RouteNetworkMapProps = {
 function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
   const { t } = useTranslation();
   const mapContainer = useRef<HTMLDivElement>(null);
-  const lastHighlightedFeature = useRef<MapGeoJSONFeature | null>(null);
+  const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
   const { setIdentifiedFeature, trace, searchResult } = useContext(MapContext);
-  const [mapLibreStyle, setMaplibreStyle] = useState<StyleSpecification | null>(
-    null
-  );
+  const [mapLibreStyle, setMaplibreStyle] = useState<Style | null>(null);
 
   useEffect(() => {
     GetMaplibreStyle().then((r) => {
@@ -243,7 +240,7 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
     newMap.dragRotate.disable();
     newMap.touchZoomRotate.disableRotation();
 
-    newMap.addControl(new ScaleControl({}), "bottom-left");
+    newMap.addControl(new ScaleControl(), "bottom-left");
 
     newMap.addControl(
       new AttributionControl({
