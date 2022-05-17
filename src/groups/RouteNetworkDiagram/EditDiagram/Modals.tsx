@@ -1,4 +1,4 @@
-import { MapGeoJSONFeature } from "maplibre-gl";
+import { MapboxGeoJSONFeature } from "maplibre-gl";
 import ModalContainer from "../../../components/ModalContainer";
 import AddContainer from "../AddContainer";
 import AddInnerSpanStructure from "../AddInnerSpanStructure";
@@ -17,7 +17,7 @@ export function addContainerModal(cb: () => void, title: string) {
 export function addInnerConduitModal(
   cb: () => void,
   title: string,
-  selectedFeatures: MapGeoJSONFeature[]
+  selectedFeatures: MapboxGeoJSONFeature[]
 ) {
   return (
     <ModalContainer closeCallback={cb} title={title}>
@@ -46,7 +46,7 @@ export function establishCustomerConnectionModal(
 export function addRackModal(
   cb: () => void,
   title: string,
-  selectedFeatures: MapGeoJSONFeature[]
+  selectedFeatures: MapboxGeoJSONFeature[]
 ) {
   return (
     <ModalContainer title={title} closeCallback={cb}>
@@ -64,7 +64,7 @@ export function addTerminalEquipmentModal(
   cb: () => void,
   title: string,
   routeNodeId: string,
-  selectedFeatures: MapGeoJSONFeature[]
+  selectedFeatures: MapboxGeoJSONFeature[]
 ) {
   return (
     <ModalContainer title={title} closeCallback={cb}>

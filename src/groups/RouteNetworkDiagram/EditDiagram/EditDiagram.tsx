@@ -7,7 +7,7 @@ import {
   useMemo,
 } from "react";
 import { useMutation, useClient } from "urql";
-import { MapGeoJSONFeature } from "maplibre-gl";
+import { MapboxGeoJSONFeature } from "maplibre-gl";
 import DiagramMenu from "../../../components/DiagramMenu";
 import SchematicDiagram from "../SchematicDiagram";
 import ToggleButton from "../../../components/ToggleButton";
@@ -87,7 +87,7 @@ type RouteNetworkDiagramProps = {
   envelope: Envelope;
 };
 
-function isTraceable(f: MapGeoJSONFeature): boolean {
+function isTraceable(f: MapboxGeoJSONFeature): boolean {
   return (
     f.properties?.type?.startsWith("InnerConduit") ||
     f.properties?.type?.startsWith("OuterConduit") ||
@@ -95,7 +95,7 @@ function isTraceable(f: MapGeoJSONFeature): boolean {
   );
 }
 
-function canAffixSpanEquipment(selected: MapGeoJSONFeature[]): boolean {
+function canAffixSpanEquipment(selected: MapboxGeoJSONFeature[]): boolean {
   const nodeContainer = selected.find(
     (x) => x.layer.source === "NodeContainerSide"
   );
@@ -107,7 +107,9 @@ function canAffixSpanEquipment(selected: MapGeoJSONFeature[]): boolean {
   return spanSegmentIds.length > 0 && !!nodeContainer;
 }
 
-function canAffixSpanEquipmentToParent(selected: MapGeoJSONFeature[]): boolean {
+function canAffixSpanEquipmentToParent(
+  selected: MapboxGeoJSONFeature[]
+): boolean {
   const invalidSelections = selected.filter(
     (x) =>
       x.layer.source !== "FiberCable" &&
@@ -134,7 +136,7 @@ function containsNodeContainer(diagramObjects: Diagram[]): boolean {
 
 function isSingleSelected(
   source: string,
-  selected: MapGeoJSONFeature[]
+  selected: MapboxGeoJSONFeature[]
 ): boolean {
   if (selected.length > 1) return false;
   return selected.find((x) => x.source === source) ? true : false;
@@ -210,11 +212,11 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const { t } = useTranslation();
   const { showElement } = useContext(OverlayContext);
   const [editMode, setEditMode] = useState(false);
-  const [selectedFeatures, setSelectedFeatures] = useState<MapGeoJSONFeature[]>(
-    []
-  );
+  const [selectedFeatures, setSelectedFeatures] = useState<
+    MapboxGeoJSONFeature[]
+  >([]);
   const [singleSelectedFeature, setSingleSelectedFeature] =
-    useState<MapGeoJSONFeature | null>();
+    useState<MapboxGeoJSONFeature | null>();
   const [spanEquipmentTabViewSelectedId, setSpanEquipmentTabViewSelectedId] =
     useState("0");
   const { identifiedFeature, setTrace } = useContext(MapContext);
@@ -550,7 +552,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   }, [selectedFeatures]);
 
   const traceFeatures = useCallback(
-    async (features: MapGeoJSONFeature[]) => {
+    async (features: MapboxGeoJSONFeature[]) => {
       const featuresToTrace = features.map((x) => x.properties?.refId);
       // If there are no features to trace we do not send the request
       // and clear the trace.
@@ -618,7 +620,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   }, [editMode, traceFeatures, currentlySelectedFeatures]);
 
   const onSelectedFeature = useCallback(
-    (feature: MapGeoJSONFeature) => {
+    (feature: MapboxGeoJSONFeature) => {
       setSingleSelectedFeature(feature);
     },
     [setSingleSelectedFeature]

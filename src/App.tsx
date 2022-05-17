@@ -1,4 +1,4 @@
-import "maplibre-gl/dist/maplibre-gl.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 import "react-toastify/dist/ReactToastify.css";
 import { useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
