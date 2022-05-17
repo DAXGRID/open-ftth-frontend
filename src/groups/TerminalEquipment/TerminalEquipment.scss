@@ -6,6 +6,11 @@
   border: 1px solid $border-color;
   border-bottom: none;
   width: 100%;
+  min-width: 700px;
+
+  .terminal-equipment-table-container {
+    min-width: initial;
+  }
 
   .rack-container-header {
     display: flex;
