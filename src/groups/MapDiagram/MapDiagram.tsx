@@ -3,8 +3,10 @@ import RouteNetworkMap from "../RouteNetworkMap";
 import RouteNetworkDiagram from "../RouteNetworkDiagram";
 import { MapContext } from "../../contexts/MapContext";
 import TabMenuTop from "./TabMenuTop";
+import { useTranslation } from "react-i18next";
 
 function MapDiagram() {
+  const { t } = useTranslation();
   const { identifiedFeature } = useContext(MapContext);
   const [showDiagram, setShowDiagram] = useState(true);
   const [selectedViewId, setSelectedViewId] = useState<number>(0);
@@ -72,12 +74,12 @@ function MapDiagram() {
             views={[
               {
                 id: 0,
-                text: "Map",
+                text: t("MAP"),
                 view: <RouteNetworkMap showSchematicDiagram={toggleDiagram} />,
               },
               {
                 id: 1,
-                text: "Details",
+                text: t("DETAILS"),
                 view: <RouteNetworkDiagram editable={false} />,
               },
             ]}

@@ -224,7 +224,9 @@
       "INSERT_AT_POSITION": "Insert at position",
       "NUMBER_OF_MODULES": "Number of modules",
       "ADDED": "Added",
-      "REMOVED": "Removed"
+      "REMOVED": "Removed",
+      "DETAILS": "Details",
+      "MAP": "Map"
     }
   },
   "dk": {
@@ -452,7 +454,9 @@
       "INSERT_AT_POSITION": "Indsæt på position (slot nummer)",
       "NUMBER_OF_MODULES": "Antal moduler",
       "ADDED": "Tilføjet",
-      "REMOVED": "Fjernet"
+      "REMOVED": "Fjernet",
+      "DETAILS": "Detaljer",
+      "MAP": "Kort"
     }
   }
 }
