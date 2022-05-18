@@ -163,7 +163,7 @@ function clickHiglight(
   callback: (feature: MapboxGeoJSONFeature) => void,
   editMode: boolean
 ) {
-  const handler = (e: MapMouseEvent & EventData) => {
+  return (e: MapMouseEvent & EventData) => {
     const bboxSize = 1;
     const bbox: [PointLike, PointLike] = [
       [e.point.x - bboxSize, e.point.y - bboxSize],
@@ -201,10 +201,6 @@ function clickHiglight(
 
     if (callback) callback(feature);
   };
-
-  map.on("click", handler);
-
-  return handler;
 }
 
 function SchematicDiagram({
@@ -375,6 +371,7 @@ function SchematicDiagram({
       onSelectFeature,
       editMode
     );
+    map.on("click", clickHighlightHandler);
 
     interactableObject.forEach((name) => {
       hoverPointer(name, map);
