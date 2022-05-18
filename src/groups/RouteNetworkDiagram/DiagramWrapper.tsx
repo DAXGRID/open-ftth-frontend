@@ -4,6 +4,7 @@ import { MapContext } from "../../contexts/MapContext";
 import EditDiagram from "./EditDiagram";
 import ReadOnlyDiagram from "./ReadOnlyDiagram";
 import Loading from "../../components/Loading";
+import { DiagramProvider } from "./DiagramContext";
 import {
   GET_DIAGRAM,
   DiagramQueryResponse,
@@ -29,14 +30,6 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
     minY: 0,
   });
 
-  /* const [diagramQueryResult] = useQuery<DiagramQueryResponse>({
-   *   query: GET_DIAGRAM,
-   *   variables: {
-   *     routeNetworkElementId: identifiedFeature?.id,
-   *   },
-   *   pause: !identifiedFeature?.id,
-   * });
-   */
   const [diagramSubscriptionResult] = useSubscription<DiagramUpdatedResponse>({
     query: SCHEMATIC_DIAGRAM_UPDATED,
     variables: { routeNetworkElementId: identifiedFeature?.id },
@@ -89,4 +82,16 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
   );
 }
 
-export default DiagramWrapper;
+interface DiagramContextWrapperProps {
+  editable: boolean;
+}
+
+function DiagramContextWrapper({ editable }: DiagramContextWrapperProps) {
+  return (
+    <DiagramProvider>
+      <DiagramWrapper editable={editable} />
+    </DiagramProvider>
+  );
+}
+
+export default DiagramContextWrapper;

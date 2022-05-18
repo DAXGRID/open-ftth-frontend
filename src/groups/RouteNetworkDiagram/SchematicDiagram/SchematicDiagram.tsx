@@ -7,7 +7,8 @@ import mapboxgl, {
   EventData,
   MapMouseEvent,
 } from "maplibre-gl";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { DiagramContext } from "../DiagramContext";
+import { useContext, useEffect, useLayoutEffect, useRef } from "react";
 import {
   createFeature,
   createSource,
@@ -140,14 +141,10 @@ function hoverPointerOff(featureName: string, map: Map) {
   map.getCanvas().style.cursor = "";
 }
 
-function enableResize(map: Map) {
-  window.addEventListener("resize", () => {
-    // Hack to handle resize of mapcanvas because
-    // the event gets called to early, so we have to queue it up
-    setTimeout(() => {
-      map.resize();
-    }, 1);
-  });
+function resizeHandler(map: Map) {
+  setTimeout(() => {
+    map.resize();
+  }, 1);
 }
 
 function clearSelected(map: Map, source: string): void {
@@ -166,7 +163,7 @@ function clickHiglight(
   callback: (feature: MapboxGeoJSONFeature) => void,
   editMode: boolean
 ) {
-  const handler = (e: MapMouseEvent & EventData) => {
+  return (e: MapMouseEvent & EventData) => {
     const bboxSize = 1;
     const bbox: [PointLike, PointLike] = [
       [e.point.x - bboxSize, e.point.y - bboxSize],
@@ -204,10 +201,6 @@ function clickHiglight(
 
     if (callback) callback(feature);
   };
-
-  map.on("click", handler);
-
-  return handler;
 }
 
 function SchematicDiagram({
@@ -217,8 +210,7 @@ function SchematicDiagram({
   editMode,
   routeElementId,
 }: SchematicDiagramProps) {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const [map, setMap] = useState<Map | null>(null);
+  const { map, setMap, reRender } = useContext(DiagramContext);
   const position = useRef<SchematicPosition | null>(null);
 
   useLayoutEffect(() => {
@@ -234,9 +226,11 @@ function SchematicDiagram({
     position.current = null;
   }, [routeElementId]);
 
-  useEffect(() => {
-    const newMap = new Map({
-      container: mapContainer.current ?? "",
+  useLayoutEffect(() => {
+    if (map) return;
+
+    const currentMap = new Map({
+      container: "test123",
       style: {
         version: 8,
         sources: {},
@@ -247,10 +241,16 @@ function SchematicDiagram({
       center: [0.014, 0.014],
     });
 
-    newMap.doubleClickZoom.disable();
-    newMap.dragRotate.disable();
-    newMap.touchZoomRotate.disableRotation();
-    newMap.addControl(
+    currentMap.on("load", () => {
+      if (!map) {
+        setMap(currentMap);
+      }
+    });
+
+    currentMap.doubleClickZoom.disable();
+    currentMap.dragRotate.disable();
+    currentMap.touchZoomRotate.disableRotation();
+    currentMap.addControl(
       new NavigationControl({
         showCompass: false,
       }),
@@ -258,8 +258,8 @@ function SchematicDiagram({
     );
 
     const savePosition = () => {
-      const bounds = newMap.getBounds();
-      const zoom = newMap.getZoom();
+      const bounds = currentMap.getBounds();
+      const zoom = currentMap.getZoom();
       position.current = {
         envelope: {
           minX: bounds.getWest(),
@@ -271,20 +271,18 @@ function SchematicDiagram({
       };
     };
 
-    enableResize(newMap);
+    currentMap.on("dragend", savePosition);
+    currentMap.on("zoomend", savePosition);
 
-    newMap.on("dragend", () => savePosition());
-    newMap.on("zoomend", () => savePosition());
-
-    newMap.on("load", () => {
-      setMap(newMap);
-    });
+    const resizeCallbackHandler = () => resizeHandler(currentMap);
+    window.addEventListener("resize", resizeCallbackHandler);
 
     return () => {
-      newMap.remove();
-      setMap(null);
+      currentMap.off("dragend", savePosition);
+      currentMap.off("zoomend", savePosition);
+      window.removeEventListener("resize", resizeCallbackHandler);
     };
-  }, []);
+  }, [map, setMap, diagramObjects]);
 
   useLayoutEffect(() => {
     if (diagramObjects.length === 0) return;
@@ -373,11 +371,13 @@ function SchematicDiagram({
       onSelectFeature,
       editMode
     );
+    map.on("click", clickHighlightHandler);
 
     interactableObject.forEach((name) => {
       hoverPointer(name, map);
     });
 
+    reRender();
     map.resize();
 
     return () => {
@@ -386,11 +386,7 @@ function SchematicDiagram({
         hoverPointerOff(name, map);
       });
     };
-  }, [diagramObjects, envelope, onSelectFeature, editMode, map]);
-
-  useEffect(() => {
-    if (diagramObjects.length === 0) return;
-  }, [diagramObjects]);
+  }, [diagramObjects, envelope, onSelectFeature, editMode, map, reRender]);
 
   return (
     <div
@@ -400,7 +396,7 @@ function SchematicDiagram({
           : "schematic-diagram schematic-diagram--read-only"
       }
     >
-      <div className="schematic-diagram-container" ref={mapContainer} />
+      <div id="test123" className="schematic-diagram-container"></div>
     </div>
   );
 }
