@@ -4,10 +4,12 @@ import RouteNetworkDiagram from "../RouteNetworkDiagram";
 import { MapContext } from "../../contexts/MapContext";
 import TabMenuTop from "./TabMenuTop";
 import { useTranslation } from "react-i18next";
+import { UserContext } from "../../contexts/UserContext";
 
 function MapDiagram() {
   const { t } = useTranslation();
   const { identifiedFeature } = useContext(MapContext);
+  const { hasRoles } = useContext(UserContext);
   const [showDiagram, setShowDiagram] = useState(true);
   const [selectedViewId, setSelectedViewId] = useState<number>(0);
   const [isDesktop, setDesktop] = useState<boolean | null>(null);
@@ -55,7 +57,7 @@ function MapDiagram() {
                 : "container hide"
             }
           >
-            <RouteNetworkDiagram editable={false} />
+            <RouteNetworkDiagram editable={hasRoles("writer")} />
           </div>
         </div>
       )}
@@ -74,7 +76,7 @@ function MapDiagram() {
               {
                 id: 1,
                 text: t("DETAILS"),
-                view: <RouteNetworkDiagram editable={false} />,
+                view: <RouteNetworkDiagram editable={hasRoles("writer")} />,
               },
             ]}
           ></TabMenuTop>
