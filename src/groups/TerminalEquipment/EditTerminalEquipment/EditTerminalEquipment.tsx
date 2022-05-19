@@ -438,7 +438,10 @@ function EditTerminalEquipment({
         },
         addressInfo: state.terminalEquipment.specification.isAddressable
           ? {
-              accessAddressId: state.accessAddressId,
+              accessAddressId:
+                state.accessAddressId?.length !== 0
+                  ? state.accessAddressId
+                  : null,
               unitAddressId:
                 state.unitAddressId?.length !== 0 ? state.unitAddressId : null,
               remark:
