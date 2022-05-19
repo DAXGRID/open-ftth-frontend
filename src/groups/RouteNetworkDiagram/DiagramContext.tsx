@@ -35,17 +35,29 @@ const DiagramProvider = ({ children }: DiagramProviderProps) => {
   useEffect(() => {
     if (!map) return;
     return () => {
-      map?.remove();
-      setMap(null);
+      if (map !== null) {
+        map?.remove();
+        setMap(null);
+      }
     };
   }, [map]);
 
   const reRender = useCallback(() => {
-    if (map?.getContainer()) {
-      document
-        .getElementsByClassName("schematic-diagram-container")[0]
-        .replaceWith(map.getContainer());
-      map.resize();
+    if (!map) {
+      throw Error("Map is null.");
+    }
+
+    const containerId = "schematic-diagram-container";
+    const previousContainer = map.getContainer();
+
+    if (previousContainer) {
+      const container = document.getElementById(containerId);
+      if (container) {
+        container.replaceWith(previousContainer);
+        map.resize();
+      } else {
+        throw Error(`Could not find container with id: ${containerId}`);
+      }
     }
   }, [map]);
 

@@ -230,7 +230,7 @@ function SchematicDiagram({
     if (map) return;
 
     const currentMap = new Map({
-      container: "test123",
+      container: "schematic-diagram-container",
       style: {
         version: 8,
         sources: {},
@@ -396,7 +396,10 @@ function SchematicDiagram({
           : "schematic-diagram schematic-diagram--read-only"
       }
     >
-      <div id="test123" className="schematic-diagram-container"></div>
+      <div
+        id="schematic-diagram-container"
+        className="schematic-diagram-container"
+      ></div>
     </div>
   );
 }
