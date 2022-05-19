@@ -21,15 +21,19 @@ function MapDiagram() {
 
   useEffect(() => {
     const desktopMinSize = 1200;
-    const updateMedia = () => {
+
+    const updateMediaSize = () => {
       if (window.innerWidth > desktopMinSize) {
         setDesktop(true);
       } else {
         setDesktop(false);
       }
     };
-    window.addEventListener("resize", updateMedia);
-    return () => window.removeEventListener("resize", updateMedia);
+
+    updateMediaSize();
+
+    window.addEventListener("resize", updateMediaSize);
+    return () => window.removeEventListener("resize", updateMediaSize);
   }, []);
 
   const toggleDiagram = useCallback(
