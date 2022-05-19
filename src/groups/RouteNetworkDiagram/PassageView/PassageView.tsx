@@ -44,14 +44,29 @@ function PassageView({
   const { selectRouteSegments } = useBridgeConnector();
 
   useEffect(() => {
+    let isSubscribed = true;
+
     if (!routeElementId || !spanEquipmentOrSegmentIds) return;
-    passageViewQuery(client, routeElementId, [spanEquipmentOrSegmentIds]).then(
-      (response) => {
-        const view = response.data?.utilityNetwork.spanEquipmentPassageView;
-        if (view) setPassageView(view);
-        else throw Error("Could not load SpanEquipmentPassageView");
-      }
-    );
+    passageViewQuery(client, routeElementId, [spanEquipmentOrSegmentIds])
+      .then((response) => {
+        if (isSubscribed) {
+          const view = response.data?.utilityNetwork.spanEquipmentPassageView;
+          if (view) {
+            setPassageView(view);
+          } else {
+            throw Error("Could not load SpanEquipmentPassageView");
+          }
+        }
+      })
+      .catch(() => {
+        if (isSubscribed) {
+          console.error("PassageViewQuery failed.");
+        }
+      });
+
+    return () => {
+      isSubscribed = false;
+    };
   }, [client, routeElementId, spanEquipmentOrSegmentIds]);
 
   useEffect(() => {
