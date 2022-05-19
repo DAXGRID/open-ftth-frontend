@@ -19,12 +19,6 @@ function MapDiagram() {
 
   useEffect(() => {
     const desktopMinSize = 1200;
-    if (window.innerWidth > desktopMinSize) {
-      setDesktop(true);
-    } else {
-      setDesktop(false);
-    }
-
     const updateMedia = () => {
       if (window.innerWidth > desktopMinSize) {
         setDesktop(true);
