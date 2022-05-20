@@ -222,4 +222,5 @@ strong {
   z-index: 2;
   background-color: $background-color;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }

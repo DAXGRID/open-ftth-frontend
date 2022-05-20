@@ -202,8 +202,7 @@ function TerminalEquipmentTable({
                           dispatch({
                             type: "removeStructure",
                             params: {
-                              terminalEquipmentId:
-                                state.terminalEquipmentOrRackId,
+                              terminalEquipmentId: terminalEquipmentId,
                               terminalStructureId: x.id,
                             },
                           })
