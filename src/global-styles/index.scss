@@ -16,6 +16,7 @@ body,
 #root {
   min-height: 100vh;
   overflow: overlay;
+  -webkit-overflow-scrolling: touch;
 }
 
 header {
@@ -223,4 +224,5 @@ strong {
   overflow: auto;
   /* Hack:  https://stackoverflow.com/questions/4889601/position-fixed-doesnt-work-on-ipad-and-iphone */
   transform: translate3d(0, 0, 0);
+  -webkit-overflow-scrolling: touch;
 }
