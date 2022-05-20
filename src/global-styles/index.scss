@@ -213,8 +213,9 @@ strong {
   top: 0;
   left: 0;
   right: 0;
-  min-height: calc(100vh - $top-menu-height);
+  min-height: 100vh;
   padding-top: calc($top-menu-height + 20px);
+  padding-bottom: 20px;
   width: 100%;
   height: 100%;
   z-index: 2;
