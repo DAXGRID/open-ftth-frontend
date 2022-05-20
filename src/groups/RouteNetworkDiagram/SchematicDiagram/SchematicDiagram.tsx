@@ -229,7 +229,7 @@ function SchematicDiagram({
   useLayoutEffect(() => {
     if (map) return;
 
-    const currentMap = new Map({
+    const newMap = new Map({
       container: "schematic-diagram-container",
       style: {
         version: 8,
@@ -244,13 +244,15 @@ function SchematicDiagram({
       touchZoomRotate: false,
     });
 
-    currentMap.on("load", () => {
+    newMap.touchZoomRotate.disableRotation();
+
+    newMap.on("load", () => {
       if (!map) {
-        setMap(currentMap);
+        setMap(newMap);
       }
     });
 
-    currentMap.addControl(
+    newMap.addControl(
       new NavigationControl({
         showCompass: false,
       }),
@@ -258,8 +260,8 @@ function SchematicDiagram({
     );
 
     const savePosition = () => {
-      const bounds = currentMap.getBounds();
-      const zoom = currentMap.getZoom();
+      const bounds = newMap.getBounds();
+      const zoom = newMap.getZoom();
       position.current = {
         envelope: {
           minX: bounds.getWest(),
@@ -271,15 +273,15 @@ function SchematicDiagram({
       };
     };
 
-    currentMap.on("dragend", savePosition);
-    currentMap.on("zoomend", savePosition);
+    newMap.on("dragend", savePosition);
+    newMap.on("zoomend", savePosition);
 
-    const resizeCallbackHandler = () => resizeHandler(currentMap);
+    const resizeCallbackHandler = () => resizeHandler(newMap);
     window.addEventListener("resize", resizeCallbackHandler);
 
     return () => {
-      currentMap.off("dragend", savePosition);
-      currentMap.off("zoomend", savePosition);
+      newMap.off("dragend", savePosition);
+      newMap.off("zoomend", savePosition);
       window.removeEventListener("resize", resizeCallbackHandler);
     };
   }, [map, setMap, diagramObjects]);
