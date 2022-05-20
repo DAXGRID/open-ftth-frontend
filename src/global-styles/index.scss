@@ -214,9 +214,9 @@ strong {
   left: 0;
   right: 0;
   min-height: calc(100vh - $top-menu-height);
-  margin-top: $top-menu-height;
+  padding-top: calc($top-menu-height + 20px);
   width: 100%;
-  height: auto;
+  height: 100%;
   z-index: 2;
   background-color: $background-color;
   overflow-y: auto;
