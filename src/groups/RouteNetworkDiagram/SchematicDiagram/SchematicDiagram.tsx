@@ -241,7 +241,6 @@ function SchematicDiagram({
       center: [0.014, 0.014],
       dragRotate: false,
       doubleClickZoom: false,
-      touchZoomRotate: false,
     });
 
     newMap.touchZoomRotate.disableRotation();
