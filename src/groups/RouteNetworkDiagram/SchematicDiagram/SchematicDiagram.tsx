@@ -239,6 +239,9 @@ function SchematicDiagram({
       },
       minZoom: 8,
       center: [0.014, 0.014],
+      dragRotate: false,
+      doubleClickZoom: false,
+      touchZoomRotate: false,
     });
 
     currentMap.on("load", () => {
@@ -247,9 +250,6 @@ function SchematicDiagram({
       }
     });
 
-    currentMap.doubleClickZoom.disable();
-    currentMap.dragRotate.disable();
-    currentMap.touchZoomRotate.disableRotation();
     currentMap.addControl(
       new NavigationControl({
         showCompass: false,
