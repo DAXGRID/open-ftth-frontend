@@ -211,9 +211,9 @@ strong {
 .fixed-fit-container {
   position: fixed;
   top: 0;
-  bottom: 0;
   left: 0;
   right: 0;
+  min-height: calc(100vh - $top-menu-height);
   margin-top: $top-menu-height;
   width: 100%;
   height: auto;
