@@ -234,8 +234,9 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       preserveDrawingBuffer: true,
       doubleClickZoom: false,
       dragRotate: false,
-      touchZoomRotate: false,
     });
+
+    newMap.touchZoomRotate.disableRotation();
 
     newMap.addControl(new ScaleControl(), "bottom-left");
 
