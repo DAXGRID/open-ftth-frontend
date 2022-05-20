@@ -231,14 +231,11 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
       style: mapLibreStyle,
       center: [9.996730316498656, 56.04595255289249],
       zoom: 10,
+      preserveDrawingBuffer: true,
       doubleClickZoom: false,
       dragRotate: false,
-      preserveDrawingBuffer: true,
+      touchZoomRotate: false,
     });
-
-    newMap.doubleClickZoom.disable();
-    newMap.dragRotate.disable();
-    newMap.touchZoomRotate.disableRotation();
 
     newMap.addControl(new ScaleControl(), "bottom-left");
 
