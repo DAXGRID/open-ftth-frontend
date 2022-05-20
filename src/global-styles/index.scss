@@ -16,6 +16,7 @@ body,
 #root {
   min-height: 100vh;
   overflow: overlay;
+  -webkit-overflow-scrolling: touch;
 }
 
 header {
