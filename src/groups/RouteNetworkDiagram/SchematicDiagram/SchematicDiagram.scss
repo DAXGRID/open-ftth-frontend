@@ -1,10 +1,10 @@
 .schematic-diagram {
-  height: calc(100vh - 173px);
+  height: calc(var(--app-height) - 173px);
   width: 100%;
 
   &.schematic-diagram--read-only {
     border-bottom: 1px solid #e3e3e3;
-    height: calc(100vh - 445px);
+    height: calc(var(--app-height) - 445px);
   }
 
   .schematic-diagram-container {

@@ -14,7 +14,7 @@
 html,
 body,
 #root {
-  min-height: 100vh;
+  min-height: var(--app-height);
   overflow: overlay;
 }
 
@@ -29,7 +29,7 @@ body {
     "Droid Sans", "Helvetica Neue", sans-serif;
   background-color: #fcfcfc;
   overflow-x: hidden;
-  min-height: 100vh;
+  min-height: var(--app-height);
 }
 
 .main-container {
@@ -38,7 +38,7 @@ body {
   transform: translateX(0px);
   color: $text-primary;
   justify-content: center;
-  min-height: 100vh;
+  min-height: var(--app-height);
   overflow: auto;
 
   &.side-menu-open {
@@ -216,7 +216,7 @@ strong {
   right: 0;
   width: 100%;
   height: 100%;
-  max-height: calc(100vh - $top-menu-height);
+  max-height: calc(var(--app-height) - $top-menu-height);
   z-index: 2;
   background-color: $background-color;
   overflow-y: auto;

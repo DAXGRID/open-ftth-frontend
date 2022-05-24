@@ -4,7 +4,7 @@
 .side-menu {
   margin-top: $top-menu-height;
   background-color: white;
-  height: 100vh;
+  height: var(--app-height);
   position: fixed;
   width: 100%;
   left: -100%;
@@ -55,7 +55,7 @@
 @media only screen and (min-width: 768px) {
   .side-menu {
     background-color: white;
-    height: 100vh;
+    height: var(--app-height);
     position: fixed;
     width: $side-menu-size;
     left: -$side-menu-size;
