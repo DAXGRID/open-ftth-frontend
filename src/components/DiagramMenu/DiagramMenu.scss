@@ -8,8 +8,10 @@
   padding-bottom: 5px;
 
   .diagram-menu-container {
+    flex-wrap: wrap;
+    justify-content: center;
     display: flex;
-    padding: 5px 5px;
+    padding: 5px;
     font-size: 25px;
     gap: 10px;
   }
