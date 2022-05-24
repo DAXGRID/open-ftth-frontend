@@ -7,6 +7,7 @@
   border-bottom: none;
   width: 100%;
   min-width: 700px;
+  font-size: 14px;
 
   .terminal-equipment-table-container {
     min-width: initial;
@@ -16,7 +17,6 @@
     display: flex;
     justify-content: flex-start;
     padding: 15px 10px;
-    font-size: 16px;
     background-color: $hover-color;
     border-bottom: none;
     border-bottom: 1px solid $border-color;
@@ -79,7 +79,6 @@
   .terminal-equipment-table-container-header {
     display: flex;
     padding: 10px;
-    font-size: 16px;
     background-color: $hover-color;
     align-items: center;
     gap: 20px;
@@ -128,7 +127,6 @@
   border-top: 1px solid $border-color;
 
   .terminal-equipment-header {
-    font-size: 16px;
     font-weight: bold;
     border-bottom: 1px solid $border-color;
   }
@@ -149,7 +147,6 @@
         justify-content: flex-start;
         padding: 10px 10px;
         background-color: $ultra-light-grey;
-        font-size: 14px;
 
         .terminal-equipment-row-header__item {
           flex: 1;
@@ -162,7 +159,6 @@
           justify-content: flex-end;
           user-select: none;
           gap: 10px;
-          font-size: 16px;
 
           .header-icons__icon {
             &:hover {
@@ -173,7 +169,6 @@
       }
 
       .terminal-equipment-data-row {
-        font-size: 14px;
       }
     }
   }
@@ -248,18 +243,19 @@
   .trace-view-title {
     padding: 15px 10px;
     font-weight: bold;
-    font-size: 16px;
     border-bottom: 1px solid $border-color;
     background-color: #f9f9f9;
   }
 
   .trace-view-grid {
     display: grid;
-    grid-template-columns: 3fr 3fr 2fr 3fr 4fr 3fr;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
   }
 
   .trace-view-header {
     border-bottom: 1px solid $border-color;
+
     .trace-view-header-item {
       background-color: #f9f9f9;
       padding: 10px;
@@ -293,6 +289,9 @@
         padding: 10px;
         border-right: 1px solid $border-color;
         align-items: center;
+        overflow: auto;
+        text-overflow: inherit;
+
         &:last-child {
           padding: 10px 20px 10px 10px;
         }
