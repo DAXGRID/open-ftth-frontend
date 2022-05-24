@@ -164,10 +164,9 @@ function clickHiglight(
   editMode: boolean
 ) {
   return (e: MapMouseEvent & EventData) => {
-    const bboxSize = 1;
     const bbox: [PointLike, PointLike] = [
-      [e.point.x - bboxSize, e.point.y - bboxSize],
-      [e.point.x + bboxSize, e.point.y + bboxSize],
+      [e.point.x, e.point.y],
+      [e.point.x, e.point.y],
     ];
 
     const features = map
