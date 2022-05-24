@@ -212,15 +212,6 @@ function SchematicDiagram({
   const { map, setMap, reRender } = useContext(DiagramContext);
   const position = useRef<SchematicPosition | null>(null);
 
-  useLayoutEffect(() => {
-    if (!map || diagramObjects.length === 0) return;
-    if (position.current) {
-      mapFitBounds(position.current.envelope, map, position.current.zoom);
-    } else {
-      mapFitBounds(envelope, map, null);
-    }
-  }, [map, envelope, diagramObjects]);
-
   useEffect(() => {
     position.current = null;
   }, [routeElementId]);
@@ -387,6 +378,15 @@ function SchematicDiagram({
       });
     };
   }, [diagramObjects, envelope, onSelectFeature, editMode, map, reRender]);
+
+  useLayoutEffect(() => {
+    if (!map || diagramObjects.length === 0) return;
+    if (position.current) {
+      mapFitBounds(position.current.envelope, map, position.current.zoom);
+    } else {
+      mapFitBounds(envelope, map, null);
+    }
+  }, [map, envelope, diagramObjects]);
 
   return (
     <div
