@@ -289,17 +289,6 @@ function SchematicDiagram({
     if (diagramObjects.length === 0) return;
     if (!map) return;
 
-    const layers = map.getStyle().layers;
-    if (layers) {
-      layers.forEach((x) => {
-        map.removeLayer(x.id);
-      });
-    }
-
-    Object.keys(map.getStyle().sources ?? {}).forEach((x) => {
-      map.removeSource(x);
-    });
-
     loadDiagram(map, diagramObjects);
     const hasInnerConduit = diagramObjects.find((x) =>
       x.style.startsWith("InnerConduit")
@@ -382,6 +371,17 @@ function SchematicDiagram({
     map.resize();
 
     return () => {
+      const layers = map.getStyle().layers;
+      if (layers) {
+        layers.forEach((x) => {
+          map.removeLayer(x.id);
+        });
+      }
+
+      Object.keys(map.getStyle().sources ?? {}).forEach((x) => {
+        map.removeSource(x);
+      });
+
       map.off("click", clickHighlightHandler);
       interactableObject.forEach((name) => {
         hoverPointerOff(name, map);
