@@ -9,7 +9,7 @@
     visibility: hidden;
 
     &.tab-menu-top-container--show {
-      height: calc(100vh - ($top-menu-height + 37px));
+      height: calc(var(--app-height) - ($top-menu-height + 37px));
       animation: 0.1s fadeIn;
       animation-fill-mode: forwards;
     }

@@ -14,6 +14,17 @@ import { OverlayContext } from "./contexts/OverlayContext";
 import { useKeycloak } from "@react-keycloak/web";
 import Overlay from "./components/Overlay";
 
+// This is a hack made to handle tablet sizes.
+// https://medium.com/quick-code/100vh-problem-with-ios-safari-92ab23c852a8
+const appHeight = () => {
+  const doc = document.documentElement;
+  doc.style.setProperty("--app-height", `${window.innerHeight}px`);
+};
+
+window.addEventListener("resize", appHeight);
+appHeight();
+// end of hack...
+
 function App() {
   const { userName, authenticated, hasRoles } = useContext(UserContext);
   const { overlayChild } = useContext(OverlayContext);

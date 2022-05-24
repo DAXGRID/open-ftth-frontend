@@ -12,7 +12,7 @@
   .map-diagram--desktop {
     display: flex;
     flex-wrap: wrap;
-    height: calc(100vh - $top-menu-height);
+    height: calc(var(--app-height) - $top-menu-height);
 
     .hide-container {
       position: absolute;
@@ -29,7 +29,7 @@
 
     .container {
       flex: 1;
-      height: calc(100vh - $top-menu-height);
+      height: calc(var(--app-height) - $top-menu-height);
 
       &:first-of-type {
         border-right: 1px solid $border-color;
