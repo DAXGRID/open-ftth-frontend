@@ -176,10 +176,10 @@ function PassageView({
               <p>{t("INNER_CONDUIT")}</p>
             </div>
             <div className="passage-view-row-item">
-              <p>{t("LENGTH")}</p>
+              <p>{t("LENGTH_UNITS")}</p>
             </div>
             <div className="passage-view-row-item">
-              <p>{t("DISTANCE")}</p>
+              <p>{t("DISTANCE_UNITS")}</p>
             </div>
           </div>
         </div>

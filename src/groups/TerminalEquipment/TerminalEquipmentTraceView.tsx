@@ -24,7 +24,7 @@ function TerminalEquipmentTraceView({ view }: TraceViewProps) {
         <div className="trace-view-header-item">{t("TERMINAL_STRUCTURE")}</div>
         <div className="trace-view-header-item">{t("TERMINAL")}</div>
         <div className="trace-view-header-item">{t("CONNECTION_INFO")}</div>
-        <div className="trace-view-header-item">{t("LENGTH")}</div>
+        <div className="trace-view-header-item">{t("LENGTH_UNITS")}</div>
       </div>
       <div className="trace-view-body ">
         {view.view?.hops.map((x, i) => {
