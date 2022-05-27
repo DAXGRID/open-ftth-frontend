@@ -15,6 +15,7 @@ import ActionButton from "../../../components/ActionButton";
 import MultiOptionActionButton from "../../../components/MultiOptionActionButton";
 import { MapContext } from "../../../contexts/MapContext";
 import { OverlayContext } from "../../../contexts/OverlayContext";
+import { DiagramContext } from "../DiagramContext";
 import NodeContainerDetails from "../NodeContainerDetails";
 import FeatureInformation from "../FeatureInformation";
 import TerminalEquipment from "../../TerminalEquipment";
@@ -211,6 +212,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const client = useClient();
   const { t } = useTranslation();
   const { showElement } = useContext(OverlayContext);
+  const { enabledTracePan, setEnabledTracePan } = useContext(DiagramContext);
   const [editMode, setEditMode] = useState(false);
   const [selectedFeatures, setSelectedFeatures] = useState<
     MapboxGeoJSONFeature[]
@@ -224,7 +226,6 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     showModalsReducer,
     showModalsInitialState
   );
-  const [enabledTracePan, setEnabledTracePan] = useState<boolean>(true);
 
   const [, cutSpanSegmentsMutation] =
     useMutation<CutSpanSegmentsResponse>(CUT_SPAN_SEGMENTS);

@@ -12,6 +12,8 @@ import { Map } from "maplibre-gl";
 interface DiagramContextType {
   map: Map | null;
   setMap: (map: Map) => void;
+  enabledTracePan: boolean;
+  setEnabledTracePan: (zoom: boolean) => void;
   reRender: () => void;
 }
 
@@ -19,6 +21,10 @@ const DiagramContext = createContext<DiagramContextType>({
   map: null,
   setMap: () => {
     console.warn("no provider set for setMap");
+  },
+  enabledTracePan: false,
+  setEnabledTracePan: () => {
+    console.warn("no provider set for setAutomaticZoom");
   },
   reRender: () => {
     console.warn("no provider set for reRender");
@@ -31,6 +37,7 @@ interface DiagramProviderProps {
 
 const DiagramProvider = ({ children }: DiagramProviderProps) => {
   const [map, setMap] = useState<Map | null>(null);
+  const [enabledTracePan, setEnabledTracePan] = useState<boolean>(true);
 
   useEffect(() => {
     if (!map) return;
@@ -66,6 +73,8 @@ const DiagramProvider = ({ children }: DiagramProviderProps) => {
       value={{
         map: map,
         setMap: setMap,
+        enabledTracePan: enabledTracePan,
+        setEnabledTracePan: setEnabledTracePan,
         reRender: reRender,
       }}
     >
