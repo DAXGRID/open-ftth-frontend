@@ -948,6 +948,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             action={() => clearHighlights()}
             title={t("CLEAR_HIGHLIGHT")}
           />
+          <ToggleButton
+            toggled={enabledTracePan}
+            id={"0"}
+            toggle={() => setEnabledTracePan(!enabledTracePan)}
+            icon={ZoomMapSvg}
+            title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
+          />
         </DiagramMenu>
       )}
       <SchematicDiagram

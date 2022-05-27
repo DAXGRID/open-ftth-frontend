@@ -10,11 +10,11 @@ type ToggleButtonProps = {
 };
 
 function renderIcon(icon: IconProp | string, altText: string) {
-  if (typeof icon === "string") {
-    return <img src={icon as string} alt={altText} />;
-  } else {
-    return <FontAwesomeIcon icon={icon as IconProp} />;
-  }
+  return typeof icon === "string" ? (
+    <img src={icon as string} alt={altText} />
+  ) : (
+    <FontAwesomeIcon icon={icon as IconProp} />
+  );
 }
 
 function ToggleButton({ toggled, icon, toggle, id, title }: ToggleButtonProps) {
