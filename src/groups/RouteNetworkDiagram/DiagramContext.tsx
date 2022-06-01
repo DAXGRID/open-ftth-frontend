@@ -9,6 +9,8 @@ import {
 } from "react";
 import { Map } from "maplibre-gl";
 
+const LOCAL_STORAGE_ENABLE_TRACE_PAN = "enabled_trace_pan";
+
 interface DiagramContextType {
   map: Map | null;
   setMap: (map: Map) => void;
@@ -37,7 +39,18 @@ interface DiagramProviderProps {
 
 const DiagramProvider = ({ children }: DiagramProviderProps) => {
   const [map, setMap] = useState<Map | null>(null);
-  const [enabledTracePan, setEnabledTracePan] = useState<boolean>(true);
+  const [enabledTracePan, setEnabledTracePan] = useState<boolean>(() => {
+    return JSON.parse(
+      localStorage.getItem(LOCAL_STORAGE_ENABLE_TRACE_PAN) ?? "true"
+    );
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      LOCAL_STORAGE_ENABLE_TRACE_PAN,
+      JSON.stringify(enabledTracePan)
+    );
+  }, [enabledTracePan]);
 
   useEffect(() => {
     if (!map) return;
