@@ -319,7 +319,7 @@ function TerminalEquipment() {
     ) {
       showElement(
         <ModalContainer
-          title={t("DISCONNECT_FIBER_CABLE")}
+          title={t("DISCONNECT")}
           closeCallback={() =>
             dispatch({
               type: "resetShowDisconnectFiberEditor",
