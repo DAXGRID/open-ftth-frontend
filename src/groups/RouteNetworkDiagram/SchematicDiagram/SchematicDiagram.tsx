@@ -247,32 +247,6 @@ function SchematicDiagram({
       }),
       "top-left"
     );
-
-    const savePosition = () => {
-      const bounds = newMap.getBounds();
-      const zoom = newMap.getZoom();
-      position.current = {
-        envelope: {
-          minX: bounds.getWest(),
-          minY: bounds.getSouth(),
-          maxX: bounds.getEast(),
-          maxY: bounds.getNorth(),
-        },
-        zoom: zoom,
-      };
-    };
-
-    newMap.on("dragend", savePosition);
-    newMap.on("zoomend", savePosition);
-
-    const resizeCallbackHandler = () => resizeHandler(newMap);
-    window.addEventListener("resize", resizeCallbackHandler);
-
-    return () => {
-      newMap.off("dragend", savePosition);
-      newMap.off("zoomend", savePosition);
-      window.removeEventListener("resize", resizeCallbackHandler);
-    };
   }, [map, setMap, diagramObjects]);
 
   useLayoutEffect(() => {
@@ -360,6 +334,26 @@ function SchematicDiagram({
     reRender();
     map.resize();
 
+    const savePosition = () => {
+      const bounds = map.getBounds();
+      const zoom = map.getZoom();
+      position.current = {
+        envelope: {
+          minX: bounds.getWest(),
+          minY: bounds.getSouth(),
+          maxX: bounds.getEast(),
+          maxY: bounds.getNorth(),
+        },
+        zoom: zoom,
+      };
+    };
+
+    map.on("dragend", savePosition);
+    map.on("zoomend", savePosition);
+
+    const resizeCallbackHandler = () => resizeHandler(map);
+    window.addEventListener("resize", resizeCallbackHandler);
+
     return () => {
       const layers = map.getStyle().layers;
       if (layers) {
@@ -376,6 +370,10 @@ function SchematicDiagram({
       interactableObject.forEach((name) => {
         hoverPointerOff(name, map);
       });
+
+      map.off("dragend", savePosition);
+      map.off("zoomend", savePosition);
+      window.removeEventListener("resize", resizeCallbackHandler);
     };
   }, [diagramObjects, envelope, onSelectFeature, editMode, map, reRender]);
 
