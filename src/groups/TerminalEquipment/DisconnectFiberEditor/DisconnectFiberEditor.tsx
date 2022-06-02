@@ -125,7 +125,7 @@ function DisconnectFiberEditor({
     <div className="disconnect-fiber-editor">
       <div className="full-row">
         <p className="disconnect-fiber-editor__title">
-          {t("CABLE_NAME")}: {view.spanEquipmentName}
+          {t("NAME")}: {view.spanEquipmentName}
         </p>
       </div>
       <div className="full-row">
@@ -148,7 +148,7 @@ function DisconnectFiberEditor({
               {t("PIN/PORT")}
             </div>
             <div className="disconnect-fiber-editor-container-header-item">
-              {t("TUBE/FIBER")}
+              {t("CONNECTION")}
             </div>
             <div className="disconnect-fiber-editor-container-header-item">
               {t("CURCUIT_END")}
