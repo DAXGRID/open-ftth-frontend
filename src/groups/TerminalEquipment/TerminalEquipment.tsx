@@ -331,6 +331,11 @@ function TerminalEquipment() {
             spanSegmentId={state.showDisconnectFiberEditor.connectedToSegmentId}
             terminalId={state.showDisconnectFiberEditor.terminalId}
             routeNodeId={state.routeNodeId}
+            disconnectCallback={() =>
+              dispatch({
+                type: "resetShowDisconnectFiberEditor",
+              })
+            }
           />
         </ModalContainer>
       );
