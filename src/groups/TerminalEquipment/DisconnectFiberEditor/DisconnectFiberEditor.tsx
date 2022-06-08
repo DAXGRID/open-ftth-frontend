@@ -43,12 +43,14 @@ interface DisconnectFiberEditorProps {
   terminalId: string;
   spanSegmentId: string;
   routeNodeId: string;
+  disconnectCallback?: () => void;
 }
 
 function DisconnectFiberEditor({
   terminalId,
   spanSegmentId,
   routeNodeId,
+  disconnectCallback,
 }: DisconnectFiberEditorProps) {
   const client = useClient();
   const { t } = useTranslation();
@@ -111,6 +113,9 @@ function DisconnectFiberEditor({
       response.data?.spanEquipment.disconnectFromTerminalEquipment.isSuccess
     ) {
       toast.success(t("DISCONNECTED"));
+      if (disconnectCallback) {
+        disconnectCallback();
+      }
     } else {
       toast.error(
         response.data?.spanEquipment.disconnectFromTerminalEquipment
