@@ -226,7 +226,19 @@
       "ADDED": "Added",
       "REMOVED": "Removed",
       "DETAILS": "Details",
-      "MAP": "Map"
+      "MAP": "Map",
+      "PROJECT_NUMBER": "Project number",
+      "PROJECT_NAME": "Project name",
+      "WORK_TASK_NUMBER": "Work task number",
+      "WORK_TASK_TYPE": "Work task type",
+      "WORK_TASK_STATUS": "Work task status",
+      "WORK_TASK_NAME": "Work task name",
+      "SUBTASK": "Subtask",
+      "OWNER": "Owner",
+      "CREATED_DATE": "Created date",
+      "INSTALLATION_NUMBER": "Installation number",
+      "MODIFIED_BY": "Modified by",
+      "PROJECT": "Project"
     }
   },
   "dk": {
@@ -456,7 +468,19 @@
       "ADDED": "Tilføjet",
       "REMOVED": "Fjernet",
       "DETAILS": "Detaljer",
-      "MAP": "Kort"
+      "MAP": "Kort",
+      "PROJECT_NUMBER": "Projekt nr.",
+      "PROJECT_NAME": "Projekt navn",
+      "WORK_TASK_NUMBER": "Opgave nr.",
+      "WORK_TASK_TYPE": "Opgave type",
+      "WORK_TASK_STATUS": "Opgave status",
+      "WORK_TASK_NAME": "Opgave name",
+      "SUBTASK": "Etape",
+      "OWNER": "Ejer",
+      "CREATED_DATE": "Oprettelsesdato",
+      "INSTALLATION_NUMBER": "Inst nr.",
+      "MODIFIED_BY": "Redigeres af",
+      "PROJECT": "Projekt"
     }
   }
 }
