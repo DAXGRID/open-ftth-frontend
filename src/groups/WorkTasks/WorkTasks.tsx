@@ -22,8 +22,7 @@ function workTaskTypeFilter(
   workTaskType: string
 ): (workTask: WorkTask) => boolean {
   return (workTask: WorkTask) => {
-    if (workTaskType === "ALL") return true;
-    return workTask.type === workTaskType;
+    return workTaskType === "ALL" ? true : workTask.type === workTaskType;
   };
 }
 
@@ -31,8 +30,7 @@ function workTaskStatusFilter(
   workTaskStatus: string
 ): (workTask: WorkTask) => boolean {
   return (workTask: WorkTask) => {
-    if (workTaskStatus === "ALL") return true;
-    return workTask.status === workTaskStatus;
+    return workTaskStatus === "ALL" ? true : workTask.status === workTaskStatus;
   };
 }
 
@@ -304,10 +302,15 @@ function WorkTasks() {
         />
       </div>
       <div className="full-row gap-default">
-        <DefaultButton innerText={t("Pick work task")} onClick={() => {}} />
+        <DefaultButton
+          innerText={t("Pick work task")}
+          onClick={() => {}}
+          disabled={!state.selectedWorkTask}
+        />
         <DefaultButton
           innerText={t("Pan/Zoom to address")}
           onClick={() => {}}
+          disabled={!state.selectedWorkTask?.geometry}
         />
       </div>
     </div>
