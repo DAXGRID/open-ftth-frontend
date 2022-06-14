@@ -7,7 +7,9 @@ import DefaultButton from "../../components/DefaultButton";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import { getWorksTasks, WorkTask } from "./WorkTasksGql";
 
-function projectNumberFilter(projectNumber: string): (x: WorkTask) => boolean {
+function projectNumberFilter(
+  projectNumber: string
+): (workTask: WorkTask) => boolean {
   return (workTask: WorkTask) => {
     if (projectNumber === "ALL") return true;
     if (projectNumber === "NO_ASSOCIATED_PROJECT")
@@ -16,11 +18,23 @@ function projectNumberFilter(projectNumber: string): (x: WorkTask) => boolean {
   };
 }
 
+function workTaskTypeFilter(
+  workTaskType: string
+): (workTask: WorkTask) => boolean {
+  return (workTask: WorkTask) => {
+    if (workTaskType === "ALL") return true;
+    return workTask.type === workTaskType;
+  };
+}
+
 function filterWorkTasks(
   workTasks: WorkTask[],
-  projectNumber: string
+  projectNumber: string,
+  workTaskType: string
 ): WorkTask[] {
-  return workTasks.filter(projectNumberFilter(projectNumber));
+  return workTasks
+    .filter(projectNumberFilter(projectNumber))
+    .filter(workTaskTypeFilter(workTaskType));
 }
 
 function mapWorkTasksBodyItems(workTasks: WorkTask[]): BodyItem[] {
@@ -191,10 +205,14 @@ function WorkTasks() {
   const selectBodyItems = useMemo(() => {
     return state.workTasks
       ? mapWorkTasksBodyItems(
-          filterWorkTasks(state.workTasks, state.projectNumberFilter)
+          filterWorkTasks(
+            state.workTasks,
+            state.projectNumberFilter,
+            state.workTaskTypeFilter
+          )
         )
       : [];
-  }, [state.workTasks, state.projectNumberFilter]);
+  }, [state.workTasks, state.projectNumberFilter, state.workTaskTypeFilter]);
 
   const selectWorkTask = (workTaskNumber: string) => {
     const workTask = state.workTasks.find((x) => x.number === workTaskNumber);
