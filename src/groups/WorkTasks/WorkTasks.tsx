@@ -7,6 +7,22 @@ import DefaultButton from "../../components/DefaultButton";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import { getWorksTasks, WorkTask } from "./WorkTasksGql";
 
+function projectNumberFilter(projectNumber: string): (x: WorkTask) => boolean {
+  return (workTask: WorkTask) => {
+    if (projectNumber === "ALL") return true;
+    if (projectNumber === "NO_ASSOCIATED_PROJECT")
+      return workTask.projectNumber === null;
+    return workTask.projectNumber === projectNumber;
+  };
+}
+
+function filterWorkTasks(
+  workTasks: WorkTask[],
+  projectNumber: string
+): WorkTask[] {
+  return workTasks.filter(projectNumberFilter(projectNumber));
+}
+
 function mapWorkTasksBodyItems(workTasks: WorkTask[]): BodyItem[] {
   return workTasks.map<BodyItem>((x) => {
     return {
@@ -173,8 +189,12 @@ function WorkTasks() {
   }, [state.workTasks, t]);
 
   const selectBodyItems = useMemo(() => {
-    return state.workTasks ? mapWorkTasksBodyItems(state.workTasks) : [];
-  }, [state.workTasks]);
+    return state.workTasks
+      ? mapWorkTasksBodyItems(
+          filterWorkTasks(state.workTasks, state.projectNumberFilter)
+        )
+      : [];
+  }, [state.workTasks, state.projectNumberFilter]);
 
   const selectWorkTask = (workTaskNumber: string) => {
     const workTask = state.workTasks.find((x) => x.number === workTaskNumber);
