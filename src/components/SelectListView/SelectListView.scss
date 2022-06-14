@@ -1,13 +1,10 @@
 @import "../../global-styles/colors";
 
 .select-list-view {
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1;
+  font-size: 14px;
+  width: 100%;
 
   .select-list-view-title {
-    flex: 1;
-    flex-basis: 100%;
     margin-bottom: 15px;
 
     h2 {
@@ -15,17 +12,18 @@
     }
   }
 
+  .select-list-view-grid {
+    display: grid;
+    grid-auto-columns: minmax(0, 3fr);
+    grid-auto-flow: column;
+  }
+
   .select-list-view-content {
-    display: flex;
-    flex-wrap: wrap;
-    flex: 1;
     background-color: $background-color;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 
     .select-list-view-header {
-      display: flex;
-      flex: 1;
       background-color: $hover-color;
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
@@ -34,23 +32,21 @@
       .select-list-view-header-item {
         flex: 1;
         border-right: 1px solid $border-color;
+        font-weight: bold;
 
         &:last-of-type {
           border-right: none;
         }
 
         p {
-          padding: 12px;
-          font-size: 16px;
+          padding: 10px;
+          white-space: wrap;
+          overflow: hidden;
         }
       }
     }
 
     .select-list-view-body {
-      display: flex;
-      flex: 1;
-      flex-basis: 100%;
-      flex-wrap: wrap;
       border: 1px solid $border-color;
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px;
@@ -61,9 +57,6 @@
       }
 
       .select-list-view-body-row {
-        display: flex;
-        flex: 1;
-        flex-basis: 100%;
         border-bottom: 1px solid $border-color;
 
         &:hover {
@@ -77,12 +70,10 @@
       }
 
       .select-list-view-body-item {
-        flex: 1;
         border-right: 1px solid $border-color;
 
         &.selected {
           background-color: $select-color;
-          font-weight: bold;
         }
 
         &:last-of-type {
@@ -90,8 +81,8 @@
         }
 
         p {
-          padding: 12px;
-          font-size: 14px;
+          overflow: auto;
+          padding: 10px;
         }
       }
     }
