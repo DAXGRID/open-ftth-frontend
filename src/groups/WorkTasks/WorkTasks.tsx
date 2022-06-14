@@ -7,6 +7,27 @@ import DefaultButton from "../../components/DefaultButton";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import { getWorksTasks, WorkTask } from "./WorkTasksGql";
 
+function mapWorkTasksBodyItems(workTasks: WorkTask[]): BodyItem[] {
+  return workTasks.map<BodyItem>((x) => {
+    return {
+      id: x.number,
+      rows: [
+        { id: "PROJECT_NUMBER", value: x.projectNumber ?? "" },
+        { id: "PROJECT_NAME", value: x.projectName ?? "" },
+        { id: "NUMBER", value: x.number ?? "" },
+        { id: "TYPE", value: x.type ?? "" },
+        { id: "STATUS", value: x.status ?? "" },
+        { id: "NAME", value: x.name ?? "" },
+        { id: "SUBTASK", value: x.subtask ?? "" },
+        { id: "OWNER", value: x.owner ?? "" },
+        { id: "CREATED_DATE", value: x.createdDate ?? "" },
+        { id: "INSTALLATION_NUMBER", value: x.installationNumber ?? "" },
+        { id: "MODIFIED_BY", value: x.modifiedBy ?? "" },
+      ],
+    };
+  });
+}
+
 function mapProjectSelectOptions(workTasks: WorkTask[]): SelectOption[] {
   return workTasks.reduce<SelectOption[]>((acc, x) => {
     const notInCollection = !!!acc.find((y) => y.value === x.projectNumber);
@@ -146,6 +167,10 @@ function WorkTasks() {
       : [];
   }, [state.workTasks, t]);
 
+  const selectBodyItems = useMemo(() => {
+    return state.workTasks ? mapWorkTasksBodyItems(state.workTasks) : [];
+  }, [state.workTasks]);
+
   return (
     <div className="work-tasks">
       <div className="full-row full-row gap-default">
@@ -204,7 +229,7 @@ function WorkTasks() {
             t("INSTALLATION_NUMBER"),
             t("MODIFIED_BY"),
           ]}
-          bodyItems={[]}
+          bodyItems={selectBodyItems}
           selectItem={() => {}}
           selected={""}
         />
