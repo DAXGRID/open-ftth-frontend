@@ -81,19 +81,22 @@ interface State {
   projectNumberFilter: string;
   workTaskTypeFilter: string;
   workTaskStatusFilter: string;
+  selectedWorkTask: WorkTask | null;
 }
 
 type Action =
   | { type: "setWorkTasks"; workTasks: WorkTask[] }
   | { type: "setProjectNumberFilter"; projectNumber: string }
   | { type: "setWorkTaskTypeFilter"; workTaskType: string }
-  | { type: "setWorkTaskStatusFilter"; workTaskStatus: string };
+  | { type: "setWorkTaskStatusFilter"; workTaskStatus: string }
+  | { type: "setSelectedWorkTask"; workTask: WorkTask };
 
 const initialState: State = {
   workTasks: [],
   projectNumberFilter: "ALL",
   workTaskTypeFilter: "ALL",
   workTaskStatusFilter: "ALL",
+  selectedWorkTask: null,
 };
 
 function reducer(state: State, action: Action): State {
@@ -106,6 +109,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, workTaskTypeFilter: action.workTaskType };
     case "setWorkTaskStatusFilter":
       return { ...state, workTaskStatusFilter: action.workTaskStatus };
+    case "setSelectedWorkTask":
+      return { ...state, selectedWorkTask: action.workTask };
     default:
       throw new Error(`No action found.`);
   }
@@ -171,6 +176,15 @@ function WorkTasks() {
     return state.workTasks ? mapWorkTasksBodyItems(state.workTasks) : [];
   }, [state.workTasks]);
 
+  const selectWorkTask = (workTaskNumber: string) => {
+    const workTask = state.workTasks.find((x) => x.number === workTaskNumber);
+    if (workTask) {
+      dispatch({ type: "setSelectedWorkTask", workTask });
+    } else {
+      console.error(`Could not find work task with id ${workTaskNumber}`);
+    }
+  };
+
   return (
     <div className="work-tasks">
       <div className="full-row full-row gap-default">
@@ -230,8 +244,8 @@ function WorkTasks() {
             t("MODIFIED_BY"),
           ]}
           bodyItems={selectBodyItems}
-          selectItem={() => {}}
-          selected={""}
+          selectItem={(x) => selectWorkTask(x.id as string)}
+          selected={state.selectedWorkTask?.number}
         />
       </div>
       <div className="full-row gap-default">
