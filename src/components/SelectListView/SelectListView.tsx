@@ -33,7 +33,7 @@ function SelectListView({
         </div>
       )}
       <div className="select-list-view-content">
-        <div className="select-list-view-header">
+        <div className="select-list-view-header select-list-view-grid">
           {headerItems.map((name) => (
             <div key={name} className="select-list-view-header-item">
               <p>{name}</p>
@@ -41,13 +41,16 @@ function SelectListView({
           ))}
         </div>
         <div
-          className="select-list-view-body"
+          className="select-list-view-body "
           style={
             maxHeightBody ? { maxHeight: maxHeightBody, overflowY: "auto" } : {}
           }
         >
           {bodyItems.map((row) => (
-            <div key={row.id} className="select-list-view-body-row">
+            <div
+              key={row.id}
+              className="select-list-view-body-row select-list-view-grid"
+            >
               {row.rows.map((item, index) => (
                 <div
                   role="button"
