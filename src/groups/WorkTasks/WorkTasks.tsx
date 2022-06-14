@@ -27,14 +27,25 @@ function workTaskTypeFilter(
   };
 }
 
+function workTaskStatusFilter(
+  workTaskStatus: string
+): (workTask: WorkTask) => boolean {
+  return (workTask: WorkTask) => {
+    if (workTaskStatus === "ALL") return true;
+    return workTask.status === workTaskStatus;
+  };
+}
+
 function filterWorkTasks(
   workTasks: WorkTask[],
   projectNumber: string,
-  workTaskType: string
+  workTaskType: string,
+  workTaskStatus: string
 ): WorkTask[] {
   return workTasks
     .filter(projectNumberFilter(projectNumber))
-    .filter(workTaskTypeFilter(workTaskType));
+    .filter(workTaskTypeFilter(workTaskType))
+    .filter(workTaskStatusFilter(workTaskStatus));
 }
 
 function mapWorkTasksBodyItems(workTasks: WorkTask[]): BodyItem[] {
@@ -208,11 +219,17 @@ function WorkTasks() {
           filterWorkTasks(
             state.workTasks,
             state.projectNumberFilter,
-            state.workTaskTypeFilter
+            state.workTaskTypeFilter,
+            state.workTaskStatusFilter
           )
         )
       : [];
-  }, [state.workTasks, state.projectNumberFilter, state.workTaskTypeFilter]);
+  }, [
+    state.workTasks,
+    state.projectNumberFilter,
+    state.workTaskTypeFilter,
+    state.workTaskStatusFilter,
+  ]);
 
   const selectWorkTask = (workTaskNumber: string) => {
     const workTask = state.workTasks.find((x) => x.number === workTaskNumber);
