@@ -233,7 +233,9 @@
       "CREATED_DATE": "Created date",
       "INSTALLATION_NUMBER": "Installation number",
       "MODIFIED_BY": "Modified by",
-      "PROJECT": "Project"
+      "PROJECT": "Project",
+      "ALL": "All",
+      "NO_ASSOCIATED_PROJECT": "No associated project"
     }
   },
   "dk": {
@@ -470,7 +472,9 @@
       "CREATED_DATE": "Oprettelsesdato",
       "INSTALLATION_NUMBER": "Inst nr.",
       "MODIFIED_BY": "Redigeres af",
-      "PROJECT": "Projekt"
+      "PROJECT": "Projekt",
+      "ALL": "Alle",
+      "NO_ASSOCIATED_PROJECT": "Ikke tilknyttet projekt"
     }
   }
 }
