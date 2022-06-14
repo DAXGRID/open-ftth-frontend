@@ -39,8 +39,9 @@
         }
 
         p {
-          padding: 10px;
-          overflow-x: auto;
+          padding: 8px;
+          white-space: wrap;
+          overflow: hidden;
         }
       }
     }
@@ -81,7 +82,8 @@
         }
 
         p {
-          padding: 10px;
+          overflow: auto;
+          padding: 8px;
         }
       }
     }
