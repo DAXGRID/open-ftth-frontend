@@ -92,6 +92,13 @@ export function getWorksTasks(_: Client): WorkTask[] {
   return exampleWorkTasks;
 }
 
+export function setCurrentWorkTaskToUser(
+  client: Client,
+  params: SetCurrentWorkTaskParams
+) {
+  return client.mutation(SET_CURRENT_WORK_TASK, params).toPromise();
+}
+
 export interface WorkTask {
   projectNumber: string | null;
   projectName: string | null;
@@ -110,14 +117,19 @@ export interface WorkTask {
   } | null;
 }
 
-// export const SET_CURRENT_WORK_TASK_MUTATION = `mutation ($userName: String!, $workTaskId: ID!) {
-//   userContext {
-//     setCurrentWorkTask(userName: $userName, workTaskId: $workTaskId)
-//     {
-//       currentWorkTask {
-//         __typename
-//       }
-//       userName
-//     }
-//   }
-// }`;
+interface SetCurrentWorkTaskParams {
+  username: string;
+  workTaskId: string;
+}
+
+const SET_CURRENT_WORK_TASK = `mutation ($userName: String!, $workTaskId: ID!) {
+  userContext {
+    setCurrentWorkTask(userName: $userName, workTaskId: $workTaskId)
+    {
+      currentWorkTask {
+        __typename
+      }
+      userName
+    }
+  }
+}`;

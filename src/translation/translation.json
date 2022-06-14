@@ -13,8 +13,7 @@
       "No segments selected": "No segments selected",
       "Conduit(s) are now placed": "Conduits(s) are now placed",
       "Work tasks": "Work tasks",
-      "Pan/Zoom to address": "Pan/Zoom to address",
-      "Pick work task": "Pick work task",
+      "PICK_WORK_TASK": "Pick work task",
       "Name": "Name",
       "Flex point area": "Flex point area",
       "Splice point area": "Splice point area",
@@ -235,7 +234,9 @@
       "MODIFIED_BY": "Modified by",
       "PROJECT": "Project",
       "ALL": "All",
-      "NO_ASSOCIATED_PROJECT": "No associated project"
+      "NO_ASSOCIATED_PROJECT": "No associated project",
+      "ZOOM_TO": "Zoom to",
+      "COMPLETED": "Completed"
     }
   },
   "dk": {
@@ -252,8 +253,7 @@
       "No segments selected": "Der er ingen selekterede rør",
       "Conduit(s) are now placed": "Rør er blevet lagt",
       "Work tasks": "Opgaveliste",
-      "Pan/Zoom to address": "Pan/Zoom til adresse",
-      "Pick work task": "Vælg opgave",
+      "PICK_WORK_TASK": "Vælg opgave",
       "Name": "Navn",
       "Flex point area": "Flexpunkt",
       "Splice point area": "Splidsepunkt",
@@ -344,8 +344,8 @@
       "CLEAR_HIGHLIGHT": "Fjern fremhævning",
       "SUCCESS_MOVED": "Flyttet",
       "ERROR": "Der skete en fejl",
-      "SELECTED": "Selekteret",
-      "SELECT": "Selekter",
+      "SELECTED": "Valgt",
+      "SELECT": "Vælg",
       "MOVE": "Flyt",
       "NAME_OR_ID": "Id/Navn",
       "SPECIFICATION": "Specifikation",
@@ -474,7 +474,9 @@
       "MODIFIED_BY": "Redigeres af",
       "PROJECT": "Projekt",
       "ALL": "Alle",
-      "NO_ASSOCIATED_PROJECT": "Ikke tilknyttet projekt"
+      "NO_ASSOCIATED_PROJECT": "Ikke tilknyttet projekt",
+      "ZOOM_TO": "Zoom til",
+      "COMPLETED": "Udført"
     }
   }
 }

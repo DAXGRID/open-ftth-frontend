@@ -1,11 +1,19 @@
-import { useEffect, useMemo, useReducer } from "react";
+import { useEffect, useMemo, useReducer, useContext } from "react";
 import { useClient } from "urql";
 import { useTranslation } from "react-i18next";
+import { UserContext } from "../../contexts/UserContext";
 import LabelContainer from "../../components/LabelContainer";
 import SelectMenu, { SelectOption } from "../../components/SelectMenu";
 import DefaultButton from "../../components/DefaultButton";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
-import { getWorksTasks, WorkTask } from "./WorkTasksGql";
+import useBridgeConnector from "../../bridge/useBridgeConnector";
+import { toast } from "react-toastify";
+
+import {
+  getWorksTasks,
+  WorkTask,
+  setCurrentWorkTaskToUser,
+} from "./WorkTasksGql";
 
 function projectNumberFilter(
   projectNumber: string
@@ -159,6 +167,8 @@ function WorkTasks() {
   const { t } = useTranslation();
   const client = useClient();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { reloadUserWorkTask, userName } = useContext(UserContext);
+  const { panToCoordinate } = useBridgeConnector();
 
   useEffect(() => {
     dispatch({ type: "setWorkTasks", workTasks: getWorksTasks(client) });
@@ -238,6 +248,40 @@ function WorkTasks() {
     }
   };
 
+  const executeSetCurrentWorkTaskToUser = () => {
+    if (!userName) {
+      console.error("No username, invalid state.");
+      return;
+    }
+
+    if (!state.selectedWorkTask) {
+      console.error("No selected work task, this is an invalid state.");
+      return;
+    }
+
+    setCurrentWorkTaskToUser(client, {
+      username: userName,
+      workTaskId: state.selectedWorkTask.number,
+    }).then((r) => {
+      toast.success(t("SELECTED"));
+      reloadUserWorkTask();
+    });
+  };
+
+  const zoomToCoordinate = () => {
+    if (!state.selectedWorkTask) {
+      console.error("No selected work task invalid state.");
+      return;
+    }
+    if (!state.selectedWorkTask.geometry) {
+      console.error("The work task has no coordinates invalid state.");
+      return;
+    }
+
+    panToCoordinate(state.selectedWorkTask.geometry.coordinates);
+    toast.success(t("COMPLETED"));
+  };
+
   return (
     <div className="work-tasks">
       <div className="full-row full-row gap-default">
@@ -303,13 +347,13 @@ function WorkTasks() {
       </div>
       <div className="full-row gap-default">
         <DefaultButton
-          innerText={t("Pick work task")}
-          onClick={() => {}}
+          innerText={t("PICK_WORK_TASK")}
+          onClick={() => executeSetCurrentWorkTaskToUser()}
           disabled={!state.selectedWorkTask}
         />
         <DefaultButton
-          innerText={t("Pan/Zoom to address")}
-          onClick={() => {}}
+          innerText={t("ZOOM_TO")}
+          onClick={() => zoomToCoordinate()}
           disabled={!state.selectedWorkTask?.geometry}
         />
       </div>
