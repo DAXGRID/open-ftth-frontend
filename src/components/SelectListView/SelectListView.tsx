@@ -15,6 +15,7 @@ type SelectListViewProps = {
   selectItem: (selected: BodyItem) => void;
   selected?: number | string;
   maxHeightBody?: string;
+  minWidth?: string;
 };
 
 function SelectListView({
@@ -24,6 +25,7 @@ function SelectListView({
   selectItem,
   selected,
   maxHeightBody,
+  minWidth,
 }: SelectListViewProps) {
   return (
     <div className="select-list-view">
@@ -32,7 +34,10 @@ function SelectListView({
           <h2>{title}</h2>
         </div>
       )}
-      <div className="select-list-view-content">
+      <div
+        className="select-list-view-content"
+        style={{ minWidth: minWidth ?? "initial" }}
+      >
         <div className="select-list-view-header select-list-view-grid">
           {headerItems.map((name) => (
             <div key={name} className="select-list-view-header-item">
