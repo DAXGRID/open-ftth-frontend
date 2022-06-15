@@ -343,6 +343,7 @@ function WorkTasks() {
           bodyItems={selectBodyItems}
           selectItem={(x) => selectWorkTask(x.id as string)}
           selected={state.selectedWorkTask?.number}
+          minWidth="1200px"
         />
       </div>
       <div className="full-row gap-default">
