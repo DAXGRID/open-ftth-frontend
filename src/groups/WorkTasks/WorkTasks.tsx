@@ -171,7 +171,14 @@ function WorkTasks() {
   const { panToCoordinate } = useBridgeConnector();
 
   useEffect(() => {
-    dispatch({ type: "setWorkTasks", workTasks: getWorksTasks(client) });
+    getWorksTasks(client).then((x) => {
+      const workTasks = x.data?.workService.workTasksWithProjectInformation;
+      if (workTasks) {
+        dispatch({ type: "setWorkTasks", workTasks: workTasks });
+      } else {
+        console.error("Could not load work tasks.");
+      }
+    });
   }, [client, dispatch]);
 
   const projectSelectOptions = useMemo(() => {
@@ -260,12 +267,16 @@ function WorkTasks() {
     }
 
     setCurrentWorkTaskToUser(client, {
-      username: userName,
-      workTaskId: state.selectedWorkTask.number,
-    }).then((r) => {
-      toast.success(t("SELECTED"));
-      reloadUserWorkTask();
-    });
+      userName: userName,
+      workTaskId: state.selectedWorkTask.workTaskId,
+    })
+      .then(() => {
+        toast.success(t("SELECTED"));
+        reloadUserWorkTask();
+      })
+      .catch(() => {
+        toast.error(t("ERROR"));
+      });
   };
 
   const zoomToCoordinate = () => {

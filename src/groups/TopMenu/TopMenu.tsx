@@ -38,7 +38,7 @@ function TopMenu({ toggleSideMenu }: TopMenuProps) {
             <span>
               {!userWorkTask?.name
                 ? t("NO_SELECTED_WORK_TASK")
-                : userWorkTask.name}
+                : `${userWorkTask.number} ${userWorkTask.name}`}
             </span>
           </IconInformationMenu>
         </div>
