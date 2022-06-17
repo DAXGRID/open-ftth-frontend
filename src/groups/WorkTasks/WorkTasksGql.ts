@@ -1,95 +1,7 @@
 import { Client } from "urql";
 
-const exampleWorkTasks: WorkTask[] = [
-  {
-    projectNumber: "P12345",
-    projectName: "Andeby",
-    number: "W000001",
-    type: "Gadeskab",
-    status: "Oprettet",
-    name: "Nyt skabsomraade i odder nybolig vej",
-    subtask: null,
-    owner: "Hans",
-    createdDate: "01-06-2021",
-    installationNumber: null,
-    modifiedBy: null,
-    geometry: null,
-  },
-  {
-    projectNumber: "P12345",
-    projectName: "Andeby",
-    number: "W000002",
-    type: "Gadeskab",
-    status: "Fuldfoert",
-    name: "Nyt skabsomraade syd",
-    subtask: "Etape 1",
-    owner: "Hans",
-    createdDate: "01-06-2021",
-    installationNumber: null,
-    modifiedBy: null,
-    geometry: null,
-  },
-  {
-    projectNumber: "P12345",
-    projectName: "Andeby",
-    number: "W000003",
-    type: "Gadeskab",
-    status: "Oprettet",
-    name: "Nyt skabsomraade syd",
-    subtask: "Etape 2",
-    owner: "Hans",
-    createdDate: "04-06-2021",
-    installationNumber: null,
-    modifiedBy: "Susie",
-    geometry: null,
-  },
-  {
-    projectNumber: "P22222234",
-    projectName: "Boligby",
-    number: "W000004",
-    type: "Installation i foreninger",
-    status: "Igangvaerende",
-    name: "Bygning 12A",
-    subtask: null,
-    owner: "Bent",
-    createdDate: "23-01-2022",
-    installationNumber: null,
-    modifiedBy: null,
-    geometry: null,
-  },
-  {
-    projectNumber: null,
-    projectName: null,
-    number: "W000010",
-    type: "Eftertilmelding Auto",
-    status: "Oprettet",
-    name: null,
-    subtask: null,
-    owner: null,
-    createdDate: "10-02-2022",
-    installationNumber: "12345",
-    modifiedBy: null,
-    geometry: null,
-  },
-  {
-    projectNumber: null,
-    projectName: null,
-    number: "W000011",
-    type: "Eftertilmelding Manuel",
-    status: "Oprettet",
-    name: null,
-    subtask: null,
-    owner: null,
-    createdDate: "10-02-2022",
-    installationNumber: "23456",
-    modifiedBy: "Jane",
-    geometry: null,
-  },
-];
-
-// TODO use client.
-export function getWorksTasks(_: Client): WorkTask[] {
-  return exampleWorkTasks;
+export function getWorksTasks(client: Client) {
+  return client.query<WorkTasksResponse>(QUERY_WORK_TASKS).toPromise();
 }
 
 export function setCurrentWorkTaskToUser(
@@ -100,6 +12,7 @@ export function setCurrentWorkTaskToUser(
 }
 
 export interface WorkTask {
+  workTaskId: string;
   projectNumber: string | null;
   projectName: string | null;
   number: string;
@@ -118,11 +31,12 @@ export interface WorkTask {
 }
 
 interface SetCurrentWorkTaskParams {
-  username: string;
+  userName: string;
   workTaskId: string;
 }
 
-const SET_CURRENT_WORK_TASK = `mutation ($userName: String!, $workTaskId: ID!) {
+const SET_CURRENT_WORK_TASK = `
+mutation ($userName: String!, $workTaskId: ID!) {
   userContext {
     setCurrentWorkTask(userName: $userName, workTaskId: $workTaskId)
     {
@@ -130,6 +44,42 @@ const SET_CURRENT_WORK_TASK = `mutation ($userName: String!, $workTaskId: ID!) {
         __typename
       }
       userName
+    }
+  }
+}`;
+
+interface WorkTasksResponse {
+  workService: {
+    workTasksWithProjectInformation: WorkTask[];
+  };
+}
+
+const QUERY_WORK_TASKS = `
+query {
+  workService {
+    workTasksWithProjectInformation {
+      workTaskId
+      projectId
+      projectNumber
+      projectName
+      projectOwner
+      projectType
+      projectStatus
+      number
+      createdDate
+      name
+      subtaskName
+      type
+      status
+      owner
+      installationId
+      areaId
+      unitAddressId
+      geometry {
+        type
+        coordinates
+      }
+      modifiedBy
     }
   }
 }`;

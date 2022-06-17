@@ -6,42 +6,24 @@ query ($userName: String!) {
   workService {
     userWorkContext(userName: $userName) {
       currentWorkTask {
-        mRID
-        workTaskType
-        name
+        id
+        type
         status
-        addressString
-        centralOfficeArea
-        flexPointArea
-        splicePointArea
-        installationId
-        technology
-        geometry {
-          coordinates
-          type
-        }
+        name
+        subtaskName
+        number
       }
     }
   }
 }`;
 
-type Geometry = {
-  coordinates: string;
-  type: string;
-};
-
 export type UserWorkTask = {
-  mRID: string;
-  workTaskType: string;
+  id: string;
+  type: string;
   name?: string;
   status?: string;
-  addressString?: string;
-  centralOfficeArea?: string;
-  flexPointArea?: string;
-  splicePointArea?: string;
-  installationId?: string;
-  technology?: string;
-  geometry?: Geometry;
+  subtaskName: string;
+  number: string;
 };
 
 type UserWorkContextQueryResponse = {
