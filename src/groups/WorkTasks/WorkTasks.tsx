@@ -68,7 +68,7 @@ function mapWorkTasksBodyItems(workTasks: WorkTask[]): BodyItem[] {
         { id: "SUBTASK", value: x.subtask ?? "" },
         { id: "OWNER", value: x.owner ?? "" },
         { id: "CREATED_DATE", value: x.createdDate ?? "" },
-        { id: "INSTALLATION_NUMBER", value: x.installationNumber ?? "" },
+        { id: "INSTALLATION_NUMBER", value: x.installationId ?? "" },
         { id: "MODIFIED_BY", value: x.modifiedBy ?? "" },
       ],
     };
