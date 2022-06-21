@@ -22,7 +22,7 @@ export interface WorkTask {
   subtask: string | null;
   owner: string | null;
   createdDate: string;
-  installationNumber: string | null;
+  installationId: string | null;
   modifiedBy: string | null;
   geometry: {
     coordinates: string;
