@@ -310,6 +310,8 @@ function WorkTasks() {
             enableSearch={true}
           />
         </LabelContainer>
+      </div>
+      <div className="full-row full-row gap-default">
         <LabelContainer text={t("WORK_TASK_TYPE")}>
           <SelectMenu
             options={typeSelectOptions}
