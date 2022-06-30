@@ -55,25 +55,27 @@ function filterWorkTasks(
 }
 
 function mapWorkTasksBodyItems(workTasks: WorkTask[]): BodyItem[] {
-  return workTasks.map<BodyItem>((x) => {
-    return {
-      id: x.number,
-      rows: [
-        { id: "PROJECT_NUMBER", value: x.projectNumber ?? "" },
-        { id: "PROJECT_NAME", value: x.projectName ?? "" },
-        { id: "NUMBER", value: x.number ?? "" },
-        { id: "TYPE", value: x.type ?? "" },
-        { id: "STATUS", value: x.status ?? "" },
-        { id: "NAME", value: x.name ?? "" },
-        { id: "SUBTASK", value: x.subtask ?? "" },
-        { id: "AREA_ID", value: x.areaId ?? "" },
-        { id: "OWNER", value: x.owner ?? "" },
-        { id: "CREATED_DATE", value: x.createdDate ?? "" },
-        { id: "INSTALLATION_NUMBER", value: x.installationId ?? "" },
-        { id: "MODIFIED_BY", value: x.modifiedBy ?? "" },
-      ],
-    };
-  });
+  return workTasks
+    .sort((a, b) => (a.createdDate > b.createdDate ? -1 : 1))
+    .map<BodyItem>((x) => {
+      return {
+        id: x.number,
+        rows: [
+          { id: "PROJECT_NUMBER", value: x.projectNumber ?? "" },
+          { id: "PROJECT_NAME", value: x.projectName ?? "" },
+          { id: "NUMBER", value: x.number ?? "" },
+          { id: "TYPE", value: x.type ?? "" },
+          { id: "STATUS", value: x.status ?? "" },
+          { id: "NAME", value: x.name ?? "" },
+          { id: "SUBTASK", value: x.subtask ?? "" },
+          { id: "AREA_ID", value: x.areaId ?? "" },
+          { id: "OWNER", value: x.owner ?? "" },
+          { id: "CREATED_DATE", value: x.createdDate ?? "" },
+          { id: "INSTALLATION_NUMBER", value: x.installationId ?? "" },
+          { id: "MODIFIED_BY", value: x.modifiedBy ?? "" },
+        ],
+      };
+    });
 }
 
 function mapProjectSelectOptions(workTasks: WorkTask[]): SelectOption[] {
