@@ -236,7 +236,8 @@
       "ALL": "All",
       "NO_ASSOCIATED_PROJECT": "No associated project",
       "ZOOM_TO": "Zoom to",
-      "COMPLETED": "Completed"
+      "COMPLETED": "Completed",
+      "AREA_ID": "Area"
     }
   },
   "dk": {
@@ -476,7 +477,8 @@
       "ALL": "Alle",
       "NO_ASSOCIATED_PROJECT": "Ikke tilknyttet projekt",
       "ZOOM_TO": "Zoom til",
-      "COMPLETED": "Udført"
+      "COMPLETED": "Udført",
+      "AREA_ID": "Område"
     }
   }
 }

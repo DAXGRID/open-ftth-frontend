@@ -21,6 +21,7 @@ export interface WorkTask {
   name: string | null;
   subtask: string | null;
   owner: string | null;
+  areaId: string | null;
   createdDate: string;
   installationId: string | null;
   modifiedBy: string | null;
