@@ -992,6 +992,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                       terminalEquipmentId={
                         singleSelectedFeature.properties?.refId ?? ""
                       }
+                      editable={true}
                     />
                   ),
                 },

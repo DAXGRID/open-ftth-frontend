@@ -37,13 +37,13 @@ function addressDisplayText(
 interface GeneralViewProps {
   routeNodeId: string;
   terminalEquipmentId: string;
-  disabled?: boolean;
+  editable?: boolean;
 }
 
 function GeneralView({
   routeNodeId,
   terminalEquipmentId,
-  disabled,
+  editable,
 }: GeneralViewProps) {
   const client = useClient();
   const { t } = useTranslation();
@@ -86,7 +86,7 @@ function GeneralView({
       <div className="general-view-container">
         <div className="general-view-header">
           <p>{terminalEquipment.name}</p>
-          {!disabled && (
+          {editable && (
             <div className="general-view-header-icons">
               <span
                 role="button"
