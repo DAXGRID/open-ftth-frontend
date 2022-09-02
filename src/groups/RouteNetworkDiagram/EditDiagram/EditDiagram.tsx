@@ -986,7 +986,14 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                 {
                   title: t("GENERAL"),
                   id: "0",
-                  view: <GeneralView />,
+                  view: (
+                    <GeneralView
+                      routeNodeId={identifiedFeature?.id ?? ""}
+                      terminalEquipmentId={
+                        singleSelectedFeature.properties?.refId ?? ""
+                      }
+                    />
+                  ),
                 },
                 {
                   title: t("CONNECTIVITY"),
