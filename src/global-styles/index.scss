@@ -91,6 +91,16 @@ body {
   font-weight: bold;
 }
 
+.block-title__big {
+  font-size: 18px;
+}
+
+.block-title__underline {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid $border-color;
+}
+
 .gap-default {
   gap: 10px;
 }

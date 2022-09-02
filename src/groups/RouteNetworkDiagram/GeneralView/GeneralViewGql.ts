@@ -4,10 +4,28 @@ let exampleResponse: QueryTerminalEquipmentDetailsResponse = {
   utilityNetwork: {
     terminalEquipment: {
       id: "d1073214-ee3c-42ff-be7e-ef50d49044d5",
-      name: "",
-      customProperties: [],
+      name: "63201",
+      customProperties: [
+        {
+          sectionName: "Status",
+          properties: [
+            { name: "Infrastruktur status", value: "ikke anlagt" },
+            { name: "Aarsag", value: "Vi klokkede i den" },
+            { name: "Kommentar", value: "Ja, det er lidt noget lort" },
+          ],
+        },
+        {
+          sectionName: "Forsyning",
+          properties: [
+            { name: "POP", value: "Nord energi bla bal" },
+            { name: "Gadeskab", value: "BB0379 (katrinegade 10)" },
+            { name: "Gadeskab lokation", value: "BB0379 (katrinegade 10)" },
+            { name: "Kappefarve", value: "blaa" },
+          ],
+        },
+      ],
       addressInfo: {
-        remark: "",
+        remark: "this is some very important remark",
         accessAddress: {
           postDistrictCode: "8660",
           postDistrict: "Skanderborg",
@@ -24,7 +42,9 @@ let exampleResponse: QueryTerminalEquipmentDetailsResponse = {
   },
 };
 
-function getGeneralView(client: Client): QueryTerminalEquipmentDetailsResponse {
+export function getGeneralView(
+  client: Client
+): QueryTerminalEquipmentDetailsResponse {
   return exampleResponse;
 }
 
@@ -33,7 +53,7 @@ export interface TerminalEquipment {
   name: string;
   customProperties: {
     sectionName: String;
-    properties: { name: String; value: String }[];
+    properties: { name: string; value: string }[];
   }[];
   addressInfo?: {
     remark: string;

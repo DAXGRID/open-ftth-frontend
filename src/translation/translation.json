@@ -238,7 +238,8 @@
       "ZOOM_TO": "Zoom to",
       "COMPLETED": "Completed",
       "AREA_ID": "Area",
-      "GENERAL": "General"
+      "GENERAL": "General",
+      "ADDRESS_ID": "Address id"
     }
   },
   "dk": {
@@ -480,7 +481,8 @@
       "ZOOM_TO": "Zoom til",
       "COMPLETED": "Udført",
       "AREA_ID": "Område",
-      "GENERAL": "Generel"
+      "GENERAL": "Generel",
+      "ADDRESS_ID": "Adresse id"
     }
   }
 }
