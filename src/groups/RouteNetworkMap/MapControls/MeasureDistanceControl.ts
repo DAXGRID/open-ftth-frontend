@@ -109,6 +109,7 @@ class MeasureDistanceControl {
         const distanceContainer = document.getElementById("distance");
         if (!distanceContainer)
           throw new Error("Distancecontainer could not be found");
+
         distanceContainer.innerHTML = "";
 
         if (this.geojson.features.length > 1) {
@@ -122,9 +123,9 @@ class MeasureDistanceControl {
           this.geojson.features.push(linestring);
 
           const value = document.createElement("pre");
-          value.textContent = `${this.distanceText}: ${length(
-            linestring
-          ).toLocaleString()} km`;
+          value.textContent = `${this.distanceText}: ${length(linestring, {
+            units: "meters",
+          }).toLocaleString()} m`;
           distanceContainer?.appendChild(value);
         }
 
