@@ -24,9 +24,13 @@ interface UnitAddress {
 }
 
 function addressDisplayText(
-  accessAddress: AccessAddress,
+  accessAddress: AccessAddress | null,
   unitAddress: UnitAddress | null
 ): string {
+  if (!accessAddress) {
+    return "";
+  }
+
   if (unitAddress) {
     return `${accessAddress.roadName} ${accessAddress.houseNumber}, ${unitAddress.floorName} ${unitAddress.suitName}, ${accessAddress.postDistrict} ${accessAddress.postDistrictCode}`;
   } else {
@@ -54,10 +58,19 @@ function GeneralView({
   const { showElement } = useContext(OverlayContext);
 
   useEffect(() => {
-    setTerminalEquipment(
-      getGeneralView(client).utilityNetwork.terminalEquipment
-    );
-  }, [client]);
+    getGeneralView(client, terminalEquipmentId)
+      .then((x) => {
+        let terminalEquipment = x.data?.utilityNetwork.terminalEquipment;
+        if (terminalEquipment) {
+          setTerminalEquipment(terminalEquipment);
+        } else {
+          console.error("Could not retrieve general view.");
+        }
+      })
+      .catch((x) => {
+        console.error(x);
+      });
+  }, [client, terminalEquipmentId]);
 
   useEffect(() => {
     if (showEditTerminalEquipment) {
@@ -75,7 +88,13 @@ function GeneralView({
     } else {
       showElement(null);
     }
-  }, [showEditTerminalEquipment]);
+  }, [
+    showEditTerminalEquipment,
+    t,
+    showElement,
+    routeNodeId,
+    terminalEquipmentId,
+  ]);
 
   if (!terminalEquipment) {
     return <></>;
@@ -98,7 +117,7 @@ function GeneralView({
           )}
         </div>
         <div className="general-view-body">
-          {terminalEquipment.addressInfo && (
+          {terminalEquipment?.addressInfo && (
             <div className="block">
               <p className="block-title block-title__underline block-title__big">
                 {t("ADDRESS_INFORMATION")}
@@ -107,8 +126,8 @@ function GeneralView({
                 <LabelContainer text={t("ADDRESS")}>
                   <TextBox
                     value={addressDisplayText(
-                      terminalEquipment.addressInfo.accessAddress,
-                      terminalEquipment.addressInfo.unitAddress
+                      terminalEquipment.addressInfo.accessAddress ?? null,
+                      terminalEquipment.addressInfo?.unitAddress ?? null
                     )}
                     setValue={() => {}}
                     disabled={true}
@@ -127,7 +146,10 @@ function GeneralView({
               <div className="full-row">
                 <LabelContainer text={t("ADDRESS_ID")}>
                   <TextBox
-                    value={terminalEquipment.addressInfo.unitAddress.externalId}
+                    value={
+                      terminalEquipment.addressInfo.unitAddress?.externalId ??
+                      ""
+                    }
                     setValue={() => {}}
                     disabled={true}
                   />
@@ -135,7 +157,7 @@ function GeneralView({
               </div>
             </div>
           )}
-          {terminalEquipment.customProperties.map((ps, i) => {
+          {terminalEquipment.dynamicProperties.map((ps, i) => {
             return (
               <div className="block" key={i}>
                 <p className="block-title block-title__underline">
