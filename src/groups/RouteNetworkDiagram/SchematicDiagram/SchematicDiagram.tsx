@@ -78,6 +78,11 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
       styleName = "OuterConduit";
     } else if (styleName.startsWith("NodeContainerSide")) {
       styleName = "NodeContainerSide";
+    } else if (
+      styleName === "TerminalEquipment" ||
+      styleName === "TerminalEquipmentWithProperties"
+    ) {
+      styleName = "TerminalEquipment";
     }
 
     if (!t[styleName]) {

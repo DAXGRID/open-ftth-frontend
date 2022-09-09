@@ -982,34 +982,53 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               selectedId={rackTabViewSelectedId}
               select={setRackTabViewSelectedId}
               key="0"
-              views={[
-                {
-                  title: t("GENERAL"),
-                  id: "0",
-                  view: (
-                    <GeneralView
-                      routeNodeId={identifiedFeature?.id ?? ""}
-                      terminalEquipmentId={
-                        singleSelectedFeature.properties?.refId ?? ""
-                      }
-                      editable={true}
-                    />
-                  ),
-                },
-                {
-                  title: t("CONNECTIVITY"),
-                  id: "1",
-                  view: (
-                    <TerminalEquipment
-                      routeNodeId={identifiedFeature?.id ?? ""}
-                      terminalEquipmentOrRackId={
-                        singleSelectedFeature.properties?.refId ?? ""
-                      }
-                      editable={true}
-                    />
-                  ),
-                },
-              ]}
+              views={
+                singleSelectedFeature?.properties?.type ===
+                "TerminalEquipmentWithProperties"
+                  ? [
+                      {
+                        title: t("GENERAL"),
+                        id: "0",
+                        view: (
+                          <GeneralView
+                            routeNodeId={identifiedFeature?.id ?? ""}
+                            terminalEquipmentId={
+                              singleSelectedFeature.properties?.refId ?? ""
+                            }
+                            editable={true}
+                          />
+                        ),
+                      },
+                      {
+                        title: t("CONNECTIVITY"),
+                        id: "1",
+                        view: (
+                          <TerminalEquipment
+                            routeNodeId={identifiedFeature?.id ?? ""}
+                            terminalEquipmentOrRackId={
+                              singleSelectedFeature.properties?.refId ?? ""
+                            }
+                            editable={true}
+                          />
+                        ),
+                      },
+                    ]
+                  : [
+                      {
+                        title: t("CONNECTIVITY"),
+                        id: "0",
+                        view: (
+                          <TerminalEquipment
+                            routeNodeId={identifiedFeature?.id ?? ""}
+                            terminalEquipmentOrRackId={
+                              singleSelectedFeature.properties?.refId ?? ""
+                            }
+                            editable={true}
+                          />
+                        ),
+                      },
+                    ]
+              }
             ></TabView>
           </div>
         )}

@@ -210,6 +210,7 @@ export function getLayer(name: string): AnyLayer {
           ],
         },
       } as FillLayer;
+    case "TerminalEquipmentWithProperties":
     case "TerminalEquipment":
       return {
         id: "TerminalEquipment",
