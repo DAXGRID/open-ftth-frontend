@@ -22,6 +22,7 @@ import TerminalEquipment from "../../TerminalEquipment";
 import ConnectivityView from "../ConnectivityView";
 import PassageView from "../PassageView";
 import TabView from "../../../components/TabView";
+import GeneralView from "../GeneralView";
 import {
   Diagram,
   Envelope,
@@ -221,6 +222,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     useState<MapboxGeoJSONFeature | null>();
   const [spanEquipmentTabViewSelectedId, setSpanEquipmentTabViewSelectedId] =
     useState("0");
+  const [rackTabViewSelectedId, setRackTabViewSelectedId] = useState("0");
   const { identifiedFeature, setTrace } = useContext(MapContext);
   const [showModals, showModalsDispatch] = useReducer(
     showModalsReducer,
@@ -977,13 +979,26 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           singleSelectedFeature?.source === "TerminalEquipment") && (
           <div className="container-max-size container-center">
             <TabView
-              select={() => {}}
+              selectedId={rackTabViewSelectedId}
+              select={setRackTabViewSelectedId}
               key="0"
-              selectedId="0"
               views={[
                 {
-                  title: t("CONNECTIVITY"),
+                  title: t("GENERAL"),
                   id: "0",
+                  view: (
+                    <GeneralView
+                      routeNodeId={identifiedFeature?.id ?? ""}
+                      terminalEquipmentId={
+                        singleSelectedFeature.properties?.refId ?? ""
+                      }
+                      editable={true}
+                    />
+                  ),
+                },
+                {
+                  title: t("CONNECTIVITY"),
+                  id: "1",
                   view: (
                     <TerminalEquipment
                       routeNodeId={identifiedFeature?.id ?? ""}

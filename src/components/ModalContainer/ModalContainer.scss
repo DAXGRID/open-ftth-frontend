@@ -10,6 +10,21 @@
   top: 25%;
   left: 50%;
   transform: translate(-50%, -25%);
+  animation: fadein 0.2s;
+
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+
+    95% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
 }
 
 .modal-header {

@@ -3,10 +3,14 @@
 
 .text-box {
   border-radius: 4px;
-  padding: 10px 10px 10px 20px;
+  padding: 10px 10px 10px 10px;
   border: 1px solid $border-color;
   font-size: 14px;
   min-height: $basic-height;
   width: 100%;
   flex: 1;
+
+  &:disabled {
+    color: black;
+  }
 }

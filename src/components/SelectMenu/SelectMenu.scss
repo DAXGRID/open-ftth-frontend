@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 10px;
   font-size: 14px;
   height: $basic-height;
   line-height: $basic-height;
@@ -86,7 +86,7 @@
 .menu-option {
   position: relative;
   display: block;
-  padding: 0px 20px;
+  padding: 0px 10px;
   font-size: 14px;
   line-height: Calc($basic-height - 5px);
   cursor: pointer;
@@ -104,7 +104,7 @@
   width: 100%;
   height: $basic-height;
   font-size: 14px;
-  padding: 15px;
+  padding: 10px;
 }
 
 .menu-option:hover {
