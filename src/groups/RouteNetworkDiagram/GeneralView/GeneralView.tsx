@@ -31,8 +31,12 @@ function addressDisplayText(
     return "";
   }
 
-  if (unitAddress) {
-    return `${accessAddress.roadName} ${accessAddress.houseNumber}, ${unitAddress.floorName} ${unitAddress.suitName}, ${accessAddress.postDistrict} ${accessAddress.postDistrictCode}`;
+  let unitAddressText = `${unitAddress?.floorName ?? ""} ${
+    unitAddress?.suitName ?? ""
+  }`.trim();
+
+  if (unitAddressText.length > 0) {
+    return `${accessAddress.roadName} ${accessAddress.houseNumber}, ${unitAddressText}, ${accessAddress.postDistrict} ${accessAddress.postDistrictCode}`;
   } else {
     return `${accessAddress.roadName} ${accessAddress.houseNumber}, ${accessAddress.postDistrict} ${accessAddress.postDistrictCode}`;
   }
