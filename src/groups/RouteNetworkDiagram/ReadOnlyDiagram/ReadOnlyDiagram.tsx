@@ -167,34 +167,53 @@ function ReadOnlyDiagram({
             select={() => {}}
             key="0"
             selectedId="0"
-            views={[
-              {
-                title: t("GENERAL"),
-                id: "0",
-                view: (
-                  <GeneralView
-                    routeNodeId={identifiedFeature?.id ?? ""}
-                    terminalEquipmentId={
-                      selectedFeature.properties?.refId ?? ""
-                    }
-                    editable={false}
-                  />
-                ),
-              },
-              {
-                title: t("CONNECTIVITY"),
-                id: "1",
-                view: (
-                  <TerminalEquipment
-                    routeNodeId={identifiedFeature?.id ?? ""}
-                    terminalEquipmentOrRackId={
-                      selectedFeature.properties?.refId ?? ""
-                    }
-                    editable={false}
-                  />
-                ),
-              },
-            ]}
+            views={
+              selectedFeature?.properties?.type ===
+              "TerminalEquipmentWithProperties"
+                ? [
+                    {
+                      title: t("GENERAL"),
+                      id: "0",
+                      view: (
+                        <GeneralView
+                          routeNodeId={identifiedFeature?.id ?? ""}
+                          terminalEquipmentId={
+                            selectedFeature.properties?.refId ?? ""
+                          }
+                          editable={false}
+                        />
+                      ),
+                    },
+                    {
+                      title: t("CONNECTIVITY"),
+                      id: "1",
+                      view: (
+                        <TerminalEquipment
+                          routeNodeId={identifiedFeature?.id ?? ""}
+                          terminalEquipmentOrRackId={
+                            selectedFeature.properties?.refId ?? ""
+                          }
+                          editable={false}
+                        />
+                      ),
+                    },
+                  ]
+                : [
+                    {
+                      title: t("CONNECTIVITY"),
+                      id: "0",
+                      view: (
+                        <TerminalEquipment
+                          routeNodeId={identifiedFeature?.id ?? ""}
+                          terminalEquipmentOrRackId={
+                            selectedFeature.properties?.refId ?? ""
+                          }
+                          editable={false}
+                        />
+                      ),
+                    },
+                  ]
+            }
           ></TabView>
         </div>
       )}
