@@ -59,6 +59,7 @@ function ReadOnlyDiagram({
     spanEquipmentTabViewSelectedId,
     setSpanEquipmentCableTabViewSelectedId,
   ] = useState("0");
+  const [rackTabViewSelectedId, setRackTabViewSelectedId] = useState("0");
   const [enabledTracePan, setEnabledTracePan] = useState<boolean>(true);
 
   const clearHighlights = useCallback(() => {
@@ -164,9 +165,9 @@ function ReadOnlyDiagram({
         selectedFeature?.source === "TerminalEquipment") && (
         <div className="container-max-size container-center">
           <TabView
-            select={() => {}}
+            select={setRackTabViewSelectedId}
             key="0"
-            selectedId="0"
+            selectedId={rackTabViewSelectedId}
             views={
               selectedFeature?.properties?.type ===
               "TerminalEquipmentWithProperties"
