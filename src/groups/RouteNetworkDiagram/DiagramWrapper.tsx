@@ -71,14 +71,14 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
   if (!identifiedFeature?.id) return <></>;
 
   return (
-    <>
+    <div className="diagram-wrapper">
       {editable && (
         <EditDiagram diagramObjects={diagramObjects} envelope={envelope} />
       )}
       {!editable && (
         <ReadOnlyDiagram diagramObjects={diagramObjects} envelope={envelope} />
       )}
-    </>
+    </div>
   );
 }
 
