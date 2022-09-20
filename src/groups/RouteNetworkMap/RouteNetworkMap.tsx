@@ -228,8 +228,6 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
     const newMap = new Map({
       container: mapContainer.current,
       style: mapLibreStyle,
-      center: [9.996730316498656, 56.04595255289249],
-      zoom: 10,
       preserveDrawingBuffer: true,
       doubleClickZoom: false,
       dragRotate: false,
