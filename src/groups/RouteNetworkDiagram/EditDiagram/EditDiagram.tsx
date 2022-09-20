@@ -82,6 +82,7 @@ import {
   establishCustomerConnectionModal,
   addRackModal,
   addTerminalEquipmentModal,
+  outageViewModal,
 } from "./Modals";
 
 type RouteNetworkDiagramProps = {
@@ -150,6 +151,7 @@ interface ShowModals {
   establishCustomerConnection: boolean;
   addRack: boolean;
   addTerminalEquipment: boolean;
+  outageView: boolean;
 }
 
 interface ShowModalsAction {
@@ -159,6 +161,7 @@ interface ShowModalsAction {
     | "establishCustomerConnection"
     | "addRack"
     | "addTerminalEquipment"
+    | "outageView"
     | "reset";
   show?: boolean;
 }
@@ -169,6 +172,7 @@ const showModalsInitialState: ShowModals = {
   addInnerConduit: false,
   addRack: false,
   addTerminalEquipment: false,
+  outageView: false,
 };
 
 function showModalsReducer(
@@ -201,6 +205,11 @@ function showModalsReducer(
       return {
         ...state,
         addTerminalEquipment: action.show ?? !state.addTerminalEquipment,
+      };
+    case "outageView":
+      return {
+        ...state,
+        outageView: action.show ?? !state.outageView,
       };
     case "reset":
       return { ...showModalsInitialState };
@@ -712,6 +721,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           currentlySelectedFeatures
         )
       );
+    } else if (showModals.outageView) {
+      showElement(
+        outageViewModal(
+          () => showModalsDispatch({ type: "outageView", show: false }),
+          t("OUTAGE_VIEW")
+        )
+      );
     } else {
       showElement(null);
     }
@@ -941,6 +957,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             toggle={() => setEnabledTracePan(!enabledTracePan)}
             icon={ZoomMapSvg}
             title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
+          />
+          <ActionButton
+            icon={AddConduitSvg}
+            action={() =>
+              showModalsDispatch({ type: "outageView", show: true })
+            }
+            title={t("OUTAGE_VIEW")}
           />
         </DiagramMenu>
       )}

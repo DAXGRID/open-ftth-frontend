@@ -5,6 +5,7 @@ import AddInnerSpanStructure from "../AddInnerSpanStructure";
 import EstablishCustomerConnection from "../EstablishCustomerConnection";
 import AddRack from "../AddRack";
 import AddTerminalEquipment from "../AddTerminalEquipment";
+import OutageView from "../OutageView";
 
 export function addContainerModal(cb: () => void, title: string) {
   return (
@@ -75,6 +76,14 @@ export function addTerminalEquipmentModal(
             ?.refId ?? ""
         }
       />
+    </ModalContainer>
+  );
+}
+
+export function outageViewModal(cb: () => void, title: string) {
+  return (
+    <ModalContainer title={title} closeCallback={cb}>
+      <OutageView />
     </ModalContainer>
   );
 }
