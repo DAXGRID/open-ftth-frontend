@@ -21,10 +21,11 @@ import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 import InformationControl from "./MapControls/InformationControl";
 import SaveImgControl from "./MapControls/SaveImgControl";
+import { v4 as uuidv4 } from "uuid";
 
 const GetMaplibreStyle = async (): Promise<Style> => {
-  const x = await fetch("./maplibre.json");
-  const json = await x.json();
+  const maplibre = await fetch(`./maplibre.json?${uuidv4()}`);
+  const json = await maplibre.json();
   return json as Style;
 };
 
