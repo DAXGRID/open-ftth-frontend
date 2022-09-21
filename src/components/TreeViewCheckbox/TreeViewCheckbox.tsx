@@ -42,14 +42,19 @@ function renderNodeTree(
 interface TreeViewCheckboxProps {
   treeNode: TreeNode;
   onCheckboxChange: (treeNode: TreeNode) => void;
+  maxHeight?: number;
 }
 
 function TreeViewCheckbox({
   treeNode,
   onCheckboxChange,
+  maxHeight,
 }: TreeViewCheckboxProps) {
   return (
-    <div className="tree-view-check-box">
+    <div
+      style={{ maxHeight: maxHeight ?? "auto" }}
+      className="tree-view-check-box"
+    >
       {renderNodeTree(treeNode, onCheckboxChange)}
     </div>
   );

@@ -65,7 +65,11 @@ function OutageView() {
   return (
     <div className="outage-view">
       <div className="full-row">
-        <TreeViewCheckbox treeNode={node} onCheckboxChange={onCheckboxClick} />
+        <TreeViewCheckbox
+          maxHeight={500}
+          treeNode={node}
+          onCheckboxChange={onCheckboxClick}
+        />
       </div>
       <div className="full-row">
         <SelectMenu

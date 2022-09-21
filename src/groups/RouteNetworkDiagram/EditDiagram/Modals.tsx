@@ -82,7 +82,7 @@ export function addTerminalEquipmentModal(
 
 export function outageViewModal(cb: () => void, title: string) {
   return (
-    <ModalContainer title={title} closeCallback={cb} enableMaxSize={true}>
+    <ModalContainer title={title} closeCallback={cb}>
       <OutageView />
     </ModalContainer>
   );
