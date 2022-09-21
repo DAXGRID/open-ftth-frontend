@@ -75,6 +75,7 @@ import {
   FlipSvg,
   EstablishCustomerConnectionSvg,
   ZoomMapSvg,
+  OutageSvg,
 } from "../../../assets";
 import {
   addContainerModal,
@@ -959,7 +960,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
           />
           <ActionButton
-            icon={AddConduitSvg}
+            icon={OutageSvg}
             action={() =>
               showModalsDispatch({ type: "outageView", show: true })
             }

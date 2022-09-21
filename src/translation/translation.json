@@ -239,7 +239,8 @@
       "COMPLETED": "Completed",
       "AREA_ID": "Area",
       "GENERAL": "General",
-      "ADDRESS_ID": "Address id"
+      "ADDRESS_ID": "Address id",
+      "OUTAGE_VIEW": "Outage"
     }
   },
   "dk": {
@@ -482,7 +483,8 @@
       "COMPLETED": "Udført",
       "AREA_ID": "Område",
       "GENERAL": "Generel",
-      "ADDRESS_ID": "Adresse id"
+      "ADDRESS_ID": "Adresse id",
+      "OUTAGE_VIEW": "Udetidsregistrering"
     }
   }
 }
