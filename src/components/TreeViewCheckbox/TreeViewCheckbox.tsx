@@ -6,6 +6,7 @@ export interface TreeNode {
   value: string | null;
   nodes: TreeNode[] | null;
   selected: boolean;
+  description: string | null;
 }
 
 function NodeSelectionRow(
@@ -21,6 +22,7 @@ function NodeSelectionRow(
         key={treeNode.id}
       />
       <p>{treeNode.label}</p>
+      <p>{treeNode.description}</p>
     </div>
   );
 }
