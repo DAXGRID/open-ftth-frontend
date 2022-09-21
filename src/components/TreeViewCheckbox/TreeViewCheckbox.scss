@@ -1,0 +1,26 @@
+@import "../../global-styles/colors";
+
+.tree-view-check-box {
+}
+
+.node-selection-row {
+  display: flex;
+  gap: 10px;
+  background-color: $hover-color;
+  padding: 5px;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  border-bottom-left-radius: 0;
+}
+
+.node-block {
+  padding-top: 10px;
+  padding-left: 25px;
+  border-left: 1px solid $border-color;
+
+  &:first-child {
+    border: none;
+    padding-top: 0;
+    padding-left: 0;
+  }
+}
