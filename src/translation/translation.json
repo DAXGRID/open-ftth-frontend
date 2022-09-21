@@ -240,7 +240,8 @@
       "AREA_ID": "Area",
       "GENERAL": "General",
       "ADDRESS_ID": "Address id",
-      "OUTAGE_VIEW": "Outage"
+      "OUTAGE_VIEW": "Outage",
+      "SEND": "Send"
     }
   },
   "dk": {
@@ -484,7 +485,8 @@
       "AREA_ID": "Område",
       "GENERAL": "Generel",
       "ADDRESS_ID": "Adresse id",
-      "OUTAGE_VIEW": "Udetidsregistrering"
+      "OUTAGE_VIEW": "Udetidsregistrering",
+      "SEND": "Send"
     }
   }
 }

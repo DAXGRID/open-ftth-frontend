@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useClient } from "urql";
+import { useTranslation } from "react-i18next";
 import { getInformation, Node } from "./OutageViewGql";
 import TreeViewCheckbox, {
   TreeNode,
 } from "../../../components/TreeViewCheckbox";
+import DefaultButton from "../../../components/DefaultButton";
+import SelectMenu from "../../../components/SelectMenu";
 
 function convertToTreeNodes(node: Node): TreeNode {
   const children: TreeNode[] = [];
@@ -40,7 +43,9 @@ function toggleSelectedTreeNodes(
 
 function OutageView() {
   const client = useClient();
+  const { t } = useTranslation();
   const [node, setNode] = useState<TreeNode | null>(null);
+  const [selectedWorkTask, setSelctedWorkTask] = useState<string>("");
 
   useEffect(() => {
     const node = getInformation(client);
@@ -59,7 +64,20 @@ function OutageView() {
 
   return (
     <div className="outage-view">
-      <TreeViewCheckbox treeNode={node} onCheckboxChange={onCheckboxClick} />
+      <div className="full-row">
+        <TreeViewCheckbox treeNode={node} onCheckboxChange={onCheckboxClick} />
+      </div>
+      <div className="full-row">
+        <SelectMenu
+          onSelected={(x) => setSelctedWorkTask(x as string)}
+          removePlaceHolderOnSelect
+          selected={selectedWorkTask}
+          options={[{ text: t("SELECT_WORK_TASK"), value: "", key: "" }]}
+        />
+      </div>
+      <div className="full-row">
+        <DefaultButton onClick={() => {}} innerText={t("SEND")} />
+      </div>
     </div>
   );
 }
