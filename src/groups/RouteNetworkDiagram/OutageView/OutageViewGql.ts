@@ -19,7 +19,7 @@ const nodes: Node = {
       nodes: [
         {
           id: "5909262c-d9e1-44b0-8996-fdef35faea1c",
-          label: "Subror 1",
+          label: "Subroer 1",
           value: null,
           nodes: [
             {
@@ -65,7 +65,7 @@ const nodes: Node = {
       nodes: [
         {
           id: "fec9548c-68ce-424b-9863-5ee529b23fd7",
-          label: "Subror 1",
+          label: "Subroer 1",
           value: null,
           nodes: [
             {
