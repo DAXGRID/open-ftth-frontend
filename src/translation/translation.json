@@ -241,7 +241,8 @@
       "GENERAL": "General",
       "ADDRESS_ID": "Address id",
       "OUTAGE_VIEW": "Outage",
-      "SEND": "Send"
+      "SEND": "Send",
+      "SELECT_WORK_TASK": "Select work task"
     }
   },
   "dk": {
@@ -486,7 +487,8 @@
       "GENERAL": "Generel",
       "ADDRESS_ID": "Adresse id",
       "OUTAGE_VIEW": "Udetidsregistrering",
-      "SEND": "Send"
+      "SEND": "Send",
+      "SELECT_WORK_TASK": "Vælg opgave"
     }
   }
 }

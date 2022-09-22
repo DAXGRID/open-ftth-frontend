@@ -126,3 +126,13 @@ const nodes: Node = {
 export function getInformation(client: Client) {
   return nodes;
 }
+
+export function getWorkTasks(client: Client): WorkTask[] {
+  return [];
+}
+
+export interface WorkTask {
+  workTaskId: string;
+  number: string;
+  type: string;
+}
