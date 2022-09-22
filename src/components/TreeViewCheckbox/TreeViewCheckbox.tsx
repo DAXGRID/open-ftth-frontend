@@ -32,7 +32,7 @@ function renderNodeTree(
   onClick: (treeNode: TreeNode) => void
 ): JSX.Element {
   return (
-    <div className="node-block">
+    <div className="node-block" key={node.id}>
       {NodeSelectionRow(node, onClick)}
       {node.nodes?.map((x) => renderNodeTree(x, onClick))}
     </div>
