@@ -49,6 +49,22 @@ function mapWorkTasksToOptions(workTasks: WorkTask[]): SelectOption[] {
   }));
 }
 
+function selectedNodeValues(node: TreeNode): string[] {
+  let result: string[] = [];
+
+  if (node.selected && node.value) {
+    result.push(node.value);
+  }
+
+  if (node.nodes) {
+    node.nodes.forEach((x) => {
+      result = [...result, ...selectedNodeValues(x)];
+    });
+  }
+
+  return result;
+}
+
 function OutageView() {
   const client = useClient();
   const { t } = useTranslation();
@@ -83,6 +99,13 @@ function OutageView() {
     }
   };
 
+  const send = () => {
+    console.log("The button is clicked.");
+    if (node) {
+      console.log(selectedNodeValues(node));
+    }
+  };
+
   if (!node) {
     return <></>;
   }
@@ -105,7 +128,7 @@ function OutageView() {
         />
       </div>
       <div className="full-row">
-        <DefaultButton onClick={() => {}} innerText={t("SEND")} />
+        <DefaultButton onClick={() => send()} innerText={t("SEND")} />
       </div>
     </div>
   );
