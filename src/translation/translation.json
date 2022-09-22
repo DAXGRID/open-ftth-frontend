@@ -242,7 +242,10 @@
       "ADDRESS_ID": "Address id",
       "OUTAGE_VIEW": "Outage",
       "SEND": "Send",
-      "SELECT_WORK_TASK": "Select work task"
+      "SELECT_WORK_TASK": "Select work task",
+      "COPY_TO_CLIP_BOARD": "Copy to clipboard",
+      "COPIED_TO_CLIPBOARD": "Copied to clipboard",
+      "COULD_NOT_COPY_TO_CLIPBOARD": "Could not copy to clipboard"
     }
   },
   "dk": {
@@ -488,7 +491,10 @@
       "ADDRESS_ID": "Adresse id",
       "OUTAGE_VIEW": "Udetidsregistrering",
       "SEND": "Send",
-      "SELECT_WORK_TASK": "Vælg opgave"
+      "SELECT_WORK_TASK": "Vælg opgave",
+      "COPY_TO_CLIPBOARD": "Kopier til udklipsholder",
+      "COPIED_TO_CLIPBOARD": "Kopieret til udklipsholder",
+      "COULD_NOT_COPY_TO_CLIPBOARD": "Kunne ikke kopiere til udklipsholder"
     }
   }
 }
