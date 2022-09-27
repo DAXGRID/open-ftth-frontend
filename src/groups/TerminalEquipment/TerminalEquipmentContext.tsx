@@ -14,6 +14,7 @@ import {
   TerminalEquipmentConnectivityViewUpdatedParams,
   Hop,
   removeStructure,
+  Envelope,
 } from "./TerminalEquipmentGql";
 import { useClient, useSubscription } from "urql";
 import { connectivityViewQuery } from "./TerminalEquipmentGql";
@@ -69,7 +70,8 @@ interface TerminalEquipmentState {
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
-  selectedConnectivityTraceHop: Hop | null;
+  selectedConnectivityTraceHops: Hop[] | null;
+  selectedEnvelope: Envelope | null;
   editable: boolean;
   terminalEquipmentOrRackId: string;
   routeNodeId: string | null;
@@ -106,8 +108,9 @@ type TerminalEquipmentAction =
       params: { id: string; view: ConnectivityTraceView };
     }
   | {
-      type: "selectConnectivityTraceHop";
-      hop: Hop;
+      type: "selectConnectivityTraceHops";
+      hops: Hop[];
+      envelope: Envelope | null;
     }
   | {
       type: "setEditable";
@@ -169,7 +172,8 @@ const terminalEquipmentInitialState: TerminalEquipmentState = {
   showEditRack: defaultShowEditRack,
   showAddAdditionalStructure: defaultShowAddtionalStructure,
   connectivityTraceViews: {},
-  selectedConnectivityTraceHop: null,
+  selectedConnectivityTraceHops: null,
+  selectedEnvelope: null,
   editable: false,
   terminalEquipmentOrRackId: "",
   showDisconnectFiberEditor: defaultShowDisconnectFiberEditor,
@@ -190,7 +194,8 @@ function terminalEquipmentReducer(
         connectivityView: action.view,
         connectivityTraceViews: {},
         showFiberEditor: defaultShowFiberEditorValues,
-        selectedConnectivityTraceHop: null,
+        selectedConnectivityTraceHops: null,
+        selectedEnvelope: null,
       };
     case "setShowFreeLines":
       return {
@@ -253,10 +258,12 @@ function terminalEquipmentReducer(
           },
         },
       };
-    case "selectConnectivityTraceHop":
+    case "selectConnectivityTraceHops":
       return {
         ...state,
-        selectedConnectivityTraceHop: action.hop,
+        selectedConnectivityTraceHops: [...action.hops],
+        selectedEnvelope:
+          action.envelope !== null ? { ...action.envelope } : null,
       };
     case "setEditable":
       return {
@@ -391,16 +398,38 @@ const TerminalEquipmentProvider = ({
   }, [state.connectivityTraceViews, dispatch, client, routeNodeId]);
 
   useEffect(() => {
-    if (!state.selectedConnectivityTraceHop) return;
-    const { routeSegmentIds, routeSegmentGeometries } =
-      state.selectedConnectivityTraceHop;
+    if (!state.selectedConnectivityTraceHops) return;
+
+    const routeSegmentIds = state.selectedConnectivityTraceHops.flatMap(
+      (x) => x.routeSegmentIds
+    );
+    const routeSegmentGeometries = state.selectedConnectivityTraceHops.flatMap(
+      (x) => x.routeSegmentGeometries
+    );
+
     setTrace({
       ids: routeSegmentIds,
       geometries: routeSegmentGeometries,
-      etrs89: null,
-      wgs84: null,
+      etrs89:
+        state.selectedEnvelope !== null
+          ? {
+              minX: state.selectedEnvelope.eTRS89MinX,
+              minY: state.selectedEnvelope.eTRS89MinY,
+              maxX: state.selectedEnvelope.eTRS89MaxX,
+              maxY: state.selectedEnvelope.eTRS89MaxY,
+            }
+          : null,
+      wgs84:
+        state.selectedEnvelope !== null
+          ? {
+              minX: state.selectedEnvelope.wGS84MinX,
+              minY: state.selectedEnvelope.wGS84MinY,
+              maxX: state.selectedEnvelope.wGS84MaxX,
+              maxY: state.selectedEnvelope.wGS84MaxY,
+            }
+          : null,
     });
-  }, [state.selectedConnectivityTraceHop, setTrace]);
+  }, [state.selectedConnectivityTraceHops, state.selectedEnvelope, setTrace]);
 
   useEffect(() => {
     if (!routeNodeId) return;

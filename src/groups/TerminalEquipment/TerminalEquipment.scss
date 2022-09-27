@@ -240,11 +240,36 @@
 }
 
 .terminal-equipment-trace-view {
-  .trace-view-title {
-    padding: 15px 10px;
-    font-weight: bold;
-    border-bottom: 1px solid $border-color;
+  .trace-view-title-header {
+    display: flex;
+    width: 100%;
     background-color: #f9f9f9;
+    border-bottom: 1px solid $border-color;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+
+    .trace-view-title {
+      flex: 1;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .trace-view-actions {
+      flex: 1;
+      display: flex;
+      font-size: 22px;
+      flex-direction: row-reverse;
+      gap: 10px;
+      padding-right: 10px;
+      user-select: none;
+
+      .trace-view-actions-action {
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
   }
 
   .trace-view-grid {
