@@ -20,7 +20,7 @@ export const spanEquipmentConnectivityViewQuery = (
 ) => {
   return client
     .query<SpanEquipmentConnectivityViewResponse>(
-      SPAN_EQUIPMENT_CONNECTIIVTY_VIEW,
+      SPAN_EQUIPMENT_CONNECTIVITY_VIEW,
       {
         routeNetworkElementId: routeNetworkElementId,
         spanEquipmentOrSegmentIds: spanEquipmentOrSegmentIds,
@@ -44,8 +44,20 @@ export interface Hop {
   hopSeqNo: number;
 }
 
+export interface Envelope {
+  wGS84MinX: number;
+  wGS84MinY: number;
+  wGS84MaxX: number;
+  wGS84MaxY: number;
+  eTRS89MinX: number;
+  eTRS89MinY: number;
+  eTRS89MaxX: number;
+  eTRS89MaxY: number;
+}
+
 export interface ConnectivityTraceView {
   circuitName: string;
+  envelope: Envelope;
   hops: Hop[];
 }
 
@@ -70,6 +82,16 @@ $terminalOrSpanEquipmentId: ID!) {
       terminalOrSpanEquipmentId: $terminalOrSpanEquipmentId
     ) {
       circuitName
+      envelope {
+        wGS84MinX
+        wGS84MinY
+        wGS84MaxX
+        wGS84MaxY
+        eTRS89MinX
+        eTRS89MinY
+        eTRS89MaxX
+        eTRS89MaxY
+      }
       hops {
         level
         isSplitter
@@ -127,7 +149,7 @@ interface SpanEquipmentConnectivityViewParams {
   spanEquipmentOrSegmentIds: string[];
 }
 
-const SPAN_EQUIPMENT_CONNECTIIVTY_VIEW = `
+const SPAN_EQUIPMENT_CONNECTIVITY_VIEW = `
 query (
 $routeNetworkElementId: ID!,
 $spanEquipmentOrSegmentIds: [ID!]!

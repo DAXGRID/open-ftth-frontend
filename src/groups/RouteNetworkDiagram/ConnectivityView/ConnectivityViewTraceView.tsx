@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { ConnectivityTraceView } from "./ConnectivityViewGql";
 import { ConnectivityViewContext } from "./ConnectivityViewContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearchPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface TraceViewProps {
   view: { view: ConnectivityTraceView | null; show: boolean };
@@ -15,8 +17,24 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
 
   return (
     <div className="connectivity-view-trace-view">
-      <div className="trace-view-title">
-        {`${t("CIRCUIT_NAME")}: ${view.view?.circuitName ?? ""}`}
+      <div className="trace-view-title-header">
+        <div className="trace-view-title">
+          {`${t("CIRCUIT_NAME")}: ${view.view?.circuitName ?? ""}`}
+        </div>
+        <div className="trace-view-actions">
+          <div
+            className="trace-view-actions-action"
+            onClick={() =>
+              dispatch({
+                type: "selectConnectivityTraceHops",
+                hops: view.view?.hops ?? [],
+                envelope: view.view?.envelope ?? null,
+              })
+            }
+          >
+            <FontAwesomeIcon icon={faSearchPlus} />
+          </div>
+        </div>
       </div>
       <div className="trace-view-header trace-view-grid">
         <div className="trace-view-header-item">{t("NODE")}</div>
@@ -32,12 +50,16 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
             <div
               key={x.hopSeqNo}
               className={`trace-view-body-row trace-view-grid ${
-                state.selectedConnectivityTraceHop === x
+                state.selectedConnectivityTraceHops?.find((y) => y === x)
                   ? "trace-view-body-row--selected"
                   : ""
               }`}
               onClick={() =>
-                dispatch({ type: "selectConnectivityTraceHop", hop: x })
+                dispatch({
+                  type: "selectConnectivityTraceHops",
+                  hops: [x],
+                  envelope: null,
+                })
               }
             >
               <div className="trace-view-body-item">
