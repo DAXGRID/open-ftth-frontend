@@ -232,9 +232,21 @@ export interface Hop {
   hopSeqNo: number;
 }
 
+export interface Envelope {
+  wGS84MinX: number;
+  wGS84MinY: number;
+  wGS84MaxX: number;
+  wGS84MaxY: number;
+  eTRS89MinX: number;
+  eTRS89MinY: number;
+  eTRS89MaxX: number;
+  eTRS89MaxY: number;
+}
+
 export interface ConnectivityTraceView {
   circuitName: string;
   hops: Hop[];
+  envelope: Envelope;
 }
 
 interface ConnectivityTraceViewResponse {
@@ -258,6 +270,16 @@ $terminalOrSpanEquipmentId: ID!) {
       terminalOrSpanEquipmentId: $terminalOrSpanEquipmentId
     ) {
       circuitName
+      envelope {
+        wGS84MinX
+        wGS84MinY
+        wGS84MaxX
+        wGS84MaxY
+        eTRS89MinX
+        eTRS89MinY
+        eTRS89MaxX
+        eTRS89MaxY
+      }
       hops {
         level
         isSplitter
