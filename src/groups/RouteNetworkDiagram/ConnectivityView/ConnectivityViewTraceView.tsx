@@ -24,7 +24,12 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
         <div className="trace-view-actions">
           <div
             className="trace-view-actions-action"
-            onClick={() => console.log("yes, I was clicked!")}
+            onClick={() =>
+              dispatch({
+                type: "selectConnectivityTraceHops",
+                hops: view.view?.hops ?? [],
+              })
+            }
           >
             <FontAwesomeIcon icon={faSearchPlus} />
           </div>
@@ -44,12 +49,12 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
             <div
               key={x.hopSeqNo}
               className={`trace-view-body-row trace-view-grid ${
-                state.selectedConnectivityTraceHop === x
+                state.selectedConnectivityTraceHops?.find((y) => y === x)
                   ? "trace-view-body-row--selected"
                   : ""
               }`}
               onClick={() =>
-                dispatch({ type: "selectConnectivityTraceHop", hop: x })
+                dispatch({ type: "selectConnectivityTraceHops", hops: [x] })
               }
             >
               <div className="trace-view-body-item">

@@ -19,7 +19,7 @@ interface ConnectivityViewState {
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
-  selectedConnectivityTraceHop: Hop | null;
+  selectedConnectivityTraceHops: Hop[] | null;
   connectivityView: SpanEquipmentConnectivityView | null;
 }
 
@@ -29,8 +29,8 @@ type ConnectivityViewAction =
       params: { id: string; view: ConnectivityTraceView };
     }
   | {
-      type: "selectConnectivityTraceHop";
-      hop: Hop;
+      type: "selectConnectivityTraceHops";
+      hops: Hop[];
     }
   | {
       type: "setShowConnectivityTraceViews";
@@ -57,10 +57,10 @@ function connectivityViewReducer(
           },
         },
       };
-    case "selectConnectivityTraceHop":
+    case "selectConnectivityTraceHops":
       return {
         ...state,
-        selectedConnectivityTraceHop: action.hop,
+        selectedConnectivityTraceHops: action.hops,
       };
     case "setShowConnectivityTraceViews":
       return {
@@ -90,7 +90,7 @@ interface ConnectivityViewContextDefintion {
 
 const initialState: ConnectivityViewState = {
   connectivityTraceViews: {},
-  selectedConnectivityTraceHop: null,
+  selectedConnectivityTraceHops: null,
   connectivityView: null,
 };
 
@@ -153,16 +153,22 @@ function ConnectivityViewProvider({
   }, [state.connectivityTraceViews, dispatch, client, routeNodeId]);
 
   useEffect(() => {
-    if (!state.selectedConnectivityTraceHop) return;
-    const { routeSegmentIds, routeSegmentGeometries } =
-      state.selectedConnectivityTraceHop;
+    if (!state.selectedConnectivityTraceHops) return;
+
+    const routeSegmentIds = state.selectedConnectivityTraceHops.flatMap(
+      (x) => x.routeSegmentIds
+    );
+    const routeSegmentGeometries = state.selectedConnectivityTraceHops.flatMap(
+      (x) => x.routeSegmentGeometries
+    );
+
     setTrace({
       ids: routeSegmentIds,
       geometries: routeSegmentGeometries,
       etrs89: null,
       wgs84: null,
     });
-  }, [state.selectedConnectivityTraceHop, setTrace]);
+  }, [state.selectedConnectivityTraceHops, setTrace]);
 
   return (
     <ConnectivityViewContext.Provider
