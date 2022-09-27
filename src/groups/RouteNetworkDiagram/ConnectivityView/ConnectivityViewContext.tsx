@@ -184,8 +184,8 @@ function ConnectivityViewProvider({
           ? {
               minX: state.selectedEnvelope.wGS84MinX,
               minY: state.selectedEnvelope.wGS84MinY,
-              maxX: state.selectedEnvelope.wGS84MaxY,
-              maxY: state.selectedEnvelope.wGS84MaxX,
+              maxX: state.selectedEnvelope.wGS84MaxX,
+              maxY: state.selectedEnvelope.wGS84MaxY,
             }
           : null,
     });
