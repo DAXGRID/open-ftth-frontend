@@ -63,8 +63,9 @@ function connectivityViewReducer(
     case "selectConnectivityTraceHops":
       return {
         ...state,
-        selectedConnectivityTraceHops: action.hops,
-        selectedEnvelope: action.envelope,
+        selectedConnectivityTraceHops: [...action.hops],
+        selectedEnvelope:
+          action.envelope !== null ? { ...action.envelope } : null,
       };
     case "setShowConnectivityTraceViews":
       return {
