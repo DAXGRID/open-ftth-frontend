@@ -28,6 +28,7 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
               dispatch({
                 type: "selectConnectivityTraceHops",
                 hops: view.view?.hops ?? [],
+                envelope: view.view?.envelope ?? null,
               })
             }
           >
@@ -54,7 +55,11 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
                   : ""
               }`}
               onClick={() =>
-                dispatch({ type: "selectConnectivityTraceHops", hops: [x] })
+                dispatch({
+                  type: "selectConnectivityTraceHops",
+                  hops: [x],
+                  envelope: null,
+                })
               }
             >
               <div className="trace-view-body-item">

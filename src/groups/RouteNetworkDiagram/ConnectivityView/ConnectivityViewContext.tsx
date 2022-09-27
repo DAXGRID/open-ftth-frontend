@@ -12,6 +12,7 @@ import {
   Hop,
   spanEquipmentConnectivityViewQuery,
   SpanEquipmentConnectivityView,
+  Envelope,
 } from "./ConnectivityViewGql";
 import { MapContext } from "../../../contexts/MapContext";
 
@@ -20,6 +21,7 @@ interface ConnectivityViewState {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
   selectedConnectivityTraceHops: Hop[] | null;
+  selectedEnvelope: Envelope | null;
   connectivityView: SpanEquipmentConnectivityView | null;
 }
 
@@ -31,6 +33,7 @@ type ConnectivityViewAction =
   | {
       type: "selectConnectivityTraceHops";
       hops: Hop[];
+      envelope: Envelope | null;
     }
   | {
       type: "setShowConnectivityTraceViews";
@@ -61,6 +64,7 @@ function connectivityViewReducer(
       return {
         ...state,
         selectedConnectivityTraceHops: action.hops,
+        selectedEnvelope: action.envelope,
       };
     case "setShowConnectivityTraceViews":
       return {
@@ -91,6 +95,7 @@ interface ConnectivityViewContextDefintion {
 const initialState: ConnectivityViewState = {
   connectivityTraceViews: {},
   selectedConnectivityTraceHops: null,
+  selectedEnvelope: null,
   connectivityView: null,
 };
 
@@ -165,10 +170,26 @@ function ConnectivityViewProvider({
     setTrace({
       ids: routeSegmentIds,
       geometries: routeSegmentGeometries,
-      etrs89: null,
-      wgs84: null,
+      etrs89:
+        state.selectedEnvelope !== null
+          ? {
+              minX: state.selectedEnvelope.eTRS89MinX,
+              minY: state.selectedEnvelope.eTRS89MinY,
+              maxX: state.selectedEnvelope.eTRS89MaxX,
+              maxY: state.selectedEnvelope.eTRS89MaxY,
+            }
+          : null,
+      wgs84:
+        state.selectedEnvelope !== null
+          ? {
+              minX: state.selectedEnvelope.wGS84MinX,
+              minY: state.selectedEnvelope.wGS84MinY,
+              maxX: state.selectedEnvelope.wGS84MaxY,
+              maxY: state.selectedEnvelope.wGS84MaxX,
+            }
+          : null,
     });
-  }, [state.selectedConnectivityTraceHops, setTrace]);
+  }, [state.selectedConnectivityTraceHops, state.selectedEnvelope, setTrace]);
 
   return (
     <ConnectivityViewContext.Provider

@@ -57,6 +57,7 @@ export interface Envelope {
 
 export interface ConnectivityTraceView {
   circuitName: string;
+  envelope: Envelope;
   hops: Hop[];
 }
 
