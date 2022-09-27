@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { ConnectivityTraceView } from "./ConnectivityViewGql";
 import { ConnectivityViewContext } from "./ConnectivityViewContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearchPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface TraceViewProps {
   view: { view: ConnectivityTraceView | null; show: boolean };
@@ -15,8 +17,18 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
 
   return (
     <div className="connectivity-view-trace-view">
-      <div className="trace-view-title">
-        {`${t("CIRCUIT_NAME")}: ${view.view?.circuitName ?? ""}`}
+      <div className="trace-view-title-header">
+        <div className="trace-view-title">
+          {`${t("CIRCUIT_NAME")}: ${view.view?.circuitName ?? ""}`}
+        </div>
+        <div className="trace-view-actions">
+          <div
+            className="trace-view-actions-action"
+            onClick={() => console.log("yes, I was clicked!")}
+          >
+            <FontAwesomeIcon icon={faSearchPlus} />
+          </div>
+        </div>
       </div>
       <div className="trace-view-header trace-view-grid">
         <div className="trace-view-header-item">{t("NODE")}</div>
