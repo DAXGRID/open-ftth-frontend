@@ -158,8 +158,8 @@ function BridgeConnector() {
 
   useEffect(() => {
     // We only want to retrieve the identified feature once after the connection
-    // hade been made. The reason for this is that in case the socket is disconnected
-    // on the client, we don't want to disturp their workflow by getting the selected
+    // has been made. The reason for this is that in case the socket is disconnected
+    // on the client, we don't want to disturb their workflow by getting the selected
     // feature from the external source, in case they're doing something else.
     if (
       !firstTimeIdentifiedFeatureConnection ||
