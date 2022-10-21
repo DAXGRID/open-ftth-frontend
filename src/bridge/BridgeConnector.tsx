@@ -28,6 +28,10 @@ function BridgeConnector() {
   const { setSelectedSegmentIds, setIdentifiedFeature, trace, searchResult } =
     useContext(MapContext);
   const [connected, setConnected] = useState(false);
+  const [
+    firstTimeIdentifiedFeatureConnection,
+    setFirstTimeIdentifiedFeatureConnection,
+  ] = useState(false);
   const {
     retrieveSelectedEquipments,
     retrieveIdentifiedNetworkElement,
@@ -139,17 +143,30 @@ function BridgeConnector() {
       }
     );
 
-    retrieveIdentifiedNetworkElement();
+    setFirstTimeIdentifiedFeatureConnection(true);
 
     return () => {
       PubSub.unsubscribe(token);
     };
   }, [
+    setFirstTimeIdentifiedFeatureConnection,
     connected,
-    retrieveIdentifiedNetworkElement,
     setIdentifiedFeature,
     keycloak.profile?.username,
     t,
+  ]);
+
+  useEffect(() => {
+    // We only want to retrieve the identified feature once after the connection
+    // hade been made. The reason for this is that in case the socket is disconnected
+    // on the client, we don't want to disturp their workflow by getting the selected
+    // feature from the external source, in case they're doing something else.
+    if (!firstTimeIdentifiedFeatureConnection) return;
+    retrieveIdentifiedNetworkElement();
+  }, [
+    firstTimeIdentifiedFeatureConnection,
+    retrieveIdentifiedNetworkElement,
+    setFirstTimeIdentifiedFeatureConnection,
   ]);
 
   useEffect(() => {
