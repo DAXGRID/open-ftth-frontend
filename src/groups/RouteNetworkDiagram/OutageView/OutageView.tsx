@@ -70,7 +70,11 @@ function formatNodesClipboard(nodes: TreeNode[]): string {
   return nodes.map((x) => `${x.value}\t${x.description}`).join("\n");
 }
 
-function OutageView() {
+interface OutageViewProps {
+  routeElementId: string;
+}
+
+function OutageView({ routeElementId }: OutageViewProps) {
   const client = useClient();
   const { t } = useTranslation();
   const [node, setNode] = useState<TreeNode | null>(null);
@@ -78,9 +82,15 @@ function OutageView() {
   const [workTasks, setWorkTasks] = useState<WorkTask[]>([]);
 
   useEffect(() => {
-    const node = getInformation(client);
-    setNode(convertToTreeNodes(node));
-  }, [client]);
+    getInformation(client, routeElementId).then((reponse) => {
+      let outageView = reponse.data?.utilityNetwork.outageView;
+      if (outageView) {
+        setNode(convertToTreeNodes(outageView));
+      } else {
+        throw Error("Did not get any outageView");
+      }
+    });
+  }, [client, routeElementId]);
 
   useEffect(() => {
     const workTasks = getWorkTasks(client);

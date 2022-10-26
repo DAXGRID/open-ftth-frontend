@@ -80,10 +80,14 @@ export function addTerminalEquipmentModal(
   );
 }
 
-export function outageViewModal(cb: () => void, title: string) {
+export function outageViewModal(
+  cb: () => void,
+  title: string,
+  routeElementId: string
+) {
   return (
     <ModalContainer title={title} closeCallback={cb}>
-      <OutageView />
+      <OutageView routeElementId={routeElementId} />
     </ModalContainer>
   );
 }

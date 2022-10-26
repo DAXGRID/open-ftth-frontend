@@ -726,7 +726,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       showElement(
         outageViewModal(
           () => showModalsDispatch({ type: "outageView", show: false }),
-          t("OUTAGE_VIEW")
+          t("OUTAGE_VIEW"),
+          identifiedFeature?.id ?? ""
         )
       );
     } else {
@@ -952,19 +953,19 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             action={() => clearHighlights()}
             title={t("CLEAR_HIGHLIGHT")}
           />
-          <ToggleButton
-            toggled={enabledTracePan}
-            id={"0"}
-            toggle={() => setEnabledTracePan(!enabledTracePan)}
-            icon={ZoomMapSvg}
-            title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
-          />
           <ActionButton
             icon={OutageSvg}
             action={() =>
               showModalsDispatch({ type: "outageView", show: true })
             }
             title={t("OUTAGE_VIEW")}
+          />
+          <ToggleButton
+            toggled={enabledTracePan}
+            id={"0"}
+            toggle={() => setEnabledTracePan(!enabledTracePan)}
+            icon={ZoomMapSvg}
+            title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
           />
         </DiagramMenu>
       )}
@@ -974,6 +975,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             icon={EraserSvg}
             action={() => clearHighlights()}
             title={t("CLEAR_HIGHLIGHT")}
+          />
+          <ActionButton
+            icon={OutageSvg}
+            action={() =>
+              showModalsDispatch({ type: "outageView", show: true })
+            }
+            title={t("OUTAGE_VIEW")}
           />
           <ToggleButton
             toggled={enabledTracePan}
