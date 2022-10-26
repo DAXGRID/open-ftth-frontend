@@ -75,6 +75,7 @@ import {
   FlipSvg,
   EstablishCustomerConnectionSvg,
   ZoomMapSvg,
+  OutageSvg,
 } from "../../../assets";
 import {
   addContainerModal,
@@ -82,6 +83,7 @@ import {
   establishCustomerConnectionModal,
   addRackModal,
   addTerminalEquipmentModal,
+  outageViewModal,
 } from "./Modals";
 
 type RouteNetworkDiagramProps = {
@@ -150,6 +152,7 @@ interface ShowModals {
   establishCustomerConnection: boolean;
   addRack: boolean;
   addTerminalEquipment: boolean;
+  outageView: boolean;
 }
 
 interface ShowModalsAction {
@@ -159,6 +162,7 @@ interface ShowModalsAction {
     | "establishCustomerConnection"
     | "addRack"
     | "addTerminalEquipment"
+    | "outageView"
     | "reset";
   show?: boolean;
 }
@@ -169,6 +173,7 @@ const showModalsInitialState: ShowModals = {
   addInnerConduit: false,
   addRack: false,
   addTerminalEquipment: false,
+  outageView: false,
 };
 
 function showModalsReducer(
@@ -201,6 +206,11 @@ function showModalsReducer(
       return {
         ...state,
         addTerminalEquipment: action.show ?? !state.addTerminalEquipment,
+      };
+    case "outageView":
+      return {
+        ...state,
+        outageView: action.show ?? !state.outageView,
       };
     case "reset":
       return { ...showModalsInitialState };
@@ -712,6 +722,14 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           currentlySelectedFeatures
         )
       );
+    } else if (showModals.outageView) {
+      showElement(
+        outageViewModal(
+          () => showModalsDispatch({ type: "outageView", show: false }),
+          t("OUTAGE_VIEW"),
+          identifiedFeature?.id ?? ""
+        )
+      );
     } else {
       showElement(null);
     }
@@ -935,6 +953,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             action={() => clearHighlights()}
             title={t("CLEAR_HIGHLIGHT")}
           />
+          <ActionButton
+            icon={OutageSvg}
+            action={() =>
+              showModalsDispatch({ type: "outageView", show: true })
+            }
+            title={t("OUTAGE_VIEW")}
+          />
           <ToggleButton
             toggled={enabledTracePan}
             id={"0"}
@@ -950,6 +975,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             icon={EraserSvg}
             action={() => clearHighlights()}
             title={t("CLEAR_HIGHLIGHT")}
+          />
+          <ActionButton
+            icon={OutageSvg}
+            action={() =>
+              showModalsDispatch({ type: "outageView", show: true })
+            }
+            title={t("OUTAGE_VIEW")}
           />
           <ToggleButton
             toggled={enabledTracePan}
