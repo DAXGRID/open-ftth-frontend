@@ -14,6 +14,12 @@ export function getWorkTasks(client: Client) {
     .toPromise();
 }
 
+export function sendTroubleTicket(client: Client, params: SendTroubleTicketParams) {
+  return client
+    .mutation<SendTroubleTicketResponse>(SEND_TROUBLE_TICKET_MUTATION, params)
+    .toPromise();
+}
+
 export interface Node {
   id: string;
   label: string;
@@ -30,7 +36,8 @@ interface OutageViewQueryResponse {
 
 export const OUTAGE_VIEW_QUERY = `
 query (
-$routeNetworkElementId: ID!) {
+  $routeNetworkElementId: ID!
+) {
   outage {
     outageView(routeNetworkElementId: $routeNetworkElementId) {
       id
@@ -104,6 +111,39 @@ query {
       workTaskId
       number
       name
+    }
+  }
+}
+`;
+
+interface SendTroubleTicketResponse {
+  outage: {
+    sendTroubleTicket: {
+      errorCode?: string;
+      isSuccess: boolean;
+      errorMesssage?: string;
+    }
+  }
+}
+
+interface SendTroubleTicketParams {
+  workTaskId: string;
+  installationsIds: string[];
+}
+
+const SEND_TROUBLE_TICKET_MUTATION = `
+mutation(
+  $workTaskId: ID!,
+  $installationsIds: [String]!
+) {
+  outage {
+    sendTroubleTicket(
+      workTaskId: $workTaskId
+      installationsIds: $installationsIds
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
     }
   }
 }
