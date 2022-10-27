@@ -8,8 +8,10 @@ export function getInformation(client: Client, routeNetworkElementId: string) {
     .toPromise();
 }
 
-export function getWorkTasks(client: Client): WorkTask[] {
-  return [];
+export function getWorkTasks(client: Client) {
+  return client
+    .query<LatestTenTroubleTicketsResponse>(LATEST_TEN_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY)
+    .toPromise();
 }
 
 export interface Node {
@@ -82,8 +84,27 @@ $routeNetworkElementId: ID!) {
 }
 `;
 
+export interface LatestTenTroubleTicketsResponse {
+  outage: {
+    latestTenTroubleTicketsOrderedByDate: WorkTask[]
+  }
+}
+
 export interface WorkTask {
   workTaskId: string;
   number: string;
   type: string;
 }
+
+const LATEST_TEN_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY = `
+query {
+  outage {
+    latestTenTroubleTicketsOrderedByDate
+    {
+      workTaskId
+      number
+      name
+    }
+  }
+}
+`;

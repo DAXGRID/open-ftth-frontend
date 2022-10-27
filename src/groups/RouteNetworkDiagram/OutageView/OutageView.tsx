@@ -87,14 +87,22 @@ function OutageView({ routeElementId }: OutageViewProps) {
       if (outageView) {
         setNode(convertToTreeNodes(outageView));
       } else {
-        throw Error("Did not get any outageView");
+        console.error(outageView);
+        throw Error("Missing outage view.");
       }
     });
   }, [client, routeElementId]);
 
   useEffect(() => {
-    const workTasks = getWorkTasks(client);
-    setWorkTasks(workTasks);
+    getWorkTasks(client).then((response) => {
+      let troubleTickets = response.data?.outage.latestTenTroubleTicketsOrderedByDate;
+      if (troubleTickets) {
+        setWorkTasks(workTasks);
+      } else {
+        console.error(response);
+        throw Error("Missing trouble tickets.");
+      }
+    });
   }, [client]);
 
   const workTaskOptions = useMemo<SelectOption[]>(() => {
@@ -107,6 +115,10 @@ function OutageView({ routeElementId }: OutageViewProps) {
       ...mapWorkTasksToOptions(workTasks),
     ];
   }, [workTasks, t]);
+
+  const hasWorkTasks = useMemo(() => {
+    return workTasks.length > 0;
+  }, [workTasks]);
 
   const onCheckboxClick = (treeNode: TreeNode) => {
     if (node) {
@@ -157,20 +169,24 @@ function OutageView({ routeElementId }: OutageViewProps) {
           onCheckboxChange={onCheckboxClick}
         />
       </div>
-      <div className="full-row">
-        <SelectMenu
-          onSelected={(x) => setSelectedWorkTask(x as string)}
-          removePlaceHolderOnSelect
-          selected={selectedWorkTask}
-          options={workTaskOptions}
-        />
-      </div>
+      {workTasks.length > 0 && (
+        <div className="full-row">
+          <SelectMenu
+            onSelected={(x) => setSelectedWorkTask(x as string)}
+            removePlaceHolderOnSelect
+            selected={selectedWorkTask}
+            options={workTaskOptions}
+          />
+        </div>
+      )}
       <div className="full-row gap-default">
-        <DefaultButton
-          disabled={selectedWorkTask === ""}
-          onClick={() => send()}
-          innerText={t("SEND")}
-        />
+        {hasWorkTasks && (
+          <DefaultButton
+            disabled={selectedWorkTask === ""}
+            onClick={() => send()}
+            innerText={t("SEND")}
+          />
+        )}
         <DefaultButton
           onClick={() => copyToClipboard()}
           innerText={t("COPY_TO_CLIPBOARD")}
