@@ -21,16 +21,15 @@ export interface Node {
 }
 
 interface OutageViewQueryResponse {
-  utilityNetwork: {
+  outage: {
     outageView: Node;
   };
 }
 
 export const OUTAGE_VIEW_QUERY = `
 query (
-$routeNetworkElementId: ID!
-) {
-  utilityNetwork {
+$routeNetworkElementId: ID!) {
+  outage {
     outageView(routeNetworkElementId: $routeNetworkElementId) {
       id
       label

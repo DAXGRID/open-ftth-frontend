@@ -83,7 +83,7 @@ function OutageView({ routeElementId }: OutageViewProps) {
 
   useEffect(() => {
     getInformation(client, routeElementId).then((reponse) => {
-      let outageView = reponse.data?.utilityNetwork.outageView;
+      let outageView = reponse.data?.outage.outageView;
       if (outageView) {
         setNode(convertToTreeNodes(outageView));
       } else {
