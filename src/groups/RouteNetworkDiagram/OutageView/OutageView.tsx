@@ -97,13 +97,13 @@ function OutageView({ routeElementId }: OutageViewProps) {
     getWorkTasks(client).then((response) => {
       let troubleTickets = response.data?.outage.latestTenTroubleTicketsOrderedByDate;
       if (troubleTickets) {
-        setWorkTasks(workTasks);
+        setWorkTasks(troubleTickets);
       } else {
         console.error(response);
         throw Error("Missing trouble tickets.");
       }
     });
-  }, [client]);
+  }, [client, setWorkTasks]);
 
   const workTaskOptions = useMemo<SelectOption[]>(() => {
     return [
