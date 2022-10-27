@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useClient } from "urql";
 import { useTranslation } from "react-i18next";
-import { getInformation, getWorkTasks, Node, WorkTask } from "./OutageViewGql";
+import { getInformation, getWorkTasks, sendTroubleTicket, Node, WorkTask } from "./OutageViewGql";
 import TreeViewCheckbox, {
   TreeNode,
 } from "../../../components/TreeViewCheckbox";
@@ -87,14 +87,22 @@ function OutageView({ routeElementId }: OutageViewProps) {
       if (outageView) {
         setNode(convertToTreeNodes(outageView));
       } else {
-        throw Error("Did not get any outageView");
+        console.error(outageView);
+        throw Error("Missing outage view.");
       }
     });
   }, [client, routeElementId]);
 
   useEffect(() => {
-    const workTasks = getWorkTasks(client);
-    setWorkTasks(workTasks);
+    getWorkTasks(client).then((response) => {
+      let troubleTickets = response.data?.outage.latestTenTroubleTicketsOrderedByDate;
+      if (troubleTickets) {
+        setWorkTasks(workTasks);
+      } else {
+        console.error(response);
+        throw Error("Missing trouble tickets.");
+      }
+    });
   }, [client]);
 
   const workTaskOptions = useMemo<SelectOption[]>(() => {
@@ -108,28 +116,48 @@ function OutageView({ routeElementId }: OutageViewProps) {
     ];
   }, [workTasks, t]);
 
+  const hasWorkTasks = useMemo(() => {
+    return workTasks.length > 0;
+  }, [workTasks]);
+
+  const selectedNodesWithUniqueValues = useMemo(() => {
+    if (node) {
+      return [...new Set(selectedNodes(node).filter((x) => x.value))];
+    } else {
+      return []
+    }
+  }, [node])
+
   const onCheckboxClick = (treeNode: TreeNode) => {
     if (node) {
       setNode(toggleSelectedTreeNodes(treeNode, node));
     }
   };
 
-  const send = () => {
+  const sendTroubleTicketAction = () => {
     if (node) {
-      console.log(
-        "Selected nodes with values.",
-        selectedNodes(node)
-          .filter((x) => x.value)
-          .map((x) => x.value)
-      );
+      sendTroubleTicket(client, {
+        installationsIds: selectedNodesWithUniqueValues.map(x => x.value) as string[],
+        workTaskId: selectedWorkTask
+      }).then((response) => {
+        const troubleTicketResponse = response.data?.outage.sendTroubleTicket;
+        if (troubleTicketResponse?.isSuccess) {
+          toast.success(t("SUCCESS"));
+        } else {
+          const error = troubleTicketResponse?.errorCode;
+          toast.error(t(error ?? "ERROR"));
+          console.error(response);
+        }
+      }).catch((response) => {
+        toast.error(t("ERROR"));
+        console.error(response);
+      });
     }
   };
 
   const copyToClipboard = () => {
     if (node) {
-      var clipboardText = formatNodesClipboard(
-        selectedNodes(node).filter((x) => x.value)
-      );
+      var clipboardText = formatNodesClipboard(selectedNodesWithUniqueValues);
       navigator.clipboard.writeText(clipboardText).then(
         () => {
           toast.success(t("COPIED_TO_CLIPBOARD"));
@@ -157,21 +185,26 @@ function OutageView({ routeElementId }: OutageViewProps) {
           onCheckboxChange={onCheckboxClick}
         />
       </div>
-      <div className="full-row">
-        <SelectMenu
-          onSelected={(x) => setSelectedWorkTask(x as string)}
-          removePlaceHolderOnSelect
-          selected={selectedWorkTask}
-          options={workTaskOptions}
-        />
-      </div>
+      {hasWorkTasks && (
+        <div className="full-row">
+          <SelectMenu
+            onSelected={(x) => setSelectedWorkTask(x as string)}
+            removePlaceHolderOnSelect
+            selected={selectedWorkTask}
+            options={workTaskOptions}
+          />
+        </div>
+      )}
       <div className="full-row gap-default">
+        {hasWorkTasks && (
+          <DefaultButton
+            disabled={selectedWorkTask === "" || selectedNodesWithUniqueValues.length === 0}
+            onClick={() => sendTroubleTicketAction()}
+            innerText={t("SEND")}
+          />
+        )}
         <DefaultButton
-          disabled={selectedWorkTask === ""}
-          onClick={() => send()}
-          innerText={t("SEND")}
-        />
-        <DefaultButton
+          disabled={selectedNodesWithUniqueValues.length === 0}
           onClick={() => copyToClipboard()}
           innerText={t("COPY_TO_CLIPBOARD")}
         />
