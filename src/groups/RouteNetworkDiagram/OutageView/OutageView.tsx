@@ -1,7 +1,13 @@
 import { useEffect, useState, useMemo } from "react";
 import { useClient } from "urql";
-import { useTranslation } from "react-i18next";
-import { getInformation, getWorkTasks, sendTroubleTicket, Node, WorkTask } from "./OutageViewGql";
+import { useTranslation, TFunction } from "react-i18next";
+import {
+  getInformation,
+  getWorkTasks,
+  sendTroubleTicket,
+  Node,
+  WorkTask,
+} from "./OutageViewGql";
 import TreeViewCheckbox, {
   TreeNode,
 } from "../../../components/TreeViewCheckbox";
@@ -9,15 +15,36 @@ import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import { toast } from "react-toastify";
 
-function convertToTreeNodes(node: Node): TreeNode {
+function pascalCaseToSnakeCase(text: string): string {
+  return text
+    .replace(/[A-Z]/g, (val) => `_${val.toLowerCase()}`)
+    .replace(/^_/, "");
+}
+
+function translateNames(text: string, t: TFunction): string {
+  return text.replace(/{([A-Za-z]+)}/g, (match) => {
+    return t(
+      pascalCaseToSnakeCase(
+        match.replace("}", "").replace("{", "")
+      ).toUpperCase()
+    );
+  });
+}
+
+function convertToTreeNodes(node: Node, t: TFunction): TreeNode {
   const children: TreeNode[] = [];
   if (node.nodes) {
     node.nodes.forEach((x) => {
-      children.push(convertToTreeNodes(x));
+      children.push(convertToTreeNodes(x, t));
     });
   }
 
-  return { ...node, nodes: children, selected: false };
+  return {
+    ...node,
+    nodes: children,
+    selected: false,
+    label: translateNames(node.label, t),
+  };
 }
 
 function toggleSelectedTreeNodes(
@@ -85,17 +112,18 @@ function OutageView({ routeElementId }: OutageViewProps) {
     getInformation(client, routeElementId).then((reponse) => {
       let outageView = reponse.data?.outage.outageView;
       if (outageView) {
-        setNode(convertToTreeNodes(outageView));
+        setNode(convertToTreeNodes(outageView, t));
       } else {
         console.error(outageView);
         throw Error("Missing outage view.");
       }
     });
-  }, [client, routeElementId]);
+  }, [client, routeElementId, t]);
 
   useEffect(() => {
     getWorkTasks(client).then((response) => {
-      let troubleTickets = response.data?.outage.latestTenTroubleTicketsOrderedByDate;
+      let troubleTickets =
+        response.data?.outage.latestTenTroubleTicketsOrderedByDate;
       if (troubleTickets) {
         setWorkTasks(troubleTickets);
       } else {
@@ -128,9 +156,9 @@ function OutageView({ routeElementId }: OutageViewProps) {
 
       return uniqueNodesByValue(selectedNodes(node).filter((x) => x.value));
     } else {
-      return []
+      return [];
     }
-  }, [node])
+  }, [node]);
 
   const onCheckboxClick = (treeNode: TreeNode) => {
     if (node) {
@@ -141,21 +169,25 @@ function OutageView({ routeElementId }: OutageViewProps) {
   const sendTroubleTicketAction = () => {
     if (node) {
       sendTroubleTicket(client, {
-        installationsIds: selectedNodesWithUniqueValues.map(x => x.value) as string[],
-        workTaskId: selectedWorkTask
-      }).then((response) => {
-        const troubleTicketResponse = response.data?.outage.sendTroubleTicket;
-        if (troubleTicketResponse?.isSuccess) {
-          toast.success(t("SUCCESS"));
-        } else {
-          const error = troubleTicketResponse?.errorCode;
-          toast.error(t(error ?? "ERROR"));
+        installationsIds: selectedNodesWithUniqueValues.map(
+          (x) => x.value
+        ) as string[],
+        workTaskId: selectedWorkTask,
+      })
+        .then((response) => {
+          const troubleTicketResponse = response.data?.outage.sendTroubleTicket;
+          if (troubleTicketResponse?.isSuccess) {
+            toast.success(t("SUCCESS"));
+          } else {
+            const error = troubleTicketResponse?.errorCode;
+            toast.error(t(error ?? "ERROR"));
+            console.error(response);
+          }
+        })
+        .catch((response) => {
+          toast.error(t("ERROR"));
           console.error(response);
-        }
-      }).catch((response) => {
-        toast.error(t("ERROR"));
-        console.error(response);
-      });
+        });
     }
   };
 
@@ -202,7 +234,10 @@ function OutageView({ routeElementId }: OutageViewProps) {
       <div className="full-row gap-default">
         {hasWorkTasks && (
           <DefaultButton
-            disabled={selectedWorkTask === "" || selectedNodesWithUniqueValues.length === 0}
+            disabled={
+              selectedWorkTask === "" ||
+              selectedNodesWithUniqueValues.length === 0
+            }
             onClick={() => sendTroubleTicketAction()}
             innerText={t("SEND")}
           />

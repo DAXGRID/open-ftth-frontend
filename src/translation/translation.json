@@ -246,7 +246,20 @@
       "SELECT_WORK_TASK": "Select work task",
       "COPY_TO_CLIP_BOARD": "Copy to clipboard",
       "COPIED_TO_CLIPBOARD": "Copied to clipboard",
-      "COULD_NOT_COPY_TO_CLIPBOARD": "Could not copy to clipboard"
+      "COULD_NOT_COPY_TO_CLIPBOARD": "Could not copy to clipboard",
+      "FIBER_NUMBER": "Fiber number",
+      "OUTAGE_VIEW_ROUTE_SEGMENT": "Outage view route segment",
+      "RED": "Red",
+      "BLUE": "Blue",
+      "YELLOW": "Yellow",
+      "BLACK": "Black",
+      "GREEN": "Green",
+      "WHITE": "White",
+      "ORANGE": "Orange",
+      "PURPLE": "Purple",
+      "GREY": "Grey",
+      "PINK": "Pink",
+      "BROWN": "Brown"
     }
   },
   "dk": {
@@ -496,7 +509,20 @@
       "SELECT_WORK_TASK": "Vælg opgave",
       "COPY_TO_CLIPBOARD": "Kopier til udklipsholder",
       "COPIED_TO_CLIPBOARD": "Kopieret til udklipsholder",
-      "COULD_NOT_COPY_TO_CLIPBOARD": "Kunne ikke kopiere til udklipsholder"
+      "COULD_NOT_COPY_TO_CLIPBOARD": "Kunne ikke kopiere til udklipsholder",
+      "FIBER_NUMBER": "Fiber nummer",
+      "OUTAGE_VIEW_ROUTE_SEGMENT": "Outage view route segment",
+      "RED": "Rød",
+      "BLUE": "Blå",
+      "YELLOW": "Gul",
+      "BLACK": "Sort",
+      "GREEN": "Grøn",
+      "WHITE": "Hvid",
+      "ORANGE": "Orange",
+      "PURPLE": "Lilla",
+      "GREY": "Grå",
+      "PINK": "Pink",
+      "BROWN": "Brun"
     }
   }
 }
