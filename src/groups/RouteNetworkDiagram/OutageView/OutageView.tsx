@@ -120,9 +120,13 @@ function OutageView({ routeElementId }: OutageViewProps) {
     return workTasks.length > 0;
   }, [workTasks]);
 
-  const selectedNodesWithUniqueValues = useMemo(() => {
+  const selectedNodesWithUniqueValues = useMemo((): TreeNode[] => {
     if (node) {
-      return [...new Set(selectedNodes(node).filter((x) => x.value))];
+      const uniqueNodesByValue = (arr: TreeNode[]): TreeNode[] => {
+        return [...new Map(arr.map((m: TreeNode) => [m.value, m])).values()];
+      };
+
+      return uniqueNodesByValue(selectedNodes(node).filter((x) => x.value));
     } else {
       return []
     }
