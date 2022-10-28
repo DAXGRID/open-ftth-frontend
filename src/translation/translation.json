@@ -259,7 +259,10 @@
       "PURPLE": "Purple",
       "GREY": "Grey",
       "PINK": "Pink",
-      "BROWN": "Brown"
+      "BROWN": "Brown",
+      "SILVER": "Silver",
+      "VIOLET": "Violet",
+      "TURQUOISE": "Turquoise"
     }
   },
   "dk": {
@@ -522,7 +525,10 @@
       "PURPLE": "Lilla",
       "GREY": "Grå",
       "PINK": "Pink",
-      "BROWN": "Brun"
+      "BROWN": "Brun",
+      "SILVER": "Sølv",
+      "VIOLET": "Violet",
+      "TURQUOISE": "Turkis"
     }
   }
 }
