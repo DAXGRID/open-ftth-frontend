@@ -94,7 +94,7 @@ function selectedNodes(node: TreeNode): TreeNode[] {
 }
 
 function formatNodesClipboard(nodes: TreeNode[]): string {
-  return nodes.map((x) => `${x.value}\t${x.description}`).join("\n");
+  return nodes.map((x) => `${x.value}\t${x.description ?? ""}`).join("\n");
 }
 
 interface OutageViewProps {
