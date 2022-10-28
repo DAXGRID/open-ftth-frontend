@@ -25,13 +25,14 @@ function send(eventMsg: any) {
 
 function BridgeConnector() {
   const { t } = useTranslation();
-  const { setSelectedSegmentIds, setIdentifiedFeature, trace, searchResult } =
-    useContext(MapContext);
+  const {
+    setSelectedSegmentIds,
+    setIdentifiedFeature,
+    trace,
+    searchResult,
+    identifiedFeature,
+  } = useContext(MapContext);
   const [connected, setConnected] = useState(false);
-  const [
-    firstTimeIdentifiedFeatureConnection,
-    setFirstTimeIdentifiedFeatureConnection,
-  ] = useState(false);
   const {
     retrieveSelectedEquipments,
     retrieveIdentifiedNetworkElement,
@@ -143,13 +144,10 @@ function BridgeConnector() {
       }
     );
 
-    setFirstTimeIdentifiedFeatureConnection(true);
-
     return () => {
       PubSub.unsubscribe(token);
     };
   }, [
-    setFirstTimeIdentifiedFeatureConnection,
     connected,
     setIdentifiedFeature,
     keycloak.profile?.username,
@@ -162,19 +160,19 @@ function BridgeConnector() {
     // on the client, we don't want to disturb their workflow by getting the selected
     // feature from the external source, in case they're doing something else.
     if (
-      !firstTimeIdentifiedFeatureConnection ||
+      identifiedFeature ||
       !connected ||
       !websocketClient ||
       websocketClient.readyState !== 1
-    )
+    ) {
       return;
+    }
 
     retrieveIdentifiedNetworkElement();
   }, [
+    identifiedFeature,
     connected,
-    firstTimeIdentifiedFeatureConnection,
     retrieveIdentifiedNetworkElement,
-    setFirstTimeIdentifiedFeatureConnection,
   ]);
 
   useEffect(() => {
