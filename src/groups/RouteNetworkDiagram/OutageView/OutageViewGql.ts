@@ -110,7 +110,7 @@ query {
     {
       workTaskId
       number
-      name
+      type
     }
   }
 }
