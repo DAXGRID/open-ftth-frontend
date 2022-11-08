@@ -263,7 +263,8 @@
       "BROWN": "Brown",
       "SILVER": "Silver",
       "VIOLET": "Violet",
-      "TURQUOISE": "Turquoise"
+      "TURQUOISE": "Turquoise",
+      "MESSAGE_HAS_BEEN_SENT": "Message has been sent"
     }
   },
   "dk": {
@@ -530,7 +531,8 @@
       "BROWN": "Brun",
       "SILVER": "Sølv",
       "VIOLET": "Violet",
-      "TURQUOISE": "Turkis"
+      "TURQUOISE": "Turkis",
+      "MESSAGE_HAS_BEEN_SENT": "Beskeden er sendt"
     }
   }
 }

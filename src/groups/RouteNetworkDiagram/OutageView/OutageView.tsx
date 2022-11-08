@@ -177,7 +177,7 @@ function OutageView({ routeElementId }: OutageViewProps) {
         .then((response) => {
           const troubleTicketResponse = response.data?.outage.sendTroubleTicket;
           if (troubleTicketResponse?.isSuccess) {
-            toast.success(t("SUCCESS"));
+            toast.success(t("MESSAGE_HAS_BEEN_SENT"));
           } else {
             const error = troubleTicketResponse?.errorCode;
             toast.error(t(error ?? "ERROR"));
