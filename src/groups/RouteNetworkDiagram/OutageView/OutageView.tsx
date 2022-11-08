@@ -72,8 +72,8 @@ function toggleSelectedTreeNodes(
 function mapWorkTasksToOptions(workTasks: WorkTask[]): SelectOption[] {
   return workTasks.map((x) => ({
     text: `${x.number} - ${x.type}`,
-    value: x.number,
-    key: x.number,
+    value: x.workTaskId,
+    key: x.workTaskId,
   }));
 }
 
