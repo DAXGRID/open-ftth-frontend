@@ -109,7 +109,7 @@ export interface LatestTenTroubleTicketsResponse {
 export interface WorkTask {
   workTaskId: string;
   number: string;
-  type: string;
+  name: string;
 }
 
 const LATEST_TEN_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY = `
@@ -119,7 +119,7 @@ query {
     {
       workTaskId
       number
-      type
+      name
     }
   }
 }

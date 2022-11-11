@@ -88,7 +88,7 @@ function setExpandedForNode(
 
 function mapWorkTasksToOptions(workTasks: WorkTask[]): SelectOption[] {
   return workTasks.map((x) => ({
-    text: `${x.number} - ${x.type}`,
+    text: `${x.number} - ${x.name}`,
     value: x.workTaskId,
     key: x.workTaskId,
   }));
