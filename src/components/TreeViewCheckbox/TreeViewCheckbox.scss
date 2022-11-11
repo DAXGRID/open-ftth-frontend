@@ -30,6 +30,16 @@
       min-width: 350px;
       flex-direction: row-reverse;
     }
+
+    .expand-action {
+      padding: 2px;
+      // We give it a static width, so it does not move other elements when changed
+      width: 18px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 
   .node-block {

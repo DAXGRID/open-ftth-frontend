@@ -1,4 +1,9 @@
 import Checkbox from "../Checkbox";
+import {
+  faChevronRight,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export interface TreeNode {
   id: string;
@@ -7,17 +12,26 @@ export interface TreeNode {
   nodes: TreeNode[] | null;
   selected: boolean;
   description: string | null;
+  expanded: boolean | null;
 }
 
 function NodeSelectionRow(
   treeNode: TreeNode,
-  onClick: (treeNode: TreeNode) => void
+  onCheckboxClicked: (treeNode: TreeNode) => void,
+  onExpandClick: (treeNode: TreeNode) => void
 ) {
   return (
     <div className="node-selection-row">
+      {treeNode.expanded !== null && treeNode.expanded !== undefined && (
+        <span className="expand-action" onClick={() => onExpandClick(treeNode)}>
+          <FontAwesomeIcon
+            icon={treeNode.expanded ? faChevronDown : faChevronRight}
+          />
+        </span>
+      )}
       <Checkbox
         checked={treeNode.selected}
-        onChange={() => onClick(treeNode)}
+        onChange={() => onCheckboxClicked(treeNode)}
         value={treeNode.id}
         key={treeNode.id}
       />
@@ -29,12 +43,17 @@ function NodeSelectionRow(
 
 function renderNodeTree(
   node: TreeNode,
-  onClick: (treeNode: TreeNode) => void
+  onCheckboxClicked: (treeNode: TreeNode) => void,
+  onExpandClick: (treeNode: TreeNode) => void
 ): JSX.Element {
   return (
     <div className="node-block" key={node.id}>
-      {NodeSelectionRow(node, onClick)}
-      {node.nodes?.map((x) => renderNodeTree(x, onClick))}
+      {NodeSelectionRow(node, onCheckboxClicked, onExpandClick)}
+      {((node.expanded === null || node.expanded === undefined) || node.expanded) && (
+        node.nodes?.map((x) =>
+          renderNodeTree(x, onCheckboxClicked, onExpandClick)
+        )
+      )}
     </div>
   );
 }
@@ -42,12 +61,14 @@ function renderNodeTree(
 interface TreeViewCheckboxProps {
   treeNode: TreeNode;
   onCheckboxChange: (treeNode: TreeNode) => void;
+  onExpandClick: (treeNode: TreeNode) => void;
   maxHeight?: number;
 }
 
 function TreeViewCheckbox({
   treeNode,
   onCheckboxChange,
+  onExpandClick,
   maxHeight,
 }: TreeViewCheckboxProps) {
   return (
@@ -55,7 +76,7 @@ function TreeViewCheckbox({
       style={{ maxHeight: maxHeight ?? "auto" }}
       className="tree-view-check-box"
     >
-      {renderNodeTree(treeNode, onCheckboxChange)}
+      {renderNodeTree(treeNode, onCheckboxChange, onExpandClick)}
     </div>
   );
 }
