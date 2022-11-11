@@ -39,6 +39,11 @@
       &:hover {
         cursor: pointer;
       }
+
+      &.expand-action--disabled {
+        cursor: not-allowed;
+        color: $grey;
+      }
     }
   }
 
@@ -46,6 +51,10 @@
     padding-top: 10px;
     padding-left: 20px;
     border-left: 1px dashed $border-color;
+
+    &.node-block-not-expandable {
+      padding-left: 50px;
+    }
 
     &:first-child {
       border: none;

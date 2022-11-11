@@ -1,7 +1,7 @@
 import Checkbox from "../Checkbox";
 import {
-  faChevronRight,
   faChevronDown,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -20,10 +20,22 @@ function NodeSelectionRow(
   onCheckboxClicked: (treeNode: TreeNode) => void,
   onExpandClick: (treeNode: TreeNode) => void
 ) {
+  const hasChildNodes =
+    treeNode.nodes !== null &&
+    treeNode.nodes !== undefined &&
+    treeNode.nodes.length > 0;
+
+  const expandable =
+    treeNode.expanded !== null && treeNode.expanded !== undefined;
+
   return (
     <div className="node-selection-row">
-      {treeNode.expanded !== null && treeNode.expanded !== undefined && (
-        <span className="expand-action" onClick={() => onExpandClick(treeNode)}>
+      {expandable && (
+        <span
+          className={`expand-action ${hasChildNodes ? "" : "expand-action--disabled"
+            } `}
+          onClick={() => hasChildNodes && onExpandClick(treeNode)}
+        >
           <FontAwesomeIcon
             icon={treeNode.expanded ? faChevronDown : faChevronRight}
           />
@@ -46,14 +58,21 @@ function renderNodeTree(
   onCheckboxClicked: (treeNode: TreeNode) => void,
   onExpandClick: (treeNode: TreeNode) => void
 ): JSX.Element {
+  const expandable = node.expanded !== null || node.expanded !== undefined;
+
+  const notExpanded =
+    node.expanded === null || node.expanded === undefined || node.expanded;
+
   return (
-    <div className="node-block" key={node.id}>
+    <div
+      className={`node-block ${expandable ? "" : "node-block-not-expandable"}`}
+      key={node.id}
+    >
       {NodeSelectionRow(node, onCheckboxClicked, onExpandClick)}
-      {((node.expanded === null || node.expanded === undefined) || node.expanded) && (
+      {notExpanded &&
         node.nodes?.map((x) =>
           renderNodeTree(x, onCheckboxClicked, onExpandClick)
-        )
-      )}
+        )}
     </div>
   );
 }
