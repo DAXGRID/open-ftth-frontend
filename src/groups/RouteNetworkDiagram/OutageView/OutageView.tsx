@@ -69,6 +69,23 @@ function toggleSelectedTreeNodes(
   };
 }
 
+function setExpandedForNode(
+  selected: TreeNode,
+  current: TreeNode,
+): TreeNode {
+
+  const children =
+    current.nodes?.map((x) =>
+      setExpandedForNode(selected, x)
+    ) ?? [];
+
+  return {
+    ...current,
+    nodes: children,
+    expanded: selected.id === current.id ? !current.expanded : current.expanded
+  };
+}
+
 function mapWorkTasksToOptions(workTasks: WorkTask[]): SelectOption[] {
   return workTasks.map((x) => ({
     text: `${x.number} - ${x.type}`,
@@ -166,6 +183,12 @@ function OutageView({ routeElementId }: OutageViewProps) {
     }
   };
 
+  const onToggleClick = (treeNode: TreeNode) => {
+    if (node) {
+      setNode(setExpandedForNode(treeNode, node));
+    }
+  };
+
   const sendTroubleTicketAction = () => {
     if (node) {
       sendTroubleTicket(client, {
@@ -219,6 +242,7 @@ function OutageView({ routeElementId }: OutageViewProps) {
           maxHeight={500}
           treeNode={node}
           onCheckboxChange={onCheckboxClick}
+          onExpandClick={onToggleClick}
         />
       </div>
       {hasWorkTasks && (

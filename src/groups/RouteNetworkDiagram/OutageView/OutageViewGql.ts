@@ -26,6 +26,7 @@ export interface Node {
   value: string | null;
   nodes: Node[] | null;
   description: string | null;
+  expanded: boolean | null;
 }
 
 interface OutageViewQueryResponse {
@@ -44,41 +45,49 @@ query (
       label
       description
       value
+      expanded
       nodes {
         id
         label
         description
         value
+        expanded
         nodes {
           id
           label
           description
           value
+          expanded
           nodes {
             id
             label
             description
             value
+            expanded
             nodes {
               id
               label
               description
               value
+              expanded
               nodes {
                 id
                 label
                 description
                 value
+                expanded
                 nodes {
                   id
                   label
                   description
                   value
+                  expanded
                   nodes {
                     id
                     label
                     description
                     value
+                    expanded
                   }
                 }
               }
