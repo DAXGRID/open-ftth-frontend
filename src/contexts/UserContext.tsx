@@ -4,6 +4,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  useMemo,
 } from "react";
 import { useKeycloak } from "@react-keycloak/web";
 import useUserWorkContext, { UserWorkTask } from "./useUserWorkContext";
@@ -16,7 +17,7 @@ type UserContextType = {
   userWorkTask: UserWorkTask | null;
   reloadUserWorkTask: () => void;
   hasRoles: (...roles: UserRolesType[]) => boolean;
-  authenticated: () => boolean;
+  authenticated: boolean;
 };
 
 const UserContext = createContext<UserContextType>({
@@ -28,9 +29,7 @@ const UserContext = createContext<UserContextType>({
   hasRoles: (..._: UserRolesType[]): boolean => {
     throw new Error("No provider set for hasRole");
   },
-  authenticated: () => {
-    throw new Error("No provider set for authenticated");
-  },
+  authenticated: false,
 });
 
 type UserContextProps = {
@@ -61,18 +60,9 @@ const UserProvider = ({ children }: UserContextProps) => {
     [keycloak]
   );
 
-  const authenticated = (): boolean => {
-    if (
-      keycloak.token &&
-      keycloak.authenticated &&
-      !keycloak.isTokenExpired()
-    ) {
-      return true;
-    } else {
-      keycloak.logout();
-      return false;
-    }
-  };
+  const authenticated = useMemo((): boolean => {
+    return keycloak?.authenticated ?? false;
+  }, [keycloak?.authenticated]);
 
   const reloadUserWorkTask = useCallback(() => {
     reExecuteUserWorkContextQuery();
