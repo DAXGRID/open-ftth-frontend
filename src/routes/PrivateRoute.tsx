@@ -22,7 +22,7 @@ function PrivateRoute({
     <Route
       {...rest}
       render={(props) =>
-        authenticated() ? (
+        authenticated ? (
           hasRoles(...roles) ? (
             // Has required roles we render the component.
             <Component {...props} />
