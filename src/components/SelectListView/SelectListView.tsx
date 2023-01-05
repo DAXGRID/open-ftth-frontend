@@ -46,10 +46,10 @@ function SelectListView({
           ))}
         </div>
         <div
-          className="select-list-view-body "
-          style={
-            maxHeightBody ? { maxHeight: maxHeightBody, overflowY: "auto" } : {}
-          }
+          className={`select-list-view-body ${
+            maxHeightBody ? "select-list-view-body--max-height" : ""
+          }`}
+          style={maxHeightBody ? { maxHeight: maxHeightBody } : {}}
         >
           {bodyItems.map((row) => (
             <div
