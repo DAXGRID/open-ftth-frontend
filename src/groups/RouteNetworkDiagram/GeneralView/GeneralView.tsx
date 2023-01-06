@@ -141,7 +141,7 @@ function GeneralView({
               <div className="full-row">
                 <LabelContainer text={t("ADDITIONAL_ADDRESS_INFORMATION")}>
                   <TextBox
-                    value={terminalEquipment.addressInfo.remark}
+                    value={terminalEquipment.addressInfo?.remark ?? ""}
                     setValue={() => {}}
                     disabled={true}
                   />
@@ -172,7 +172,7 @@ function GeneralView({
                     <div className="full-row" key={j}>
                       <LabelContainer text={p.name}>
                         <TextBox
-                          value={p.value}
+                          value={p?.value ?? ""}
                           setValue={() => {}}
                           disabled={true}
                         />

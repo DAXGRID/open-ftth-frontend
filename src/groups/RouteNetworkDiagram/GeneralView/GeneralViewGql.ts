@@ -22,7 +22,7 @@ export interface TerminalEquipment {
     properties: { name: string; value: string }[];
   }[];
   addressInfo?: {
-    remark: string;
+    remark?: string;
     accessAddress?: {
       postDistrictCode: string;
       postDistrict: string;
