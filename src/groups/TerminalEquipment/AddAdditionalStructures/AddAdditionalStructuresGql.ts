@@ -3,7 +3,7 @@ import { Client } from "urql";
 export function getTerminalStructureSpecifications(client: Client) {
   return client
     .query<TerminalStructureSpecificationResponse>(
-      TERMINAL_STRUCTURE_SPECIFICATION_QUERY
+      TERMINAL_STRUCTURE_SPECIFICATION_QUERY, {}
     )
     .toPromise();
 }

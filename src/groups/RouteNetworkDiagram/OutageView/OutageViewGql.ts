@@ -10,7 +10,7 @@ export function getInformation(client: Client, routeNetworkElementId: string) {
 
 export function getWorkTasks(client: Client) {
   return client
-    .query<LatestTenTroubleTicketsResponse>(LATEST_TEN_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY)
+    .query<LatestTenTroubleTicketsResponse>(LATEST_TEN_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY, {})
     .toPromise();
 }
 
