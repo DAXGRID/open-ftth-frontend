@@ -2,7 +2,7 @@ import { Client } from "urql";
 
 export function queryRackSpecifications(client: Client) {
   return client
-    .query<RackSpecificationsResponse>(QUERY_RACK_SPECIFICATIONS)
+    .query<RackSpecificationsResponse>(QUERY_RACK_SPECIFICATIONS, {})
     .toPromise();
 }
 

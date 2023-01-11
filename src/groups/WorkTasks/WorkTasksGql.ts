@@ -1,7 +1,7 @@
 import { Client } from "urql";
 
 export function getWorksTasks(client: Client) {
-  return client.query<WorkTasksResponse>(QUERY_WORK_TASKS).toPromise();
+  return client.query<WorkTasksResponse>(QUERY_WORK_TASKS, {}).toPromise();
 }
 
 export function setCurrentWorkTaskToUser(

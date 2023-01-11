@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Client, defaultExchanges, subscriptionExchange, Provider } from "urql";
+import { Client, subscriptionExchange, Provider, Operation, makeOperation, fetchExchange } from "urql";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import App from "./App";
@@ -12,6 +12,7 @@ import "./global-styles/index.scss";
 import { MapProvider } from "./contexts/MapContext";
 import { UserProvider } from "./contexts/UserContext";
 import { OverlayProvider } from "./contexts/OverlayContext";
+import { authExchange } from '@urql/exchange-auth';
 
 const subscriptionClient = new SubscriptionClient(
   `${Config.API_GATEWAY_WS_URI}/graphql`,
@@ -26,30 +27,64 @@ const subscriptionClient = new SubscriptionClient(
   }
 );
 
+const withAuthHeader = (operation: Operation, token: string) => {
+  const fetchOptions =
+    typeof operation.context.fetchOptions === 'function'
+      ? operation.context.fetchOptions()
+      : operation.context.fetchOptions || {};
+
+  return makeOperation(operation.kind, operation, {
+    ...operation.context,
+    fetchOptions: {
+      ...fetchOptions,
+      headers: {
+        ...fetchOptions.headers,
+        Authorization: token,
+      },
+    },
+  });
+};
+
+const getAuth = async () => {
+  // First time the application loads, the keycloak token is not set.
+  // When the servers returns unauthorized, we get a new token.
+  if (!keycloak.token) {
+    return { token: "" }
+  }
+
+  return await keycloak.updateToken(30).then(() => {
+    if (keycloak.token) {
+      return { token: `Bearer ${keycloak.token}` };
+    }
+  }).catch(() => {
+    console.error("Could not update token. Logging user out...");
+    keycloak.logout();
+  });
+}
+
 const client = new Client({
   url: `${Config.API_GATEWAY_HTTP_URI}/graphql`,
   requestPolicy: "network-only",
-  fetchOptions: () => {
-    const token = keycloak.token;
-    return token
-      ? {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      : {};
-  },
   exchanges: [
-    ...defaultExchanges,
+    authExchange({
+      getAuth: getAuth,
+      didAuthError: ({ error }) => {
+        return error.graphQLErrors.some(e => e.extensions?.code === "ACCESS_DENIED");
+      },
+      addAuthToOperation: ({ authState, operation }) => {
+        return withAuthHeader(operation, authState!.token);
+      },
+    }),
+    fetchExchange,
     subscriptionExchange({
-      forwardSubscription: (operation) => subscriptionClient.request(operation),
+      forwardSubscription: (operation: any) => subscriptionClient.request(operation),
     }),
   ],
 });
 
 ReactDOM.render(
   <React.StrictMode>
-    <ReactKeycloakProvider authClient={keycloak}>
+    <ReactKeycloakProvider authClient={keycloak} autoRefreshToken={false}>
       <Provider value={client}>
         <UserProvider>
           <MapProvider>

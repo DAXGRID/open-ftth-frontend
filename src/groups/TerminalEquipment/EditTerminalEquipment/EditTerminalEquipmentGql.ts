@@ -21,7 +21,7 @@ export function queryTerminalEquipmentDetails(
 export function queryTerminalEquipmentSpecifications(client: Client) {
   return client
     .query<SpanEquipmentSpecificationsResponse>(
-      QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS
+      QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS, {}
     )
     .toPromise();
 }
