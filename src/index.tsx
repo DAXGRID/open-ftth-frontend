@@ -107,7 +107,7 @@ const client = new Client({
     }),
     fetchExchange,
     subscriptionExchange({
-      forwardSubscription: (operation: any) => subscriptionClient.request(operation),
+      forwardSubscription: (operation) => subscriptionClient.request(operation),
     }),
   ],
 });
