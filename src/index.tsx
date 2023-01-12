@@ -14,17 +14,32 @@ import { UserProvider } from "./contexts/UserContext";
 import { OverlayProvider } from "./contexts/OverlayContext";
 import { authExchange } from '@urql/exchange-auth';
 
+const INITIAL_KEYCLOAK_DELAY = 300;
+
+function delay(ms: number) {
+  return new Promise(resolve => {
+    setTimeout(() => { resolve('') }, ms);
+  });
+}
+
 const subscriptionClient = new SubscriptionClient(
   `${Config.API_GATEWAY_WS_URI}/graphql`,
   {
-    lazy: true,
+    lazy: false,
     reconnect: true,
-    connectionParams: () => {
+    connectionParams: async () => {
+      // First time the application loads, the keycloak is not initalized.
+      // One way to figure out if it is, is by checking if the initial token has beens set.
+      // We wait `n` amount of time, before sending the initial request.
+      // This is quite ugly, but this is how it is done for now.
+      if (!keycloak.token) {
+        await delay(INITIAL_KEYCLOAK_DELAY);
+      }
+
       if (keycloak.token) {
         // This is an edge case where the token has not been refreshed correctly
-        // and we need to issue a new one. This is done async, so it might first be on
-        // the next connection that the new token is used.
-        keycloak.updateToken(30);
+        // and we need to issue a new one.
+        await keycloak.updateToken(30);
       }
 
       return {
@@ -53,8 +68,16 @@ const withAuthHeader = (operation: Operation, token: string) => {
 };
 
 const getAuth = async () => {
-  // First time the application loads, the keycloak token is not set.
-  // When the servers returns unauthorized, we get a new token.
+  // First time the application loads, the keycloak is not initalized.
+  // One way to figure out if it is, is by checking if the initial token has beens set.
+  // We wait `n` amount of time, before sending the initial request.
+  // This is quite ugly, but this is how it is done for now.
+  if (!keycloak.token) {
+    await delay(INITIAL_KEYCLOAK_DELAY);
+  }
+
+  // If the tokens has not been set after `n` amount of time, we just return
+  // an empty token, this will result in a new token been issued.
   if (!keycloak.token) {
     return { token: "" }
   }
