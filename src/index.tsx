@@ -20,6 +20,13 @@ const subscriptionClient = new SubscriptionClient(
     lazy: true,
     reconnect: true,
     connectionParams: () => {
+      if (keycloak.token) {
+        // This is an edge case where the token has not been refreshed correctly
+        // and we need to issue a new one. This is done async, so it might first be on
+        // the next connection that the new token is used.
+        keycloak.updateToken(30);
+      }
+
       return {
         Authorization: `Bearer ${keycloak.token}`,
       };
@@ -84,7 +91,7 @@ const client = new Client({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ReactKeycloakProvider authClient={keycloak} autoRefreshToken={false}>
+    <ReactKeycloakProvider authClient={keycloak} autoRefreshToken={true}>
       <Provider value={client}>
         <UserProvider>
           <MapProvider>
