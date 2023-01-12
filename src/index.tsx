@@ -114,7 +114,7 @@ const client = new Client({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ReactKeycloakProvider authClient={keycloak} autoRefreshToken={true}>
+    <ReactKeycloakProvider authClient={keycloak} autoRefreshToken={false}>
       <Provider value={client}>
         <UserProvider>
           <MapProvider>
