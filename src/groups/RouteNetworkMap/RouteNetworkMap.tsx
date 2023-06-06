@@ -179,7 +179,8 @@ function mapFitBounds(
     minY: number;
     maxX: number;
     maxY: number;
-  }
+  },
+  animate: boolean
 ) {
   map.fitBounds(
     [
@@ -187,41 +188,89 @@ function mapFitBounds(
       [envelope.maxX, envelope.maxY],
     ],
     {
-      animate: false,
+      animate: animate,
     }
   );
 }
 
 type RouteNetworkMapProps = {
   showSchematicDiagram: (show: boolean) => void;
+  initialEnvelope?: {
+    minX: number;
+    minY: number;
+    maxX: number;
+    maxY: number;
+  };
+  initialMarker?: {
+    x: number;
+    y: number;
+  };
 };
 
-function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
+function RouteNetworkMap({
+  showSchematicDiagram,
+  initialEnvelope,
+  initialMarker,
+}: RouteNetworkMapProps) {
   const { t } = useTranslation();
   const mapContainer = useRef<HTMLDivElement>(null);
   const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
+  const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const { setIdentifiedFeature, trace, searchResult } = useContext(MapContext);
   const [mapLibreStyle, setMaplibreStyle] = useState<Style | null>(null);
 
   useEffect(() => {
-    GetMaplibreStyle().then((r) => {
+    getMaplibreStyle().then((r) => {
       setMaplibreStyle(r);
     });
   }, [setMaplibreStyle]);
 
   useEffect(() => {
-    if (!map.current) return;
-    if (trace.wgs84) {
-      mapFitBounds(map.current, {
-        minX: trace.wgs84.minX,
-        minY: trace.wgs84.minY,
-        maxX: trace.wgs84.maxX,
-        maxY: trace.wgs84.maxY,
+    if (mapLoaded && map.current && initialEnvelope) {
+      mapFitBounds(map.current, initialEnvelope, true);
+    }
+  }, [map, initialEnvelope, mapLoaded]);
+
+  useEffect(() => {
+    if (mapLoaded && map.current && initialMarker) {
+      console.log("setting initial marker");
+      const features: Feature<Geometry, GeoJsonProperties>[] = [];
+      const feature: Feature<Geometry, GeoJsonProperties> = {
+        id: 0,
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [initialMarker.x, initialMarker.y],
+        },
+        properties: {},
+      };
+
+      features.push(feature);
+
+      (map.current.getSource("initial_marker") as GeoJSONSource)?.setData({
+        type: "FeatureCollection",
+        features: features,
       });
     }
+  }, [map, initialMarker, mapLoaded]);
+
+  useEffect(() => {
+    if (!mapLoaded || !map.current) return;
+    if (trace.wgs84) {
+      mapFitBounds(
+        map.current,
+        {
+          minX: trace.wgs84.minX,
+          minY: trace.wgs84.minY,
+          maxX: trace.wgs84.maxX,
+          maxY: trace.wgs84.maxY,
+        },
+        false
+      );
+    }
     highlightGeometries(map.current, trace.geometries);
-  }, [trace, map]);
+  }, [trace, map, mapLoaded]);
 
   useEffect(() => {
     if (!mapLibreStyle || !mapContainer.current) return;
@@ -355,6 +404,26 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
         },
       });
 
+      newMap.addSource("initial_marker", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [],
+        },
+      });
+
+      newMap.addLayer({
+        id: "initial_marker",
+        type: "circle",
+        source: "initial_marker",
+        paint: {
+          "circle-radius": 12,
+          "circle-stroke-width": 2,
+          "circle-opacity": 0,
+          "circle-stroke-color": "#FF0000",
+        },
+      });
+
       newMap.addSource("information_marker", {
         type: "geojson",
         data: {
@@ -408,15 +477,22 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
         },
         filter: ["in", "$type", "LineString"],
       });
-    });
 
-    map.current = newMap;
+      map.current = newMap;
+      setMapLoaded(true);
+    });
 
     return () => {
       newMap.remove();
       map.current = null;
     };
-  }, [setIdentifiedFeature, showSchematicDiagram, t, mapLibreStyle]);
+  }, [
+    setIdentifiedFeature,
+    showSchematicDiagram,
+    t,
+    mapLibreStyle,
+    setMapLoaded,
+  ]);
 
   useEffect(() => {
     if (!map.current || !searchResult) return;
@@ -447,7 +523,11 @@ function RouteNetworkMap({ showSchematicDiagram }: RouteNetworkMapProps) {
   }, [searchResult]);
 
   return (
-    <div className="route-network-map">
+    <div
+      className={`route-network-map ${
+        mapLoaded ? "route-network-map--loaded" : ""
+      }`}
+    >
       <div className="route-network-map-container" ref={mapContainer}>
         <div id="distance" className="distance-container"></div>
       </div>

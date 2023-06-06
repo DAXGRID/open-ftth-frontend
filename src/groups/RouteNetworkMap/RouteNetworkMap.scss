@@ -3,6 +3,11 @@
 .route-network-map {
   width: 100%;
   height: 100%;
+  visibility: none;
+
+  &.route-network-map--loaded {
+    visibility: visible;
+  }
 
   .route-network-map-container {
     width: 100%;
