@@ -221,7 +221,7 @@ function RouteNetworkMap({
   const [mapLibreStyle, setMaplibreStyle] = useState<Style | null>(null);
 
   useEffect(() => {
-    getMaplibreStyle().then((r) => {
+    GetMaplibreStyle().then((r) => {
       setMaplibreStyle(r);
     });
   }, [setMaplibreStyle]);
