@@ -6,6 +6,8 @@ import { MapContext } from "../../contexts/MapContext";
 import TabMenuTop from "./TabMenuTop";
 import { useTranslation } from "react-i18next";
 import { UserContext } from "../../contexts/UserContext";
+import { lookupLocation } from "./LocationGql";
+import { useClient } from "urql";
 
 interface LocationSearchResponse {
   envelope: {
@@ -46,6 +48,7 @@ function MapDiagram() {
   const [locationSearchResponse, setLocationSearchResponse] =
     useState<LocationSearchResponse | null>(null);
   const location = useLocation();
+  const client = useClient();
 
   useEffect(() => {
     // Hack to handle issue with map not being displayed fully.
@@ -70,24 +73,29 @@ function MapDiagram() {
   }, []);
 
   useEffect(() => {
-    // TODO call GraphQL
     const { kind, value } = getLocationUrlParameters(location.search);
-    setTimeout(() => {
-      if (kind && value) {
-        const envelope = {
-          maxX: 9.846643823320909,
-          maxY: 55.84230941549938,
-          minX: 9.841922420538234,
-          minY: 55.83975657387827,
-        };
-        setLocationSearchResponse({
-          envelope: envelope,
-          routeElementId: "232df597-6217-4c26-bb76-95975db1812b",
-          coordinate: { x: 9.84454407055106, y: 55.84098217939197 },
+
+    if (kind !== null && value !== null) {
+      lookupLocation(client, kind, value)
+        .then(response => {
+          const location = response.data?.location.lookupLocation;
+          if (location) {
+            setLocationSearchResponse({
+              envelope: {
+                maxX: location.envelope.maxX,
+                maxY: location.envelope.maxY,
+                minX: location.envelope.minX,
+                minY: location.envelope.minY
+              },
+              routeElementId: location.routeElementId,
+              coordinate: { x: location.coordinate.x, y: location.coordinate.y },
+            });
+          } else {
+            throw Error("Could not redirect to location, retrieved null value.");
+          }
         });
-      }
-    }, 10);
-  }, [location.search, setLocationSearchResponse]);
+    }
+  }, [location.search, setLocationSearchResponse, client]);
 
   useEffect(() => {
     if (locationSearchResponse) {
