@@ -234,7 +234,6 @@ function RouteNetworkMap({
 
   useEffect(() => {
     if (mapLoaded && map.current && initialMarker) {
-      console.log("setting initial marker");
       const features: Feature<Geometry, GeoJsonProperties>[] = [];
       const feature: Feature<Geometry, GeoJsonProperties> = {
         id: 0,
