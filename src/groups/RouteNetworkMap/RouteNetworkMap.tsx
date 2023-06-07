@@ -228,7 +228,7 @@ function RouteNetworkMap({
 
   useEffect(() => {
     if (mapLoaded && map.current && initialEnvelope) {
-      mapFitBounds(map.current, initialEnvelope, true);
+      mapFitBounds(map.current, initialEnvelope, false);
     }
   }, [map, initialEnvelope, mapLoaded]);
 
