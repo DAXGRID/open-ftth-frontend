@@ -131,6 +131,10 @@ function BridgeConnector() {
           return;
         }
 
+        if (!data.identifiedFeatureId) {
+          return;
+        }
+
         if (data.username === keycloak.profile?.username) {
           if (data.identifiedFeatureId === "uuid_generate_v4()") {
             toast.error(t("NOT_VALID_SELECTION"));
