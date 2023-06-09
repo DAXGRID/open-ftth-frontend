@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { UserContext } from "../../contexts/UserContext";
 import { lookupLocation } from "./LocationGql";
 import { useClient } from "urql";
+import { toast } from "react-toastify";
 
 interface LocationSearchResponse {
   envelope: {
@@ -78,24 +79,31 @@ function MapDiagram() {
     if (kind !== null && value !== null) {
       lookupLocation(client, kind, value)
         .then(response => {
-          const location = response.data?.location.lookupLocation;
-          if (location) {
-            setLocationSearchResponse({
-              envelope: {
-                maxX: location.envelope.maxX,
-                maxY: location.envelope.maxY,
-                minX: location.envelope.minX,
-                minY: location.envelope.minY
-              },
-              routeElementId: location.routeElementId,
-              coordinate: { x: location.coordinate.x, y: location.coordinate.y },
-            });
-          } else {
-            throw Error("Could not redirect to location, retrieved null value.");
+          if (response?.error !== undefined && response?.error !== null) {
+            toast.error(t("COULD_NOT_FIND_LOCATION"))
+            console.error(response.error?.message);
+            return;
           }
+
+          if (!response.data?.location) {
+            toast.error(t("ERROR"));
+            return;
+          }
+
+          const location = response.data.location.lookupLocation;
+          setLocationSearchResponse({
+            envelope: {
+              maxX: location.envelope.maxX,
+              maxY: location.envelope.maxY,
+              minX: location.envelope.minX,
+              minY: location.envelope.minY
+            },
+            routeElementId: location.routeElementId,
+            coordinate: { x: location.coordinate.x, y: location.coordinate.y },
+          });
         });
     }
-  }, [location.search, setLocationSearchResponse, client]);
+  }, [location.search, setLocationSearchResponse, client, t]);
 
   useEffect(() => {
     if (locationSearchResponse) {

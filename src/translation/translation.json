@@ -264,7 +264,8 @@
       "SILVER": "Silver",
       "VIOLET": "Violet",
       "TURQUOISE": "Turquoise",
-      "MESSAGE_HAS_BEEN_SENT": "Message has been sent"
+      "MESSAGE_HAS_BEEN_SENT": "Message has been sent",
+      "COULD_NOT_FIND_LOCATION": "Could not find the location"
     }
   },
   "dk": {
@@ -532,7 +533,8 @@
       "SILVER": "Sølv",
       "VIOLET": "Violet",
       "TURQUOISE": "Turkis",
-      "MESSAGE_HAS_BEEN_SENT": "Beskeden er sendt"
+      "MESSAGE_HAS_BEEN_SENT": "Beskeden er sendt",
+      "COULD_NOT_FIND_LOCATION": "Kunne ikke finde lokationen"
     }
   }
 }
