@@ -32,10 +32,16 @@ interface LocationParameters {
 function getLocationUrlParameters(
   parametersString: string
 ): LocationParameters {
-  const searchParams = new URLSearchParams(parametersString);
+  const params = new URLSearchParams(parametersString);
+
+  const newParams = new URLSearchParams();
+  for (const [name, value] of params) {
+    newParams.append(name.toLowerCase(), value);
+  }
+
   return {
-    kind: searchParams.get("locationKind"),
-    value: searchParams.get("locationValue"),
+    kind: newParams.get("locationkind"),
+    value: newParams.get("locationvalue"),
   };
 }
 
