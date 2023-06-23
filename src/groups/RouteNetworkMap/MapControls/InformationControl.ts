@@ -46,7 +46,7 @@ function parseBody(htmlBody: string, obj: any): string {
   for (let i = 0; i < matches.length; i++) {
     result = result.replace(
       matches[i][0],
-      resolve(matches[i][0].replaceAll("{", "").replaceAll("}", ""), obj)
+      resolve(matches[i][0].replaceAll("{", "").replaceAll("}", ""), obj) ?? ""
     );
   }
 
