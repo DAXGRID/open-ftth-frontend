@@ -214,6 +214,12 @@ strong {
   margin-bottom: 20px;
 }
 
+.mapboxgl-popup {
+  /* This is a hack, we do not have access to the elment specific style, */
+  /* so we have to set it here */
+  max-width: 100% !important;
+}
+
 .mapboxgl-popup-tip {
   /* We do not want to display the popup tip */
   display: none;
