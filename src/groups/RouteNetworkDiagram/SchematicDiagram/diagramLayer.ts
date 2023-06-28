@@ -124,6 +124,7 @@ export function getLayer(name: string): AnyLayer {
     case "OuterConduitViolet":
     case "OuterConduitPink":
     case "OuterConduitYellow":
+    case "OuterConduitTransparent":
       return {
         id: "OuterConduit",
         source: "OuterConduit",
@@ -157,6 +158,8 @@ export function getLayer(name: string): AnyLayer {
             colorMap.LIGHT_PINK,
             "OuterConduitYellow",
             colorMap.LIGHT_YELLOW,
+            "OuterConduitTransparent",
+            colorMap.TRANSPARENT,
             "#ccc",
           ],
         },
@@ -173,6 +176,7 @@ export function getLayer(name: string): AnyLayer {
     case "InnerConduitViolet":
     case "InnerConduitPink":
     case "InnerConduitTurquoise":
+    case "InnerConduitNeonGreen":
       return {
         id: "InnerConduit",
         source: "InnerConduit",
@@ -206,6 +210,8 @@ export function getLayer(name: string): AnyLayer {
             colorMap.PINK,
             "InnerConduitTurquoise",
             colorMap.TURQUOISE,
+            "InnerConduitNeonGreen",
+            colorMap.NEON_GREEN,
             "#ccc",
           ],
         },

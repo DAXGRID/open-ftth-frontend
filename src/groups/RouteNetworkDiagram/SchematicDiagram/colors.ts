@@ -12,6 +12,7 @@ const colorMap = {
   ORANGE: "#ff9900",
   GREEN: "#00ff00",
   LIGHT_GREEN: "#a3ffa3",
+  NEON_GREEN: "#39FF14",
   BLACK: "#000000",
   GREY: "#808080",
   LIGHT_GREY: "#c4c0c0",
@@ -21,6 +22,7 @@ const colorMap = {
   LIGHT_PINK: "#ffbdde",
   TURQUOISE: "#00ffff",
   LIGHT_TURQUOISE: "#a8ffff",
+  TRANSPARENT: "#f9f9f9",
 };
 
 export default colorMap;
