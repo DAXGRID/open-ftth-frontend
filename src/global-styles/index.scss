@@ -218,6 +218,8 @@ strong {
   /* This is a hack, we do not have access to the elment specific style, */
   /* so we have to set it here */
   max-width: 100% !important;
+  /* To avoid that the popup is right on top of the selected item. */
+  padding-top: 20px;
 }
 
 .mapboxgl-popup-tip {
