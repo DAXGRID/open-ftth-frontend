@@ -13,7 +13,7 @@ import SchematicDiagram from "../SchematicDiagram";
 import ToggleButton from "../../../components/ToggleButton";
 import ActionButton from "../../../components/ActionButton";
 import MultiOptionActionButton from "../../../components/MultiOptionActionButton";
-import { MapContext } from "../../../contexts/MapContext";
+import { MapContext, IdentifiedFeature } from "../../../contexts/MapContext";
 import { OverlayContext } from "../../../contexts/OverlayContext";
 import { DiagramContext } from "../DiagramContext";
 import NodeContainerDetails from "../NodeContainerDetails";
@@ -233,11 +233,14 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const [spanEquipmentTabViewSelectedId, setSpanEquipmentTabViewSelectedId] =
     useState("0");
   const [rackTabViewSelectedId, setRackTabViewSelectedId] = useState("0");
-  const { identifiedFeature, setTrace } = useContext(MapContext);
+  const { setTrace, identifiedFeature } = useContext(MapContext);
   const [showModals, showModalsDispatch] = useReducer(
     showModalsReducer,
     showModalsInitialState
   );
+  // This is a hack to avoid re-renders before all state have been set.
+  // This could have been much cleaner with a reducer, but that is not an easy solution to implement.
+  const [localIdentifiedFeature, setLocalIdentifiedFeature] = useState<IdentifiedFeature | null>()
 
   const [, cutSpanSegmentsMutation] =
     useMutation<CutSpanSegmentsResponse>(CUT_SPAN_SEGMENTS);
@@ -260,7 +263,14 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
   useEffect(() => {
     setEditMode(false);
-  }, [identifiedFeature, setEditMode]);
+    setLocalIdentifiedFeature(identifiedFeature);
+    setSingleSelectedFeature(null);
+    setSelectedFeatures([]);
+  }, [identifiedFeature,
+      setEditMode,
+      setLocalIdentifiedFeature,
+      setSingleSelectedFeature,
+      setSelectedFeatures]);
 
   useEffect(() => {
     showModalsDispatch({ type: "reset" });
@@ -333,13 +343,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       })
       .map((x) => x.properties?.refId as string);
 
-    if (!identifiedFeature?.id) {
+    if (!localIdentifiedFeature?.id) {
       toast.error(t("No identified feature"));
       return;
     }
 
     const parameters: CutSpanSegmentsParameter = {
-      routeNodeId: identifiedFeature.id,
+      routeNodeId: localIdentifiedFeature.id,
       spanSegmentsToCut: spanSegmentsToCut,
     };
 
@@ -360,13 +370,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       })
       .map((x) => x.properties?.refId as string);
 
-    if (!identifiedFeature?.id) {
+    if (!localIdentifiedFeature?.id) {
       toast.error(t("No identified feature"));
       return;
     }
 
     const parameters: ConnectSpanSegmentsParameter = {
-      routeNodeId: identifiedFeature.id,
+      routeNodeId: localIdentifiedFeature.id,
       spanSegmentsToConnect: spanSegmentsToConnect,
     };
 
@@ -396,13 +406,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
     const spanSegmentsToDisconnect = [...innerConduits, ...outerConduits];
 
-    if (!identifiedFeature?.id) {
+    if (!localIdentifiedFeature?.id) {
       toast.error(t("No identified feature"));
       return;
     }
 
     const parameters: DisconnectSpanSegmentsParameter = {
-      routeNodeId: identifiedFeature.id,
+      routeNodeId: localIdentifiedFeature.id,
       spanSegmentsToDisconnect: spanSegmentsToDisconnect,
     };
 
@@ -433,13 +443,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       return;
     }
 
-    if (!identifiedFeature?.id) {
+    if (!localIdentifiedFeature?.id) {
       toast.error(t("No identified feature"));
       return;
     }
 
     const parameters: DetachSpanEquipmentParameters = {
-      routeNodeId: identifiedFeature.id,
+      routeNodeId: localIdentifiedFeature.id,
       spanSegmentIds: spanSegmentsIds,
     };
 
@@ -455,7 +465,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const removeObject = async () => {
-    if (!identifiedFeature?.id) {
+    if (!localIdentifiedFeature?.id) {
       toast.error("ERROR");
       console.error("Identified feature id was not set.");
       return;
@@ -531,7 +541,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           REMOVE_RACK_FROM_NODE_CONTAINER,
           {
             rackId: objectToRemove.id,
-            routeNodeId: identifiedFeature.id,
+            routeNodeId: localIdentifiedFeature.id,
           } as RemoveRackFromNodeContainerParams
         )
         .toPromise();
@@ -547,7 +557,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     } else if (objectToRemove.source === "TerminalEquipment") {
       const response = await client
         .mutation<RemoveTerminalEquipmentResponse>(REMOVE_TERMINAL_EQUIPMENT, {
-          routeNodeId: identifiedFeature.id,
+          routeNodeId: localIdentifiedFeature.id,
           terminalEquipmentId: objectToRemove.id,
         } as RemoveTerminalEquipmentParams)
         .toPromise();
@@ -697,7 +707,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               show: false,
             }),
           t("ESTABLISH_CUSTOMER_CONNECTION"),
-          identifiedFeature?.id ?? ""
+          localIdentifiedFeature?.id ?? ""
         )
       );
     } else if (showModals.addRack) {
@@ -718,7 +728,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           () =>
             showModalsDispatch({ type: "addTerminalEquipment", show: false }),
           t("ADD_TERMINAL_EQUIPMENT"),
-          identifiedFeature?.id ?? "",
+          localIdentifiedFeature?.id ?? "",
           currentlySelectedFeatures
         )
       );
@@ -727,7 +737,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         outageViewModal(
           () => showModalsDispatch({ type: "outageView", show: false }),
           t("OUTAGE_VIEW"),
-          identifiedFeature?.id ?? ""
+          localIdentifiedFeature?.id ?? ""
         )
       );
     } else {
@@ -735,7 +745,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     }
   }, [
     showModals,
-    identifiedFeature?.id,
+    localIdentifiedFeature?.id,
     t,
     currentlySelectedFeatures,
     showElement,
@@ -780,7 +790,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     );
 
     if (
-      !identifiedFeature?.id ||
+      !localIdentifiedFeature?.id ||
       !fiberCable?.properties?.refId ||
       !innerOrOuterConduit?.properties?.refId
     ) {
@@ -788,7 +798,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     }
 
     const params: AffixSpanEquipmentToParentParams = {
-      routeNodeId: identifiedFeature.id,
+      routeNodeId: localIdentifiedFeature.id,
       spanSegmentIdOne: fiberCable.properties.refId,
       spanSegmentIdTwo: innerOrOuterConduit.properties.refId,
     };
@@ -814,7 +824,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
   };
 
-  if (!identifiedFeature?.id) {
+  if (!localIdentifiedFeature?.id) {
     return <div></div>;
   }
 
@@ -822,7 +832,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     <div className="route-network-diagram">
       <FeatureInformation />
 
-      {identifiedFeature.type === "RouteNode" && (
+      {localIdentifiedFeature.type === "RouteNode" && (
         <DiagramMenu>
           <ToggleButton
             icon={PencilSvg}
@@ -969,7 +979,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           />
         </DiagramMenu>
       )}
-      {identifiedFeature.type === "RouteSegment" && (
+      {localIdentifiedFeature.type === "RouteSegment" && (
         <DiagramMenu>
           <ActionButton
             icon={EraserSvg}
@@ -997,7 +1007,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         envelope={envelope}
         onSelectFeature={onSelectedFeature}
         editMode={editMode}
-        routeElementId={identifiedFeature.id}
+        routeElementId={localIdentifiedFeature.id}
       />
       {!editMode && singleSelectedFeature?.source === "NodeContainer" && (
         <NodeContainerDetails
@@ -1023,7 +1033,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                         id: "0",
                         view: (
                           <GeneralView
-                            routeNodeId={identifiedFeature?.id ?? ""}
+                            routeNodeId={localIdentifiedFeature?.id ?? ""}
                             terminalEquipmentId={
                               singleSelectedFeature.properties?.refId ?? ""
                             }
@@ -1036,7 +1046,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                         id: "1",
                         view: (
                           <TerminalEquipment
-                            routeNodeId={identifiedFeature?.id ?? ""}
+                            routeNodeId={localIdentifiedFeature?.id ?? ""}
                             terminalEquipmentOrRackId={
                               singleSelectedFeature.properties?.refId ?? ""
                             }
@@ -1051,7 +1061,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                         id: "0",
                         view: (
                           <TerminalEquipment
-                            routeNodeId={identifiedFeature?.id ?? ""}
+                            routeNodeId={localIdentifiedFeature?.id ?? ""}
                             terminalEquipmentOrRackId={
                               singleSelectedFeature.properties?.refId ?? ""
                             }
@@ -1078,7 +1088,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                   view: (
                     <PassageView
                       editable={true}
-                      routeElementId={identifiedFeature?.id ?? ""}
+                      routeElementId={localIdentifiedFeature?.id ?? ""}
                       spanEquipmentOrSegmentIds={
                         singleSelectedFeature.properties?.refId ?? ""
                       }
@@ -1090,7 +1100,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                   title: t("CONNECTIVITY"),
                   view: (
                     <ConnectivityView
-                      routeNetworkElementId={identifiedFeature?.id ?? ""}
+                      routeNetworkElementId={localIdentifiedFeature?.id ?? ""}
                       spanEquipmentId={
                         singleSelectedFeature.properties?.refId ?? ""
                       }
