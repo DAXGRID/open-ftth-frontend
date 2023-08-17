@@ -2,7 +2,7 @@ import { createContext, ReactNode, useState, useEffect } from "react";
 
 type FeatureType = "RouteNode" | "RouteSegment" | "Deleted";
 
-type IdentifiedFeature = {
+export type IdentifiedFeature = {
   id: string | null;
   type: FeatureType | null;
 };
