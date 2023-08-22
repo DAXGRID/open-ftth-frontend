@@ -51,7 +51,7 @@
     ]
   },
   "devDependencies": {
-    "@types/geojson": "^7946.0.8",
+    "@types/geojson": "^7946.0.10",
     "@types/node": "^15.12.4",
     "@types/pubsub-js": "^1.8.2",
     "@types/react": "^17.0.11",
