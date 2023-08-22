@@ -1,7 +1,7 @@
 import {
   faEdit,
   faFilter,
-  faPlusCircle,
+  faPlus,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -134,7 +134,7 @@ function TerminalEquipmentTableContainer({
                   })
                 }
               >
-                <FontAwesomeIcon icon={faPlusCircle} />
+                <FontAwesomeIcon icon={faPlus} />
               </span>
             </>
           )}
