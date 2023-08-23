@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ConnectivityTraceView } from "./TerminalEquipmentGql";
 import { TerminalEquipmentContext } from "./TerminalEquipmentContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearchPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlassLocation } from "@fortawesome/free-solid-svg-icons";
 
 interface TraceViewProps {
   view: { view: ConnectivityTraceView | null; show: boolean };
@@ -32,7 +32,7 @@ function TerminalEquipmentTraceView({ view }: TraceViewProps) {
               })
             }
           >
-            <FontAwesomeIcon icon={faSearchPlus} />
+            <FontAwesomeIcon icon={faMagnifyingGlassLocation} />
           </div>
         </div>
       </div>
