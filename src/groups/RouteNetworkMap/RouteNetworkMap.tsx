@@ -1,3 +1,4 @@
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
 import {
@@ -523,9 +524,8 @@ function RouteNetworkMap({
 
   return (
     <div
-      className={`route-network-map ${
-        mapLoaded ? "route-network-map--loaded" : ""
-      }`}
+      className={`route-network-map ${mapLoaded ? "route-network-map--loaded" : ""
+        }`}
     >
       <div className="route-network-map-container" ref={mapContainer}>
         <div id="distance" className="distance-container"></div>

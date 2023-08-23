@@ -80,7 +80,7 @@ function mapWorkTasksBodyItems(workTasks: WorkTask[]): BodyItem[] {
 
 function mapProjectSelectOptions(workTasks: WorkTask[]): SelectOption[] {
   return workTasks.reduce<SelectOption[]>((acc, x) => {
-    const notInCollection = !!!acc.find((y) => y.value === x.projectNumber);
+    const notInCollection = !acc.find((y) => y.value === x.projectNumber);
     return notInCollection && x.projectName && x.projectNumber
       ? [
           ...acc,
@@ -96,7 +96,7 @@ function mapProjectSelectOptions(workTasks: WorkTask[]): SelectOption[] {
 
 function mapWorkTaskType(workTasks: WorkTask[]): SelectOption[] {
   return workTasks.reduce<SelectOption[]>((acc, x) => {
-    const notInCollection = !!!acc.find((y) => y.value === x.type);
+    const notInCollection = !acc.find((y) => y.value === x.type);
     return notInCollection && x.type
       ? [
           ...acc,
@@ -112,7 +112,7 @@ function mapWorkTaskType(workTasks: WorkTask[]): SelectOption[] {
 
 function mapWorkTaskStatus(workTasks: WorkTask[]): SelectOption[] {
   return workTasks.reduce<SelectOption[]>((acc, x) => {
-    const notInCollection = !!!acc.find((y) => y.value === x.status);
+    const notInCollection = !acc.find((y) => y.value === x.status);
     return notInCollection && x.status
       ? [
           ...acc,

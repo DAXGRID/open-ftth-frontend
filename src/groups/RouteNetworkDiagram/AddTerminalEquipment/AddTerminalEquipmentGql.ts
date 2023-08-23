@@ -54,10 +54,6 @@ export interface RackResponse {
   };
 }
 
-export interface Rack {
-  name: string;
-}
-
 export const QUERY_RACK = `
 query (
   $routeNodeId: ID!,
