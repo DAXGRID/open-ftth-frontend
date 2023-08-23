@@ -57,7 +57,7 @@ function renderNodeTree(
   node: TreeNode,
   onCheckboxClicked: (treeNode: TreeNode) => void,
   onExpandClick: (treeNode: TreeNode) => void
-): JSX.Element {
+) {
   const expandable = node.expanded !== null || node.expanded !== undefined;
 
   const notExpanded =

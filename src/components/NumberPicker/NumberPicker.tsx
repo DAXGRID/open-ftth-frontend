@@ -1,3 +1,5 @@
+import React from "react";
+
 export type NumberPickerProps = {
   value: number;
   setValue: (value: number) => void;
