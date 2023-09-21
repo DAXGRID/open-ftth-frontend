@@ -18,11 +18,13 @@ executors:
   alpine-git:
     environment:
       IMAGE_NAME: openftth/frontend
+      CHART_PATH: ./dax/openftth-frontend
+      GIT_USER_NAME: "dax-bot"
+      GIT_USER_EMAIL: "admin@dax.dk"
+      GIT_CLONE_REPO: "git@github.com:DAXGRID/dax-charts.git"
+      SSH_FINGERPRINT: "df:5e:75:0f:54:3d:be:51:14:b1:86:3d:1a:39:72:12"
     docker:
     - image: alpine/git
-      auth:
-        username: $DOCKER_LOGIN
-        password: $DOCKER_ACCESSTOKEN
 
 jobs:
   build-app:
@@ -78,28 +80,26 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "df:5e:75:0f:54:3d:be:51:14:b1:86:3d:1a:39:72:12"
+            - $SSH_FINGERPRINT
       - run:
           name: key-scan
           command: ssh-keyscan github.com >> ~/.ssh/known_hosts
       - run:
-          name: git clone open-ftth-chart
-          command: git clone git@github.com:DAXGRID/open-ftth-chart.git
+          name: git clone charts repo
+          command: git clone $GIT_CLONE_REPO
       - run:
           name: package and push
           command: |
              apk add bash
              IMAGE_TAG_NO_V=${CIRCLE_TAG:1}
-             cd ./open-ftth-chart
-             git config user.email "admin@dax.dk"
-             git config user.name "dax-bot"
-             sed -i "/appVersion:.*/c\appVersion: \"$IMAGE_TAG_NO_V\"" ./openftth/charts/frontend/Chart.yaml
-             sed -i "/  tag:.*/c\  tag: v$IMAGE_TAG_NO_V" ./openftth/charts/frontend/values.yaml
-             CHART_VERSION="$(./scripts/increment-chart-number.sh "$(grep -w '^version:' ./openftth/Chart.yaml)" bug)"
-             sed -i "/^version:.*/c\version: $CHART_VERSION" ./openftth/Chart.yaml
+             cd ./dax-charts
+             git config user.email $GIT_USER_EMAIL
+             git config user.name $GIT_USER_NAME
+             ./scripts/update-chart-version.sh $CHART_PATH $IMAGE_TAG_NO_V
              git add .
-             git commit -m "upgrades $IMAGE_NAME to version $CHART_VERSION"
+             git commit -m "upgrades $IMAGE_NAME to version $CIRCLE_TAG"
              git push
+
 workflows:
   build-test-upload_image:
     jobs:
