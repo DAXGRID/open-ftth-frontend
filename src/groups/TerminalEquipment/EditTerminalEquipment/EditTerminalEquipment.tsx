@@ -27,7 +27,7 @@ function rackToOption(racks: Rack[]): SelectOption[] {
 
 function accessAddressToOption(
   nearestAccessAddress: NearestAccessAddress,
-  t: TFunction<"translation">
+  t: TFunction<"translation">,
 ): SelectOption {
   return {
     text: `${nearestAccessAddress.accessAddress.roadName} ${
@@ -48,13 +48,13 @@ function unitAddressToOption(unitAddress: UnitAddress): SelectOption {
 
 function categoryToOptions(
   specs: TerminalEquipmentSpecification[],
-  isRackEquipment: boolean
+  isRackEquipment: boolean,
 ): SelectOption[] {
   return [
     ...new Set(
       specs
         .filter((x) => x.isRackEquipment === isRackEquipment)
-        .map((x) => x.category)
+        .map((x) => x.category),
     ),
   ].map((x, i) => ({
     text: x,
@@ -66,7 +66,7 @@ function categoryToOptions(
 function specificationToOptions(
   specs: TerminalEquipmentSpecification[],
   category: string,
-  isRackEquipment: boolean
+  isRackEquipment: boolean,
 ): SelectOption[] {
   return specs
     .filter((x) => x.isRackEquipment === isRackEquipment)
@@ -76,7 +76,7 @@ function specificationToOptions(
 
 function manufacturerToOptions(
   specs: Manufacturer[],
-  refs: string[]
+  refs: string[],
 ): SelectOption[] {
   return specs
     .filter((x) => refs.findIndex((y) => y === x.id))
@@ -182,7 +182,7 @@ function reducer(state: State, action: Action): State {
       throw new Error(
         `No action found of type: '${
           (action as any)?.type ?? "has no action type"
-        }'`
+        }'`,
       );
   }
 }
@@ -327,7 +327,7 @@ function EditTerminalEquipment({
 
     return categoryToOptions(
       state.terminalEquipmentSpecifications,
-      state?.terminalEquipment.specification.isRackEquipment
+      state?.terminalEquipment.specification.isRackEquipment,
     );
   }, [state.terminalEquipment, state.terminalEquipmentSpecifications]);
 
@@ -342,7 +342,7 @@ function EditTerminalEquipment({
     return specificationToOptions(
       state.terminalEquipmentSpecifications,
       state.categoryName,
-      state.terminalEquipment.specification.isRackEquipment
+      state.terminalEquipment.specification.isRackEquipment,
     );
   }, [
     state.terminalEquipmentSpecifications,
@@ -359,8 +359,8 @@ function EditTerminalEquipment({
       ...manufacturerToOptions(
         state.manufacturers,
         state.terminalEquipmentSpecifications.find(
-          (x) => x.id === state.specificationId
-        )?.manufacturerRefs ?? []
+          (x) => x.id === state.specificationId,
+        )?.manufacturerRefs ?? [],
       ),
     ];
   }, [
@@ -415,7 +415,7 @@ function EditTerminalEquipment({
       state.nearestAccessAddresses
         .find((x) => x.accessAddress.id === state.accessAddressId)
         ?.accessAddress.unitAddresses.sort((x, y) =>
-          x.externalId > y.externalId ? 1 : -1
+          x.externalId > y.externalId ? 1 : -1,
         )
         .map(unitAddressToOption) ?? [];
 
@@ -426,8 +426,30 @@ function EditTerminalEquipment({
     return state.racks ? rackToOption(state.racks) : [];
   }, [state.racks]);
 
+  useEffect(() => {
+    if (!state.accessAddressId) return;
+
+    // This effect is there to automatically set the unitAddressId in case of only a single unit address
+    // For the access address.
+    if (unitAddressOptions.length === 2) {
+      dispatch({
+        type: "setUnitAddressId",
+        id: unitAddressOptions[1].value.toString(),
+      });
+    }
+  }, [state.accessAddressId, unitAddressOptions]);
+
   const executeUpdateTerminalEquipment = () => {
     if (state.terminalEquipment?.id && state.specificationId) {
+      if (
+        state.terminalEquipment.specification.isAddressable &&
+        state.accessAddressId &&
+        !state.unitAddressId
+      ) {
+        toast.error(t("UNIT_ADDRESS_REQUIRED"));
+        return;
+      }
+
       updateTerminalEquipment(client, {
         terminalEquipmentId: terminalEquipmentId,
         terminalEquipmentSpecificationId: state.specificationId,
@@ -461,10 +483,12 @@ function EditTerminalEquipment({
         .then((r) => {
           if (r.data?.terminalEquipment.updateProperties.errorCode) {
             toast.error(
-              t(r.data?.terminalEquipment.updateProperties.errorCode ?? "ERROR")
+              t(
+                r.data?.terminalEquipment.updateProperties.errorCode ?? "ERROR",
+              ),
             );
             console.error(
-              r.data.terminalEquipment.updateProperties.errorMessage
+              r.data.terminalEquipment.updateProperties.errorMessage,
             );
           }
         })
@@ -575,16 +599,21 @@ function EditTerminalEquipment({
               enableSearch={true}
             />
           </div>
-          <div className="full-row">
-            <SelectMenu
-              options={unitAddressOptions ?? []}
-              onSelected={(x) =>
-                dispatch({ type: "setUnitAddressId", id: x?.toString() ?? "" })
-              }
-              selected={state.unitAddressId ?? ""}
-              enableSearch={true}
-            />
-          </div>
+          {unitAddressOptions.length > 2 && (
+            <div className="full-row">
+              <SelectMenu
+                options={unitAddressOptions ?? []}
+                onSelected={(x) =>
+                  dispatch({
+                    type: "setUnitAddressId",
+                    id: x?.toString() ?? "",
+                  })
+                }
+                selected={state.unitAddressId ?? ""}
+                enableSearch={true}
+              />
+            </div>
+          )}
           <div className="full-row">
             <TextBox
               placeHolder={t("ADDITIONAL_ADDRESS_INFORMATION")}
