@@ -27,7 +27,7 @@ import {
 
 function accessAddressToOption(
   nearestAccessAddress: NearestAccessAddress,
-  t: TFunction<"translation">
+  t: TFunction<"translation">,
 ): SelectOption {
   return {
     text: `${nearestAccessAddress.accessAddress.roadName} ${
@@ -48,13 +48,13 @@ function unitAddressToOption(unitAddress: UnitAddress): SelectOption {
 
 function categoryToOptions(
   specs: TerminalEquipmentSpecification[],
-  isRackEquipment: boolean
+  isRackEquipment: boolean,
 ): SelectOption[] {
   return [
     ...new Set(
       specs
         .filter((x) => x.isRackEquipment === isRackEquipment)
-        .map((x) => x.category)
+        .map((x) => x.category),
     ),
   ].map((x, i) => ({
     text: x,
@@ -66,7 +66,7 @@ function categoryToOptions(
 function specificationToOptions(
   specs: TerminalEquipmentSpecification[],
   category: string,
-  isRackEquipment: boolean
+  isRackEquipment: boolean,
 ): SelectOption[] {
   return specs
     .filter((x) => x.isRackEquipment === isRackEquipment)
@@ -76,7 +76,7 @@ function specificationToOptions(
 
 function manufacturerToOptions(
   specs: Manufacturer[],
-  refs: string[]
+  refs: string[],
 ): SelectOption[] {
   return specs
     .filter((x) => refs.findIndex((y) => y === x.id))
@@ -182,7 +182,7 @@ function AddTerminalEquipment({
   const [specificationResponse] = useQuery<SpanEquipmentSpecificationsResponse>(
     {
       query: QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS,
-    }
+    },
   );
 
   const [nearestAddressesResponse] = useQuery<NearestAccessAddressesResponse>({
@@ -204,7 +204,7 @@ function AddTerminalEquipment({
       return [];
     return categoryToOptions(
       specificationResponse.data.utilityNetwork.terminalEquipmentSpecifications,
-      !!rackId
+      !!rackId,
     );
   }, [
     specificationResponse.data?.utilityNetwork.terminalEquipmentSpecifications,
@@ -221,7 +221,7 @@ function AddTerminalEquipment({
     return specificationToOptions(
       specificationResponse.data.utilityNetwork.terminalEquipmentSpecifications,
       state.category,
-      !!rackId
+      !!rackId,
     );
   }, [
     specificationResponse.data?.utilityNetwork.terminalEquipmentSpecifications,
@@ -242,8 +242,8 @@ function AddTerminalEquipment({
       ...manufacturerToOptions(
         specificationResponse.data.utilityNetwork.manufacturers,
         specificationResponse.data.utilityNetwork.terminalEquipmentSpecifications.find(
-          (x) => x.id === state.specification
-        )?.manufacturerRefs ?? []
+          (x) => x.id === state.specification,
+        )?.manufacturerRefs ?? [],
       ),
     ];
   }, [state.specification, specificationResponse, t]);
@@ -296,7 +296,7 @@ function AddTerminalEquipment({
       nearestAddressesResponse.data?.addressService.nearestAccessAddresses
         .find((x) => x.accessAddress.id === state.accessAddressId)
         ?.accessAddress.unitAddresses.sort((x, y) =>
-          x.externalId > y.externalId ? 1 : -1
+          x.externalId > y.externalId ? 1 : -1,
         )
         .map(unitAddressToOption) ?? [];
 
@@ -306,7 +306,7 @@ function AddTerminalEquipment({
   const isAddressable = useMemo<boolean>(() => {
     return (
       specificationResponse.data?.utilityNetwork.terminalEquipmentSpecifications.find(
-        (x) => x.id === state.specification
+        (x) => x.id === state.specification,
       )?.isAddressable ?? false
     );
   }, [state.specification, specificationResponse]);
@@ -316,7 +316,25 @@ function AddTerminalEquipment({
     dispatch({ type: "setCategory", id: categoryOptions[0].value as string });
   }, [categoryOptions]);
 
+  useEffect(() => {
+    if (!state.accessAddressId) return;
+
+    // This effect is there to automatically set the unitAddressId in case of only a single unit address
+    // For the access address.
+    if (unitAddressOptions.length === 2) {
+      dispatch({
+        type: "setUnitAddressId",
+        id: unitAddressOptions[1].value.toString(),
+      });
+    }
+  }, [state.accessAddressId, unitAddressOptions]);
+
   const addTerminalEquipment = async () => {
+    if (isAddressable && state.accessAddressId && !state.unitAddressId) {
+      toast.error(t("UNIT_ADDRESS_REQUIRED"));
+      return;
+    }
+
     const params: PlaceTerminalEquipmentInNodeContainerParams = {
       routeNodeId: routeNodeId,
       terminalEquipmentSpecificationId: state.specification,
@@ -345,7 +363,7 @@ function AddTerminalEquipment({
     const response = await client
       .mutation<PlaceTerminalEquipmentInNodeContainerResponse>(
         PLACE_TERMINAL_EQUIPMENT_IN_NODE_CONTAINER,
-        params
+        params,
       )
       .toPromise();
 
@@ -356,8 +374,8 @@ function AddTerminalEquipment({
       toast.error(
         t(
           response.data?.nodeContainer?.placeTerminalEquipmentInNodeContainer
-            ?.errorCode ?? "ERROR"
-        )
+            ?.errorCode ?? "ERROR",
+        ),
       );
     } else {
       dispatch({ type: "reset" });
@@ -513,16 +531,21 @@ function AddTerminalEquipment({
               enableSearch={true}
             />
           </div>
-          <div className="full-row">
-            <SelectMenu
-              options={unitAddressOptions ?? []}
-              onSelected={(x) =>
-                dispatch({ type: "setUnitAddressId", id: x?.toString() ?? "" })
-              }
-              selected={state.unitAddressId}
-              enableSearch={true}
-            />
-          </div>
+          {unitAddressOptions.length > 2 && (
+            <div className="full-row">
+              <SelectMenu
+                options={unitAddressOptions ?? []}
+                onSelected={(x) =>
+                  dispatch({
+                    type: "setUnitAddressId",
+                    id: x?.toString() ?? "",
+                  })
+                }
+                selected={state.unitAddressId}
+                enableSearch={true}
+              />
+            </div>
+          )}
           <div className="full-row">
             <TextBox
               placeHolder={t("ADDITIONAL_ADDRESS_INFORMATION")}
