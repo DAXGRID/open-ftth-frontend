@@ -348,8 +348,6 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     }
   };
 
-  console.log(unitAddressOptions);
-
   const selectAccessAddressId = (id: string) => {
     setSelectedAccessAddressId(id);
     setSelectedUnitAddressId("");
