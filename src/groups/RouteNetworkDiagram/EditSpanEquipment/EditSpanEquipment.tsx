@@ -29,7 +29,7 @@ type EditSpanEquipmentParams = {
 
 function accessAddressToOption(
   nearestAccessAddress: NearestAccessAddress,
-  t: TFunction<"translation">
+  t: TFunction<"translation">,
 ): SelectOption {
   return {
     text: `${nearestAccessAddress.accessAddress.roadName} ${
@@ -50,7 +50,7 @@ function unitAddressToOption(unitAddress: UnitAddress): SelectOption {
 
 const getFilteredSpanEquipmentSpecifications = (
   specifications: SpanEquipmentSpecification[],
-  selectedCategory: string | number | undefined
+  selectedCategory: string | number | undefined,
 ) => {
   const bodyItems = specifications.map<BodyItem>((x) => {
     return {
@@ -72,7 +72,7 @@ const getFilteredManufacturers = (
   manufacturers: Manufacturer[],
   selectedSpanEquipmentSpecification: string | number | undefined,
   spanEquipmentSpecifications: SpanEquipmentSpecification[],
-  t: TFunction<"translation">
+  t: TFunction<"translation">,
 ) => {
   if (
     !manufacturers ||
@@ -90,11 +90,11 @@ const getFilteredManufacturers = (
   });
 
   const spanEquipment = spanEquipmentSpecifications.find(
-    (x) => x.id === selectedSpanEquipmentSpecification
+    (x) => x.id === selectedSpanEquipmentSpecification,
   );
   if (!spanEquipment) {
     throw new Error(
-      `Could not find SpanEquipment on id ${selectedSpanEquipmentSpecification}`
+      `Could not find SpanEquipment on id ${selectedSpanEquipmentSpecification}`,
     );
   }
 
@@ -122,7 +122,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
   const { t } = useTranslation();
   const client = useClient();
   const [colorMarkingOptions] = useState<SelectOption[]>(
-    colorOptions(Config.COLOR_OPTIONS, t)
+    colorOptions(Config.COLOR_OPTIONS, t),
   );
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [selectedManufacturer, setSelectedManufacturer] = useState<string>("");
@@ -152,7 +152,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       query: QUERY_SPAN_EQUIPMENT_DETAILS,
       variables: { spanEquipmentOrSegmentId: spanEquipmentMrid },
       pause: !spanEquipmentMrid,
-    }
+    },
   );
 
   const [spanEquipmentSpecificationsResponse] =
@@ -174,9 +174,9 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     () =>
       getFilteredSpanEquipmentSpecifications(
         spanEquipmentSpecifications,
-        selectedCategory
+        selectedCategory,
       ),
-    [spanEquipmentSpecifications, selectedCategory]
+    [spanEquipmentSpecifications, selectedCategory],
   );
 
   const filteredManufactuers = useMemo(
@@ -185,14 +185,14 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
         manufacturers,
         selectedSpanEquipmentSpecification,
         spanEquipmentSpecifications,
-        t
+        t,
       ),
     [
       manufacturers,
       selectedSpanEquipmentSpecification,
       spanEquipmentSpecifications,
       t,
-    ]
+    ],
   );
 
   const accessAddresses = useMemo<SelectOption[]>(() => {
@@ -237,7 +237,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       nearestAccessAddressesResponse.data?.addressService.nearestAccessAddresses
         .find((x) => x.accessAddress.id === selectedAccessAddressId)
         ?.accessAddress.unitAddresses.sort((x, y) =>
-          x.externalId > y.externalId ? 1 : -1
+          x.externalId > y.externalId ? 1 : -1,
         )
         .map(unitAddressToOption) ?? [];
 
@@ -266,7 +266,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
 
     setManufacturers(manufacturers);
     setSpanEquipmentssetSpanEquipmentSpecifications(
-      spanEquipmentSpecifications
+      spanEquipmentSpecifications,
     );
   }, [spanEquipmentSpecificationsResponse]);
 
@@ -282,15 +282,15 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     setSelectedColorMarking(markingInfo?.markingColor ?? "");
     setSelectedAccessAddressId(
       spanEquipmentDetailsResponse.data.utilityNetwork?.spanEquipment
-        ?.addressInfo?.accessAddress?.id ?? ""
+        ?.addressInfo?.accessAddress?.id ?? "",
     );
     setSelectedUnitAddressId(
       spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
-        ?.addressInfo?.unitAddress?.id ?? ""
+        ?.addressInfo?.unitAddress?.id ?? "",
     );
     setAdditionalAddressInformation(
       spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
-        ?.addressInfo?.remark ?? ""
+        ?.addressInfo?.remark ?? "",
     );
   }, [spanEquipmentDetailsResponse]);
 
@@ -312,6 +312,11 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       return;
     }
 
+    if (selectedAccessAddressId && !selectedUnitAddressId) {
+      toast.error(t("UNIT_ADDRESS_REQUIRED"));
+      return;
+    }
+
     const params: UpdateSpanEquipmentDetailsParameters = {
       spanEquipmentOrSegmentId: spanEquipmentMrid,
       manufacturerId:
@@ -330,7 +335,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     const result = await client
       .mutation<UpdateSpanEquipmentDetailsResponse>(
         MUTATION_UPDATE_SPAN_EQUIPMENT_DETAILS,
-        params
+        params,
       )
       .toPromise();
 
@@ -338,10 +343,12 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       toast.success(t("UPDATED"));
     } else {
       toast.error(
-        t(result.data?.spanEquipment.updateProperties.errorCode ?? "ERROR")
+        t(result.data?.spanEquipment.updateProperties.errorCode ?? "ERROR"),
       );
     }
   };
+
+  console.log(unitAddressOptions);
 
   const selectAccessAddressId = (id: string) => {
     setSelectedAccessAddressId(id);
@@ -393,14 +400,16 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
             enableSearch={true}
           />
         </div>
-        <div className="full-row">
-          <SelectMenu
-            options={unitAddressOptions ?? []}
-            onSelected={(x) => setSelectedUnitAddressId(x?.toString() ?? "")}
-            selected={selectedUnitAddressId}
-            enableSearch={true}
-          />
-        </div>
+        {unitAddressOptions.length > 1 && (
+          <div className="full-row">
+            <SelectMenu
+              options={unitAddressOptions ?? []}
+              onSelected={(x) => setSelectedUnitAddressId(x?.toString() ?? "")}
+              selected={selectedUnitAddressId}
+              enableSearch={true}
+            />
+          </div>
+        )}
         <div className="full-row">
           <TextBox
             placeHolder={t("ADDITIONAL_ADDRESS_INFORMATION")}
