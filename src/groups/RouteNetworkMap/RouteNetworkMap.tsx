@@ -70,7 +70,7 @@ function clickHighlight(
   map: Map,
   lastHighlightedFeature: React.RefObject<MapboxGeoJSONFeature>,
   measureDistanceControl: MeasureDistanceControl,
-  callback: (feature: MapboxGeoJSONFeature) => void
+  callback: (feature: MapboxGeoJSONFeature) => void,
 ) {
   map.on("click", (e) => {
     // Do nothing if the measure distance control is active to avoid
@@ -85,7 +85,7 @@ function clickHighlight(
     const changeSymbolIconImageHighlight = (
       iconLayer: any,
       feature: MapboxGeoJSONFeature,
-      remove: boolean
+      remove: boolean,
     ) => {
       // We have to do this check because mapbox is annoying and changes the type "randomly"
       let icon =
@@ -117,7 +117,7 @@ function clickHighlight(
         changeSymbolIconImageHighlight(
           iconImage,
           lastHighlightedFeature.current,
-          true
+          true,
         );
       }
 
@@ -181,7 +181,7 @@ function mapFitBounds(
     maxX: number;
     maxY: number;
   },
-  animate: boolean
+  animate: boolean,
 ) {
   map.fitBounds(
     [
@@ -190,7 +190,7 @@ function mapFitBounds(
     ],
     {
       animate: animate,
-    }
+    },
   );
 }
 
@@ -218,7 +218,8 @@ function RouteNetworkMap({
   const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
-  const { setIdentifiedFeature, trace, searchResult } = useContext(MapContext);
+  const { setIdentifiedFeature, trace, searchResult, identifiedFeature } =
+    useContext(MapContext);
   const [mapLibreStyle, setMaplibreStyle] = useState<Style | null>(null);
 
   useEffect(() => {
@@ -232,6 +233,35 @@ function RouteNetworkMap({
       mapFitBounds(map.current, initialEnvelope, false);
     }
   }, [map, initialEnvelope, mapLoaded]);
+
+  // This is a big hack to avoid last being selected when using the browser history.
+  useEffect(() => {
+    if (!map.current) {
+      return;
+    }
+
+    if (
+      lastHighlightedFeature?.current?.properties?.mrid ===
+      identifiedFeature?.id
+    ) {
+      return;
+    }
+
+    var clickEvent = new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      clientX: 0,
+      clientY: 0,
+    });
+
+    // Get the target element to dispatch the click event
+    var targetElement = map.current.getCanvas();
+
+    // Dispatch the click event on the target element
+    if (targetElement) {
+      targetElement.dispatchEvent(clickEvent);
+    }
+  }, [identifiedFeature]);
 
   useEffect(() => {
     if (mapLoaded && map.current && initialMarker) {
@@ -266,7 +296,7 @@ function RouteNetworkMap({
           maxX: trace.wgs84.maxX,
           maxY: trace.wgs84.maxY,
         },
-        false
+        false,
       );
     }
     highlightGeometries(map.current, trace.geometries);
@@ -294,19 +324,19 @@ function RouteNetworkMap({
           '<a href="https://openmaptiles.org/">© OpenMapTiles</a>',
         ],
       }),
-      "bottom-right"
+      "bottom-right",
     );
 
     newMap.addControl(
       new NavigationControl({
         showCompass: false,
       }),
-      "top-left"
+      "top-left",
     );
 
     newMap.addControl(
       new ToggleDiagramControl(showSchematicDiagram),
-      "top-right"
+      "top-right",
     );
 
     newMap.addControl(new SaveImgControl(), "top-right");
@@ -317,7 +347,7 @@ function RouteNetworkMap({
     ) {
       newMap.addControl(
         new InformationControl(Config.INFORMATION_CONTROL_CONFIG),
-        "top-right"
+        "top-right",
       );
     }
 
@@ -328,7 +358,7 @@ function RouteNetworkMap({
         },
         trackUserLocation: true,
         showAccuracyCircle: false,
-      })
+      }),
     );
     const measureDistanceControl = new MeasureDistanceControl(t("DISTANCE"));
     newMap.addControl(measureDistanceControl, "top-right");
@@ -339,9 +369,9 @@ function RouteNetworkMap({
         new ToggleLayerButton(
           Config.LAYERS.flatMap((x) => {
             return x.layerGroups;
-          })
+          }),
         ),
-        "top-right"
+        "top-right",
       );
       enableResize(newMap);
       hoverPointer(["route_node", "route_segment"], 10, newMap);
@@ -363,7 +393,7 @@ function RouteNetworkMap({
 
           lastHighlightedFeature.current = x;
           setIdentifiedFeature({ id: x?.properties?.mrid, type: type });
-        }
+        },
       );
 
       newMap.addSource("route_segment_trace", {
@@ -524,8 +554,9 @@ function RouteNetworkMap({
 
   return (
     <div
-      className={`route-network-map ${mapLoaded ? "route-network-map--loaded" : ""
-        }`}
+      className={`route-network-map ${
+        mapLoaded ? "route-network-map--loaded" : ""
+      }`}
     >
       <div className="route-network-map-container" ref={mapContainer}>
         <div id="distance" className="distance-container"></div>
