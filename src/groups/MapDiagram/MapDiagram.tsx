@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import RouteNetworkMap from "../RouteNetworkMap";
 import RouteNetworkDiagram from "../RouteNetworkDiagram";
 import { MapContext } from "../../contexts/MapContext";
@@ -27,11 +27,11 @@ interface LocationSearchResponse {
 interface LocationParameters {
   kind: string | null;
   value: string | null;
+  type: string | null;
+  id: string | null;
 }
 
-function getLocationUrlParameters(
-  parametersString: string
-): LocationParameters {
+function getUrlParameters(parametersString: string): LocationParameters {
   const params = new URLSearchParams(parametersString);
 
   const newParams = new URLSearchParams();
@@ -42,6 +42,8 @@ function getLocationUrlParameters(
   return {
     kind: newParams.get("locationkind"),
     value: newParams.get("locationvalue"),
+    type: newParams.get("type"),
+    id: newParams.get("id"),
   };
 }
 
@@ -56,6 +58,29 @@ function MapDiagram() {
     useState<LocationSearchResponse | null>(null);
   const location = useLocation();
   const client = useClient();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (
+      !identifiedFeature ||
+      !identifiedFeature.id ||
+      !identifiedFeature.type
+    ) {
+      return;
+    }
+
+    const params = new URLSearchParams({
+      id: identifiedFeature.id,
+      type: identifiedFeature.type,
+    });
+
+    const oldPath = `${history.location.pathname}${history.location.search}`;
+    const newPath = `${history.location.pathname}?${params}`;
+
+    if (oldPath !== newPath) {
+      history.push(`/?${params}`);
+    }
+  }, [identifiedFeature, history]);
 
   useEffect(() => {
     // Hack to handle issue with map not being displayed fully.
@@ -79,35 +104,46 @@ function MapDiagram() {
     return () => window.removeEventListener("resize", updateMediaSize);
   }, []);
 
+  // Makes it possible to use the browser history to go back and forwards between equipment.
   useEffect(() => {
-    const { kind, value } = getLocationUrlParameters(location.search);
+    const { id, type } = getUrlParameters(location.search);
+
+    if (type !== null && id !== null) {
+      setIdentifiedFeature({
+        id: id,
+        type: type as "RouteNode" | "RouteSegment",
+      });
+    }
+  }, [setIdentifiedFeature, location.search]);
+
+  useEffect(() => {
+    const { kind, value } = getUrlParameters(location.search);
 
     if (kind !== null && value !== null) {
-      lookupLocation(client, kind, value)
-        .then(response => {
-          if (response?.error !== undefined && response?.error !== null) {
-            toast.error(t("COULD_NOT_FIND_LOCATION"))
-            console.error(response.error?.message);
-            return;
-          }
+      lookupLocation(client, kind, value).then((response) => {
+        if (response?.error !== undefined && response?.error !== null) {
+          toast.error(t("COULD_NOT_FIND_LOCATION"));
+          console.error(response.error?.message);
+          return;
+        }
 
-          if (!response.data?.location) {
-            toast.error(t("ERROR"));
-            return;
-          }
+        if (!response.data?.location) {
+          toast.error(t("ERROR"));
+          return;
+        }
 
-          const location = response.data.location.lookupLocation;
-          setLocationSearchResponse({
-            envelope: {
-              maxX: location.envelope.maxX,
-              maxY: location.envelope.maxY,
-              minX: location.envelope.minX,
-              minY: location.envelope.minY
-            },
-            routeElementId: location.routeElementId,
-            coordinate: { x: location.coordinate.x, y: location.coordinate.y },
-          });
+        const location = response.data.location.lookupLocation;
+        setLocationSearchResponse({
+          envelope: {
+            maxX: location.envelope.maxX,
+            maxY: location.envelope.maxY,
+            minX: location.envelope.minX,
+            minY: location.envelope.minY,
+          },
+          routeElementId: location.routeElementId,
+          coordinate: { x: location.coordinate.x, y: location.coordinate.y },
         });
+      });
     }
   }, [location.search, setLocationSearchResponse, client, t]);
 
@@ -124,7 +160,7 @@ function MapDiagram() {
     (show: boolean) => {
       setShowDiagram(show);
     },
-    [setShowDiagram]
+    [setShowDiagram],
   );
 
   if (isDesktop === null) {
