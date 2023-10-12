@@ -5,6 +5,7 @@ import EditDiagram from "./EditDiagram";
 import ReadOnlyDiagram from "./ReadOnlyDiagram";
 import Loading from "../../components/Loading";
 import { DiagramProvider } from "./DiagramContext";
+import { useLocation, useHistory } from "react-router-dom";
 import {
   GET_DIAGRAM,
   DiagramQueryResponse,
@@ -18,9 +19,31 @@ type DiagramWrapperProps = {
   editable: boolean;
 };
 
+interface LocationParameters {
+  type: string | null;
+  id: string | null;
+}
+
+function getUrlParameters(parametersString: string): LocationParameters {
+  const params = new URLSearchParams(parametersString);
+
+  const newParams = new URLSearchParams();
+  for (const [name, value] of params) {
+    newParams.append(name.toLowerCase(), value);
+  }
+
+  return {
+    type: newParams.get("type"),
+    id: newParams.get("id"),
+  };
+}
+
 function DiagramWrapper({ editable }: DiagramWrapperProps) {
   const client = useClient();
-  const { identifiedFeature } = useContext(MapContext);
+  const location = useLocation();
+  const history = useHistory();
+
+  const { identifiedFeature, setIdentifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
   const [loading, setLoading] = useState(false);
   const [envelope, setEnvelope] = useState<Envelope>({
@@ -35,6 +58,40 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
     variables: { routeNetworkElementId: identifiedFeature?.id },
     pause: !identifiedFeature?.id,
   });
+
+  // Makes it possible to use the browser history to go back and forwards between equipment.
+  useEffect(() => {
+    const { id, type } = getUrlParameters(location.search);
+
+    if (type !== null && id !== null) {
+      setIdentifiedFeature({
+        id: id,
+        type: type as "RouteNode" | "RouteSegment",
+      });
+    }
+  }, [setIdentifiedFeature, location.search]);
+
+  useEffect(() => {
+    if (
+      !identifiedFeature ||
+      !identifiedFeature.id ||
+      !identifiedFeature.type
+    ) {
+      return;
+    }
+
+    const params = new URLSearchParams({
+      id: identifiedFeature.id,
+      type: identifiedFeature.type,
+    });
+
+    const oldPath = `${history.location.pathname}${history.location.search}`;
+    const newPath = `${history.location.pathname}?${params}`;
+
+    if (oldPath !== newPath) {
+      history.push(newPath);
+    }
+  }, [identifiedFeature, history]);
 
   useEffect(() => {
     if (!identifiedFeature?.id || !client) return;

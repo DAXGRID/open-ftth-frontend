@@ -218,8 +218,7 @@ function RouteNetworkMap({
   const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
-  const { setIdentifiedFeature, trace, searchResult, identifiedFeature } =
-    useContext(MapContext);
+  const { setIdentifiedFeature, trace, searchResult } = useContext(MapContext);
   const [mapLibreStyle, setMaplibreStyle] = useState<Style | null>(null);
 
   useEffect(() => {
@@ -233,35 +232,6 @@ function RouteNetworkMap({
       mapFitBounds(map.current, initialEnvelope, false);
     }
   }, [map, initialEnvelope, mapLoaded]);
-
-  // This is a big hack to avoid last being selected when using the browser history.
-  useEffect(() => {
-    if (!map.current) {
-      return;
-    }
-
-    if (
-      lastHighlightedFeature?.current?.properties?.mrid ===
-      identifiedFeature?.id
-    ) {
-      return;
-    }
-
-    var clickEvent = new MouseEvent("click", {
-      bubbles: true,
-      cancelable: true,
-      clientX: 0,
-      clientY: 0,
-    });
-
-    // Get the target element to dispatch the click event
-    var targetElement = map.current.getCanvas();
-
-    // Dispatch the click event on the target element
-    if (targetElement) {
-      targetElement.dispatchEvent(clickEvent);
-    }
-  }, [identifiedFeature]);
 
   useEffect(() => {
     if (mapLoaded && map.current && initialMarker) {
