@@ -64,6 +64,72 @@ function hoverPointer(featureNames: string[], bboxSize: number, map: Map) {
   });
 }
 
+function highlightFeature(
+  map: Map,
+  lastHighlightedFeature: React.RefObject<MapboxGeoJSONFeature>,
+  feature: MapboxGeoJSONFeature,
+) {
+  const changeSymbolIconImageHighlight = (
+    iconLayer: any,
+    feature: MapboxGeoJSONFeature,
+    remove: boolean,
+  ) => {
+    // We have to do this check because mapbox is annoying and changes the type "randomly"
+    let icon =
+      typeof iconLayer !== "string" ? (iconLayer.name as string) : iconLayer;
+
+    // In case that we switch from highlighted icon to another
+    if (icon.endsWith("-highlight")) {
+      icon = icon.replace("-highlight", "");
+    }
+
+    // This is required because we cannot use state for icons in mapbox to switch icon.
+    map.setLayoutProperty(feature.layer?.id, "icon-image", [
+      "match",
+      ["id"],
+      remove ? -1 : feature.id,
+      `${icon}-highlight`,
+      icon,
+    ]);
+  };
+
+  // reset last state to avoid multiple selected at the same time
+  if (lastHighlightedFeature.current) {
+    // We have to change it to any because mapbox changes the type randomly
+    const iconImage = (lastHighlightedFeature.current?.layer as SymbolLayer)
+      .layout?.["icon-image"] as any;
+
+    // If it has iconImage change highlight
+    if (iconImage) {
+      changeSymbolIconImageHighlight(
+        iconImage,
+        lastHighlightedFeature.current,
+        true,
+      );
+    }
+
+    map.setFeatureState(lastHighlightedFeature.current, {
+      ...lastHighlightedFeature.current,
+      selected: false,
+    });
+  }
+
+  // We have to change it to any because mapbox changes the type randomly
+  const iconImage = (feature.layer as SymbolLayer).layout?.[
+    "icon-image"
+  ] as any;
+  // If it has iconImage change highlight
+  if (iconImage) {
+    changeSymbolIconImageHighlight(iconImage, feature, false);
+  }
+
+  feature.state.selected = !feature.state.selected;
+  map.setFeatureState(feature, {
+    ...feature,
+    selected: feature.state.selected,
+  });
+}
+
 function clickHighlight(
   featureNames: string[],
   bboxSize: number,
@@ -554,6 +620,33 @@ function RouteNetworkMap({
       zoom: identifiedFeature.extraMapInformation.zoomLevel,
       animate: false,
     });
+
+    function onIdleCallback() {
+      if (!map.current || !identifiedFeature) {
+        return;
+      }
+
+      const feature = map.current
+        .queryRenderedFeatures()
+        .find((x) => x.properties?.mrid === identifiedFeature?.id);
+
+      if (!feature) {
+        map.current.off("idle", onIdleCallback);
+        return;
+      }
+
+      if (feature.state.selected) {
+        map.current.off("idle", onIdleCallback);
+        return;
+      }
+
+      highlightFeature(map.current, lastHighlightedFeature, feature);
+      lastHighlightedFeature.current = feature;
+
+      map.current.off("idle", onIdleCallback);
+    }
+
+    map.current.on("idle", onIdleCallback);
   }, [identifiedFeature, mapLoaded]);
 
   return (
