@@ -113,6 +113,7 @@ function MapDiagram() {
       setIdentifiedFeature({
         id: locationSearchResponse.routeElementId,
         type: "RouteNode",
+        extraMapInformation: null,
       });
     }
   }, [locationSearchResponse, setIdentifiedFeature]);

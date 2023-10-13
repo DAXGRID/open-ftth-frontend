@@ -5,6 +5,11 @@ type FeatureType = "RouteNode" | "RouteSegment" | "Deleted";
 export type IdentifiedFeature = {
   id: string | null;
   type: FeatureType | null;
+  extraMapInformation: {
+    xCoordinate: number;
+    yCoordinate: number;
+    zoomLevel: number;
+  } | null;
 };
 
 export interface SearchResult {
@@ -49,7 +54,7 @@ const MapContext = createContext<MapContextType>({
   setSelectedSegmentIds: () => {
     console.warn("no provider set for setSelectedSegmentIds");
   },
-  identifiedFeature: { id: null, type: null },
+  identifiedFeature: { id: null, type: null, extraMapInformation: null },
   setIdentifiedFeature: () => {
     console.warn("no provider set for setIdentifiedFeature");
   },
@@ -87,7 +92,11 @@ const MapProvider = ({ children }: MapProviderProps) => {
   useEffect(() => {
     if (!searchResult) return;
     if (searchResult?.objectType === "routeNode") {
-      setIdentifiedNetworkElement({ id: searchResult.id, type: "RouteNode" });
+      setIdentifiedNetworkElement({
+        id: searchResult.id,
+        type: "RouteNode",
+        extraMapInformation: null,
+      });
     }
   }, [searchResult]);
 

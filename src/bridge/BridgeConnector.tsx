@@ -99,7 +99,7 @@ function BridgeConnector() {
             setSelectedSegmentIds(data.selectedFeaturesMrid);
           }
         }
-      }
+      },
     );
 
     retrieveSelectedEquipments();
@@ -142,21 +142,17 @@ function BridgeConnector() {
             setIdentifiedFeature({
               id: data.identifiedFeatureId,
               type: data.selectedType as "RouteSegment" | "RouteNode" | null,
+              extraMapInformation: null,
             });
           }
         }
-      }
+      },
     );
 
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [
-    connected,
-    setIdentifiedFeature,
-    keycloak.profile?.username,
-    t,
-  ]);
+  }, [connected, setIdentifiedFeature, keycloak.profile?.username, t]);
 
   useEffect(() => {
     // We only want to retrieve the identified feature once after the connection
@@ -173,11 +169,7 @@ function BridgeConnector() {
     }
 
     retrieveIdentifiedNetworkElement();
-  }, [
-    identifiedFeature,
-    connected,
-    retrieveIdentifiedNetworkElement,
-  ]);
+  }, [identifiedFeature, connected, retrieveIdentifiedNetworkElement]);
 
   useEffect(() => {
     if (!connected || !websocketClient || websocketClient.readyState !== 1)
