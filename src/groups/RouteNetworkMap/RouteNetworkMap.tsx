@@ -218,7 +218,8 @@ function RouteNetworkMap({
   const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
-  const { setIdentifiedFeature, trace, searchResult } = useContext(MapContext);
+  const { setIdentifiedFeature, trace, searchResult, identifiedFeature } =
+    useContext(MapContext);
   const [mapLibreStyle, setMaplibreStyle] = useState<Style | null>(null);
 
   useEffect(() => {
@@ -361,8 +362,25 @@ function RouteNetworkMap({
             throw Error(`${x.type} is not a valid type`);
           }
 
+          // This should not happen, but in case it does we just returns and log it out.
+          if (!map.current) {
+            console.error("Could not get map after click, something is wrong.");
+            return;
+          }
+
+          const currentMapCenter = map.current.getCenter();
+
           lastHighlightedFeature.current = x;
-          setIdentifiedFeature({ id: x?.properties?.mrid, type: type });
+
+          setIdentifiedFeature({
+            id: x?.properties?.mrid,
+            type: type,
+            extraMapInformation: {
+              xCoordinate: currentMapCenter.lat,
+              yCoordinate: currentMapCenter.lng,
+              zoomLevel: map.current.getZoom(),
+            },
+          });
         },
       );
 
@@ -521,6 +539,22 @@ function RouteNetworkMap({
       animate: false,
     });
   }, [searchResult]);
+
+  // This is used for browser history to zoom to coordinate in url.
+  useEffect(() => {
+    if (!identifiedFeature?.extraMapInformation || !map.current) {
+      return;
+    }
+
+    map.current.flyTo({
+      center: [
+        identifiedFeature.extraMapInformation.yCoordinate,
+        identifiedFeature.extraMapInformation.xCoordinate,
+      ],
+      zoom: identifiedFeature.extraMapInformation.zoomLevel,
+      animate: false,
+    });
+  }, [identifiedFeature, mapLoaded]);
 
   return (
     <div

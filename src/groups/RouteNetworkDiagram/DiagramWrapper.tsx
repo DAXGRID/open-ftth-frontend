@@ -22,6 +22,9 @@ type DiagramWrapperProps = {
 interface LocationParameters {
   type: string | null;
   id: string | null;
+  x: number | null;
+  y: number | null;
+  zoomLevel: number | null;
 }
 
 function getUrlParameters(parametersString: string): LocationParameters {
@@ -32,9 +35,18 @@ function getUrlParameters(parametersString: string): LocationParameters {
     newParams.append(name.toLowerCase(), value);
   }
 
+  const type = newParams.get("type");
+  const id = newParams.get("id");
+  const x = newParams.get("x");
+  const y = newParams.get("y");
+  const zoomLevel = newParams.get("zoomlevel");
+
   return {
-    type: newParams.get("type"),
-    id: newParams.get("id"),
+    type: type ? type : null,
+    id: id ? id : null,
+    x: x ? Number(x) : null,
+    y: y ? Number(y) : null,
+    zoomLevel: zoomLevel ? Number(zoomLevel) : null,
   };
 }
 
@@ -61,12 +73,20 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
 
   // Makes it possible to use the browser history to go back and forwards between equipment.
   useEffect(() => {
-    const { id, type } = getUrlParameters(location.search);
+    const { id, type, x, y, zoomLevel } = getUrlParameters(location.search);
 
     if (type !== null && id !== null) {
       setIdentifiedFeature({
         id: id,
         type: type as "RouteNode" | "RouteSegment",
+        extraMapInformation:
+          x && y && zoomLevel
+            ? {
+                xCoordinate: x,
+                yCoordinate: y,
+                zoomLevel: zoomLevel,
+              }
+            : null,
       });
     }
   }, [setIdentifiedFeature, location.search]);
@@ -80,10 +100,18 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
       return;
     }
 
-    const params = new URLSearchParams({
-      id: identifiedFeature.id,
-      type: identifiedFeature.type,
-    });
+    const params = identifiedFeature.extraMapInformation
+      ? new URLSearchParams({
+          id: identifiedFeature.id,
+          type: identifiedFeature.type,
+          x: identifiedFeature.extraMapInformation.xCoordinate.toString(),
+          y: identifiedFeature.extraMapInformation.yCoordinate.toString(),
+          zoomLevel: identifiedFeature.extraMapInformation.zoomLevel.toString(),
+        })
+      : new URLSearchParams({
+          id: identifiedFeature.id,
+          type: identifiedFeature.type,
+        });
 
     const oldPath = `${history.location.pathname}${history.location.search}`;
     const newPath = `${history.location.pathname}?${params}`;
