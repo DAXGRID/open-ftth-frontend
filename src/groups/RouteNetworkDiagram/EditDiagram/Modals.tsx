@@ -18,7 +18,7 @@ export function addContainerModal(cb: () => void, title: string) {
 export function addInnerConduitModal(
   cb: () => void,
   title: string,
-  selectedFeatures: MapboxGeoJSONFeature[]
+  selectedFeatures: MapboxGeoJSONFeature[],
 ) {
   return (
     <ModalContainer closeCallback={cb} title={title}>
@@ -35,7 +35,7 @@ export function addInnerConduitModal(
 export function establishCustomerConnectionModal(
   cb: () => void,
   title: string,
-  routeNodeId: string
+  routeNodeId: string,
 ) {
   return (
     <ModalContainer closeCallback={cb} title={title}>
@@ -47,7 +47,7 @@ export function establishCustomerConnectionModal(
 export function addRackModal(
   cb: () => void,
   title: string,
-  selectedFeatures: MapboxGeoJSONFeature[]
+  selectedFeatures: MapboxGeoJSONFeature[],
 ) {
   return (
     <ModalContainer title={title} closeCallback={cb}>
@@ -65,25 +65,45 @@ export function addTerminalEquipmentModal(
   cb: () => void,
   title: string,
   routeNodeId: string,
-  selectedFeatures: MapboxGeoJSONFeature[]
+  selectedFeatures: MapboxGeoJSONFeature[],
 ) {
-  return (
-    <ModalContainer title={title} closeCallback={cb}>
-      <AddTerminalEquipment
-        routeNodeId={routeNodeId}
-        rackId={
-          selectedFeatures.find((x) => x.source === "Rack")?.properties
-            ?.refId ?? ""
-        }
-      />
-    </ModalContainer>
-  );
+  const freeRackSpace =
+    selectedFeatures.find((x) => x.source === "FreeRackSpace") ?? null;
+
+  if (freeRackSpace) {
+    const rackId = freeRackSpace.properties?.rackId;
+
+    if (!rackId) {
+      throw Error(`Could not get the rack id on free rack space.`);
+    }
+
+    const position = freeRackSpace.properties?.position;
+    if (!rackId) {
+      throw Error(`Could not get the position on free rack space.`);
+    }
+
+    return (
+      <ModalContainer title={title} closeCallback={cb}>
+        <AddTerminalEquipment
+          routeNodeId={routeNodeId}
+          rackId={rackId as string}
+          position={Number(position)}
+        />
+      </ModalContainer>
+    );
+  } else {
+    return (
+      <ModalContainer title={title} closeCallback={cb}>
+        <AddTerminalEquipment routeNodeId={routeNodeId} />
+      </ModalContainer>
+    );
+  }
 }
 
 export function outageViewModal(
   cb: () => void,
   title: string,
-  routeElementId: string
+  routeElementId: string,
 ) {
   return (
     <ModalContainer title={title} closeCallback={cb}>

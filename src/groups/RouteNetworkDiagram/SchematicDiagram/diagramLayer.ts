@@ -9,7 +9,7 @@ import {
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
 
 export function createSource(
-  features: Feature<Geometry, GeoJsonProperties>[]
+  features: Feature<Geometry, GeoJsonProperties>[],
 ): GeoJSONSourceRaw {
   const source: GeoJSONSourceRaw = {
     type: "geojson",
@@ -29,7 +29,8 @@ export function createFeature(
   coordinate: any,
   style: string,
   refId: string,
-  drawingOrder: number
+  drawingOrder: number,
+  properties?: { name: string; value: string }[],
 ): Feature<Geometry, GeoJsonProperties> {
   return {
     id: id,
@@ -43,6 +44,13 @@ export function createFeature(
       type: style,
       refId: refId,
       drawingOrder: drawingOrder,
+      // Map the dynamic properties into the object,
+      // this is done to avoid having the json deserialize the properties
+      // because maplibre makes objects in properties to JSON.
+      ...properties?.reduce(
+        (acc, v) => ({ ...acc, [v.name]: v.value }),
+        {},
+      ),
     },
   };
 }
@@ -102,10 +110,10 @@ export function getLayer(name: string): AnyLayer {
           "fill-outline-color": "black",
         },
       } as FillLayer;
-    case "SubrackSpace":
+    case "FreeRackSpace":
       return {
-        id: "SubrackSpace",
-        source: "SubrackSpace",
+        id: "FreeRackSpace",
+        source: "FreeRackSpace",
         type: "fill",
         paint: {
           "fill-color": "#ccf1cc",
@@ -504,6 +512,22 @@ export const rackSelect: LineLayer = {
   id: "RackSelect",
   type: "line",
   source: "Rack",
+  paint: {
+    "line-width": 4,
+    "line-color": colorMap.LIGHT_BLUE,
+    "line-opacity": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      1,
+      0,
+    ],
+  },
+};
+
+export const freeRackSpaceSelect: LineLayer = {
+  id: "FreeRackSpaceSelect",
+  type: "line",
+  source: "FreeRackSpace",
   paint: {
     "line-width": 4,
     "line-color": colorMap.LIGHT_BLUE,

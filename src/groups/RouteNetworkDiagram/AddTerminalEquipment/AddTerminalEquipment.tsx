@@ -169,11 +169,13 @@ function reducer(state: State, action: Action): State {
 interface AddTerminalEquipmentProps {
   routeNodeId: string;
   rackId?: string;
+  position?: number;
 }
 
 function AddTerminalEquipment({
   routeNodeId,
   rackId,
+  position,
 }: AddTerminalEquipmentProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { t } = useTranslation();
@@ -312,6 +314,11 @@ function AddTerminalEquipment({
   }, [state.specification, specificationResponse]);
 
   useEffect(() => {
+    if (!position) return;
+    dispatch({ type: "setStartUnitPosition", unitPosition: position });
+  }, [position]);
+
+  useEffect(() => {
     if (!categoryOptions || categoryOptions.length === 0) return;
     dispatch({ type: "setCategory", id: categoryOptions[0].value as string });
   }, [categoryOptions]);
@@ -378,6 +385,7 @@ function AddTerminalEquipment({
         ),
       );
     } else {
+      toast.success(t("ADDED"));
       dispatch({ type: "reset" });
     }
   };
@@ -485,30 +493,13 @@ function AddTerminalEquipment({
           <div className="full-row">
             <LabelContainer text={`${t("RACK_UNIT")}:`}>
               <NumberPicker
+                disabled
                 value={state.startUnitPosition}
                 minValue={0}
                 maxValue={100}
                 setValue={(x) =>
                   dispatch({ type: "setStartUnitPosition", unitPosition: x })
                 }
-              />
-            </LabelContainer>
-          </div>
-          <div className="full-row">
-            <LabelContainer text={`${t("PLACEMENT_METHOD")}:`}>
-              <SelectMenu
-                options={[
-                  { text: t("TOP_DOWN"), value: "TOP_DOWN", key: 0 },
-                  { text: t("BOTTOM_UP"), value: "BOTTOM_UP", key: 1 },
-                ]}
-                removePlaceHolderOnSelect
-                onSelected={(x) =>
-                  dispatch({
-                    type: "setPlacementMethod",
-                    method: x as PlacementMethod,
-                  })
-                }
-                selected={state.placementMethod}
               />
             </LabelContainer>
           </div>

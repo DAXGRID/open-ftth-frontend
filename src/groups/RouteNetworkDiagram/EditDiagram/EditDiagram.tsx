@@ -101,7 +101,7 @@ function isTraceable(f: MapboxGeoJSONFeature): boolean {
 
 function canAffixSpanEquipment(selected: MapboxGeoJSONFeature[]): boolean {
   const nodeContainer = selected.find(
-    (x) => x.layer.source === "NodeContainerSide"
+    (x) => x.layer.source === "NodeContainerSide",
   );
 
   const spanSegmentIds = selected
@@ -112,19 +112,19 @@ function canAffixSpanEquipment(selected: MapboxGeoJSONFeature[]): boolean {
 }
 
 function canAffixSpanEquipmentToParent(
-  selected: MapboxGeoJSONFeature[]
+  selected: MapboxGeoJSONFeature[],
 ): boolean {
   const invalidSelections = selected.filter(
     (x) =>
       x.layer.source !== "FiberCable" &&
       x.layer.source !== "InnerConduit" &&
-      x.layer.source !== "OuterConduit"
+      x.layer.source !== "OuterConduit",
   );
 
   const fiberCables = selected.filter((x) => x.layer.source === "FiberCable");
   const innerConduits = selected.filter(
     (x) =>
-      x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
+      x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit",
   );
 
   return (
@@ -140,7 +140,7 @@ function containsNodeContainer(diagramObjects: Diagram[]): boolean {
 
 function isSingleSelected(
   source: string,
-  selected: MapboxGeoJSONFeature[]
+  selected: MapboxGeoJSONFeature[],
 ): boolean {
   if (selected.length > 1) return false;
   return selected.find((x) => x.source === source) ? true : false;
@@ -178,7 +178,7 @@ const showModalsInitialState: ShowModals = {
 
 function showModalsReducer(
   state: ShowModals,
-  action: ShowModalsAction
+  action: ShowModalsAction,
 ): ShowModals {
   switch (action.type) {
     case "addContainer":
@@ -236,18 +236,19 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const { setTrace, identifiedFeature } = useContext(MapContext);
   const [showModals, showModalsDispatch] = useReducer(
     showModalsReducer,
-    showModalsInitialState
+    showModalsInitialState,
   );
   // This is a hack to avoid re-renders before all state have been set.
   // This could have been much cleaner with a reducer, but that is not an easy solution to implement.
-  const [localIdentifiedFeature, setLocalIdentifiedFeature] = useState<IdentifiedFeature | null>()
+  const [localIdentifiedFeature, setLocalIdentifiedFeature] =
+    useState<IdentifiedFeature | null>();
 
   const [, cutSpanSegmentsMutation] =
     useMutation<CutSpanSegmentsResponse>(CUT_SPAN_SEGMENTS);
 
   const [, affixSpanEquipmentMutation] =
     useMutation<AffixSpanEquipmentResponse>(
-      AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER
+      AFFIX_SPAN_EQUIPMENT_TO_NODE_CONTAINER,
     );
 
   const [, connectSpanSegmentsMutation] =
@@ -258,7 +259,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
   const [, detachSpanEquipmentMutation] =
     useMutation<DetachSpanEquipmentResponse>(
-      DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER
+      DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER,
     );
 
   useEffect(() => {
@@ -266,11 +267,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     setLocalIdentifiedFeature(identifiedFeature);
     setSingleSelectedFeature(null);
     setSelectedFeatures([]);
-  }, [identifiedFeature,
-      setEditMode,
-      setLocalIdentifiedFeature,
-      setSingleSelectedFeature,
-      setSelectedFeatures]);
+  }, [
+    identifiedFeature,
+    setEditMode,
+    setLocalIdentifiedFeature,
+    setSingleSelectedFeature,
+    setSelectedFeatures,
+  ]);
 
   useEffect(() => {
     showModalsDispatch({ type: "reset" });
@@ -287,7 +290,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
   const affixSpanEquipment = async () => {
     const nodeContainer = currentlySelectedFeatures.find(
-      (x) => x.layer.source === "NodeContainerSide"
+      (x) => x.layer.source === "NodeContainerSide",
     );
 
     const nodeContainerId = nodeContainer?.properties?.refId as string;
@@ -328,8 +331,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       toast.error(
         t(
           data?.spanEquipment.affixSpanEquipmentToNodeContainer.errorCode ??
-            "Error has occured"
-        )
+            "Error has occured",
+        ),
       );
     }
   };
@@ -356,7 +359,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     const { data } = await cutSpanSegmentsMutation(parameters);
     if (!data?.spanEquipment.cutSpanSegments.isSuccess) {
       toast.error(
-        t(data?.spanEquipment.cutSpanSegments.errorCode ?? "Error has occured")
+        t(data?.spanEquipment.cutSpanSegments.errorCode ?? "Error has occured"),
       );
     }
   };
@@ -385,8 +388,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       toast.error(
         t(
           data?.spanEquipment.connectSpanSegments.errorCode ??
-            "Error has occured"
-        )
+            "Error has occured",
+        ),
       );
     }
   };
@@ -421,8 +424,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       toast.error(
         t(
           data?.spanEquipment.disconnectSpanSegments.errorCode ??
-            "Error has occured"
-        )
+            "Error has occured",
+        ),
       );
     }
   };
@@ -458,8 +461,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       toast.error(
         t(
           data?.spanEquipment.detachSpanEquipmentFromNodeContainer.errorCode ??
-            "Error has occurred"
-        )
+            "Error has occurred",
+        ),
       );
     }
   };
@@ -498,7 +501,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     }
 
     const confirmed = window.confirm(
-      t("Are you sure you want to delete the selected object?")
+      t("Are you sure you want to delete the selected object?"),
     );
     if (!confirmed) return;
 
@@ -513,7 +516,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
       if (!response.data?.nodeContainer.remove.isSuccess) {
         toast.error(
-          t(response.data?.nodeContainer.remove.errorCode ?? "ERROR")
+          t(response.data?.nodeContainer.remove.errorCode ?? "ERROR"),
         );
       }
     } else if (
@@ -531,8 +534,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         toast.error(
           t(
             response.data?.spanEquipment.removeSpanStructure.errorCode ??
-              "ERROR"
-          )
+              "ERROR",
+          ),
         );
       }
     } else if (objectToRemove.source === "Rack") {
@@ -542,7 +545,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           {
             rackId: objectToRemove.id,
             routeNodeId: localIdentifiedFeature.id,
-          } as RemoveRackFromNodeContainerParams
+          } as RemoveRackFromNodeContainerParams,
         )
         .toPromise();
 
@@ -550,8 +553,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         toast.error(
           t(
             response.data?.nodeContainer.removeRackFromNodeContainer
-              .errorCode ?? "ERROR"
-          )
+              .errorCode ?? "ERROR",
+          ),
         );
       }
     } else if (objectToRemove.source === "TerminalEquipment") {
@@ -564,7 +567,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
       if (!response.data?.terminalEquipment.remove.isSuccess) {
         toast.error(
-          t(response.data?.terminalEquipment.remove.errorCode ?? "ERROR")
+          t(response.data?.terminalEquipment.remove.errorCode ?? "ERROR"),
         );
       }
     }
@@ -615,7 +618,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         });
       }
     },
-    [client, setTrace, enabledTracePan]
+    [client, setTrace, enabledTracePan],
   );
 
   // Trace single
@@ -646,7 +649,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     (feature: MapboxGeoJSONFeature) => {
       setSingleSelectedFeature(feature);
     },
-    [setSingleSelectedFeature]
+    [setSingleSelectedFeature],
   );
 
   useEffect(() => {
@@ -659,7 +662,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       const foundIndex = selectedFeatures.findIndex(
         (x) =>
           x.properties?.refId === singleSelectedFeature.properties?.refId &&
-          x.properties?.type === singleSelectedFeature.properties?.type
+          x.properties?.type === singleSelectedFeature.properties?.type,
       );
 
       if (foundIndex !== -1) {
@@ -687,16 +690,16 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       showElement(
         addContainerModal(
           () => showModalsDispatch({ type: "addContainer", show: false }),
-          t("ADD_NODE_CONTAINER")
-        )
+          t("ADD_NODE_CONTAINER"),
+        ),
       );
     } else if (showModals.addInnerConduit) {
       showElement(
         addInnerConduitModal(
           () => showModalsDispatch({ type: "addInnerConduit", show: false }),
           t("ADD_INNER_CONDUIT"),
-          currentlySelectedFeatures
-        )
+          currentlySelectedFeatures,
+        ),
       );
     } else if (showModals.establishCustomerConnection) {
       showElement(
@@ -707,8 +710,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               show: false,
             }),
           t("ESTABLISH_CUSTOMER_CONNECTION"),
-          localIdentifiedFeature?.id ?? ""
-        )
+          localIdentifiedFeature?.id ?? "",
+        ),
       );
     } else if (showModals.addRack) {
       showElement(
@@ -719,8 +722,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               show: false,
             }),
           t("ADD_RACK"),
-          currentlySelectedFeatures
-        )
+          currentlySelectedFeatures,
+        ),
       );
     } else if (showModals.addTerminalEquipment) {
       showElement(
@@ -729,16 +732,16 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             showModalsDispatch({ type: "addTerminalEquipment", show: false }),
           t("ADD_TERMINAL_EQUIPMENT"),
           localIdentifiedFeature?.id ?? "",
-          currentlySelectedFeatures
-        )
+          currentlySelectedFeatures,
+        ),
       );
     } else if (showModals.outageView) {
       showElement(
         outageViewModal(
           () => showModalsDispatch({ type: "outageView", show: false }),
           t("OUTAGE_VIEW"),
-          localIdentifiedFeature?.id ?? ""
-        )
+          localIdentifiedFeature?.id ?? "",
+        ),
       );
     } else {
       showElement(null);
@@ -753,7 +756,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
 
   const reverseVertialAlignment = async () => {
     const nodeContainer = currentlySelectedFeatures.find(
-      (x) => x.layer.source === "NodeContainerSide"
+      (x) => x.layer.source === "NodeContainerSide",
     );
 
     const nodeContainerId = nodeContainer?.properties?.refId as string;
@@ -773,20 +776,20 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       toast.error(
         t(
           result.data?.nodeContainer.reverseVerticalContentAlignment
-            .errorCode ?? "Error has occurred"
-        )
+            .errorCode ?? "Error has occurred",
+        ),
       );
     }
   };
 
   const affixSpanEquipmentToParent = async () => {
     const fiberCable = currentlySelectedFeatures.find(
-      (x) => x.layer.source === "FiberCable"
+      (x) => x.layer.source === "FiberCable",
     );
 
     const innerOrOuterConduit = currentlySelectedFeatures.find(
       (x) =>
-        x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
+        x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit",
     );
 
     if (
@@ -806,7 +809,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     const response = await client
       .mutation<AffixSpanEquipmentToParentResponse>(
         AFFIX_SPAN_EQUIPMENT_TO_PARENT,
-        params
+        params,
       )
       .toPromise();
 
@@ -814,8 +817,8 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       toast.error(
         t(
           response.data?.spanEquipment.affixSpanEquipmentToParent.errorCode ??
-            "ERROR"
-        )
+            "ERROR",
+        ),
       );
     }
   };
@@ -878,7 +881,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                 text: t("PLACE_CABLE_IN_CONDUIT"),
                 action: () => affixSpanEquipmentToParent(),
                 disabled: !canAffixSpanEquipmentToParent(
-                  currentlySelectedFeatures
+                  currentlySelectedFeatures,
                 ),
                 key: 1,
               },
@@ -908,7 +911,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                   showModalsDispatch({ type: "addRack", show: true }),
                 disabled: !isSingleSelected(
                   "NodeContainer",
-                  currentlySelectedFeatures
+                  currentlySelectedFeatures,
                 ),
                 key: 1,
               },
@@ -920,7 +923,10 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                     show: true,
                   }),
                 disabled:
-                  !isSingleSelected("Rack", currentlySelectedFeatures) &&
+                  !isSingleSelected(
+                    "FreeRackSpace",
+                    currentlySelectedFeatures,
+                  ) &&
                   !isSingleSelected("NodeContainer", currentlySelectedFeatures),
                 key: 2,
               },
