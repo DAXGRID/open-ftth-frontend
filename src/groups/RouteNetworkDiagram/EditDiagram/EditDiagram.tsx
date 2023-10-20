@@ -58,6 +58,9 @@ import {
   REMOVE_TERMINAL_EQUIPMENT,
   RemoveTerminalEquipmentParams,
   RemoveTerminalEquipmentResponse,
+  MOVE_RACK_EQUIPMENT,
+  MoveRackEquipmentParams,
+  MoveRackEquipmentResponse,
 } from "./EditDiagramGql";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -76,6 +79,7 @@ import {
   EstablishCustomerConnectionSvg,
   ZoomMapSvg,
   OutageSvg,
+  MoveEquipmentSvg,
 } from "../../../assets";
 import {
   addContainerModal,
@@ -84,6 +88,7 @@ import {
   addRackModal,
   addTerminalEquipmentModal,
   outageViewModal,
+  arrangeRackEquipmentModal,
 } from "./Modals";
 
 type RouteNetworkDiagramProps = {
@@ -138,6 +143,38 @@ function containsNodeContainer(diagramObjects: Diagram[]): boolean {
   return diagramObjects.find((x) => x.style === "NodeContainer") ? true : false;
 }
 
+function eligibleToMoveRackEquipment(
+  selectedFeatures: MapboxGeoJSONFeature[],
+): boolean {
+  const containsFreeRackSpace = selectedFeatures.find(
+    (x) => x.source === "FreeRackSpace",
+  );
+  const containsTerminalEquipment = selectedFeatures.find(
+    (x) => x.source === "TerminalEquipment",
+  );
+
+  return (
+    !!containsFreeRackSpace &&
+    !!containsTerminalEquipment &&
+    // To avoid that the user selects multiple things at the same time.
+    selectedFeatures.length === 2
+  );
+}
+
+function eligableToArrangeTerminalEquipment(
+  selectedFeatures: MapboxGeoJSONFeature[],
+): boolean {
+  const containsTerminalEquipment = selectedFeatures.find(
+    (x) => x.source === "TerminalEquipment",
+  );
+
+  return (
+    !!containsTerminalEquipment &&
+    // To avoid that the user selects multiple things at the same time.
+    selectedFeatures.length === 1
+  );
+}
+
 function isSingleSelected(
   source: string,
   selected: MapboxGeoJSONFeature[],
@@ -153,6 +190,7 @@ interface ShowModals {
   addRack: boolean;
   addTerminalEquipment: boolean;
   outageView: boolean;
+  arrangeRackEquipment: boolean;
 }
 
 interface ShowModalsAction {
@@ -163,6 +201,7 @@ interface ShowModalsAction {
     | "addRack"
     | "addTerminalEquipment"
     | "outageView"
+    | "arrangeRackEquipment"
     | "reset";
   show?: boolean;
 }
@@ -174,6 +213,7 @@ const showModalsInitialState: ShowModals = {
   addRack: false,
   addTerminalEquipment: false,
   outageView: false,
+  arrangeRackEquipment: false,
 };
 
 function showModalsReducer(
@@ -212,6 +252,11 @@ function showModalsReducer(
         ...state,
         outageView: action.show ?? !state.outageView,
       };
+    case "arrangeRackEquipment":
+      return {
+        ...state,
+        arrangeRackEquipment: action.show ?? !state.arrangeRackEquipment,
+      };
     case "reset":
       return { ...showModalsInitialState };
     default:
@@ -225,6 +270,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const { showElement } = useContext(OverlayContext);
   const { enabledTracePan, setEnabledTracePan } = useContext(DiagramContext);
   const [editMode, setEditMode] = useState(false);
+  // Do not use this for getting the current selected features, instead use `currentlySelectedFeatures`.
   const [selectedFeatures, setSelectedFeatures] = useState<
     MapboxGeoJSONFeature[]
   >([]);
@@ -743,6 +789,35 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           localIdentifiedFeature?.id ?? "",
         ),
       );
+    } else if (showModals.arrangeRackEquipment) {
+      if (!localIdentifiedFeature?.id) {
+        throw Error("Could not get route network element id");
+      }
+
+      if (currentlySelectedFeatures.length !== 1) {
+        throw Error(
+          "The correct amount of selected items for arrange terminal equipment did not match.",
+        );
+      }
+
+      const terminalEquipmentId =
+        currentlySelectedFeatures[0]?.properties?.refId;
+      if (!terminalEquipmentId) {
+        throw Error("Could not get terminal equipment id.");
+      }
+
+      showElement(
+        arrangeRackEquipmentModal(
+          () =>
+            showModalsDispatch({
+              type: "arrangeRackEquipment",
+              show: false,
+            }),
+          t("MOVE_UP_OR_DOWN"),
+          localIdentifiedFeature.id,
+          terminalEquipmentId,
+        ),
+      );
     } else {
       showElement(null);
     }
@@ -819,6 +894,68 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           response.data?.spanEquipment.affixSpanEquipmentToParent.errorCode ??
             "ERROR",
         ),
+      );
+    }
+  };
+
+  const moveRackEquipment = async () => {
+    if (!eligibleToMoveRackEquipment(currentlySelectedFeatures)) return;
+
+    const freeRackSpace = currentlySelectedFeatures.find(
+      (x) => x.source === "FreeRackSpace",
+    );
+    if (!freeRackSpace) {
+      throw new Error("Could not get free rack space.");
+    }
+
+    const moveToRackPosition = freeRackSpace.properties?.position as
+      | string
+      | null
+      | undefined;
+
+    if (!moveToRackPosition) {
+      throw new Error(
+        "Could not get free rack space position from selected feature.",
+      );
+    }
+
+    const moveToRackId = freeRackSpace.properties?.rackId as
+      | string
+      | null
+      | undefined;
+
+    if (!moveToRackId) {
+      throw new Error("Could not get rack id on free rack space.");
+    }
+
+    const terminalEquipmentId = currentlySelectedFeatures.find(
+      (x) => x.source === "TerminalEquipment",
+    )?.properties?.refId;
+
+    if (!terminalEquipmentId) {
+      throw new Error(
+        "Could not get terminal equipment id from selected feature.",
+      );
+    }
+
+    if (!localIdentifiedFeature?.id) {
+      throw new Error("Could not get route node id.");
+    }
+
+    const params: MoveRackEquipmentParams = {
+      routeNodeId: localIdentifiedFeature.id,
+      terminalEquipmentId: terminalEquipmentId,
+      moveToRackId: moveToRackId,
+      moveToRackPosition: parseInt(moveToRackPosition),
+    };
+
+    const response = await client
+      .mutation<MoveRackEquipmentResponse>(MOVE_RACK_EQUIPMENT, params)
+      .toPromise();
+
+    if (!response.data?.nodeContainer.moveRackEquipment.isSuccess) {
+      toast.error(
+        t(response.data?.nodeContainer.moveRackEquipment.errorCode ?? "ERROR"),
       );
     }
   };
@@ -929,6 +1066,36 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                   ) &&
                   !isSingleSelected("NodeContainer", currentlySelectedFeatures),
                 key: 2,
+              },
+            ]}
+            title={t("ADD_NODE_CONTAINER")}
+            disabled={!editMode}
+          />
+          <MultiOptionActionButton
+            icon={MoveEquipmentSvg}
+            actions={[
+              {
+                text: t("MOVE_TERMINAL_EQUIPMENT"),
+                action: () => {
+                  moveRackEquipment();
+                },
+                disabled: !eligibleToMoveRackEquipment(
+                  currentlySelectedFeatures,
+                ),
+                key: 0,
+              },
+              {
+                text: t("MOVE_UP_OR_DOWN"),
+                action: () => {
+                  showModalsDispatch({
+                    type: "arrangeRackEquipment",
+                    show: true,
+                  });
+                },
+                disabled: !eligableToArrangeTerminalEquipment(
+                  currentlySelectedFeatures,
+                ),
+                key: 1,
               },
             ]}
             title={t("ADD_NODE_CONTAINER")}

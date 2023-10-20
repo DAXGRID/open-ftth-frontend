@@ -42,10 +42,12 @@ export function createFeature(
     properties: {
       label: label,
       type: style,
-      refId: refId,
+      // In case no refId is set, we use the id instead.
+      // This is important because otherwise we cannot identify the feature.
+      refId: refId ? refId : id,
       drawingOrder: drawingOrder,
       // Map the dynamic properties into the object,
-      // this is done to avoid having the json deserialize the properties
+      // this is done to avoid having to JSON deserialize the properties
       // because maplibre makes objects in properties to JSON.
       ...properties?.reduce(
         (acc, v) => ({ ...acc, [v.name]: v.value }),

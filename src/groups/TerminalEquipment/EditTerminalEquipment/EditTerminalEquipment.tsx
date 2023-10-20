@@ -6,7 +6,6 @@ import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import TextBox from "../../../components/TextBox";
 import DefaultButton from "../../../components/DefaultButton";
 import LabelContainer from "../../../components/LabelContainer";
-import NumberPicker from "../../../components/NumberPicker";
 import {
   queryTerminalEquipmentDetails,
   TerminalEquipment,
@@ -16,14 +15,8 @@ import {
   queryNearestAccessAddresses,
   NearestAccessAddress,
   UnitAddress,
-  Rack,
-  queryRacks,
   updateTerminalEquipment,
 } from "./EditTerminalEquipmentGql";
-
-function rackToOption(racks: Rack[]): SelectOption[] {
-  return racks.map((x) => ({ text: x.name, value: x.id, key: x.id }));
-}
 
 function accessAddressToOption(
   nearestAccessAddress: NearestAccessAddress,
@@ -89,15 +82,12 @@ interface State {
   manufacturerId: string | null;
   accessAddressId: string | null;
   unitAddressId: string | null;
-  rackId: string | null;
-  rackPosition: number | null;
   name: string | null;
   terminalEquipment: TerminalEquipment | null;
   manufacturers: Manufacturer[] | null;
   terminalEquipmentSpecifications: TerminalEquipmentSpecification[] | null;
   nearestAccessAddresses: NearestAccessAddress[] | null;
   additionalAddressInformation: string | null;
-  racks: Rack[] | null;
 }
 
 const initialState: State = {
@@ -106,15 +96,12 @@ const initialState: State = {
   manufacturerId: null,
   accessAddressId: null,
   unitAddressId: null,
-  rackId: null,
-  rackPosition: null,
   name: null,
   terminalEquipment: null,
   manufacturers: null,
   terminalEquipmentSpecifications: null,
   nearestAccessAddresses: null,
   additionalAddressInformation: null,
-  racks: null,
 };
 
 type Action =
@@ -126,8 +113,6 @@ type Action =
     }
   | { type: "setCategoryName"; name: string }
   | { type: "setSpecificationId"; id: string }
-  | { type: "setRackId"; id: string | null }
-  | { type: "setRackPosition"; position: number | null }
   | { type: "setAccessAddressId"; id: string | null }
   | { type: "setUnitAddressId"; id: string | null }
   | { type: "setAdditionalAddressInformation"; text: string | null }
@@ -137,7 +122,6 @@ type Action =
       type: "setNearestAccessAddresses";
       nearestAccessAddresses: NearestAccessAddress[];
     }
-  | { type: "setRacks"; racks: Rack[] }
   | { type: "reset" };
 
 function reducer(state: State, action: Action): State {
@@ -165,17 +149,11 @@ function reducer(state: State, action: Action): State {
       return { ...state, unitAddressId: action.id };
     case "setAdditionalAddressInformation":
       return { ...state, additionalAddressInformation: action.text };
-    case "setRackId":
-      return { ...state, rackId: action.id };
-    case "setRackPosition":
-      return { ...state, rackPosition: action.position };
     case "setNearestAccessAddresses":
       return {
         ...state,
         nearestAccessAddresses: action.nearestAccessAddresses,
       };
-    case "setRacks":
-      return { ...state, racks: action.racks };
     case "reset":
       return initialState;
     default:
@@ -238,15 +216,6 @@ function EditTerminalEquipment({
             type: "setAdditionalAddressInformation",
             text: terminalEquipment.addressInfo?.remark ?? null,
           });
-          dispatch({
-            type: "setRackId",
-            id: terminalEquipment.subrackPlacementInfo?.rackId ?? null,
-          });
-          dispatch({
-            type: "setRackPosition",
-            position:
-              terminalEquipment.subrackPlacementInfo?.startUnitPosition ?? null,
-          });
         } else {
           toast.error(t("ERROR"));
         }
@@ -302,24 +271,6 @@ function EditTerminalEquipment({
         toast.error(t("ERROR"));
       });
   }, [routeNodeId, client, t, dispatch]);
-
-  useEffect(() => {
-    if (!routeNodeId) return;
-
-    queryRacks(client, routeNodeId)
-      .then((r) => {
-        const racks = r.data?.utilityNetwork.racks;
-        if (racks) {
-          dispatch({ type: "setRacks", racks: racks });
-        } else {
-          toast.error(t("ERROR"));
-        }
-      })
-      .catch((r) => {
-        console.error(r);
-        toast.error(t("ERROR"));
-      });
-  }, [routeNodeId, dispatch, client, t]);
 
   const categoryOptions = useMemo<SelectOption[]>(() => {
     if (!state.terminalEquipment || !state.terminalEquipmentSpecifications)
@@ -422,10 +373,6 @@ function EditTerminalEquipment({
     return defaultList.concat(options);
   }, [state.nearestAccessAddresses, state.accessAddressId, t]);
 
-  const rackOptions = useMemo<SelectOption[]>(() => {
-    return state.racks ? rackToOption(state.racks) : [];
-  }, [state.racks]);
-
   useEffect(() => {
     if (!state.accessAddressId) return;
 
@@ -472,13 +419,6 @@ function EditTerminalEquipment({
                   : null,
             }
           : null,
-        rackId: state.terminalEquipment.specification.isRackEquipment
-          ? state.rackId
-          : null,
-        rackStartUnitPosition: state.terminalEquipment.specification
-          .isRackEquipment
-          ? state.rackPosition
-          : null,
       })
         .then((r) => {
           if (r.data?.terminalEquipment.updateProperties.errorCode) {
@@ -504,10 +444,10 @@ function EditTerminalEquipment({
   if (
     !state.terminalEquipment ||
     !state.specificationId ||
-    !state.categoryName ||
-    !state.racks
-  )
+    !state.categoryName
+  ) {
     return <></>;
+  }
 
   return (
     <div className="edit-terminal-equipment">
@@ -553,35 +493,6 @@ function EditTerminalEquipment({
           </LabelContainer>
         </div>
       </div>
-
-      {state.terminalEquipment.specification.isRackEquipment && (
-        <div className="full-row-group">
-          <div className="full-row">
-            <LabelContainer text={`${t("RACK")}:`}>
-              <SelectMenu
-                onSelected={(x) =>
-                  dispatch({ type: "setRackId", id: x as string })
-                }
-                options={rackOptions}
-                selected={state.rackId ?? ""}
-              />
-            </LabelContainer>
-          </div>
-
-          <div className="full-row">
-            <LabelContainer text={`${t("RACK_UNIT")}:`}>
-              <NumberPicker
-                value={state.rackPosition ?? 0}
-                minValue={0}
-                maxValue={100}
-                setValue={(x) =>
-                  dispatch({ type: "setRackPosition", position: x })
-                }
-              />
-            </LabelContainer>
-          </div>
-        </div>
-      )}
 
       {state.terminalEquipment.specification.isAddressable && (
         <div className="block">

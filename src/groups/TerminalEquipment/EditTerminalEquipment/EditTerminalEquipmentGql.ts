@@ -275,8 +275,6 @@ interface MutationUpdateTerminalEquipmentParams {
     unitAddressId: string | null;
     remark: string | null;
   } | null;
-  rackId: string | null;
-  rackStartUnitPosition: number | null;
 }
 
 const MUTATION_UPDATE_TERMINAL_EQUIPMENT = `
@@ -285,17 +283,13 @@ $terminalEquipmentId: ID!,
 $terminalEquipmentSpecificationId: ID!,
 $manufacturerId: ID,
 $namingInfo: NamingInfoInputType,
-$addressInfo: AddressInfoInputType,
-$rackId: ID,
-$rackStartUnitPosition: Int) {
+$addressInfo: AddressInfoInputType) {
   terminalEquipment {
     updateProperties (terminalEquipmentId: $terminalEquipmentId,
                       terminalEquipmentSpecificationId: $terminalEquipmentSpecificationId,
                       manufacturerId: $manufacturerId,
                       namingInfo: $namingInfo,
-                      addressInfo: $addressInfo,
-                      rackId: $rackId,
-                      rackStartUnitPosition: $rackStartUnitPosition) {
+                      addressInfo: $addressInfo) {
       isSuccess
       errorMessage
       errorCode

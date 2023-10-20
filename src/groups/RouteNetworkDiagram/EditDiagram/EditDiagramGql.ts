@@ -379,3 +379,42 @@ $terminalEquipmentId: ID!
   }
 }
 `;
+
+export interface MoveRackEquipmentResponse {
+  nodeContainer: {
+    moveRackEquipment: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
+export interface MoveRackEquipmentParams {
+  routeNodeId: string;
+  terminalEquipmentId: string;
+  moveToRackId: string;
+  moveToRackPosition: number;
+}
+
+export const MOVE_RACK_EQUIPMENT = `
+mutation(
+$routeNodeId: ID!,
+$terminalEquipmentId: ID!,
+$moveToRackId: ID!,
+$moveToRackPosition: Int!
+) {
+  nodeContainer {
+    moveRackEquipment(
+      routeNodeId: $routeNodeId
+      terminalEquipmentId: $terminalEquipmentId
+      moveToRackId: $moveToRackId
+      moveToRackPosition: $moveToRackPosition
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}
+`;

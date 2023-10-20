@@ -18,6 +18,7 @@ import ZoomMapSvg from "./zoom-map.svg";
 import OutageSvg from "./outage.svg";
 import FlagDenmarkSvg from "./flags/dk.svg";
 import FlagGreatBritainSvg from "./flags/gb.svg";
+import MoveEquipmentSvg from "./move-equipment.svg"
 
 export {
   Loading,
@@ -40,4 +41,5 @@ export {
   OutageSvg,
   FlagDenmarkSvg,
   FlagGreatBritainSvg,
+  MoveEquipmentSvg,
 };
