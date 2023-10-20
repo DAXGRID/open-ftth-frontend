@@ -21,6 +21,7 @@ export interface Diagram {
   label?: string;
   drawingOrder: number;
   geometry: Geometry;
+  properties?: { name: string; value: string }[];
 }
 
 export interface Geometry {
@@ -50,6 +51,10 @@ query ($routeNetworkElementId: ID!) {
         style
         label
         drawingOrder
+        properties {
+          name
+          value
+        }
       }
     }
   }

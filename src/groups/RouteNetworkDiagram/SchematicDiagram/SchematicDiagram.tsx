@@ -21,6 +21,7 @@ import {
   terminalEquipmentSelect,
   fiberCableSymbolLayer,
   fiberCableUnderLayer,
+  freeRackSpaceSelect,
 } from "./diagramLayer";
 
 interface Envelope {
@@ -37,6 +38,7 @@ interface Diagram {
   label?: string;
   geometry: Geometry;
   drawingOrder: number;
+  properties?: { name: string; value: string }[];
 }
 
 interface Geometry {
@@ -68,7 +70,8 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
       x.geometry.coordinates,
       x.style,
       x.refId ?? "",
-      x.drawingOrder
+      x.drawingOrder,
+      x.properties,
     );
 
     let styleName = x.style;
@@ -110,7 +113,7 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
 function mapFitBounds(
   envelope: Envelope,
   map: mapboxgl.Map,
-  zoom: number | null
+  zoom: number | null,
 ) {
   var extraOptions = zoom
     ? {
@@ -126,7 +129,7 @@ function mapFitBounds(
     {
       ...extraOptions,
       animate: false,
-    }
+    },
   );
 }
 
@@ -166,7 +169,7 @@ function clickHiglight(
   featureNames: string[],
   map: Map,
   callback: (feature: MapboxGeoJSONFeature) => void,
-  editMode: boolean
+  editMode: boolean,
 ) {
   return (e: MapMouseEvent & EventData) => {
     const bbox: [PointLike, PointLike] = [
@@ -179,7 +182,7 @@ function clickHiglight(
       .filter((x) => featureNames.find((y) => y === x.source))
       .sort(
         (x, y) =>
-          (y.properties?.drawingOrder ?? 0) - (x.properties?.drawingOrder ?? 0)
+          (y.properties?.drawingOrder ?? 0) - (x.properties?.drawingOrder ?? 0),
       );
 
     const feature = features.length > 0 ? features[0] : null;
@@ -200,7 +203,7 @@ function clickHiglight(
 
     map.setFeatureState(
       { source: feature.source, id: feature.id },
-      { selected: feature.state.selected }
+      { selected: feature.state.selected },
     );
 
     if (callback) callback(feature);
@@ -250,7 +253,7 @@ function SchematicDiagram({
       new NavigationControl({
         showCompass: false,
       }),
-      "top-left"
+      "top-left",
     );
   }, [map, setMap, diagramObjects]);
 
@@ -260,29 +263,33 @@ function SchematicDiagram({
 
     loadDiagram(map, diagramObjects);
     const hasInnerConduit = diagramObjects.find((x) =>
-      x.style.startsWith("InnerConduit")
+      x.style.startsWith("InnerConduit"),
     );
 
     const hasOuterConduit = diagramObjects.find((x) =>
-      x.style.startsWith("OuterConduit")
+      x.style.startsWith("OuterConduit"),
     );
 
     const hasNodeContainerSide = diagramObjects.find((x) =>
-      x.style.startsWith("NodeContainerSide")
+      x.style.startsWith("NodeContainerSide"),
     );
 
     const hasNodeContainer = diagramObjects.find((x) =>
-      x.style.startsWith("NodeContainer")
+      x.style.startsWith("NodeContainer"),
     );
 
     const hasRack = diagramObjects.find((x) => x.style.startsWith("Rack"));
 
     const hasTerminalEquipment = diagramObjects.find((x) =>
-      x.style.startsWith("TerminalEquipment")
+      x.style.startsWith("TerminalEquipment"),
     );
 
     const hasFiberCable = diagramObjects.find((x) =>
-      x.style.startsWith("FiberCable")
+      x.style.startsWith("FiberCable"),
+    );
+
+    const hasFreeRackSpace = diagramObjects.find((x) =>
+      x.style.startsWith("FreeRackSpace"),
     );
 
     const interactableObject: string[] = [];
@@ -324,11 +331,16 @@ function SchematicDiagram({
       interactableObject.push("FiberCable");
     }
 
+    if (hasFreeRackSpace) {
+      map.addLayer(freeRackSpaceSelect);
+      interactableObject.push("FreeRackSpace");
+    }
+
     const clickHighlightHandler = clickHiglight(
       interactableObject,
       map,
       onSelectFeature,
-      editMode
+      editMode,
     );
     map.on("click", clickHighlightHandler);
 
