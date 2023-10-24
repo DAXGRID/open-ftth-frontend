@@ -89,6 +89,10 @@ subscription ($routeNetworkElementId: ID!) {
       style
       label
       drawingOrder
+      properties {
+        name
+        value
+      }
     }
   }
 }
