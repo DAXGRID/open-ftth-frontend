@@ -1,6 +1,6 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import "react-toastify/dist/ReactToastify.css";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Slide, ToastContainer } from "react-toastify";
@@ -13,6 +13,7 @@ import { UserContext } from "./contexts/UserContext";
 import { OverlayContext } from "./contexts/OverlayContext";
 import { useKeycloak } from "@react-keycloak/web";
 import Overlay from "./components/Overlay";
+import Config from "./config";
 
 // This is a hack made to handle tablet sizes.
 // https://medium.com/quick-code/100vh-problem-with-ios-safari-92ab23c852a8
@@ -29,8 +30,19 @@ function App() {
   const { userName, authenticated, hasRoles } = useContext(UserContext);
   const { overlayChild } = useContext(OverlayContext);
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { initialized } = useKeycloak();
+
+  useEffect(() => {
+    const language = localStorage.getItem("language");
+    if (language) {
+      if (i18n.language !== language) {
+        i18n.changeLanguage(language);
+      }
+    } else {
+      localStorage.setItem("language", Config.DEFAULT_USER_LANGUAGE);
+    }
+  }, [i18n]);
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);

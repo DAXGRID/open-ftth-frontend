@@ -16,6 +16,8 @@ import EstablishCustomerConnectionSvg from "./establish-customer-connection.svg"
 import PlusSvg from "./plus.svg";
 import ZoomMapSvg from "./zoom-map.svg";
 import OutageSvg from "./outage.svg";
+import FlagDenmarkSvg from "./flags/dk.svg";
+import FlagGreatBritainSvg from "./flags/gb.svg";
 
 export {
   Loading,
@@ -36,4 +38,6 @@ export {
   PlusSvg,
   ZoomMapSvg,
   OutageSvg,
+  FlagDenmarkSvg,
+  FlagGreatBritainSvg,
 };
