@@ -6,7 +6,7 @@ const resources = translation;
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: "dk",
+  fallbackLng: "en",
   keySeparator: false,
   interpolation: {
     escapeValue: false,

@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import {} from "react-i18next";
 
 interface View {
   text: string;

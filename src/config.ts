@@ -26,6 +26,7 @@ declare global {
     config_COLOR_OPTIONS: string[];
     config_LAYERS: LayerConfig[];
     config_INFORMATION_CONTROL_CONFIG: InformationControlConfig;
+    config_DEFAULT_USER_LANGUAGE: string;
   }
 }
 
@@ -37,6 +38,7 @@ const settings = {
   COLOR_OPTIONS: window.config_COLOR_OPTIONS,
   LAYERS: window.config_LAYERS ?? [],
   INFORMATION_CONTROL_CONFIG: window.config_INFORMATION_CONTROL_CONFIG ?? null,
+  DEFAULT_USER_LANGUAGE: window.config_DEFAULT_USER_LANGUAGE ?? "en"
 };
 
 export default settings;

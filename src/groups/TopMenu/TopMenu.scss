@@ -18,10 +18,13 @@
       &.top-menu-item__center {
         flex: 4;
         justify-content: center;
+        margin-left: 5px;
+        margin-right: 10px;
       }
 
       &.top-menu-item__end {
         flex-direction: row-reverse;
+        gap: 20px;
       }
     }
   }
