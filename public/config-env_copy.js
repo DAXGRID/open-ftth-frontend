@@ -7,4 +7,4 @@ window.config_LAYERS = [];
 window.config_INFORMATION_CONTROL_CONFIG = {
   sourceLayers: [],
 };
-window.config_DEFAULT_USER_LANGUAGE = "en"
+window.config_DEFAULT_USER_LANGUAGE = "en";
