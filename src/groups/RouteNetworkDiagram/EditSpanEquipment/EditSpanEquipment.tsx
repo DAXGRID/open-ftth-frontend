@@ -380,7 +380,6 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
         <div className="full-row">
           <SelectMenu
             options={colorMarkingOptions}
-            removePlaceHolderOnSelect
             onSelected={(x) => setSelectedColorMarking(x)}
             selected={selectedColorMarking}
             enableSearch={true}
