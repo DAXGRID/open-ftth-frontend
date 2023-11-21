@@ -136,12 +136,17 @@ function clickHighlight(
   map: Map,
   lastHighlightedFeature: React.RefObject<MapboxGeoJSONFeature>,
   measureDistanceControl: MeasureDistanceControl,
+  informationControl: InformationControl | null,
   callback: (feature: MapboxGeoJSONFeature) => void,
 ) {
   map.on("click", (e) => {
     // Do nothing if the measure distance control is active to avoid
     // annoyances for the user doing measureing.
     if (measureDistanceControl.active) return;
+
+    // Do nothing if the information control is active to avoid
+    // annoyances for the user doing measureing.
+    if (informationControl?.active) return;
 
     const bbox: [PointLike, PointLike] = [
       [e.point.x - bboxSize, e.point.y - bboxSize],
@@ -378,14 +383,16 @@ function RouteNetworkMap({
 
     newMap.addControl(new SaveImgControl(), "top-right");
 
+    let informationControl: InformationControl | null = null;
+
     if (
       Config.INFORMATION_CONTROL_CONFIG.sourceLayers &&
       Config.INFORMATION_CONTROL_CONFIG.sourceLayers.length > 0
     ) {
-      newMap.addControl(
-        new InformationControl(Config.INFORMATION_CONTROL_CONFIG),
-        "top-right",
+      informationControl = new InformationControl(
+        Config.INFORMATION_CONTROL_CONFIG,
       );
+      newMap.addControl(informationControl, "top-right");
     }
 
     newMap.addControl(
@@ -418,6 +425,7 @@ function RouteNetworkMap({
         newMap,
         lastHighlightedFeature,
         measureDistanceControl,
+        informationControl,
         (x) => {
           let type: "RouteNode" | "RouteSegment" | null = null;
           if (x?.properties?.objecttype === "route_node") {
