@@ -46,7 +46,7 @@ function parseBody(htmlBody: string, obj: any): string {
   for (let i = 0; i < matches.length; i++) {
     result = result.replace(
       matches[i][0],
-      resolve(matches[i][0].replaceAll("{", "").replaceAll("}", ""), obj) ?? ""
+      resolve(matches[i][0].replaceAll("{", "").replaceAll("}", ""), obj) ?? "",
     );
   }
 
@@ -86,24 +86,30 @@ function createPopupContainer(bodyContents: string[]): string {
 
 function filterFeatures(
   config: InformationControlConfig,
-  feature: MapboxGeoJSONFeature
+  feature: MapboxGeoJSONFeature,
 ): boolean {
-  const sourceLayer = config.sourceLayers.find(
-    (z) => z.layer === feature.sourceLayer
+  const sourceLayers = config.sourceLayers.filter(
+    (z) => z.layer === feature.sourceLayer,
   );
 
-  if (sourceLayer) {
-    // If it is we check to see if the sourceLayer feature found matches the filter (either true or false).
-    // If there is no filter, we return that the feature is found (true).
-    return sourceLayer.filter
-      ? !!feature.properties &&
-          resolve(sourceLayer.filter.property, feature) ===
-            sourceLayer.filter.value
-      : true;
-  } else {
-    // If we cannot find the feature on source layer we just return false.
-    return false;
+  for (let i = 0; i < sourceLayers.length; i++) {
+    const sourceLayer = sourceLayers[i];
+
+    if (sourceLayer.filter) {
+      if (
+        resolve(sourceLayer.filter.property, feature) ===
+        sourceLayer.filter.value
+      ) {
+        return true;
+      }
+    } else {
+      // If it has no filter we just return true since it will always match.
+      return true;
+    }
   }
+
+  // No source layer is found, we just return false.
+  return false;
 }
 
 function queryFeature(
@@ -112,8 +118,8 @@ function queryFeature(
   bbox: [PointLike, PointLike],
   filter: (
     config: InformationControlConfig,
-    feature: MapboxGeoJSONFeature
-  ) => boolean
+    feature: MapboxGeoJSONFeature,
+  ) => boolean,
 ) {
   return map.queryRenderedFeatures(bbox, {}).find((x) => {
     return filter(config, x);
@@ -126,8 +132,8 @@ function queryFeatures(
   bbox: [PointLike, PointLike],
   filter: (
     config: InformationControlConfig,
-    feature: MapboxGeoJSONFeature
-  ) => boolean
+    feature: MapboxGeoJSONFeature,
+  ) => boolean,
 ) {
   return map
     .queryRenderedFeatures(bbox, {})
@@ -138,7 +144,7 @@ function queryFeatures(
 function createOnClickFunc(
   map: Map,
   config: InformationControlConfig,
-  bboxSize: number
+  bboxSize: number,
 ) {
   const onClick = (e: MapMouseEvent) => {
     const bbox: [PointLike, PointLike] = [
@@ -165,23 +171,40 @@ function createOnClickFunc(
     }
 
     const parsedBodies = features.map((feature) => {
-      const sourceLayer = config.sourceLayers.find(
-        (x) => x.layer === feature.sourceLayer
+      const sourceLayers = config.sourceLayers.filter(
+        (x) => x.layer === feature.sourceLayer,
       );
 
-      if (!sourceLayer) {
+      if (sourceLayers.length === 1) {
+        return parseBody(sourceLayers[0].body, feature);
+      } else if (sourceLayers.length > 1) {
+        for (let i = 0; i < sourceLayers.length; i++) {
+          const sourceLayer = sourceLayers[i];
+          if (
+            sourceLayer.filter &&
+            resolve(sourceLayer.filter?.property, feature) ===
+              sourceLayer.filter?.value
+          ) {
+            return parseBody(sourceLayer.body, feature);
+          }
+        }
+        // Multiple of same layers
+      } else {
         throw Error(
-          `Could not find source layer for feature with ${feature.sourceLayer}`
+          `Could not find source layer for feature with ${feature.sourceLayer}`,
         );
       }
 
-      return parseBody(sourceLayer.body, feature);
+      throw Error(`Could not handle parsing bodies for ${feature}`);
     });
 
-    showSelection(map, features[0]);
-
-    const popupContainer = createPopupContainer(parsedBodies);
-    addPopup(map, coordinates, popupContainer);
+    if (parsedBodies) {
+      showSelection(map, features[0]);
+      const popupContainer = createPopupContainer(parsedBodies);
+      addPopup(map, coordinates, popupContainer);
+    } else {
+      throw Error("Could not parse bodies for information control display.");
+    }
   };
 
   return onClick;
@@ -190,7 +213,7 @@ function createOnClickFunc(
 function createHoverPointerFunc(
   map: Map,
   config: InformationControlConfig,
-  bboxSize: number
+  bboxSize: number,
 ) {
   const onHoverPointer = (e: MapMouseEvent) => {
     const bbox: [PointLike, PointLike] = [
@@ -257,7 +280,7 @@ class InformationControl {
   active: boolean = false;
   onClickFunc:
     | ((
-        e: MapMouseEvent & { features?: MapboxGeoJSONFeature[] | undefined }
+        e: MapMouseEvent & { features?: MapboxGeoJSONFeature[] | undefined },
       ) => void)
     | null = null;
   onHoverFunc: ((e: MapMouseEvent) => void) | null = null;
