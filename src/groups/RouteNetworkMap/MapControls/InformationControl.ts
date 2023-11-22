@@ -15,6 +15,7 @@ library.add(faInfoCircle);
 
 interface InformationControlLayer {
   layer: string;
+  styleLayerName: string | null;
   body: string;
   filter: {
     property: string;
@@ -100,7 +101,11 @@ function filterFeatures(
         resolve(sourceLayer.filter.property, feature) ===
         sourceLayer.filter.value
       ) {
-        return true;
+        if (sourceLayer.styleLayerName) {
+          return sourceLayer.styleLayerName === feature.layer.id;
+        } else {
+          return true;
+        }
       }
     } else {
       // If it has no filter we just return true since it will always match.
@@ -135,10 +140,7 @@ function queryFeatures(
     feature: MapboxGeoJSONFeature,
   ) => boolean,
 ) {
-  return map
-    .queryRenderedFeatures(bbox, {})
-    .filter((x) => filter(config, x))
-    .filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i);
+  return map.queryRenderedFeatures(bbox, {}).filter((x) => filter(config, x));
 }
 
 function createOnClickFunc(
