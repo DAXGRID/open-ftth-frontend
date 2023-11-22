@@ -9,6 +9,7 @@ interface LayerConfig {
 interface InformationControlConfig {
   sourceLayers: {
     layer: string;
+    styleLayerName: string | null;
     body: string;
     filter: {
       property: string;
