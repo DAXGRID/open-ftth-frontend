@@ -4,9 +4,7 @@ import {
   MapboxGeoJSONFeature,
   Popup,
   PointLike,
-  GeoJSONSource,
 } from "maplibre-gl";
-import { Geometry, GeoJsonProperties, Feature } from "geojson";
 import { icon, library } from "@fortawesome/fontawesome-svg-core";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import "./InformationControl.scss";
@@ -147,6 +145,7 @@ function createOnClickFunc(
   map: Map,
   config: InformationControlConfig,
   bboxSize: number,
+  previousSelectedFeature: MapboxGeoJSONFeature[],
 ) {
   const onClick = (e: MapMouseEvent) => {
     const bbox: [PointLike, PointLike] = [
@@ -156,21 +155,22 @@ function createOnClickFunc(
 
     const features = queryFeatures(map, config, bbox, filterFeatures);
 
+    removeSelection(map, previousSelectedFeature);
+    previousSelectedFeature.length = 0;
+    for (let i = 0; i < features.length; i++) {
+      previousSelectedFeature.push(features[i]);
+    }
+
     // In case we don't find a feature we return since we odn't want to create a popup.
     if (features.length === 0) return;
 
     // We have to cast to any because of coordinates missing from type spec.
-    const coordinates: [number, number] = (features[0].geometry as any)
-      .coordinates;
+    let coordinates: [number, number] = [e.lngLat.lng, e.lngLat.lat];
+    if (features[0].geometry.type === "Point") {
+      coordinates = (features[0].geometry as any).coordinates;
+    }
 
     if (!coordinates) throw Error("Could not find BBOX for feature.");
-
-    // Ensure that if the map is zoomed out such that multiple
-    // copies of the feature are visible, the popup appears
-    // over the copy being pointed to.
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
 
     const parsedBodies = features.map((feature) => {
       const sourceLayers = config.sourceLayers.filter(
@@ -201,7 +201,7 @@ function createOnClickFunc(
     });
 
     if (parsedBodies) {
-      showSelection(map, features[0]);
+      showSelection(map, features);
       const popupContainer = createPopupContainer(parsedBodies);
       addPopup(map, coordinates, popupContainer);
     } else {
@@ -246,34 +246,36 @@ function removePopup() {
   }
 }
 
-function showSelection(map: Map, myFeature: any) {
-  const features: Feature<Geometry, GeoJsonProperties>[] = [];
-  const feature: Feature<Geometry, GeoJsonProperties> = {
-    id: 0,
-    type: "Feature",
-    geometry: {
-      type: "Point",
-      coordinates: [
-        myFeature.geometry.coordinates[0],
-        myFeature.geometry.coordinates[1],
-      ],
-    },
-    properties: {},
-  };
-
-  features.push(feature);
-
-  (map.getSource("information_marker") as GeoJSONSource)?.setData({
-    type: "FeatureCollection",
-    features: features ?? [],
-  });
+function showSelection(map: Map, features: MapboxGeoJSONFeature[]) {
+  for (let i = 0; i < features.length; i++) {
+    const feature = features[i];
+    map.setFeatureState(
+      {
+        source: feature.source,
+        sourceLayer: feature.sourceLayer,
+        id: feature.id,
+      },
+      {
+        info_selection: true,
+      },
+    );
+  }
 }
 
-function removeSelection(map: Map) {
-  (map.getSource("information_marker") as GeoJSONSource)?.setData({
-    type: "FeatureCollection",
-    features: [],
-  });
+function removeSelection(map: Map, features: MapboxGeoJSONFeature[]) {
+  for (let i = 0; i < features.length; i++) {
+    const feature = features[i];
+    map.setFeatureState(
+      {
+        source: feature.source,
+        sourceLayer: feature.sourceLayer,
+        id: feature.id,
+      },
+      {
+        info_selection: false,
+      },
+    );
+  }
 }
 
 class InformationControl {
@@ -287,9 +289,11 @@ class InformationControl {
     | null = null;
   onHoverFunc: ((e: MapMouseEvent) => void) | null = null;
   config: InformationControlConfig;
+  previousSelectedFeatures: MapboxGeoJSONFeature[];
 
   constructor(config: InformationControlConfig) {
     this.config = config;
+    this.previousSelectedFeatures = [];
   }
 
   onAdd(map: Map) {
@@ -298,7 +302,12 @@ class InformationControl {
     this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
     const button = createButton();
 
-    this.onClickFunc = createOnClickFunc(map, this.config, 6);
+    this.onClickFunc = createOnClickFunc(
+      map,
+      this.config,
+      6,
+      this.previousSelectedFeatures,
+    );
     this.onHoverFunc = createHoverPointerFunc(map, this.config, 6);
 
     button.addEventListener("click", () => {
@@ -316,7 +325,8 @@ class InformationControl {
         map.off("click", this.onClickFunc);
         map.off("mousemove", this.onHoverFunc);
         removePopup();
-        removeSelection(map);
+        removeSelection(map, this.previousSelectedFeatures);
+        this.previousSelectedFeatures.length = 0;
       }
     });
 
