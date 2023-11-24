@@ -100,7 +100,9 @@ function filterFeatures(
         sourceLayer.filter.value
       ) {
         if (sourceLayer.styleLayerName) {
-          return sourceLayer.styleLayerName === feature.layer.id;
+          if (sourceLayer.styleLayerName === feature.layer.id) {
+            return true;
+          }
         } else {
           return true;
         }
