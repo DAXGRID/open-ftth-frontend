@@ -516,26 +516,6 @@ function RouteNetworkMap({
         },
       });
 
-      newMap.addSource("information_marker", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [],
-        },
-      });
-
-      newMap.addLayer({
-        id: "information_marker",
-        type: "circle",
-        source: "information_marker",
-        paint: {
-          "circle-radius": 12,
-          "circle-stroke-width": 2,
-          "circle-opacity": 0,
-          "circle-stroke-color": "#33b5e5",
-        },
-      });
-
       newMap.addSource("measurement", {
         type: "geojson",
         data: {
