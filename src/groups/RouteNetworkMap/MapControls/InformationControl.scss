@@ -16,10 +16,12 @@
 }
 
 .information-control-container {
-  padding: 10px;
+  padding-top: 30px;
 }
 
 .information-control-body {
+  overflow-y: auto;
+  max-height: 500px;
 }
 
 .information-control-body-item {
