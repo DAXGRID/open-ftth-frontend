@@ -353,6 +353,7 @@ function RouteNetworkMap({
       preserveDrawingBuffer: true,
       doubleClickZoom: false,
       dragRotate: false,
+      maxZoom: 23,
     });
 
     newMap.touchZoomRotate.disableRotation();
