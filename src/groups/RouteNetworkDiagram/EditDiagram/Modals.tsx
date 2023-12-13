@@ -6,6 +6,7 @@ import EstablishCustomerConnection from "../EstablishCustomerConnection";
 import AddRack from "../AddRack";
 import AddTerminalEquipment from "../AddTerminalEquipment";
 import OutageView from "../OutageView";
+import ArrangeRackEquipment from "../ArrangeRackEquipment";
 
 export function addContainerModal(cb: () => void, title: string) {
   return (
@@ -108,6 +109,22 @@ export function outageViewModal(
   return (
     <ModalContainer title={title} closeCallback={cb}>
       <OutageView routeElementId={routeElementId} />
+    </ModalContainer>
+  );
+}
+
+export function arrangeRackEquipmentModal(
+  cb: () => void,
+  title: string,
+  routeElementId: string,
+  terminalEquipmentId: string,
+) {
+  return (
+    <ModalContainer title={title} closeCallback={cb}>
+      <ArrangeRackEquipment
+        routeElementId={routeElementId}
+        terminalEquipmentId={terminalEquipmentId}
+      />
     </ModalContainer>
   );
 }

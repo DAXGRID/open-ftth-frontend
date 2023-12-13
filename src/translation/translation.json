@@ -266,7 +266,13 @@
       "TURQUOISE": "Turquoise",
       "MESSAGE_HAS_BEEN_SENT": "Message has been sent",
       "COULD_NOT_FIND_LOCATION": "Could not find the location",
-      "UNIT_ADDRESS_REQUIRED": "Unit address is required."
+      "UNIT_ADDRESS_REQUIRED": "Unit address is required.",
+      "MOVE_TERMINAL_EQUIPMENT": "Move terminal equipment",
+      "MOVE_UP": "Move up",
+      "MOVE_DOWN": "Move down",
+      "DIRECTION": "Direction",
+      "MOVE_UP_OR_DOWN": "Move up or down",
+      "AMOUNT_RACK_UNITS": "Amount of rack units"
     }
   },
   "dk": {
@@ -536,7 +542,13 @@
       "TURQUOISE": "Turkis",
       "MESSAGE_HAS_BEEN_SENT": "Beskeden er sendt",
       "COULD_NOT_FIND_LOCATION": "Kunne ikke finde lokationen",
-      "UNIT_ADDRESS_REQUIRED": "Enhedsadresse er påkrævet."
+      "UNIT_ADDRESS_REQUIRED": "Enhedsadresse er påkrævet.",
+      "MOVE_TERMINAL_EQUIPMENT": "Flyt udstyr",
+      "MOVE_UP": "Flyt op",
+      "MOVE_DOWN": "Flyt ned",
+      "DIRECTION": "Retning",
+      "MOVE_UP_OR_DOWN": "Flyt op/ned",
+      "AMOUNT_RACK_UNITS": "Antal rack units"
     }
   }
 }
