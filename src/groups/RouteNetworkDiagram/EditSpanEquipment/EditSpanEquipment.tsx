@@ -40,9 +40,10 @@ function accessAddressToOption(
   };
 }
 
-function unitAddressToOption(unitAddress: UnitAddress): SelectOption {
+function unitAddressToOption(unitAddress: UnitAddress, t: TFunction<"translation">): SelectOption {
+  const text = `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`.trim();
   return {
-    text: `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`,
+    text: text ? text : t("UNNAMED"),
     value: unitAddress.id,
     key: unitAddress.id,
   };
@@ -239,7 +240,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
         ?.accessAddress.unitAddresses.sort((x, y) =>
           x.externalId > y.externalId ? 1 : -1,
         )
-        .map(unitAddressToOption) ?? [];
+        .map((x) => unitAddressToOption(x, t)) ?? [];
 
     // We do this because there is an issue
     // where unit address has an id but no labels and its the only one

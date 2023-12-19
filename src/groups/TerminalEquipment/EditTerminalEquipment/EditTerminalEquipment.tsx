@@ -31,9 +31,10 @@ function accessAddressToOption(
   };
 }
 
-function unitAddressToOption(unitAddress: UnitAddress): SelectOption {
+function unitAddressToOption(unitAddress: UnitAddress, t: TFunction<"translation">): SelectOption {
+  const text = `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`.trim();
   return {
-    text: `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`,
+    text: text ? text : t("UNNAMED"),
     value: unitAddress.id,
     key: unitAddress.id,
   };
@@ -368,7 +369,7 @@ function EditTerminalEquipment({
         ?.accessAddress.unitAddresses.sort((x, y) =>
           x.externalId > y.externalId ? 1 : -1,
         )
-        .map(unitAddressToOption) ?? [];
+        .map((x) => unitAddressToOption(x, t)) ?? [];
 
     return defaultList.concat(options);
   }, [state.nearestAccessAddresses, state.accessAddressId, t]);

@@ -272,7 +272,8 @@
       "MOVE_DOWN": "Move down",
       "DIRECTION": "Direction",
       "MOVE_UP_OR_DOWN": "Move up or down",
-      "AMOUNT_RACK_UNITS": "Amount of rack units"
+      "AMOUNT_RACK_UNITS": "Amount of rack units",
+      "UNNAMED": "Unnamed"
     }
   },
   "dk": {
@@ -548,7 +549,8 @@
       "MOVE_DOWN": "Flyt ned",
       "DIRECTION": "Retning",
       "MOVE_UP_OR_DOWN": "Flyt op/ned",
-      "AMOUNT_RACK_UNITS": "Antal rack units"
+      "AMOUNT_RACK_UNITS": "Antal rack units",
+      "UNNAMED": "Unavngiven"
     }
   }
 }
