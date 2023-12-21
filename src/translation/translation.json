@@ -271,7 +271,7 @@
       "MOVE_UP": "Move up",
       "MOVE_DOWN": "Move down",
       "DIRECTION": "Direction",
-      "MOVE_UP_OR_DOWN": "Move up or down",
+      "MOVE_EQUIPMENT_AS_WELL_AS_EVERYTHING_ABOVE_UP_OR_DOWN": "Move equipment and everything above up/down",
       "AMOUNT_RACK_UNITS": "Amount of rack units",
       "UNNAMED": "Unnamed"
     }
@@ -548,7 +548,7 @@
       "MOVE_UP": "Flyt op",
       "MOVE_DOWN": "Flyt ned",
       "DIRECTION": "Retning",
-      "MOVE_UP_OR_DOWN": "Flyt op/ned",
+      "MOVE_EQUIPMENT_AS_WELL_AS_EVERYTHING_ABOVE_UP_OR_DOWN": "Flyt udstyr samt alt ovenover op/ned",
       "AMOUNT_RACK_UNITS": "Antal rack units",
       "UNNAMED": "Unavngiven"
     }

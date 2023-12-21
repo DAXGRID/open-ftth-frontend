@@ -813,7 +813,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               type: "arrangeRackEquipment",
               show: false,
             }),
-          t("MOVE_UP_OR_DOWN"),
+          t("MOVE_EQUIPMENT_AS_WELL_AS_EVERYTHING_ABOVE_UP_OR_DOWN"),
           localIdentifiedFeature.id,
           terminalEquipmentId,
         ),
@@ -1085,7 +1085,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                 key: 0,
               },
               {
-                text: t("MOVE_UP_OR_DOWN"),
+                text: t("MOVE_EQUIPMENT_AS_WELL_AS_EVERYTHING_ABOVE_UP_OR_DOWN"),
                 action: () => {
                   showModalsDispatch({
                     type: "arrangeRackEquipment",
