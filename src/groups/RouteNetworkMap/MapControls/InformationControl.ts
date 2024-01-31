@@ -187,7 +187,9 @@ function createOnClickFunc(
           if (
             sourceLayer.filter &&
             resolve(sourceLayer.filter?.property, feature) ===
-              sourceLayer.filter?.value
+              sourceLayer.filter?.value &&
+            (!sourceLayer.styleLayerName ||
+              sourceLayer.styleLayerName === feature.layer.id)
           ) {
             return parseBody(sourceLayer.body, feature);
           }
