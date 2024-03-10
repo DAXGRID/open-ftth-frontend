@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useClient } from "urql";
-import { getGeneralView, TerminalEquipment } from "./GeneralViewGql";
+import { getGeneralView, TerminalEquipment } from "./GeneralTerminalEquipmentViewGql";
 import { useTranslation } from "react-i18next";
 import TextBox from "../../../components/TextBox";
 import LabelContainer from "../../../components/LabelContainer";
@@ -42,17 +42,17 @@ function addressDisplayText(
   }
 }
 
-interface GeneralViewProps {
+interface GeneralTerminalEquipmentViewProps {
   routeNodeId: string;
   terminalEquipmentId: string;
   editable?: boolean;
 }
 
-function GeneralView({
+function GeneralTerminalEquipmentView({
   routeNodeId,
   terminalEquipmentId,
   editable,
-}: GeneralViewProps) {
+}: GeneralTerminalEquipmentViewProps) {
   const client = useClient();
   const { t } = useTranslation();
   const [terminalEquipment, setTerminalEquipment] =
@@ -189,4 +189,4 @@ function GeneralView({
   );
 }
 
-export default GeneralView;
+export default GeneralTerminalEquipmentView;

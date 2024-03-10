@@ -22,7 +22,7 @@ import TerminalEquipment from "../../TerminalEquipment";
 import ConnectivityView from "../ConnectivityView";
 import PassageView from "../PassageView";
 import TabView from "../../../components/TabView";
-import GeneralView from "../GeneralView";
+import GeneralTerminalEquipmentView from "../GeneralTerminalEquipmentView";
 import {
   Diagram,
   Envelope,
@@ -1205,7 +1205,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                         title: t("GENERAL"),
                         id: "0",
                         view: (
-                          <GeneralView
+                          <GeneralTerminalEquipmentView
                             routeNodeId={localIdentifiedFeature?.id ?? ""}
                             terminalEquipmentId={
                               singleSelectedFeature.properties?.refId ?? ""
