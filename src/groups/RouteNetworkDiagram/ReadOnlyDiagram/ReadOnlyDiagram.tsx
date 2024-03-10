@@ -14,7 +14,7 @@ import TerminalEquipment from "../../TerminalEquipment";
 import ConnectivityView from "../ConnectivityView";
 import PassageView from "../PassageView";
 import TabView from "../../../components/TabView";
-import GeneralView from "../GeneralView";
+import GeneralTerminalEquipmentView from "../GeneralTerminalEquipmentView";
 import {
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
@@ -176,7 +176,7 @@ function ReadOnlyDiagram({
                       title: t("GENERAL"),
                       id: "0",
                       view: (
-                        <GeneralView
+                        <GeneralTerminalEquipmentView
                           routeNodeId={identifiedFeature?.id ?? ""}
                           terminalEquipmentId={
                             selectedFeature.properties?.refId ?? ""
