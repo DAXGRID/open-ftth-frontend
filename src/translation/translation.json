@@ -275,7 +275,11 @@
       "AMOUNT_RACK_UNITS": "Amount of rack units",
       "UNNAMED": "Unnamed",
       "TERMINAL_EQUIPMENT_DOES_NOT_FIT_IN_RACK": "Rack equipment is not allowed to overlap existing rack equipment",
-      "TERMINAL_EQUIPMENT_CANNOT_BE_MOVED_DOWN_DUE_TO_LACK_OF_FREE_SPACE": "Rack equipment is not allowed to overlap existing rack equipment or moved below rack bottom"
+      "TERMINAL_EQUIPMENT_CANNOT_BE_MOVED_DOWN_DUE_TO_LACK_OF_FREE_SPACE": "Rack equipment is not allowed to overlap existing rack equipment or moved below rack bottom",
+      "MARKING_TEXT": "Marking text",
+      "ID": "Id",
+      "SPECIFCATION_DESCRIPTION": "Specification description",
+      "DESCRIPTION": "Description"
     }
   },
   "dk": {
@@ -554,7 +558,11 @@
       "AMOUNT_RACK_UNITS": "Antal rack units",
       "UNNAMED": "Unavngiven",
       "TERMINAL_EQUIPMENT_DOES_NOT_FIT_IN_RACK": "Rack udstyr må ikke overlappe eksisterende udstyr",
-      "TERMINAL_EQUIPMENT_CANNOT_BE_MOVED_DOWN_DUE_TO_LACK_OF_FREE_SPACE": "Rack udstyr må ikke overlappe eksisterende udstyr eller flyttes længere ned end til bunden af rack'et"
+      "TERMINAL_EQUIPMENT_CANNOT_BE_MOVED_DOWN_DUE_TO_LACK_OF_FREE_SPACE": "Rack udstyr må ikke overlappe eksisterende udstyr eller flyttes længere ned end til bunden af rack'et",
+      "MARKING_TEXT": "Markerings tekst",
+      "ID": "Id",
+      "SPECIFCATION_DESCRIPTION": "Specifikations beskrivelse",
+      "DESCRIPTION": "Beskrivelse"
     }
   }
 }

@@ -15,6 +15,7 @@ import ConnectivityView from "../ConnectivityView";
 import PassageView from "../PassageView";
 import TabView from "../../../components/TabView";
 import GeneralTerminalEquipmentView from "../GeneralTerminalEquipmentView";
+import GeneralSpanEquipmentView from "../GeneralSpanEquipmentView";
 import {
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
@@ -128,7 +129,7 @@ function ReadOnlyDiagram({
         setSelectedFeature(null);
       }
     },
-    [setSelectedFeature]
+    [setSelectedFeature],
   );
 
   return (
@@ -226,6 +227,15 @@ function ReadOnlyDiagram({
             select={setSpanEquipmentCableTabViewSelectedId}
             views={[
               {
+                title: t("General"),
+                view: (
+                  <GeneralSpanEquipmentView
+                    spanEquipmentId={selectedFeature.properties?.refId ?? ""}
+                  />
+                ),
+                id: "0",
+              },
+              {
                 title: t("PASSAGE_VIEW"),
                 view: (
                   <PassageView
@@ -236,7 +246,7 @@ function ReadOnlyDiagram({
                     }
                   />
                 ),
-                id: "0",
+                id: "1",
               },
               {
                 title: t("CONNECTIVITY"),
@@ -246,7 +256,7 @@ function ReadOnlyDiagram({
                     spanEquipmentId={selectedFeature.properties?.refId ?? ""}
                   />
                 ),
-                id: "1",
+                id: "2",
               },
             ]}
           />

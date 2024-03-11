@@ -23,6 +23,7 @@ import ConnectivityView from "../ConnectivityView";
 import PassageView from "../PassageView";
 import TabView from "../../../components/TabView";
 import GeneralTerminalEquipmentView from "../GeneralTerminalEquipmentView";
+import GeneralSpanEquipmentView from "../GeneralSpanEquipmentView";
 import {
   Diagram,
   Envelope,
@@ -1085,7 +1086,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                 key: 0,
               },
               {
-                text: t("MOVE_EQUIPMENT_AS_WELL_AS_EVERYTHING_ABOVE_UP_OR_DOWN"),
+                text: t(
+                  "MOVE_EQUIPMENT_AS_WELL_AS_EVERYTHING_ABOVE_UP_OR_DOWN",
+                ),
                 action: () => {
                   showModalsDispatch({
                     type: "arrangeRackEquipment",
@@ -1257,6 +1260,15 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               select={setSpanEquipmentTabViewSelectedId}
               views={[
                 {
+                  title: t("General"),
+                  view: (
+                    <GeneralSpanEquipmentView
+                      spanEquipmentId={singleSelectedFeature.properties?.refId}
+                    />
+                  ),
+                  id: "0",
+                },
+                {
                   title: t("PASSAGE_VIEW"),
                   view: (
                     <PassageView
@@ -1267,7 +1279,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                       }
                     />
                   ),
-                  id: "0",
+                  id: "1",
                 },
                 {
                   title: t("CONNECTIVITY"),
@@ -1279,7 +1291,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                       }
                     />
                   ),
-                  id: "1",
+                  id: "2",
                 },
               ]}
             />
