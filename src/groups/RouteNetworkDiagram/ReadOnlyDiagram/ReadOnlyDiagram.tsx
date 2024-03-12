@@ -227,7 +227,7 @@ function ReadOnlyDiagram({
             select={setSpanEquipmentCableTabViewSelectedId}
             views={[
               {
-                title: t("General"),
+                title: t("GENERAL"),
                 view: (
                   <GeneralSpanEquipmentView
                     spanEquipmentId={selectedFeature.properties?.refId ?? ""}

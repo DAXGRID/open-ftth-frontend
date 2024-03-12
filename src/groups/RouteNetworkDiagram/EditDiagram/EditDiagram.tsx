@@ -1260,7 +1260,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
               select={setSpanEquipmentTabViewSelectedId}
               views={[
                 {
-                  title: t("General"),
+                  title: t("GENERAL"),
                   view: (
                     <GeneralSpanEquipmentView
                       spanEquipmentId={singleSelectedFeature.properties?.refId}
