@@ -81,9 +81,9 @@ function GeneralSpanEquipmentView({
         <div className="general-span-equipment-view-body">
           <div className="block">
             <div className="full-row">
-              <LabelContainer text={t("NAME")}>
+              <LabelContainer text={t("SPECIFCATION_NAME")}>
                 <TextBox
-                  value={spanEquipment.name ?? ""}
+                  value={spanEquipment.specification?.name ?? ""}
                   setValue={() => {}}
                   disabled={true}
                 />
@@ -92,16 +92,16 @@ function GeneralSpanEquipmentView({
             <div className="full-row">
               <LabelContainer text={t("SPECIFCATION_DESCRIPTION")}>
                 <TextBox
-                  value={spanEquipment?.specification?.description ?? ""}
+                  value={spanEquipment.specification?.description ?? ""}
                   setValue={() => {}}
                   disabled={true}
                 />
               </LabelContainer>
             </div>
             <div className="full-row">
-              <LabelContainer text={t("MARKING_COLOR")}>
+              <LabelContainer text={t("DESCRIPTION")}>
                 <TextBox
-                  value={spanEquipment.markingInfo?.markingColor ?? ""}
+                  value={spanEquipment.description ?? ""}
                   setValue={() => {}}
                   disabled={true}
                 />
@@ -111,6 +111,15 @@ function GeneralSpanEquipmentView({
               <LabelContainer text={t("MARKING_TEXT")}>
                 <TextBox
                   value={spanEquipment.markingInfo?.markingText ?? ""}
+                  setValue={() => {}}
+                  disabled={true}
+                />
+              </LabelContainer>
+            </div>
+            <div className="full-row">
+              <LabelContainer text={t("MARKING_COLOR")}>
+                <TextBox
+                  value={spanEquipment.markingInfo?.markingColor ?? ""}
                   setValue={() => {}}
                   disabled={true}
                 />

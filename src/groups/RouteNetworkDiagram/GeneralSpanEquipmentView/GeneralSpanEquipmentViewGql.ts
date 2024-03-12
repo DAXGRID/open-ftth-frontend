@@ -22,9 +22,10 @@ interface QuerySpanEquipmentDetailsResponse {
 }
 
 export interface SpanEquipment {
-  id: string;
   name: string;
+  description: string;
   specification: {
+    name: string;
     description: string;
   };
   markingInfo: {
@@ -51,10 +52,10 @@ const QUERY_SPAN_EQUIPMENT_DETAILS = `
 query ($spanEquipmentOrSegmentId: ID!) {
   utilityNetwork {
     spanEquipment(spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId) {
-      id
       name
       description
       specification {
+        name
         description
       }
       markingInfo {

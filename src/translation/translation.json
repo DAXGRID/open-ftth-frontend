@@ -279,6 +279,7 @@
       "MARKING_TEXT": "Marking text",
       "ID": "Id",
       "SPECIFCATION_DESCRIPTION": "Specification description",
+      "SPECIFCATION_NAME": "Specification name",
       "DESCRIPTION": "Description"
     }
   },
@@ -561,8 +562,9 @@
       "TERMINAL_EQUIPMENT_CANNOT_BE_MOVED_DOWN_DUE_TO_LACK_OF_FREE_SPACE": "Rack udstyr må ikke overlappe eksisterende udstyr eller flyttes længere ned end til bunden af rack'et",
       "MARKING_TEXT": "Markerings tekst",
       "ID": "Id",
-      "SPECIFCATION_DESCRIPTION": "Specifikations beskrivelse",
-      "DESCRIPTION": "Beskrivelse"
+      "SPECIFCATION_DESCRIPTION": "Specifikation beskrivelse",
+      "SPECIFCATION_NAME": "Specifikation navn",
+      "DESCRIPTION": "Kommentar"
     }
   }
 }
