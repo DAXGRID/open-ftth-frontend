@@ -231,6 +231,7 @@ function ReadOnlyDiagram({
                 view: (
                   <GeneralSpanEquipmentView
                     spanEquipmentId={selectedFeature.properties?.refId ?? ""}
+                    editable={false}
                   />
                 ),
                 id: "0",

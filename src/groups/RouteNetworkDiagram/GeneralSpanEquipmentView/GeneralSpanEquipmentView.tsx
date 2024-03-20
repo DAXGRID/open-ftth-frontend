@@ -1,15 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useClient } from "urql";
 import { useTranslation } from "react-i18next";
+import { EditPropertiesSvg } from "../../../assets";
+import ModalContainer from "../../../components/ModalContainer";
 import LabelContainer from "../../../components/LabelContainer";
 import TextBox from "../../../components/TextBox";
+import ActionButton from "../../../components/ActionButton";
 import {
   getSpanEquipmentDetails,
   SpanEquipment,
 } from "./GeneralSpanEquipmentViewGql";
+import { OverlayContext } from "../../../contexts/OverlayContext";
+import EditSpanEquipment from "../EditSpanEquipment";
 
 interface GeneralSpanEquipmentViewProps {
   spanEquipmentId: string;
+  editable: boolean;
 }
 
 interface AccessAddress {
@@ -46,12 +52,16 @@ function addressDisplayText(
 
 function GeneralSpanEquipmentView({
   spanEquipmentId,
+  editable,
 }: GeneralSpanEquipmentViewProps) {
   const client = useClient();
   const { t } = useTranslation();
+  const { showElement } = useContext(OverlayContext);
   const [spanEquipment, setSpanEquipment] = useState<SpanEquipment | null>(
     null,
   );
+  const [showEditSpanEquipment, setShowEditSpanEquipment] =
+    useState<boolean>(false);
 
   useEffect(() => {
     getSpanEquipmentDetails(client, spanEquipmentId)
@@ -68,16 +78,44 @@ function GeneralSpanEquipmentView({
       });
   }, [client, spanEquipmentId]);
 
+  useEffect(() => {
+    if (showEditSpanEquipment) {
+      showElement(
+        <ModalContainer
+          title={t("EDIT_SPAN_EQUIPMENT")}
+          closeCallback={() => setShowEditSpanEquipment(false)}
+        >
+          <EditSpanEquipment spanEquipmentMrid={spanEquipmentId ?? ""} />
+        </ModalContainer>,
+      );
+    } else {
+      showElement(null);
+    }
+  }, [showEditSpanEquipment, t, showElement, spanEquipmentId]);
+
   if (!spanEquipment) {
     return <></>;
   }
 
   return (
     <div className="general-span-equipment-view">
-      <div className="general-view-container">
-        <div className="general-view-header">
+      <div className="general-span-equipment-view-container">
+        <div className="general-span-equipment-view-header">
           <p>{spanEquipment.name}</p>
+          <div className="general-span-equipment-view-row-title-header-actions">
+            {editable && (
+              <>
+                <ActionButton
+                  action={() => setShowEditSpanEquipment(true)}
+                  icon={EditPropertiesSvg}
+                  title={t("EDIT")}
+                  key={1}
+                />
+              </>
+            )}
+          </div>
         </div>
+
         <div className="general-span-equipment-view-body">
           <div className="block">
             <div className="full-row">

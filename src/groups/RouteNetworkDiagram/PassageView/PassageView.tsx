@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useClient } from "urql";
-import { EditPropertiesSvg, MoveConduitSvg, PlusSvg } from "../../../assets";
+import { MoveConduitSvg, PlusSvg } from "../../../assets";
 import ActionButton from "../../../components/ActionButton";
 import ModalContainer from "../../../components/ModalContainer";
 import { MapContext } from "../../../contexts/MapContext";
 import { OverlayContext } from "../../../contexts/OverlayContext";
-import EditSpanEquipment from "../EditSpanEquipment";
 import RerouteSpanEquipment from "../RerouteSpanEquipment";
 import useBridgeConnector from "../../../bridge/useBridgeConnector";
 import {
@@ -37,9 +36,8 @@ function PassageView({
   const [passageView, setPassageView] =
     useState<SpanEquipmentPassageView | null>(null);
   const [selectedLineIndex, setSelectedLineIndex] = useState<number | null>(
-    null
+    null,
   );
-  const [showEditSpanEquipment, setShowEditSpanEquipment] = useState(false);
   const [showRerouteTube, setShowRerouteTube] = useState(false);
   const { selectRouteSegments } = useBridgeConnector();
 
@@ -79,29 +77,12 @@ function PassageView({
           <RerouteSpanEquipment
             selectedRouteSegmentMrid={spanEquipmentOrSegmentIds ?? ""}
           />
-        </ModalContainer>
-      );
-    } else if (showEditSpanEquipment) {
-      showElement(
-        <ModalContainer
-          title={t("EDIT_SPAN_EQUIPMENT")}
-          closeCallback={() => setShowEditSpanEquipment(false)}
-        >
-          <EditSpanEquipment
-            spanEquipmentMrid={spanEquipmentOrSegmentIds ?? ""}
-          />
-        </ModalContainer>
+        </ModalContainer>,
       );
     } else {
       showElement(null);
     }
-  }, [
-    showRerouteTube,
-    showEditSpanEquipment,
-    t,
-    showElement,
-    spanEquipmentOrSegmentIds,
-  ]);
+  }, [showRerouteTube, t, showElement, spanEquipmentOrSegmentIds]);
 
   if (!passageView || passageView.spanEquipments.length === 0) {
     return <div style={{ height: "200" }}></div>;
@@ -143,16 +124,10 @@ function PassageView({
                   key={0}
                 />
                 <ActionButton
-                  action={() => setShowEditSpanEquipment(true)}
-                  icon={EditPropertiesSvg}
-                  title={t("EDIT")}
-                  key={1}
-                />
-                <ActionButton
                   action={() => selectAllLineSegmentsInMap()}
                   icon={PlusSvg}
                   title={t("SELECT")}
-                  key={2}
+                  key={1}
                 />
               </>
             )}
