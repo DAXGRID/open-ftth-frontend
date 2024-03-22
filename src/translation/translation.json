@@ -280,7 +280,9 @@
       "ID": "Id",
       "SPECIFCATION_DESCRIPTION": "Specification description",
       "SPECIFCATION_NAME": "Specification name",
-      "DESCRIPTION": "Description"
+      "DESCRIPTION": "Description",
+      "MARKING_INFORMATION": "Marking information",
+      "COMMENT": "Comment"
     }
   },
   "dk": {
@@ -564,7 +566,9 @@
       "ID": "Id",
       "SPECIFCATION_DESCRIPTION": "Specifikation beskrivelse",
       "SPECIFCATION_NAME": "Specifikation navn",
-      "DESCRIPTION": "Kommentar"
+      "DESCRIPTION": "Kommentar",
+      "MARKING_INFORMATION": "Markerings information",
+      "COMMENT": "Kommentar"
     }
   }
 }

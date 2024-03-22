@@ -40,8 +40,12 @@ function accessAddressToOption(
   };
 }
 
-function unitAddressToOption(unitAddress: UnitAddress, t: TFunction<"translation">): SelectOption {
-  const text = `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`.trim();
+function unitAddressToOption(
+  unitAddress: UnitAddress,
+  t: TFunction<"translation">,
+): SelectOption {
+  const text =
+    `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`.trim();
   return {
     text: text ? text : t("UNNAMED"),
     value: unitAddress.id,
@@ -125,22 +129,36 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
   const [colorMarkingOptions] = useState<SelectOption[]>(
     colorOptions(Config.COLOR_OPTIONS, t),
   );
+
+  // Span equipment information
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
+
   const [selectedManufacturer, setSelectedManufacturer] = useState<string>("");
+
   const [
     spanEquipmentSpecifications,
     setSpanEquipmentssetSpanEquipmentSpecifications,
   ] = useState<SpanEquipmentSpecification[]>([]);
+
   const [
     selectedSpanEquipmentSpecification,
     setSelectedSpanEquipmentSpecification,
   ] = useState<string>();
+
   const [selectedCategory, setSelectedCategory] = useState<
     string | number | undefined
   >();
+
+  const [description, setDescription] = useState<string>("");
+
+  // Color Marking
   const [selectedColorMarking, setSelectedColorMarking] = useState<
     string | number | undefined
   >("");
+
+  const [markingText, setMarkingText] = useState<string>("");
+
+  // Address information
   const [selectedAccessAddressId, setSelectedAccessAddressId] =
     useState<string>("");
   const [selectedUnitAddressId, setSelectedUnitAddressId] =
@@ -319,12 +337,14 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     }
 
     const params: UpdateSpanEquipmentDetailsParameters = {
+      description: description,
       spanEquipmentOrSegmentId: spanEquipmentMrid,
       manufacturerId:
         selectedManufacturer === ""
           ? "00000000-0000-0000-0000-000000000000"
           : selectedManufacturer,
       markingColor: selectedColorMarking?.toString() ?? "",
+      markingText: markingText,
       spanEquipmentSpecificationId: selectedSpanEquipmentSpecification,
       accessAddressId: selectedAccessAddressId ? selectedAccessAddressId : null,
       unitAddressId: selectedUnitAddressId ? selectedUnitAddressId : null,
@@ -379,11 +399,29 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
           />
         </div>
         <div className="full-row">
+          <TextBox
+            placeHolder={t("COMMENT")}
+            setValue={setDescription}
+            value={description}
+          />
+        </div>
+      </div>
+
+      <div className="block">
+        <p className="block-title">{t("MARKING_INFORMATION")}</p>
+        <div className="full-row">
           <SelectMenu
             options={colorMarkingOptions}
             onSelected={(x) => setSelectedColorMarking(x)}
             selected={selectedColorMarking}
             enableSearch={true}
+          />
+        </div>
+        <div className="full-row">
+          <TextBox
+            placeHolder={t("MARKING_TEXT")}
+            setValue={setMarkingText}
+            value={markingText}
           />
         </div>
       </div>
