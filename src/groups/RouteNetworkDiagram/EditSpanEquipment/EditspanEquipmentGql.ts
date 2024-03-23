@@ -46,12 +46,14 @@ query {
 export interface SpanEquipmentDetailsResponse {
   utilityNetwork: {
     spanEquipment: {
+      description: string;
       specification: {
         category: string;
         id: string;
       };
       markingInfo: {
         markingColor: string;
+        markingText: string;
       };
       manufacturer: {
         id: string;
@@ -76,12 +78,14 @@ query ($spanEquipmentOrSegmentId: ID!){
       spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId
     )
     {
+      description
       specification {
         category
         id
       }
       markingInfo {
         markingColor
+        markingText
       }
       manufacturer {
         id
@@ -101,8 +105,10 @@ query ($spanEquipmentOrSegmentId: ID!){
 `;
 
 export interface UpdateSpanEquipmentDetailsParameters {
+  description: string;
   spanEquipmentOrSegmentId: string;
   markingColor: string;
+  markingText: string;
   manufacturerId: string;
   spanEquipmentSpecificationId: string;
   accessAddressId: string | null;
@@ -121,8 +127,10 @@ export interface UpdateSpanEquipmentDetailsResponse {
 
 export const MUTATION_UPDATE_SPAN_EQUIPMENT_DETAILS = `
 mutation (
+ $description: String,
  $spanEquipmentOrSegmentId: ID!,
  $markingColor: String,
+ $markingText: String,
  $manufacturerId: ID!,
  $spanEquipmentSpecificationId: ID!,
  $accessAddressId: ID,
@@ -130,8 +138,14 @@ mutation (
  $remark: String) {
   spanEquipment {
     updateProperties(
+      namingInfo: {
+        description: $description
+      }
       spanEquipmentOrSegmentId: $spanEquipmentOrSegmentId
-      markingInfo: { markingColor: $markingColor }
+      markingInfo: {
+        markingColor: $markingColor
+        markingText: $markingText
+      }
       manufacturerId: $manufacturerId
       spanEquipmentSpecificationId: $spanEquipmentSpecificationId,
       addressInfo: {
