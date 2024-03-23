@@ -50,7 +50,6 @@ export interface PlaceSpanEquipmentParameters {
   manufacturerId?: string;
   markingColor?: string;
   markingText?: string;
-  namingInfo?: string;
   description?: string;
 }
 
@@ -73,7 +72,7 @@ mutation (
   $markingColor: String,
   $markingText: String,
   $namingInfoName: String,
-  $namingInfoDescription: String)
+  $description: String)
 {
   spanEquipment
   {
@@ -88,7 +87,7 @@ mutation (
       },
       namingInfo: {
         name: $namingInfoName,
-        description: $namingInfoDescription
+        description: $description
       }
     )
     {
