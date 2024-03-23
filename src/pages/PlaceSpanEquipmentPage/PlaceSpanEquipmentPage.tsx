@@ -167,7 +167,6 @@ function PlaceSpanEquipmentPage() {
       description: description,
     };
 
-    debugger; // eslint-disable-line no-debugger
     const { data } = await placeSpanEquipmentMutation(parameters);
 
     if (data?.spanEquipment.placeSpanEquipmentInRouteNetwork.isSuccess) {
