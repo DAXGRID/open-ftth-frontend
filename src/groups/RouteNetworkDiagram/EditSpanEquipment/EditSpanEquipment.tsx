@@ -311,6 +311,14 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
         ?.addressInfo?.remark ?? "",
     );
+    setDescription(
+      spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
+        .description,
+    );
+    setMarkingText(
+      spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
+        ?.markingInfo?.markingText,
+    );
   }, [spanEquipmentDetailsResponse]);
 
   useEffect(() => {
