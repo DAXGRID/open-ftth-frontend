@@ -530,8 +530,8 @@ function RouteNetworkMap({
         type: "circle",
         source: "measurement",
         paint: {
-          "circle-radius": 5,
-          "circle-color": "#FFD700",
+          "circle-radius": 3,
+          "circle-color": "#D20C0C",
         },
         filter: ["in", "$type", "Point"],
       });
@@ -545,8 +545,9 @@ function RouteNetworkMap({
           "line-join": "round",
         },
         paint: {
-          "line-color": "#FFD700",
+          "line-color": "#D20C0C",
           "line-width": 2.5,
+          "line-dasharray": [0.2, 2],
         },
         filter: ["in", "$type", "LineString"],
       });
