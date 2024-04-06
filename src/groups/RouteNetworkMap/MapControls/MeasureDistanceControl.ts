@@ -135,7 +135,7 @@ class MeasureDistanceControl {
         if (!this.map) return;
 
         if (e.originalEvent.button === 2) {
-          // When left click is clicked again we reset the state.
+          // When right click is clicked again we reset the state.
           if (this.leftClickDisabled) {
             this.measurementFeatures = {
               type: "FeatureCollection",
