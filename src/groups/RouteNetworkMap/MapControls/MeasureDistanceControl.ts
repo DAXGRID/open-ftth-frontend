@@ -18,22 +18,26 @@ class MeasureDistanceControl {
   active: boolean;
   container: HTMLElement | null;
   map: Map | undefined;
-  geojson: FeatureCollection<Geometry, GeoJsonProperties>;
+  measurementFeatures: FeatureCollection<Geometry, GeoJsonProperties>;
   measureClick: (e: MapMouseEvent) => void;
   mouseMove: (e: MapMouseEvent) => void;
+  disableContextMenu: (e: MapMouseEvent) => void;
+  leftClickDisabled: boolean;
   distanceText: string;
 
   constructor(distanceText: string) {
     this.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
     this.container = null;
     this.active = false;
-    this.geojson = {
+    this.measurementFeatures = {
       type: "FeatureCollection",
       features: [],
     };
-    this.measureClick = () => {};
-    this.mouseMove = () => {};
+    this.measureClick = () => { };
+    this.mouseMove = () => { };
+    this.disableContextMenu = (e) => { e.preventDefault() };
     this.distanceText = distanceText;
+    this.leftClickDisabled = false;
   }
 
   onAdd(map: Map) {
@@ -64,6 +68,14 @@ class MeasureDistanceControl {
   measureDistance() {
     if (!this.map || !this.container) return;
 
+    const distanceContainer = document.getElementById("distance");
+    if (!distanceContainer)
+      throw new Error("Distancecontainer could not be found");
+
+    const value = document.createElement("pre");
+    value.textContent = "";
+    distanceContainer.appendChild(value);
+
     if (!this.active) {
       this.active = true;
       this.container.firstElementChild?.classList.add("active");
@@ -71,17 +83,7 @@ class MeasureDistanceControl {
       this.mouseMove = (e: MapMouseEvent) => {
         if (!this.map) return;
 
-        var features = this.map.queryRenderedFeatures(e.point, {
-          layers: ["measure-points"],
-        });
-
-        this.map.getCanvas().style.cursor = features.length
-          ? "pointer"
-          : "crosshair";
-      };
-
-      this.measureClick = (e: MapMouseEvent) => {
-        if (!this.map) return;
+        this.map.getCanvas().style.cursor = "Pointer";
 
         const linestring: any = {
           type: "Feature",
@@ -91,7 +93,10 @@ class MeasureDistanceControl {
           },
         };
 
-        if (this.geojson.features.length > 1) this.geojson.features.pop();
+        if (this.measurementFeatures.features.length > 1) {
+          this.measurementFeatures.features.pop();
+          this.measurementFeatures.features.pop();
+        }
 
         const point: Feature<Point, GeoJsonProperties> = {
           type: "Feature",
@@ -104,55 +109,156 @@ class MeasureDistanceControl {
           },
         };
 
-        this.geojson.features.push(point);
+        this.measurementFeatures.features.push(point);
 
-        const distanceContainer = document.getElementById("distance");
-        if (!distanceContainer)
-          throw new Error("Distancecontainer could not be found");
-
-        distanceContainer.innerHTML = "";
-
-        if (this.geojson.features.length > 1) {
-          linestring.geometry.coordinates = this.geojson.features.map(
+        if (this.measurementFeatures.features.length >= 1) {
+          linestring.geometry.coordinates = [...this.measurementFeatures.features, point].map(
             (point) => {
               return (point as Feature<Point, GeoJsonProperties>).geometry
                 .coordinates;
             }
           );
 
-          this.geojson.features.push(linestring);
+          this.measurementFeatures.features.push(linestring);
 
-          const value = document.createElement("pre");
           value.textContent = `${this.distanceText}: ${length(linestring, {
             units: "meters",
           }).toLocaleString()} m`;
-          distanceContainer?.appendChild(value);
         }
 
         (this.map.getSource("measurement") as GeoJSONSource).setData(
-          this.geojson
+          this.measurementFeatures
         );
       };
 
-      this.map.on("click", this.measureClick);
+      this.measureClick = (e: MapMouseEvent) => {
+        if (!this.map) return;
+
+        if (e.originalEvent.button === 2) {
+          // When left click is clicked again we reset the state.
+          if (this.leftClickDisabled) {
+            this.measurementFeatures = {
+              type: "FeatureCollection",
+              features: [],
+            };
+            (this.map.getSource("measurement") as GeoJSONSource).setData(
+              this.measurementFeatures
+            );
+            this.map.on("mousemove", this.mouseMove);
+            this.leftClickDisabled = false;
+          } else {
+            // In case of right click we disable the measurement features.
+
+            // We remove the last two elements since they have not been selected by the user yet.
+            this.measurementFeatures.features.pop();
+            this.measurementFeatures.features.pop();
+
+            const linestring: any = {
+              type: "Feature",
+              geometry: {
+                type: "LineString",
+                coordinates: [],
+              },
+            };
+
+            if (this.measurementFeatures.features.length > 1) {
+
+              // After the two last elements has been removed,
+              // we only want to draw if there are more than 1 points in the collection.
+              linestring.geometry.coordinates = this.measurementFeatures.features.map(
+                (point) => {
+                  return (point as Feature<Point, GeoJsonProperties>).geometry
+                    .coordinates;
+                }
+              );
+
+              this.measurementFeatures.features.push(linestring);
+            }
+
+            value.textContent = `${this.distanceText}: ${length(linestring, {
+              units: "meters",
+            }).toLocaleString()} m`;
+
+            (this.map.getSource("measurement") as GeoJSONSource).setData(
+              this.measurementFeatures
+            );
+            this.map.off("mousemove", this.mouseMove);
+            this.map.getCanvas().style.cursor = "";
+            this.leftClickDisabled = true;
+          }
+
+          return;
+        }
+
+        // If the measurement has been left click disabled, we do nothing
+        // until the state has been reset.
+        if (this.leftClickDisabled) {
+          return;
+        }
+
+        const linestring: any = {
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [],
+          },
+        };
+
+        if (this.measurementFeatures.features.length > 1) this.measurementFeatures.features.pop();
+
+        const point: Feature<Point, GeoJsonProperties> = {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [e.lngLat.lng, e.lngLat.lat],
+          },
+          properties: {
+            id: String(new Date().getTime()),
+          },
+        };
+
+        this.measurementFeatures.features.push(point);
+
+        if (this.measurementFeatures.features.length > 1) {
+          linestring.geometry.coordinates = this.measurementFeatures.features.map(
+            (point) => {
+              return (point as Feature<Point, GeoJsonProperties>).geometry
+                .coordinates;
+            }
+          );
+
+          this.measurementFeatures.features.push(linestring);
+
+          value.textContent = `${this.distanceText}: ${length(linestring, {
+            units: "meters",
+          }).toLocaleString()} m`;
+        }
+
+        (this.map.getSource("measurement") as GeoJSONSource).setData(
+          this.measurementFeatures
+        );
+      };
+
+      this.map.on("mousedown", this.measureClick);
       this.map.on("mousemove", this.mouseMove);
+      this.map.on("contextmenu", () => this.disableContextMenu);
     } else {
       this.active = false;
       this.container.firstElementChild?.classList.remove("active");
-      this.geojson = {
+      this.measurementFeatures = {
         type: "FeatureCollection",
         features: [],
       };
       (this.map.getSource("measurement") as GeoJSONSource).setData(
-        this.geojson
+        this.measurementFeatures
       );
 
-      this.map.off("click", this.measureClick);
+      this.map.off("mousedown", this.measureClick);
       this.map.off("mousemove", this.mouseMove);
+      this.map.off("contextmenu", () => this.disableContextMenu);
+      this.map.getCanvas().style.cursor = "";
+      this.leftClickDisabled = false;
 
-      const distanceContainer = document.getElementById("distance");
-      if (!distanceContainer)
-        throw new Error("Distancecontainer could not be found");
       distanceContainer.innerHTML = "";
     }
   }
