@@ -33,9 +33,11 @@ class MeasureDistanceControl {
       type: "FeatureCollection",
       features: [],
     };
-    this.measureClick = () => { };
-    this.mouseMove = () => { };
-    this.disableContextMenu = (e) => { e.preventDefault() };
+    this.measureClick = () => {};
+    this.mouseMove = () => {};
+    this.disableContextMenu = (e) => {
+      e.preventDefault();
+    };
     this.distanceText = distanceText;
     this.leftClickDisabled = false;
   }
@@ -112,12 +114,13 @@ class MeasureDistanceControl {
         this.measurementFeatures.features.push(point);
 
         if (this.measurementFeatures.features.length >= 1) {
-          linestring.geometry.coordinates = [...this.measurementFeatures.features, point].map(
-            (point) => {
-              return (point as Feature<Point, GeoJsonProperties>).geometry
-                .coordinates;
-            }
-          );
+          linestring.geometry.coordinates = [
+            ...this.measurementFeatures.features,
+            point,
+          ].map((point) => {
+            return (point as Feature<Point, GeoJsonProperties>).geometry
+              .coordinates;
+          });
 
           this.measurementFeatures.features.push(linestring);
 
@@ -127,7 +130,7 @@ class MeasureDistanceControl {
         }
 
         (this.map.getSource("measurement") as GeoJSONSource).setData(
-          this.measurementFeatures
+          this.measurementFeatures,
         );
       };
 
@@ -142,7 +145,7 @@ class MeasureDistanceControl {
               features: [],
             };
             (this.map.getSource("measurement") as GeoJSONSource).setData(
-              this.measurementFeatures
+              this.measurementFeatures,
             );
             this.map.on("mousemove", this.mouseMove);
             this.leftClickDisabled = false;
@@ -162,15 +165,13 @@ class MeasureDistanceControl {
             };
 
             if (this.measurementFeatures.features.length > 1) {
-
               // After the two last elements has been removed,
               // we only want to draw if there are more than 1 points in the collection.
-              linestring.geometry.coordinates = this.measurementFeatures.features.map(
-                (point) => {
+              linestring.geometry.coordinates =
+                this.measurementFeatures.features.map((point) => {
                   return (point as Feature<Point, GeoJsonProperties>).geometry
                     .coordinates;
-                }
-              );
+                });
 
               this.measurementFeatures.features.push(linestring);
             }
@@ -180,7 +181,7 @@ class MeasureDistanceControl {
             }).toLocaleString()} m`;
 
             (this.map.getSource("measurement") as GeoJSONSource).setData(
-              this.measurementFeatures
+              this.measurementFeatures,
             );
             this.map.off("mousemove", this.mouseMove);
             this.map.getCanvas().style.cursor = "";
@@ -204,7 +205,8 @@ class MeasureDistanceControl {
           },
         };
 
-        if (this.measurementFeatures.features.length > 1) this.measurementFeatures.features.pop();
+        if (this.measurementFeatures.features.length > 1)
+          this.measurementFeatures.features.pop();
 
         const point: Feature<Point, GeoJsonProperties> = {
           type: "Feature",
@@ -220,12 +222,11 @@ class MeasureDistanceControl {
         this.measurementFeatures.features.push(point);
 
         if (this.measurementFeatures.features.length > 1) {
-          linestring.geometry.coordinates = this.measurementFeatures.features.map(
-            (point) => {
+          linestring.geometry.coordinates =
+            this.measurementFeatures.features.map((point) => {
               return (point as Feature<Point, GeoJsonProperties>).geometry
                 .coordinates;
-            }
-          );
+            });
 
           this.measurementFeatures.features.push(linestring);
 
@@ -235,7 +236,7 @@ class MeasureDistanceControl {
         }
 
         (this.map.getSource("measurement") as GeoJSONSource).setData(
-          this.measurementFeatures
+          this.measurementFeatures,
         );
       };
 
@@ -250,7 +251,7 @@ class MeasureDistanceControl {
         features: [],
       };
       (this.map.getSource("measurement") as GeoJSONSource).setData(
-        this.measurementFeatures
+        this.measurementFeatures,
       );
 
       this.map.off("mousedown", this.measureClick);
