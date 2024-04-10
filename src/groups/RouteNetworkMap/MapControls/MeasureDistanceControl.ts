@@ -5,6 +5,7 @@ import {
   GeoJsonProperties,
   Feature,
   Point,
+  LineString,
 } from "geojson";
 import { icon, library } from "@fortawesome/fontawesome-svg-core";
 import { faRuler } from "@fortawesome/free-solid-svg-icons";
@@ -23,9 +24,10 @@ class MeasureDistanceControl {
   mouseMove: (e: MapMouseEvent) => void;
   disableContextMenu: (e: MapMouseEvent) => void;
   leftClickDisabled: boolean;
-  distanceText: string;
+  totalLenghtText: string;
+  lengthText: string;
 
-  constructor(distanceText: string) {
+  constructor(lengthText: string, totalLenghtText: string) {
     this.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
     this.container = null;
     this.active = false;
@@ -38,7 +40,8 @@ class MeasureDistanceControl {
     this.disableContextMenu = (e) => {
       e.preventDefault();
     };
-    this.distanceText = distanceText;
+    this.totalLenghtText = totalLenghtText;
+    this.lengthText = lengthText;
     this.leftClickDisabled = false;
   }
 
@@ -87,12 +90,13 @@ class MeasureDistanceControl {
 
         this.map.getCanvas().style.cursor = "Pointer";
 
-        const linestring: any = {
+        const linestring: Feature<LineString, GeoJsonProperties> = {
           type: "Feature",
           geometry: {
             type: "LineString",
             coordinates: [],
           },
+          properties: {},
         };
 
         if (this.measurementFeatures.features.length > 1) {
@@ -114,6 +118,24 @@ class MeasureDistanceControl {
         this.measurementFeatures.features.push(point);
 
         if (this.measurementFeatures.features.length >= 1) {
+          // This is created because customers asked to showcase the length of the newest linestring
+          // from the lastest point.
+          const lastLinestring: Feature<LineString, GeoJsonProperties> = {
+            type: "Feature",
+            geometry: {
+              type: "LineString",
+              coordinates: this.measurementFeatures.features
+                .filter((x) => x.geometry.type === "Point")
+                .slice(-2)
+                .map(
+                  (point) =>
+                    (point as Feature<Point, GeoJsonProperties>).geometry
+                      .coordinates,
+                ),
+            },
+            properties: {},
+          };
+
           linestring.geometry.coordinates = [
             ...this.measurementFeatures.features,
             point,
@@ -124,9 +146,18 @@ class MeasureDistanceControl {
 
           this.measurementFeatures.features.push(linestring);
 
-          value.textContent = `${this.distanceText}: ${length(linestring, {
+          const latestLength = `${this.lengthText}: ${length(lastLinestring, {
             units: "meters",
           }).toLocaleString()} m`;
+
+          const totalLengthText = `${this.totalLenghtText}: ${length(
+            linestring,
+            {
+              units: "meters",
+            },
+          ).toLocaleString()} m`;
+
+          value.textContent = latestLength + "\n" + totalLengthText;
         }
 
         (this.map.getSource("measurement") as GeoJSONSource).setData(
@@ -156,12 +187,13 @@ class MeasureDistanceControl {
             this.measurementFeatures.features.pop();
             this.measurementFeatures.features.pop();
 
-            const linestring: any = {
+            const linestring: Feature<LineString, GeoJsonProperties> = {
               type: "Feature",
               geometry: {
                 type: "LineString",
                 coordinates: [],
               },
+              properties: {},
             };
 
             if (this.measurementFeatures.features.length > 1) {
@@ -176,9 +208,34 @@ class MeasureDistanceControl {
               this.measurementFeatures.features.push(linestring);
             }
 
-            value.textContent = `${this.distanceText}: ${length(linestring, {
+            const lastLinestring: Feature<LineString, GeoJsonProperties> = {
+              type: "Feature",
+              geometry: {
+                type: "LineString",
+                coordinates: this.measurementFeatures.features
+                  .filter((x) => x.geometry.type === "Point")
+                  .slice(-2)
+                  .map(
+                    (point) =>
+                      (point as Feature<Point, GeoJsonProperties>).geometry
+                        .coordinates,
+                  ),
+              },
+              properties: {},
+            };
+
+            const latestLength = `${this.lengthText}: ${length(lastLinestring, {
               units: "meters",
             }).toLocaleString()} m`;
+
+            const totalLengthText = `${this.totalLenghtText}: ${length(
+              linestring,
+              {
+                units: "meters",
+              },
+            ).toLocaleString()} m`;
+
+            value.textContent = latestLength + "\n" + totalLengthText;
 
             (this.map.getSource("measurement") as GeoJSONSource).setData(
               this.measurementFeatures,
@@ -197,12 +254,13 @@ class MeasureDistanceControl {
           return;
         }
 
-        const linestring: any = {
+        const linestring: Feature<LineString, GeoJsonProperties> = {
           type: "Feature",
           geometry: {
             type: "LineString",
             coordinates: [],
           },
+          properties: {},
         };
 
         if (this.measurementFeatures.features.length > 1)
@@ -230,9 +288,34 @@ class MeasureDistanceControl {
 
           this.measurementFeatures.features.push(linestring);
 
-          value.textContent = `${this.distanceText}: ${length(linestring, {
+          const lastLinestring: Feature<LineString, GeoJsonProperties> = {
+            type: "Feature",
+            geometry: {
+              type: "LineString",
+              coordinates: this.measurementFeatures.features
+                .filter((x) => x.geometry.type === "Point")
+                .slice(-2)
+                .map(
+                  (point) =>
+                    (point as Feature<Point, GeoJsonProperties>).geometry
+                      .coordinates,
+                ),
+            },
+            properties: {},
+          };
+
+          const latestLength = `${this.lengthText}: ${length(lastLinestring, {
             units: "meters",
           }).toLocaleString()} m`;
+
+          const totalLengthText = `${this.totalLenghtText}: ${length(
+            linestring,
+            {
+              units: "meters",
+            },
+          ).toLocaleString()} m`;
+
+          value.textContent = latestLength + "\n" + totalLengthText;
         }
 
         (this.map.getSource("measurement") as GeoJSONSource).setData(

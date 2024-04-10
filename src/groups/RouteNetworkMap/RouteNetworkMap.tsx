@@ -405,7 +405,10 @@ function RouteNetworkMap({
         showAccuracyCircle: false,
       }),
     );
-    const measureDistanceControl = new MeasureDistanceControl(t("DISTANCE"));
+    const measureDistanceControl = new MeasureDistanceControl(
+      t("LENGTH"),
+      t("TOTAL_LENGTH"),
+    );
     newMap.addControl(measureDistanceControl, "top-right");
 
     newMap.on("load", () => {
