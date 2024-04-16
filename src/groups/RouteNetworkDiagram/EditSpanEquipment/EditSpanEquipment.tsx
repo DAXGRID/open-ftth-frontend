@@ -19,7 +19,6 @@ import { TFunction, useTranslation } from "react-i18next";
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import TextBox from "../../../components/TextBox";
-import SelectListView, { BodyItem } from "../../../components/SelectListView";
 import { toast } from "react-toastify";
 import Config from "../../../config";
 
@@ -57,17 +56,18 @@ const getFilteredSpanEquipmentSpecifications = (
   specifications: SpanEquipmentSpecification[],
   selectedCategory: string | number | undefined,
 ) => {
-  const bodyItems = specifications.map<BodyItem>((x) => {
+  const bodyItems = specifications.map<SelectOption>((x) => {
     return {
-      rows: [{ id: 0, value: x.description }],
-      id: x.id,
+      text: x.description,
+      value: x.id.toString(),
+      key: x.id
     };
   });
 
   return bodyItems.filter((x) => {
     return (
       specifications.find((y) => {
-        return y.id === x.id;
+        return y.id === x.value;
       })?.category === selectedCategory
     );
   });
@@ -87,16 +87,18 @@ const getFilteredManufacturers = (
     return [];
   }
 
-  const bodyItems = manufacturers.map<BodyItem>((x) => {
+  const bodyItems = manufacturers.map<SelectOption>((x) => {
     return {
-      rows: [{ id: 0, value: x.name }],
-      id: x.id,
+      text: x.name,
+      value: x.id,
+      key: x.id
     };
   });
 
   const spanEquipment = spanEquipmentSpecifications.find(
     (x) => x.id === selectedSpanEquipmentSpecification,
   );
+
   if (!spanEquipment) {
     throw new Error(
       `Could not find SpanEquipment on id ${selectedSpanEquipmentSpecification}`,
@@ -104,12 +106,13 @@ const getFilteredManufacturers = (
   }
 
   const filtered = bodyItems.filter((x) => {
-    return spanEquipment.manufacturerRefs.includes(x.id.toString());
+    return spanEquipment.manufacturerRefs.includes(x.value.toString());
   });
 
-  const defaultValue = {
-    rows: [{ id: 0, value: t("UNSPECIFIED") }],
-    id: "",
+  const defaultValue: SelectOption= {
+    text: t("UNSPECIFIED"),
+    value: "",
+    key: ""
   };
 
   return [defaultValue, ...filtered];
@@ -387,23 +390,18 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       <div className="block">
         <p className="block-title">{t("SPAN_EQUIPMENT_INFORMATION")}</p>
         <div className="full-row">
-          <SelectListView
-            headerItems={[t("Specification")]}
-            bodyItems={filteredSpanEquipmentSpecifications}
-            selectItem={(x) =>
-              selectSpanEquipmentSpecification(x.id.toString())
-            }
+          <SelectMenu
+            options={filteredSpanEquipmentSpecifications}
+            onSelected={(x) => selectSpanEquipmentSpecification(x?.toString() ?? "")}
             selected={selectedSpanEquipmentSpecification}
-            maxHeightBody="175px"
+            enableSearch={true}
           />
         </div>
         <div className="full-row">
-          <SelectListView
-            headerItems={[t("Manufacturer")]}
-            bodyItems={filteredManufactuers}
-            selectItem={(x) => setSelectedManufacturer(x.id.toString())}
+          <SelectMenu
+            options={filteredManufactuers}
+            onSelected={(x) => setSelectedManufacturer(x?.toString() ?? "")}
             selected={selectedManufacturer}
-            maxHeightBody="175px"
           />
         </div>
         <div className="full-row">
