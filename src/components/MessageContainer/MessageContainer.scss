@@ -1,0 +1,21 @@
+.message-container {
+  background-color: white;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-items: center;
+  flex-direction: column;
+}
+
+.message-container-text {
+  flex: 1;
+  padding: 4px;
+  font-size: 18px;
+}
+
+.message-container-link {
+  flex: 1;
+  padding: 4px;
+}

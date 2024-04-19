@@ -18,6 +18,12 @@ interface InformationControlConfig {
   }[];
 }
 
+interface IntitialUserPrompt {
+  message: string;
+  linkUrl: string;
+  linkText: string;
+}
+
 declare global {
   interface Window {
     config_API_GATEWAY_HTTP_URI: string;
@@ -28,6 +34,7 @@ declare global {
     config_LAYERS: LayerConfig[];
     config_INFORMATION_CONTROL_CONFIG: InformationControlConfig;
     config_DEFAULT_USER_LANGUAGE: string;
+    config_INITIAL_USER_PROMPT: IntitialUserPrompt | null;
   }
 }
 
@@ -39,7 +46,10 @@ const settings = {
   COLOR_OPTIONS: window.config_COLOR_OPTIONS,
   LAYERS: window.config_LAYERS ?? [],
   INFORMATION_CONTROL_CONFIG: window.config_INFORMATION_CONTROL_CONFIG ?? null,
-  DEFAULT_USER_LANGUAGE: window.config_DEFAULT_USER_LANGUAGE ?? "en"
+  DEFAULT_USER_LANGUAGE: window.config_DEFAULT_USER_LANGUAGE ?? "en",
+  // The initial user prompt has been made because some customers want an
+  // initial prompt to be displayed to the user when they first time visit the site.
+  INITIAL_USER_PROMPT: window.config_INITIAL_USER_PROMPT
 };
 
 export default settings;
