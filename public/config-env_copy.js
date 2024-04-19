@@ -8,3 +8,4 @@ window.config_INFORMATION_CONTROL_CONFIG = {
   sourceLayers: [],
 };
 window.config_DEFAULT_USER_LANGUAGE = "en";
+window.config_INITIAL_USER_PROMPT = null;

@@ -7,6 +7,8 @@ import { Slide, ToastContainer } from "react-toastify";
 import BridgeConnector from "./bridge/BridgeConnector";
 import Loading from "./components/Loading";
 import SideMenu, { SideMenuItem } from "./components/SideMenu";
+import MessageContainer from "./components/MessageContainer";
+import ModalContainer from "./components/ModalContainer";
 import TopMenu from "./groups/TopMenu";
 import Routes from "./routes/Routes";
 import { UserContext } from "./contexts/UserContext";
@@ -28,10 +30,38 @@ appHeight();
 
 function App() {
   const { userName, authenticated, hasRoles } = useContext(UserContext);
-  const { overlayChild } = useContext(OverlayContext);
+  const { overlayChild, showElement } = useContext(OverlayContext);
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
+  const [showInitialDisplayedPrompt, setshowInitialDisplayedPrompt] =
+    useState(true);
   const { t, i18n } = useTranslation();
   const { initialized } = useKeycloak();
+
+  useEffect(() => {
+    // Only show the message if everything has been initialized.
+    if (!initialized) return;
+
+    // Only show the message if the message has a value.
+    if (!Config.INITIAL_USER_PROMPT) return;
+
+    // It will displayed once on login, after it has been closed it won't be displayed again
+    // until the user reloads the page.
+    if (showInitialDisplayedPrompt) {
+      showElement(
+        <ModalContainer
+          closeCallback={() => setshowInitialDisplayedPrompt(false)}
+        >
+          <MessageContainer
+            message={Config.INITIAL_USER_PROMPT.message}
+            linkText={Config.INITIAL_USER_PROMPT.linkText}
+            linkUrl={Config.INITIAL_USER_PROMPT.linkUrl}
+          />
+        </ModalContainer>,
+      );
+    } else {
+      showElement(null);
+    }
+  }, [initialized, showElement, showInitialDisplayedPrompt]);
 
   useEffect(() => {
     const language = localStorage.getItem("language");
@@ -42,7 +72,7 @@ function App() {
     } else {
       localStorage.setItem("language", Config.DEFAULT_USER_LANGUAGE);
     }
-  }, [i18n]);
+  }, [i18n, initialized]);
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);
