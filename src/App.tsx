@@ -39,7 +39,7 @@ function App() {
 
   useEffect(() => {
     // Only show the message if everything has been initialized.
-    if (!initialized) return;
+    if (!initialized || !authenticated) return;
 
     // Only show the message if the message has a value.
     if (!Config.INITIAL_USER_PROMPT) return;
