@@ -61,7 +61,7 @@ function App() {
     } else {
       showElement(null);
     }
-  }, [initialized, showElement, showInitialDisplayedPrompt]);
+  }, [initialized, authenticated, showElement, showInitialDisplayedPrompt]);
 
   useEffect(() => {
     const language = localStorage.getItem("language");
