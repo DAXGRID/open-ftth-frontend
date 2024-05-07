@@ -13,7 +13,7 @@ import {
   NearestAccessAddress,
   NearestAccessAddressesResponse,
   UnitAddress,
-} from "./EditspanEquipmentGql";
+} from "./EditSpanEquipmentGql";
 import { useQuery, useClient } from "urql";
 import { TFunction, useTranslation } from "react-i18next";
 import DefaultButton from "../../../components/DefaultButton";
@@ -152,7 +152,8 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     string | number | undefined
   >();
 
-  const [description, setDescription] = useState<string>("");
+  const [description, setDescription] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
 
   // Color Marking
   const [selectedColorMarking, setSelectedColorMarking] = useState<
@@ -318,6 +319,10 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
       spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
         .description,
     );
+    setName(
+      spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
+        .name,
+    );
     setMarkingText(
       spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
         ?.markingInfo?.markingText,
@@ -348,6 +353,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     }
 
     const params: UpdateSpanEquipmentDetailsParameters = {
+      name: name,
       description: description,
       spanEquipmentOrSegmentId: spanEquipmentMrid,
       manufacturerId:
@@ -408,7 +414,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
           <TextBox
             placeHolder={t("COMMENT")}
             setValue={setDescription}
-            value={description}
+            value={description ?? ""}
           />
         </div>
       </div>
