@@ -46,6 +46,7 @@ export interface SpanEquipment {
       suitName: string;
     };
   };
+  routeSegmentIds: string[];
 }
 
 const QUERY_SPAN_EQUIPMENT_DETAILS = `
@@ -76,6 +77,7 @@ query ($spanEquipmentOrSegmentId: ID!) {
           suitName
         }
       }
+      routeSegmentIds
     }
   }
 }

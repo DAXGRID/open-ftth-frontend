@@ -1,13 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useClient } from "urql";
-import { MoveConduitSvg, PlusSvg } from "../../../assets";
-import ActionButton from "../../../components/ActionButton";
-import ModalContainer from "../../../components/ModalContainer";
 import { MapContext } from "../../../contexts/MapContext";
-import { OverlayContext } from "../../../contexts/OverlayContext";
-import RerouteSpanEquipment from "../RerouteSpanEquipment";
-import useBridgeConnector from "../../../bridge/useBridgeConnector";
 import {
   Line,
   passageViewQuery,
@@ -30,7 +24,6 @@ function PassageView({
   editable,
 }: PassageViewProps) {
   const { t } = useTranslation();
-  const { showElement } = useContext(OverlayContext);
   const client = useClient();
   const { setTrace } = useContext(MapContext);
   const [passageView, setPassageView] =
@@ -38,8 +31,6 @@ function PassageView({
   const [selectedLineIndex, setSelectedLineIndex] = useState<number | null>(
     null,
   );
-  const [showRerouteTube, setShowRerouteTube] = useState(false);
-  const { selectRouteSegments } = useBridgeConnector();
 
   useEffect(() => {
     let isSubscribed = true;
@@ -67,31 +58,9 @@ function PassageView({
     };
   }, [client, routeElementId, spanEquipmentOrSegmentIds]);
 
-  useEffect(() => {
-    if (showRerouteTube) {
-      showElement(
-        <ModalContainer
-          title={t("REROUTE_SPAN_EQUIPMENT")}
-          closeCallback={() => setShowRerouteTube(false)}
-        >
-          <RerouteSpanEquipment
-            selectedRouteSegmentMrid={spanEquipmentOrSegmentIds ?? ""}
-          />
-        </ModalContainer>,
-      );
-    } else {
-      showElement(null);
-    }
-  }, [showRerouteTube, t, showElement, spanEquipmentOrSegmentIds]);
-
   if (!passageView || passageView.spanEquipments.length === 0) {
     return <div style={{ height: "200" }}></div>;
   }
-
-  const selectAllLineSegmentsInMap = () => {
-    selectRouteSegments(spanEquipment.lines.flatMap((x) => x.routeSegmentIds));
-    setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
-  };
 
   const selectLine = (line: SelectableLine, index: number) => {
     setSelectedLineIndex(index);
@@ -113,24 +82,6 @@ function PassageView({
             <p className="passage-view_title">{spanEquipment.name}</p>
             <p className="passage-view_title">{spanEquipment.specName}</p>
             <p className="passage-view_title">{spanEquipment.info}</p>
-          </div>
-          <div className="passage-view-row-title-header-actions">
-            {editable && (
-              <>
-                <ActionButton
-                  action={() => setShowRerouteTube(true)}
-                  icon={MoveConduitSvg}
-                  title={t("MOVE")}
-                  key={0}
-                />
-                <ActionButton
-                  action={() => selectAllLineSegmentsInMap()}
-                  icon={PlusSvg}
-                  title={t("SELECT")}
-                  key={1}
-                />
-              </>
-            )}
           </div>
         </div>
         <div className="passage-view-row-header">
