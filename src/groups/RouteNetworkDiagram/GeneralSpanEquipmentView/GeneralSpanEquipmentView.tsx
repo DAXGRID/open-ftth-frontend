@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useClient } from "urql";
 import { useTranslation } from "react-i18next";
-import { EditPropertiesSvg } from "../../../assets";
+import { EditPropertiesSvg, MoveConduitSvg, PlusSvg } from "../../../assets";
 import ModalContainer from "../../../components/ModalContainer";
 import LabelContainer from "../../../components/LabelContainer";
 import TextBox from "../../../components/TextBox";
@@ -12,6 +12,9 @@ import {
 } from "./GeneralSpanEquipmentViewGql";
 import { OverlayContext } from "../../../contexts/OverlayContext";
 import EditSpanEquipment from "../EditSpanEquipment";
+import RerouteSpanEquipment from "../RerouteSpanEquipment";
+import useBridgeConnector from "../../../bridge/useBridgeConnector";
+import { MapContext } from "../../../contexts/MapContext";
 
 interface GeneralSpanEquipmentViewProps {
   spanEquipmentId: string;
@@ -57,11 +60,14 @@ function GeneralSpanEquipmentView({
   const client = useClient();
   const { t } = useTranslation();
   const { showElement } = useContext(OverlayContext);
+  const { setTrace } = useContext(MapContext);
   const [spanEquipment, setSpanEquipment] = useState<SpanEquipment | null>(
     null,
   );
   const [showEditSpanEquipment, setShowEditSpanEquipment] =
     useState<boolean>(false);
+  const [showRerouteTube, setShowRerouteTube] = useState(false);
+  const { selectRouteSegments } = useBridgeConnector();
 
   useEffect(() => {
     getSpanEquipmentDetails(client, spanEquipmentId)
@@ -79,7 +85,18 @@ function GeneralSpanEquipmentView({
   }, [client, spanEquipmentId]);
 
   useEffect(() => {
-    if (showEditSpanEquipment) {
+    if (showRerouteTube) {
+      showElement(
+        <ModalContainer
+          title={t("REROUTE_SPAN_EQUIPMENT")}
+          closeCallback={() => setShowRerouteTube(false)}
+        >
+          <RerouteSpanEquipment
+            selectedRouteSegmentMrid={spanEquipmentId ?? ""}
+          />
+        </ModalContainer>,
+      );
+    } else if (showEditSpanEquipment) {
       showElement(
         <ModalContainer
           title={t("EDIT_SPAN_EQUIPMENT")}
@@ -91,7 +108,18 @@ function GeneralSpanEquipmentView({
     } else {
       showElement(null);
     }
-  }, [showEditSpanEquipment, t, showElement, spanEquipmentId]);
+  }, [
+    showEditSpanEquipment,
+    t,
+    showElement,
+    spanEquipmentId,
+    showRerouteTube,
+  ]);
+
+  const selectAllLineSegmentsInMap = () => {
+    selectRouteSegments(spanEquipment?.routeSegmentIds ?? []);
+    setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
+  };
 
   if (!spanEquipment) {
     return <></>;
@@ -106,10 +134,22 @@ function GeneralSpanEquipmentView({
             {editable && (
               <>
                 <ActionButton
+                  action={() => setShowRerouteTube(true)}
+                  icon={MoveConduitSvg}
+                  title={t("REROUTE_SPAN_EQUIPMENT")}
+                  key={0}
+                />
+                <ActionButton
+                  action={() => selectAllLineSegmentsInMap()}
+                  icon={PlusSvg}
+                  title={t("SELECT")}
+                  key={1}
+                />
+                <ActionButton
                   action={() => setShowEditSpanEquipment(true)}
                   icon={EditPropertiesSvg}
                   title={t("EDIT")}
-                  key={1}
+                  key={2}
                 />
               </>
             )}
