@@ -1263,6 +1263,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
                   title: t("GENERAL"),
                   view: (
                     <GeneralSpanEquipmentView
+                      routeNetworkElementId={localIdentifiedFeature.id}
                       spanEquipmentId={singleSelectedFeature.properties?.refId}
                       editable={true}
                     />

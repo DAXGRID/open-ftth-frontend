@@ -9,6 +9,7 @@ import ActionButton from "../../../components/ActionButton";
 import {
   getSpanEquipmentDetails,
   SpanEquipment,
+  passageViewQuery,
 } from "./GeneralSpanEquipmentViewGql";
 import { OverlayContext } from "../../../contexts/OverlayContext";
 import EditSpanEquipment from "../EditSpanEquipment";
@@ -17,6 +18,7 @@ import useBridgeConnector from "../../../bridge/useBridgeConnector";
 import { MapContext } from "../../../contexts/MapContext";
 
 interface GeneralSpanEquipmentViewProps {
+  routeNetworkElementId: string;
   spanEquipmentId: string;
   editable: boolean;
 }
@@ -54,6 +56,7 @@ function addressDisplayText(
 }
 
 function GeneralSpanEquipmentView({
+  routeNetworkElementId,
   spanEquipmentId,
   editable,
 }: GeneralSpanEquipmentViewProps) {
@@ -108,17 +111,28 @@ function GeneralSpanEquipmentView({
     } else {
       showElement(null);
     }
-  }, [
-    showEditSpanEquipment,
-    t,
-    showElement,
-    spanEquipmentId,
-    showRerouteTube,
-  ]);
+  }, [showEditSpanEquipment, t, showElement, spanEquipmentId, showRerouteTube]);
 
   const selectAllLineSegmentsInMap = () => {
-    selectRouteSegments(spanEquipment?.routeSegmentIds ?? []);
-    setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
+    passageViewQuery(client, routeNetworkElementId, [spanEquipmentId])
+      .then((x) => {
+        const spanEquipment =
+          x.data?.utilityNetwork.spanEquipmentPassageView.spanEquipments[0];
+
+        if (spanEquipment) {
+          selectRouteSegments(
+            spanEquipment.lines.flatMap((x) => x.routeSegmentIds),
+          );
+          setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
+        } else {
+          console.error("Could not get span equipment from the passage view.");
+        }
+      })
+      .catch((e) => {
+        console.error(
+          `Failed to fetch the passage view. Failed with error: '${e}'.`,
+        );
+      });
   };
 
   if (!spanEquipment) {
