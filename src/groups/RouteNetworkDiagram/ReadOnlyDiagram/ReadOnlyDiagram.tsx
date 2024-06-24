@@ -230,6 +230,7 @@ function ReadOnlyDiagram({
                 title: t("GENERAL"),
                 view: (
                   <GeneralSpanEquipmentView
+                    routeNetworkElementId={identifiedFeature?.id ?? ""}
                     spanEquipmentId={selectedFeature.properties?.refId ?? ""}
                     editable={false}
                   />

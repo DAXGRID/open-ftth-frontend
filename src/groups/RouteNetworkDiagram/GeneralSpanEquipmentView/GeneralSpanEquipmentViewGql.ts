@@ -14,6 +14,18 @@ export function getSpanEquipmentDetails(
     .toPromise();
 }
 
+export const passageViewQuery = (
+  client: Client,
+  routeNetworkElementId: string,
+  spanEquipmentOrSegmentIds: string[]
+) => {
+  return client
+    .query<PassageViewResponse>(PASSAGE_VIEW_QUERY, {
+      routeNetworkElementId: routeNetworkElementId,
+      spanEquipmentOrSegmentIds: spanEquipmentOrSegmentIds,
+    } as PassageViewQueryParams)
+    .toPromise();
+};
 
 interface QuerySpanEquipmentDetailsResponse {
   utilityNetwork: {
@@ -46,7 +58,6 @@ export interface SpanEquipment {
       suitName: string;
     };
   };
-  routeSegmentIds: string[];
 }
 
 const QUERY_SPAN_EQUIPMENT_DETAILS = `
@@ -77,8 +88,50 @@ query ($spanEquipmentOrSegmentId: ID!) {
           suitName
         }
       }
-      routeSegmentIds
     }
   }
 }
 `
+
+export interface PassageViewLine {
+  routeSegmentIds: string[];
+}
+
+interface PassageViewSpanEquipment {
+  lines: PassageViewLine[];
+}
+
+export interface SpanEquipmentPassageView {
+  spanEquipments: PassageViewSpanEquipment[];
+}
+
+interface PassageViewResponse {
+  utilityNetwork: {
+    spanEquipmentPassageView: SpanEquipmentPassageView;
+  };
+}
+
+interface PassageViewQueryParams {
+  routeNetworkElementId: string;
+  spanEquipmentOrSegmentIds: string[];
+}
+
+const PASSAGE_VIEW_QUERY = `
+query (
+$routeNetworkElementId: ID!,
+$spanEquipmentOrSegmentIds: [ID!]!
+){
+  utilityNetwork {
+    spanEquipmentPassageView(
+      routeNetworkElementId: $routeNetworkElementId
+      spanEquipmentOrSegmentIds: $spanEquipmentOrSegmentIds
+    ) {
+      spanEquipments {
+         lines {
+          routeSegmentIds
+         }
+      }
+    }
+  }
+}
+`;
