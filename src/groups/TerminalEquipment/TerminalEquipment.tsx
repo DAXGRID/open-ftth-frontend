@@ -3,6 +3,7 @@ import {
   faFilter,
   faPlus,
   faTrashAlt,
+  faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode, useContext, useEffect, useMemo } from "react";
@@ -26,6 +27,7 @@ import DisconnectFiberEditor from "./DisconnectFiberEditor";
 import EditTerminalEquipment from "./EditTerminalEquipment";
 import EditRack from "./EditRack";
 import AddAdditionalStructures from "./AddAdditionalStructures";
+import OutageView from "../RouteNetworkDiagram/OutageView";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -135,6 +137,22 @@ function TerminalEquipmentTableContainer({
                 }
               >
                 <FontAwesomeIcon icon={faPlus} />
+              </span>
+              <span
+                role="button"
+                className="header-icons__icon"
+                onClick={() =>
+                  dispatch({
+                    show: {
+                      routeNodeId: state.routeNodeId,
+                      show: true,
+                      terminalEquipmentId: terminalEquipment.id,
+                    },
+                    type: "setShowOutageView",
+                  })
+                }
+              >
+                <FontAwesomeIcon icon={faTriangleExclamation} />
               </span>
             </>
           )}
@@ -300,7 +318,7 @@ function TerminalEquipment() {
               }
               side={state.showFiberEditor.side}
             />
-          </ModalContainer>
+          </ModalContainer>,
         );
       } else {
         throw Error("Did not have all information to show fiber editor.");
@@ -311,6 +329,7 @@ function TerminalEquipment() {
   }, [state.showFiberEditor, showElement, dispatch, t, identifiedFeature]);
 
   useEffect(() => {
+    console.log(state.showOutageView);
     if (
       state.showDisconnectFiberEditor.show &&
       state.showDisconnectFiberEditor.connectedToSegmentId &&
@@ -337,7 +356,7 @@ function TerminalEquipment() {
               })
             }
           />
-        </ModalContainer>
+        </ModalContainer>,
       );
     } else if (
       state.showEditTerminalEquipment.show &&
@@ -359,7 +378,7 @@ function TerminalEquipment() {
             }
             routeNodeId={state.routeNodeId}
           />
-        </ModalContainer>
+        </ModalContainer>,
       );
     } else if (
       state.showEditRack.show &&
@@ -375,7 +394,7 @@ function TerminalEquipment() {
             rackId={state.showEditRack.rackId}
             routeNodeId={state.showEditRack.routeNodeId}
           />
-        </ModalContainer>
+        </ModalContainer>,
       );
     } else if (
       state.showAddAdditionalStructure.show &&
@@ -400,7 +419,23 @@ function TerminalEquipment() {
               state.showAddAdditionalStructure.terminalEquipmentId
             }
           />
-        </ModalContainer>
+        </ModalContainer>,
+      );
+    } else if (
+      state.showOutageView.show &&
+      state.showOutageView.routeNodeId &&
+      state.showOutageView.terminalEquipmentId
+    ) {
+      showElement(
+        <ModalContainer
+          title={t("OUTAGE_VIEW")}
+          closeCallback={() => dispatch({ type: "resetShowOutageView" })}
+        >
+          <OutageView
+            routeElementId={state.showOutageView.routeNodeId}
+            equipmentId={state.showOutageView.terminalEquipmentId}
+          />
+        </ModalContainer>,
       );
     } else {
       showElement(null);
@@ -413,6 +448,7 @@ function TerminalEquipment() {
     state.terminalEquipmentOrRackId,
     state.showEditRack,
     state.showAddAdditionalStructure,
+    state.showOutageView,
     showElement,
     dispatch,
     t,
@@ -437,7 +473,7 @@ function TerminalEquipment() {
           return (
             <RackContainer
               parentNodeStructure={state.connectivityView?.parentNodeStructures.find(
-                (z) => z.id === x
+                (z) => z.id === x,
               )}
               key={x}
             >
