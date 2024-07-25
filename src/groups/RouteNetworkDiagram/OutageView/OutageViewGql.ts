@@ -1,9 +1,10 @@
 import { Client } from "urql";
 
-export function getInformation(client: Client, routeNetworkElementId: string) {
+export function getInformation(client: Client, routeNetworkElementId: string, equipmentId: string | null) {
   return client
     .query<OutageViewQueryResponse>(OUTAGE_VIEW_QUERY, {
       routeNetworkElementId: routeNetworkElementId,
+      equipmentId: equipmentId
     })
     .toPromise();
 }
@@ -37,10 +38,11 @@ interface OutageViewQueryResponse {
 
 export const OUTAGE_VIEW_QUERY = `
 query (
-  $routeNetworkElementId: ID!
+  $routeNetworkElementId: ID!,
+  $equipmentId: ID
 ) {
   outage {
-    outageView(routeNetworkElementId: $routeNetworkElementId) {
+    outageView(routeNetworkElementId: $routeNetworkElementId, equipmentId: $equipmentId) {
       id
       label
       description

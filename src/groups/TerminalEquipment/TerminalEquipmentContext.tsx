@@ -54,6 +54,12 @@ interface ShowAddAdditionalStructures {
   terminalEquipmentId: string | null;
 }
 
+interface ShowOutageView {
+  show: boolean;
+  routeNodeId: string | null;
+  terminalEquipmentId: string | null;
+}
+
 interface RemoveStructure {
   terminalEquipmentId: string;
   terminalStructureId: string;
@@ -67,6 +73,7 @@ interface TerminalEquipmentState {
   showEditTerminalEquipment: ShowEditTerminalEquipment;
   showEditRack: ShowEditRack;
   showAddAdditionalStructure: ShowAddAdditionalStructures;
+  showOutageView: ShowOutageView;
   connectivityTraceViews: {
     [id: string]: { show: boolean; view: ConnectivityTraceView };
   };
@@ -103,6 +110,8 @@ type TerminalEquipmentAction =
       show: ShowAddAdditionalStructures;
     }
   | { type: "resetShowAddAdditionalStructures" }
+  | { type: "setShowOutageView"; show: ShowOutageView }
+  | { type: "resetShowOutageView" }
   | {
       type: "setViewConnectivityTraceViews";
       params: { id: string; view: ConnectivityTraceView };
@@ -164,6 +173,12 @@ const defaultShowAddtionalStructure: ShowAddAdditionalStructures = {
   terminalEquipmentId: null,
 };
 
+const defaultShowOutageView: ShowOutageView = {
+  show: false,
+  routeNodeId: null,
+  terminalEquipmentId: null,
+};
+
 const terminalEquipmentInitialState: TerminalEquipmentState = {
   connectivityView: null,
   showFreeLines: {},
@@ -171,6 +186,7 @@ const terminalEquipmentInitialState: TerminalEquipmentState = {
   showEditTerminalEquipment: defaultShowEditTerminalEquipment,
   showEditRack: defaultShowEditRack,
   showAddAdditionalStructure: defaultShowAddtionalStructure,
+  showOutageView: defaultShowOutageView,
   connectivityTraceViews: {},
   selectedConnectivityTraceHops: null,
   selectedEnvelope: null,
@@ -183,7 +199,7 @@ const terminalEquipmentInitialState: TerminalEquipmentState = {
 
 function terminalEquipmentReducer(
   state: TerminalEquipmentState,
-  action: TerminalEquipmentAction
+  action: TerminalEquipmentAction,
 ): TerminalEquipmentState {
   switch (action.type) {
     case "setRouteNodeId":
@@ -246,6 +262,13 @@ function terminalEquipmentReducer(
       return {
         ...state,
         showAddAdditionalStructure: defaultShowAddtionalStructure,
+      };
+    case "setShowOutageView":
+      return { ...state, showOutageView: action.show };
+    case "resetShowOutageView":
+      return {
+        ...state,
+        showOutageView: defaultShowOutageView,
       };
     case "setViewConnectivityTraceViews":
       return {
@@ -321,7 +344,7 @@ const TerminalEquipmentProvider = ({
   const client = useClient();
   const [state, dispatch] = useReducer(
     terminalEquipmentReducer,
-    terminalEquipmentInitialState
+    terminalEquipmentInitialState,
   );
 
   const [connectiviyViewUpdatedResult] =
@@ -381,7 +404,7 @@ const TerminalEquipmentProvider = ({
 
   useEffect(() => {
     const notLoaded = Object.entries(state.connectivityTraceViews).filter(
-      (x) => x[1].show && !x[1].view
+      (x) => x[1].show && !x[1].view,
     );
 
     notLoaded.forEach((x) => {
@@ -401,10 +424,10 @@ const TerminalEquipmentProvider = ({
     if (!state.selectedConnectivityTraceHops) return;
 
     const routeSegmentIds = state.selectedConnectivityTraceHops.flatMap(
-      (x) => x.routeSegmentIds
+      (x) => x.routeSegmentIds,
     );
     const routeSegmentGeometries = state.selectedConnectivityTraceHops.flatMap(
-      (x) => x.routeSegmentGeometries
+      (x) => x.routeSegmentGeometries,
     );
 
     setTrace({
@@ -440,7 +463,7 @@ const TerminalEquipmentProvider = ({
     if (!state.removeStructure) return;
 
     const confirmed = window.confirm(
-      t("Are you sure you want to delete the selected object?")
+      t("Are you sure you want to delete the selected object?"),
     );
     if (!confirmed) {
       dispatch({ type: "resetRemoveStructure" });
