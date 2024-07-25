@@ -1139,13 +1139,6 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             action={() => clearHighlights()}
             title={t("CLEAR_HIGHLIGHT")}
           />
-          <ActionButton
-            icon={OutageSvg}
-            action={() =>
-              showModalsDispatch({ type: "outageView", show: true })
-            }
-            title={t("OUTAGE_VIEW")}
-          />
           <ToggleButton
             toggled={enabledTracePan}
             id={"0"}
