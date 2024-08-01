@@ -115,7 +115,7 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
     if (!specificationsQueryResult.data) return;
 
     const { nodeContainerSpecifications, manufacturers } =
-      specificationsQueryResult.data?.utilityNetwork;
+      specificationsQueryResult.data?.utilityNetwork || {};
 
     if (!nodeContainerSpecifications || !manufacturers) return;
 
@@ -127,7 +127,7 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
     if (!nodeContainerDetailsResponse.data) return;
 
     const { specification, manufacturer } =
-      nodeContainerDetailsResponse.data?.utilityNetwork.nodeContainer;
+      nodeContainerDetailsResponse.data?.utilityNetwork.nodeContainer || {};
 
     setSelectedCategory(specification.category);
     setSelectedSpecification(specification.id);

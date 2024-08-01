@@ -6,10 +6,9 @@ import {
   useCallback,
   useMemo,
 } from "react";
-import { useKeycloak } from "@react-keycloak/web";
 import useUserWorkContext, { UserWorkTask } from "./useUserWorkContext";
+import { useAuth } from "react-oidc-context";
 
-const RESOURCE_NAME = "openftth-frontend";
 type UserRolesType = "reader" | "writer";
 
 type UserContextType = {
@@ -38,31 +37,37 @@ type UserContextProps = {
 
 const UserProvider = ({ children }: UserContextProps) => {
   const [userName, setUsername] = useState<string>("");
-  const { initialized, keycloak } = useKeycloak();
+  const auth = useAuth();
   const { userWorkContext, reExecuteUserWorkContextQuery } =
     useUserWorkContext(userName);
 
   useEffect(() => {
-    if (!initialized) return;
-    keycloak.loadUserProfile().then(() => {
-      if (!keycloak.profile?.username) {
-        throw new Error("Could not load user from keycloak.");
-      } else {
-        setUsername(keycloak.profile.username);
-      }
-    });
-  }, [initialized, keycloak, setUsername]);
+    if (auth.isLoading) return;
+
+    if (auth.isAuthenticated) {
+      setUsername(auth.user?.profile.preferred_username ?? "");
+    }
+  }, [
+    auth.isAuthenticated,
+    setUsername,
+    auth.isLoading,
+    auth.user?.profile.preferred_username,
+  ]);
 
   const hasRoles = useCallback(
     (...roles: UserRolesType[]): boolean => {
-      return roles.every((x) => keycloak.hasResourceRole(x, RESOURCE_NAME));
+      return roles.every((userRole) =>
+        (
+          auth.user?.profile.openftth_frontend as { roles: string[] } | null
+        )?.roles.find((role: string) => role === userRole),
+      );
     },
-    [keycloak]
+    [auth.user],
   );
 
   const authenticated = useMemo((): boolean => {
-    return keycloak?.authenticated ?? false;
-  }, [keycloak?.authenticated]);
+    return auth.isAuthenticated;
+  }, [auth.isAuthenticated]);
 
   const reloadUserWorkTask = useCallback(() => {
     reExecuteUserWorkContextQuery();

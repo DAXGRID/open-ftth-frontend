@@ -21,7 +21,7 @@ function mapContainerResponse(
   t: TFunction<string>
 ) {
   if (!x) return [];
-  const { specification, manufacturer } = x.utilityNetwork?.nodeContainer;
+  const { specification, manufacturer } = x.utilityNetwork?.nodeContainer || {};
   return [
     {
       name: t("MANUFACTURER"),

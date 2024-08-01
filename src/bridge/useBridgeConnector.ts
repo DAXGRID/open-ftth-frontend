@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { send } from "./BridgeConnector";
-import { useKeycloak } from "@react-keycloak/web";
+import { useAuth } from "react-oidc-context";
 
 export interface RetrieveSelectedSpanEquipmentsResponse {
   selectedFeaturesMrid: string[];
@@ -9,43 +9,43 @@ export interface RetrieveSelectedSpanEquipmentsResponse {
 }
 
 function useBridgeConnector() {
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
 
   const retrieveSelectedEquipments = useCallback(() => {
-    if (!keycloak.profile?.username) return;
+    if (!auth.user?.profile.preferred_username) return;
 
     const message = {
       eventType: "RetrieveSelected",
-      username: keycloak.profile?.username,
+      username: auth.user?.profile.preferred_username,
     };
 
     send(message);
-  }, [keycloak.profile?.username]);
+  }, [auth.user?.profile.preferred_username]);
 
   const retrieveIdentifiedNetworkElement = useCallback(() => {
-    if (!keycloak.profile?.username) return;
+    if (!auth.user?.profile.preferred_username) return;
 
     const message = {
       eventType: "RetrieveIdentifiedNetworkElement",
-      username: keycloak.profile?.username,
+      username: auth.user?.profile.preferred_username,
     };
 
     send(message);
-  }, [keycloak.profile?.username]);
+  }, [auth.user?.profile.preferred_username]);
 
   const panToCoordinate = useCallback(
     (coordinate: string) => {
-      if (!keycloak.profile?.username) return;
+      if (auth.user?.profile.preferred_username) return;
 
       const message = {
         eventType: "PanToCoordinate",
-        username: keycloak.profile?.username,
+        username: auth.user?.profile.preferred_username,
         coordinate: JSON.parse(coordinate),
       };
 
       send(message);
     },
-    [keycloak.profile?.username]
+    [auth.user?.profile.preferred_username]
   );
 
   const highlightFeatures = useCallback(
@@ -63,12 +63,12 @@ function useBridgeConnector() {
         identifiedFeatureMrids: featureIds,
         etrs89: etrs89,
         featureType: "RouteSegment",
-        username: keycloak.profile?.username,
+        username: auth.user?.profile.preferred_username,
       };
 
       send(message);
     },
-    [keycloak.profile?.username]
+    [auth.user?.profile.preferred_username]
   );
 
   const selectRouteSegments = useCallback(
@@ -76,12 +76,12 @@ function useBridgeConnector() {
       const message = {
         eventType: "SelectRouteSegments",
         Mrids: segmentIds,
-        username: keycloak.profile?.username,
+        username: auth.user?.profile.preferred_username,
       };
 
       send(message);
     },
-    [keycloak.profile?.username]
+    [auth.user?.profile.preferred_username]
   );
 
   return {

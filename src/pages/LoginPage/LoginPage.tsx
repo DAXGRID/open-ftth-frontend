@@ -1,5 +1,5 @@
 import { Redirect, useLocation } from "react-router-dom";
-import { useKeycloak } from "@react-keycloak/web";
+import { useAuth } from "react-oidc-context";
 import Loading from "../../components/Loading";
 
 const LoginPage = () => {
@@ -8,14 +8,14 @@ const LoginPage = () => {
     from: { pathname: "/" },
   };
 
-  const { keycloak, initialized } = useKeycloak();
+  const auth = useAuth();
 
-  if (!initialized) return <Loading />;
+  if (auth.isLoading) return <Loading />;
 
-  if (keycloak.authenticated)
+  if (auth.isAuthenticated)
     return <Redirect to={currentLocationState?.from as string} />;
 
-  keycloak.login();
+  auth.signinRedirect();
 
   return <></>;
 };

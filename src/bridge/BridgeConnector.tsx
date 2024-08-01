@@ -6,9 +6,9 @@ import useBridgeConnector, {
   RetrieveSelectedSpanEquipmentsResponse,
 } from "../bridge/useBridgeConnector";
 import { MapContext } from "../contexts/MapContext";
-import { useKeycloak } from "@react-keycloak/web";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 
 type IdentifyNetworkEvent = {
   eventType: string;
@@ -39,7 +39,7 @@ function BridgeConnector() {
     highlightFeatures,
     panToCoordinate,
   } = useBridgeConnector();
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
 
   useEffect(() => {
     function setup() {
@@ -90,7 +90,7 @@ function BridgeConnector() {
     const token = PubSub.subscribe(
       "RetrieveSelectedResponse",
       async (_msg: string, data: RetrieveSelectedSpanEquipmentsResponse) => {
-        if (data.username === keycloak.profile?.username) {
+        if (data.username === auth.user?.profile.preferred_username) {
           // If the user has not saved inside of the map
           if (data.selectedFeaturesMrid.includes("uuid_generate_v4()")) {
             toast.error(t("NOT_VALID_SELECTION"));
@@ -111,7 +111,7 @@ function BridgeConnector() {
     connected,
     setSelectedSegmentIds,
     retrieveSelectedEquipments,
-    keycloak.profile?.username,
+    auth.user?.profile.preferred_username,
     t,
   ]);
 
@@ -135,7 +135,7 @@ function BridgeConnector() {
           return;
         }
 
-        if (data.username === keycloak.profile?.username) {
+        if (data.username === auth.user?.profile.preferred_username) {
           if (data.identifiedFeatureId === "uuid_generate_v4()") {
             toast.error(t("NOT_VALID_SELECTION"));
           } else {
@@ -152,7 +152,7 @@ function BridgeConnector() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [connected, setIdentifiedFeature, keycloak.profile?.username, t]);
+  }, [connected, setIdentifiedFeature, auth.user?.profile.preferred_username, t]);
 
   useEffect(() => {
     // We only want to retrieve the identified feature once after the connection
