@@ -6,12 +6,10 @@ viewBox="0 0 10000 10000"
  xmlns:xlink="http://www.w3.org/1999/xlink">
  <defs>
   <style type="text/css">
-   <![CDATA[
     .str0 {stroke:#2B2A29;stroke-width:700}
     .str1 {stroke:#2B2A29;stroke-width:150;stroke-dasharray:750.000000 450.000000}
     .fil0 {fill:none}
     .fil1 {fill:black}
-   ]]>
   </style>
  </defs>
  <g id="Layer_x0020_1">

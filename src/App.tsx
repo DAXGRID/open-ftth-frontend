@@ -13,9 +13,9 @@ import TopMenu from "./groups/TopMenu";
 import Routes from "./routes/Routes";
 import { UserContext } from "./contexts/UserContext";
 import { OverlayContext } from "./contexts/OverlayContext";
-import { useKeycloak } from "@react-keycloak/web";
 import Overlay from "./components/Overlay";
 import Config from "./config";
+import { useAuth } from "react-oidc-context";
 
 // This is a hack made to handle tablet sizes.
 // https://medium.com/quick-code/100vh-problem-with-ios-safari-92ab23c852a8
@@ -35,11 +35,11 @@ function App() {
   const [showInitialDisplayedPrompt, setshowInitialDisplayedPrompt] =
     useState(true);
   const { t, i18n } = useTranslation();
-  const { initialized } = useKeycloak();
+  const auth = useAuth();
 
   useEffect(() => {
     // Only show the message if everything has been initialized.
-    if (!initialized || !authenticated) return;
+    if (auth.isLoading || !authenticated) return;
 
     // Only show the message if the message has a value.
     if (!Config.INITIAL_USER_PROMPT) return;
@@ -61,7 +61,7 @@ function App() {
     } else {
       showElement(null);
     }
-  }, [initialized, authenticated, showElement, showInitialDisplayedPrompt]);
+  }, [auth.isLoading, authenticated, showElement, showInitialDisplayedPrompt]);
 
   useEffect(() => {
     const language = localStorage.getItem("language");
@@ -72,7 +72,7 @@ function App() {
     } else {
       localStorage.setItem("language", Config.DEFAULT_USER_LANGUAGE);
     }
-  }, [i18n, initialized]);
+  }, [i18n, auth.isLoading]);
 
   const toggleSideMenu = () => {
     setSideMenuOpen(!sideMenuOpen);
@@ -80,9 +80,10 @@ function App() {
     window.dispatchEvent(new Event("resize"));
   };
 
-  if (!initialized) return <Loading />;
+  if (auth.isLoading) return <Loading />;
+
   // if keycloak is setup and user is authenticated but no username.
-  if (initialized && authenticated && !userName) return <Loading />;
+  if (auth.isLoading && authenticated && !userName) return <Loading />;
 
   return (
     <Router>
