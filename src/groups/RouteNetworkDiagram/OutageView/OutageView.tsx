@@ -39,12 +39,15 @@ function convertToTreeNodes(node: Node, t: TFunction): TreeNode {
     });
   }
 
+  console.log(node);
+
   return {
     ...node,
     nodes: children,
     selected: false,
     label: translateNames(node.label, t),
-  };
+    description: node.description === null ? null : translateNames(node.description, t)
+   };
 }
 
 function toggleSelectedTreeNodes(
