@@ -230,7 +230,7 @@ function AddTerminalEquipment({
       specificationResponse.data.utilityNetwork.terminalEquipmentSpecifications,
       state.category,
       !!rackId,
-    );
+    ).sort((x, y) => x.text.localeCompare(y.text));
   }, [
     specificationResponse.data?.utilityNetwork.terminalEquipmentSpecifications,
     state.category,
@@ -253,7 +253,7 @@ function AddTerminalEquipment({
           (x) => x.id === state.specification,
         )?.manufacturerRefs ?? [],
       ),
-    ];
+    ].sort((x, y) => x.text.localeCompare(y.text));
   }, [state.specification, specificationResponse, t]);
 
   const accessAddresses = useMemo<SelectOption[]>(() => {
@@ -415,6 +415,7 @@ function AddTerminalEquipment({
         <div className="full-row">
           <LabelContainer text={`${t("SPECIFICATION")}:`}>
             <SelectMenu
+              enableSearch
               autoSelectFirst={true}
               options={specificationOptions}
               removePlaceHolderOnSelect
