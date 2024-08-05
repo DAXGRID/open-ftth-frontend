@@ -281,7 +281,8 @@
       "SPECIFCATION_NAME": "Specification name",
       "DESCRIPTION": "Description",
       "MARKING_INFORMATION": "Marking information",
-      "COMMENT": "Comment"
+      "COMMENT": "Comment",
+      "OUTAGE_INSTALLATIONS_FOUND": "Installations found"
     }
   },
   "dk": {
@@ -566,7 +567,8 @@
       "SPECIFCATION_NAME": "Specifikation navn",
       "DESCRIPTION": "Kommentar",
       "MARKING_INFORMATION": "Markerings information",
-      "COMMENT": "Kommentar"
+      "COMMENT": "Kommentar",
+      "OUTAGE_INSTALLATIONS_FOUND": "Installationer fundet"
     }
   }
 }
