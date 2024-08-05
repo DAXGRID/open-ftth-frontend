@@ -39,8 +39,6 @@ function convertToTreeNodes(node: Node, t: TFunction): TreeNode {
     });
   }
 
-  console.log(node);
-
   return {
     ...node,
     nodes: children,
