@@ -329,7 +329,6 @@ function TerminalEquipment() {
   }, [state.showFiberEditor, showElement, dispatch, t, identifiedFeature]);
 
   useEffect(() => {
-    console.log(state.showOutageView);
     if (
       state.showDisconnectFiberEditor.show &&
       state.showDisconnectFiberEditor.connectedToSegmentId &&
