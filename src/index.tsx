@@ -17,9 +17,18 @@ const oidcConfig = {
   redirect_uri: Config.AUTH_REDIRECT_URL,
 };
 
+// This is used to clear the history after the sign-in redirect.
+const onSigninCallback = (_user: any | void): void => {
+  window.history.replaceState(
+    {},
+    document.title,
+    window.location.pathname
+  )
+}
+
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider {...oidcConfig}>
+    <AuthProvider {...oidcConfig} onSigninCallback={onSigninCallback}>
       <AuthWrapperProvider>
         <UserProvider>
           <MapProvider>
