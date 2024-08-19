@@ -35,7 +35,6 @@ declare global {
     config_INFORMATION_CONTROL_CONFIG: InformationControlConfig;
     config_DEFAULT_USER_LANGUAGE: string;
     config_INITIAL_USER_PROMPT: IntitialUserPrompt | null;
-    AUTH_REDIRECT_URL: string;
   }
 }
 
@@ -51,7 +50,6 @@ const settings = {
   // The initial user prompt has been made because some customers want an
   // initial prompt to be displayed to the user when they first time visit the site.
   INITIAL_USER_PROMPT: window.config_INITIAL_USER_PROMPT,
-  AUTH_REDIRECT_URL: window.location.origin
 };
 
 export default settings;
