@@ -35,7 +35,7 @@ function useBridgeConnector() {
 
   const panToCoordinate = useCallback(
     (coordinate: string) => {
-      if (auth.user?.profile.preferred_username) return;
+      if (!auth.user?.profile.preferred_username) return;
 
       const message = {
         eventType: "PanToCoordinate",
