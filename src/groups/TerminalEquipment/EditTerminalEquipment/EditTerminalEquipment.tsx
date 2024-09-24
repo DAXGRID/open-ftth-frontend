@@ -295,7 +295,7 @@ function EditTerminalEquipment({
       state.terminalEquipmentSpecifications,
       state.categoryName,
       state.terminalEquipment.specification.isRackEquipment,
-    );
+    ).sort((x, y) => x.text > y.text ? 1 : -1);
   }, [
     state.terminalEquipmentSpecifications,
     state.categoryName,
@@ -314,7 +314,7 @@ function EditTerminalEquipment({
           (x) => x.id === state.specificationId,
         )?.manufacturerRefs ?? [],
       ),
-    ];
+    ].sort((x, y) => x.text > y.text ? 1 : -1);
   }, [
     state.manufacturers,
     state.terminalEquipmentSpecifications,
@@ -469,6 +469,7 @@ function EditTerminalEquipment({
               onSelected={(x) =>
                 dispatch({ type: "setSpecificationId", id: x as string })
               }
+              enableSearch
               options={specificationOptions}
               selected={state.specificationId}
             />
@@ -480,6 +481,7 @@ function EditTerminalEquipment({
               onSelected={(x) =>
                 dispatch({ type: "setManufacturerId", id: x as string })
               }
+              enableSearch
               options={manufacturerOptions}
               selected={state.manufacturerId ?? ""}
             />
