@@ -118,7 +118,8 @@ function AddAdditionalStructures({
 
   const categoryOptions = useMemo<SelectOption[]>(() => {
     if (state.terminalStructureSpecifications) {
-      return createCategoryOptions(state.terminalStructureSpecifications, t);
+      return createCategoryOptions(state.terminalStructureSpecifications, t)
+        .sort((x, y) => x.text > y.text ? 1 : -1);
     } else {
       return [];
     }
@@ -129,7 +130,7 @@ function AddAdditionalStructures({
       return createSpecificationOptions(
         state.terminalStructureSpecifications,
         state.category
-      );
+      ).sort((x, y) => x.text > y.text ? 1 : -1);
     } else {
       return [];
     }
@@ -170,6 +171,7 @@ function AddAdditionalStructures({
             <SelectMenu
               options={categoryOptions}
               autoSelectFirst
+              enableSearch
               onSelected={(x) =>
                 dispatch({
                   type: "setCategory",
@@ -184,6 +186,7 @@ function AddAdditionalStructures({
           <LabelContainer text={`${t("SPECIFICATION")}:`}>
             <SelectMenu
               options={specificationOptions}
+              enableSearch
               autoSelectFirst
               onSelected={(x) =>
                 dispatch({
