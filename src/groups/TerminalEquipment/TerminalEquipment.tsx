@@ -53,6 +53,24 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
               className="header-icons__icon"
               onClick={() =>
                 dispatch({
+                  type: "setShowOutageView",
+                  show: {
+                    routeNodeId: state.routeNodeId,
+                    equipmentId: parentNodeStructure.id,
+                    show: true,
+                  },
+                })
+              }
+            >
+              <FontAwesomeIcon icon={faTriangleExclamation} />
+            </span>
+          )}
+          {state.editable && (
+            <span
+              role="button"
+              className="header-icons__icon"
+              onClick={() =>
+                dispatch({
                   type: "setShowEditRack",
                   show: {
                     routeNodeId: state.routeNodeId,
@@ -146,7 +164,7 @@ function TerminalEquipmentTableContainer({
                     show: {
                       routeNodeId: state.routeNodeId,
                       show: true,
-                      terminalEquipmentId: terminalEquipment.id,
+                      equipmentId: terminalEquipment.id,
                     },
                     type: "setShowOutageView",
                   })
@@ -423,7 +441,7 @@ function TerminalEquipment() {
     } else if (
       state.showOutageView.show &&
       state.showOutageView.routeNodeId &&
-      state.showOutageView.terminalEquipmentId
+      state.showOutageView.equipmentId
     ) {
       showElement(
         <ModalContainer
@@ -432,7 +450,7 @@ function TerminalEquipment() {
         >
           <OutageView
             routeElementId={state.showOutageView.routeNodeId}
-            equipmentId={state.showOutageView.terminalEquipmentId}
+            equipmentId={state.showOutageView.equipmentId}
           />
         </ModalContainer>,
       );

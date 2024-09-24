@@ -57,7 +57,7 @@ interface ShowAddAdditionalStructures {
 interface ShowOutageView {
   show: boolean;
   routeNodeId: string | null;
-  terminalEquipmentId: string | null;
+  equipmentId: string | null;
 }
 
 interface RemoveStructure {
@@ -176,7 +176,7 @@ const defaultShowAddtionalStructure: ShowAddAdditionalStructures = {
 const defaultShowOutageView: ShowOutageView = {
   show: false,
   routeNodeId: null,
-  terminalEquipmentId: null,
+  equipmentId: null,
 };
 
 const terminalEquipmentInitialState: TerminalEquipmentState = {
