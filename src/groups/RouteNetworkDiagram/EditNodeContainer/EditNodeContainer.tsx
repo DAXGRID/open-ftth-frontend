@@ -27,7 +27,7 @@ const getFilteredNodeContainerSpecifications = (
 ) => {
   const bodyItems = specifications.map<BodyItem>((x) => {
     return {
-      rows: [{ id: 0, value: x.name }],
+      rows: [{ id: 0, value: x.description }],
       id: x.id,
     };
   });
