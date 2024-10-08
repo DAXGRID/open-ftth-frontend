@@ -4,6 +4,7 @@ export interface NodeContainerDetailsResponse {
       name: string;
       specification: {
         name: string;
+        description: string;
       };
       manufacturer: {
         name: string;
@@ -22,6 +23,7 @@ query ($nodeContainerId: ID!) {
       }
       specification {
         name
+        description
       }
     }
   }

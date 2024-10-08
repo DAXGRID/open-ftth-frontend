@@ -11,7 +11,7 @@ import ModalContainer from "../../../components/ModalContainer";
 import EditNodeContainer from "../EditNodeContainer";
 import { OverlayContext } from "../../../contexts/OverlayContext";
 
-type SpanEquopmentDetailsParams = {
+type SpanEquipmentDetailsParams = {
   nodeContainerMrid: string;
   showActions: boolean;
 };
@@ -29,7 +29,7 @@ function mapContainerResponse(
     },
     {
       name: t("SPECIFICATION"),
-      value: specification?.name ?? t("UNSPECIFIED"),
+      value: specification?.description ?? t("UNSPECIFIED"),
     },
   ];
 }
@@ -37,7 +37,7 @@ function mapContainerResponse(
 function NodeContainerDetails({
   nodeContainerMrid,
   showActions,
-}: SpanEquopmentDetailsParams) {
+}: SpanEquipmentDetailsParams) {
   const { t } = useTranslation();
   const { showElement } = useContext(OverlayContext);
   const [showEditNodeContainer, setShowEditNodeContainer] = useState(false);
