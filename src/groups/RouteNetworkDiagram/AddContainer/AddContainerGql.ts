@@ -11,6 +11,7 @@ export interface NodeContainerSpecification {
   id: string;
   category: string;
   name: string;
+  description: string;
   deprecated: boolean;
   manufacturerRefs: string[];
 }
@@ -29,6 +30,7 @@ query {
       id
       category
       name
+      description
       description
       deprecated
       manufacturerRefs
