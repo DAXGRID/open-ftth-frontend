@@ -12,6 +12,7 @@ export interface TerminalEquipmentSpecification {
   name: string;
   category: string;
   isRackEquipment: boolean;
+  description: string;
   manufacturerRefs: string[];
   isAddressable: boolean;
 }
