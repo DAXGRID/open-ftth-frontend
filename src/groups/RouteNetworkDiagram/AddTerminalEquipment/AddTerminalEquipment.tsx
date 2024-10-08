@@ -77,7 +77,7 @@ function specificationToOptions(
   return specs
     .filter((x) => x.isRackEquipment === isRackEquipment)
     .filter((x) => x.category === category)
-    .map((x) => ({ text: x.name, value: x.id, key: x.id }));
+    .map((x) => ({ text: x.description, value: x.id, key: x.id }));
 }
 
 function manufacturerToOptions(
