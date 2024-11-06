@@ -106,7 +106,7 @@ const getFilteredManufacturers = (
   }
 
   const filtered = bodyItems.filter((x) => {
-    return spanEquipment.manufacturerRefs.includes(x.value.toString());
+    return spanEquipment.manufacturerRefs?.includes(x.value.toString());
   });
 
   const defaultValue: SelectOption= {
@@ -341,6 +341,30 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
     setSelectedManufacturer("");
   };
 
+  const categorySelectOptions = () => {
+    const categoryOptions = spanEquipmentSpecifications
+      .map((x) => {
+        return x.category;
+      })
+      .filter((v, i, a) => a.indexOf(v) === i)
+      .map<SelectOption>((x) => {
+        return {
+          text: t(x),
+          value: x,
+        };
+      });
+
+    return categoryOptions;
+  };
+
+  const selectCategory = (categoryId: string | number | undefined) => {
+    if (selectedCategory === categoryId || selectCategory === undefined) return;
+
+    setSelectedCategory(categoryId);
+    setSelectedSpanEquipmentSpecification("");
+    setSelectedManufacturer("");
+  };
+
   const update = async () => {
     if (!selectedSpanEquipmentSpecification) {
       toast.error("ERROR");
@@ -397,10 +421,19 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
         <p className="block-title">{t("SPAN_EQUIPMENT_INFORMATION")}</p>
         <div className="full-row">
           <SelectMenu
+            options={categorySelectOptions()}
+            removePlaceHolderOnSelect
+            onSelected={selectCategory}
+            selected={selectedCategory}
+          />
+        </div>
+        <div className="full-row">
+          <SelectMenu
             options={filteredSpanEquipmentSpecifications}
             onSelected={(x) => selectSpanEquipmentSpecification(x?.toString() ?? "")}
             selected={selectedSpanEquipmentSpecification}
             enableSearch={true}
+            autoSelectFirst={true}
           />
         </div>
         <div className="full-row">
@@ -408,6 +441,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
             options={filteredManufactuers}
             onSelected={(x) => setSelectedManufacturer(x?.toString() ?? "")}
             selected={selectedManufacturer}
+            autoSelectFirst={true}
           />
         </div>
         <div className="full-row">
