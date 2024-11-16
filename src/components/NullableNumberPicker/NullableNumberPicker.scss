@@ -1,0 +1,25 @@
+@import "../../global-styles/settings";
+@import "../../global-styles/colors";
+
+.nullable-number-picker {
+  flex: 1;
+  width: 100%;
+
+  .counter-buttons {
+    position: absolute;
+    right: 0;
+
+    button {
+      border: none;
+    }
+  }
+
+  input {
+    width: 100%;
+    min-height: $basic-height;
+    padding: 0px 20px;
+    font-size: 14px;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+  }
+}
