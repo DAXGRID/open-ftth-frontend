@@ -287,7 +287,8 @@
       "INTERFACE_TYPE": "Interface type",
       "SLOT_NUMBER": "Slot nr",
       "SUB_SLOT_NUMBER": "Sub slot nr",
-      "PORT_NUMBER": "Port nr"
+      "PORT_NUMBER": "Port nr",
+      "EDIT_INTERFACE": "Edit interface"
     }
   },
   "dk": {
@@ -579,7 +580,8 @@
       "INTERFACE_TYPE": "Interface type",
       "SLOT_NUMBER": "Slot nr",
       "SUB_SLOT_NUMBER": "Sub slot nr",
-      "PORT_NUMBER": "Port nr"
+      "PORT_NUMBER": "Port nr",
+      "EDIT_INTERFACE": "Rediger interface"
     }
   }
 }
