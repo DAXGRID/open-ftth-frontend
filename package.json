@@ -12,7 +12,7 @@
     "i18next": "^20.3.2",
     "maplibre-gl": "^1.14.0",
     "oidc-client-ts": "^3.0.1",
-    "pubsub-js": "^1.9.3",
+    "pubsub-js": "^1.9.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.11.0",
@@ -51,7 +51,7 @@
   "devDependencies": {
     "@types/geojson": "^7946.0.10",
     "@types/node": "^15.12.4",
-    "@types/pubsub-js": "^1.8.2",
+    "@types/pubsub-js": "^1.8.6",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.8",
     "@types/react-router-dom": "^5.1.7",
