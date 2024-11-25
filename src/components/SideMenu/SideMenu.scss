@@ -1,8 +1,8 @@
-@import "../../global-styles/colors";
-@import "../../global-styles/settings";
+@use "../../global-styles/colors";
+@use "../../global-styles/settings";
 
 .side-menu {
-  margin-top: $top-menu-height;
+  margin-top: settings.$top-menu-height;
   background-color: white;
   height: var(--app-height);
   position: fixed;
@@ -10,7 +10,7 @@
   left: -100%;
   transition: all 0.3s linear;
   transform: translateX(-100%);
-  border-right: 1px solid $border-color;
+  border-right: 1px solid colors.$border-color;
   z-index: 1;
 
   .side-menu__label {
@@ -26,14 +26,14 @@
     font-size: 16px;
     width: 100%;
     height: 100%;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid colors.$border-color;
 
     &:hover {
-      background-color: $hover-color;
+      background-color: colors.$hover-color;
     }
 
     &.side-menu-item--selected {
-      background-color: $select-color;
+      background-color: colors.$select-color;
       font-weight: bold;
     }
 
@@ -57,10 +57,10 @@
     background-color: white;
     height: var(--app-height);
     position: fixed;
-    width: $side-menu-size;
-    left: -$side-menu-size;
+    width: settings.$side-menu-size;
+    left: -(settings.$side-menu-size);
     transition: all 0.3s linear;
-    transform: translateX(-$side-menu-size);
+    transform: translateX(-(settings.$side-menu-size));
     z-index: 1;
 
     .side-menu__label {
@@ -69,7 +69,7 @@
 
     &.show {
       transition: all 0.3s linear;
-      transform: translateX($side-menu-size);
+      transform: translateX(settings.$side-menu-size);
     }
   }
 }

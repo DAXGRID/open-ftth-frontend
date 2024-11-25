@@ -1,9 +1,9 @@
-@import "../../global-styles/colors";
+@use "../../global-styles/colors";
 
 .rack-container {
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   border-bottom: none;
   width: 100%;
   min-width: 700px;
@@ -17,9 +17,9 @@
     display: flex;
     justify-content: flex-start;
     padding: 15px 10px;
-    background-color: $hover-color;
+    background-color: colors.$hover-color;
     border-bottom: none;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid colors.$border-color;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
     align-items: center;
@@ -44,7 +44,7 @@
         }
 
         &.header-icons__icon--selected {
-          color: $success-color;
+          color: colors.$success-color;
         }
       }
     }
@@ -53,7 +53,7 @@
   .terminal-equipment-table-container {
     border-radius: 0;
     border: none;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid colors.$border-color;
 
     &:last-child {
       border-bottom: none;
@@ -71,7 +71,7 @@
 .terminal-equipment-table-container {
   background-color: white;
   border-radius: 4px;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   flex-basis: 100%;
   border-bottom: none;
   min-width: 700px;
@@ -79,7 +79,7 @@
   .terminal-equipment-table-container-header {
     display: flex;
     padding: 10px;
-    background-color: $hover-color;
+    background-color: colors.$hover-color;
     align-items: center;
     gap: 20px;
 
@@ -102,7 +102,7 @@
         }
 
         &.header-icons__icon--selected {
-          color: $success-color;
+          color: colors.$success-color;
         }
       }
     }
@@ -124,11 +124,11 @@
 }
 
 .terminal-equipment-table {
-  border-top: 1px solid $border-color;
+  border-top: 1px solid colors.$border-color;
 
   .terminal-equipment-header {
     font-weight: bold;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid colors.$border-color;
   }
 
   .terminal-equipment-table-body {
@@ -140,13 +140,13 @@
 
     .terminal-equipment-table-row {
       flex: 1;
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid colors.$border-color;
 
       .terminal-equipment-header-row {
         display: flex;
         justify-content: flex-start;
         padding: 10px 10px;
-        background-color: $ultra-light-grey;
+        background-color: colors.$ultra-light-grey;
 
         .terminal-equipment-row-header__item {
           flex: 1;
@@ -175,7 +175,7 @@
 
   .terminal-equipment-table-item {
     padding: 7px 10px;
-    border-right: 1px solid $border-color;
+    border-right: 1px solid colors.$border-color;
     display: flex;
     align-items: center;
 
@@ -244,7 +244,7 @@
     display: flex;
     width: 100%;
     background-color: #f9f9f9;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid colors.$border-color;
     padding: 10px;
     align-items: center;
     justify-content: space-between;
@@ -279,12 +279,12 @@
   }
 
   .trace-view-header {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid colors.$border-color;
 
     .trace-view-header-item {
       background-color: #f9f9f9;
       padding: 10px;
-      border-right: 1px solid $border-color;
+      border-right: 1px solid colors.$border-color;
       align-items: center;
       font-weight: bold;
       &:last-child {
@@ -299,20 +299,20 @@
 
   .trace-view-body {
     .trace-view-body-row {
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid colors.$border-color;
 
       &.trace-view-body-row--selected {
-        background-color: $select-color;
+        background-color: colors.$select-color;
       }
 
       &:hover {
         cursor: pointer;
-        background-color: $select-color;
+        background-color: colors.$select-color;
       }
 
       .trace-view-body-item {
         padding: 10px;
-        border-right: 1px solid $border-color;
+        border-right: 1px solid colors.$border-color;
         align-items: center;
         overflow: auto;
         text-overflow: inherit;

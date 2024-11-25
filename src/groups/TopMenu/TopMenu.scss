@@ -1,8 +1,8 @@
-@import "../../global-styles/colors";
+@use "../../global-styles/colors";
 
 .top-menu {
   background-color: white;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid colors.$border-color;
   padding: 7px 25px;
   font-size: 24px;
 

@@ -1,4 +1,4 @@
-@import "../../global-styles/colors";
+@use "../../global-styles/colors";
 
 .select-list-view {
   font-size: 14px;
@@ -20,19 +20,19 @@
   }
 
   .select-list-view-content {
-    background-color: $background-color;
+    background-color: colors.$background-color;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 
     .select-list-view-header {
-      background-color: $hover-color;
+      background-color: colors.$hover-color;
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
-      border: 1px solid $border-color;
+      border: 1px solid colors.$border-color;
 
       .select-list-view-header-item {
         flex: 1;
-        border-right: 1px solid $border-color;
+        border-right: 1px solid colors.$border-color;
         font-weight: bold;
 
         &:last-of-type {
@@ -48,7 +48,7 @@
     }
 
     .select-list-view-body {
-      border: 1px solid $border-color;
+      border: 1px solid colors.$border-color;
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px;
       border-top: none;
@@ -63,11 +63,11 @@
       }
 
       .select-list-view-body-row {
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid colors.$border-color;
 
         &:hover {
           cursor: pointer;
-          background-color: $hover-color;
+          background-color: colors.$hover-color;
         }
 
         &:last-of-type {
@@ -76,10 +76,10 @@
       }
 
       .select-list-view-body-item {
-        border-right: 1px solid $border-color;
+        border-right: 1px solid colors.$border-color;
 
         &.selected {
-          background-color: $select-color;
+          background-color: colors.$select-color;
         }
 
         &:last-of-type {

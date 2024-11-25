@@ -1,4 +1,4 @@
-@import "../../global-styles/colors";
+@use "../../global-styles/colors";
 
 .select-menu-svg-icon {
   display: flex;
@@ -9,7 +9,7 @@
     z-index: 1;
     background: white;
     right: 13px;
-    border: 1px solid $border-color;
+    border: 1px solid colors.$border-color;
     padding: 5px 5px 0px 5px;
     width: 50px;
     border-radius: 4px;

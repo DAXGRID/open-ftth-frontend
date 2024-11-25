@@ -1,4 +1,4 @@
-@import "../../global-styles/colors";
+@use "../../global-styles/colors";
 
 .tab-view {
   padding: 20px;
@@ -6,13 +6,13 @@
 
 .tab-view-container {
   background-color: white;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   border-radius: 4px;
 }
 
 .tab-view-header {
   display: flex;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid colors.$border-color;
 }
 
 .tab-view-header-tabs {
@@ -21,21 +21,21 @@
 
   .tab-view-header-tab {
     padding: 10px 20px;
-    border-right: 1px solid $border-color;
+    border-right: 1px solid colors.$border-color;
     user-select: none;
     font-weight: bold;
 
     &.tab-view-header-tab--selected {
-      background-color: $select-color;
+      background-color: colors.$select-color;
 
       &:hover {
-        background-color: $hover-selected;
+        background-color: colors.$hover-selected;
       }
     }
 
     &:hover {
       cursor: pointer;
-      background-color: $select-color;
+      background-color: colors.$select-color;
     }
   }
 }
@@ -49,13 +49,13 @@
   padding-right: 5px;
 
   .tab-view-header-actions-action {
-    border: 1px solid $border-color;
+    border: 1px solid colors.$border-color;
     padding: 5px 6px;
     border-radius: 4px;
 
     &:hover {
       cursor: pointer;
-      background-color: $hover-color;
+      background-color: colors.$hover-color;
     }
   }
 }

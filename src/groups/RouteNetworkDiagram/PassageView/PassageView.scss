@@ -1,4 +1,4 @@
-@import "../../../global-styles/colors";
+@use "../../../global-styles/colors";
 
 .passage-view {
   padding: 15px;
@@ -6,9 +6,9 @@
 }
 
 .passage-view-container {
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   border-radius: 4px;
-  background-color: $header-color;
+  background-color: colors.$header-color;
   justify-self: center;
   min-width: 650px;
 }
@@ -44,12 +44,12 @@
 
 .passage-view-row-header {
   font-weight: bold;
-  background-color: $header-color;
+  background-color: colors.$header-color;
   border-bottom: none;
   font-size: 14px;
   border-bottom: none;
-  border-top: 1px solid $border-color;
-  border-bottom: 1px solid $border-color;
+  border-top: 1px solid colors.$border-color;
+  border-bottom: 1px solid colors.$border-color;
 }
 
 .passage-view-row-body {
@@ -60,17 +60,17 @@
 
   .passage-view-row {
     &.passage-view-row--selected {
-      background-color: $select-color;
+      background-color: colors.$select-color;
 
       &:hover {
         cursor: pointer;
-        background-color: $select-color;
+        background-color: colors.$select-color;
       }
     }
 
     &:hover {
       cursor: pointer;
-      background-color: $select-color;
+      background-color: colors.$select-color;
     }
   }
 }
@@ -82,14 +82,14 @@
 }
 
 .passage-view-row {
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid colors.$border-color;
 
   &:last-child {
     border-bottom: none;
   }
 
   .passage-view-row-item {
-    border-right: 1px solid $border-color;
+    border-right: 1px solid colors.$border-color;
 
     &:last-child {
       border-right: none;

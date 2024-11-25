@@ -1,4 +1,4 @@
-@import "../../../global-styles/colors";
+@use "../../../global-styles/colors";
 
 .disconnect-fiber-editor {
 }
@@ -8,7 +8,7 @@
 }
 
 .disconnect-fiber-editor-container {
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   border-radius: 4px;
 }
 
@@ -28,7 +28,7 @@
 
 .disconnect-fiber-editor-container-header-item {
   font-weight: bold;
-  border-right: 1px solid $border-color;
+  border-right: 1px solid colors.$border-color;
   padding: 10px;
   overflow-wrap: break-word;
 
@@ -50,7 +50,7 @@
 .disconnect-fiber-editor-container-body-line {
   flex-basis: 100%;
   width: 100%;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid colors.$border-color;
 
   &:last-of-type {
     border-bottom: none;
@@ -58,7 +58,7 @@
 }
 
 .disconnect-fiber-editor-container-body-line-item {
-  border-right: 1px solid $border-color;
+  border-right: 1px solid colors.$border-color;
   padding: 10px;
   width: 100%;
   overflow-wrap: break-word;

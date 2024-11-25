@@ -1,18 +1,18 @@
-@import "../../global-styles/colors";
+@use "../../global-styles/colors";
 
 .tree-view-check-box {
   flex: 1;
   padding: 15px 10px;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   border-radius: 4px;
   overflow-y: auto;
 
   .node-selection-row {
     display: flex;
     gap: 10px;
-    background-color: $lighter-grey;
+    background-color: colors.$lighter-grey;
     padding: 5px;
-    border: 1px solid $border-color;
+    border: 1px solid colors.$border-color;
     border-radius: 4px;
     border-bottom-left-radius: 0;
     display: flex;
@@ -42,7 +42,7 @@
 
       &.expand-action--disabled {
         cursor: not-allowed;
-        color: $grey;
+        color: colors.$grey;
       }
     }
   }
@@ -50,7 +50,7 @@
   .node-block {
     padding-top: 10px;
     padding-left: 20px;
-    border-left: 1px dashed $border-color;
+    border-left: 1px dashed colors.$border-color;
 
     &.node-block-not-expandable {
       padding-left: 50px;

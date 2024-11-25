@@ -1,4 +1,4 @@
-@import "../../../global-styles/colors";
+@use "../../../global-styles/colors";
 
 .connectivity-view {
   padding: 20px;
@@ -9,9 +9,9 @@
 .connectivity-view-container {
   display: flex;
   flex-wrap: wrap;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   border-radius: 4px;
-  background-color: $header-color;
+  background-color: colors.$header-color;
   min-width: 650px;
 }
 
@@ -24,8 +24,8 @@
 .connectivity-view-header {
   flex-basis: 100%;
   font-weight: bold;
-  border-top: 1px solid $border-color;
-  border-bottom: 1px solid $border-color;
+  border-top: 1px solid colors.$border-color;
+  border-bottom: 1px solid colors.$border-color;
 }
 
 .connectivity-view-body {
@@ -40,7 +40,7 @@
   grid-auto-columns: minmax(0, 3fr);
   grid-auto-flow: column;
 
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid colors.$border-color;
 
   &:last-child {
     border-bottom: none;
@@ -48,7 +48,7 @@
 }
 
 .connectivity-view-row-item {
-  border-right: 1px solid $border-color;
+  border-right: 1px solid colors.$border-color;
   padding: 10px;
   font-size: 14px;
   display: flex;
@@ -73,7 +73,7 @@
     display: flex;
     width: 100%;
     background-color: #f9f9f9;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid colors.$border-color;
     padding: 10px;
     align-items: center;
     justify-content: space-between;
@@ -108,11 +108,11 @@
   }
 
   .trace-view-header {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid colors.$border-color;
     .trace-view-header-item {
       background-color: #f9f9f9;
       padding: 10px;
-      border-right: 1px solid $border-color;
+      border-right: 1px solid colors.$border-color;
       align-items: center;
       font-weight: bold;
       &:last-child {
@@ -126,27 +126,27 @@
   }
 
   .trace-view-body {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid colors.$border-color;
 
     .trace-view-body-row {
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid colors.$border-color;
 
       &:last-child {
         border-bottom: none;
       }
 
       &.trace-view-body-row--selected {
-        background-color: $select-color;
+        background-color: colors.$select-color;
       }
 
       &:hover {
         cursor: pointer;
-        background-color: $select-color;
+        background-color: colors.$select-color;
       }
 
       .trace-view-body-item {
         padding: 10px;
-        border-right: 1px solid $border-color;
+        border-right: 1px solid colors.$border-color;
         align-items: center;
         &:last-child {
           padding: 10px 20px 10px 10px;

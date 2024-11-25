@@ -1,5 +1,5 @@
-@import "../../global-styles/colors";
-@import "../../global-styles/settings";
+@use "../../global-styles/colors";
+@use "../../global-styles/settings";
 
 .default-button {
   width: 100%;
@@ -8,20 +8,20 @@
   border: none;
   padding: 15px 20px;
   font-size: 16px;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   flex: 1;
   padding: 0;
   min-width: 300px;
-  height: $basic-height;
+  height: settings.$basic-height;
   border-radius: 4px;
 
   &:hover {
     cursor: pointer;
-    background-color: $hover-color;
+    background-color: colors.$hover-color;
   }
 
   &[disabled] {
-    background-color: $disabled-color;
+    background-color: colors.$disabled-color;
     &:hover {
       cursor: not-allowed;
     }

@@ -1,5 +1,5 @@
-@import "../../global-styles/colors";
-@import "../../global-styles/settings";
+@use "../../global-styles/colors";
+@use "../../global-styles/settings";
 
 .select-menu-wrapper {
   position: relative;
@@ -22,24 +22,24 @@
   justify-content: space-between;
   padding: 0 10px;
   font-size: 14px;
-  height: $basic-height;
-  line-height: $basic-height;
+  height: settings.$basic-height;
+  line-height: settings.$basic-height;
   background: #ffffff;
   cursor: pointer;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   border-radius: 4px;
 
   &.disabled {
-    background-color: $disabled-color;
+    background-color: colors.$disabled-color;
     cursor: not-allowed;
 
     &:hover {
-      background-color: $disabled-color;
+      background-color: colors.$disabled-color;
     }
   }
 
   &:hover {
-    background-color: $hover-color;
+    background-color: colors.$hover-color;
   }
 
   span {
@@ -61,7 +61,7 @@
   top: 100%;
   left: 0px;
   right: 0px;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   border-top: 0;
   background: #fff;
   opacity: 0;
@@ -88,10 +88,10 @@
   display: block;
   padding: 0px 10px;
   font-size: 14px;
-  line-height: Calc($basic-height - 5px);
+  line-height: Calc(settings.$basic-height - 5px);
   cursor: pointer;
   transition: all 0.2s;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid colors.$border-color;
 
   &:last-child {
     border-bottom: none;
@@ -100,24 +100,24 @@
 
 .menu-option-search {
   border: none;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid colors.$border-color;
   width: 100%;
-  height: $basic-height;
+  height: settings.$basic-height;
   font-size: 14px;
   padding: 10px;
 }
 
 .menu-option:hover {
   cursor: pointer;
-  background-color: $hover-color;
+  background-color: colors.$hover-color;
 }
 
 .menu-option.selected {
-  background-color: $select-color;
+  background-color: colors.$select-color;
 }
 
 .menu-option.disabled {
-  background-color: $hover-color;
+  background-color: colors.$hover-color;
   &:hover {
     cursor: not-allowed;
   }

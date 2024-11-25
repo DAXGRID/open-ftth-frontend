@@ -1,4 +1,4 @@
-@import "../../../global-styles/colors";
+@use "../../../global-styles/colors";
 
 .equipment-selector {
   display: flex;
@@ -6,7 +6,7 @@
 }
 
 .equipment-selector-table {
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   border-radius: 4px;
   width: 100%;
 
@@ -18,7 +18,7 @@
       p {
         font-weight: bold;
         font-size: 14px;
-        border-right: 1px solid $border-color;
+        border-right: 1px solid colors.$border-color;
         padding: 10px 15px;
         &:last-child {
           border-right: none;
@@ -34,14 +34,14 @@
     .equipment-selector-table-body__row {
       display: grid;
       grid-template-columns: 3fr 2fr 0.5fr 2fr 3fr;
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid colors.$border-color;
 
       &.row-invalid {
-        background-color: $red;
+        background-color: colors.$red;
       }
 
       &:first-child {
-        border-top: 1px solid $border-color;
+        border-top: 1px solid colors.$border-color;
       }
 
       &:last-child {
@@ -50,7 +50,7 @@
 
       p {
         font-size: 14px;
-        border-right: 1px solid $border-color;
+        border-right: 1px solid colors.$border-color;
         padding: 10px 15px;
 
         &:last-child {
