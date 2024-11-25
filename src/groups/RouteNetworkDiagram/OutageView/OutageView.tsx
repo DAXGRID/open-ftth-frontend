@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useClient } from "urql";
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import {
   getInformation,
   getWorkTasks,

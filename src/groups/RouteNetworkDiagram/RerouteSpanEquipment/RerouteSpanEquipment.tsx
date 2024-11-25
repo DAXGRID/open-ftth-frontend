@@ -4,7 +4,8 @@ import { useClient, Client } from "urql";
 import useBridgeConnector from "../../../bridge/useBridgeConnector";
 import { MapContext } from "../../../contexts/MapContext";
 import { toast } from "react-toastify";
-import { TFunction, useTranslation } from "react-i18next";
+import {  useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import {
   QUERY_GET_ROUTESEGMENT_IDS,
   GetRouteSegmentIdsParameter,

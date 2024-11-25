@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import { useQuery } from "urql";
 import FeatureDetailsContainer from "../FeatureDetailContainer";
 import {
