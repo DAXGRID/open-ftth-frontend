@@ -15,7 +15,8 @@ import {
   UnitAddress,
 } from "./EditSpanEquipmentGql";
 import { useQuery, useClient } from "urql";
-import { TFunction, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import TextBox from "../../../components/TextBox";

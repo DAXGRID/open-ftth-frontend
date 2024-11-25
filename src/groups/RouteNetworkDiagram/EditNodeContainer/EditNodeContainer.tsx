@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import { useQuery, useClient } from "urql";
 import {
   MUTATION_UPDATE_NODE_CONTAINER,

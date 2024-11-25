@@ -1,7 +1,8 @@
 import { useReducer, useEffect, useMemo } from "react";
 import { useClient } from "urql";
 import { toast } from "react-toastify";
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import TextBox from "../../../components/TextBox";
 import DefaultButton from "../../../components/DefaultButton";

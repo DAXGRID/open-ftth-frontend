@@ -1,5 +1,6 @@
 import { useContext, useLayoutEffect, useState, useMemo } from "react";
-import { TFunction, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
 import SelectListView, { BodyItem } from "../../../components/SelectListView";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";

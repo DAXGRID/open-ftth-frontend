@@ -243,3 +243,7 @@ strong {
   background-color: colors.$background-color;
   overflow-y: auto;
 }
+
+.mapboxgl-canvas {
+    position: initial;
+}
