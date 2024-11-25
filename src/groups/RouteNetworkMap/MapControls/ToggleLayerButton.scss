@@ -1,4 +1,4 @@
-@import "../../../global-styles/colors";
+@use "../../../global-styles/colors";
 
 .toggle-layer-button {
   border-radius: 4px;
@@ -41,15 +41,15 @@
     white-space: nowrap;
 
     &.toggle-list-item--selected {
-      background-color: $select-color;
+      background-color: colors.$select-color;
 
       &:hover {
-        background-color: $select-color;
+        background-color: colors.$select-color;
       }
     }
 
     &:hover {
-      background-color: $hover-color;
+      background-color: colors.$hover-color;
       cursor: pointer;
     }
 

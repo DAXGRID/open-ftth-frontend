@@ -1,4 +1,4 @@
-@import "../../../global-styles/colors";
+@use "../../../global-styles/colors";
 
 .search-menu {
   height: 100%;
@@ -16,7 +16,7 @@
     height: 100%;
     padding: 10px 40px 10px 20px;
     border-radius: 4px;
-    border: 1px solid $border-color;
+    border: 1px solid colors.$border-color;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 
@@ -41,7 +41,7 @@
   .search-menu-results {
     position: absolute;
     background: white;
-    border: 1px solid $border-color;
+    border: 1px solid colors.$border-color;
     border-top: none;
     margin-top: 39px;
     padding: 0px 10px 10px 10px;
@@ -53,7 +53,7 @@
       font-size: 14px;
 
       li {
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid colors.$border-color;
         padding: 10px;
         margin: 10px 0px;
 

@@ -1,5 +1,5 @@
-@import "./colors";
-@import "./settings";
+@use "colors";
+@use "settings";
 
 *,
 *:before,
@@ -33,10 +33,10 @@ body {
 }
 
 .main-container {
-  padding-top: $top-menu-height;
+  padding-top: settings.$top-menu-height;
   display: flex;
   transform: translateX(0px);
-  color: $text-primary;
+  color: colors.$text-primary;
   justify-content: center;
   min-height: var(--app-height);
   overflow: auto;
@@ -56,7 +56,7 @@ body {
   border-radius: 4px;
   padding: 20px;
   background-color: white;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   margin: 10px;
   height: 100%;
 }
@@ -77,14 +77,14 @@ body {
   border-radius: 4px;
   padding: 20px;
   background-color: white;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   margin: 20px;
 }
 
 .block {
   border-radius: 4px;
   background-color: white;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   margin: 0px 0px 20px 0px;
   padding: 15px;
 }
@@ -102,7 +102,7 @@ body {
 .block-title__underline {
   padding-bottom: 10px;
   margin-bottom: 10px;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid colors.$border-color;
 }
 
 .gap-default {
@@ -125,7 +125,7 @@ body {
 }
 
 .full-row-group {
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   padding: 15px;
   border-radius: 4px;
   margin-bottom: 15px;
@@ -168,18 +168,18 @@ strong {
     transition: all 0.3s linear;
     &.side-menu-open {
       transition: all 0.3s linear;
-      transform: translateX($side-menu-size);
-      width: calc(100% - #{$side-menu-size});
+      transform: translateX(settings.$side-menu-size);
+      width: calc(100% - #{settings.$side-menu-size});
     }
   }
 }
 
 .Toastify__toast--success {
-  background-color: $success-color;
+  background-color: colors.$success-color;
 }
 
 .Toastify__toast--error {
-  background-color: $error-color;
+  background-color: colors.$error-color;
 }
 
 .mapboxgl-ctrl-group button {
@@ -187,15 +187,15 @@ strong {
 }
 
 .color-red {
-  color: $error-color;
+  color: colors.$error-color;
 }
 
 .text-red {
-  color: $red;
+  color: colors.$red;
 }
 
 .text-green {
-  color: $green;
+  color: colors.$green;
 }
 
 .text-center {
@@ -233,13 +233,13 @@ strong {
 
 .fixed-fit-container {
   position: fixed;
-  top: calc($top-menu-height);
+  top: calc(settings.$top-menu-height);
   left: 0;
   right: 0;
   width: 100%;
   height: 100%;
-  max-height: calc(var(--app-height) - $top-menu-height);
+  max-height: calc(var(--app-height) - settings.$top-menu-height);
   z-index: 2;
-  background-color: $background-color;
+  background-color: colors.$background-color;
   overflow-y: auto;
 }

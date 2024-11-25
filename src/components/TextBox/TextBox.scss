@@ -1,12 +1,12 @@
-@import "../../global-styles/colors";
-@import "../../global-styles/settings";
+@use "../../global-styles/colors";
+@use "../../global-styles/settings";
 
 .text-box {
   border-radius: 4px;
   padding: 10px 10px 10px 10px;
-  border: 1px solid $border-color;
+  border: 1px solid colors.$border-color;
   font-size: 14px;
-  min-height: $basic-height;
+  min-height: settings.$basic-height;
   width: 100%;
   flex: 1;
 

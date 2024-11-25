@@ -1,5 +1,5 @@
-@import "../../global-styles/colors";
-@import "../../global-styles/settings";
+@use "../../global-styles/colors";
+@use "../../global-styles/settings";
 
 .map-diagram {
 }
@@ -12,7 +12,7 @@
   .map-diagram--desktop {
     display: flex;
     flex-wrap: wrap;
-    height: calc(var(--app-height) - $top-menu-height);
+    height: calc(var(--app-height) - settings.$top-menu-height);
 
     .hide-container {
       position: absolute;
@@ -29,14 +29,14 @@
 
     .container {
       flex: 1;
-      height: calc(var(--app-height) - $top-menu-height);
+      height: calc(var(--app-height) - settings.$top-menu-height);
 
       &:first-of-type {
-        border-right: 1px solid $border-color;
+        border-right: 1px solid colors.$border-color;
       }
 
       &:last-of-type {
-        border-left: 1px solid $border-color;
+        border-left: 1px solid colors.$border-color;
         overflow-y: scroll;
       }
 

@@ -1,5 +1,5 @@
-@import "../../global-styles/settings";
-@import "../../global-styles/colors";
+@use "../../global-styles/settings";
+@use "../../global-styles/colors";
 
 .number-picker {
   flex: 1;
@@ -16,10 +16,10 @@
 
   input {
     width: 100%;
-    min-height: $basic-height;
+    min-height: settings.$basic-height;
     padding: 0px 20px;
     font-size: 14px;
-    border: 1px solid $border-color;
+    border: 1px solid colors.$border-color;
     border-radius: 4px;
   }
 }

@@ -1,5 +1,5 @@
-@import "../../../global-styles/colors";
-@import "../../../global-styles/settings";
+@use "../../../global-styles/colors";
+@use "../../../global-styles/settings";
 
 .tab-menu-top {
   .tab-menu-top-container {
@@ -9,7 +9,7 @@
     visibility: hidden;
 
     &.tab-menu-top-container--show {
-      height: calc(var(--app-height) - ($top-menu-height + 37px));
+      height: calc(var(--app-height) - (settings.$top-menu-height + 37px));
       animation: 0.1s fadeIn;
       animation-fill-mode: forwards;
     }
@@ -32,12 +32,12 @@
       padding: 10px;
       flex: 1;
       text-align: center;
-      border-bottom: 1px solid $border-color;
-      border-right: 1px solid $border-color;
+      border-bottom: 1px solid colors.$border-color;
+      border-right: 1px solid colors.$border-color;
       font-weight: bold;
 
       &.tab-menu-top-menu_item--selected {
-        background-color: $select-color;
+        background-color: colors.$select-color;
       }
 
       &:hover {
