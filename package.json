@@ -9,7 +9,7 @@
     "@turf/turf": "^6.4.0",
     "@urql/exchange-auth": "^1.0.0",
     "graphql": "^15.9.0",
-    "maplibre-gl": "^1.14.0",
+    "maplibre-gl": "^1.15.3",
     "oidc-client-ts": "^3.1.0",
     "pubsub-js": "^1.9.5",
     "react": "^18.3.1",
