@@ -182,7 +182,7 @@ strong {
   background-color: colors.$error-color;
 }
 
-.mapboxgl-ctrl-group button {
+.maplibregl-ctrl-group button {
   font-size: 15px;
 }
 
@@ -208,17 +208,17 @@ strong {
   }
 }
 
-.mapboxgl-popup-close-button {
+.maplibregl-popup-close-button {
   font-size: 24px;
 }
 
-.mapboxgl-popup-content {
+.maplibregl-popup-content {
   padding: 0;
   border: 1px solid grey;
   margin-bottom: 30px;
 }
 
-.mapboxgl-popup {
+.maplibregl-popup {
   /* This is a hack, we do not have access to the elment specific style, */
   /* so we have to set it here */
   max-width: 100% !important;
@@ -226,8 +226,12 @@ strong {
   padding-top: 20px;
 }
 
-.mapboxgl-popup-tip {
+.maplibregl-popup-tip {
   /* We do not want to display the popup tip */
+  display: none;
+}
+
+.maplibregl-ctrl-bottom-right {
   display: none;
 }
 

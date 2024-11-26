@@ -15,7 +15,7 @@ class ToggleDiagramControl {
   show: boolean;
 
   constructor(toggleDiagram: (show: boolean) => void) {
-    this.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+    this.className = "maplibregl-ctrl maplibregl-ctrl-group";
     this.container = null;
     this.toggleDiagram = toggleDiagram;
     this.show = true;

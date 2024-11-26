@@ -245,7 +245,7 @@ function addPopup(map: Map, coordinates: [number, number], htmlBody: string) {
 }
 
 function removePopup() {
-  const popup = document.getElementsByClassName("mapboxgl-popup");
+  const popup = document.getElementsByClassName("maplibregl-popup");
   if (popup.length) {
     popup[0].remove();
   }
@@ -309,7 +309,7 @@ class InformationControl {
   onAdd(map: Map) {
     this.map = map;
     this.container = document.createElement("div");
-    this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+    this.container.className = "maplibregl-ctrl maplibregl-ctrl-group";
     const button = createButton();
 
     this.onClickFunc = createOnClickFunc(
