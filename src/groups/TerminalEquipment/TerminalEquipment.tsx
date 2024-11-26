@@ -230,7 +230,7 @@ function TerminalEquipmentTable({
                     {x.info}
                   </p>
                   {state.editable && (
-                    <div className="header-icons">
+                    <div className="header-icons ">
                       <span
                         role="button"
                         className="header-icons__icon color-red"

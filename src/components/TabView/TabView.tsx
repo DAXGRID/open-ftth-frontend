@@ -62,9 +62,10 @@ interface TabViewProps {
   views: { view: ReactNode; title: string; id: string }[];
   selectedId: string;
   select: (id: string) => void;
+  showFullScreenButton?: boolean | null;
 }
 
-function TabView({ views, selectedId, select }: TabViewProps) {
+function TabView({ views, selectedId, select, showFullScreenButton }: TabViewProps) {
   const viewToShow = views.find((x) => x.id === selectedId);
   const tabViewElement = useRef<HTMLDivElement>(null);
   const fixedFitClassName = "fixed-fit-container";
@@ -89,7 +90,7 @@ function TabView({ views, selectedId, select }: TabViewProps) {
           views={views}
           selectedId={selectedId}
           select={select}
-          showFullscreenButton={true}
+    showFullscreenButton={showFullScreenButton === null ? true : false}
           toggleFullscreen={toggleFullscreen}
           isFullscreen={isFullScreen}
         />

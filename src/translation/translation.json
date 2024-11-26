@@ -282,7 +282,12 @@
       "DESCRIPTION": "Description",
       "MARKING_INFORMATION": "Marking information",
       "COMMENT": "Comment",
-      "OUTAGE_INSTALLATIONS_FOUND": "Installations found"
+      "ADD_CARD": "Add card",
+      "ADD_INTERFACE": "Add interface",
+      "INTERFACE_TYPE": "Interface type",
+      "SLOT_NUMBER": "Slot nr",
+      "SUB_SLOT_NUMBER": "Sub slot nr",
+      "PORT_NUMBER": "Port nr"
     }
   },
   "dk": {
@@ -568,7 +573,13 @@
       "DESCRIPTION": "Kommentar",
       "MARKING_INFORMATION": "Markerings information",
       "COMMENT": "Kommentar",
-      "OUTAGE_INSTALLATIONS_FOUND": "Installationer fundet"
+      "OUTAGE_INSTALLATIONS_FOUND": "Installationer fundet",
+      "ADD_CARD": "Tilføj kort",
+      "ADD_INTERFACE": "Tilføj interface",
+      "INTERFACE_TYPE": "Interface type",
+      "SLOT_NUMBER": "Slot nr",
+      "SUB_SLOT_NUMBER": "Sub slot nr",
+      "PORT_NUMBER": "Port nr"
     }
   }
 }

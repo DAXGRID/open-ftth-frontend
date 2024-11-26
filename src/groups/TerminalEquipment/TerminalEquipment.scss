@@ -145,6 +145,7 @@
       .terminal-equipment-header-row {
         display: flex;
         justify-content: flex-start;
+        align-items: center;
         padding: 10px 10px;
         background-color: colors.$ultra-light-grey;
 
@@ -159,6 +160,7 @@
           justify-content: flex-end;
           user-select: none;
           gap: 10px;
+          font-size: 22px;
 
           .header-icons__icon {
             &:hover {
