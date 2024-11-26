@@ -4,7 +4,7 @@ import maplibregl, {
   MapGeoJSONFeature,
   PointLike,
   NavigationControl,
-  MapEvent,
+  MapDataEvent,
   MapMouseEvent,
 } from "maplibre-gl";
 import { DiagramContext } from "../DiagramContext";
@@ -159,7 +159,6 @@ function clearSelected(map: Map, source: string): void {
   map
     .querySourceFeatures(source, {
       sourceLayer: source,
-      filter: []
     })
     .forEach((x) => {
       map.setFeatureState({ source: source, id: x.id }, { selected: false });
@@ -172,7 +171,7 @@ function clickHiglight(
   callback: (feature: MapGeoJSONFeature) => void,
   editMode: boolean,
 ) {
-  return (e: MapMouseEvent & MapEvent) => {
+  return (e: MapMouseEvent & MapDataEvent) => {
     const bbox: [PointLike, PointLike] = [
       [e.point.x, e.point.y],
       [e.point.x, e.point.y],

@@ -13,6 +13,7 @@ import {
   AttributionControl,
   NavigationControl,
   GeolocateControl,
+  LegacyFilterSpecification,
 } from "maplibre-gl";
 import { useContext, useEffect, useRef, useState } from "react";
 import Config from "../../config";
@@ -53,7 +54,7 @@ function hoverPointer(featureNames: string[], bboxSize: number, map: Map) {
         ...featureNames.map((x) => {
           return ["==", "objecttype", x];
         }),
-      ],
+      ] as LegacyFilterSpecification,
     });
 
     if (features.length > 0) {
