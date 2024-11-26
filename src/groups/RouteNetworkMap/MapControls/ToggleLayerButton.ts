@@ -71,7 +71,7 @@ class ToggleLayerButton {
   onAdd(map: Map) {
     this.map = map;
     this.container = document.createElement("div");
-    this.container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+    this.container.className = "maplibregl-ctrl maplibregl-ctrl-group";
 
     const buttonIcon = icon({ prefix: "fas", iconName: "layer-group" }).node[0];
 

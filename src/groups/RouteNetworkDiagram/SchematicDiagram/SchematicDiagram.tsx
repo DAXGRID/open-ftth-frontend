@@ -1,10 +1,10 @@
 import { Feature } from "geojson";
-import mapboxgl, {
+import maplibregl, {
   Map,
-  MapboxGeoJSONFeature,
+  MapGeoJSONFeature,
   PointLike,
   NavigationControl,
-  EventData,
+  MapDataEvent,
   MapMouseEvent,
 } from "maplibre-gl";
 import { DiagramContext } from "../DiagramContext";
@@ -49,7 +49,7 @@ interface Geometry {
 type SchematicDiagramProps = {
   diagramObjects: Diagram[];
   envelope: Envelope;
-  onSelectFeature: (feature: MapboxGeoJSONFeature) => void;
+  onSelectFeature: (feature: MapGeoJSONFeature) => void;
   editMode: boolean;
   routeElementId: string;
 };
@@ -112,7 +112,7 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
 
 function mapFitBounds(
   envelope: Envelope,
-  map: mapboxgl.Map,
+  map: maplibregl.Map,
   zoom: number | null,
 ) {
   var extraOptions = zoom
@@ -168,10 +168,10 @@ function clearSelected(map: Map, source: string): void {
 function clickHiglight(
   featureNames: string[],
   map: Map,
-  callback: (feature: MapboxGeoJSONFeature) => void,
+  callback: (feature: MapGeoJSONFeature) => void,
   editMode: boolean,
 ) {
-  return (e: MapMouseEvent & EventData) => {
+  return (e: MapMouseEvent & MapDataEvent) => {
     const bbox: [PointLike, PointLike] = [
       [e.point.x, e.point.y],
       [e.point.x, e.point.y],

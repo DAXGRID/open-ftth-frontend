@@ -28,7 +28,7 @@ class MeasureDistanceControl {
   lengthText: string;
 
   constructor(lengthText: string, totalLenghtText: string) {
-    this.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+    this.className = "maplibregl-ctrl maplibregl-ctrl-group";
     this.container = null;
     this.active = false;
     this.measurementFeatures = {
