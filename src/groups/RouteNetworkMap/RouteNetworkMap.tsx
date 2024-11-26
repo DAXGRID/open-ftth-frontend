@@ -4,11 +4,11 @@ import { Feature, GeoJsonProperties, Geometry } from "geojson";
 import {
   GeoJSONSource,
   Map,
-  MapboxGeoJSONFeature,
+  MapGeoJSONFeature,
   MapMouseEvent,
   PointLike,
-  Style,
-  SymbolLayer,
+  StyleSpecification,
+  SymbolLayerSpecification,
   ScaleControl,
   AttributionControl,
   NavigationControl,
@@ -24,10 +24,10 @@ import InformationControl from "./MapControls/InformationControl";
 import SaveImgControl from "./MapControls/SaveImgControl";
 import { v4 as uuidv4 } from "uuid";
 
-const GetMaplibreStyle = async (): Promise<Style> => {
+const GetMaplibreStyle = async (): Promise<StyleSpecification> => {
   const maplibre = await fetch(`./maplibre.json?${uuidv4()}`);
   const json = await maplibre.json();
-  return json as Style;
+  return json as StyleSpecification;
 };
 
 function enableResize(map: Map) {
@@ -66,12 +66,12 @@ function hoverPointer(featureNames: string[], bboxSize: number, map: Map) {
 
 function highlightFeature(
   map: Map,
-  lastHighlightedFeature: React.RefObject<MapboxGeoJSONFeature>,
-  feature: MapboxGeoJSONFeature,
+  lastHighlightedFeature: React.RefObject<MapGeoJSONFeature>,
+  feature: MapGeoJSONFeature,
 ) {
   const changeSymbolIconImageHighlight = (
     iconLayer: any,
-    feature: MapboxGeoJSONFeature,
+    feature: MapGeoJSONFeature,
     remove: boolean,
   ) => {
     // We have to do this check because mapbox is annoying and changes the type "randomly"
@@ -96,7 +96,7 @@ function highlightFeature(
   // reset last state to avoid multiple selected at the same time
   if (lastHighlightedFeature.current) {
     // We have to change it to any because mapbox changes the type randomly
-    const iconImage = (lastHighlightedFeature.current?.layer as SymbolLayer)
+    const iconImage = (lastHighlightedFeature.current?.layer as SymbolLayerSpecification)
       .layout?.["icon-image"] as any;
 
     // If it has iconImage change highlight
@@ -115,7 +115,7 @@ function highlightFeature(
   }
 
   // We have to change it to any because mapbox changes the type randomly
-  const iconImage = (feature.layer as SymbolLayer).layout?.[
+  const iconImage = (feature.layer as SymbolLayerSpecification).layout?.[
     "icon-image"
   ] as any;
   // If it has iconImage change highlight
@@ -134,10 +134,10 @@ function clickHighlight(
   featureNames: string[],
   bboxSize: number,
   map: Map,
-  lastHighlightedFeature: React.RefObject<MapboxGeoJSONFeature>,
+  lastHighlightedFeature: React.RefObject<MapGeoJSONFeature>,
   measureDistanceControl: MeasureDistanceControl,
   informationControl: InformationControl | null,
-  callback: (feature: MapboxGeoJSONFeature) => void,
+  callback: (feature: MapGeoJSONFeature) => void,
 ) {
   map.on("click", (e) => {
     // Do nothing if the measure distance control is active to avoid
@@ -155,7 +155,7 @@ function clickHighlight(
 
     const changeSymbolIconImageHighlight = (
       iconLayer: any,
-      feature: MapboxGeoJSONFeature,
+      feature: MapGeoJSONFeature,
       remove: boolean,
     ) => {
       // We have to do this check because mapbox is annoying and changes the type "randomly"
@@ -180,7 +180,7 @@ function clickHighlight(
     // reset last state to avoid multiple selected at the same time
     if (lastHighlightedFeature.current) {
       // We have to change it to any because mapbox changes the type randomly
-      const iconImage = (lastHighlightedFeature.current?.layer as SymbolLayer)
+      const iconImage = (lastHighlightedFeature.current?.layer as SymbolLayerSpecification)
         .layout?.["icon-image"] as any;
 
       // If it has iconImage change highlight
@@ -207,7 +207,7 @@ function clickHighlight(
     }
 
     // We have to change it to any because mapbox changes the type randomly
-    const iconImage = (feature.layer as SymbolLayer).layout?.[
+    const iconImage = (feature.layer as SymbolLayerSpecification).layout?.[
       "icon-image"
     ] as any;
     // If it has iconImage change highlight
@@ -286,12 +286,12 @@ function RouteNetworkMap({
 }: RouteNetworkMapProps) {
   const { t } = useTranslation();
   const mapContainer = useRef<HTMLDivElement>(null);
-  const lastHighlightedFeature = useRef<MapboxGeoJSONFeature | null>(null);
+  const lastHighlightedFeature = useRef<MapGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const { setIdentifiedFeature, trace, searchResult, identifiedFeature } =
     useContext(MapContext);
-  const [mapLibreStyle, setMaplibreStyle] = useState<Style | null>(null);
+  const [mapLibreStyle, setMaplibreStyle] = useState<StyleSpecification | null>(null);
 
   useEffect(() => {
     GetMaplibreStyle().then((r) => {
@@ -358,7 +358,7 @@ function RouteNetworkMap({
 
     newMap.touchZoomRotate.disableRotation();
 
-    newMap.addControl(new ScaleControl(), "bottom-left");
+    newMap.addControl(new ScaleControl({}), "bottom-left");
 
     newMap.addControl(
       new AttributionControl({

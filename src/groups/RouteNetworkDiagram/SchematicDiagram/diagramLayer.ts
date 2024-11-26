@@ -1,17 +1,17 @@
 import colorMap from "./colors";
 import {
-  AnyLayer,
-  FillLayer,
-  LineLayer,
-  SymbolLayer,
-  GeoJSONSourceRaw,
+  LayerSpecification,
+  FillLayerSpecification,
+  LineLayerSpecification,
+  SymbolLayerSpecification,
+  GeoJSONSourceSpecification,
 } from "maplibre-gl";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
 
 export function createSource(
   features: Feature<Geometry, GeoJsonProperties>[],
-): GeoJSONSourceRaw {
-  const source: GeoJSONSourceRaw = {
+): GeoJSONSourceSpecification {
+  const source: GeoJSONSourceSpecification = {
     type: "geojson",
     data: {
       type: "FeatureCollection",
@@ -57,7 +57,7 @@ export function createFeature(
   };
 }
 
-export function getLayer(name: string): AnyLayer {
+export function getLayer(name: string): LayerSpecification {
   switch (name) {
     case "FiberCable": {
       return {
@@ -73,7 +73,7 @@ export function getLayer(name: string): AnyLayer {
             colorMap.WHITE,
           ],
         },
-      } as LineLayer;
+      } as LineLayerSpecification;
     }
     case "NodeContainerSideNorth":
     case "NodeContainerSideSouth":
@@ -91,7 +91,7 @@ export function getLayer(name: string): AnyLayer {
           "line-color": "black",
           "line-opacity": 0,
         },
-      } as LineLayer;
+      } as LineLayerSpecification;
     case "NodeContainer":
       return {
         id: "NodeContainer",
@@ -101,7 +101,7 @@ export function getLayer(name: string): AnyLayer {
           "fill-color": "#e1e1e1",
           "fill-outline-color": "black",
         },
-      } as FillLayer;
+      } as FillLayerSpecification;
     case "Rack":
       return {
         id: "Rack",
@@ -111,7 +111,7 @@ export function getLayer(name: string): AnyLayer {
           "fill-color": "white",
           "fill-outline-color": "black",
         },
-      } as FillLayer;
+      } as FillLayerSpecification;
     case "FreeRackSpace":
       return {
         id: "FreeRackSpace",
@@ -121,7 +121,7 @@ export function getLayer(name: string): AnyLayer {
           "fill-color": "#ccf1cc",
           "fill-outline-color": "black",
         },
-      } as FillLayer;
+      } as FillLayerSpecification;
     case "OuterConduitOrange":
     case "OuterConduitRed":
     case "OuterConduitGreen":
@@ -173,7 +173,7 @@ export function getLayer(name: string): AnyLayer {
             "#ccc",
           ],
         },
-      } as FillLayer;
+      } as FillLayerSpecification;
     case "InnerConduitBlue":
     case "InnerConduitOrange":
     case "InnerConduitGreen":
@@ -225,7 +225,7 @@ export function getLayer(name: string): AnyLayer {
             "#ccc",
           ],
         },
-      } as FillLayer;
+      } as FillLayerSpecification;
     case "TerminalEquipmentWithProperties":
     case "TerminalEquipment":
       return {
@@ -236,7 +236,7 @@ export function getLayer(name: string): AnyLayer {
           "fill-color": "#f4f6f8",
           "fill-outline-color": "black",
         },
-      } as FillLayer;
+      } as FillLayerSpecification;
     case "WestTerminalLabel":
       return {
         id: "WestTerminalLabel",
@@ -255,7 +255,7 @@ export function getLayer(name: string): AnyLayer {
           "text-offset": [-0.5, 0],
           "text-max-width": 1000,
         },
-      } as SymbolLayer;
+      } as SymbolLayerSpecification;
     case "EastTerminalLabel":
       return {
         id: "EastTerminalLabel",
@@ -274,7 +274,7 @@ export function getLayer(name: string): AnyLayer {
           "text-offset": [0.5, 0],
           "text-max-width": 1000,
         },
-      } as SymbolLayer;
+      } as SymbolLayerSpecification;
     case "SouthTerminalLabel":
       return {
         id: "SouthTerminalLabel",
@@ -294,7 +294,7 @@ export function getLayer(name: string): AnyLayer {
           "text-offset": [-0.5, 0],
           "text-max-width": 1000,
         },
-      } as SymbolLayer;
+      } as SymbolLayerSpecification;
     case "NorthTerminalLabel":
       return {
         id: "NorthTerminalLabel",
@@ -314,7 +314,7 @@ export function getLayer(name: string): AnyLayer {
           "text-offset": [0.5, 0],
           "text-max-width": 1000,
         },
-      } as SymbolLayer;
+      } as SymbolLayerSpecification;
     case "SpanEquipmentLabel":
       return {
         id: "SpanEquipmentLabel",
@@ -334,7 +334,7 @@ export function getLayer(name: string): AnyLayer {
           "text-offset": [0, 0],
           "text-max-width": 1000,
         },
-      } as SymbolLayer;
+      } as SymbolLayerSpecification;
     case "NodeContainerLabel":
       return {
         id: "NodeContainerLabel",
@@ -354,7 +354,7 @@ export function getLayer(name: string): AnyLayer {
           "text-offset": [0, -0.5],
           "text-max-width": 1000,
         },
-      } as SymbolLayer;
+      } as SymbolLayerSpecification;
     case "RackLabel":
       return {
         id: "RackLabel",
@@ -374,7 +374,7 @@ export function getLayer(name: string): AnyLayer {
           "text-offset": [0, -0.25],
           "text-max-width": 1000,
         },
-      } as SymbolLayer;
+      } as SymbolLayerSpecification;
     case "RackUnitLabel":
       return {
         id: "RackUnitLabel",
@@ -393,7 +393,7 @@ export function getLayer(name: string): AnyLayer {
           "text-offset": [-0.75, 0],
           "text-max-width": 1000,
         },
-      } as SymbolLayer;
+      } as SymbolLayerSpecification;
     case "TerminalEquipmentNameLabel":
       return {
         id: "TerminalEquipmentNameLabel",
@@ -413,7 +413,7 @@ export function getLayer(name: string): AnyLayer {
           "text-offset": [0, 0],
           "text-max-width": 100000,
         },
-      } as SymbolLayer;
+      } as SymbolLayerSpecification;
     case "TerminalEquipmentTypeLabel":
       return {
         id: "TerminalEquipmentTypeLabel",
@@ -433,13 +433,13 @@ export function getLayer(name: string): AnyLayer {
           "text-offset": [0, 0],
           "text-max-width": 20,
         },
-      } as SymbolLayer;
+      } as SymbolLayerSpecification;
     default:
       throw new Error(`The following style is not supported '${name}'`);
   }
 }
 
-export const nodeContainerSideSelect: LineLayer = {
+export const nodeContainerSideSelect: LineLayerSpecification = {
   id: "NodeContainerSideSelect",
   type: "line",
   source: "NodeContainerSide",
@@ -462,7 +462,7 @@ export const nodeContainerSideSelect: LineLayer = {
   },
 };
 
-export const innerConduitSelect: LineLayer = {
+export const innerConduitSelect: LineLayerSpecification = {
   id: "InnerConduitSelect",
   type: "line",
   source: "InnerConduit",
@@ -478,7 +478,7 @@ export const innerConduitSelect: LineLayer = {
   },
 };
 
-export const outerConduitSelect: LineLayer = {
+export const outerConduitSelect: LineLayerSpecification = {
   id: "OuterConduitSelect",
   type: "line",
   source: "OuterConduit",
@@ -494,7 +494,7 @@ export const outerConduitSelect: LineLayer = {
   },
 };
 
-export const nodeContainerSelect: LineLayer = {
+export const nodeContainerSelect: LineLayerSpecification = {
   id: "NodeContainerSelect",
   type: "line",
   source: "NodeContainer",
@@ -510,7 +510,7 @@ export const nodeContainerSelect: LineLayer = {
   },
 };
 
-export const rackSelect: LineLayer = {
+export const rackSelect: LineLayerSpecification = {
   id: "RackSelect",
   type: "line",
   source: "Rack",
@@ -526,7 +526,7 @@ export const rackSelect: LineLayer = {
   },
 };
 
-export const freeRackSpaceSelect: LineLayer = {
+export const freeRackSpaceSelect: LineLayerSpecification = {
   id: "FreeRackSpaceSelect",
   type: "line",
   source: "FreeRackSpace",
@@ -542,7 +542,7 @@ export const freeRackSpaceSelect: LineLayer = {
   },
 };
 
-export const terminalEquipmentSelect: LineLayer = {
+export const terminalEquipmentSelect: LineLayerSpecification = {
   id: "TerminalEquipmentSelect",
   type: "line",
   source: "TerminalEquipment",
@@ -558,7 +558,7 @@ export const terminalEquipmentSelect: LineLayer = {
   },
 };
 
-export const fiberCableSymbolLayer: SymbolLayer = {
+export const fiberCableSymbolLayer: SymbolLayerSpecification = {
   id: "FiberCableLabel",
   type: "symbol",
   source: "FiberCable",
@@ -577,7 +577,7 @@ export const fiberCableSymbolLayer: SymbolLayer = {
   },
 };
 
-export const fiberCableUnderLayer: LineLayer = {
+export const fiberCableUnderLayer: LineLayerSpecification = {
   id: "FiberCableUnderLayer",
   source: "FiberCable",
   type: "line",
