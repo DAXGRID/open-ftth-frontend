@@ -224,7 +224,7 @@ function EditInterface() {
           </LabelContainer>
         </div>
         <div className="full-row">
-          <DefaultButton innerText={t("ADD")} onClick={() => {}} />
+          <DefaultButton innerText={t("EDIT")} onClick={() => {}} />
         </div>
       </div>
     </div>
