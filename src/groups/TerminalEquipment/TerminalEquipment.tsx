@@ -28,6 +28,7 @@ import EditTerminalEquipment from "./EditTerminalEquipment";
 import EditRack from "./EditRack";
 import AddAdditionalStructures from "./AddAdditionalStructures";
 import OutageView from "../RouteNetworkDiagram/OutageView";
+import EditInterface from "./EditInterface";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -231,6 +232,23 @@ function TerminalEquipmentTable({
                   </p>
                   {state.editable && (
                     <div className="header-icons ">
+                      <span
+                        role="button"
+                        className="header-icons__icon"
+                        onClick={() =>
+                          dispatch({
+                            type: "setShowEditInterfaceView",
+                            showEditInterfaceView: {
+                              show: true,
+                              routeNodeId: state.routeNodeId ?? "",
+                              terminalEquipmentId: terminalEquipmentId,
+                              terminalStructureId: x.id,
+                            },
+                          })
+                        }
+                      >
+                        <FontAwesomeIcon icon={faEdit} />
+                      </span>
                       <span
                         role="button"
                         className="header-icons__icon color-red"
@@ -454,6 +472,20 @@ function TerminalEquipment() {
           />
         </ModalContainer>,
       );
+    } else if (
+      state.showEditInterfaceView?.show &&
+      state.showEditInterfaceView.terminalEquipmentId &&
+      state.showEditInterfaceView.terminalStructureId &&
+      state.showEditInterfaceView.routeNodeId
+    ) {
+      showElement(
+        <ModalContainer
+          title={t("EDIT_INTERFACE")}
+          closeCallback={() => dispatch({ type: "resetShowEditInterfaceView" })}
+        >
+          <EditInterface />
+        </ModalContainer>,
+      );
     } else {
       showElement(null);
     }
@@ -466,6 +498,7 @@ function TerminalEquipment() {
     state.showEditRack,
     state.showAddAdditionalStructure,
     state.showOutageView,
+    state.showEditInterfaceView,
     showElement,
     dispatch,
     t,
