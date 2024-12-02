@@ -88,6 +88,7 @@ export interface TerminalEquipment {
   name: string;
   specName: string;
   info: string | null;
+  isLineTermination: boolean;
   terminalStructures: TerminalStructure[];
 }
 
@@ -122,6 +123,7 @@ $terminalEquipmentOrRackId: ID!) {
         name
         category
         specName
+        isLineTermination
         terminalStructures {
           id
           name
@@ -183,6 +185,7 @@ subscription ($routeNodeId: ID!, $terminalEquipmentOrRackId: ID!) {
       name
       category
       specName
+      isLineTermination
       terminalStructures {
         id
         name
