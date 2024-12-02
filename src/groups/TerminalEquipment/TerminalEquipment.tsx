@@ -150,6 +150,7 @@ function TerminalEquipmentTableContainer({
                       routeNodeId: state.routeNodeId,
                       show: true,
                       terminalEquipmentId: terminalEquipment.id,
+                      isLineTermination: terminalEquipment.isLineTermination,
                     },
                     type: "setShowAddAdditionalStructures",
                   })
@@ -187,6 +188,7 @@ type TerminalEquipmentTableProps = {
   showFreeLines: boolean;
   terminalEquipmentId: string;
   isRack: boolean;
+  isLineTermination: boolean;
 };
 
 function TerminalEquipmentTable({
@@ -194,6 +196,7 @@ function TerminalEquipmentTable({
   showFreeLines,
   terminalEquipmentId,
   isRack,
+  isLineTermination,
 }: TerminalEquipmentTableProps) {
   const { t } = useTranslation();
   const { state, dispatch } = useContext(TerminalEquipmentContext);
@@ -232,23 +235,25 @@ function TerminalEquipmentTable({
                   </p>
                   {state.editable && (
                     <div className="header-icons ">
-                      <span
-                        role="button"
-                        className="header-icons__icon"
-                        onClick={() =>
-                          dispatch({
-                            type: "setShowEditInterfaceView",
-                            showEditInterfaceView: {
-                              show: true,
-                              routeNodeId: state.routeNodeId ?? "",
-                              terminalEquipmentId: terminalEquipmentId,
-                              terminalStructureId: x.id,
-                            },
-                          })
-                        }
-                      >
-                        <FontAwesomeIcon icon={faEdit} />
-                      </span>
+                      {isLineTermination && (
+                        <span
+                          role="button"
+                          className="header-icons__icon"
+                          onClick={() =>
+                            dispatch({
+                              type: "setShowEditInterfaceView",
+                              showEditInterfaceView: {
+                                show: true,
+                                routeNodeId: state.routeNodeId ?? "",
+                                terminalEquipmentId: terminalEquipmentId,
+                                terminalStructureId: x.id,
+                              },
+                            })
+                          }
+                        >
+                          <FontAwesomeIcon icon={faEdit} />
+                        </span>
+                      )}
                       <span
                         role="button"
                         className="header-icons__icon color-red"
@@ -450,6 +455,9 @@ function TerminalEquipment() {
               })
             }
             routeNodeId={state.showAddAdditionalStructure.routeNodeId}
+            isLineTermination={
+              state.showAddAdditionalStructure.isLineTermination
+            }
             terminalEquipmentId={
               state.showAddAdditionalStructure.terminalEquipmentId
             }
@@ -539,6 +547,7 @@ function TerminalEquipment() {
                       terminalStructures={y.terminalStructures}
                       showFreeLines={state.showFreeLines[y.id] ?? false}
                       isRack={true}
+                      isLineTermination={y.isLineTermination}
                     />
                   </TerminalEquipmentTableContainer>
                 );
@@ -560,6 +569,7 @@ function TerminalEquipment() {
                   terminalStructures={y.terminalStructures}
                   showFreeLines={state.showFreeLines[y.id] ?? false}
                   isRack={false}
+                  isLineTermination={y.isLineTermination}
                 />
               </TerminalEquipmentTableContainer>
             );

@@ -8,12 +8,34 @@ export function getTerminalStructureSpecifications(client: Client) {
     .toPromise();
 }
 
+export function addInterface(
+  client: Client,
+  params: AddInterfaceParams
+) {
+  return client
+    .mutation<AddInterfaceResponse>(
+      ADD_INTERFACE,
+      params
+    )
+    .toPromise();
+}
+
 export interface TerminalStructureSpecification {
   id: string;
   category: string;
   name: string;
   description: string;
   deprecated: boolean;
+}
+
+interface AddInterfaceResponse {
+  terminalEquipment: {
+    addInterface: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
 }
 
 interface TerminalStructureSpecificationResponse {
@@ -31,6 +53,41 @@ query {
       name
       description
       deprecated
+    }
+  }
+}
+`;
+
+interface AddInterfaceParams {
+  routeNodeId: string;
+  terminalEquipmentId: string;
+  structureSpecificationId: string;
+  interfaceInfo: {
+    interfaceType: string | null;
+    slotNumber: number | null;
+    subSlotNumber: number | null;
+    portNumber: number | null;
+    circuitName: string | null;
+  } | null
+}
+
+const ADD_INTERFACE = `
+mutation (
+$routeNodeId: ID!,
+$terminalEquipmentId: ID!,
+$structureSpecificationId: ID!,
+$interfaceInfo: InterfaceInfoInputType
+) {
+  terminalEquipment {
+    addInterface(
+      routeNodeId: $routeNodeId
+      terminalEquipmentId: $terminalEquipmentId
+      structureSpecificationId: $structureSpecificationId
+      interfaceInfo: $interfaceInfo
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
     }
   }
 }

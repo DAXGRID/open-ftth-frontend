@@ -11,6 +11,7 @@ import DefaultButton from "../../../../components/DefaultButton";
 import {
   getTerminalStructureSpecifications,
   TerminalStructureSpecification,
+  addInterface,
 } from "./AddInterfaceGql";
 
 function createCategoryOptions(
@@ -42,6 +43,7 @@ interface State {
   subSlotNumber: number | null;
   portNumber: number | null;
   terminalStructureSpecifications: TerminalStructureSpecification[];
+  circuitName: string | null;
 }
 
 function reducer(state: State, action: Action): State {
@@ -58,6 +60,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, subSlotNumber: action.subSlotNumber };
     case "setPortNumber":
       return { ...state, portNumber: action.portNumber };
+    case "setCircuitName":
+      return { ...state, circuitName: action.curcuitName };
     case "setTerminalStructureSpecifications":
       return {
         ...state,
@@ -75,6 +79,7 @@ type Action =
   | { type: "setSlotNumber"; slotNumber: number | null }
   | { type: "setSubSlotNumber"; subSlotNumber: number | null }
   | { type: "setPortNumber"; portNumber: number | null }
+  | { type: "setCircuitName"; curcuitName: string | null }
   | {
       type: "setTerminalStructureSpecifications";
       terminalStructureSpecifications: TerminalStructureSpecification[];
@@ -88,9 +93,18 @@ const initialState: State = {
   subSlotNumber: null,
   portNumber: null,
   terminalStructureSpecifications: [],
+  circuitName: null,
 };
 
-function AddInterface() {
+interface AddInterfaceParams {
+  routeNodeId: string;
+  terminalEquipmentId: string;
+}
+
+function AddInterface({
+  routeNodeId,
+  terminalEquipmentId,
+}: AddInterfaceParams) {
   const { t } = useTranslation();
   const client = useClient();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -132,6 +146,53 @@ function AddInterface() {
       return [];
     }
   }, [state.terminalStructureSpecifications, state.category]);
+
+  function executeAddInterface() {
+    if (state.specificationId === null) {
+      console.error("the specification id was not set.");
+      toast.error(t("ERROR"));
+      return;
+    }
+
+    const interfaceInfo =
+      state.interfaceType ||
+      state.subSlotNumber ||
+      state.subSlotNumber ||
+      state.circuitName ||
+      state.portNumber
+        ? {
+            interfaceType: state.interfaceType,
+            slotNumber: state.slotNumber,
+            subSlotNumber: state.subSlotNumber,
+            portNumber: state.portNumber,
+            circuitName: state.circuitName,
+          }
+        : null;
+
+    addInterface(client, {
+      routeNodeId: routeNodeId,
+      terminalEquipmentId: terminalEquipmentId,
+      structureSpecificationId: state.specificationId,
+      interfaceInfo: interfaceInfo,
+    })
+      .then((response) => {
+        if (response.data?.terminalEquipment.addInterface.isSuccess) {
+          toast.success(t("ADDED"));
+        } else {
+          console.error(response);
+          toast.error(
+            t(
+              response.data?.terminalEquipment.addInterface.errorCode ??
+                "ERROR",
+            ),
+          );
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error(t("ERROR"));
+      });
+  }
 
   return (
     <div className="add-interface">
@@ -175,6 +236,16 @@ function AddInterface() {
                 dispatch({ type: "setInterfaceType", interfaceType: x })
               }
               value={state.interfaceType ?? ""}
+            />
+          </LabelContainer>
+        </div>
+        <div className="full-row">
+          <LabelContainer text={`${t("CIRCUIT_NAME")}:`}>
+            <TextBox
+              setValue={(x) =>
+                dispatch({ type: "setCircuitName", curcuitName: x })
+              }
+              value={state.circuitName ?? ""}
             />
           </LabelContainer>
         </div>
@@ -224,7 +295,7 @@ function AddInterface() {
           </LabelContainer>
         </div>
         <div className="full-row">
-          <DefaultButton innerText={t("ADD")} onClick={() => {}} />
+          <DefaultButton onClick={executeAddInterface} innerText={t("ADD")} />
         </div>
       </div>
     </div>
