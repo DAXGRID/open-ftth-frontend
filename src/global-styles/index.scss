@@ -176,10 +176,12 @@ strong {
 
 .Toastify__toast--success {
   background-color: colors.$success-color;
+  color: white;
 }
 
 .Toastify__toast--error {
   background-color: colors.$error-color;
+  color: white;
 }
 
 .maplibregl-ctrl-group button {
