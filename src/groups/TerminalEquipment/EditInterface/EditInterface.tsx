@@ -227,7 +227,7 @@ function EditInterface({
 
     const interfaceInfo =
       state.interfaceType ||
-      state.subSlotNumber ||
+      state.slotNumber ||
       state.subSlotNumber ||
       state.portNumber
         ? {
