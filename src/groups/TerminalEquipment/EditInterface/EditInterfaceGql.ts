@@ -71,7 +71,7 @@ interface EditInterfaceParams {
   terminalEquipmentId: string;
   terminalStructureId: string;
   terminalStructureSpecificationId: string;
-  position: number | null;
+  position: number;
   interfaceInfo: {
     interfaceType: string | null;
     slotNumber: number | null;
@@ -92,7 +92,7 @@ $interfaceInfo: InterfaceInfoInputType
     updateTerminalStructureProperties(
       terminalEquipmentId: $terminalEquipmentId
       terminalStructureId: $terminalStructureId
-      terminalStructureSpecificationId: $terminalStructureSpecificationId;
+      terminalStructureSpecificationId: $terminalStructureSpecificationId
       position: $position
       interfaceInfo: $interfaceInfo
     ) {
@@ -115,6 +115,7 @@ interface TerminalStructure {
     slotNumber: number | null;
     subSlotNumber: number | null;
     circuitName: string | null;
+    portNumber: number | null;
   } | null
 }
 
@@ -149,6 +150,7 @@ query(
         slotNumber
         subSlotNumber
         circuitName
+        portNumber
       }
     }
   }

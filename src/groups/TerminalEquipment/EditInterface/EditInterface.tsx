@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 import NullableNumberPicker from "../../../components/NullableNumberPicker";
+import NumberPicker from "../../../components/NumberPicker";
 import LabelContainer from "../../../components/LabelContainer";
 import TextBox from "../../../components/TextBox";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
@@ -48,6 +49,7 @@ interface TerminalStructure {
     slotNumber: number | null;
     subSlotNumber: number | null;
     circuitName: string | null;
+    portNumber: number | null;
   } | null;
 }
 
@@ -60,6 +62,7 @@ interface State {
   portNumber: number | null;
   terminalStructureSpecifications: TerminalStructureSpecification[];
   circuitName: string | null;
+  position: number;
 }
 
 function reducer(state: State, action: Action): State {
@@ -78,6 +81,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, portNumber: action.portNumber };
     case "setCircuitName":
       return { ...state, circuitName: action.curcuitName };
+    case "setPosition":
+      return { ...state, position: action.position };
     case "setTerminalStructure":
       return {
         ...state,
@@ -90,6 +95,8 @@ function reducer(state: State, action: Action): State {
           action.terminalStructure.interfaceInfo?.circuitName ?? null,
         slotNumber: action.terminalStructure.interfaceInfo?.slotNumber ?? null,
         category: action.terminalStructure.category,
+        position: action.terminalStructure.position,
+        portNumber: action.terminalStructure.interfaceInfo?.portNumber ?? null,
       };
     case "setTerminalStructureSpecifications":
       return {
@@ -110,6 +117,7 @@ type Action =
   | { type: "setPortNumber"; portNumber: number | null }
   | { type: "setCircuitName"; curcuitName: string | null }
   | { type: "setTerminalStructure"; terminalStructure: TerminalStructure }
+  | { type: "setPosition"; position: number }
   | {
       type: "setTerminalStructureSpecifications";
       terminalStructureSpecifications: TerminalStructureSpecification[];
@@ -124,6 +132,7 @@ const initialState: State = {
   portNumber: null,
   terminalStructureSpecifications: [],
   circuitName: null,
+  position: 0,
 };
 
 interface EditInterfaceParams {
@@ -241,7 +250,7 @@ function EditInterface({
 
     editInterface(client, {
       terminalEquipmentId: terminalEquipmentId,
-      position: 0,
+      position: state.position,
       terminalStructureId: terminalStructureId,
       terminalStructureSpecificationId: state.specificationId,
       interfaceInfo: interfaceInfo,
@@ -251,7 +260,7 @@ function EditInterface({
           response.data?.terminalEquipment.updateTerminalStructureProperties
             .isSuccess
         ) {
-          toast.success(t("ADDED"));
+          toast.success(t("UPDATED"));
         } else {
           console.error(response);
           toast.error(
@@ -300,6 +309,21 @@ function EditInterface({
                 })
               }
               selected={state.specificationId ?? ""}
+            />
+          </LabelContainer>
+        </div>
+        <div className="full-row">
+          <LabelContainer text={`${t("POSITION")}:`}>
+            <NumberPicker
+              minValue={1}
+              maxValue={100}
+              setValue={(x) =>
+                dispatch({
+                  type: "setPosition",
+                  position: x,
+                })
+              }
+              value={state.position}
             />
           </LabelContainer>
         </div>

@@ -289,7 +289,8 @@
       "SUB_SLOT_NUMBER": "Sub slot nr",
       "PORT_NUMBER": "Port nr",
       "EDIT_INTERFACE": "Edit interface",
-      "CIRCUIT_NAME": "Kredsløbsnummer"
+      "CIRCUIT_NAME": "Kredsløbsnummer",
+      "POSITION": "Position"
     }
   },
   "dk": {
@@ -583,7 +584,8 @@
       "SUB_SLOT_NUMBER": "Sub slot nr",
       "PORT_NUMBER": "Port nr",
       "EDIT_INTERFACE": "Rediger interface",
-      "CIRCUIT_NAME": "Kredsløbsnummer"
+      "CIRCUIT_NAME": "Kredsløbsnummer",
+      "POSITION": "Position"
     }
   }
 }
