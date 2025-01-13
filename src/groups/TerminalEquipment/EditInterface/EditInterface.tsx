@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 import NullableNumberPicker from "../../../components/NullableNumberPicker";
+import NumberPicker from "../../../components/NumberPicker";
 import LabelContainer from "../../../components/LabelContainer";
 import TextBox from "../../../components/TextBox";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
@@ -11,6 +12,8 @@ import DefaultButton from "../../../components/DefaultButton";
 import {
   getTerminalStructureSpecifications,
   TerminalStructureSpecification,
+  editInterface,
+  getTerminalStructure,
 } from "./EditInterfaceGql";
 
 function createCategoryOptions(
@@ -34,6 +37,22 @@ function createSpecificationOptions(
     .map((x) => ({ text: x.name, value: x.id, key: x.id }));
 }
 
+interface TerminalStructure {
+  id: string;
+  name: string;
+  description: string;
+  position: number;
+  category: string;
+  specificationId: string;
+  interfaceInfo: {
+    interfaceType: string | null;
+    slotNumber: number | null;
+    subSlotNumber: number | null;
+    circuitName: string | null;
+    portNumber: number | null;
+  } | null;
+}
+
 interface State {
   category: string | null;
   specificationId: string | null;
@@ -42,6 +61,8 @@ interface State {
   subSlotNumber: number | null;
   portNumber: number | null;
   terminalStructureSpecifications: TerminalStructureSpecification[];
+  circuitName: string | null;
+  position: number;
 }
 
 function reducer(state: State, action: Action): State {
@@ -58,6 +79,25 @@ function reducer(state: State, action: Action): State {
       return { ...state, subSlotNumber: action.subSlotNumber };
     case "setPortNumber":
       return { ...state, portNumber: action.portNumber };
+    case "setCircuitName":
+      return { ...state, circuitName: action.curcuitName };
+    case "setPosition":
+      return { ...state, position: action.position };
+    case "setTerminalStructure":
+      return {
+        ...state,
+        specificationId: action.terminalStructure.specificationId,
+        interfaceType:
+          action.terminalStructure.interfaceInfo?.interfaceType ?? null,
+        subSlotNumber:
+          action.terminalStructure.interfaceInfo?.subSlotNumber ?? null,
+        circuitName:
+          action.terminalStructure.interfaceInfo?.circuitName ?? null,
+        slotNumber: action.terminalStructure.interfaceInfo?.slotNumber ?? null,
+        category: action.terminalStructure.category,
+        position: action.terminalStructure.position,
+        portNumber: action.terminalStructure.interfaceInfo?.portNumber ?? null,
+      };
     case "setTerminalStructureSpecifications":
       return {
         ...state,
@@ -75,6 +115,9 @@ type Action =
   | { type: "setSlotNumber"; slotNumber: number | null }
   | { type: "setSubSlotNumber"; subSlotNumber: number | null }
   | { type: "setPortNumber"; portNumber: number | null }
+  | { type: "setCircuitName"; curcuitName: string | null }
+  | { type: "setTerminalStructure"; terminalStructure: TerminalStructure }
+  | { type: "setPosition"; position: number }
   | {
       type: "setTerminalStructureSpecifications";
       terminalStructureSpecifications: TerminalStructureSpecification[];
@@ -88,9 +131,21 @@ const initialState: State = {
   subSlotNumber: null,
   portNumber: null,
   terminalStructureSpecifications: [],
+  circuitName: null,
+  position: 0,
 };
 
-function EditInterface() {
+interface EditInterfaceParams {
+  routeNodeId: string;
+  terminalEquipmentId: string;
+  terminalStructureId: string;
+}
+
+function EditInterface({
+  routeNodeId,
+  terminalEquipmentId,
+  terminalStructureId,
+}: EditInterfaceParams) {
   const { t } = useTranslation();
   const client = useClient();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -110,6 +165,45 @@ function EditInterface() {
       }
     });
   }, [dispatch, client, t]);
+
+  useEffect(() => {
+    if (state.terminalStructureSpecifications.length === 0) return;
+
+    getTerminalStructure(client, {
+      terminalStructureId,
+      terminalEquipmentOrTerminalId: terminalEquipmentId,
+    }).then((x) => {
+      const terminalStructure = x.data?.utilityNetwork.terminalStructure;
+      if (terminalStructure) {
+        const category = state.terminalStructureSpecifications.find(
+          (x) => x.id === terminalStructure.specificationId,
+        )?.category;
+
+        if (!category) {
+          console.error(
+            `Could not load find category on specification id: ${terminalStructure.specificationId}`,
+          );
+          toast.error(t("ERROR"));
+          return;
+        }
+
+        dispatch({
+          type: "setTerminalStructure",
+          terminalStructure: { ...terminalStructure, category },
+        });
+      } else {
+        console.error("Could not load terminal structure.");
+        toast.error(t("ERROR"));
+      }
+    });
+  }, [
+    dispatch,
+    client,
+    t,
+    terminalEquipmentId,
+    terminalStructureId,
+    state.terminalStructureSpecifications,
+  ]);
 
   const categoryOptions = useMemo<SelectOption[]>(() => {
     if (state.terminalStructureSpecifications) {
@@ -132,6 +226,57 @@ function EditInterface() {
       return [];
     }
   }, [state.terminalStructureSpecifications, state.category]);
+
+  const executeEditInterface = () => {
+    if (state.specificationId === null) {
+      console.error("the specification id was not set.");
+      toast.error(t("ERROR"));
+      return;
+    }
+
+    const interfaceInfo =
+      state.interfaceType ||
+      state.slotNumber ||
+      state.subSlotNumber ||
+      state.portNumber ||
+      state.circuitName
+        ? {
+            interfaceType: state.interfaceType,
+            slotNumber: state.slotNumber,
+            subSlotNumber: state.subSlotNumber,
+            portNumber: state.portNumber,
+            circuitName: state.circuitName,
+          }
+        : null;
+
+    editInterface(client, {
+      terminalEquipmentId: terminalEquipmentId,
+      position: state.position,
+      terminalStructureId: terminalStructureId,
+      terminalStructureSpecificationId: state.specificationId,
+      interfaceInfo: interfaceInfo,
+    })
+      .then((response) => {
+        if (
+          response.data?.terminalEquipment.updateTerminalStructureProperties
+            .isSuccess
+        ) {
+          toast.success(t("UPDATED"));
+        } else {
+          console.error(response);
+          toast.error(
+            t(
+              response.data?.terminalEquipment.updateTerminalStructureProperties
+                .errorCode ?? "ERROR",
+            ),
+          );
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error(t("ERROR"));
+      });
+  };
 
   return (
     <div className="add-interface">
@@ -169,12 +314,37 @@ function EditInterface() {
           </LabelContainer>
         </div>
         <div className="full-row">
+          <LabelContainer text={`${t("POSITION")}:`}>
+            <NumberPicker
+              minValue={1}
+              maxValue={100}
+              setValue={(x) =>
+                dispatch({
+                  type: "setPosition",
+                  position: x,
+                })
+              }
+              value={state.position}
+            />
+          </LabelContainer>
+        </div>
+        <div className="full-row">
           <LabelContainer text={`${t("INTERFACE_TYPE")}:`}>
             <TextBox
               setValue={(x) =>
                 dispatch({ type: "setInterfaceType", interfaceType: x })
               }
               value={state.interfaceType ?? ""}
+            />
+          </LabelContainer>
+        </div>
+        <div className="full-row">
+          <LabelContainer text={`${t("CIRCUIT_NAME")}:`}>
+            <TextBox
+              setValue={(x) =>
+                dispatch({ type: "setCircuitName", curcuitName: x })
+              }
+              value={state.circuitName ?? ""}
             />
           </LabelContainer>
         </div>
@@ -224,7 +394,7 @@ function EditInterface() {
           </LabelContainer>
         </div>
         <div className="full-row">
-          <DefaultButton innerText={t("EDIT")} onClick={() => {}} />
+          <DefaultButton innerText={t("EDIT")} onClick={executeEditInterface} />
         </div>
       </div>
     </div>

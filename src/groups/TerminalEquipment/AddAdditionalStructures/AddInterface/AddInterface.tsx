@@ -156,7 +156,7 @@ function AddInterface({
 
     const interfaceInfo =
       state.interfaceType ||
-      state.subSlotNumber ||
+      state.slotNumber ||
       state.subSlotNumber ||
       state.circuitName ||
       state.portNumber
