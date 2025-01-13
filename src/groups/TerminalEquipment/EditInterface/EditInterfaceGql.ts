@@ -8,6 +8,27 @@ export function getTerminalStructureSpecifications(client: Client) {
     .toPromise();
 }
 
+export function getTerminalStructure(client: Client, params: TerminalStructureQueryParams) {
+  return client
+    .query<TerminalEquipmentResponse>(
+      TERMINAL_STRUCTURE_QUERY, params
+    )
+    .toPromise();
+}
+
+
+export function editInterface(
+  client: Client,
+  params: EditInterfaceParams
+) {
+  return client
+    .mutation<AddInterfaceResponse>(
+      EDIT_INTERFACE,
+      params
+    )
+    .toPromise();
+}
+
 export interface TerminalStructureSpecification {
   id: string;
   category: string;
@@ -35,3 +56,100 @@ query {
   }
 }
 `;
+
+interface AddInterfaceResponse {
+  terminalEquipment: {
+    updateTerminalStructureProperties: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
+interface EditInterfaceParams {
+  terminalEquipmentId: string;
+  terminalStructureId: string;
+  terminalStructureSpecificationId: string;
+  position: number | null;
+  interfaceInfo: {
+    interfaceType: string | null;
+    slotNumber: number | null;
+    subSlotNumber: number | null;
+    circuitName: string | null;
+  } | null
+}
+
+const EDIT_INTERFACE = `
+mutation (
+$terminalEquipmentId: ID!,
+$terminalStructureId: ID!,
+$terminalStructureSpecificationId: ID!,
+$position: Int!,
+$interfaceInfo: InterfaceInfoInputType
+) {
+  terminalEquipment {
+    updateTerminalStructureProperties(
+      terminalEquipmentId: $terminalEquipmentId
+      terminalStructureId: $terminalStructureId
+      terminalStructureSpecificationId: $terminalStructureSpecificationId;
+      position: $position
+      interfaceInfo: $interfaceInfo
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}
+`;
+
+interface TerminalStructure {
+  id: string;
+  name: string;
+  description: string;
+  position: number;
+  specificationId: string;
+  interfaceInfo: {
+    interfaceType: string | null;
+    slotNumber: number | null;
+    subSlotNumber: number | null;
+    circuitName: string | null;
+  } | null
+}
+
+interface TerminalEquipmentResponse {
+  utilityNetwork: {
+    terminalStructure: TerminalStructure;
+  };
+}
+
+interface TerminalStructureQueryParams {
+  terminalEquipmentOrTerminalId: string;
+  terminalStructureId : string;
+}
+
+export const TERMINAL_STRUCTURE_QUERY = `
+query(
+  $terminalEquipmentOrTerminalId: ID!,
+  $terminalStructureId: ID! 
+) {
+  utilityNetwork {
+    terminalStructure(
+      terminalEquipmentOrTerminalId: $terminalEquipmentOrTerminalId
+      terminalStructureId: $terminalStructureId)
+    {
+      id
+      name
+      description
+      position
+      specificationId
+      interfaceInfo {
+        interfaceType
+        slotNumber
+        subSlotNumber
+        circuitName
+      }
+    }
+  }
+}`;

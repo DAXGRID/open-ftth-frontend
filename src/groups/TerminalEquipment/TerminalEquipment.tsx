@@ -491,7 +491,11 @@ function TerminalEquipment() {
           title={t("EDIT_INTERFACE")}
           closeCallback={() => dispatch({ type: "resetShowEditInterfaceView" })}
         >
-          <EditInterface />
+          <EditInterface
+            routeNodeId={state.showEditInterfaceView.routeNodeId}
+            terminalEquipmentId={state.showEditInterfaceView.terminalEquipmentId}
+            terminalStructureId={state.showEditInterfaceView.terminalStructureId}
+          />
         </ModalContainer>,
       );
     } else {
