@@ -238,7 +238,8 @@ function EditInterface({
       state.interfaceType ||
       state.slotNumber ||
       state.subSlotNumber ||
-      state.portNumber
+      state.portNumber ||
+      state.circuitName
         ? {
             interfaceType: state.interfaceType,
             slotNumber: state.slotNumber,
