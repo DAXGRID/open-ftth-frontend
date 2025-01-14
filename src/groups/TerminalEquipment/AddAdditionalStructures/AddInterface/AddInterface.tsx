@@ -12,6 +12,7 @@ import {
   getTerminalStructureSpecifications,
   TerminalStructureSpecification,
   addInterface,
+  getNextPhysicalCircuitId,
 } from "./AddInterfaceGql";
 
 function createCategoryOptions(
@@ -120,6 +121,21 @@ function AddInterface({
         });
       } else {
         console.error("Could not load terminal structure specifications.");
+        toast.error(t("ERROR"));
+      }
+    });
+  }, [dispatch, client, t]);
+
+  useEffect(() => {
+    getNextPhysicalCircuitId(client).then((x) => {
+      const nextPhysicalCircuitId = x.data?.utilityNetwork.getNextPhysicalCircuitId;
+      if (nextPhysicalCircuitId) {
+        dispatch({
+          type: "setCircuitName",
+          curcuitName: nextPhysicalCircuitId,
+        });
+      } else {
+        console.error("Could not load next physical circuit id.");
         toast.error(t("ERROR"));
       }
     });
