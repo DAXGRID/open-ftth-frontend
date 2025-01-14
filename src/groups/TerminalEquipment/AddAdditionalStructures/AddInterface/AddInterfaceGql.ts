@@ -20,6 +20,14 @@ export function addInterface(
     .toPromise();
 }
 
+export function getNextPhysicalCircuitId(client: Client) {
+  return client
+    .query<NextPhysicalCircuitIdResponse>(
+      NEXT_PHYSICAL_CIRCUIT_ID_QUERY, {}
+    )
+    .toPromise();
+}
+
 export interface TerminalStructureSpecification {
   id: string;
   category: string;
@@ -89,6 +97,21 @@ $interfaceInfo: InterfaceInfoInputType
       errorCode
       errorMessage
     }
+  }
+}
+`;
+
+
+interface NextPhysicalCircuitIdResponse {
+  utilityNetwork: {
+    getNextPhysicalCircuitId: string;
+  };
+}
+
+const NEXT_PHYSICAL_CIRCUIT_ID_QUERY = `
+query {
+  utilityNetwork {
+    getNextPhysicalCircuitId
   }
 }
 `;
