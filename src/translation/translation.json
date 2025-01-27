@@ -290,7 +290,8 @@
       "PORT_NUMBER": "Port nr",
       "EDIT_INTERFACE": "Edit interface",
       "CIRCUIT_NAME": "Kredsløbsnummer",
-      "POSITION": "Position"
+      "POSITION": "Position",
+      "COULD_NOT_LOAD_DIAGRAM": "Could not load the diagram - maybe the route element no longer exists."
     }
   },
   "dk": {
@@ -585,7 +586,8 @@
       "PORT_NUMBER": "Port nr",
       "EDIT_INTERFACE": "Rediger interface",
       "CIRCUIT_NAME": "Kredsløbsnummer",
-      "POSITION": "Position"
+      "POSITION": "Position",
+      "COULD_NOT_LOAD_DIAGRAM": "Diagrammet kunne ikke vises, måske findes elementet ikke længere."
     }
   }
 }
