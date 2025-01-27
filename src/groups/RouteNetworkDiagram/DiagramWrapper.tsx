@@ -1,5 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useSubscription, useClient } from "urql";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import { MapContext } from "../../contexts/MapContext";
 import EditDiagram from "./EditDiagram";
 import ReadOnlyDiagram from "./ReadOnlyDiagram";
@@ -54,6 +56,7 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
   const client = useClient();
   const location = useLocation();
   const history = useHistory();
+  const { t } = useTranslation();
 
   const { identifiedFeature, setIdentifiedFeature } = useContext(MapContext);
   const [diagramObjects, setDiagramObjects] = useState<Diagram[]>([]);
@@ -131,16 +134,21 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
       })
       .toPromise()
       .then((r) => {
-        if (r.data) {
+        if (r.data?.schematic?.buildDiagram) {
           const { diagramObjects, envelope } = r.data.schematic.buildDiagram;
           setDiagramObjects(diagramObjects);
           setEnvelope(envelope);
         } else {
-          console.error("Could not load diagram.");
+          // if none is found we reset the identified feature to avoid issues.
+          setIdentifiedFeature({ id: null, type: null, extraMapInformation: null })
+          // We replace the history to avoid the user getting confused and keep refreshing.
+          history.replace("");
+          toast.error(t("COULD_NOT_LOAD_DIAGRAM"));
+          console.error("Could not load diagram.", r);
         }
         setLoading(false);
       });
-  }, [identifiedFeature?.id, client]);
+  }, [identifiedFeature?.id, client, t, setIdentifiedFeature, history]);
 
   useEffect(() => {
     if (!diagramSubscriptionResult?.data) return;
