@@ -291,7 +291,8 @@
       "EDIT_INTERFACE": "Edit interface",
       "CIRCUIT_NAME": "Kredsløbsnummer",
       "POSITION": "Position",
-      "COULD_NOT_LOAD_DIAGRAM": "Could not load the diagram - maybe the route element no longer exists."
+      "COULD_NOT_LOAD_DIAGRAM": "Could not load the diagram - maybe the route element no longer exists.",
+      "OutageInstallationsFound": "circuit(s)"
     }
   },
   "dk": {
@@ -587,7 +588,8 @@
       "EDIT_INTERFACE": "Rediger interface",
       "CIRCUIT_NAME": "Kredsløbsnummer",
       "POSITION": "Position",
-      "COULD_NOT_LOAD_DIAGRAM": "Diagrammet kunne ikke vises, måske findes elementet ikke længere."
+      "COULD_NOT_LOAD_DIAGRAM": "Diagrammet kunne ikke vises, måske findes elementet ikke længere.",
+      "OutageInstallationsFound": "kredsløb"
     }
   }
 }
