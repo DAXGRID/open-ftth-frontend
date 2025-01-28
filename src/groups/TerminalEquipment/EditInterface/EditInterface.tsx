@@ -208,7 +208,7 @@ function EditInterface({
   const categoryOptions = useMemo<SelectOption[]>(() => {
     if (state.terminalStructureSpecifications) {
       return createCategoryOptions(
-        state.terminalStructureSpecifications,
+        state.terminalStructureSpecifications.filter((x) => x.isInterfaceModule),
         t,
       ).sort((x, y) => (x.text > y.text ? 1 : -1));
     } else {
@@ -219,7 +219,7 @@ function EditInterface({
   const specificationOptions = useMemo<SelectOption[]>(() => {
     if (state.terminalStructureSpecifications && state.category) {
       return createSpecificationOptions(
-        state.terminalStructureSpecifications,
+        state.terminalStructureSpecifications.filter((x) => x.isInterfaceModule),
         state.category,
       ).sort((x, y) => (x.text > y.text ? 1 : -1));
     } else {

@@ -34,6 +34,7 @@ export interface TerminalStructureSpecification {
   name: string;
   description: string;
   deprecated: boolean;
+  isInterfaceModule: boolean;
 }
 
 interface AddInterfaceResponse {
@@ -61,6 +62,7 @@ query {
       name
       description
       deprecated
+      isInterfaceModule
     }
   }
 }
