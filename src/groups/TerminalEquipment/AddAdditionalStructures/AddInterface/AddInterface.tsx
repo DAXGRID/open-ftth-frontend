@@ -14,6 +14,8 @@ import {
   addInterface,
   getNextPhysicalCircuitId,
 } from "./AddInterfaceGql";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 
 function createCategoryOptions(
   specifications: TerminalStructureSpecification[],
@@ -126,25 +128,12 @@ function AddInterface({
     });
   }, [dispatch, client, t]);
 
-  useEffect(() => {
-    getNextPhysicalCircuitId(client).then((x) => {
-      const nextPhysicalCircuitId = x.data?.utilityNetwork.getNextPhysicalCircuitId;
-      if (nextPhysicalCircuitId) {
-        dispatch({
-          type: "setCircuitName",
-          curcuitName: nextPhysicalCircuitId,
-        });
-      } else {
-        console.error("Could not load next physical circuit id.");
-        toast.error(t("ERROR"));
-      }
-    });
-  }, [dispatch, client, t]);
-
   const categoryOptions = useMemo<SelectOption[]>(() => {
     if (state.terminalStructureSpecifications) {
       return createCategoryOptions(
-        state.terminalStructureSpecifications.filter((x) => x.isInterfaceModule),
+        state.terminalStructureSpecifications.filter(
+          (x) => x.isInterfaceModule,
+        ),
         t,
       ).sort((x, y) => (x.text > y.text ? 1 : -1));
     } else {
@@ -155,13 +144,31 @@ function AddInterface({
   const specificationOptions = useMemo<SelectOption[]>(() => {
     if (state.terminalStructureSpecifications && state.category) {
       return createSpecificationOptions(
-        state.terminalStructureSpecifications.filter((x) => x.isInterfaceModule),
+        state.terminalStructureSpecifications.filter(
+          (x) => x.isInterfaceModule,
+        ),
         state.category,
       ).sort((x, y) => (x.text > y.text ? 1 : -1));
     } else {
       return [];
     }
   }, [state.terminalStructureSpecifications, state.category]);
+
+  function executeGetNextPhysicalCircuitId() {
+    getNextPhysicalCircuitId(client).then((x) => {
+      const nextPhysicalCircuitId =
+        x.data?.utilityNetwork.getNextPhysicalCircuitId;
+      if (nextPhysicalCircuitId) {
+        dispatch({
+          type: "setCircuitName",
+          curcuitName: nextPhysicalCircuitId,
+        });
+      } else {
+        console.error("Could not load next physical circuit id.");
+        toast.error(t("ERROR"));
+      }
+    });
+  }
 
   function executeAddInterface() {
     if (state.specificationId === null) {
@@ -193,6 +200,10 @@ function AddInterface({
     })
       .then((response) => {
         if (response.data?.terminalEquipment.addInterface.isSuccess) {
+          dispatch({
+            type: "setCircuitName",
+            curcuitName: null,
+          });
           toast.success(t("ADDED"));
         } else {
           console.error(response);
@@ -257,12 +268,21 @@ function AddInterface({
         </div>
         <div className="full-row">
           <LabelContainer text={`${t("CIRCUIT_NAME")}:`}>
-            <TextBox
-              setValue={(x) =>
-                dispatch({ type: "setCircuitName", curcuitName: x })
-              }
-              value={state.circuitName ?? ""}
-            />
+            <div className="circuit-name-group">
+              <TextBox
+                setValue={(x) =>
+                  dispatch({ type: "setCircuitName", curcuitName: x })
+                }
+                value={state.circuitName ?? ""}
+              />
+              <span
+                role="button"
+                className="circuit-name-button header-icons__icon"
+                onClick={executeGetNextPhysicalCircuitId}
+              >
+                <FontAwesomeIcon icon={faRefresh} />
+              </span>
+            </div>
           </LabelContainer>
         </div>
         <div className="full-row">
