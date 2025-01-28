@@ -282,6 +282,7 @@
       "DESCRIPTION": "Description",
       "MARKING_INFORMATION": "Marking information",
       "COMMENT": "Comment",
+      "OUTAGE_INSTALLATIONS_FOUND": "installations",
       "ADD_CARD": "Add card",
       "ADD_INTERFACE": "Add interface",
       "INTERFACE_TYPE": "Interface type",
@@ -292,7 +293,7 @@
       "CIRCUIT_NAME": "Kredsløbsnummer",
       "POSITION": "Position",
       "COULD_NOT_LOAD_DIAGRAM": "Could not load the diagram - maybe the route element no longer exists.",
-      "OUTAGE_CIRCUITS_FOUND": "circuit(s)",
+      "OUTAGE_CIRCUITS_FOUND": "circuit(s) found",
       "AND": "and"
     }
   },
@@ -579,7 +580,7 @@
       "DESCRIPTION": "Kommentar",
       "MARKING_INFORMATION": "Markerings information",
       "COMMENT": "Kommentar",
-      "OUTAGE_INSTALLATIONS_FOUND": "Installationer fundet",
+      "OUTAGE_INSTALLATIONS_FOUND": "installationer",
       "ADD_CARD": "Tilføj kort",
       "ADD_INTERFACE": "Tilføj interface",
       "INTERFACE_TYPE": "Interface type",
@@ -590,7 +591,7 @@
       "CIRCUIT_NAME": "Kredsløbsnummer",
       "POSITION": "Position",
       "COULD_NOT_LOAD_DIAGRAM": "Diagrammet kunne ikke vises, måske findes elementet ikke længere.",
-      "OUTAGE_CIRCUITS_FOUND": "kredsløb",
+      "OUTAGE_CIRCUITS_FOUND": "kredsløb fundet",
       "AND": "og"
     }
   }
