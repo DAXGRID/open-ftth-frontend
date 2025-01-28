@@ -79,6 +79,7 @@ export interface TerminalStructure {
   specName: string;
   info: string | null;
   lines: Line[];
+  isInterfaceModule: boolean;
 }
 
 export interface TerminalEquipment {
@@ -129,6 +130,7 @@ $terminalEquipmentOrRackId: ID!) {
           name
           specName
           info
+          isInterfaceModule
           lines {
             connectorSymbol
             a {

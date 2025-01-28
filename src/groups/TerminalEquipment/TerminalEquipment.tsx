@@ -235,7 +235,7 @@ function TerminalEquipmentTable({
                   </p>
                   {state.editable && (
                     <div className="header-icons ">
-                      {isLineTermination && (
+                      {x.isInterfaceModule && (
                         <span
                           role="button"
                           className="header-icons__icon"
