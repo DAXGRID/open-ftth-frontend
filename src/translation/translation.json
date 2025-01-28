@@ -292,7 +292,8 @@
       "CIRCUIT_NAME": "Kredsløbsnummer",
       "POSITION": "Position",
       "COULD_NOT_LOAD_DIAGRAM": "Could not load the diagram - maybe the route element no longer exists.",
-      "OUTAGE_CIRCUITS_FOUND": "circuit(s)"
+      "OUTAGE_CIRCUITS_FOUND": "circuit(s)",
+      "AND": "and"
     }
   },
   "dk": {
@@ -589,7 +590,8 @@
       "CIRCUIT_NAME": "Kredsløbsnummer",
       "POSITION": "Position",
       "COULD_NOT_LOAD_DIAGRAM": "Diagrammet kunne ikke vises, måske findes elementet ikke længere.",
-      "OUTAGE_CIRCUITS_FOUND": "kredsløb"
+      "OUTAGE_CIRCUITS_FOUND": "kredsløb",
+      "AND": "og"
     }
   }
 }
