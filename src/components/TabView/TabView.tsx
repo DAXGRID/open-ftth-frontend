@@ -62,7 +62,7 @@ interface TabViewProps {
   views: { view: ReactNode; title: string; id: string }[];
   selectedId: string;
   select: (id: string) => void;
-  showFullScreenButton?: boolean | null;
+  showFullScreenButton: boolean;
 }
 
 function TabView({ views, selectedId, select, showFullScreenButton }: TabViewProps) {
@@ -90,7 +90,7 @@ function TabView({ views, selectedId, select, showFullScreenButton }: TabViewPro
           views={views}
           selectedId={selectedId}
           select={select}
-          showFullscreenButton={showFullScreenButton ?? false ? true : false}
+          showFullscreenButton={showFullScreenButton}
           toggleFullscreen={toggleFullscreen}
           isFullscreen={isFullScreen}
         />
