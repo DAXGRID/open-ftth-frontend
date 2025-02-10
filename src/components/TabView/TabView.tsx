@@ -90,7 +90,7 @@ function TabView({ views, selectedId, select, showFullScreenButton }: TabViewPro
           views={views}
           selectedId={selectedId}
           select={select}
-    showFullscreenButton={showFullScreenButton === null ? true : false}
+          showFullscreenButton={showFullScreenButton ?? false ? true : false}
           toggleFullscreen={toggleFullscreen}
           isFullscreen={isFullScreen}
         />

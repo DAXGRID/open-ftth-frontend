@@ -1190,6 +1190,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           singleSelectedFeature?.source === "TerminalEquipment") && (
           <div className="container-max-size container-center">
             <TabView
+              showFullScreenButton={true}
               selectedId={rackTabViewSelectedId}
               select={setRackTabViewSelectedId}
               key="0"
@@ -1249,6 +1250,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           singleSelectedFeature?.source.includes("Conduit")) && (
           <div className="container-max-size container-center">
             <TabView
+              showFullScreenButton={true}
               selectedId={spanEquipmentTabViewSelectedId}
               select={setSpanEquipmentTabViewSelectedId}
               views={[

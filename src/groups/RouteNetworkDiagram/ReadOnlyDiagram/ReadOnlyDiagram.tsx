@@ -166,6 +166,7 @@ function ReadOnlyDiagram({
         selectedFeature?.source === "TerminalEquipment") && (
         <div className="container-max-size container-center">
           <TabView
+            showFullScreenButton={true}
             select={setRackTabViewSelectedId}
             key="0"
             selectedId={rackTabViewSelectedId}
@@ -223,6 +224,7 @@ function ReadOnlyDiagram({
         selectedFeature?.source.includes("Conduit")) && (
         <div className="container-max-size container-center">
           <TabView
+            showFullScreenButton={true}
             selectedId={spanEquipmentTabViewSelectedId}
             select={setSpanEquipmentCableTabViewSelectedId}
             views={[
