@@ -193,6 +193,7 @@ subscription ($routeNodeId: ID!, $terminalEquipmentOrRackId: ID!) {
         name
         specName
         info
+        isInterfaceModule
         lines {
           connectorSymbol
           a {
