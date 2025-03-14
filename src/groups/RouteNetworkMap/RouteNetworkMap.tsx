@@ -350,7 +350,8 @@ function RouteNetworkMap({
 
     const newMap = new Map({
       container: mapContainer.current,
-      style: mapLibreStyle,
+      // We want to ous eour own glyphs in production.
+      style: { ...mapLibreStyle, glyphs: "/fonts/{fontstack}/{range}.pbf" },
       preserveDrawingBuffer: true,
       doubleClickZoom: false,
       dragRotate: false,
