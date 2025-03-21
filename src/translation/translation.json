@@ -294,7 +294,19 @@
       "POSITION": "Position",
       "COULD_NOT_LOAD_DIAGRAM": "Could not load the diagram - maybe the route element no longer exists.",
       "OUTAGE_CIRCUITS_FOUND": "circuit(s) found",
-      "AND": "and"
+      "AND": "and",
+      "RD": "Red",
+      "GR": "Green",
+      "BL": "Blue",
+      "YL": "Yellow",
+      "WH": "White",
+      "SL": "Slate",
+      "BR": "Brown",
+      "VI": "Violet",
+      "TQ": "Turquoise",
+      "BK": "Black",
+      "OR": "Orange",
+      "PK": "Pink"
     }
   },
   "dk": {
@@ -592,7 +604,19 @@
       "POSITION": "Position",
       "COULD_NOT_LOAD_DIAGRAM": "Diagrammet kunne ikke vises, måske findes elementet ikke længere.",
       "OUTAGE_CIRCUITS_FOUND": "kredsløb fundet",
-      "AND": "og"
+      "AND": "og",
+      "RD": "Rød",
+      "GR": "Grøn",
+      "BL": "Blå",
+      "YL": "Gul",
+      "WH": "Hvid",
+      "SL": "Skifer",
+      "BR": "Brun",
+      "VI": "Violet",
+      "TQ": "Turkis",
+      "BK": "Sort",
+      "OR": "Orange",
+      "PK": "Pink"
     }
   }
 }

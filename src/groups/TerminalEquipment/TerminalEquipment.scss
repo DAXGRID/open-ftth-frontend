@@ -330,3 +330,92 @@
     }
   }
 }
+
+.color-coded {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .color-coded-item {
+    display: flex;
+    flex-basis: 100%;
+
+    .color-coded-item-text {
+      display: flex;
+      gap: 5px;
+    }
+  }
+
+  .box {
+    height: 15px;
+    width: 15px;
+    border: 1px solid black;
+  }
+
+  .rd {
+    background-color: #cc0000;
+  }
+
+  .gr {
+    background-color: #00ff00;
+  }
+
+  .bl {
+    background-color: #0000ff;
+  }
+
+  .yl {
+    background-color: #ffff00;
+  }
+
+  .wh {
+    background-color: #ffffff;
+  }
+
+  .sl {
+    background-color: #808080;
+  }
+
+  .br {
+    background-color: #996633;
+  }
+
+  .vi {
+    background-color: #9900cc;
+  }
+
+  .tq {
+    background-color: #00ffff;
+  }
+
+  .bk {
+    background-color: #000000;
+  }
+
+  .or {
+    background-color: #ff9900;
+  }
+
+  .pk {
+    background-color: #ff99cc;
+  }
+
+  // This is done to support hover on colors on mobile devices.
+  @media (pointer: coarse), (hover: none) {
+    [title] {
+      position: relative;
+      display: inline-flex;
+      justify-content: center;
+    }
+    [title]:focus::after {
+      content: attr(title);
+      position: absolute;
+      top: 90%;
+      color: #000;
+      background-color: #fff;
+      border: 1px solid;
+      width: fit-content;
+      padding: 3px;
+    }
+  }
+}

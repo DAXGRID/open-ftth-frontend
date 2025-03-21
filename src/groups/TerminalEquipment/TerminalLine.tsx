@@ -8,6 +8,8 @@ import {
   faChevronRight,
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
+import colorCodedElement from "./ColorCodedElement";
 
 interface TerminalLineProps {
   line: Line;
@@ -16,6 +18,7 @@ interface TerminalLineProps {
 
 function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
   const { state, dispatch } = useContext(TerminalEquipmentContext);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -33,9 +36,9 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
             >
               <FontAwesomeIcon
                 icon={
-                  state.connectivityTraceViews[
+                  (state.connectivityTraceViews[
                     line.a?.terminal.id ?? line.z?.terminal.id ?? ""
-                  ]?.show ?? false
+                  ]?.show ?? false)
                     ? faChevronDown
                     : faChevronRight
                 }
@@ -46,7 +49,7 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
             </span>
           </div>
           <div className="terminal-equipment-table-item">
-            {line.a?.connectedTo}
+            {colorCodedElement(line.a?.connectedTo ?? "", t)}
           </div>
           <div className="terminal-equipment-table-item">
             <PinPort
@@ -55,7 +58,7 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
             />
           </div>
           <div className="terminal-equipment-table-item">
-            {line.z?.connectedTo}
+            {colorCodedElement(line.z?.connectedTo ?? "", t)}
           </div>
           <div className="terminal-equipment-table-item">
             {line.z?.end ?? ""}
