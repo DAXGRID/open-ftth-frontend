@@ -25,8 +25,9 @@ header {
 }
 
 body {
-  font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family:
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
   background-color: #fcfcfc;
   overflow-x: hidden;
   min-height: var(--app-height);
@@ -248,4 +249,22 @@ strong {
   z-index: 2;
   background-color: colors.$background-color;
   overflow-y: auto;
+}
+
+@media (pointer: coarse), (hover: none) {
+  [title] {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+  }
+  [title]:focus::after {
+    content: attr(title);
+    position: absolute;
+    top: 90%;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid;
+    width: fit-content;
+    padding: 3px;
+  }
 }
