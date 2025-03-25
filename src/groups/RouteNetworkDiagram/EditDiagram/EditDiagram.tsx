@@ -385,7 +385,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   };
 
   const cutSpanSegments = async () => {
-    const spanSegmentsToCut = currentlySelectedFeatures
+    const conduitsToCut = currentlySelectedFeatures
       .filter((x) => {
         return (
           x.layer.source === "InnerConduit" || x.layer.source === "OuterConduit"
@@ -393,9 +393,33 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
       })
       .map((x) => x.properties?.refId as string);
 
+    const fiberCablesToCut = currentlySelectedFeatures
+      .filter((x) => {
+        return x.layer.source === "FiberCable";
+      })
+      .map((x) => x.properties?.refId as string);
+
+    if (fiberCablesToCut.length > 0 && conduitsToCut.length > 0) {
+      toast.error(t("NOT_ALLOWED_CUT_BOTH_CABLES_AND_TUBES"));
+      return;
+    }
+
+    if (fiberCablesToCut.length === 0 && conduitsToCut.length === 0) {
+      toast.error(t("NOTHING_SELECTED_TO_CUT"));
+      return;
+    }
+
     if (!localIdentifiedFeature?.id) {
       toast.error(t("No identified feature"));
       return;
+    }
+
+    const spanSegmentsToCut =
+      fiberCablesToCut.length > 0 ? fiberCablesToCut : conduitsToCut;
+
+    if (fiberCablesToCut.length > 0) {
+      const confirmed = window.confirm(t("CONFIRATION_CUT_CABLE"));
+      if (!confirmed) return;
     }
 
     const parameters: CutSpanSegmentsParameter = {
