@@ -306,7 +306,10 @@
       "TQ": "Turquoise",
       "BK": "Black",
       "OR": "Orange",
-      "PK": "Pink"
+      "PK": "Pink",
+      "NOT_ALLOWED_CUT_BOTH_CABLES_AND_TUBES": "Not allowed to cut both cables and tubes at the same time",
+      "CONFIRATION_CUT_CABLE": "Are you sure you want to cut the cable?",
+      "NOTHING_SELECTED_TO_CUT": "Nothing has been selected to be cut."
     }
   },
   "dk": {
@@ -616,7 +619,10 @@
       "TQ": "Turkis",
       "BK": "Sort",
       "OR": "Orange",
-      "PK": "Pink"
+      "PK": "Pink",
+      "NOT_ALLOWED_CUT_BOTH_CABLES_AND_TUBES": "Det er ikke tilladt at klippe kabler og rør på samme tid.",
+      "CONFIRATION_CUT_CABLE": "Er du sikker på at du vil klippe kablet?",
+      "NOTHING_SELECTED_TO_CUT": "Du har ikke valgt noget som skal klippes."
     }
   }
 }
