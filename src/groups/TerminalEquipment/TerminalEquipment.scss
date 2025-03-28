@@ -193,6 +193,7 @@
       width: 100%;
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
 
       .table-item-terminal__item {
         text-align: center;
