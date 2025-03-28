@@ -1,35 +1,29 @@
 @use "../../../global-styles/colors";
 
-.disconnect-fiber-editor {
+.edit-tags {
 }
 
-.disconnect-fiber-editor__title {
-  font-size: 16px;
-}
-
-.disconnect-fiber-editor-container {
+.edit-tags-container {
   border: 1px solid colors.$border-color;
   border-radius: 4px;
+  width: 100%;
 }
 
-.disconnect-fiber-editor-container-header,
-.disconnect-fiber-editor-container-body-line {
+.edit-tags-container-header,
+.edit-tags-container-body-line {
   display: grid;
-  grid-template-columns:
-    minmax(0, 1fr) repeat(3, minmax(0, 3fr))
-    repeat(3, minmax(0, 3fr));
+  grid-template-columns: repeat(3, minmax(0, 3fr));
   grid-auto-flow: column;
-  overflow: hidden;
 }
 
-.disconnect-fiber-editor-container-header {
+.edit-tags-container-header {
   width: 100%;
   // This has been added to align elements accross different browsers.
   overflow-y: hidden;
   scrollbar-gutter: stable;
 }
 
-.disconnect-fiber-editor-container-header-item {
+.edit-tags-container-header-item {
   font-weight: bold;
   border-right: 1px solid colors.$border-color;
   padding: 10px;
@@ -40,7 +34,7 @@
   }
 }
 
-.disconnect-fiber-editor-container-body {
+.edit-tags-container-body {
   font-size: 14px;
   max-height: 60vh;
   overflow-y: scroll;
@@ -49,7 +43,7 @@
   flex-wrap: wrap;
 }
 
-.disconnect-fiber-editor-container-body-line {
+.edit-tags-container-body-line {
   flex-basis: 100%;
   width: 100%;
   border-bottom: 1px solid colors.$border-color;
@@ -59,7 +53,7 @@
   }
 }
 
-.disconnect-fiber-editor-container-body-line-item {
+.edit-tags-container-body-line-item {
   border-right: 1px solid colors.$border-color;
   padding: 10px;
   width: 100%;
@@ -73,7 +67,6 @@
   }
 
   &:last-of-type {
-    padding-right: 20px;
     border-right: none;
   }
 }

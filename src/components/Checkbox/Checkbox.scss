@@ -2,5 +2,9 @@
   input[type="checkbox"] {
     transform: scale(1.5);
     padding: 10px;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
