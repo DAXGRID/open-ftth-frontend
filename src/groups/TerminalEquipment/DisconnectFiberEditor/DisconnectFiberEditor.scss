@@ -24,6 +24,7 @@
 
 .disconnect-fiber-editor-container-header {
   width: 100%;
+  padding-right: 15px;
 }
 
 .disconnect-fiber-editor-container-header-item {
@@ -40,8 +41,7 @@
 .disconnect-fiber-editor-container-body {
   font-size: 14px;
   max-height: 60vh;
-  overflow-y: auto;
-  overflow: overlay;
+  overflow-y: scroll;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
