@@ -401,6 +401,10 @@
     background-color: #ff99cc;
   }
 
+  .tp {
+    background-color: #f9f9f9;
+  }
+
   // This is done to support hover on colors on mobile devices.
   @media (pointer: coarse), (hover: none) {
     [title] {
