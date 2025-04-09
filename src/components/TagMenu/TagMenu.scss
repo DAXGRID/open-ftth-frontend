@@ -1,0 +1,96 @@
+@use "../../global-styles/colors";
+
+.tag-menu {
+  display: flex;
+  border-radius: 4px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag-menu-line {
+  border: 1px solid colors.$border-color;
+  padding: 5px 10px;
+  border-radius: 4px;
+  // This is done to keep everything aligned.
+  min-height: 28px;
+  align-content: center;
+  background-color: #f7f7f7;
+}
+
+.tag-menu-line-remove {
+  color: black;
+  font-weight: bold;
+  background-color: white;
+
+  &:hover {
+    background-color: colors.$hover-color;
+    cursor: pointer;
+    background-color: white;
+    color: red;
+  }
+}
+
+.tag-menu-new-tag {
+  padding: 5px 10px;
+  border-radius: 10%;
+  border: 1px dashed black;
+  user-select: none;
+
+  &:hover {
+    cursor: pointer;
+    border-style: solid;
+  }
+}
+
+.tag-menu-new-tag-add {
+  font-size: 16px;
+}
+
+.tag-menu-select-menu {
+  background-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 4px;
+  gap: 5px;
+}
+
+.tag-menu-select-menu-header {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: right;
+}
+
+.tag-menu-select-menu-header-exit-button {
+  font-size: 20px;
+  user-select: none;
+
+  &:hover {
+    cursor: pointer;
+    font-weight: bold;
+  }
+}
+
+.tag-menu-select-menu-body {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  max-height: 300px;
+  gap: 10px;
+}
+
+.tag-menu-select-menu-item {
+  flex-basis: 100%;
+  padding: 5px;
+  border-bottom: 1px solid colors.$border-color;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  user-select: none;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #f7f7f7;
+  }
+}

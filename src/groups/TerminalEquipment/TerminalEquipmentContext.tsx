@@ -73,6 +73,10 @@ interface ShowEditInterfaceView {
   terminalStructureId: string;
 }
 
+interface ShowEditTags {
+  show: boolean;
+}
+
 interface TerminalEquipmentState {
   connectivityView: TerminalEquipmentConnectivityView | null;
   showFreeLines: { [id: string]: boolean };
@@ -92,6 +96,7 @@ interface TerminalEquipmentState {
   routeNodeId: string | null;
   removeStructure: RemoveStructure | null;
   showEditInterfaceView: ShowEditInterfaceView | null;
+  showEditTags: ShowEditTags | null;
 }
 
 type TerminalEquipmentAction =
@@ -155,6 +160,13 @@ type TerminalEquipmentAction =
     }
   | {
       type: "resetShowEditInterfaceView";
+    }
+  | {
+      type: "setShowEditTags";
+      showEditTags: ShowEditTags;
+    }
+  | {
+      type: "resetShowEditTags";
     };
 
 const defaultShowFiberEditorValues: ShowFiberEditor = {
@@ -187,13 +199,17 @@ const defaultShowAddtionalStructure: ShowAddAdditionalStructures = {
   show: false,
   routeNodeId: null,
   terminalEquipmentId: null,
-  isLineTermination: false
+  isLineTermination: false,
 };
 
 const defaultShowOutageView: ShowOutageView = {
   show: false,
   routeNodeId: null,
   equipmentId: null,
+};
+
+const defaultShowEditTags = {
+  show: false,
 };
 
 const terminalEquipmentInitialState: TerminalEquipmentState = {
@@ -213,6 +229,7 @@ const terminalEquipmentInitialState: TerminalEquipmentState = {
   routeNodeId: null,
   removeStructure: null,
   showEditInterfaceView: null,
+  showEditTags: defaultShowEditTags,
 };
 
 function terminalEquipmentReducer(
@@ -329,6 +346,16 @@ function terminalEquipmentReducer(
       return {
         ...state,
         removeStructure: null,
+      };
+    case "setShowEditTags":
+      return {
+        ...state,
+        showEditTags: action.showEditTags,
+      };
+    case "resetShowEditTags":
+      return {
+        ...state,
+        showEditTags: null,
       };
     default:
       throw new Error(`No action for ${action}`);
