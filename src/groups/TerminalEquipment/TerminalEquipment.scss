@@ -277,7 +277,7 @@
 
   .trace-view-grid {
     display: grid;
-    grid-auto-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(0, 0.6fr);
     grid-auto-flow: column;
   }
 
