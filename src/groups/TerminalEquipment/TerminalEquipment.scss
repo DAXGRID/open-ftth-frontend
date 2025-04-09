@@ -115,7 +115,9 @@
 .terminal-equipment-table-grid-header,
 .terminal-equipment-table-grid-equipped {
   display: grid;
-  grid-template-columns: 4fr 3.5fr 3fr 3.5fr 4fr;
+  grid-auto-columns: minmax(0, 4fr) minmax(0, 3.5fr) minmax(0, 3fr)
+    minmax(0, 3.5fr) minmax(0, 4fr);
+  grid-auto-flow: column;
 }
 
 .terminal-equipment-table-grid-free {
@@ -347,64 +349,153 @@
     .color-coded-item-text {
       display: flex;
       gap: 5px;
+      align-items: center;
     }
   }
 
-  .box {
-    height: 15px;
-    width: 15px;
-    border: 1px solid black;
+  .box-color-container {
+    display: relative;
   }
 
-  .rd {
+  .box {
+    height: 18px;
+    width: 18px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+  }
+
+  .box-single-stripe {
+    height: 100%;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    display: none;
+  }
+
+  .box-double-stripe {
+    height: 100%;
+    width: 8px;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    display: none;
+  }
+
+  .bk1 > .box-single-stripe,
+  .bk2 > .box-double-stripe {
+    border-color: white;
+  }
+
+  .rd1,
+  .gr1,
+  .bl1,
+  .yl1,
+  .wh1,
+  .sl1,
+  .br1,
+  .vi1,
+  .tq1,
+  .bk1,
+  .or1,
+  .pk1,
+  .tp1 {
+    .box-single-stripe {
+      display: unset;
+    }
+  }
+
+  .rd2,
+  .gr2,
+  .bl2,
+  .yl2,
+  .wh2,
+  .sl2,
+  .br2,
+  .vi2,
+  .tq2,
+  .bk2,
+  .or2,
+  .pk2,
+  .tp2 {
+    .box-double-stripe {
+      display: unset;
+    }
+  }
+
+  .rd,
+  .rd1,
+  .rd2 {
     background-color: #cc0000;
   }
 
-  .gr {
+  .gr,
+  .gr1,
+  .gr2 {
     background-color: #00ff00;
   }
 
-  .bl {
+  .bl,
+  .bl1,
+  .bl2 {
     background-color: #0000ff;
   }
 
-  .yl {
+  .yl,
+  .yl1,
+  .yl2 {
     background-color: #ffff00;
   }
 
-  .wh {
+  .wh,
+  .wh1,
+  .wh2 {
     background-color: #ffffff;
   }
 
-  .sl {
+  .sl,
+  .sl1,
+  .sl2 {
     background-color: #808080;
   }
 
-  .br {
+  .br,
+  .br1,
+  .br2 {
     background-color: #996633;
   }
 
-  .vi {
+  .vi,
+  .vi1,
+  .vi2 {
     background-color: #9900cc;
   }
 
-  .tq {
+  .tq,
+  .tq1,
+  .tq2 {
     background-color: #00ffff;
   }
 
-  .bk {
+  .bk,
+  .bk1,
+  .bk2 {
     background-color: #000000;
   }
 
-  .or {
+  .or,
+  .or1,
+  .or2 {
     background-color: #ff9900;
   }
 
-  .pk {
+  .pk,
+  .pk1,
+  .pk2 {
     background-color: #ff99cc;
   }
 
-  .tp {
+  .tp,
+  .tp1,
+  .tp2 {
     background-color: #f9f9f9;
   }
 
