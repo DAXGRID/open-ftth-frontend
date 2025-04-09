@@ -13,11 +13,12 @@ function buildColorCodedItem(
     if (colorMatch !== null) {
       const color = colorMatch[1].toUpperCase();
       return (
-        <span
-          key={i}
-          title={t(color)}
-          className={`box ${color.toLowerCase()}`}
-        ></span>
+        <div className="box-color-container" key={i}>
+          <div title={t(color)} className={`box ${color.toLowerCase()}`}>
+            <div className="box-single-stripe"></div>
+            <div className="box-double-stripe"></div>
+          </div>
+        </div>
       );
     }
 
