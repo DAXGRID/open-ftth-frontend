@@ -20,13 +20,13 @@
     "openmaptiles:version": "3.x",
     "maputnik:renderer": "mbgljs"
   },
-  "center": [11.008051, 57.266949],
-  "zoom": 12,
+  "center": [9.996730316498656, 56.04595255289249],
+  "zoom": 10,
   "sources": {
     "route_network": {
       "type": "vector",
       "tiles": [
-        "http://tiles-routenetwork.openftth.local/services/route_network/tiles/{z}/{x}/{y}.pbf"
+        "https://test-tiles-routenetwork.aura-openftth.dk/services/route_network/tiles/{z}/{x}/{y}.pbf"
       ],
       "minZoom": 0,
       "minzoom": 4,
@@ -35,7 +35,7 @@
     "osm": {
       "type": "vector",
       "tiles": [
-        "http://tiles-basemap.openftth.local/services/osm/tiles/{z}/{x}/{y}.pbf"
+        "https://test-tiles-basemap.aura-openftth.dk/services/osm/tiles/{z}/{x}/{y}.pbf"
       ],
       "minZoom": 0,
       "maxZoom": 14,
@@ -44,7 +44,7 @@
     "basemap-extra": {
       "type": "vector",
       "tiles": [
-        "http://tiles-basemap.openftth.local/services/objects/tiles/{z}/{x}/{y}.pbf"
+        "https://test-tiles-basemap.aura-openftth.dk/services/objects/tiles/{z}/{x}/{y}.pbf"
       ],
       "minZoom": 0,
       "maxZoom": 14,
@@ -58,10 +58,27 @@
       ],
       "tileSize": 256
     },
+    "custom": {
+      "type": "vector",
+      "tiles": [
+        "https://test-tiles-custom.aura-openftth.dk/services/custom/tiles/{z}/{x}/{y}.pbf"
+      ],
+      "minZoom": 0,
+      "maxZoom": 14,
+      "maxzoom": 17,
+      "minzoom": 8
+    },
+    "matrikelkort": {
+      "type": "raster",
+      "tiles": [
+        "https://services.datafordeler.dk/Matrikel/MatrikelGaeldendeOgForeloebigWMS/1.0.0/WMS?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=TRUE&LAYERS=Matrikelskel_Gaeldende%2COptagetVej_Gaeldende%2CCentroide_Gaeldende&password=Jotu*5jellefikadt&username=LCTNUGNNHG&STYLES=Roede_skel%2CRoed_OptagetVej%2CRoede_centroider&SRS=EPSG:3857&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}"
+      ],
+      "tileSize": 256
+    },
     "access_address": {
       "type": "vector",
       "tiles": [
-        "http://tiles-access-address.openftth.local/services/access_address/tiles/{z}/{x}/{y}.pbf"
+        "https://test-tiles-access-address.aura-openftth.dk/services/access_address/tiles/{z}/{x}/{y}.pbf"
       ],
       "minZoom": 0,
       "maxZoom": 14,
@@ -209,11 +226,50 @@
       }
     },
     {
-      "id": "building",
+      "id": "building_planlagt_outline",
+      "type": "line",
+      "source": "basemap-extra",
+      "source-layer": "danishbasemap",
+      "filter": [
+        "all",
+        ["==", "objecttype", "bygning"],
+        ["!=", "status", "Anlagt"]
+      ],
+      "paint": {
+        "line-width": 2,
+        "line-color": "rgba(67, 67, 67, 1)",
+        "line-dasharray": [2, 2]
+      }
+    },
+    {
+      "id": "building_anlagt",
       "type": "fill",
-      "source": "osm",
-      "source-layer": "building",
+      "source": "basemap-extra",
+      "source-layer": "danishbasemap",
       "minzoom": 12,
+      "filter": [
+        "all",
+        ["==", "objecttype", "bygning"],
+        ["==", "status", "Anlagt"]
+      ],
+      "layout": { "visibility": "visible" },
+      "paint": {
+        "fill-antialias": true,
+        "fill-color": "rgba(243, 243, 243, 0.48)",
+        "fill-outline-color": "rgba(203, 203, 203, 1)"
+      }
+    },
+    {
+      "id": "building_planlagt",
+      "type": "fill",
+      "source": "basemap-extra",
+      "source-layer": "danishbasemap",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        ["==", "objecttype", "bygning"],
+        ["!=", "status", "Anlagt"]
+      ],
       "layout": { "visibility": "visible" },
       "paint": {
         "fill-antialias": true,
@@ -842,24 +898,22 @@
       "id": "highway_name_other",
       "type": "symbol",
       "metadata": { "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5" },
-      "source": "osm",
-      "source-layer": "transportation_name",
-      "filter": [
-        "all",
-        ["!=", "class", "motorway"],
-        ["==", "$type", "LineString"]
-      ],
+      "source": "basemap-extra",
+      "source-layer": "danishbasemap",
+      "filter": ["all", ["==", "objecttype", "vejmidte"]],
       "layout": {
         "symbol-placement": "line",
         "symbol-spacing": 350,
-        "text-field": "{name:latin} {name:nonlatin}",
+        "text-field": "{vejnavn}",
         "text-font": ["Open Sans Regular"],
         "text-max-angle": 30,
         "text-pitch-alignment": "viewport",
         "text-rotation-alignment": "map",
         "text-size": 14,
         "text-transform": "none",
-        "visibility": "visible"
+        "visibility": "visible",
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true
       },
       "paint": {
         "text-color": "rgba(0, 0, 0, 1)",
@@ -867,35 +921,6 @@
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 2,
         "text-translate": [0, 0]
-      }
-    },
-    {
-      "id": "highway_name_motorway",
-      "type": "symbol",
-      "metadata": { "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5" },
-      "source": "osm",
-      "source-layer": "transportation_name",
-      "filter": [
-        "all",
-        ["==", "$type", "LineString"],
-        ["==", "class", "motorway"]
-      ],
-      "layout": {
-        "symbol-placement": "line",
-        "symbol-spacing": 350,
-        "text-field": "{ref}",
-        "text-font": ["Open Sans Regular"],
-        "text-pitch-alignment": "viewport",
-        "text-rotation-alignment": "viewport",
-        "text-size": 10,
-        "visibility": "visible"
-      },
-      "paint": {
-        "text-color": "rgb(117, 129, 145)",
-        "text-halo-blur": 1,
-        "text-halo-color": "hsl(0, 0%, 100%)",
-        "text-halo-width": 1,
-        "text-translate": [0, 2]
       }
     },
     {
@@ -997,6 +1022,14 @@
       "paint": { "line-color": "rgba(183, 180, 180, 1)" }
     },
     {
+      "id": "hegn",
+      "type": "line",
+      "source": "basemap-extra",
+      "source-layer": "danishbasemap",
+      "filter": ["all", ["==", "objecttype", "hegn"]],
+      "paint": { "line-color": "rgba(191, 209, 195, 1)", "line-width": 4 }
+    },
+    {
       "id": "skel",
       "type": "line",
       "source": "basemap-extra",
@@ -1009,7 +1042,7 @@
       "type": "symbol",
       "source": "basemap-extra",
       "source-layer": "danishbasemap",
-      "minzoom": 18,
+      "minzoom": 19,
       "filter": ["all", ["==", "objecttype", "nedloebsrist"]],
       "layout": { "icon-image": "drain-1", "icon-size": 0.4 },
       "paint": {
@@ -1025,11 +1058,21 @@
       "type": "symbol",
       "source": "basemap-extra",
       "source-layer": "danishbasemap",
-      "minzoom": 18,
+      "minzoom": 19,
       "maxzoom": 24,
       "filter": ["all", ["==", "objecttype", "broenddaeksel"]],
       "layout": { "icon-image": "circle-3", "icon-size": 0.5 },
       "paint": { "icon-opacity": 0.5 }
+    },
+    {
+      "id": "mast",
+      "type": "symbol",
+      "source": "basemap-extra",
+      "source-layer": "danishbasemap",
+      "minzoom": 19,
+      "filter": ["all", ["==", "objecttype", "mast"]],
+      "layout": { "icon-image": "circle-bolt", "icon-size": 0.7 },
+      "paint": { "text-opacity": 0.5, "icon-opacity": 0.5 }
     },
     {
       "id": "place_other",
@@ -1437,35 +1480,268 @@
       }
     },
     {
-      "id": "route_segment_schematic",
-      "type": "line",
+      "id": "route_network_info_selection",
+      "type": "circle",
       "source": "route_network",
       "source-layer": "route_network",
-      "filter": ["all", ["==", "method", "Schematic"]],
+      "filter": [
+        "any",
+        ["==", "kind", "BuildingAccessPoint"],
+        ["==", "kind", "CabinetBig"],
+        ["==", "kind", "CabinetBig"],
+        ["==", "kind", "CabinetSmall"],
+        ["==", "kind", "CentralOfficeBig"],
+        ["==", "kind", "CentralOfficeMedium"],
+        ["==", "kind", "CentralOfficeSmall"],
+        ["==", "kind", "ConduitClosure"],
+        ["==", "kind", "ConduitClosureBranchOff"],
+        ["==", "kind", "ConduitClosureFork"],
+        ["==", "kind", "ConduitClosureStraight"],
+        ["==", "kind", "ConduitConnector"],
+        ["==", "kind", "ConduitConnectorBranchOff"],
+        ["==", "kind", "ConduitConnectorStraight"],
+        ["==", "kind", "ConduitEnd"],
+        ["==", "kind", "HandHole"],
+        ["==", "kind", "ManHole"],
+        ["==", "kind", "MultiDwellingUnit"],
+        ["==", "kind", "SingleDwellingUnit"],
+        ["==", "kind", "SpliceClosure"],
+        ["==", "kind", "SDU"],
+        ["==", "kind", "ConduitSlack"]
+      ],
       "paint": {
-        "line-color": [
+        "circle-color": "#01dcff",
+        "circle-radius": 20,
+        "circle-opacity": [
           "case",
-          ["boolean", ["feature-state", "selected"], false],
-          "#00FF00",
-          "black"
-        ],
-        "line-width": [
-          "case",
-          ["boolean", ["feature-state", "selected"], false],
-          4,
-          2
-        ],
-        "line-opacity": 1,
-        "line-dasharray": [1]
+          ["boolean", ["feature-state", "info_selection"], false],
+          0.4,
+          0
+        ]
       }
     },
     {
-      "id": "route_segment_surveyd",
+      "id": "digikort_polygon",
+      "type": "line",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 16,
+      "filter": ["all", ["==", "objecttype", "custom_basemap_polygon"]],
+      "layout": { "visibility": "visible", "line-cap": "butt" },
+      "paint": {
+        "line-color": "rgba(109, 45, 176, 0.21)",
+        "line-gap-width": 0,
+        "line-dasharray": [0.8],
+        "line-width": 2
+      }
+    },
+    {
+      "id": "digikort_line",
+      "type": "line",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 16,
+      "filter": ["all", ["==", "objecttype", "custom_basemap_line"]],
+      "paint": { "line-color": "rgba(109, 45, 176, 0.21)", "line-width": 2 }
+    },
+    {
+      "id": "area_network_outline",
+      "type": "line",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 0,
+      "filter": ["all", ["==", "objecttype", "network_area"]],
+      "layout": { "visibility": "visible", "line-cap": "butt" },
+      "paint": {
+        "line-color": "rgba(30, 96, 61, 1)",
+        "line-gap-width": 0,
+        "line-dasharray": [0.8],
+        "line-width": 2
+      }
+    },
+    {
+      "id": "area_central_office_label",
+      "type": "symbol",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 0,
+      "filter": ["all", ["==", "objecttype", "central_office_area_label"]],
+      "layout": {
+        "text-field": "{name}",
+        "text-size": 18,
+        "text-font": ["Open Sans Bold"],
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "icon-offset": [0, 0],
+        "text-offset": [0, 0.8],
+        "visibility": "none"
+      },
+      "paint": {
+        "text-color": "rgba(255, 0, 0, 1)",
+        "text-halo-width": 2,
+        "text-halo-blur": 2,
+        "text-halo-color": "rgba(242, 237, 237, 1)"
+      }
+    },
+    {
+      "id": "area_central_office",
+      "type": "fill",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 0,
+      "filter": ["all", ["==", "objecttype", "central_office_area"]],
+      "layout": { "visibility": "none" },
+      "paint": {
+        "fill-opacity": 0.2,
+        "fill-color": "rgba(224, 41, 41, 1)",
+        "fill-outline-color": "rgba(224, 41, 41, 1)"
+      }
+    },
+    {
+      "id": "area_central_office_outline",
+      "type": "line",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 0,
+      "filter": ["all", ["==", "objecttype", "central_office_area"]],
+      "layout": { "visibility": "none", "line-cap": "butt" },
+      "paint": {
+        "line-color": "rgba(243, 5, 5, 1)",
+        "line-width": 2,
+        "line-gap-width": 0
+      }
+    },
+    {
+      "id": "area_flex",
+      "type": "fill",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 10,
+      "filter": ["all", ["==", "objecttype", "flex_area"]],
+      "layout": { "visibility": "none" },
+      "paint": {
+        "fill-opacity": 0.2,
+        "fill-color": "rgba(41, 224, 64, 1)",
+        "fill-outline-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
+      "id": "area_flex_outline",
+      "type": "line",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 0,
+      "filter": ["all", ["==", "objecttype", "flex_area"]],
+      "layout": { "visibility": "none", "line-cap": "butt" },
+      "paint": {
+        "line-color": "rgba(11, 247, 0, 1)",
+        "line-width": 3,
+        "line-gap-width": 0
+      }
+    },
+    {
+      "id": "area_flex_label",
+      "type": "symbol",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 10,
+      "filter": ["all", ["==", "objecttype", "flex_area_label"]],
+      "layout": {
+        "text-field": "{name}",
+        "text-size": 18,
+        "text-font": ["Open Sans Bold"],
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "icon-offset": [0, 0],
+        "text-offset": [0, 0.8],
+        "visibility": "none"
+      },
+      "paint": {
+        "text-color": "rgba(76, 133, 99, 1)",
+        "text-halo-width": 2,
+        "text-halo-blur": 2,
+        "text-halo-color": "rgba(242, 237, 237, 1)"
+      }
+    },
+    {
+      "id": "area_customer",
+      "type": "fill",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 12,
+      "filter": ["all", ["==", "objecttype", "customer_area"]],
+      "layout": { "visibility": "none" },
+      "paint": {
+        "fill-opacity": 0.2,
+        "fill-color": "rgba(224, 41, 41, 1)",
+        "fill-outline-color": "rgba(224, 41, 41, 1)"
+      }
+    },
+    {
+      "id": "area_customer_outline",
+      "type": "line",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 0,
+      "filter": ["all", ["==", "objecttype", "customer_area"]],
+      "layout": { "visibility": "none", "line-cap": "butt" },
+      "paint": {
+        "line-color": "rgba(243, 5, 5, 1)",
+        "line-width": 2,
+        "line-gap-width": 0
+      }
+    },
+    {
+      "id": "area_customer_label",
+      "type": "symbol",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 12,
+      "filter": ["all", ["==", "objecttype", "customer_area_label"]],
+      "layout": {
+        "text-field": "{name}",
+        "text-size": 18,
+        "text-font": ["Open Sans Bold"],
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "icon-offset": [0, 0],
+        "text-offset": [0, 0.8],
+        "visibility": "none"
+      },
+      "paint": {
+        "text-color": "rgba(255, 0, 0, 1)",
+        "text-halo-width": 2,
+        "text-halo-blur": 2,
+        "text-halo-color": "rgba(242, 237, 237, 1)"
+      }
+    },
+    {
+      "id": "route_segment_label",
+      "type": "symbol",
+      "source": "route_network",
+      "source-layer": "route_network",
+      "minzoom": 17,
+      "filter": ["all", ["==", "objecttype", "route_segment"]],
+      "layout": {
+        "text-field": "{name}",
+        "text-font": ["Open Sans Regular"],
+        "symbol-placement": "line",
+        "text-offset": [0, -0.7],
+        "text-size": 14,
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "route_segment_in_service",
       "type": "line",
       "source": "route_network",
       "source-layer": "route_network",
-      "filter": ["all", ["==", "method", "LandSurveying"]],
-      "layout": { "visibility": "visible" },
+      "minzoom": 13,
+      "filter": [
+        "all",
+        ["==", "state", "InService"],
+        ["==", "objecttype", "route_segment"]
+      ],
       "paint": {
         "line-color": [
           "case",
@@ -1480,6 +1756,35 @@
           2
         ],
         "line-opacity": 1
+      }
+    },
+    {
+      "id": "route_segment_planned",
+      "type": "line",
+      "source": "route_network",
+      "source-layer": "route_network",
+      "minzoom": 13,
+      "filter": [
+        "all",
+        ["==", "state", "Planned"],
+        ["==", "objecttype", "route_segment"]
+      ],
+      "layout": { "visibility": "visible" },
+      "paint": {
+        "line-color": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false],
+          "#00FF00",
+          "black"
+        ],
+        "line-width": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false],
+          4,
+          2
+        ],
+        "line-opacity": 1,
+        "line-dasharray": [1, 1]
       }
     },
     {
@@ -1509,54 +1814,6 @@
       }
     },
     {
-      "id": "route_cabinet_big",
-      "type": "symbol",
-      "source": "route_network",
-      "source-layer": "route_network",
-      "minzoom": 14,
-      "filter": ["all", ["==", "kind", "CabinetBig"]],
-      "layout": {
-        "icon-size": 1,
-        "icon-image": "cabinet-big",
-        "text-field": "{name}",
-        "text-anchor": "bottom-left",
-        "text-offset": [1, -0.55],
-        "text-font": ["Open Sans Bold"],
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": true,
-        "text-allow-overlap": true,
-        "text-ignore-placement": true
-      },
-      "paint": {
-        "text-halo-width": 2,
-        "text-halo-color": "rgba(255, 255, 255, 1)"
-      }
-    },
-    {
-      "id": "route_cabinet_small",
-      "type": "symbol",
-      "source": "route_network",
-      "source-layer": "route_network",
-      "minzoom": 15,
-      "filter": ["all", ["==", "kind", "CabinetSmall"]],
-      "layout": {
-        "icon-size": 1,
-        "icon-image": "cabinet-small",
-        "text-field": "{name}",
-        "text-anchor": "bottom-left",
-        "text-offset": [0.7, -0.3],
-        "text-font": ["Open Sans Regular"],
-        "icon-allow-overlap": true,
-        "icon-ignore-placement": true,
-        "text-allow-overlap": true,
-        "text-ignore-placement": true
-      },
-      "paint": {
-        "text-halo-width": 2,
-        "text-halo-color": "rgba(255, 255, 255, 1)"
-      }
-    },
-    {
       "id": "route_hand_hole",
       "type": "symbol",
       "source": "route_network",
@@ -1581,6 +1838,55 @@
       }
     },
     {
+      "id": "route_splice_closure_label",
+      "type": "symbol",
+      "source": "route_network",
+      "source-layer": "route_network",
+      "minzoom": 18,
+      "filter": ["any", ["==", "kind", "SpliceClosure"]],
+      "layout": {
+        "icon-size": 1,
+        "text-field": "{name}",
+        "text-anchor": "bottom-left",
+        "text-offset": [0.7, -0.3],
+        "text-font": ["Open Sans Regular"],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-size": 13
+      },
+      "paint": {
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
+      "id": "route_splice_closure",
+      "type": "symbol",
+      "source": "route_network",
+      "source-layer": "route_network",
+      "minzoom": 17,
+      "filter": ["any", ["==", "kind", "SpliceClosure"]],
+      "layout": {
+        "icon-size": 1,
+        "text-field": "",
+        "text-anchor": "bottom-left",
+        "text-offset": [0.7, -0.3],
+        "text-font": ["Open Sans Regular"],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "icon-image": "splice-closure",
+        "text-size": 13
+      },
+      "paint": {
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
       "id": "route_conduit_closure",
       "type": "symbol",
       "source": "route_network",
@@ -1588,10 +1894,30 @@
       "minzoom": 17,
       "filter": [
         "any",
-        ["==", "kind", "ConduitClosure"],
-        ["==", "kind", "ConduitClosureStraight"],
-        ["==", "kind", "ConduitClosureFork"],
-        ["==", "kind", "ConduitClosureBranchOff"]
+        [
+          "case",
+          ["==", ["typeof", ["get", "kind"]], "string"],
+          ["==", ["get", "kind"], "ConduitClosure"],
+          false
+        ],
+        [
+          "case",
+          ["==", ["typeof", ["get", "kind"]], "string"],
+          ["==", ["get", "kind"], "ConduitClosureStraight"],
+          false
+        ],
+        [
+          "case",
+          ["==", ["typeof", ["get", "kind"]], "string"],
+          ["==", ["get", "kind"], "ConduitClosureFork"],
+          false
+        ],
+        [
+          "case",
+          ["==", ["typeof", ["get", "kind"]], "string"],
+          ["==", ["get", "kind"], "ConduitClosureBranchOff"],
+          false
+        ]
       ],
       "layout": {
         "icon-size": 1,
@@ -1628,6 +1954,190 @@
         "text-offset": [0.6, -0.2],
         "text-allow-overlap": true,
         "text-ignore-placement": true
+      },
+      "paint": { "text-halo-width": 2 }
+    },
+    {
+      "id": "route_slack",
+      "type": "symbol",
+      "source": "route_network",
+      "source-layer": "route_network",
+      "minzoom": 17,
+      "maxzoom": 24,
+      "filter": ["all", ["==", "kind", "ConduitSlack"]],
+      "layout": {
+        "icon-image": "spiral-1",
+        "visibility": "visible",
+        "text-field": "{name}",
+        "text-font": ["Open Sans Regular"],
+        "text-justify": "right",
+        "text-anchor": "bottom-left",
+        "text-offset": [0.6, -0.2],
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "icon-offset": [-4, -10],
+        "icon-ignore-placement": true,
+        "icon-allow-overlap": true
+      },
+      "paint": { "text-halo-width": 2 }
+    },
+    {
+      "id": "route_node_planned_17",
+      "type": "symbol",
+      "source": "route_network",
+      "source-layer": "route_network",
+      "minzoom": 17,
+      "filter": [
+        "all",
+        ["==", ["get", "state"], "Planned"],
+        [
+          "match",
+          ["get", "kind"],
+          ["SDU"],
+          true,
+          ["HandHole"],
+          true,
+          ["SpliceClosure"],
+          true,
+          ["ConduitClosureFork"],
+          true,
+          ["ConduitClosure"],
+          true,
+          ["ConduitClosureStraight"],
+          true,
+          ["ConduitClosureBranchOff"],
+          true,
+          false
+        ]
+      ],
+      "layout": {
+        "icon-image": "planned-dashed-circle",
+        "text-field": "",
+        "text-anchor": "bottom-left",
+        "text-offset": [0.7, -0.3],
+        "text-font": [],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-size": 16,
+        "icon-size": 1.2,
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
+      "id": "route_node_planned_15",
+      "type": "symbol",
+      "source": "route_network",
+      "source-layer": "route_network",
+      "minzoom": 15,
+      "filter": [
+        "all",
+        ["==", ["get", "state"], "Planned"],
+        [
+          "match",
+          ["get", "kind"],
+          ["CabinetBig"],
+          true,
+          ["CabinetSmall"],
+          true,
+          false
+        ]
+      ],
+      "layout": {
+        "icon-image": "planned-dashed-circle",
+        "text-field": "",
+        "text-anchor": "bottom-left",
+        "text-offset": [0.7, -0.3],
+        "text-font": [],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-size": 16,
+        "icon-size": 1.2,
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
+      "id": "route_cabinet_small",
+      "type": "symbol",
+      "source": "route_network",
+      "source-layer": "route_network",
+      "minzoom": 15,
+      "filter": ["all", ["==", "kind", "CabinetSmall"]],
+      "layout": {
+        "icon-size": 1,
+        "icon-image": "cabinet-small",
+        "text-field": "{name}",
+        "text-anchor": "bottom-left",
+        "text-offset": [0.7, -0.3],
+        "text-font": ["Open Sans Regular"],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "text-allow-overlap": true,
+        "text-ignore-placement": true
+      },
+      "paint": {
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
+      "id": "route_cabinet_big",
+      "type": "symbol",
+      "source": "route_network",
+      "source-layer": "route_network",
+      "minzoom": 14,
+      "filter": ["all", ["==", "kind", "CabinetBig"]],
+      "layout": {
+        "icon-size": 1,
+        "icon-image": "cabinet-big",
+        "text-field": "{name}",
+        "text-anchor": "bottom-left",
+        "text-offset": [1, -0.55],
+        "text-font": ["Open Sans Bold"],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "text-allow-overlap": true,
+        "text-ignore-placement": true
+      },
+      "paint": {
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
+      "id": "matrikelkort",
+      "type": "raster",
+      "source": "matrikelkort",
+      "source-layer": "matrikelkort",
+      "layout": { "visibility": "none" }
+    },
+    {
+      "id": "housenumber_info_selection",
+      "type": "circle",
+      "source": "access_address",
+      "source-layer": "access_address",
+      "minzoom": 16,
+      "paint": {
+        "circle-color": "#01dcff",
+        "circle-radius": 20,
+        "circle-translate": [0, 10],
+        "circle-opacity": [
+          "case",
+          ["boolean", ["feature-state", "info_selection"], false],
+          0.4,
+          0
+        ]
       }
     },
     {
@@ -1643,7 +2153,8 @@
         "text-allow-overlap": true,
         "text-ignore-placement": true,
         "icon-offset": [0, 0],
-        "text-offset": [0, 0.8]
+        "text-offset": [0, 0.8],
+        "visibility": "visible"
       },
       "paint": {
         "text-halo-width": 1,
@@ -1652,14 +2163,42 @@
       }
     },
     {
-      "id": "mast",
-      "type": "symbol",
-      "source": "basemap-extra",
-      "source-layer": "danishbasemap",
-      "minzoom": 18,
-      "filter": ["all", ["==", "objecttype", "mast"]],
-      "layout": { "icon-image": "circle-with-m-1", "icon-size": 0.7 },
-      "paint": { "text-opacity": 0.5, "icon-opacity": 0.5 }
+      "id": "survey_roer",
+      "type": "line",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 13,
+      "filter": ["all", ["==", "objecttype", "survey_roer"]],
+      "layout": { "visibility": "none" },
+      "paint": { "line-color": "rgba(203, 3, 10, 1)", "line-width": 2 }
+    },
+    {
+      "id": "survey_foeringsroer",
+      "type": "line",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 12,
+      "filter": ["all", ["==", "objecttype", "survey_foeringsroer"]],
+      "layout": { "visibility": "none" },
+      "paint": {
+        "line-color": "rgba(133, 67, 67, 1)",
+        "line-width": 7,
+        "line-opacity": 0.4
+      }
+    },
+    {
+      "id": "survey_komponent",
+      "type": "circle",
+      "source": "custom",
+      "source-layer": "custom",
+      "minzoom": 15,
+      "filter": ["all", ["==", "objecttype", "survey_komponent"]],
+      "layout": { "visibility": "none" },
+      "paint": {
+        "circle-stroke-color": "rgba(255, 0, 0, 1)",
+        "circle-color": "rgba(255, 0, 0, 1)",
+        "circle-radius": 5
+      }
     }
   ],
   "id": "positron"
