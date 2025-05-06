@@ -117,9 +117,7 @@ function canAffixSpanEquipment(selected: MapGeoJSONFeature[]): boolean {
   return spanSegmentIds.length > 0 && !!nodeContainer;
 }
 
-function canAffixSpanEquipmentToParent(
-  selected: MapGeoJSONFeature[],
-): boolean {
+function canAffixSpanEquipmentToParent(selected: MapGeoJSONFeature[]): boolean {
   const invalidSelections = selected.filter(
     (x) =>
       x.layer.source !== "FiberCable" &&
@@ -272,9 +270,9 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const { enabledTracePan, setEnabledTracePan } = useContext(DiagramContext);
   const [editMode, setEditMode] = useState(false);
   // Do not use this for getting the current selected features, instead use `currentlySelectedFeatures`.
-  const [selectedFeatures, setSelectedFeatures] = useState<
-    MapGeoJSONFeature[]
-  >([]);
+  const [selectedFeatures, setSelectedFeatures] = useState<MapGeoJSONFeature[]>(
+    [],
+  );
   const [singleSelectedFeature, setSingleSelectedFeature] =
     useState<MapGeoJSONFeature | null>();
   const [spanEquipmentTabViewSelectedId, setSpanEquipmentTabViewSelectedId] =
