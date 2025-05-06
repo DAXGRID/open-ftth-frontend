@@ -352,8 +352,10 @@ function RouteNetworkMap({
       container: mapContainer.current,
       // We want to ous eour own glyphs in production.
       style: { ...mapLibreStyle, glyphs: "/fonts/{fontstack}/{range}.pbf" },
-      preserveDrawingBuffer: true,
       doubleClickZoom: false,
+      canvasContextAttributes: {
+        preserveDrawingBuffer: true,
+      },
       dragRotate: false,
       maxZoom: 24,
     });
