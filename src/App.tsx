@@ -1,5 +1,4 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import "react-toastify/dist/ReactToastify.css";
 import { useState, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter as Router } from "react-router-dom";
