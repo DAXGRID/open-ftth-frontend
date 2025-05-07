@@ -67,7 +67,7 @@ function hoverPointer(featureNames: string[], bboxSize: number, map: Map) {
 
 function highlightFeature(
   map: Map,
-  lastHighlightedFeature: React.RefObject<MapGeoJSONFeature>,
+  lastHighlightedFeature: React.RefObject<MapGeoJSONFeature | null>,
   feature: MapGeoJSONFeature,
 ) {
   const changeSymbolIconImageHighlight = (
@@ -97,8 +97,9 @@ function highlightFeature(
   // reset last state to avoid multiple selected at the same time
   if (lastHighlightedFeature.current) {
     // We have to change it to any because mapbox changes the type randomly
-    const iconImage = (lastHighlightedFeature.current?.layer as SymbolLayerSpecification)
-      .layout?.["icon-image"] as any;
+    const iconImage = (
+      lastHighlightedFeature.current?.layer as SymbolLayerSpecification
+    ).layout?.["icon-image"] as any;
 
     // If it has iconImage change highlight
     if (iconImage) {
@@ -135,7 +136,7 @@ function clickHighlight(
   featureNames: string[],
   bboxSize: number,
   map: Map,
-  lastHighlightedFeature: React.RefObject<MapGeoJSONFeature>,
+  lastHighlightedFeature: React.RefObject<MapGeoJSONFeature | null>,
   measureDistanceControl: MeasureDistanceControl,
   informationControl: InformationControl | null,
   callback: (feature: MapGeoJSONFeature) => void,
@@ -181,8 +182,9 @@ function clickHighlight(
     // reset last state to avoid multiple selected at the same time
     if (lastHighlightedFeature.current) {
       // We have to change it to any because mapbox changes the type randomly
-      const iconImage = (lastHighlightedFeature.current?.layer as SymbolLayerSpecification)
-        .layout?.["icon-image"] as any;
+      const iconImage = (
+        lastHighlightedFeature.current?.layer as SymbolLayerSpecification
+      ).layout?.["icon-image"] as any;
 
       // If it has iconImage change highlight
       if (iconImage) {
@@ -292,7 +294,9 @@ function RouteNetworkMap({
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const { setIdentifiedFeature, trace, searchResult, identifiedFeature } =
     useContext(MapContext);
-  const [mapLibreStyle, setMaplibreStyle] = useState<StyleSpecification | null>(null);
+  const [mapLibreStyle, setMaplibreStyle] = useState<StyleSpecification | null>(
+    null,
+  );
 
   useEffect(() => {
     GetMaplibreStyle().then((r) => {
