@@ -9,7 +9,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@turf/turf": "^6.4.0",
+    "@turf/turf": "^7.2.0",
     "@urql/exchange-auth": "^1.0.0",
     "graphql": "^15.9.0",
     "maplibre-gl": "5.5.0",
