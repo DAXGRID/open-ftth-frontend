@@ -14,6 +14,7 @@ type SelectMenuProps = {
   removePlaceHolderOnSelect?: boolean;
   onSelected: (selected: number | string | undefined) => void;
   maxWidth?: string;
+  maxHeight?: string;
   selected: string | number | undefined;
   enableSearch?: boolean;
   autoSelectFirst?: boolean;
@@ -24,6 +25,7 @@ function SelectMenu({
   options,
   onSelected,
   maxWidth,
+  maxHeight,
   selected,
   enableSearch,
   removePlaceHolderOnSelect,
@@ -44,7 +46,7 @@ function SelectMenu({
     <div
       tabIndex={0}
       role="button"
-      style={{ maxWidth }}
+      style={{ maxWidth, maxHeight }}
       className="select-menu-wrapper"
       onClick={() => setToggled(!toggled)}
       onKeyPress={(e) => (e.key === "Enter" ? setToggled(!toggled) : () => {})}
@@ -71,7 +73,7 @@ function SelectMenu({
             ? options
                 .filter((x) => x.value && x.value !== -1)
                 .filter((x) =>
-                  x.text.toLowerCase().includes(search.toLowerCase())
+                  x.text.toLowerCase().includes(search.toLowerCase()),
                 )
                 ?.map((option) => (
                   <CustomOption
@@ -85,7 +87,7 @@ function SelectMenu({
                 ))
             : options
                 .filter((x) =>
-                  x.text.toLowerCase().includes(search.toLowerCase())
+                  x.text.toLowerCase().includes(search.toLowerCase()),
                 )
                 ?.map((option) => (
                   <CustomOption

@@ -540,6 +540,7 @@ function AddTerminalEquipment({
                     id: x?.toString() ?? "",
                   })
                 }
+                maxHeight={"112px"}
                 selected={state.unitAddressId}
                 enableSearch={true}
               />
