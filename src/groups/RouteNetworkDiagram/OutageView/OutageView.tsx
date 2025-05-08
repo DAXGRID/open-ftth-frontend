@@ -26,8 +26,8 @@ function translateNames(text: string, t: TFunction): string {
   return text.replace(/{([A-Za-z]+)}/g, (match) => {
     return t(
       pascalCaseToSnakeCase(
-        match.replace("}", "").replace("{", "")
-      ).toUpperCase()
+        match.replace("}", "").replace("{", ""),
+      ).toUpperCase(),
     );
   });
 }
@@ -45,14 +45,15 @@ function convertToTreeNodes(node: Node, t: TFunction): TreeNode {
     nodes: children,
     selected: false,
     label: translateNames(node.label, t),
-    description: node.description === null ? null : translateNames(node.description, t)
-   };
+    description:
+      node.description === null ? null : translateNames(node.description, t),
+  };
 }
 
 function toggleSelectedTreeNodes(
   selected: TreeNode,
   current: TreeNode,
-  toggle?: boolean
+  toggle?: boolean,
 ): TreeNode {
   const newToggle =
     toggle === undefined && selected.id === current.id
@@ -61,7 +62,7 @@ function toggleSelectedTreeNodes(
 
   const children =
     current.nodes?.map((x) =>
-      toggleSelectedTreeNodes(selected, x, newToggle)
+      toggleSelectedTreeNodes(selected, x, newToggle),
     ) ?? [];
 
   return {
@@ -71,20 +72,14 @@ function toggleSelectedTreeNodes(
   };
 }
 
-function setExpandedForNode(
-  selected: TreeNode,
-  current: TreeNode,
-): TreeNode {
-
+function setExpandedForNode(selected: TreeNode, current: TreeNode): TreeNode {
   const children =
-    current.nodes?.map((x) =>
-      setExpandedForNode(selected, x)
-    ) ?? [];
+    current.nodes?.map((x) => setExpandedForNode(selected, x)) ?? [];
 
   return {
     ...current,
     nodes: children,
-    expanded: selected.id === current.id ? !current.expanded : current.expanded
+    expanded: selected.id === current.id ? !current.expanded : current.expanded,
   };
 }
 
@@ -119,9 +114,14 @@ function formatNodesClipboard(nodes: TreeNode[]): string {
 interface OutageViewProps {
   routeElementId: string;
   equipmentId: string | null;
+  showSendButton: boolean;
 }
 
-function OutageView({ routeElementId, equipmentId }: OutageViewProps) {
+function OutageView({
+  routeElementId,
+  equipmentId,
+  showSendButton,
+}: OutageViewProps) {
   const client = useClient();
   const { t } = useTranslation();
   const [node, setNode] = useState<TreeNode | null>(null);
@@ -196,7 +196,7 @@ function OutageView({ routeElementId, equipmentId }: OutageViewProps) {
     if (node) {
       sendTroubleTicket(client, {
         installationsIds: selectedNodesWithUniqueValues.map(
-          (x) => x.value
+          (x) => x.value,
         ) as string[],
         workTaskId: selectedWorkTask,
       })
@@ -227,7 +227,7 @@ function OutageView({ routeElementId, equipmentId }: OutageViewProps) {
         (err) => {
           toast.error(t("COULD_NOT_COPY_TO_CLIPBOARD"));
           console.error(err);
-        }
+        },
       );
     } else {
       throw Error("Something is wrong, no node is found.");
@@ -248,7 +248,7 @@ function OutageView({ routeElementId, equipmentId }: OutageViewProps) {
           onExpandClick={onToggleClick}
         />
       </div>
-      {hasWorkTasks && (
+      {showSendButton && hasWorkTasks && (
         <div className="full-row">
           <SelectMenu
             onSelected={(x) => setSelectedWorkTask(x as string)}
@@ -259,7 +259,7 @@ function OutageView({ routeElementId, equipmentId }: OutageViewProps) {
         </div>
       )}
       <div className="full-row gap-default">
-        {hasWorkTasks && (
+        {showSendButton && hasWorkTasks && (
           <DefaultButton
             disabled={
               selectedWorkTask === "" ||

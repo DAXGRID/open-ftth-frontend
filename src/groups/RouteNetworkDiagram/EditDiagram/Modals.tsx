@@ -108,7 +108,11 @@ export function outageViewModal(
 ) {
   return (
     <ModalContainer title={title} closeCallback={cb}>
-      <OutageView routeElementId={routeElementId} equipmentId={null} />
+      <OutageView
+        routeElementId={routeElementId}
+        equipmentId={null}
+        showSendButton={true}
+      />
     </ModalContainer>
   );
 }

@@ -50,24 +50,22 @@ function RackContainer({ children, parentNodeStructure }: RackContainerProps) {
         )}
         {parentNodeStructure?.info && <p>{parentNodeStructure?.info ?? ""}</p>}
         <div className="header-icons">
-          {state.editable && (
-            <span
-              role="button"
-              className="header-icons__icon"
-              onClick={() =>
-                dispatch({
-                  type: "setShowOutageView",
-                  show: {
-                    routeNodeId: state.routeNodeId,
-                    equipmentId: parentNodeStructure.id,
-                    show: true,
-                  },
-                })
-              }
-            >
-              <FontAwesomeIcon icon={faTriangleExclamation} />
-            </span>
-          )}
+          <span
+            role="button"
+            className="header-icons__icon"
+            onClick={() =>
+              dispatch({
+                type: "setShowOutageView",
+                show: {
+                  routeNodeId: state.routeNodeId,
+                  equipmentId: parentNodeStructure.id,
+                  show: true,
+                },
+              })
+            }
+          >
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </span>
           {state.editable && (
             <span
               role="button"
@@ -160,24 +158,24 @@ function TerminalEquipmentTableContainer({
               >
                 <FontAwesomeIcon icon={faPlus} />
               </span>
-              <span
-                role="button"
-                className="header-icons__icon"
-                onClick={() =>
-                  dispatch({
-                    show: {
-                      routeNodeId: state.routeNodeId,
-                      show: true,
-                      equipmentId: terminalEquipment.id,
-                    },
-                    type: "setShowOutageView",
-                  })
-                }
-              >
-                <FontAwesomeIcon icon={faTriangleExclamation} />
-              </span>
             </>
           )}
+          <span
+            role="button"
+            className="header-icons__icon"
+            onClick={() =>
+              dispatch({
+                show: {
+                  routeNodeId: state.routeNodeId,
+                  show: true,
+                  equipmentId: terminalEquipment.id,
+                },
+                type: "setShowOutageView",
+              })
+            }
+          >
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </span>
         </div>
       </div>
       <div className="terminal-equipment-table-container-body">{children}</div>
@@ -491,6 +489,7 @@ function TerminalEquipment() {
           <OutageView
             routeElementId={state.showOutageView.routeNodeId}
             equipmentId={state.showOutageView.equipmentId}
+            showSendButton={state.editable}
           />
         </ModalContainer>,
       );
@@ -540,6 +539,7 @@ function TerminalEquipment() {
     state.showOutageView,
     state.showEditInterfaceView,
     state.showEditTags,
+    state.editable,
     showElement,
     dispatch,
     t,

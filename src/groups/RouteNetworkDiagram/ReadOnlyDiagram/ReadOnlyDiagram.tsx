@@ -7,7 +7,7 @@ import DiagramMenu from "../../../components/DiagramMenu";
 import ActionButton from "../../../components/ActionButton";
 import ToggleButton from "../../../components/ToggleButton";
 import { MapContext } from "../../../contexts/MapContext";
-import { EraserSvg, ZoomMapSvg } from "../../../assets";
+import { EraserSvg, ZoomMapSvg, OutageSvg } from "../../../assets";
 import { useTranslation } from "react-i18next";
 import FeatureInformation from "../FeatureInformation";
 import TerminalEquipment from "../../TerminalEquipment";
@@ -16,10 +16,12 @@ import PassageView from "../PassageView";
 import TabView from "../../../components/TabView";
 import GeneralTerminalEquipmentView from "../GeneralTerminalEquipmentView";
 import GeneralSpanEquipmentView from "../GeneralSpanEquipmentView";
+import { OverlayContext } from "../../../contexts/OverlayContext";
 import {
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
 } from "./ReadOnlyDiagramGql";
+import { outageViewModal } from "./Modals";
 
 interface Envelope {
   minX: number;
@@ -60,8 +62,10 @@ function ReadOnlyDiagram({
     spanEquipmentTabViewSelectedId,
     setSpanEquipmentCableTabViewSelectedId,
   ] = useState("0");
+  const { showElement } = useContext(OverlayContext);
   const [rackTabViewSelectedId, setRackTabViewSelectedId] = useState("0");
   const [enabledTracePan, setEnabledTracePan] = useState<boolean>(true);
+  const [showOutageView, setShowOutageView] = useState(false);
 
   const clearHighlights = useCallback(() => {
     setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
@@ -118,6 +122,26 @@ function ReadOnlyDiagram({
     }
   }, [selectedFeature, setTrace, enabledTracePan, client, clearHighlights]);
 
+  useEffect(() => {
+    if (showOutageView && identifiedFeature?.id) {
+      showElement(
+        outageViewModal(
+          () => setShowOutageView(false),
+          t("OUTAGE_VIEW"),
+          identifiedFeature.id,
+        ),
+      );
+    } else {
+      showElement(null);
+    }
+  }, [
+    showOutageView,
+    setShowOutageView,
+    t,
+    identifiedFeature?.id,
+    showElement,
+  ]);
+
   const onSelectedFeature = useCallback(
     async (feature: MapGeoJSONFeature) => {
       const isSelected = feature.state?.selected as boolean;
@@ -148,6 +172,14 @@ function ReadOnlyDiagram({
           icon={ZoomMapSvg}
           title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
         />
+
+        {identifiedFeature?.type === "RouteSegment" && (
+          <ActionButton
+            icon={OutageSvg}
+            action={() => setShowOutageView(true)}
+            title={t("OUTAGE_VIEW")}
+          />
+        )}
       </DiagramMenu>
       <SchematicDiagram
         diagramObjects={diagramObjects}
