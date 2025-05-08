@@ -46,7 +46,7 @@ function SelectMenu({
     <div
       tabIndex={0}
       role="button"
-      style={{ maxWidth, maxHeight }}
+      style={{ maxWidth }}
       className="select-menu-wrapper"
       onClick={() => setToggled(!toggled)}
       onKeyPress={(e) => (e.key === "Enter" ? setToggled(!toggled) : () => {})}
@@ -58,7 +58,7 @@ function SelectMenu({
           <span>{options.find((x) => x.value === selected)?.text}</span>
           <div className="arrow" />
         </div>
-        <div className="menu-options">
+        <div className="menu-options" style={{ maxHeight }}>
           {enableSearch && (
             <input
               onClick={(e) => e.stopPropagation()}
