@@ -17,6 +17,10 @@ type IdentifyNetworkEvent = {
   username: string;
 };
 
+interface TilesetUpdatedEvent {
+  tilesetName: string;
+}
+
 let websocketClient: w3cwebsocket | null;
 
 function send(eventMsg: any) {
@@ -31,6 +35,7 @@ function BridgeConnector() {
     trace,
     searchResult,
     identifiedFeature,
+    tilesetUpdated,
   } = useContext(MapContext);
   const [connected, setConnected] = useState(false);
   const {
@@ -120,6 +125,22 @@ function BridgeConnector() {
       return;
 
     const token = PubSub.subscribe(
+      "TilesetUpdated",
+      async (_msg: string, data: TilesetUpdatedEvent) => {
+        tilesetUpdated(data.tilesetName);
+      },
+    );
+
+    return () => {
+      PubSub.unsubscribe(token);
+    };
+  }, [connected, tilesetUpdated]);
+
+  useEffect(() => {
+    if (!connected || !websocketClient || websocketClient.readyState !== 1)
+      return;
+
+    const token = PubSub.subscribe(
       "IdentifyNetworkElement",
       (_msg: string, data: IdentifyNetworkEvent) => {
         if (
@@ -152,7 +173,12 @@ function BridgeConnector() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [connected, setIdentifiedFeature, auth.user?.profile.preferred_username, t]);
+  }, [
+    connected,
+    setIdentifiedFeature,
+    auth.user?.profile.preferred_username,
+    t,
+  ]);
 
   useEffect(() => {
     // We only want to retrieve the identified feature once after the connection

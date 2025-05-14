@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 type FeatureType = "RouteNode" | "RouteSegment" | "Deleted";
 
@@ -30,6 +31,9 @@ type MapContextType = {
   setTrace: (trace: Trace) => void;
   searchResult: SearchResult | null;
   setSearchResult: (searchResult: SearchResult) => void;
+  tilesetUpdated: (tilesetName: string) => void;
+  subscribeTilesetUpdated: (callback: (tilesetName: string) => void) => string;
+  unSubscribeTilesetUpdated: (token: string) => void;
 };
 
 type Trace = {
@@ -71,6 +75,16 @@ const MapContext = createContext<MapContextType>({
   setSearchResult: () => {
     console.warn("no provider set for setSearchResult");
   },
+  tilesetUpdated: () => {
+    console.warn("no provider set for tilesetUpdated");
+  },
+  subscribeTilesetUpdated: () => {
+    console.warn("no provider set for subscribeTilesetUpdated");
+    return "";
+  },
+  unSubscribeTilesetUpdated: () => {
+    console.warn("no provider set for unSubscribeTilesetUpdated");
+  },
 });
 
 type MapProviderProps = {
@@ -88,6 +102,9 @@ const MapProvider = ({ children }: MapProviderProps) => {
     wgs84: null,
   });
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
+  const [subscribeTilesetUpdated, setSubscriptionTileSetUpdated] = useState<
+    Record<string, (tilesetName: string) => void>
+  >({});
 
   useEffect(() => {
     if (!searchResult) return;
@@ -100,6 +117,10 @@ const MapProvider = ({ children }: MapProviderProps) => {
     }
   }, [searchResult]);
 
+  function tileSetUpdated(tilesetName: string) {
+    Object.entries(subscribeTilesetUpdated).forEach((x) => x[1](tilesetName));
+  }
+
   return (
     <MapContext.Provider
       value={{
@@ -111,6 +132,22 @@ const MapProvider = ({ children }: MapProviderProps) => {
         setTrace: setTrace,
         searchResult: searchResult,
         setSearchResult: setSearchResult,
+        tilesetUpdated: tileSetUpdated,
+        subscribeTilesetUpdated: (callback: (tilesetName: string) => void) => {
+          const token = uuidv4();
+          setSubscriptionTileSetUpdated((callbacks) => {
+            callbacks[token] = callback;
+            return callbacks;
+          });
+
+          return token;
+        },
+        unSubscribeTilesetUpdated: (token: string) => {
+          setSubscriptionTileSetUpdated((callbacks) => {
+            delete callbacks[token];
+            return callbacks;
+          });
+        },
       }}
     >
       {children}
