@@ -292,8 +292,14 @@ function RouteNetworkMap({
   const lastHighlightedFeature = useRef<MapGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
-  const { setIdentifiedFeature, trace, searchResult, identifiedFeature } =
-    useContext(MapContext);
+  const {
+    setIdentifiedFeature,
+    trace,
+    searchResult,
+    identifiedFeature,
+    subscribeTilesetUpdated,
+    unSubscribeTilesetUpdated,
+  } = useContext(MapContext);
   const [mapLibreStyle, setMaplibreStyle] = useState<StyleSpecification | null>(
     null,
   );
@@ -309,6 +315,34 @@ function RouteNetworkMap({
       mapFitBounds(map.current, initialEnvelope, false);
     }
   }, [map, initialEnvelope, mapLoaded]);
+
+  useEffect(() => {
+    const cancelToken = subscribeTilesetUpdated((tilesetName: string) => {
+      if (!map.current) {
+        console.warn(
+          `Could not refresh tileset with name: '${tilesetName}', no map has been set yet.`,
+        );
+        return;
+      }
+
+      const m = map.current;
+      const sourceCache = m.style.sourceCaches[tilesetName];
+
+      sourceCache.map.refreshTiles(
+        tilesetName,
+        sourceCache
+          .getIds()
+          .map((id) => sourceCache._tiles[id].tileID.canonical),
+      );
+
+      // Will be left in there for now for debug purposes.
+      console.log(`Refreshed tileset with name: '${tilesetName}'.`);
+    });
+
+    return () => {
+      unSubscribeTilesetUpdated(cancelToken);
+    };
+  }, [map, subscribeTilesetUpdated, unSubscribeTilesetUpdated]);
 
   useEffect(() => {
     if (mapLoaded && map.current && initialMarker) {
