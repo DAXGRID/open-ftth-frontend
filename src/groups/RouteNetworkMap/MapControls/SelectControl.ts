@@ -49,6 +49,14 @@ function createHoverPointerFunc(map: Map, bboxSize: number) {
 function createOnClickFunc(map: Map, bboxSize: number) {
   const onClick = (e: MapMouseEvent) => {
     const features = queryFeatures(map, bboxSize, e);
+
+    features.forEach((x) => {
+      map.setFeatureState(x, {
+        ...x,
+        multiSelected: true,
+      });
+    });
+
     console.log(features);
   };
 
