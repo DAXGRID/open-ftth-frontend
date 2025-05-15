@@ -23,6 +23,7 @@ import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 import InformationControl from "./MapControls/InformationControl";
 import SaveImgControl from "./MapControls/SaveImgControl";
+import SelectControl from "./MapControls/SelectControl";
 import { v4 as uuidv4 } from "uuid";
 
 const GetMaplibreStyle = async (): Promise<StyleSpecification> => {
@@ -139,6 +140,7 @@ function clickHighlight(
   lastHighlightedFeature: React.RefObject<MapGeoJSONFeature | null>,
   measureDistanceControl: MeasureDistanceControl,
   informationControl: InformationControl | null,
+  selectControl: SelectControl | null,
   callback: (feature: MapGeoJSONFeature) => void,
 ) {
   map.on("click", (e) => {
@@ -146,9 +148,11 @@ function clickHighlight(
     // annoyances for the user doing measureing.
     if (measureDistanceControl.active) return;
 
-    // Do nothing if the information control is active to avoid
-    // annoyances for the user doing measureing.
+    // Do nothing if the information control is active.
     if (informationControl?.active) return;
+
+    // Do nothing if the select control is active.
+    if (selectControl?.active) return;
 
     const bbox: [PointLike, PointLike] = [
       [e.point.x - bboxSize, e.point.y - bboxSize],
@@ -428,6 +432,9 @@ function RouteNetworkMap({
       "top-right",
     );
 
+    const selectControl = new SelectControl();
+    newMap.addControl(selectControl, "top-right");
+
     newMap.addControl(new SaveImgControl(), "top-right");
 
     let informationControl: InformationControl | null = null;
@@ -476,6 +483,7 @@ function RouteNetworkMap({
         lastHighlightedFeature,
         measureDistanceControl,
         informationControl,
+        selectControl,
         (x) => {
           let type: "RouteNode" | "RouteSegment" | null = null;
           if (x?.properties?.objecttype === "route_node") {
