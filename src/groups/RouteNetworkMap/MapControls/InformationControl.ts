@@ -283,11 +283,6 @@ function removeSelection(map: Map, features: MapGeoJSONFeature[]) {
   }
 }
 
-// ```typescript
-// (method) Map.off<"click">(type: "click", layer: string, listener: (ev: MapMouseEvent & {
-//     features?: Feature<Geometry, GeoJsonProperties>[] | undefined;
-// } & Object) => void): Map (+2 overloads)
-
 class InformationControl {
   map: Map | null = null;
   container: HTMLElement | null = null;
