@@ -328,7 +328,11 @@ function RouteNetworkMap({
       const m = map.current;
       const sourceCache = m.style.sourceCaches[tilesetName];
 
-      sourceCache.map.refreshTiles(
+      // Reload the whole cache
+      sourceCache.reload(true);
+
+      // Refresh the current files.
+      m.refreshTiles(
         tilesetName,
         sourceCache
           .getIds()
