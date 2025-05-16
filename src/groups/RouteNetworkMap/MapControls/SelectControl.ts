@@ -16,17 +16,13 @@ function queryFeatures(map: Map, bboxSize: number, e: MapMouseEvent) {
     [e.point.x + bboxSize, e.point.y + bboxSize],
   ] as const;
 
-  const featureNames = ["route_segment", "route_node"] as const;
+  const featureNames = ["route_segment"] as const;
 
   return map.queryRenderedFeatures(bbox, {
     filter: [
       "any",
       ...featureNames.map((x) => {
-        return [
-          "==",
-          "objecttype",
-          "route_segment",
-        ] as LegacyFilterSpecification;
+        return ["==", "objecttype", x] as LegacyFilterSpecification;
       }),
     ],
   });
@@ -53,7 +49,7 @@ function createOnClickFunc(map: Map, bboxSize: number) {
     features.forEach((x) => {
       map.setFeatureState(x, {
         ...x,
-        multiSelected: true,
+        multiSelected: !(x.state?.multiSelected ?? false),
       });
     });
 
