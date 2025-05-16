@@ -3,6 +3,7 @@ import {
   MapMouseEvent,
   PointLike,
   LegacyFilterSpecification,
+  MapGeoJSONFeature,
 } from "maplibre-gl";
 import { icon, library } from "@fortawesome/fontawesome-svg-core";
 import { faArrowPointer } from "@fortawesome/free-solid-svg-icons";
@@ -42,18 +43,26 @@ function createHoverPointerFunc(map: Map, bboxSize: number) {
   return onHoverPointer;
 }
 
-function createOnClickFunc(map: Map, bboxSize: number) {
+function createOnClickFunc(
+  map: Map,
+  bboxSize: number,
+  selectedFeatureCallback: (x: MapGeoJSONFeature) => void,
+) {
   const onClick = (e: MapMouseEvent) => {
     const features = queryFeatures(map, bboxSize, e);
 
-    features.forEach((x) => {
-      map.setFeatureState(x, {
-        ...x,
-        multiSelected: !(x.state?.multiSelected ?? false),
-      });
-    });
+    if (features.length > 0) {
+      const feature = features[0];
+      // const newMultiSelectedState = !(feature.state?.multiSelected ?? false);
+      // map.setFeatureState(feature, {
+      //   ...feature,
+      //   multiSelected: newMultiSelectedState,
+      // });
 
-    console.log(features);
+      // We have to set it, to reflect the new state.
+      // feature.state.multiSelected = newMultiSelectedState;
+      selectedFeatureCallback(feature);
+    }
   };
 
   return onClick;
@@ -63,6 +72,12 @@ class SelectControl {
   map: Map | null = null;
   container: HTMLElement | null = null;
   active: boolean = false;
+  selections: MapGeoJSONFeature[] = [];
+  selectionCallback: (selection: MapGeoJSONFeature) => void;
+
+  constructor(selectionCallback: (selection: MapGeoJSONFeature) => void) {
+    this.selectionCallback = selectionCallback;
+  }
 
   onAdd(map: Map) {
     this.map = map;
@@ -79,8 +94,37 @@ class SelectControl {
     button.appendChild(buttonIcon);
     button.className = "select-control-button";
 
+    const bboxSize = 4;
+
+    const hoverFunc = createHoverPointerFunc(this.map, bboxSize);
+
+    const clickFunc = createOnClickFunc(this.map, bboxSize, (feature) => {
+      this.selectionCallback(feature);
+    });
+
     button.addEventListener("click", () => {
-      this.enableSelection();
+      if (!this.map || !this.container) return;
+
+      if (!this.active) {
+        this.map.on("mousemove", hoverFunc);
+        this.map.on("click", clickFunc);
+
+        this.active = true;
+        this.container.firstElementChild?.classList.add("active");
+      } else {
+        this.active = false;
+
+        this.map.off("mousemove", hoverFunc);
+        this.map.off("click", clickFunc);
+
+        this.selections.length = 0;
+
+        this.map.getCanvas().style.cursor = "";
+
+        this.container.firstElementChild?.classList.remove("active");
+
+        //this.selectionCallback([]);
+      }
     });
 
     this.container.appendChild(button);
@@ -91,34 +135,6 @@ class SelectControl {
     this.container?.parentNode?.removeChild(this.container);
     if (this.map) {
       this.map = null;
-    }
-  }
-
-  enableSelection() {
-    if (!this.map || !this.container) return;
-
-    const bboxSize = 4;
-    const hoverFunc = createHoverPointerFunc(this.map, bboxSize);
-    const clickFunc = createOnClickFunc(this.map, bboxSize);
-
-    if (!this.active) {
-      this.map.on("mousemove", hoverFunc);
-      this.map.on("click", clickFunc);
-
-      this.active = true;
-      console.log("Selection has been enabled");
-      this.container.firstElementChild?.classList.add("active");
-    } else {
-      this.active = false;
-
-      this.map.off("mousemove", hoverFunc);
-      this.map.off("click", clickFunc);
-
-      // Set default cursor
-      this.map.getCanvas().style.cursor = "";
-
-      console.log("Selection has been disabled");
-      this.container.firstElementChild?.classList.remove("active");
     }
   }
 }

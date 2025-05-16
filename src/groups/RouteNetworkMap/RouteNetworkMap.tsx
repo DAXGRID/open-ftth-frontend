@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
+import useBridgeConnector from "../../bridge/useBridgeConnector";
 import {
   GeoJSONSource,
   Map,
@@ -296,7 +297,9 @@ function RouteNetworkMap({
   const lastHighlightedFeature = useRef<MapGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
+  const { selectRouteSegments } = useBridgeConnector();
   const {
+    selectedSegmentIds,
     setIdentifiedFeature,
     trace,
     searchResult,
@@ -432,7 +435,10 @@ function RouteNetworkMap({
       "top-right",
     );
 
-    const selectControl = new SelectControl();
+    const selectControl = new SelectControl((selection: MapGeoJSONFeature) => {
+      selectRouteSegments([...selectedSegmentIds, selection.properties.mrid]);
+    });
+
     newMap.addControl(selectControl, "top-right");
 
     newMap.addControl(new SaveImgControl(), "top-right");
@@ -623,7 +629,13 @@ function RouteNetworkMap({
     t,
     mapLibreStyle,
     setMapLoaded,
+    selectRouteSegments,
+    selectedSegmentIds,
   ]);
+
+  useEffect(() => {
+    console.log(selectedSegmentIds);
+  }, [selectedSegmentIds]);
 
   useEffect(() => {
     if (!map.current || !searchResult) return;

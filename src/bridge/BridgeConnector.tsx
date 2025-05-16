@@ -125,6 +125,24 @@ function BridgeConnector() {
       return;
 
     const token = PubSub.subscribe(
+      "SelectRouteSegments",
+      async (_msg: string, data: { mrids: string[]; username: string }) => {
+        if (data.username === auth.user?.profile.preferred_username) {
+          setSelectedSegmentIds(data.mrids);
+        }
+      },
+    );
+
+    return () => {
+      PubSub.unsubscribe(token);
+    };
+  }, [connected, setSelectedSegmentIds, auth.user?.profile.preferred_username]);
+
+  useEffect(() => {
+    if (!connected || !websocketClient || websocketClient.readyState !== 1)
+      return;
+
+    const token = PubSub.subscribe(
       "TilesetUpdated",
       async (_msg: string, data: TilesetUpdatedEvent) => {
         tilesetUpdated(data.tilesetName);
