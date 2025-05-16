@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useState, useEffect } from "react";
+import {
+  createContext,
+  ReactNode,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 
 type FeatureType = "RouteNode" | "RouteSegment" | "Deleted";
@@ -25,6 +31,7 @@ export interface SearchResult {
 type MapContextType = {
   selectedSegmentIds: string[];
   setSelectedSegmentIds: (selectedSegments: string[]) => void;
+  toggleSelectedSegmentId: (selectedSegment: string) => void;
   identifiedFeature: IdentifiedFeature | null;
   setIdentifiedFeature: (identifiedNetworkElement: IdentifiedFeature) => void;
   trace: Trace;
@@ -85,6 +92,9 @@ const MapContext = createContext<MapContextType>({
   unSubscribeTilesetUpdated: () => {
     console.warn("no provider set for unSubscribeTilesetUpdated");
   },
+  toggleSelectedSegmentId: () => {
+    console.warn("addSelectedSegmentId");
+  },
 });
 
 type MapProviderProps = {
@@ -117,6 +127,21 @@ const MapProvider = ({ children }: MapProviderProps) => {
     }
   }, [searchResult]);
 
+  const toggleSelectedSegmentId = useCallback(
+    (segmentId: string) => {
+      setSelectedSegments((prevSelectedSegments) => {
+        const indexAlreadyExist = prevSelectedSegments.indexOf(segmentId);
+        if (indexAlreadyExist === -1) {
+          return [...prevSelectedSegments, segmentId];
+        } else {
+          prevSelectedSegments.splice(indexAlreadyExist, 1);
+          return [...prevSelectedSegments];
+        }
+      });
+    },
+    [setSelectedSegments],
+  );
+
   function tileSetUpdated(tilesetName: string) {
     Object.entries(subscribeTilesetUpdated).forEach((x) => x[1](tilesetName));
   }
@@ -126,6 +151,7 @@ const MapProvider = ({ children }: MapProviderProps) => {
       value={{
         selectedSegmentIds: selectedSegments,
         setSelectedSegmentIds: setSelectedSegments,
+        toggleSelectedSegmentId: toggleSelectedSegmentId,
         identifiedFeature: identifiedNetworkElement,
         setIdentifiedFeature: setIdentifiedNetworkElement,
         trace: trace,

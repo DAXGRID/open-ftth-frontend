@@ -53,14 +53,6 @@ function createOnClickFunc(
 
     if (features.length > 0) {
       const feature = features[0];
-      // const newMultiSelectedState = !(feature.state?.multiSelected ?? false);
-      // map.setFeatureState(feature, {
-      //   ...feature,
-      //   multiSelected: newMultiSelectedState,
-      // });
-
-      // We have to set it, to reflect the new state.
-      // feature.state.multiSelected = newMultiSelectedState;
       selectedFeatureCallback(feature);
     }
   };

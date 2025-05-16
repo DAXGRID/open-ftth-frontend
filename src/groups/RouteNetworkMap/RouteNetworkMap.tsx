@@ -1,7 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
-import useBridgeConnector from "../../bridge/useBridgeConnector";
 import {
   GeoJSONSource,
   Map,
@@ -297,8 +296,8 @@ function RouteNetworkMap({
   const lastHighlightedFeature = useRef<MapGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
-  const { selectRouteSegments } = useBridgeConnector();
   const {
+    toggleSelectedSegmentId: toggleSelectedSegmentId,
     selectedSegmentIds,
     setIdentifiedFeature,
     trace,
@@ -436,7 +435,7 @@ function RouteNetworkMap({
     );
 
     const selectControl = new SelectControl((selection: MapGeoJSONFeature) => {
-      selectRouteSegments([...selectedSegmentIds, selection.properties.mrid]);
+      toggleSelectedSegmentId(selection.properties.mrid);
     });
 
     newMap.addControl(selectControl, "top-right");
@@ -521,6 +520,18 @@ function RouteNetworkMap({
           });
         },
       );
+
+      newMap.addLayer({
+        id: "route_segment_selection",
+        type: "line",
+        source: "route_network",
+        "source-layer": "route_network",
+        filter: ["in", ["get", "mrid"], ["literal", [""]]],
+        paint: {
+          "line-color": "#FFFF00",
+          "line-width": 2,
+        },
+      });
 
       newMap.addSource("route_segment_trace", {
         type: "geojson",
@@ -629,12 +640,25 @@ function RouteNetworkMap({
     t,
     mapLibreStyle,
     setMapLoaded,
-    selectRouteSegments,
-    selectedSegmentIds,
+    toggleSelectedSegmentId,
   ]);
 
   useEffect(() => {
-    console.log(selectedSegmentIds);
+    if (!map.current) return;
+
+    const routeSegmentSelectionLayer = map.current.getLayer(
+      "route_segment_selection",
+    );
+
+    if (!routeSegmentSelectionLayer) {
+      throw Error("Could not find route segment selection layer.");
+    }
+
+    map.current.setFilter("route_segment_selection", [
+      "in",
+      ["get", "mrid"],
+      ["literal", selectedSegmentIds],
+    ]);
   }, [selectedSegmentIds]);
 
   useEffect(() => {

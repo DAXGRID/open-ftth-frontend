@@ -36,15 +36,21 @@ function BridgeConnector() {
     searchResult,
     identifiedFeature,
     tilesetUpdated,
+    selectedSegmentIds,
   } = useContext(MapContext);
   const [connected, setConnected] = useState(false);
   const {
+    selectRouteSegments,
     retrieveSelectedEquipments,
     retrieveIdentifiedNetworkElement,
     highlightFeatures,
     panToCoordinate,
   } = useBridgeConnector();
   const auth = useAuth();
+
+  useEffect(() => {
+    selectRouteSegments(selectedSegmentIds);
+  }, [selectRouteSegments, selectedSegmentIds]);
 
   useEffect(() => {
     function setup() {
