@@ -60,15 +60,28 @@ function createOnClickFunc(
   return onClick;
 }
 
+function createOnLeftClickFunc(undoCallback: () => void) {
+  return (e: MapMouseEvent) => {
+    if (e.originalEvent.button === 2) {
+      undoCallback();
+    }
+  };
+}
+
 class SelectControl {
   map: Map | null = null;
   container: HTMLElement | null = null;
   active: boolean = false;
   selections: MapGeoJSONFeature[] = [];
   selectionCallback: (selection: MapGeoJSONFeature) => void;
+  undoCallback: () => void;
 
-  constructor(selectionCallback: (selection: MapGeoJSONFeature) => void) {
+  constructor(
+    selectionCallback: (selection: MapGeoJSONFeature) => void,
+    undoCallback: () => void,
+  ) {
     this.selectionCallback = selectionCallback;
+    this.undoCallback = undoCallback;
   }
 
   onAdd(map: Map) {
@@ -94,12 +107,15 @@ class SelectControl {
       this.selectionCallback(feature);
     });
 
+    const leftClickFunc = createOnLeftClickFunc(this.undoCallback);
+
     button.addEventListener("click", () => {
       if (!this.map || !this.container) return;
 
       if (!this.active) {
         this.map.on("mousemove", hoverFunc);
         this.map.on("click", clickFunc);
+        this.map.on("mousedown", leftClickFunc);
 
         this.active = true;
         this.container.firstElementChild?.classList.add("active");
@@ -108,14 +124,13 @@ class SelectControl {
 
         this.map.off("mousemove", hoverFunc);
         this.map.off("click", clickFunc);
+        this.map.off("mousedown", leftClickFunc);
 
         this.selections.length = 0;
 
         this.map.getCanvas().style.cursor = "";
 
         this.container.firstElementChild?.classList.remove("active");
-
-        //this.selectionCallback([]);
       }
     });
 

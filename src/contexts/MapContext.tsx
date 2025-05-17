@@ -32,6 +32,7 @@ type MapContextType = {
   selectedSegmentIds: string[];
   setSelectedSegmentIds: (selectedSegments: string[]) => void;
   toggleSelectedSegmentId: (selectedSegment: string) => void;
+  removeLastSelectedSegmentId: () => void;
   identifiedFeature: IdentifiedFeature | null;
   setIdentifiedFeature: (identifiedNetworkElement: IdentifiedFeature) => void;
   trace: Trace;
@@ -59,6 +60,17 @@ type Trace = {
     maxY: number;
   } | null;
 };
+
+function arraysEqual(a: any, b: any) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
 
 const MapContext = createContext<MapContextType>({
   selectedSegmentIds: [],
@@ -93,7 +105,10 @@ const MapContext = createContext<MapContextType>({
     console.warn("no provider set for unSubscribeTilesetUpdated");
   },
   toggleSelectedSegmentId: () => {
-    console.warn("addSelectedSegmentId");
+    console.warn("no provider set for addSelectedSegmentId");
+  },
+  removeLastSelectedSegmentId: () => {
+    console.warn("no provider set for removeLastSelectedSegmentId");
   },
 });
 
@@ -142,16 +157,39 @@ const MapProvider = ({ children }: MapProviderProps) => {
     [setSelectedSegments],
   );
 
+  const removeLastSelectedSegmentId = useCallback(() => {
+    setSelectedSegments((prevSelectedSegments) => {
+      prevSelectedSegments.pop();
+      return [...prevSelectedSegments];
+    });
+  }, [setSelectedSegments]);
+
   function tileSetUpdated(tilesetName: string) {
     Object.entries(subscribeTilesetUpdated).forEach((x) => x[1](tilesetName));
   }
+
+  const setSelectedSegmentsx = useCallback(
+    (newSelectedSegments: string[]) => {
+      setSelectedSegments((prevSelectedSegments) => {
+        // This is done to prevent updating the value in case they're the same, since
+        // it might result in a for-ever loop.
+        if (!arraysEqual(prevSelectedSegments, newSelectedSegments)) {
+          return newSelectedSegments;
+        }
+
+        return prevSelectedSegments;
+      });
+    },
+    [setSelectedSegments],
+  );
 
   return (
     <MapContext.Provider
       value={{
         selectedSegmentIds: selectedSegments,
-        setSelectedSegmentIds: setSelectedSegments,
+        setSelectedSegmentIds: setSelectedSegmentsx,
         toggleSelectedSegmentId: toggleSelectedSegmentId,
+        removeLastSelectedSegmentId: removeLastSelectedSegmentId,
         identifiedFeature: identifiedNetworkElement,
         setIdentifiedFeature: setIdentifiedNetworkElement,
         trace: trace,

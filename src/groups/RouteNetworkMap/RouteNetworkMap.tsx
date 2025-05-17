@@ -297,7 +297,7 @@ function RouteNetworkMap({
   const map = useRef<Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const {
-    toggleSelectedSegmentId: toggleSelectedSegmentId,
+    toggleSelectedSegmentId,
     selectedSegmentIds,
     setIdentifiedFeature,
     trace,
@@ -305,6 +305,7 @@ function RouteNetworkMap({
     identifiedFeature,
     subscribeTilesetUpdated,
     unSubscribeTilesetUpdated,
+    removeLastSelectedSegmentId,
   } = useContext(MapContext);
   const [mapLibreStyle, setMaplibreStyle] = useState<StyleSpecification | null>(
     null,
@@ -434,9 +435,12 @@ function RouteNetworkMap({
       "top-right",
     );
 
-    const selectControl = new SelectControl((selection: MapGeoJSONFeature) => {
-      toggleSelectedSegmentId(selection.properties.mrid);
-    });
+    const selectControl = new SelectControl(
+      (selection: MapGeoJSONFeature) => {
+        toggleSelectedSegmentId(selection.properties.mrid);
+      },
+      () => removeLastSelectedSegmentId(),
+    );
 
     newMap.addControl(selectControl, "top-right");
 
@@ -641,6 +645,7 @@ function RouteNetworkMap({
     mapLibreStyle,
     setMapLoaded,
     toggleSelectedSegmentId,
+    removeLastSelectedSegmentId,
   ]);
 
   useEffect(() => {
