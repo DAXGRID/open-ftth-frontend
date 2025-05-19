@@ -1,12 +1,13 @@
 @use "../../../global-styles/colors";
 
-.select-control-button {
+button.select-control-button {
   border-radius: 4px;
   border: none;
   background-color: white;
   border-bottom: 1px solid #e3e3e3;
-  height: 29px;
-  width: 29px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &.active {
     color: #33b5e5;
@@ -14,5 +15,11 @@
 
   &:hover {
     cursor: pointer;
+  }
+
+  & > svg {
+    padding-left: 3px;
+    padding-top: 1px;
+    max-width: 20px;
   }
 }

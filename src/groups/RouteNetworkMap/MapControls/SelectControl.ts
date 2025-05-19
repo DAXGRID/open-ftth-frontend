@@ -5,11 +5,19 @@ import {
   LegacyFilterSpecification,
   MapGeoJSONFeature,
 } from "maplibre-gl";
-import { icon, library } from "@fortawesome/fontawesome-svg-core";
-import { faArrowPointer } from "@fortawesome/free-solid-svg-icons";
 import "./SelectControl.scss";
 
-library.add(faArrowPointer);
+const selectSvgIcon = `
+<?xml version="1.0" encoding="utf-8"?>
+<svg fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	 viewBox="0 0 24 24" xml:space="preserve">
+<g id="select">
+	<path d="M14.8,24l-3.3-4.3l-3.2,4.2L5.8,6.9l16,7.2L16.4,16l3.2,4.3L14.8,24z M11.6,16.4l3.6,4.8l1.6-1.3L13.1,15l3.3-1.1l-8.1-3.6
+		l1.3,8.7L11.6,16.4z"/>
+	<path d="M4,18H0v-4h2v2h2V18z M2,12H0V6h2V12z M18,10h-2V6h2V10z M18,4h-2V2h-2V0h4V4z M2,4H0V0h4v2H2V4z M12,2H6V0h6V2z"/>
+</g>
+</svg>
+`;
 
 function queryFeatures(map: Map, bboxSize: number, e: MapMouseEvent) {
   const bbox: [PointLike, PointLike] = [
@@ -90,13 +98,11 @@ class SelectControl {
     this.container.className = "maplibregl-ctrl maplibregl-ctrl-group";
     this.active = false;
 
-    const buttonIcon = icon({
-      prefix: "fas",
-      iconName: faArrowPointer.iconName,
-    }).node[0];
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.innerHTML = selectSvgIcon;
 
     const button = document.createElement("button");
-    button.appendChild(buttonIcon);
+    button.appendChild(svg);
     button.className = "select-control-button";
 
     const bboxSize = 4;
