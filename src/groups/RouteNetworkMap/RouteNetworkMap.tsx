@@ -24,7 +24,11 @@ import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 import InformationControl from "./MapControls/InformationControl";
 import SaveImgControl from "./MapControls/SaveImgControl";
 import SelectControl from "./MapControls/SelectControl";
+import PlaceCableControl from "./MapControls/PlaceCableControl";
 import { v4 as uuidv4 } from "uuid";
+import { OverlayContext } from "../../contexts/OverlayContext";
+import ModalContainer from "../../components/ModalContainer";
+import PlaceSpanEquipmentPage from "../../pages/PlaceSpanEquipmentPage";
 
 const GetMaplibreStyle = async (): Promise<StyleSpecification> => {
   const maplibre = await fetch(`./maplibre.json?${uuidv4()}`);
@@ -295,6 +299,8 @@ function RouteNetworkMap({
   const mapContainer = useRef<HTMLDivElement>(null);
   const lastHighlightedFeature = useRef<MapGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
+  const [showPlaceSpanEquipment, setShowPlaceSpanEquipment] =
+    useState<boolean>(false);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const {
     toggleSelectedSegmentId,
@@ -307,6 +313,7 @@ function RouteNetworkMap({
     unSubscribeTilesetUpdated,
     removeLastSelectedSegmentId,
   } = useContext(MapContext);
+  const { showElement } = useContext(OverlayContext);
   const [mapLibreStyle, setMaplibreStyle] = useState<StyleSpecification | null>(
     null,
   );
@@ -316,6 +323,23 @@ function RouteNetworkMap({
       setMaplibreStyle(r);
     });
   }, [setMaplibreStyle]);
+
+  useEffect(() => {
+    if (showPlaceSpanEquipment) {
+      showElement(
+        <ModalContainer
+          title={t("Place span equipments")}
+          closeCallback={() => setShowPlaceSpanEquipment(false)}
+        >
+          <PlaceSpanEquipmentPage />
+        </ModalContainer>,
+      );
+
+      return () => {
+        showElement(null);
+      };
+    }
+  }, [showElement, showPlaceSpanEquipment, setShowPlaceSpanEquipment, t]);
 
   useEffect(() => {
     if (mapLoaded && map.current && initialEnvelope) {
@@ -443,6 +467,13 @@ function RouteNetworkMap({
     );
 
     newMap.addControl(selectControl, "top-right");
+
+    newMap.addControl(
+      new PlaceCableControl(() => {
+        setShowPlaceSpanEquipment(true);
+      }),
+      "top-right",
+    );
 
     newMap.addControl(new SaveImgControl(), "top-right");
 
@@ -646,6 +677,7 @@ function RouteNetworkMap({
     setMapLoaded,
     toggleSelectedSegmentId,
     removeLastSelectedSegmentId,
+    setShowPlaceSpanEquipment,
   ]);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { useClient, Client } from "urql";
 import useBridgeConnector from "../../../bridge/useBridgeConnector";
 import { MapContext } from "../../../contexts/MapContext";
 import { toast } from "react-toastify";
-import {  useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 import {
   QUERY_GET_ROUTESEGMENT_IDS,
@@ -17,6 +17,7 @@ import {
 
 type RerouteTubeParams = {
   selectedRouteSegmentMrid: string;
+  successCallback: () => void;
 };
 
 const selectRouteSegmentsInMap = async (
@@ -24,7 +25,7 @@ const selectRouteSegmentsInMap = async (
   client: Client,
   selectRouteSegments: (mrids: string[]) => void,
   highlightFeatures: (mrids: string[]) => void,
-  t: TFunction<string>
+  t: TFunction<string>,
 ) => {
   const params: GetRouteSegmentIdsParameter = {
     spanEquipmentOrSegmentId: id,
@@ -48,7 +49,8 @@ const reroute = async (
   id: string,
   routeSegmentIds: string[],
   client: Client,
-  t: TFunction<string>
+  t: TFunction<string>,
+  successCallback: () => void,
 ) => {
   const params: RerouteParameter = {
     spanEquipmentOrSegmentId: id,
@@ -66,7 +68,10 @@ const reroute = async (
   }
 };
 
-function RerouteSpanEquipment({ selectedRouteSegmentMrid }: RerouteTubeParams) {
+function RerouteSpanEquipment({
+  selectedRouteSegmentMrid,
+  successCallback,
+}: RerouteTubeParams) {
   const client = useClient();
   const { selectRouteSegments, highlightFeatures } = useBridgeConnector();
   const { selectedSegmentIds } = useContext(MapContext);
@@ -84,14 +89,20 @@ function RerouteSpanEquipment({ selectedRouteSegmentMrid }: RerouteTubeParams) {
               (mrids: string[]) => {
                 highlightFeatures(mrids, null);
               },
-              t
+              t,
             )
           }
           innerText={t("SELECT")}
         />
         <DefaultButton
           onClick={() =>
-            reroute(selectedRouteSegmentMrid, selectedSegmentIds, client, t)
+            reroute(
+              selectedRouteSegmentMrid,
+              selectedSegmentIds,
+              client,
+              t,
+              successCallback,
+            )
           }
           innerText={t("MOVE")}
         />

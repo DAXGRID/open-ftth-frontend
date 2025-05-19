@@ -32,8 +32,12 @@ function accessAddressToOption(
   };
 }
 
-function unitAddressToOption(unitAddress: UnitAddress, t: TFunction<"translation">): SelectOption {
-  const text = `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`.trim();
+function unitAddressToOption(
+  unitAddress: UnitAddress,
+  t: TFunction<"translation">,
+): SelectOption {
+  const text =
+    `${unitAddress.floorName ?? ""} ${unitAddress.suitName ?? ""}`.trim();
   return {
     text: text ? text : t("UNNAMED"),
     value: unitAddress.id,
@@ -170,11 +174,13 @@ function reducer(state: State, action: Action): State {
 interface EditTerminalEquipmentProps {
   terminalEquipmentId: string;
   routeNodeId: string;
+  successCallback?: () => void;
 }
 
 function EditTerminalEquipment({
   terminalEquipmentId,
   routeNodeId,
+  successCallback,
 }: EditTerminalEquipmentProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { t } = useTranslation();
@@ -296,7 +302,7 @@ function EditTerminalEquipment({
       state.terminalEquipmentSpecifications,
       state.categoryName,
       state.terminalEquipment.specification.isRackEquipment,
-    ).sort((x, y) => x.text > y.text ? 1 : -1);
+    ).sort((x, y) => (x.text > y.text ? 1 : -1));
   }, [
     state.terminalEquipmentSpecifications,
     state.categoryName,
@@ -315,7 +321,7 @@ function EditTerminalEquipment({
           (x) => x.id === state.specificationId,
         )?.manufacturerRefs ?? [],
       ),
-    ].sort((x, y) => x.text > y.text ? 1 : -1);
+    ].sort((x, y) => (x.text > y.text ? 1 : -1));
   }, [
     state.manufacturers,
     state.terminalEquipmentSpecifications,
@@ -432,6 +438,10 @@ function EditTerminalEquipment({
             console.error(
               r.data.terminalEquipment.updateProperties.errorMessage,
             );
+          } else {
+            if (successCallback) {
+              successCallback();
+            }
           }
         })
         .catch(() => {
