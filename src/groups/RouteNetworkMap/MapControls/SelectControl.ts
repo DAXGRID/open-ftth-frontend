@@ -98,11 +98,14 @@ class SelectControl {
     this.container.className = "maplibregl-ctrl maplibregl-ctrl-group";
     this.active = false;
 
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.innerHTML = selectSvgIcon;
+    const buttonIcon = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg",
+    );
+    buttonIcon.innerHTML = selectSvgIcon;
 
     const button = document.createElement("button");
-    button.appendChild(svg);
+    button.appendChild(buttonIcon);
     button.className = "select-control-button";
 
     const bboxSize = 4;
