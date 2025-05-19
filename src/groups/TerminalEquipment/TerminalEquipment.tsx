@@ -347,7 +347,7 @@ function TerminalEquipment() {
     return () => {
       showElement(false);
     };
-  }, []);
+  }, [showElement]);
 
   useEffect(() => {
     if (state.showFiberEditor.show) {

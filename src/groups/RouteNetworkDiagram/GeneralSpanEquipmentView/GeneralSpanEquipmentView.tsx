@@ -76,7 +76,7 @@ function GeneralSpanEquipmentView({
     return () => {
       showElement(false);
     };
-  }, []);
+  }, [showElement]);
 
   useEffect(() => {
     getSpanEquipmentDetails(client, spanEquipmentId)
