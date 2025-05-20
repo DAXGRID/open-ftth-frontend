@@ -29,6 +29,8 @@ export interface SearchResult {
 }
 
 type MapContextType = {
+  isInSelectionMode: boolean;
+  setIsInSelectionMode: (isInSelectionMode: boolean) => void;
   selectedSegmentIds: string[];
   setSelectedSegmentIds: (selectedSegments: string[]) => void;
   toggleSelectedSegmentId: (selectedSegment: string) => void;
@@ -73,6 +75,10 @@ function arraysEqual(a: any, b: any) {
 }
 
 const MapContext = createContext<MapContextType>({
+  isInSelectionMode: false,
+  setIsInSelectionMode: () => {
+    console.warn("no provider set for setIsInSelectionMode");
+  },
   selectedSegmentIds: [],
   setSelectedSegmentIds: () => {
     console.warn("no provider set for setSelectedSegmentIds");
@@ -130,6 +136,7 @@ const MapProvider = ({ children }: MapProviderProps) => {
   const [subscribeTilesetUpdated, setSubscriptionTileSetUpdated] = useState<
     Record<string, (tilesetName: string) => void>
   >({});
+  const [isInSelectionMode, setIsInSelectionMode] = useState<boolean>(false);
 
   useEffect(() => {
     if (!searchResult) return;
@@ -187,7 +194,9 @@ const MapProvider = ({ children }: MapProviderProps) => {
     <MapContext.Provider
       value={{
         selectedSegmentIds: selectedSegments,
+        setIsInSelectionMode: setIsInSelectionMode,
         setSelectedSegmentIds: setSelectedSegmentsx,
+        isInSelectionMode: isInSelectionMode,
         toggleSelectedSegmentId: toggleSelectedSegmentId,
         removeLastSelectedSegmentId: removeLastSelectedSegmentId,
         identifiedFeature: identifiedNetworkElement,

@@ -83,13 +83,16 @@ class SelectControl {
   selections: MapGeoJSONFeature[] = [];
   selectionCallback: (selection: MapGeoJSONFeature) => void;
   undoCallback: () => void;
+  toggleCallback: (selectState: boolean) => void;
 
   constructor(
     selectionCallback: (selection: MapGeoJSONFeature) => void,
     undoCallback: () => void,
+    toggleCallback: (selectState: boolean) => void,
   ) {
     this.selectionCallback = selectionCallback;
     this.undoCallback = undoCallback;
+    this.toggleCallback = toggleCallback;
   }
 
   onAdd(map: Map) {
@@ -128,8 +131,10 @@ class SelectControl {
 
         this.active = true;
         this.container.firstElementChild?.classList.add("active");
+        this.toggleCallback(true);
       } else {
         this.active = false;
+        this.toggleCallback(false);
 
         this.map.off("mousemove", hoverFunc);
         this.map.off("click", clickFunc);

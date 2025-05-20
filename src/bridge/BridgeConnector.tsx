@@ -37,6 +37,7 @@ function BridgeConnector() {
     identifiedFeature,
     tilesetUpdated,
     selectedSegmentIds,
+    isInSelectionMode,
   } = useContext(MapContext);
   const [connected, setConnected] = useState(false);
   const {
@@ -49,8 +50,10 @@ function BridgeConnector() {
   const auth = useAuth();
 
   useEffect(() => {
-    selectRouteSegments(selectedSegmentIds);
-  }, [selectRouteSegments, selectedSegmentIds]);
+    if (isInSelectionMode) {
+      selectRouteSegments(selectedSegmentIds);
+    }
+  }, [selectRouteSegments, selectedSegmentIds, isInSelectionMode]);
 
   useEffect(() => {
     if (!auth.user?.profile.preferred_username) {
@@ -113,6 +116,11 @@ function BridgeConnector() {
     const token = PubSub.subscribe(
       "RetrieveSelectedResponse",
       async (_msg: string, data: RetrieveSelectedSpanEquipmentsResponse) => {
+        // We do not want to receive events when in selection mode.
+        if (isInSelectionMode) {
+          return;
+        }
+
         if (data.username === auth.user?.profile.preferred_username) {
           // If the user has not saved inside of the map
           if (data.selectedFeaturesMrid.includes("uuid_generate_v4()")) {
@@ -133,6 +141,7 @@ function BridgeConnector() {
     retrieveSelectedEquipments,
     auth.user?.profile.preferred_username,
     t,
+    isInSelectionMode,
   ]);
 
   useEffect(() => {

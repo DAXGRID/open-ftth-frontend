@@ -316,6 +316,7 @@ function RouteNetworkMap({
     subscribeTilesetUpdated,
     unSubscribeTilesetUpdated,
     removeLastSelectedSegmentId,
+    setIsInSelectionMode,
   } = useContext(MapContext);
   const { showElement } = useContext(OverlayContext);
   const [mapLibreStyle, setMaplibreStyle] = useState<StyleSpecification | null>(
@@ -468,6 +469,9 @@ function RouteNetworkMap({
         toggleSelectedSegmentId(selection.properties.mrid);
       },
       () => removeLastSelectedSegmentId(),
+      (selectState: boolean) => {
+        setIsInSelectionMode(selectState);
+      },
     );
 
     // These should only be shown if the user has write rights.
@@ -694,6 +698,7 @@ function RouteNetworkMap({
     setShowPlaceSpanEquipment,
     setSelectedSegmentIds,
     isWriter,
+    setIsInSelectionMode,
   ]);
 
   useEffect(() => {
