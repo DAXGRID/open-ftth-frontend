@@ -289,12 +289,14 @@ type RouteNetworkMapProps = {
     x: number;
     y: number;
   };
+  isWriter: boolean;
 };
 
 function RouteNetworkMap({
   showSchematicDiagram,
   initialEnvelope,
   initialMarker,
+  isWriter,
 }: RouteNetworkMapProps) {
   const { t } = useTranslation();
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -450,15 +452,15 @@ function RouteNetworkMap({
     );
 
     newMap.addControl(
+      new ToggleDiagramControl(showSchematicDiagram),
+      "top-right",
+    );
+
+    newMap.addControl(
       new NavigationControl({
         showCompass: false,
       }),
       "top-left",
-    );
-
-    newMap.addControl(
-      new ToggleDiagramControl(showSchematicDiagram),
-      "top-right",
     );
 
     const selectControl = new SelectControl(
@@ -468,21 +470,24 @@ function RouteNetworkMap({
       () => removeLastSelectedSegmentId(),
     );
 
-    newMap.addControl(selectControl, "top-right");
+    // These should only be shown if the user has write rights.
+    if (isWriter) {
+      newMap.addControl(selectControl, "top-right");
 
-    newMap.addControl(
-      new PlaceCableControl(() => {
-        setShowPlaceSpanEquipment(true);
-      }),
-      "top-right",
-    );
+      newMap.addControl(
+        new PlaceCableControl(() => {
+          setShowPlaceSpanEquipment(true);
+        }),
+        "top-right",
+      );
 
-    newMap.addControl(
-      new ClearSelectionControl(() => {
-        setSelectedSegmentIds([]);
-      }),
-      "top-right",
-    );
+      newMap.addControl(
+        new ClearSelectionControl(() => {
+          setSelectedSegmentIds([]);
+        }),
+        "top-right",
+      );
+    }
 
     newMap.addControl(new SaveImgControl(), "top-right");
 
@@ -687,6 +692,8 @@ function RouteNetworkMap({
     toggleSelectedSegmentId,
     removeLastSelectedSegmentId,
     setShowPlaceSpanEquipment,
+    setSelectedSegmentIds,
+    isWriter,
   ]);
 
   useEffect(() => {
