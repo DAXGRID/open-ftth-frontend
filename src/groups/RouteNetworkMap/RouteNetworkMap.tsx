@@ -25,6 +25,7 @@ import InformationControl from "./MapControls/InformationControl";
 import SaveImgControl from "./MapControls/SaveImgControl";
 import SelectControl from "./MapControls/SelectControl";
 import PlaceCableControl from "./MapControls/PlaceCableControl";
+import ClearSelectionControl from "./MapControls/ClearSelectionControl";
 import { v4 as uuidv4 } from "uuid";
 import { OverlayContext } from "../../contexts/OverlayContext";
 import ModalContainer from "../../components/ModalContainer";
@@ -304,6 +305,7 @@ function RouteNetworkMap({
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const {
     toggleSelectedSegmentId,
+    setSelectedSegmentIds,
     selectedSegmentIds,
     setIdentifiedFeature,
     trace,
@@ -471,6 +473,13 @@ function RouteNetworkMap({
     newMap.addControl(
       new PlaceCableControl(() => {
         setShowPlaceSpanEquipment(true);
+      }),
+      "top-right",
+    );
+
+    newMap.addControl(
+      new ClearSelectionControl(() => {
+        setSelectedSegmentIds([]);
       }),
       "top-right",
     );
