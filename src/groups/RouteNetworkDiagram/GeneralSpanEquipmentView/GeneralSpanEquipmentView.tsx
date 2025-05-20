@@ -73,6 +73,12 @@ function GeneralSpanEquipmentView({
   const { selectRouteSegments } = useBridgeConnector();
 
   useEffect(() => {
+    return () => {
+      showElement(false);
+    };
+  }, [showElement]);
+
+  useEffect(() => {
     getSpanEquipmentDetails(client, spanEquipmentId)
       .then((x) => {
         let spanEquipment = x.data?.utilityNetwork.spanEquipment;
@@ -96,22 +102,40 @@ function GeneralSpanEquipmentView({
         >
           <RerouteSpanEquipment
             selectedRouteSegmentMrid={spanEquipmentId ?? ""}
+            successCallback={() => setShowRerouteTube(false)}
           />
         </ModalContainer>,
       );
+
+      return () => {
+        showElement(null);
+      };
     } else if (showEditSpanEquipment) {
       showElement(
         <ModalContainer
           title={t("EDIT_SPAN_EQUIPMENT")}
           closeCallback={() => setShowEditSpanEquipment(false)}
         >
-          <EditSpanEquipment spanEquipmentMrid={spanEquipmentId ?? ""} />
+          <EditSpanEquipment
+            spanEquipmentMrid={spanEquipmentId ?? ""}
+            successCallback={() => setShowEditSpanEquipment(false)}
+          />
         </ModalContainer>,
       );
-    } else {
-      showElement(null);
+
+      return () => {
+        showElement(null);
+      };
     }
-  }, [showEditSpanEquipment, t, showElement, spanEquipmentId, showRerouteTube]);
+  }, [
+    showEditSpanEquipment,
+    t,
+    showElement,
+    spanEquipmentId,
+    showRerouteTube,
+    setShowEditSpanEquipment,
+    setShowRerouteTube,
+  ]);
 
   const selectAllLineSegmentsInMap = () => {
     passageViewQuery(client, routeNetworkElementId, [spanEquipmentId])

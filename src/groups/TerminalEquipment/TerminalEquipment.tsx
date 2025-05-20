@@ -344,6 +344,12 @@ function TerminalEquipment() {
   const { identifiedFeature } = useContext(MapContext);
 
   useEffect(() => {
+    return () => {
+      showElement(false);
+    };
+  }, [showElement]);
+
+  useEffect(() => {
     if (state.showFiberEditor.show) {
       if (
         identifiedFeature?.id &&

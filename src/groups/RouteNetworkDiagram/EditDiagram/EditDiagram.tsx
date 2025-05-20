@@ -762,7 +762,15 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           t("ADD_NODE_CONTAINER"),
         ),
       );
-    } else if (showModals.addInnerConduit) {
+
+      return () => {
+        showElement(null);
+      };
+    }
+  }, [showModals.addContainer, t, showElement]);
+
+  useEffect(() => {
+    if (showModals.addInnerConduit) {
       showElement(
         addInnerConduitModal(
           () => showModalsDispatch({ type: "addInnerConduit", show: false }),
@@ -770,7 +778,15 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           currentlySelectedFeatures,
         ),
       );
-    } else if (showModals.establishCustomerConnection) {
+
+      return () => {
+        showElement(null);
+      };
+    }
+  }, [showModals.addInnerConduit, t, showElement, currentlySelectedFeatures]);
+
+  useEffect(() => {
+    if (showModals.establishCustomerConnection) {
       showElement(
         establishCustomerConnectionModal(
           () =>
@@ -782,7 +798,20 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           localIdentifiedFeature?.id ?? "",
         ),
       );
-    } else if (showModals.addRack) {
+
+      return () => {
+        showElement(null);
+      };
+    }
+  }, [
+    showModals.establishCustomerConnection,
+    t,
+    showElement,
+    localIdentifiedFeature?.id,
+  ]);
+
+  useEffect(() => {
+    if (showModals.addRack) {
       showElement(
         addRackModal(
           () =>
@@ -794,7 +823,15 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           currentlySelectedFeatures,
         ),
       );
-    } else if (showModals.addTerminalEquipment) {
+
+      return () => {
+        showElement(null);
+      };
+    }
+  }, [showModals.addRack, t, showElement, currentlySelectedFeatures]);
+
+  useEffect(() => {
+    if (showModals.addTerminalEquipment) {
       showElement(
         addTerminalEquipmentModal(
           () =>
@@ -804,7 +841,21 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           currentlySelectedFeatures,
         ),
       );
-    } else if (showModals.outageView) {
+
+      return () => {
+        showElement(null);
+      };
+    }
+  }, [
+    showModals.addTerminalEquipment,
+    t,
+    showElement,
+    currentlySelectedFeatures,
+    localIdentifiedFeature?.id,
+  ]);
+
+  useEffect(() => {
+    if (showModals.outageView) {
       showElement(
         outageViewModal(
           () => showModalsDispatch({ type: "outageView", show: false }),
@@ -812,7 +863,15 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           localIdentifiedFeature?.id ?? "",
         ),
       );
-    } else if (showModals.arrangeRackEquipment) {
+
+      return () => {
+        showElement(null);
+      };
+    }
+  }, [showModals.outageView, t, showElement, localIdentifiedFeature?.id]);
+
+  useEffect(() => {
+    if (showModals.arrangeRackEquipment) {
       if (!localIdentifiedFeature?.id) {
         throw Error("Could not get route network element id");
       }
@@ -841,15 +900,17 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
           terminalEquipmentId,
         ),
       );
-    } else {
-      showElement(null);
+
+      return () => {
+        showElement(null);
+      };
     }
   }, [
-    showModals,
+    showModals.arrangeRackEquipment,
     localIdentifiedFeature?.id,
-    t,
     currentlySelectedFeatures,
     showElement,
+    t,
   ]);
 
   const reverseVertialAlignment = async () => {

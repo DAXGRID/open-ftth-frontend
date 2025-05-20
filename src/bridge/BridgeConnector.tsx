@@ -36,6 +36,8 @@ function BridgeConnector() {
     searchResult,
     identifiedFeature,
     tilesetUpdated,
+    selectedSegmentIds,
+    isInSelectionMode,
   } = useContext(MapContext);
   const [connected, setConnected] = useState(false);
   const {
@@ -43,10 +45,21 @@ function BridgeConnector() {
     retrieveIdentifiedNetworkElement,
     highlightFeatures,
     panToCoordinate,
+    selectRouteSegments,
   } = useBridgeConnector();
   const auth = useAuth();
 
   useEffect(() => {
+    if (isInSelectionMode) {
+      selectRouteSegments(selectedSegmentIds);
+    }
+  }, [selectRouteSegments, selectedSegmentIds, isInSelectionMode]);
+
+  useEffect(() => {
+    if (!auth.user?.profile.preferred_username) {
+      return;
+    }
+
     function setup() {
       websocketClient = new w3cwebsocket(Config.DESKTOP_BRIDGE_URI);
 
@@ -58,6 +71,17 @@ function BridgeConnector() {
       websocketClient.onopen = () => {
         setConnected(true);
         console.log("Connected to BridgeConnector");
+
+        // Ugly hack, it depends on time and there is no easy way to
+        // handle this right now.
+        const setIntervalToken = setInterval(() => {
+          try {
+            retrieveSelectedEquipments();
+            clearInterval(setIntervalToken);
+          } catch {
+            // Try again
+          }
+        }, 500);
       };
 
       websocketClient.onclose = () => {
@@ -86,15 +110,17 @@ function BridgeConnector() {
       setConnected(false);
       websocketClient = null;
     };
-  }, []);
+  }, [auth.user?.profile.preferred_username, retrieveSelectedEquipments]);
 
   useEffect(() => {
-    if (!connected || !websocketClient || websocketClient.readyState !== 1)
-      return;
-
     const token = PubSub.subscribe(
       "RetrieveSelectedResponse",
       async (_msg: string, data: RetrieveSelectedSpanEquipmentsResponse) => {
+        // We do not want to receive events when in selection mode.
+        if (isInSelectionMode) {
+          return;
+        }
+
         if (data.username === auth.user?.profile.preferred_username) {
           // If the user has not saved inside of the map
           if (data.selectedFeaturesMrid.includes("uuid_generate_v4()")) {
@@ -107,23 +133,18 @@ function BridgeConnector() {
       },
     );
 
-    retrieveSelectedEquipments();
-
     return () => {
       PubSub.unsubscribe(token);
     };
   }, [
-    connected,
     setSelectedSegmentIds,
     retrieveSelectedEquipments,
     auth.user?.profile.preferred_username,
     t,
+    isInSelectionMode,
   ]);
 
   useEffect(() => {
-    if (!connected || !websocketClient || websocketClient.readyState !== 1)
-      return;
-
     const token = PubSub.subscribe(
       "TilesetUpdated",
       async (_msg: string, data: TilesetUpdatedEvent) => {
@@ -134,12 +155,24 @@ function BridgeConnector() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [connected, tilesetUpdated]);
+  }, [tilesetUpdated]);
 
   useEffect(() => {
-    if (!connected || !websocketClient || websocketClient.readyState !== 1)
-      return;
+    const token = PubSub.subscribe(
+      "SelectRouteSegments",
+      async (_msg: string, data: { mrids: string[]; username: string }) => {
+        if (data.username === auth.user?.profile.preferred_username) {
+          setSelectedSegmentIds(data.mrids);
+        }
+      },
+    );
 
+    return () => {
+      PubSub.unsubscribe(token);
+    };
+  }, [setSelectedSegmentIds, auth.user?.profile.preferred_username]);
+
+  useEffect(() => {
     const token = PubSub.subscribe(
       "IdentifyNetworkElement",
       (_msg: string, data: IdentifyNetworkEvent) => {
@@ -173,12 +206,7 @@ function BridgeConnector() {
     return () => {
       PubSub.unsubscribe(token);
     };
-  }, [
-    connected,
-    setIdentifiedFeature,
-    auth.user?.profile.preferred_username,
-    t,
-  ]);
+  }, [setIdentifiedFeature, auth.user?.profile.preferred_username, t]);
 
   useEffect(() => {
     // We only want to retrieve the identified feature once after the connection

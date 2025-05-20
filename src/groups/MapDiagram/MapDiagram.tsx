@@ -135,6 +135,7 @@ function MapDiagram() {
         <div className="map-diagram map-diagram--desktop">
           <div className="container">
             <RouteNetworkMap
+              isWriter={hasRoles("writer")}
               showSchematicDiagram={toggleDiagram}
               initialEnvelope={locationSearchResponse?.envelope}
               initialMarker={locationSearchResponse?.coordinate}
@@ -163,6 +164,7 @@ function MapDiagram() {
                 text: t("MAP"),
                 view: (
                   <RouteNetworkMap
+                    isWriter={hasRoles("writer")}
                     showSchematicDiagram={toggleDiagram}
                     initialEnvelope={locationSearchResponse?.envelope}
                     initialMarker={locationSearchResponse?.coordinate}

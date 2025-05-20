@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useState, useEffect } from "react";
+import {
+  createContext,
+  ReactNode,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 
 type FeatureType = "RouteNode" | "RouteSegment" | "Deleted";
@@ -23,8 +29,12 @@ export interface SearchResult {
 }
 
 type MapContextType = {
+  isInSelectionMode: boolean;
+  setIsInSelectionMode: (isInSelectionMode: boolean) => void;
   selectedSegmentIds: string[];
   setSelectedSegmentIds: (selectedSegments: string[]) => void;
+  toggleSelectedSegmentId: (selectedSegment: string) => void;
+  removeLastSelectedSegmentId: () => void;
   identifiedFeature: IdentifiedFeature | null;
   setIdentifiedFeature: (identifiedNetworkElement: IdentifiedFeature) => void;
   trace: Trace;
@@ -53,7 +63,22 @@ type Trace = {
   } | null;
 };
 
+function arraysEqual(a: any, b: any) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
 const MapContext = createContext<MapContextType>({
+  isInSelectionMode: false,
+  setIsInSelectionMode: () => {
+    console.warn("no provider set for setIsInSelectionMode");
+  },
   selectedSegmentIds: [],
   setSelectedSegmentIds: () => {
     console.warn("no provider set for setSelectedSegmentIds");
@@ -85,6 +110,12 @@ const MapContext = createContext<MapContextType>({
   unSubscribeTilesetUpdated: () => {
     console.warn("no provider set for unSubscribeTilesetUpdated");
   },
+  toggleSelectedSegmentId: () => {
+    console.warn("no provider set for addSelectedSegmentId");
+  },
+  removeLastSelectedSegmentId: () => {
+    console.warn("no provider set for removeLastSelectedSegmentId");
+  },
 });
 
 type MapProviderProps = {
@@ -105,6 +136,7 @@ const MapProvider = ({ children }: MapProviderProps) => {
   const [subscribeTilesetUpdated, setSubscriptionTileSetUpdated] = useState<
     Record<string, (tilesetName: string) => void>
   >({});
+  const [isInSelectionMode, setIsInSelectionMode] = useState<boolean>(false);
 
   useEffect(() => {
     if (!searchResult) return;
@@ -117,15 +149,56 @@ const MapProvider = ({ children }: MapProviderProps) => {
     }
   }, [searchResult]);
 
+  const toggleSelectedSegmentId = useCallback(
+    (segmentId: string) => {
+      setSelectedSegments((prevSelectedSegments) => {
+        const indexAlreadyExist = prevSelectedSegments.indexOf(segmentId);
+        if (indexAlreadyExist === -1) {
+          return [...prevSelectedSegments, segmentId];
+        } else {
+          prevSelectedSegments.splice(indexAlreadyExist, 1);
+          return [...prevSelectedSegments];
+        }
+      });
+    },
+    [setSelectedSegments],
+  );
+
+  const removeLastSelectedSegmentId = useCallback(() => {
+    setSelectedSegments((prevSelectedSegments) => {
+      prevSelectedSegments.pop();
+      return [...prevSelectedSegments];
+    });
+  }, [setSelectedSegments]);
+
   function tileSetUpdated(tilesetName: string) {
     Object.entries(subscribeTilesetUpdated).forEach((x) => x[1](tilesetName));
   }
+
+  const setSelectedSegmentsx = useCallback(
+    (newSelectedSegments: string[]) => {
+      setSelectedSegments((prevSelectedSegments) => {
+        // This is done to prevent updating the value in case they're the same, since
+        // it might result in a for-ever loop.
+        if (!arraysEqual(prevSelectedSegments, newSelectedSegments)) {
+          return newSelectedSegments;
+        }
+
+        return prevSelectedSegments;
+      });
+    },
+    [setSelectedSegments],
+  );
 
   return (
     <MapContext.Provider
       value={{
         selectedSegmentIds: selectedSegments,
-        setSelectedSegmentIds: setSelectedSegments,
+        setIsInSelectionMode: setIsInSelectionMode,
+        setSelectedSegmentIds: setSelectedSegmentsx,
+        isInSelectionMode: isInSelectionMode,
+        toggleSelectedSegmentId: toggleSelectedSegmentId,
+        removeLastSelectedSegmentId: removeLastSelectedSegmentId,
         identifiedFeature: identifiedNetworkElement,
         setIdentifiedFeature: setIdentifiedNetworkElement,
         trace: trace,

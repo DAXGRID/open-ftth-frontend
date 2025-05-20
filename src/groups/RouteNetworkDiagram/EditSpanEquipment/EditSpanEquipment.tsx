@@ -25,6 +25,7 @@ import Config from "../../../config";
 
 type EditSpanEquipmentParams = {
   spanEquipmentMrid: string;
+  successCallback: () => void;
 };
 
 function accessAddressToOption(
@@ -61,7 +62,7 @@ const getFilteredSpanEquipmentSpecifications = (
     return {
       text: x.description,
       value: x.id.toString(),
-      key: x.id
+      key: x.id,
     };
   });
 
@@ -92,7 +93,7 @@ const getFilteredManufacturers = (
     return {
       text: x.name,
       value: x.id,
-      key: x.id
+      key: x.id,
     };
   });
 
@@ -110,10 +111,10 @@ const getFilteredManufacturers = (
     return spanEquipment.manufacturerRefs?.includes(x.value.toString());
   });
 
-  const defaultValue: SelectOption= {
+  const defaultValue: SelectOption = {
     text: t("UNSPECIFIED"),
     value: "",
-    key: ""
+    key: "",
   };
 
   return [defaultValue, ...filtered];
@@ -127,7 +128,10 @@ const colorOptions = (colors: string[], t: TFunction<"translation">) => {
   return [{ text: t("Pick color marking"), value: "" }, ...options];
 };
 
-function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
+function EditSpanEquipment({
+  spanEquipmentMrid,
+  successCallback: finishedCallback,
+}: EditSpanEquipmentParams) {
   const { t } = useTranslation();
   const client = useClient();
   const [colorMarkingOptions] = useState<SelectOption[]>(
@@ -321,8 +325,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
         .description,
     );
     setName(
-      spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
-        .name,
+      spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment.name,
     );
     setMarkingText(
       spanEquipmentDetailsResponse.data?.utilityNetwork?.spanEquipment
@@ -404,6 +407,7 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
 
     if (result.data?.spanEquipment.updateProperties.isSuccess) {
       toast.success(t("UPDATED"));
+      finishedCallback();
     } else {
       toast.error(
         t(result.data?.spanEquipment.updateProperties.errorCode ?? "ERROR"),
@@ -431,7 +435,9 @@ function EditSpanEquipment({ spanEquipmentMrid }: EditSpanEquipmentParams) {
         <div className="full-row">
           <SelectMenu
             options={filteredSpanEquipmentSpecifications}
-            onSelected={(x) => selectSpanEquipmentSpecification(x?.toString() ?? "")}
+            onSelected={(x) =>
+              selectSpanEquipmentSpecification(x?.toString() ?? "")
+            }
             selected={selectedSpanEquipmentSpecification}
             enableSearch={true}
             autoSelectFirst={true}

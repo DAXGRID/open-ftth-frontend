@@ -23,7 +23,13 @@ import MeasureDistanceControl from "./MapControls/MeasureDistanceControl";
 import ToggleDiagramControl from "./MapControls/ToggleDiagramControl";
 import InformationControl from "./MapControls/InformationControl";
 import SaveImgControl from "./MapControls/SaveImgControl";
+import SelectControl from "./MapControls/SelectControl";
+import PlaceCableControl from "./MapControls/PlaceCableControl";
+import ClearSelectionControl from "./MapControls/ClearSelectionControl";
 import { v4 as uuidv4 } from "uuid";
+import { OverlayContext } from "../../contexts/OverlayContext";
+import ModalContainer from "../../components/ModalContainer";
+import PlaceSpanEquipmentPage from "../../pages/PlaceSpanEquipmentPage";
 
 const GetMaplibreStyle = async (): Promise<StyleSpecification> => {
   const maplibre = await fetch(`./maplibre.json?${uuidv4()}`);
@@ -139,6 +145,7 @@ function clickHighlight(
   lastHighlightedFeature: React.RefObject<MapGeoJSONFeature | null>,
   measureDistanceControl: MeasureDistanceControl,
   informationControl: InformationControl | null,
+  selectControl: SelectControl | null,
   callback: (feature: MapGeoJSONFeature) => void,
 ) {
   map.on("click", (e) => {
@@ -146,9 +153,11 @@ function clickHighlight(
     // annoyances for the user doing measureing.
     if (measureDistanceControl.active) return;
 
-    // Do nothing if the information control is active to avoid
-    // annoyances for the user doing measureing.
+    // Do nothing if the information control is active.
     if (informationControl?.active) return;
+
+    // Do nothing if the select control is active.
+    if (selectControl?.active) return;
 
     const bbox: [PointLike, PointLike] = [
       [e.point.x - bboxSize, e.point.y - bboxSize],
@@ -280,26 +289,36 @@ type RouteNetworkMapProps = {
     x: number;
     y: number;
   };
+  isWriter: boolean;
 };
 
 function RouteNetworkMap({
   showSchematicDiagram,
   initialEnvelope,
   initialMarker,
+  isWriter,
 }: RouteNetworkMapProps) {
   const { t } = useTranslation();
   const mapContainer = useRef<HTMLDivElement>(null);
   const lastHighlightedFeature = useRef<MapGeoJSONFeature | null>(null);
   const map = useRef<Map | null>(null);
+  const [showPlaceSpanEquipment, setShowPlaceSpanEquipment] =
+    useState<boolean>(false);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const {
+    toggleSelectedSegmentId,
+    setSelectedSegmentIds,
+    selectedSegmentIds,
     setIdentifiedFeature,
     trace,
     searchResult,
     identifiedFeature,
     subscribeTilesetUpdated,
     unSubscribeTilesetUpdated,
+    removeLastSelectedSegmentId,
+    setIsInSelectionMode,
   } = useContext(MapContext);
+  const { showElement } = useContext(OverlayContext);
   const [mapLibreStyle, setMaplibreStyle] = useState<StyleSpecification | null>(
     null,
   );
@@ -309,6 +328,23 @@ function RouteNetworkMap({
       setMaplibreStyle(r);
     });
   }, [setMaplibreStyle]);
+
+  useEffect(() => {
+    if (showPlaceSpanEquipment) {
+      showElement(
+        <ModalContainer
+          title={t("Place span equipments")}
+          closeCallback={() => setShowPlaceSpanEquipment(false)}
+        >
+          <PlaceSpanEquipmentPage />
+        </ModalContainer>,
+      );
+
+      return () => {
+        showElement(null);
+      };
+    }
+  }, [showElement, showPlaceSpanEquipment, setShowPlaceSpanEquipment, t]);
 
   useEffect(() => {
     if (mapLoaded && map.current && initialEnvelope) {
@@ -417,16 +453,45 @@ function RouteNetworkMap({
     );
 
     newMap.addControl(
+      new ToggleDiagramControl(showSchematicDiagram),
+      "top-right",
+    );
+
+    newMap.addControl(
       new NavigationControl({
         showCompass: false,
       }),
       "top-left",
     );
 
-    newMap.addControl(
-      new ToggleDiagramControl(showSchematicDiagram),
-      "top-right",
+    const selectControl = new SelectControl(
+      (selection: MapGeoJSONFeature) => {
+        toggleSelectedSegmentId(selection.properties.mrid);
+      },
+      () => removeLastSelectedSegmentId(),
+      (selectState: boolean) => {
+        setIsInSelectionMode(selectState);
+      },
     );
+
+    // These should only be shown if the user has write rights.
+    if (isWriter) {
+      newMap.addControl(selectControl, "top-right");
+
+      newMap.addControl(
+        new PlaceCableControl(() => {
+          setShowPlaceSpanEquipment(true);
+        }),
+        "top-right",
+      );
+
+      newMap.addControl(
+        new ClearSelectionControl(() => {
+          setSelectedSegmentIds([]);
+        }),
+        "top-right",
+      );
+    }
 
     newMap.addControl(new SaveImgControl(), "top-right");
 
@@ -476,6 +541,7 @@ function RouteNetworkMap({
         lastHighlightedFeature,
         measureDistanceControl,
         informationControl,
+        selectControl,
         (x) => {
           let type: "RouteNode" | "RouteSegment" | null = null;
           if (x?.properties?.objecttype === "route_node") {
@@ -507,6 +573,18 @@ function RouteNetworkMap({
           });
         },
       );
+
+      newMap.addLayer({
+        id: "route_segment_selection",
+        type: "line",
+        source: "route_network",
+        "source-layer": "route_network",
+        filter: ["in", ["get", "mrid"], ["literal", [""]]],
+        paint: {
+          "line-color": "#FFFF00",
+          "line-width": 2,
+        },
+      });
 
       newMap.addSource("route_segment_trace", {
         type: "geojson",
@@ -615,7 +693,31 @@ function RouteNetworkMap({
     t,
     mapLibreStyle,
     setMapLoaded,
+    toggleSelectedSegmentId,
+    removeLastSelectedSegmentId,
+    setShowPlaceSpanEquipment,
+    setSelectedSegmentIds,
+    isWriter,
+    setIsInSelectionMode,
   ]);
+
+  useEffect(() => {
+    if (!map.current) return;
+
+    const routeSegmentSelectionLayer = map.current.getLayer(
+      "route_segment_selection",
+    );
+
+    if (!routeSegmentSelectionLayer) {
+      throw Error("Could not find route segment selection layer.");
+    }
+
+    map.current.setFilter("route_segment_selection", [
+      "in",
+      ["get", "mrid"],
+      ["literal", selectedSegmentIds],
+    ]);
+  }, [selectedSegmentIds]);
 
   useEffect(() => {
     if (!map.current || !searchResult) return;

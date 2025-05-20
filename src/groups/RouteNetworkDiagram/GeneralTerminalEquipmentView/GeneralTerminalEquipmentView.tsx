@@ -1,6 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import { useClient } from "urql";
-import { getGeneralView, TerminalEquipment } from "./GeneralTerminalEquipmentViewGql";
+import {
+  getGeneralView,
+  TerminalEquipment,
+} from "./GeneralTerminalEquipmentViewGql";
 import { useTranslation } from "react-i18next";
 import TextBox from "../../../components/TextBox";
 import LabelContainer from "../../../components/LabelContainer";
@@ -25,7 +28,7 @@ interface UnitAddress {
 
 function addressDisplayText(
   accessAddress: AccessAddress | null,
-  unitAddress: UnitAddress | null
+  unitAddress: UnitAddress | null,
 ): string {
   if (!accessAddress) {
     return "";
@@ -87,10 +90,12 @@ function GeneralTerminalEquipmentView({
             terminalEquipmentId={terminalEquipmentId}
             routeNodeId={routeNodeId}
           />
-        </ModalContainer>
+        </ModalContainer>,
       );
-    } else {
-      showElement(null);
+
+      return () => {
+        showElement(null);
+      };
     }
   }, [
     showEditTerminalEquipment,
@@ -131,7 +136,7 @@ function GeneralTerminalEquipmentView({
                   <TextBox
                     value={addressDisplayText(
                       terminalEquipment.addressInfo.accessAddress ?? null,
-                      terminalEquipment.addressInfo?.unitAddress ?? null
+                      terminalEquipment.addressInfo?.unitAddress ?? null,
                     )}
                     setValue={() => {}}
                     disabled={true}
