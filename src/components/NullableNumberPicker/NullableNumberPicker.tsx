@@ -27,8 +27,6 @@ function NullableNumberPicker({
     const noFrontZeros = event.target.value.replace(/^0+/, "");
     const number = noFrontZeros.length === 0 ? 0 : parseInt(noFrontZeros);
 
-    console.log(minValue);
-
     if (minValue !== undefined && number < minValue) {
       setValue(minValue);
     } else if (maxValue !== undefined && number > maxValue) {
