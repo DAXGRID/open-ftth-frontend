@@ -257,7 +257,7 @@ function PlaceSpanEquipmentPage() {
               selectSpanEquipmentSpecification(x.id.toString())
             }
             selected={selectedSpanEquipmentSpecification}
-            maxHeightBody="250px"
+            maxHeightBody="150px"
           />
         </div>
         <div className="full-row">
@@ -266,7 +266,7 @@ function PlaceSpanEquipmentPage() {
             bodyItems={filteredManufactuers}
             selectItem={(x) => setSelectedManufacturer(x.id.toString())}
             selected={selectedManufacturer}
-            maxHeightBody="300px"
+            maxHeightBody="150px"
           />
         </div>
         <div className="full-row">
