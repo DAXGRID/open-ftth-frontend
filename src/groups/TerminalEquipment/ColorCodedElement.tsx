@@ -12,9 +12,10 @@ function buildColorCodedItem(
     const colorMatch = x.match(colorMatchRegex);
     if (colorMatch !== null) {
       const color = colorMatch[1].toUpperCase();
+      const colorText = `${color}_TEXT`;
       return (
         <div className="box-color-container" key={i}>
-          <div title={t(color)} className={`box ${color.toLowerCase()}`}>
+          <div title={t(colorText)} className={`box ${color.toLowerCase()}`}>
             <div className="box-single-stripe"></div>
             <div className="box-double-stripe"></div>
           </div>
