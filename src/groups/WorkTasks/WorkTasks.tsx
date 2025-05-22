@@ -16,7 +16,7 @@ import {
 } from "./WorkTasksGql";
 
 function projectNumberFilter(
-  projectNumber: string
+  projectNumber: string,
 ): (workTask: WorkTask) => boolean {
   return (workTask: WorkTask) => {
     if (projectNumber === "ALL") return true;
@@ -27,7 +27,7 @@ function projectNumberFilter(
 }
 
 function workTaskTypeFilter(
-  workTaskType: string
+  workTaskType: string,
 ): (workTask: WorkTask) => boolean {
   return (workTask: WorkTask) => {
     return workTaskType === "ALL" ? true : workTask.type === workTaskType;
@@ -35,7 +35,7 @@ function workTaskTypeFilter(
 }
 
 function workTaskStatusFilter(
-  workTaskStatus: string
+  workTaskStatus: string,
 ): (workTask: WorkTask) => boolean {
   return (workTask: WorkTask) => {
     return workTaskStatus === "ALL" ? true : workTask.status === workTaskStatus;
@@ -46,7 +46,7 @@ function filterWorkTasks(
   workTasks: WorkTask[],
   projectNumber: string,
   workTaskType: string,
-  workTaskStatus: string
+  workTaskStatus: string,
 ): WorkTask[] {
   return workTasks
     .filter(projectNumberFilter(projectNumber))
@@ -197,7 +197,7 @@ function WorkTasks() {
       ? [
           ...defaultOptions,
           ...mapProjectSelectOptions(state.workTasks).sort((x, y) =>
-            x.text > y.text ? 1 : -1
+            x.text > y.text ? 1 : -1,
           ),
         ]
       : [];
@@ -211,7 +211,7 @@ function WorkTasks() {
       ? [
           ...defaultOptions,
           ...mapWorkTaskType(state.workTasks).sort((x, y) =>
-            x.text > y.text ? 1 : -1
+            x.text > y.text ? 1 : -1,
           ),
         ]
       : [];
@@ -225,7 +225,7 @@ function WorkTasks() {
       ? [
           ...defaultOptions,
           ...mapWorkTaskStatus(state.workTasks).sort((x, y) =>
-            x.text > y.text ? 1 : -1
+            x.text > y.text ? 1 : -1,
           ),
         ]
       : [];
@@ -238,8 +238,8 @@ function WorkTasks() {
             state.workTasks,
             state.projectNumberFilter,
             state.workTaskTypeFilter,
-            state.workTaskStatusFilter
-          )
+            state.workTaskStatusFilter,
+          ),
         )
       : [];
   }, [

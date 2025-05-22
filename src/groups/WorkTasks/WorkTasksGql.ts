@@ -6,7 +6,7 @@ export function getWorksTasks(client: Client) {
 
 export function setCurrentWorkTaskToUser(
   client: Client,
-  params: SetCurrentWorkTaskParams
+  params: SetCurrentWorkTaskParams,
 ) {
   return client.mutation(SET_CURRENT_WORK_TASK, params).toPromise();
 }
