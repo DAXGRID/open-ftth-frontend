@@ -1,5 +1,5 @@
-@import "../../global-styles/settings";
-@import "../../global-styles/colors";
+@use "../../global-styles/settings" as *;
+@use "../../global-styles/colors" as *;
 
 .nullable-number-picker {
   flex: 1;
