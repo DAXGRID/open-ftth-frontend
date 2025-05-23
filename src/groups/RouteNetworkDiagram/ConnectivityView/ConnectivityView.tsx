@@ -11,13 +11,16 @@ import {
   faChevronRight,
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
+import ColorCodedElement from "../../ColorCodedElement";
+import { TFunction } from "i18next";
 
 interface ConnectivityViewRowProps {
   line: Line;
   isCable: boolean;
+  t: TFunction;
 }
 
-function ConnectivityViewRow({ line, isCable }: ConnectivityViewRowProps) {
+function ConnectivityViewRow({ line, isCable, t }: ConnectivityViewRowProps) {
   const { dispatch, state } = useContext(ConnectivityViewContext);
 
   return (
@@ -36,8 +39,8 @@ function ConnectivityViewRow({ line, isCable }: ConnectivityViewRowProps) {
             >
               <FontAwesomeIcon
                 icon={
-                  state.connectivityTraceViews[line.spanSegmentId]?.show ??
-                  false
+                  (state.connectivityTraceViews[line.spanSegmentId]?.show ??
+                  false)
                     ? faChevronDown
                     : faChevronRight
                 }
@@ -53,7 +56,7 @@ function ConnectivityViewRow({ line, isCable }: ConnectivityViewRowProps) {
           <p>{line.sequenceNumber}</p>
         </div>
         <div className="connectivity-view-row-item">
-          <p>{line.name}</p>
+          <p>{ColorCodedElement(line.name, t)}</p>
         </div>
         <div className="connectivity-view-row-item">
           <p>{line.z.connectedto}</p>

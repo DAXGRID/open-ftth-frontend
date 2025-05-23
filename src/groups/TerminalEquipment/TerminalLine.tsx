@@ -9,7 +9,7 @@ import {
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import colorCodedElement from "./ColorCodedElement";
+import ColorCodedElement from "../ColorCodedElement";
 
 interface TerminalLineProps {
   line: Line;
@@ -49,7 +49,7 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
             </span>
           </div>
           <div className="terminal-equipment-table-item">
-            {colorCodedElement(line.a?.connectedTo ?? "", t)}
+            {ColorCodedElement(line.a?.connectedTo ?? "", t)}
           </div>
           <div className="terminal-equipment-table-item">
             <PinPort
@@ -58,7 +58,7 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
             />
           </div>
           <div className="terminal-equipment-table-item">
-            {colorCodedElement(line.z?.connectedTo ?? "", t)}
+            {ColorCodedElement(line.z?.connectedTo ?? "", t)}
           </div>
           <div className="terminal-equipment-table-item">
             {line.z?.end ?? ""}
