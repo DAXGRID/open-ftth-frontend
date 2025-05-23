@@ -256,7 +256,7 @@ function TerminalEquipmentTable({
                       )}
                       <span
                         role="button"
-                        className="header-icons__icon"
+                        className="header-icons__icon hidden"
                         onClick={() =>
                           dispatch({
                             type: "setShowEditTags",
