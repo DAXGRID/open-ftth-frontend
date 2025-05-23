@@ -56,7 +56,7 @@ function ConnectivityViewRow({ line, isCable, t }: ConnectivityViewRowProps) {
           <p>{line.sequenceNumber}</p>
         </div>
         <div className="connectivity-view-row-item">
-          <p>{ColorCodedElement(line.name, t)}</p>
+          {ColorCodedElement(line.name, t)}
         </div>
         <div className="connectivity-view-row-item">
           <p>{line.z.connectedto}</p>
@@ -119,6 +119,7 @@ function ConnectivityView() {
                 isCable={spanEquipment.isCable}
                 line={x}
                 key={x.spanSegmentId}
+                t={t}
               ></ConnectivityViewRow>
             );
           })}
