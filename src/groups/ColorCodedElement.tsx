@@ -33,7 +33,7 @@ function buildColorCodedItem(
 
   return (
     <div key={index} className="color-coded-item">
-      <p className="color-coded-item-text">{spanContent}</p>
+      <div className="color-coded-item-text">{spanContent}</div>
     </div>
   );
 }
@@ -47,7 +47,7 @@ export default function ColorCodedElement(text: string, t: TFunction<string>) {
     return (
       <div className="color-coded">
         <div className="color-coded-item">
-          <p>{text}</p>
+          <div>{text}</div>
         </div>
       </div>
     );
