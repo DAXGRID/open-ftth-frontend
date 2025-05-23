@@ -377,7 +377,8 @@
       "CONFIRATION_CUT_CABLE": "Are you sure you want to cut the cable?",
       "NOTHING_SELECTED_TO_CUT": "Nothing has been selected to be cut.",
       "EDIT_TAGS": "Edit tags",
-      "TAGS": "Tags"
+      "TAGS": "Tags",
+      "NUMBER": "Number"
     }
   },
   "dk": {
@@ -758,7 +759,8 @@
       "CONFIRATION_CUT_CABLE": "Er du sikker på at du vil klippe kablet?",
       "NOTHING_SELECTED_TO_CUT": "Du har ikke valgt noget som skal klippes.",
       "EDIT_TAGS": "Editer tags",
-      "TAGS": "Tags"
+      "TAGS": "Tags",
+      "NUMBER": "Nummer"
     }
   }
 }
