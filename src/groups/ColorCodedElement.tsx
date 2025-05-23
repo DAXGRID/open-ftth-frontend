@@ -38,7 +38,7 @@ function buildColorCodedItem(
   );
 }
 
-export default function colorCodedElement(text: string, t: TFunction<string>) {
+export default function ColorCodedElement(text: string, t: TFunction<string>) {
   const itemGroupsRegex = /\[([\w\d ()#{}]*)\]*/g;
 
   const groups = [...text.matchAll(itemGroupsRegex)].map((x) => x[1]);

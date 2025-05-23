@@ -4,7 +4,7 @@ import { ConnectivityTraceView } from "./TerminalEquipmentGql";
 import { TerminalEquipmentContext } from "./TerminalEquipmentContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlassLocation } from "@fortawesome/free-solid-svg-icons";
-import colorCodedElement from "./ColorCodedElement";
+import ColorCodedElement from "../ColorCodedElement";
 
 interface TraceViewProps {
   view: { view: ConnectivityTraceView | null; show: boolean };
@@ -72,7 +72,7 @@ function TerminalEquipmentTraceView({ view }: TraceViewProps) {
               </div>
               <div className="trace-view-body-item">{x.terminal ?? ""}</div>
               <div className="trace-view-body-item">
-                {colorCodedElement(x.connectionInfo ?? "", t)}
+                {ColorCodedElement(x.connectionInfo ?? "", t)}
               </div>
               <div className="trace-view-body-item">{x.totalLength ?? ""}</div>
             </div>
