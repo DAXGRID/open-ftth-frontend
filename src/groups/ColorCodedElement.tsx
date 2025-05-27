@@ -6,7 +6,7 @@ function buildColorCodedItem(
   index: number,
 ) {
   const colorMatchRegex = /#{(\w*)}/;
-  const translationMatchRegex = /^[^#]*{([A-Z[a-z]*)}$/;
+  const translationMatchRegex = /^[^#]*{([A-Za-z1-9]*)}$/;
 
   const spanContent = text.split(" ").map((x, i) => {
     const colorMatch = x.match(colorMatchRegex);
@@ -52,6 +52,8 @@ export default function ColorCodedElement(text: string, t: TFunction<string>) {
       </div>
     );
   }
+
+  console.log(groups);
 
   return (
     <div className="color-coded">
