@@ -72,7 +72,10 @@ const getFilteredManufacturers = (
   }
 
   const filtered = bodyItems.filter((x) => {
-    return spanEquipment.manufacturerRefs?.includes(x.id.toString());
+    // If no manufacturerRefs we just return everything.
+    return (
+      spanEquipment.manufacturerRefs?.includes(x.id.toString()) ?? bodyItems
+    );
   });
 
   const defaultValue = {
