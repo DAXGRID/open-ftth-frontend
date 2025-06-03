@@ -109,14 +109,10 @@ workflows:
             tags:
               only: /.*/
       - build-docker-image:
-          requires:
-            - build-app
           context: docker
           filters:
             tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+              only: /.*/
       - docker-publish-image:
           context: docker
           requires:
