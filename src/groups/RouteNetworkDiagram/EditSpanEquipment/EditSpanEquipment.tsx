@@ -107,9 +107,13 @@ const getFilteredManufacturers = (
     );
   }
 
-  const filtered = bodyItems.filter((x) => {
-    return spanEquipment.manufacturerRefs?.includes(x.value.toString());
-  });
+  const filtered =
+    spanEquipment.manufacturerRefs === null
+      ? bodyItems
+      : bodyItems.filter((x) => {
+          // If no refs, we just return everything.
+          return spanEquipment.manufacturerRefs.includes(x.value.toString());
+        });
 
   const defaultValue: SelectOption = {
     text: t("UNSPECIFIED"),
