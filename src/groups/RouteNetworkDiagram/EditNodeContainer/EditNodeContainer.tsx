@@ -24,7 +24,7 @@ type EditNodeContainerProps = {
 
 const getFilteredNodeContainerSpecifications = (
   specifications: NodeContainerSpecification[],
-  selectedCategory: string | number | undefined
+  selectedCategory: string | number | undefined,
 ) => {
   const bodyItems = specifications.map<BodyItem>((x) => {
     return {
@@ -46,7 +46,7 @@ const getFilteredManufacturers = (
   manufacturers: Manufacturer[],
   selectedNodeContainerSpecification: string | number | undefined,
   nodeContainerSpecifications: NodeContainerSpecification[],
-  t: TFunction<"translation">
+  t: TFunction<"translation">,
 ) => {
   if (
     !manufacturers ||
@@ -64,17 +64,22 @@ const getFilteredManufacturers = (
   });
 
   const spanEquipment = nodeContainerSpecifications.find(
-    (x) => x.id === selectedNodeContainerSpecification
+    (x) => x.id === selectedNodeContainerSpecification,
   );
+
   if (!spanEquipment) {
     throw new Error(
-      `Could not find SpanEquipment on id ${selectedNodeContainerSpecification}`
+      `Could not find SpanEquipment on id ${selectedNodeContainerSpecification}`,
     );
   }
 
-  const filtered = bodyItems.filter((x) => {
-    return spanEquipment.manufacturerRefs?.includes(x.id.toString());
-  });
+  const filtered =
+    spanEquipment.manufacturerRefs === null ||
+    spanEquipment.manufacturerRefs.length === 0
+      ? bodyItems
+      : bodyItems.filter((x) => {
+          return spanEquipment.manufacturerRefs?.includes(x.id.toString());
+        });
 
   const defaultValue = {
     rows: [{ id: 0, value: t("UNSPECIFIED") }],
@@ -109,7 +114,7 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
       query: QUERY_NODE_CONTAINER_DETAILS,
       variables: { nodeContainerId: nodeContainerMrid },
       pause: !nodeContainerMrid,
-    }
+    },
   );
 
   useEffect(() => {
@@ -138,7 +143,7 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
   const filteredNodeContainerSpecifications = useMemo(
     () =>
       getFilteredNodeContainerSpecifications(specifications, selectedCategory),
-    [specifications, selectedCategory]
+    [specifications, selectedCategory],
   );
 
   const selectCategory = (categoryId: string | number | undefined) => {
@@ -176,9 +181,9 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
         manufacturers,
         selectedSpecification,
         specifications,
-        t
+        t,
       ),
-    [manufacturers, selectedSpecification, specifications, t]
+    [manufacturers, selectedSpecification, specifications, t],
   );
 
   const selectNodeContainerSpecification = (specificationId: string) => {
@@ -206,13 +211,13 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
     const result = await client
       .mutation<MutationUpdateNodeContainerResponse>(
         MUTATION_UPDATE_NODE_CONTAINER,
-        parameters
+        parameters,
       )
       .toPromise();
 
     if (!result.data?.nodeContainer.updateProperties.isSuccess) {
       toast.error(
-        t(result.data?.nodeContainer.updateProperties.errorCode ?? "ERROR")
+        t(result.data?.nodeContainer.updateProperties.errorCode ?? "ERROR"),
       );
     } else {
       toast.success(t("UPDATED"));

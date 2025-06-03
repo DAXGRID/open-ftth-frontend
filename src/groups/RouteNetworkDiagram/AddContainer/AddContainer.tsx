@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 
 const getFilteredSpanEquipmentSpecifications = (
   specifications: NodeContainerSpecification[],
-  selectedCategory: string | number | undefined
+  selectedCategory: string | number | undefined,
 ) => {
   const bodyItems = specifications.map<BodyItem>((x) => {
     return {
@@ -43,7 +43,7 @@ const getFilteredManufacturers = (
   manufacturers: Manufacturer[],
   selectedNodeContainerSpecification: string | number | undefined,
   nodeContainerSpecifications: NodeContainerSpecification[],
-  t: TFunction<"translation">
+  t: TFunction<"translation">,
 ) => {
   if (
     !manufacturers ||
@@ -61,17 +61,22 @@ const getFilteredManufacturers = (
   });
 
   const spanEquipment = nodeContainerSpecifications.find(
-    (x) => x.id === selectedNodeContainerSpecification
+    (x) => x.id === selectedNodeContainerSpecification,
   );
+
   if (!spanEquipment) {
     throw new Error(
-      `Could not find SpanEquipment on id ${selectedNodeContainerSpecification}`
+      `Could not find SpanEquipment on id ${selectedNodeContainerSpecification}`,
     );
   }
 
-  const filtered = bodyItems.filter((x) => {
-    return spanEquipment.manufacturerRefs?.includes(x.id.toString());
-  });
+  const filtered =
+    spanEquipment.manufacturerRefs === null ||
+    spanEquipment.manufacturerRefs.length === 0
+      ? bodyItems
+      : bodyItems.filter((x) => {
+          return spanEquipment.manufacturerRefs?.includes(x.id.toString());
+        });
 
   const defaultValue = {
     rows: [{ id: 0, value: t("UNSPECIFIED") }],
@@ -102,16 +107,16 @@ function AddContainer() {
 
   const [, placeNodeContainerMutation] =
     useMutation<PlaceNodeContainerResponse>(
-      PLACE_NODE_CONTAINER_IN_ROUTE_NETWORK
+      PLACE_NODE_CONTAINER_IN_ROUTE_NETWORK,
     );
 
   const filteredSpanEquipmentSpecifications = useMemo(
     () =>
       getFilteredSpanEquipmentSpecifications(
         nodeContainerSpecifications,
-        selectedCategory
+        selectedCategory,
       ),
-    [nodeContainerSpecifications, selectedCategory]
+    [nodeContainerSpecifications, selectedCategory],
   );
 
   const filteredManufactuers = useMemo(
@@ -120,14 +125,14 @@ function AddContainer() {
         manufacturers,
         selectedNodeContainerSpecification,
         nodeContainerSpecifications,
-        t
+        t,
       ),
     [
       manufacturers,
       selectedNodeContainerSpecification,
       nodeContainerSpecifications,
       t,
-    ]
+    ],
   );
 
   useLayoutEffect(() => {
@@ -161,7 +166,7 @@ function AddContainer() {
 
     if (!data?.nodeContainer.placeNodeContainerInRouteNetwork.isSuccess) {
       toast.error(
-        t(data?.nodeContainer.placeNodeContainerInRouteNetwork.errorCode ?? "")
+        t(data?.nodeContainer.placeNodeContainerInRouteNetwork.errorCode ?? ""),
       );
     }
   };
