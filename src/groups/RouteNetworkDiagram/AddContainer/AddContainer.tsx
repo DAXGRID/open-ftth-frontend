@@ -223,6 +223,7 @@ function AddContainer() {
       </div>
       <div className="full-row">
         <SelectListView
+          maxHeightBody={"300px"}
           headerItems={[t("Specification")]}
           bodyItems={filteredSpanEquipmentSpecifications}
           selectItem={(x) => selectNodeContainerSpecification(x.id.toString())}
@@ -231,6 +232,7 @@ function AddContainer() {
       </div>
       <div className="full-row">
         <SelectListView
+          maxHeightBody={"300px"}
           headerItems={[t("Manufacturer")]}
           bodyItems={filteredManufactuers}
           selectItem={(x) => setSelectedManufacturer(x.id.toString())}
