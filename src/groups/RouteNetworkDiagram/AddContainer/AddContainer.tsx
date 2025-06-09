@@ -212,7 +212,7 @@ function AddContainer() {
   }
 
   return (
-    <div className="place-span-equipment page-container">
+    <div className="add-container page-container">
       <div className="full-row">
         <SelectMenu
           options={categorySelectOptions()}
