@@ -1,4 +1,10 @@
-import { useContext, useLayoutEffect, useState, useMemo } from "react";
+import {
+  useContext,
+  useLayoutEffect,
+  useState,
+  useMemo,
+  useEffect,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
@@ -135,6 +141,31 @@ function AddContainer() {
     ],
   );
 
+  useEffect(() => {
+    if (filteredSpanEquipmentSpecifications.length === 0) {
+      return;
+    }
+
+    setSelectedSpanEquipmentSpecification(
+      filteredSpanEquipmentSpecifications[0].id,
+    );
+  }, [
+    filteredSpanEquipmentSpecifications,
+    setSelectedSpanEquipmentSpecification,
+  ]);
+
+  useEffect(() => {
+    if (filteredManufactuers.length === 0) {
+      return;
+    }
+
+    if (filteredManufactuers.length > 1) {
+      setSelectedManufacturer(filteredManufactuers[1].id);
+    } else {
+      setSelectedManufacturer(filteredManufactuers[0].id);
+    }
+  }, [filteredManufactuers, setSelectedManufacturer]);
+
   useLayoutEffect(() => {
     if (!nodeContainerResult.data) return;
 
@@ -196,15 +227,12 @@ function AddContainer() {
     if (selectedCategory === categoryId || selectCategory === undefined) return;
 
     setSelectedCategory(categoryId);
-    setSelectedSpanEquipmentSpecification(undefined);
-    setSelectedManufacturer("");
   };
 
   const selectNodeContainerSpecification = (specificationId: string) => {
     if (selectedNodeContainerSpecification === specificationId) return;
 
     setSelectedSpanEquipmentSpecification(specificationId);
-    setSelectedManufacturer("");
   };
 
   if (nodeContainerResult.fetching) {
