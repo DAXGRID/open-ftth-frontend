@@ -2,22 +2,19 @@ import { Client } from "urql";
 
 export function getSpanEquipmentDetails(
   client: Client,
-  spanEquipmentOrSegmentId: string
+  spanEquipmentOrSegmentId: string,
 ) {
   return client
-    .query<QuerySpanEquipmentDetailsResponse>(
-      QUERY_SPAN_EQUIPMENT_DETAILS,
-      {
-        spanEquipmentOrSegmentId: spanEquipmentOrSegmentId,
-      }
-    )
+    .query<QuerySpanEquipmentDetailsResponse>(QUERY_SPAN_EQUIPMENT_DETAILS, {
+      spanEquipmentOrSegmentId: spanEquipmentOrSegmentId,
+    })
     .toPromise();
 }
 
 export const passageViewQuery = (
   client: Client,
   routeNetworkElementId: string,
-  spanEquipmentOrSegmentIds: string[]
+  spanEquipmentOrSegmentIds: string[],
 ) => {
   return client
     .query<PassageViewResponse>(PASSAGE_VIEW_QUERY, {
@@ -43,6 +40,9 @@ export interface SpanEquipment {
   markingInfo: {
     markingColor: string;
     markingText: string;
+  };
+  manufacturer: {
+    name: string;
   };
   addressInfo?: {
     remark?: string;
@@ -70,6 +70,9 @@ query ($spanEquipmentOrSegmentId: ID!) {
         name
         description
       }
+      manufacturer {
+        name
+      }
       markingInfo {
         markingColor
         markingText
@@ -91,7 +94,7 @@ query ($spanEquipmentOrSegmentId: ID!) {
     }
   }
 }
-`
+`;
 
 export interface PassageViewLine {
   routeSegmentIds: string[];
