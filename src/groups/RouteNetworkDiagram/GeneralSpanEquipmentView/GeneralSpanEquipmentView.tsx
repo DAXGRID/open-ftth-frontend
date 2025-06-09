@@ -215,6 +215,15 @@ function GeneralSpanEquipmentView({
               </LabelContainer>
             </div>
             <div className="full-row">
+              <LabelContainer text={t("MANUFACTURER")}>
+                <TextBox
+                  value={spanEquipment.manufacturer?.name ?? t("UNSPECIFIED")}
+                  setValue={() => {}}
+                  disabled={true}
+                />
+              </LabelContainer>
+            </div>
+            <div className="full-row">
               <LabelContainer text={t("DESCRIPTION")}>
                 <TextBox
                   value={spanEquipment.description ?? ""}
