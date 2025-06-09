@@ -200,6 +200,19 @@ function PlaceSpanEquipmentPage() {
     }
   }, [filteredManufactuers, setSelectedManufacturer]);
 
+  useEffect(() => {
+    if (filteredSpanEquipmentSpecifications?.length === 0) {
+      return;
+    }
+
+    setSelectedSpanEquipmentSpecification(
+      filteredSpanEquipmentSpecifications[0].id,
+    );
+  }, [
+    filteredSpanEquipmentSpecifications,
+    setSelectedSpanEquipmentSpecification,
+  ]);
+
   useLayoutEffect(() => {
     if (!spanEquipmentResult.data) {
       return;
@@ -243,15 +256,12 @@ function PlaceSpanEquipmentPage() {
     if (selectedCategory === categoryId || selectCategory === undefined) return;
 
     setSelectedCategory(categoryId);
-    setSelectedSpanEquipmentSpecification(undefined);
-    setSelectedManufacturer("");
   };
 
   const selectSpanEquipmentSpecification = (specificationId: string) => {
     if (selectedSpanEquipmentSpecification === specificationId) return;
 
     setSelectedSpanEquipmentSpecification(specificationId);
-    setSelectedManufacturer("");
   };
 
   if (spanEquipmentResult.fetching) {
