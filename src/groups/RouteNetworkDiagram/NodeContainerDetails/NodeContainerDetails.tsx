@@ -19,7 +19,7 @@ type SpanEquipmentDetailsParams = {
 
 function mapContainerResponse(
   x: NodeContainerDetailsResponse | undefined,
-  t: TFunction<string>
+  t: TFunction<string>,
 ) {
   if (!x) return [];
   const { specification, manufacturer } = x.utilityNetwork?.nodeContainer || {};
@@ -47,7 +47,7 @@ function NodeContainerDetails({
       query: QUERY_NODE_CONTAINER_DETAILS,
       variables: { nodeContainerId: nodeContainerMrid },
       pause: !nodeContainerMrid,
-    }
+    },
   );
 
   useEffect(() => {
@@ -57,8 +57,11 @@ function NodeContainerDetails({
           title={t("EDIT_NODE_CONTAINER")}
           closeCallback={() => setShowEditNodeContainer(false)}
         >
-          <EditNodeContainer nodeContainerMrid={nodeContainerMrid ?? ""} />
-        </ModalContainer>
+          <EditNodeContainer
+            nodeContainerMrid={nodeContainerMrid ?? ""}
+            successCallback={() => setShowEditNodeContainer(false)}
+          />
+        </ModalContainer>,
       );
     } else {
       showElement(null);

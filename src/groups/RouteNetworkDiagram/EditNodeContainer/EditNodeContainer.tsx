@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 
 type EditNodeContainerProps = {
   nodeContainerMrid: string;
+  successCallback: () => void;
 };
 
 const getFilteredNodeContainerSpecifications = (
@@ -89,7 +90,10 @@ const getFilteredManufacturers = (
   return [defaultValue, ...filtered];
 };
 
-function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
+function EditNodeContainer({
+  nodeContainerMrid,
+  successCallback,
+}: EditNodeContainerProps) {
   const { t } = useTranslation();
   const client = useClient();
 
@@ -221,6 +225,7 @@ function EditNodeContainer({ nodeContainerMrid }: EditNodeContainerProps) {
       );
     } else {
       toast.success(t("UPDATED"));
+      successCallback();
     }
   };
 
