@@ -159,12 +159,29 @@ function AddContainer() {
       return;
     }
 
-    if (filteredManufactuers.length > 1) {
+    const spanEquipment = nodeContainerSpecifications.find(
+      (x) => x.id === selectedNodeContainerSpecification,
+    );
+
+    if (!spanEquipment) {
+      throw new Error(
+        `Could not find SpanEquipment on id ${selectedNodeContainerSpecification}`,
+      );
+    }
+
+    if (
+      spanEquipment.manufacturerRefs &&
+      spanEquipment.manufacturerRefs.length > 1
+    ) {
       setSelectedManufacturer(filteredManufactuers[1].id);
     } else {
       setSelectedManufacturer(filteredManufactuers[0].id);
     }
-  }, [filteredManufactuers, setSelectedManufacturer]);
+  }, [
+    filteredManufactuers,
+    setSelectedManufacturer,
+    selectedNodeContainerSpecification,
+  ]);
 
   useLayoutEffect(() => {
     if (!nodeContainerResult.data) return;
