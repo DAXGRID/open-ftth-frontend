@@ -193,10 +193,23 @@ function PlaceSpanEquipmentPage() {
       return;
     }
 
-    if (filteredManufactuers.length > 1) {
-      setSelectedManufacturer(filteredManufactuers[1].id);
-    } else {
+    const spanEquipment = spanEquipmentSpecifications.find(
+      (x) => x.id === selectedSpanEquipmentSpecification,
+    );
+
+    if (!spanEquipment) {
+      throw new Error(
+        `Could not find SpanEquipment on id ${selectedSpanEquipmentSpecification}`,
+      );
+    }
+
+    if (
+      !spanEquipment.manufacturerRefs ||
+      spanEquipment.manufacturerRefs.length === 0
+    ) {
       setSelectedManufacturer(filteredManufactuers[0].id);
+    } else {
+      setSelectedManufacturer(filteredManufactuers[1].id);
     }
   }, [filteredManufactuers, setSelectedManufacturer]);
 
