@@ -41,10 +41,14 @@ function createHoverPointerFunc(map: Map, bboxSize: number) {
   const onHoverPointer = (e: MapMouseEvent) => {
     const features = queryFeatures(map, bboxSize, e);
 
-    if (features.length > 0) {
-      map.getCanvas().style.cursor = "pointer";
-    } else {
-      map.getCanvas().style.cursor = "";
+    // The progress check is done to keep showing the progress
+    // cursor when something is loading.
+    if (map.getCanvas().style.cursor !== "progress") {
+      if (features.length > 0) {
+        map.getCanvas().style.cursor = "pointer";
+      } else {
+        map.getCanvas().style.cursor = "";
+      }
     }
   };
 

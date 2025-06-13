@@ -6,6 +6,8 @@ import {
   useCallback,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useClient } from "urql";
+import { shortestPathBetweenSegments } from "./MapContextGql";
 
 type FeatureType = "RouteNode" | "RouteSegment" | "Deleted";
 
@@ -33,7 +35,7 @@ type MapContextType = {
   setIsInSelectionMode: (isInSelectionMode: boolean) => void;
   selectedSegmentIds: string[];
   setSelectedSegmentIds: (selectedSegments: string[]) => void;
-  toggleSelectedSegmentId: (selectedSegment: string) => void;
+  appendSegmentSelection: (selectedSegment: string) => void;
   removeLastSelectedSegmentId: () => void;
   identifiedFeature: IdentifiedFeature | null;
   setIdentifiedFeature: (identifiedNetworkElement: IdentifiedFeature) => void;
@@ -44,6 +46,7 @@ type MapContextType = {
   tilesetUpdated: (tilesetName: string) => void;
   subscribeTilesetUpdated: (callback: (tilesetName: string) => void) => string;
   unSubscribeTilesetUpdated: (token: string) => void;
+  isLoading: boolean;
 };
 
 type Trace = {
@@ -75,6 +78,7 @@ function arraysEqual(a: any, b: any) {
 }
 
 const MapContext = createContext<MapContextType>({
+  isLoading: false,
   isInSelectionMode: false,
   setIsInSelectionMode: () => {
     console.warn("no provider set for setIsInSelectionMode");
@@ -110,7 +114,7 @@ const MapContext = createContext<MapContextType>({
   unSubscribeTilesetUpdated: () => {
     console.warn("no provider set for unSubscribeTilesetUpdated");
   },
-  toggleSelectedSegmentId: () => {
+  appendSegmentSelection: () => {
     console.warn("no provider set for addSelectedSegmentId");
   },
   removeLastSelectedSegmentId: () => {
@@ -137,6 +141,13 @@ const MapProvider = ({ children }: MapProviderProps) => {
     Record<string, (tilesetName: string) => void>
   >({});
   const [isInSelectionMode, setIsInSelectionMode] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [clickedSegments, setClickedSegments] = useState<{
+    start: string | null;
+    end: string | null;
+  }>({ start: null, end: null });
+
+  const client = useClient();
 
   useEffect(() => {
     if (!searchResult) return;
@@ -149,27 +160,34 @@ const MapProvider = ({ children }: MapProviderProps) => {
     }
   }, [searchResult]);
 
-  const toggleSelectedSegmentId = useCallback(
+  const appendSegmentSelection = useCallback(
     (segmentId: string) => {
-      setSelectedSegments((prevSelectedSegments) => {
-        const indexAlreadyExist = prevSelectedSegments.indexOf(segmentId);
-        if (indexAlreadyExist === -1) {
-          return [...prevSelectedSegments, segmentId];
+      setClickedSegments((prevClickedSegments) => {
+        if (
+          prevClickedSegments.start !== null &&
+          prevClickedSegments.end !== null
+        ) {
+          return { ...prevClickedSegments, end: segmentId };
+        } else if (
+          prevClickedSegments.start &&
+          prevClickedSegments.end === null
+        ) {
+          return { start: prevClickedSegments.start, end: segmentId };
         } else {
-          prevSelectedSegments.splice(indexAlreadyExist, 1);
-          return [...prevSelectedSegments];
+          return { start: segmentId, end: null };
         }
       });
     },
-    [setSelectedSegments],
+    [setClickedSegments],
   );
 
-  const removeLastSelectedSegmentId = useCallback(() => {
+  const clearSelection = useCallback(() => {
     setSelectedSegments((prevSelectedSegments) => {
-      prevSelectedSegments.pop();
-      return [...prevSelectedSegments];
+      return [];
     });
-  }, [setSelectedSegments]);
+
+    setClickedSegments({ start: null, end: null });
+  }, [setSelectedSegments, setClickedSegments]);
 
   function tileSetUpdated(tilesetName: string) {
     Object.entries(subscribeTilesetUpdated).forEach((x) => x[1](tilesetName));
@@ -190,6 +208,39 @@ const MapProvider = ({ children }: MapProviderProps) => {
     [setSelectedSegments],
   );
 
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
+    if (clickedSegments.start === null && clickedSegments.end === null) {
+      return;
+    }
+
+    if (clickedSegments.start !== null && clickedSegments.end === null) {
+      setSelectedSegmentsx([clickedSegments.start]);
+      return;
+    }
+
+    setIsLoading(true);
+
+    shortestPathBetweenSegments(
+      client,
+      clickedSegments.start,
+      clickedSegments.end,
+    )
+      .then((data) => {
+        if (data.data?.routeNetwork?.shortestPathBetweenSegments) {
+          setSelectedSegmentsx(
+            data.data.routeNetwork.shortestPathBetweenSegments,
+          );
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [clickedSegments, client, setSelectedSegmentsx, setIsLoading]);
+
   return (
     <MapContext.Provider
       value={{
@@ -197,11 +248,12 @@ const MapProvider = ({ children }: MapProviderProps) => {
         setIsInSelectionMode: setIsInSelectionMode,
         setSelectedSegmentIds: setSelectedSegmentsx,
         isInSelectionMode: isInSelectionMode,
-        toggleSelectedSegmentId: toggleSelectedSegmentId,
-        removeLastSelectedSegmentId: removeLastSelectedSegmentId,
+        appendSegmentSelection: appendSegmentSelection,
+        clearSelection: clearSelection,
         identifiedFeature: identifiedNetworkElement,
         setIdentifiedFeature: setIdentifiedNetworkElement,
         trace: trace,
+        isLoading: isLoading,
         setTrace: setTrace,
         searchResult: searchResult,
         setSearchResult: setSearchResult,
