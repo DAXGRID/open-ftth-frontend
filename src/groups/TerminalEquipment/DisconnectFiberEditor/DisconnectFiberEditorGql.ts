@@ -100,7 +100,7 @@ interface DisconnectFromTerminalEquipmentParams {
 const DISCONNECT_FROM_TERMINAL_EQUIPMENT_MUTATION = `
 mutation (
 $routeNodeId: ID!,
-$disconnects: [DisconnectSpanSegmentFromTerminalOperationInputType!]!
+$disconnects: [DisconnectSpanSegmentFromTerminalOperationInput!]!
 ) {
   spanEquipment {
     disconnectFromTerminalEquipment(
