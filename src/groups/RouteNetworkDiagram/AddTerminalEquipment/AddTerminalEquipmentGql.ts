@@ -110,8 +110,8 @@ $manufacturerId: ID
 $numberOfEquipments: Int!
 $startSequenceNumber: Int!
 $terminalEquipmentNamingMethod: TerminalEquipmentNamingMethodEnum!
-$namingInfo: NamingInfoInputType!
-$subrackPlacementInfo: SubrackPlacementInfoInputType
+$namingInfo: NamingInfoInput!
+$subrackPlacementInfo: SubrackPlacementInfoInput
 $accessAddressId: ID
 $unitAddressId: ID
 $remark: String

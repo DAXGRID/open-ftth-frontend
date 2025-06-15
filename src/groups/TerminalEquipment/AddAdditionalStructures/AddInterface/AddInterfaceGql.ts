@@ -3,28 +3,21 @@ import { Client } from "urql";
 export function getTerminalStructureSpecifications(client: Client) {
   return client
     .query<TerminalStructureSpecificationResponse>(
-      TERMINAL_STRUCTURE_SPECIFICATION_QUERY, {}
+      TERMINAL_STRUCTURE_SPECIFICATION_QUERY,
+      {},
     )
     .toPromise();
 }
 
-export function addInterface(
-  client: Client,
-  params: AddInterfaceParams
-) {
+export function addInterface(client: Client, params: AddInterfaceParams) {
   return client
-    .mutation<AddInterfaceResponse>(
-      ADD_INTERFACE,
-      params
-    )
+    .mutation<AddInterfaceResponse>(ADD_INTERFACE, params)
     .toPromise();
 }
 
 export function getNextPhysicalCircuitId(client: Client) {
   return client
-    .query<NextPhysicalCircuitIdResponse>(
-      NEXT_PHYSICAL_CIRCUIT_ID_QUERY, {}
-    )
+    .query<NextPhysicalCircuitIdResponse>(NEXT_PHYSICAL_CIRCUIT_ID_QUERY, {})
     .toPromise();
 }
 
@@ -78,7 +71,7 @@ interface AddInterfaceParams {
     subSlotNumber: number | null;
     portNumber: number | null;
     circuitName: string | null;
-  } | null
+  } | null;
 }
 
 const ADD_INTERFACE = `
@@ -86,7 +79,7 @@ mutation (
 $routeNodeId: ID!,
 $terminalEquipmentId: ID!,
 $structureSpecificationId: ID!,
-$interfaceInfo: InterfaceInfoInputType
+$interfaceInfo: InterfaceInfoInput
 ) {
   terminalEquipment {
     addInterface(
@@ -102,7 +95,6 @@ $interfaceInfo: InterfaceInfoInputType
   }
 }
 `;
-
 
 interface NextPhysicalCircuitIdResponse {
   utilityNetwork: {

@@ -3,29 +3,24 @@ import { Client } from "urql";
 export function getTerminalStructureSpecifications(client: Client) {
   return client
     .query<TerminalStructureSpecificationResponse>(
-      TERMINAL_STRUCTURE_SPECIFICATION_QUERY, {}
+      TERMINAL_STRUCTURE_SPECIFICATION_QUERY,
+      {},
     )
     .toPromise();
 }
 
-export function getTerminalStructure(client: Client, params: TerminalStructureQueryParams) {
-  return client
-    .query<TerminalEquipmentResponse>(
-      TERMINAL_STRUCTURE_QUERY, params
-    )
-    .toPromise();
-}
-
-
-export function editInterface(
+export function getTerminalStructure(
   client: Client,
-  params: EditInterfaceParams
+  params: TerminalStructureQueryParams,
 ) {
   return client
-    .mutation<AddInterfaceResponse>(
-      EDIT_INTERFACE,
-      params
-    )
+    .query<TerminalEquipmentResponse>(TERMINAL_STRUCTURE_QUERY, params)
+    .toPromise();
+}
+
+export function editInterface(client: Client, params: EditInterfaceParams) {
+  return client
+    .mutation<AddInterfaceResponse>(EDIT_INTERFACE, params)
     .toPromise();
 }
 
@@ -79,7 +74,7 @@ interface EditInterfaceParams {
     slotNumber: number | null;
     subSlotNumber: number | null;
     circuitName: string | null;
-  } | null
+  } | null;
 }
 
 const EDIT_INTERFACE = `
@@ -88,7 +83,7 @@ $terminalEquipmentId: ID!,
 $terminalStructureId: ID!,
 $terminalStructureSpecificationId: ID!,
 $position: Int!,
-$interfaceInfo: InterfaceInfoInputType
+$interfaceInfo: InterfaceInfoInput
 ) {
   terminalEquipment {
     updateTerminalStructureProperties(
@@ -118,7 +113,7 @@ interface TerminalStructure {
     subSlotNumber: number | null;
     circuitName: string | null;
     portNumber: number | null;
-  } | null
+  } | null;
 }
 
 interface TerminalEquipmentResponse {
@@ -129,7 +124,7 @@ interface TerminalEquipmentResponse {
 
 interface TerminalStructureQueryParams {
   terminalEquipmentOrTerminalId: string;
-  terminalStructureId : string;
+  terminalStructureId: string;
 }
 
 export const TERMINAL_STRUCTURE_QUERY = `
