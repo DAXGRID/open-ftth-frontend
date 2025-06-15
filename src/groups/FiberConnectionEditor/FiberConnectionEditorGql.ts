@@ -147,7 +147,7 @@ interface ConnectToTerminalEquipmentParams {
 const CONNECT_TO_TERMINAL_EQUIPMENT_MUTATION = `
 mutation (
 $routeNodeId: ID!,
-$connects: [ConnectSpanSegmentToTerminalOperationInputType!]!) {
+$connects: [ConnectSpanSegmentToTerminalOperationInput!]!) {
   spanEquipment {
     connectToTerminalEquipment (
       routeNodeId: $routeNodeId
