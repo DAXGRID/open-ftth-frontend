@@ -6,14 +6,14 @@ interface QueryTerminalEquipmentDetailsParams {
 
 export function queryTerminalEquipmentDetails(
   client: Client,
-  terminalEquipmentId: string
+  terminalEquipmentId: string,
 ) {
   return client
     .query<QueryTerminalEquipmentDetailsResponse>(
       QUERY_TERMINAL_EQUIPMENT_DETAILS,
       {
         terminalEquipmentOrTerminalId: terminalEquipmentId,
-      } as QueryTerminalEquipmentDetailsParams
+      } as QueryTerminalEquipmentDetailsParams,
     )
     .toPromise();
 }
@@ -21,21 +21,22 @@ export function queryTerminalEquipmentDetails(
 export function queryTerminalEquipmentSpecifications(client: Client) {
   return client
     .query<SpanEquipmentSpecificationsResponse>(
-      QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS, {}
+      QUERY_TERMINAL_EQUIPMENT_SPECIFICATIONS,
+      {},
     )
     .toPromise();
 }
 
 export function queryNearestAccessAddresses(
   client: Client,
-  routeNodeId: string
+  routeNodeId: string,
 ) {
   return client
     .query<QueryNearestAccessAddressesResponse>(
       QUERY_NEAREST_ACCESS_ADDRESSES,
       {
         routeNodeId: routeNodeId,
-      } as QueryNearestAccessAddressesParams
+      } as QueryNearestAccessAddressesParams,
     )
     .toPromise();
 }
@@ -50,12 +51,12 @@ export function queryRacks(client: Client, routeNodeId: string) {
 
 export function updateTerminalEquipment(
   client: Client,
-  params: MutationUpdateTerminalEquipmentParams
+  params: MutationUpdateTerminalEquipmentParams,
 ) {
   return client
     .mutation<MutationUpdateTerminalEquipmentResponse>(
       MUTATION_UPDATE_TERMINAL_EQUIPMENT,
-      params
+      params,
     )
     .toPromise();
 }
@@ -282,8 +283,8 @@ mutation (
 $terminalEquipmentId: ID!,
 $terminalEquipmentSpecificationId: ID!,
 $manufacturerId: ID,
-$namingInfo: NamingInfoInputType,
-$addressInfo: AddressInfoInputType) {
+$namingInfo: NamingInfoInput,
+$addressInfo: AddressInfoInput) {
   terminalEquipment {
     updateProperties (terminalEquipmentId: $terminalEquipmentId,
                       terminalEquipmentSpecificationId: $terminalEquipmentSpecificationId,
