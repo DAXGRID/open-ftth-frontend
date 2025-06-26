@@ -10,6 +10,7 @@ import {
 } from "./DisconnectFiberEditorGql";
 import DefaultButton from "../../../components/DefaultButton";
 import { toast } from "react-toastify";
+import ColorCodedElement from "../../ColorCodedElement";
 
 interface CheckboxPair {
   checked: boolean;
@@ -24,7 +25,7 @@ interface CheckboxListChangeEvent {
 
 function createLineCheckboxPairs(
   lines: Line[],
-  spanSegmentId: string
+  spanSegmentId: string,
 ): CheckboxPair[] {
   return lines
     .filter((line) => line.isConnected)
@@ -65,7 +66,7 @@ function DisconnectFiberEditor({
     }).then((response) => {
       if (response.data) {
         setView(
-          response.data.utilityNetwork.disconnectSpanEquipmentFromTerminalView
+          response.data.utilityNetwork.disconnectSpanEquipmentFromTerminalView,
         );
       }
     });
@@ -82,8 +83,8 @@ function DisconnectFiberEditor({
   }: CheckboxListChangeEvent) => {
     setPairs(
       pairs.map((pair) =>
-        pair.value === value ? { ...pair, checked: checked } : pair
-      )
+        pair.value === value ? { ...pair, checked: checked } : pair,
+      ),
     );
   };
 
@@ -119,7 +120,7 @@ function DisconnectFiberEditor({
     } else {
       toast.error(
         response.data?.spanEquipment.disconnectFromTerminalEquipment
-          .errorCode ?? "ERROR"
+          .errorCode ?? "ERROR",
       );
     }
   };
@@ -184,7 +185,7 @@ function DisconnectFiberEditor({
                     {x.line.terminalName}
                   </div>
                   <div className="disconnect-fiber-editor-container-body-line-item">
-                    {x.line.spanStructureName}
+                    {ColorCodedElement(x.line.spanStructureName, t)}
                   </div>
                   <div className="disconnect-fiber-editor-container-body-line-item">
                     {x.line.end}
