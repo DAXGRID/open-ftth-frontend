@@ -1,21 +1,31 @@
 import { Client } from "urql";
 
-export function getInformation(client: Client, routeNetworkElementId: string, equipmentId: string | null) {
+export function getInformation(
+  client: Client,
+  routeNetworkElementId: string,
+  equipmentId: string | null,
+) {
   return client
     .query<OutageViewQueryResponse>(OUTAGE_VIEW_QUERY, {
       routeNetworkElementId: routeNetworkElementId,
-      equipmentId: equipmentId
+      equipmentId: equipmentId,
     })
     .toPromise();
 }
 
 export function getWorkTasks(client: Client) {
   return client
-    .query<LatestTenTroubleTicketsResponse>(LATEST_TEN_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY, {})
+    .query<LatestTenTroubleTicketsResponse>(
+      LATEST_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY,
+      {},
+    )
     .toPromise();
 }
 
-export function sendTroubleTicket(client: Client, params: SendTroubleTicketParams) {
+export function sendTroubleTicket(
+  client: Client,
+  params: SendTroubleTicketParams,
+) {
   return client
     .mutation<SendTroubleTicketResponse>(SEND_TROUBLE_TICKET_MUTATION, params)
     .toPromise();
@@ -104,8 +114,8 @@ query (
 
 export interface LatestTenTroubleTicketsResponse {
   outage: {
-    latestTenTroubleTicketsOrderedByDate: WorkTask[]
-  }
+    latestTroubleTicketsOrderedByDate: WorkTask[];
+  };
 }
 
 export interface WorkTask {
@@ -114,10 +124,10 @@ export interface WorkTask {
   name: string;
 }
 
-const LATEST_TEN_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY = `
+const LATEST_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY = `
 query {
   outage {
-    latestTenTroubleTicketsOrderedByDate
+    latestTroubleTicketsOrderedByDate
     {
       workTaskId
       number
@@ -133,8 +143,8 @@ interface SendTroubleTicketResponse {
       errorCode?: string;
       isSuccess: boolean;
       errorMesssage?: string;
-    }
-  }
+    };
+  };
 }
 
 interface SendTroubleTicketParams {
