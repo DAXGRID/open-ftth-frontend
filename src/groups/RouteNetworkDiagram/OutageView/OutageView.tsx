@@ -143,7 +143,7 @@ function OutageView({
   useEffect(() => {
     getWorkTasks(client).then((response) => {
       let troubleTickets =
-        response.data?.outage.latestTenTroubleTicketsOrderedByDate;
+        response.data?.outage.latestTroubleTicketsOrderedByDate;
       if (troubleTickets) {
         setWorkTasks(troubleTickets);
       } else {
