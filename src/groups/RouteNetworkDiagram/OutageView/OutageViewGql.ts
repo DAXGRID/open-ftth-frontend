@@ -127,7 +127,7 @@ export interface WorkTask {
 const LATEST_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY = `
 query {
   outage {
-    latestTroubleTicketsOrderedByDate
+    latestTroubleTicketsOrderedByDate(count: 50)
     {
       workTaskId
       number
