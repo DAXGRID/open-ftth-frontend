@@ -61,7 +61,7 @@ function createButton(): HTMLButtonElement {
   return button;
 }
 
-function createPopupContainer(bodyContents: string[]): string {
+function createPopupContainer(bodyContents: string[]): HTMLDivElement {
   const stringToHTML = (str: string) => {
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
@@ -81,7 +81,7 @@ function createPopupContainer(bodyContents: string[]): string {
   container.classList.add("information-control-container");
   container.appendChild(body);
 
-  return container.outerHTML;
+  return container;
 }
 
 function filterFeatures(
@@ -208,7 +208,7 @@ function createOnClickFunc(
     if (parsedBodies) {
       showSelection(map, features);
       const popupContainer = createPopupContainer(parsedBodies);
-      addPopup(map, coordinates, popupContainer);
+      addPopup(map, coordinates, popupContainer.outerHTML);
     } else {
       throw Error("Could not parse bodies for information control display.");
     }
@@ -241,7 +241,16 @@ function createHoverPointerFunc(
 }
 
 function addPopup(map: Map, coordinates: [number, number], htmlBody: string) {
-  new Popup().setLngLat(coordinates).setHTML(htmlBody).addTo(map);
+  const popup = new Popup().setLngLat(coordinates).setHTML(htmlBody);
+  // This has been done because elements are scrolled to be bottom at the start.
+  // From what I could find there are no CSS way to do it, so it has been done with JavaScript.
+  popup.on("open", () => {
+    popup
+      .getElement()
+      .querySelectorAll(".information-control-body")[0]
+      .scrollTo({ top: 0, behavior: "instant" });
+  });
+  popup.addTo(map);
 }
 
 function removePopup() {
@@ -289,7 +298,9 @@ class InformationControl {
   active: boolean = false;
   onClickFunc:
     | ((
-      e: MapMouseEvent & { features?: Feature<Geometry, GeoJsonProperties>[] | undefined; } & Object,
+        e: MapMouseEvent & {
+          features?: Feature<Geometry, GeoJsonProperties>[] | undefined;
+        } & Object,
       ) => void)
     | null = null;
   onHoverFunc: ((e: MapMouseEvent) => void) | null = null;
