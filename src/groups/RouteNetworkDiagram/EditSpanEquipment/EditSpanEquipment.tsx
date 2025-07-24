@@ -379,11 +379,6 @@ function EditSpanEquipment({
       return;
     }
 
-    if (selectedAccessAddressId && !selectedUnitAddressId) {
-      toast.error(t("UNIT_ADDRESS_REQUIRED"));
-      return;
-    }
-
     const params: UpdateSpanEquipmentDetailsParameters = {
       name: name,
       description: description,
