@@ -378,7 +378,8 @@
       "NOTHING_SELECTED_TO_CUT": "Nothing has been selected to be cut.",
       "EDIT_TAGS": "Edit tags",
       "TAGS": "Tags",
-      "NUMBER": "Number"
+      "NUMBER": "Number",
+      "CONFIRM_OVERWRITE_CIRCUIT_ID": "Er du sikker på at du vil overskrive værdien?"
     }
   },
   "dk": {
@@ -760,7 +761,8 @@
       "NOTHING_SELECTED_TO_CUT": "Du har ikke valgt noget som skal klippes.",
       "EDIT_TAGS": "Editer tags",
       "TAGS": "Tags",
-      "NUMBER": "Nummer"
+      "NUMBER": "Nummer",
+      "CONFIRM_OVERWRITE_CIRCUIT_ID": "Er du sikker på at du vil overskrive værdien?"
     }
   }
 }
