@@ -24,6 +24,12 @@ export function editInterface(client: Client, params: EditInterfaceParams) {
     .toPromise();
 }
 
+export function getNextPhysicalCircuitId(client: Client) {
+  return client
+    .query<NextPhysicalCircuitIdResponse>(NEXT_PHYSICAL_CIRCUIT_ID_QUERY, {})
+    .toPromise();
+}
+
 export interface TerminalStructureSpecification {
   id: string;
   category: string;
@@ -152,3 +158,17 @@ query(
     }
   }
 }`;
+
+interface NextPhysicalCircuitIdResponse {
+  utilityNetwork: {
+    getNextPhysicalCircuitId: string;
+  };
+}
+
+const NEXT_PHYSICAL_CIRCUIT_ID_QUERY = `
+query {
+  utilityNetwork {
+    getNextPhysicalCircuitId
+  }
+}
+`;
