@@ -37,7 +37,8 @@
 
 .connectivity-view-row {
   display: grid;
-  grid-auto-columns: minmax(0, 3fr);
+  grid-auto-columns: minmax(0, 3fr) minmax(0, 2fr) minmax(0, 2fr) minmax(0, 5fr)
+    minmax(0, 3fr) minmax(0, 3fr);
   grid-auto-flow: column;
 
   border-bottom: 1px solid colors.$border-color;
