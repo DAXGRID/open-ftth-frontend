@@ -309,7 +309,6 @@ function RouteNetworkMap({
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const {
     appendSegmentSelection: toggleSelectedSegmentId,
-    setSelectedSegmentIds,
     selectedSegmentIds,
     setIdentifiedFeature,
     trace,
@@ -490,7 +489,7 @@ function RouteNetworkMap({
 
       newMap.addControl(
         new ClearSelectionControl(() => {
-          setSelectedSegmentIds([]);
+          clearSelection();
         }),
         "top-right",
       );
@@ -699,7 +698,6 @@ function RouteNetworkMap({
     toggleSelectedSegmentId,
     clearSelection,
     setShowPlaceSpanEquipment,
-    setSelectedSegmentIds,
     isWriter,
     setIsInSelectionMode,
   ]);
