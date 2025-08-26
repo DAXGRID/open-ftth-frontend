@@ -4,6 +4,7 @@ import { ConnectivityTraceView } from "./ConnectivityViewGql";
 import { ConnectivityViewContext } from "./ConnectivityViewContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchPlus } from "@fortawesome/free-solid-svg-icons";
+import ColorCodedElement from "../../ColorCodedElement";
 
 interface TraceViewProps {
   view: { view: ConnectivityTraceView | null; show: boolean };
@@ -68,7 +69,9 @@ function ConnectivityViewTraceView({ view }: TraceViewProps) {
               <div className="trace-view-body-item">{x.equipment}</div>
               <div className="trace-view-body-item">{x.terminalStructure}</div>
               <div className="trace-view-body-item">{x.terminal}</div>
-              <div className="trace-view-body-item">{x.connectionInfo}</div>
+              <div className="trace-view-body-item">
+                {ColorCodedElement(x.connectionInfo ?? "", t)}
+              </div>
               <div className="trace-view-body-item">{x.totalLength}</div>
             </div>
           );
