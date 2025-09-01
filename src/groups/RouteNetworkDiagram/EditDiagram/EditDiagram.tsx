@@ -86,6 +86,7 @@ import {
   addContainerModal,
   addInnerConduitModal,
   establishCustomerConnectionModal,
+  addInstallationModal,
   addRackModal,
   addTerminalEquipmentModal,
   outageViewModal,
@@ -186,6 +187,7 @@ interface ShowModals {
   addContainer: boolean;
   addInnerConduit: boolean;
   establishCustomerConnection: boolean;
+  addInstallation: boolean;
   addRack: boolean;
   addTerminalEquipment: boolean;
   outageView: boolean;
@@ -197,6 +199,7 @@ interface ShowModalsAction {
     | "addContainer"
     | "addInnerConduit"
     | "establishCustomerConnection"
+    | "addInstallation"
     | "addRack"
     | "addTerminalEquipment"
     | "outageView"
@@ -235,6 +238,11 @@ function showModalsReducer(
         ...state,
         establishCustomerConnection:
           action.show ?? !state.establishCustomerConnection,
+      };
+    case "addInstallation":
+      return {
+        ...state,
+        addInstallation: action.show ?? !state.addInstallation,
       };
     case "addRack":
       return {
@@ -811,6 +819,26 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   ]);
 
   useEffect(() => {
+    if (showModals.addInstallation) {
+      showElement(
+        addInstallationModal(
+          () =>
+            showModalsDispatch({
+              type: "addInstallation",
+              show: false,
+            }),
+          t("ADD_INSTALLATION"),
+          localIdentifiedFeature?.id ?? "",
+        ),
+      );
+
+      return () => {
+        showElement(null);
+      };
+    }
+  }, [showModals.addInstallation, t, showElement, localIdentifiedFeature?.id]);
+
+  useEffect(() => {
     if (showModals.addRack) {
       showElement(
         addRackModal(
@@ -1207,16 +1235,32 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             title={t("REVERSE_VERTICAL_ALIGNMENT")}
             disabled={!editMode}
           />
-          <ActionButton
+
+          <MultiOptionActionButton
             icon={EstablishCustomerConnectionSvg}
-            action={() =>
-              showModalsDispatch({
-                type: "establishCustomerConnection",
-                show: true,
-              })
-            }
+            actions={[
+              {
+                text: t("ADD_PIPE_LOOP"),
+                action: () =>
+                  showModalsDispatch({
+                    type: "establishCustomerConnection",
+                    show: true,
+                  }),
+                key: 0,
+              },
+              {
+                text: t("ADD_INSTALLATION"),
+                action: () =>
+                  showModalsDispatch({
+                    type: "addInstallation",
+                    show: true,
+                  }),
+                key: 1,
+              },
+            ]}
             title={t("ESTABLISH_CUSTOMER_CONNECTION")}
           />
+
           <ActionButton
             icon={EraserSvg}
             action={() => clearHighlights()}

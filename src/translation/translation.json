@@ -379,7 +379,10 @@
       "EDIT_TAGS": "Edit tags",
       "TAGS": "Tags",
       "NUMBER": "Number",
-      "CONFIRM_OVERWRITE_CIRCUIT_ID": "Er du sikker på at du vil overskrive værdien?"
+      "CONFIRM_OVERWRITE_CIRCUIT_ID": "Er du sikker på at du vil overskrive værdien?",
+      "INSTALLATION": "Installation",
+      "ADD_INSTALLATION": "Tilføj installation",
+      "ADD_PIPE_LOOP": "Tilføj rørsløjfe"
     }
   },
   "dk": {
@@ -762,7 +765,10 @@
       "EDIT_TAGS": "Editer tags",
       "TAGS": "Tags",
       "NUMBER": "Nummer",
-      "CONFIRM_OVERWRITE_CIRCUIT_ID": "Er du sikker på at du vil overskrive værdien?"
+      "CONFIRM_OVERWRITE_CIRCUIT_ID": "Er du sikker på at du vil overskrive værdien?",
+      "INSTALLATION": "Installation",
+      "ADD_INSTALLATION": "Tilføj installation",
+      "ADD_PIPE_LOOP": "Tilføj rørsløjfe"
     }
   }
 }
