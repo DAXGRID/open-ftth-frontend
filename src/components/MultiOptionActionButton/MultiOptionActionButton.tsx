@@ -39,6 +39,7 @@ function MultiOptionActionButton({
       <div
         role="button"
         tabIndex={0}
+        title={title}
         onClick={() => !disabled && setOpen(!open)}
         className={`multi-option-action-button ${disabled ? "disabled" : ""}`}
       >
