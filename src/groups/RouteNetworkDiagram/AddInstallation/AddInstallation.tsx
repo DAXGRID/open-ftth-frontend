@@ -156,6 +156,7 @@ function AddInstallation({ routeNodeId }: AddInstallationProps) {
       <div className="full-row">
         <LabelContainer text={t("INSTALLATION")}>
           <SelectMenu
+            maxHeight={"250px"}
             selected={selectedInstallationId}
             options={installationOptions}
             onSelected={(x) => setselectedInstallationId(x)}
