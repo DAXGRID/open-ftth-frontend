@@ -3,6 +3,7 @@ import ModalContainer from "../../../components/ModalContainer";
 import AddContainer from "../AddContainer";
 import AddInnerSpanStructure from "../AddInnerSpanStructure";
 import EstablishCustomerConnection from "../EstablishCustomerConnection";
+import AddInstallation from "../AddInstallation";
 import AddRack from "../AddRack";
 import AddTerminalEquipment from "../AddTerminalEquipment";
 import OutageView from "../OutageView";
@@ -41,6 +42,18 @@ export function establishCustomerConnectionModal(
   return (
     <ModalContainer closeCallback={cb} title={title}>
       <EstablishCustomerConnection routeNodeId={routeNodeId} load={true} />
+    </ModalContainer>
+  );
+}
+
+export function addInstallationModal(
+  cb: () => void,
+  title: string,
+  routeNodeId: string,
+) {
+  return (
+    <ModalContainer closeCallback={cb} title={title}>
+      <AddInstallation routeNodeId={routeNodeId} />
     </ModalContainer>
   );
 }
