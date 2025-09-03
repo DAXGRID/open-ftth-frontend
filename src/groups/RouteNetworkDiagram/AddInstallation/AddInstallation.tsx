@@ -78,7 +78,7 @@ function AddInstallation({ routeNodeId }: AddInstallationProps) {
 
     return nearestUndocumentedInstallations.map<SelectOption>((x) => {
       return {
-        text: `${x.installationId} - (${x.displayAddress})`,
+        text: `${x.installationId} (${x.displayAddress} ${x.additionalAddressInformation ? ` - ${x.additionalAddressInformation}` : ""})`,
         value: x.installationId,
         key: x.installationId,
       };
