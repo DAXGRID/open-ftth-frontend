@@ -2,14 +2,14 @@ import { Client } from "urql";
 
 export function getGeneralView(
   client: Client,
-  terminalEquipmentOrTerminalId: string
+  terminalEquipmentOrTerminalId: string,
 ) {
   return client
     .query<QueryTerminalEquipmentDetailsResponse>(
       QUERY_TERMINAL_EQUIPMENT_DETAILS,
       {
         terminalEquipmentOrTerminalId: terminalEquipmentOrTerminalId,
-      }
+      },
     )
     .toPromise();
 }
@@ -17,6 +17,11 @@ export function getGeneralView(
 export interface TerminalEquipment {
   id: string;
   name: string;
+  installationInfo?: {
+    installationId: string;
+    status?: string;
+    locationRemark?: string;
+  };
   dynamicProperties: {
     sectionName: String;
     properties: { name: string; value: string }[];
@@ -49,6 +54,11 @@ query ($terminalEquipmentOrTerminalId: ID!) {
     terminalEquipment(terminalEquipmentOrTerminalId: $terminalEquipmentOrTerminalId) {
       id
       name
+      installationInfo {
+        installationId
+        status
+        locationRemark
+      }
       addressInfo {
         remark
         accessAddress {
