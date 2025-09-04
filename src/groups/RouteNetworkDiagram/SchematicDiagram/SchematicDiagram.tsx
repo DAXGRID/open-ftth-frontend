@@ -133,20 +133,69 @@ function mapFitBounds(
   );
 }
 
-function hoverPointer(featureName: string, map: Map) {
-  map.on("mousemove", featureName, () => {
+function hoverPointer(featureNames: string[], map: Map) {
+  let hoveredFeature: maplibregl.GeoJSONFeature | null = null;
+
+  const mouseMoveFn = (e: maplibregl.MapMouseEvent) => {
+    const bbox: [PointLike, PointLike] = [
+      [e.point.x, e.point.y],
+      [e.point.x, e.point.y],
+    ];
+
+    const features = map
+      .queryRenderedFeatures(bbox)
+      .filter((x) => featureNames.find((y) => y === x.source))
+      .sort(
+        (x, y) =>
+          (y.properties?.drawingOrder ?? 0) - (x.properties?.drawingOrder ?? 0),
+      );
+
+    const feature = features.length > 0 ? features[0] : null;
+
+    if (!feature) return;
+
+    featureNames.forEach((source) => {
+      map
+        .querySourceFeatures(source, {
+          sourceLayer: source,
+        })
+        .forEach((x) => {
+          map.setFeatureState({ source: source, id: x.id }, { hovered: false });
+        });
+    });
+
+    map.setFeatureState(
+      { source: feature.source, id: feature.id },
+      { hovered: true },
+    );
+
     map.getCanvas().style.cursor = "pointer";
-  });
 
-  map.on("mouseleave", featureName, () => {
+    hoveredFeature = feature;
+  };
+
+  const mouseLeaveFn = (e: maplibregl.MapMouseEvent) => {
+    featureNames.forEach((source) => {
+      map
+        .querySourceFeatures(source, {
+          sourceLayer: source,
+        })
+        .forEach((x) => {
+          map.setFeatureState({ source: source, id: x.id }, { hovered: false });
+        });
+    });
+
     map.getCanvas().style.cursor = "";
-  });
-}
+  };
 
-function hoverPointerOff(featureName: string, map: Map) {
-  map.off("mousemove", featureName, () => {});
-  map.off("mouseleave", featureName, () => {});
-  map.getCanvas().style.cursor = "";
+  map.on("mousemove", featureNames, mouseMoveFn);
+  map.on("mouseleave", featureNames, mouseLeaveFn);
+
+  // Cleanup
+  return () => {
+    map.off("mousemove", featureNames, mouseMoveFn);
+    map.off("mouseleave", featureNames, mouseLeaveFn);
+  };
 }
 
 function resizeHandler(map: Map) {
@@ -303,16 +352,16 @@ function SchematicDiagram({
       interactableObject.push("OuterConduit");
     }
 
+    if (hasNodeContainer) {
+      map.addLayer(nodeContainerSelect);
+      interactableObject.push("NodeContainer");
+    }
+
     if (hasNodeContainerSide && editMode) {
       map.addLayer(nodeContainerSideSelect);
       interactableObject.push("NodeContainerSide");
     } else if (hasNodeContainerSide) {
       map.addLayer(nodeContainerSideSelect);
-    }
-
-    if (hasNodeContainer) {
-      map.addLayer(nodeContainerSelect);
-      interactableObject.push("NodeContainer");
     }
 
     if (hasRack) {
@@ -344,9 +393,7 @@ function SchematicDiagram({
     );
     map.on("click", clickHighlightHandler);
 
-    interactableObject.forEach((name) => {
-      hoverPointer(name, map);
-    });
+    const cleanupHoverPointerFn = hoverPointer(interactableObject, map);
 
     reRender();
     map.resize();
@@ -384,9 +431,8 @@ function SchematicDiagram({
       });
 
       map.off("click", clickHighlightHandler);
-      interactableObject.forEach((name) => {
-        hoverPointerOff(name, map);
-      });
+      cleanupHoverPointerFn();
+      map.getCanvas().style.cursor = "";
 
       map.off("dragend", savePosition);
       map.off("zoomend", savePosition);

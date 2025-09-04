@@ -49,10 +49,7 @@ export function createFeature(
       // Map the dynamic properties into the object,
       // this is done to avoid having to JSON deserialize the properties
       // because maplibre makes objects in properties to JSON.
-      ...properties?.reduce(
-        (acc, v) => ({ ...acc, [v.name]: v.value }),
-        {},
-      ),
+      ...properties?.reduce((acc, v) => ({ ...acc, [v.name]: v.value }), {}),
     },
   };
 }
@@ -70,6 +67,8 @@ export function getLayer(name: string): LayerSpecification {
             "case",
             ["boolean", ["feature-state", "selected"], false],
             colorMap.LIGHT_BLUE,
+            ["boolean", ["feature-state", "hovered"], false],
+            colorMap.LIGHT_TURQUOISE,
             colorMap.WHITE,
           ],
         },
@@ -450,13 +449,17 @@ export const nodeContainerSideSelect: LineLayerSpecification = {
     "line-width": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
-      8,
-      0.5,
+      4,
+      ["boolean", ["feature-state", "hovered"], false],
+      4,
+      0,
     ],
     "line-color": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
       colorMap.LIGHT_BLUE,
+      ["boolean", ["feature-state", "hovered"], false],
+      colorMap.LIGHT_TURQUOISE,
       colorMap.BLACK,
     ],
   },
@@ -468,10 +471,19 @@ export const innerConduitSelect: LineLayerSpecification = {
   source: "InnerConduit",
   paint: {
     "line-width": 3,
-    "line-color": colorMap.LIGHT_BLUE,
+    "line-color": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      colorMap.LIGHT_BLUE,
+      ["boolean", ["feature-state", "hovered"], false],
+      colorMap.LIGHT_TURQUOISE,
+      colorMap.WHITE,
+    ],
     "line-opacity": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
+      1,
+      ["boolean", ["feature-state", "hovered"], false],
       1,
       0,
     ],
@@ -484,10 +496,19 @@ export const outerConduitSelect: LineLayerSpecification = {
   source: "OuterConduit",
   paint: {
     "line-width": 3,
-    "line-color": colorMap.LIGHT_BLUE,
+    "line-color": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      colorMap.LIGHT_BLUE,
+      ["boolean", ["feature-state", "hovered"], false],
+      colorMap.LIGHT_TURQUOISE,
+      colorMap.WHITE,
+    ],
     "line-opacity": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
+      1,
+      ["boolean", ["feature-state", "hovered"], false],
       1,
       0,
     ],
@@ -500,10 +521,19 @@ export const nodeContainerSelect: LineLayerSpecification = {
   source: "NodeContainer",
   paint: {
     "line-width": 4,
-    "line-color": colorMap.LIGHT_BLUE,
+    "line-color": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      colorMap.LIGHT_BLUE,
+      ["boolean", ["feature-state", "hovered"], false],
+      colorMap.LIGHT_TURQUOISE,
+      colorMap.WHITE,
+    ],
     "line-opacity": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
+      1,
+      ["boolean", ["feature-state", "hovered"], false],
       1,
       0,
     ],
@@ -516,10 +546,19 @@ export const rackSelect: LineLayerSpecification = {
   source: "Rack",
   paint: {
     "line-width": 4,
-    "line-color": colorMap.LIGHT_BLUE,
+    "line-color": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      colorMap.LIGHT_BLUE,
+      ["boolean", ["feature-state", "hovered"], false],
+      colorMap.LIGHT_TURQUOISE,
+      colorMap.WHITE,
+    ],
     "line-opacity": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
+      1,
+      ["boolean", ["feature-state", "hovered"], false],
       1,
       0,
     ],
@@ -532,10 +571,19 @@ export const freeRackSpaceSelect: LineLayerSpecification = {
   source: "FreeRackSpace",
   paint: {
     "line-width": 4,
-    "line-color": colorMap.LIGHT_BLUE,
+    "line-color": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      colorMap.LIGHT_BLUE,
+      ["boolean", ["feature-state", "hovered"], false],
+      colorMap.LIGHT_TURQUOISE,
+      colorMap.WHITE,
+    ],
     "line-opacity": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
+      1,
+      ["boolean", ["feature-state", "hovered"], false],
       1,
       0,
     ],
@@ -548,10 +596,19 @@ export const terminalEquipmentSelect: LineLayerSpecification = {
   source: "TerminalEquipment",
   paint: {
     "line-width": 2,
-    "line-color": colorMap.LIGHT_BLUE,
+    "line-color": [
+      "case",
+      ["boolean", ["feature-state", "selected"], false],
+      colorMap.LIGHT_BLUE,
+      ["boolean", ["feature-state", "hovered"], false],
+      colorMap.LIGHT_TURQUOISE,
+      colorMap.WHITE,
+    ],
     "line-opacity": [
       "case",
       ["boolean", ["feature-state", "selected"], false],
+      1,
+      ["boolean", ["feature-state", "hovered"], false],
       1,
       0,
     ],
