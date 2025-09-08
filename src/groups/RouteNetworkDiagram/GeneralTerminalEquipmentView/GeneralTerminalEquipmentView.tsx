@@ -126,6 +126,43 @@ function GeneralTerminalEquipmentView({
           )}
         </div>
         <div className="general-view-body">
+          {terminalEquipment?.installationInfo && (
+            <div className="block">
+              <p className="block-title block-title__underline block-title__big">
+                {t("INSTALLATION_INFORMATION")}
+              </p>
+              <div className="full-row">
+                <LabelContainer text={t("INSTALLATION_ID")}>
+                  <TextBox
+                    value={terminalEquipment.installationInfo.installationId}
+                    setValue={() => {}}
+                    disabled={true}
+                  />
+                </LabelContainer>
+              </div>
+              <div className="full-row">
+                <LabelContainer text={t("STATUS")}>
+                  <TextBox
+                    value={terminalEquipment.installationInfo.status ?? ""}
+                    setValue={() => {}}
+                    disabled={true}
+                  />
+                </LabelContainer>
+              </div>
+              <div className="full-row">
+                <LabelContainer text={t("LOCATION_REMARK")}>
+                  <TextBox
+                    value={
+                      terminalEquipment.installationInfo.locationRemark ?? ""
+                    }
+                    setValue={() => {}}
+                    disabled={true}
+                  />
+                </LabelContainer>
+              </div>
+            </div>
+          )}
+
           {terminalEquipment?.addressInfo && (
             <div className="block">
               <p className="block-title block-title__underline block-title__big">
