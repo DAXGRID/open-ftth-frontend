@@ -149,17 +149,6 @@ function GeneralTerminalEquipmentView({
                   />
                 </LabelContainer>
               </div>
-              <div className="full-row">
-                <LabelContainer text={t("ADDITIONAL_ADDRESS_INFORMATION")}>
-                  <TextBox
-                    value={
-                      terminalEquipment.installationInfo.locationRemark ?? ""
-                    }
-                    setValue={() => {}}
-                    disabled={true}
-                  />
-                </LabelContainer>
-              </div>
             </div>
           )}
 

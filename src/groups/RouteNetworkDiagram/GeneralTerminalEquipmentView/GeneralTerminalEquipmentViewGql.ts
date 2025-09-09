@@ -20,7 +20,6 @@ export interface TerminalEquipment {
   installationInfo?: {
     installationId: string;
     status?: string;
-    locationRemark?: string;
   };
   dynamicProperties: {
     sectionName: String;
@@ -57,7 +56,6 @@ query ($terminalEquipmentOrTerminalId: ID!) {
       installationInfo {
         installationId
         status
-        locationRemark
       }
       addressInfo {
         remark
