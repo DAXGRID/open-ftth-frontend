@@ -382,7 +382,9 @@
       "CONFIRM_OVERWRITE_CIRCUIT_ID": "Er du sikker på at du vil overskrive værdien?",
       "INSTALLATION": "Installation",
       "ADD_INSTALLATION": "Tilføj installation",
-      "ADD_PIPE_LOOP": "Tilføj rørsløjfe"
+      "ADD_PIPE_LOOP": "Tilføj rørsløjfe",
+      "INSTALLATION_INFORMATION": "Installation information",
+      "INSTALLATION_ID": "Installation id"
     }
   },
   "dk": {
@@ -768,7 +770,9 @@
       "CONFIRM_OVERWRITE_CIRCUIT_ID": "Er du sikker på at du vil overskrive værdien?",
       "INSTALLATION": "Installation",
       "ADD_INSTALLATION": "Tilføj installation",
-      "ADD_PIPE_LOOP": "Tilføj rørsløjfe"
+      "ADD_PIPE_LOOP": "Tilføj rørsløjfe",
+      "INSTALLATION_INFORMATION": "Installations information",
+      "INSTALLATION_ID": "Installations id"
     }
   }
 }

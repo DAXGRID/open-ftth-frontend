@@ -150,7 +150,7 @@ function GeneralTerminalEquipmentView({
                 </LabelContainer>
               </div>
               <div className="full-row">
-                <LabelContainer text={t("LOCATION_REMARK")}>
+                <LabelContainer text={t("ADDITIONAL_ADDRESS_INFORMATION")}>
                   <TextBox
                     value={
                       terminalEquipment.installationInfo.locationRemark ?? ""
