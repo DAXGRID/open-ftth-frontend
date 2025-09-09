@@ -384,7 +384,8 @@
       "ADD_INSTALLATION": "Tilføj installation",
       "ADD_PIPE_LOOP": "Tilføj rørsløjfe",
       "INSTALLATION_INFORMATION": "Installation information",
-      "INSTALLATION_ID": "Installation id"
+      "INSTALLATION_ID": "Installation id",
+      "STATUS": "Status"
     }
   },
   "dk": {
@@ -772,7 +773,8 @@
       "ADD_INSTALLATION": "Tilføj installation",
       "ADD_PIPE_LOOP": "Tilføj rørsløjfe",
       "INSTALLATION_INFORMATION": "Installations information",
-      "INSTALLATION_ID": "Installations id"
+      "INSTALLATION_ID": "Installations id",
+      "STATUS": "Status"
     }
   }
 }
