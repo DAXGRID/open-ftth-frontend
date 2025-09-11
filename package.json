@@ -51,14 +51,14 @@
   },
   "devDependencies": {
     "@types/geojson": "^7946.0.10",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.18.1",
     "@types/pubsub-js": "^1.8.6",
     "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
     "@types/react-router-dom": "^5.1.7",
     "@types/uuid": "^10.0.0",
     "@types/websocket": "^1.0.10",
-    "@vitejs/plugin-react": "^4.4.1",
-    "vite": "^6.3.6"
+    "@vitejs/plugin-react": "^5.0.2",
+    "vite": "^7.1.5"
   }
 }
