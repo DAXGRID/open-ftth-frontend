@@ -3,7 +3,7 @@ import { Client } from "urql";
 export const connectivityViewQuery = (
   client: Client,
   routeNodeId: string,
-  terminalEquipmentOrRackId: string
+  terminalEquipmentOrRackId: string,
 ) => {
   return client
     .query<TerminalEquipmentResponse>(
@@ -11,7 +11,7 @@ export const connectivityViewQuery = (
       {
         routeNodeId: routeNodeId,
         terminalEquipmentOrRackId: terminalEquipmentOrRackId,
-      }
+      },
     )
     .toPromise();
 };
@@ -19,7 +19,7 @@ export const connectivityViewQuery = (
 export const connectivityTraceViewQuery = (
   client: Client,
   routeNetworkElementId: string,
-  terminalOrSpanEquipmentId: string
+  terminalOrSpanEquipmentId: string,
 ) => {
   return client
     .query<ConnectivityTraceViewResponse>(CONNECTIVITY_TRACE_VIEW_QUERY, {
@@ -31,7 +31,7 @@ export const connectivityTraceViewQuery = (
 
 export const removeStructure = (
   client: Client,
-  params: RemoveStructureParams
+  params: RemoveStructureParams,
 ) => {
   return client
     .mutation<RemoveStructureResponse>(REMOVE_STRUCTURE_MUTATION, params)
@@ -90,6 +90,7 @@ export interface TerminalEquipment {
   specName: string;
   info: string | null;
   isLineTermination: boolean;
+  terminalStructuresIsNameable: boolean;
   terminalStructures: TerminalStructure[];
 }
 
@@ -125,6 +126,7 @@ $terminalEquipmentOrRackId: ID!) {
         category
         specName
         isLineTermination
+        terminalStructuresIsNameable
         terminalStructures {
           id
           name
@@ -188,6 +190,7 @@ subscription ($routeNodeId: ID!, $terminalEquipmentOrRackId: ID!) {
       category
       specName
       isLineTermination
+      terminalStructuresIsNameable  
       terminalStructures {
         id
         name
