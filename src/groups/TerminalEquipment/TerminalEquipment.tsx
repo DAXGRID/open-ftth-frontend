@@ -147,6 +147,8 @@ function TerminalEquipmentTableContainer({
                 onClick={() =>
                   dispatch({
                     show: {
+                      terminalStructureIsNameable:
+                        terminalEquipment.terminalStructuresIsNameable,
                       routeNodeId: state.routeNodeId,
                       show: true,
                       terminalEquipmentId: terminalEquipment.id,
@@ -471,6 +473,9 @@ function TerminalEquipment() {
               dispatch({
                 type: "resetShowAddAdditionalStructures",
               })
+            }
+            terminalStructuresIsNameable={
+              state.showAddAdditionalStructure.terminalStructureIsNameable
             }
             routeNodeId={state.showAddAdditionalStructure.routeNodeId}
             isLineTermination={

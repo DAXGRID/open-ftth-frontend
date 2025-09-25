@@ -3,20 +3,30 @@ import { Client } from "urql";
 export function getTerminalStructureSpecifications(client: Client) {
   return client
     .query<TerminalStructureSpecificationResponse>(
-      TERMINAL_STRUCTURE_SPECIFICATION_QUERY, {}
+      TERMINAL_STRUCTURE_SPECIFICATION_QUERY,
+      {},
     )
     .toPromise();
 }
 
 export function addAdditionalStructures(
   client: Client,
-  params: AddAdditionalStructuresParams
+  params: AddAdditionalStructuresParams,
 ) {
   return client
     .mutation<AddAdditionalStructuresResponse>(
       ADD_ADDITIONAL_STRUCTURES,
-      params
+      params,
     )
+    .toPromise();
+}
+
+export function addAdditionalStructure(
+  client: Client,
+  params: AddAdditionalStructureParams,
+) {
+  return client
+    .mutation<AddAdditionalStructureResponse>(ADD_ADDITIONAL_STRUCTURE, params)
     .toPromise();
 }
 
@@ -81,6 +91,48 @@ $numberOfStructures: Int!
       structureSpecificationId: $structureSpecificationId
       position: $position
       numberOfStructures: $numberOfStructures
+    ) {
+      isSuccess
+      errorCode
+      errorMessage
+    }
+  }
+}
+`;
+
+interface AddAdditionalStructureResponse {
+  terminalEquipment: {
+    addAdditionalStructure: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
+interface AddAdditionalStructureParams {
+  routeNodeId: string;
+  terminalEquipmentId: string;
+  structureSpecificationId: string;
+  position: number;
+  name: string;
+}
+
+const ADD_ADDITIONAL_STRUCTURE = `
+mutation (
+$routeNodeId: ID!,
+$terminalEquipmentId: ID!,
+$structureSpecificationId: ID!,
+$position: Int!,
+$name: String!
+) {
+  terminalEquipment {
+    addAdditionalStructure(
+      routeNodeId: $routeNodeId
+      terminalEquipmentId: $terminalEquipmentId
+      structureSpecificationId: $structureSpecificationId
+      position: $position
+      name: $name
     ) {
       isSuccess
       errorCode

@@ -11,11 +11,13 @@ import {
   getTerminalStructureSpecifications,
   TerminalStructureSpecification,
   addAdditionalStructures,
+  addAdditionalStructure,
 } from "./AddCardGql";
+import TextBox from "../../../../components/TextBox";
 
 function createCategoryOptions(
   specifications: TerminalStructureSpecification[],
-  t: TFunction
+  t: TFunction,
 ): SelectOption[] {
   return specifications.reduce<SelectOption[]>((acc, x) => {
     if (acc.findIndex((z) => z.value === x.category) === -1) {
@@ -27,7 +29,7 @@ function createCategoryOptions(
 
 function createSpecificationOptions(
   specifications: TerminalStructureSpecification[],
-  category: string
+  category: string,
 ): SelectOption[] {
   return specifications
     .filter((x) => x.category === category)
@@ -40,6 +42,7 @@ interface State {
   position: number;
   numberOfStructures: number;
   terminalStructureSpecifications: TerminalStructureSpecification[] | null;
+  name: string | null;
 }
 
 type Action =
@@ -50,7 +53,8 @@ type Action =
       terminalStructureSpecifications: TerminalStructureSpecification[];
     }
   | { type: "setPosition"; position: number }
-  | { type: "setNumberOfStructures"; numberOfStructures: number };
+  | { type: "setNumberOfStructures"; numberOfStructures: number }
+  | { type: "setName"; setName: string | null };
 
 const initialState: State = {
   category: null,
@@ -58,6 +62,7 @@ const initialState: State = {
   terminalStructureSpecifications: null,
   position: 1,
   numberOfStructures: 1,
+  name: null,
 };
 
 function reducer(state: State, action: Action): State {
@@ -81,6 +86,11 @@ function reducer(state: State, action: Action): State {
         ...state,
         numberOfStructures: action.numberOfStructures,
       };
+    case "setName":
+      return {
+        ...state,
+        name: action.name,
+      };
     default:
       throw new Error(`No action found.`);
   }
@@ -89,12 +99,14 @@ function reducer(state: State, action: Action): State {
 interface AddCardProps {
   routeNodeId: string;
   terminalEquipmentId: string;
+  terminalStructuresIsNameable: boolean;
   addedSuccessCallback?: () => void;
 }
 
 function AddCard({
   routeNodeId,
   terminalEquipmentId,
+  terminalStructuresIsNameable,
   addedSuccessCallback,
 }: AddCardProps) {
   const { t } = useTranslation();
@@ -119,8 +131,10 @@ function AddCard({
 
   const categoryOptions = useMemo<SelectOption[]>(() => {
     if (state.terminalStructureSpecifications) {
-      return createCategoryOptions(state.terminalStructureSpecifications, t)
-        .sort((x, y) => x.text > y.text ? 1 : -1);
+      return createCategoryOptions(
+        state.terminalStructureSpecifications,
+        t,
+      ).sort((x, y) => (x.text > y.text ? 1 : -1));
     } else {
       return [];
     }
@@ -130,15 +144,38 @@ function AddCard({
     if (state.terminalStructureSpecifications && state.category) {
       return createSpecificationOptions(
         state.terminalStructureSpecifications,
-        state.category
-      ).sort((x, y) => x.text > y.text ? 1 : -1);
+        state.category,
+      ).sort((x, y) => (x.text > y.text ? 1 : -1));
     } else {
       return [];
     }
   }, [state.terminalStructureSpecifications, state.category]);
 
   const executeAddAdditionalStructures = () => {
-    if (state.specificationId) {
+    if (!state.specificationId) {
+      toast.error(t("ERROR"));
+      console.error("SpecificationId was not set.");
+    }
+
+    if (terminalStructuresIsNameable) {
+      addAdditionalStructure(client, {
+        name: state.name,
+        position: state.position,
+        routeNodeId: routeNodeId,
+        structureSpecificationId: state.specificationId,
+        terminalEquipmentId: terminalEquipmentId,
+      }).then((r) => {
+        const body = r.data?.terminalEquipment.addAdditionalStructure;
+        if (body?.isSuccess) {
+          toast.success(t("ADDED"));
+          if (addedSuccessCallback) {
+            addedSuccessCallback();
+          }
+        } else {
+          toast.error(t(body?.errorCode ?? "ERROR"));
+        }
+      });
+    } else {
       addAdditionalStructures(client, {
         numberOfStructures: state.numberOfStructures,
         position: state.position,
@@ -156,9 +193,6 @@ function AddCard({
           toast.error(t(body?.errorCode ?? "ERROR"));
         }
       });
-    } else {
-      toast.error(t("ERROR"));
-      console.error("SpecificationId was not set.");
     }
   };
 
@@ -207,24 +241,44 @@ function AddCard({
             />
           </LabelContainer>
         </div>
-        <div className="full-row">
-          <LabelContainer text={`${t("NUMBER_OF_MODULES")}:`}>
-            <NumberPicker
-              minValue={0}
-              maxValue={1000}
-              setValue={(x) =>
-                dispatch({
-                  type: "setNumberOfStructures",
-                  numberOfStructures: x,
-                })
-              }
-              value={state.numberOfStructures}
-            />
-          </LabelContainer>
-        </div>
+        {(terminalStructuresIsNameable && (
+          <div className="full-row">
+            <LabelContainer text={`${t("NAME")}:`}>
+              <TextBox
+                setValue={(x) =>
+                  dispatch({
+                    type: "setName",
+                    name: x,
+                  })
+                }
+                value={state.name}
+              />
+            </LabelContainer>
+          </div>
+        )) || (
+          <div className="full-row">
+            <LabelContainer text={`${t("NUMBER_OF_MODULES")}:`}>
+              <NumberPicker
+                minValue={1}
+                maxValue={1000}
+                setValue={(x) =>
+                  dispatch({
+                    type: "setNumberOfStructures",
+                    numberOfStructures: x,
+                  })
+                }
+                value={state.numberOfStructures}
+              />
+            </LabelContainer>
+          </div>
+        )}
         <div className="full-row">
           <DefaultButton
-            disabled={!(state.numberOfStructures > 0)}
+            disabled={
+              (!terminalStructuresIsNameable &&
+                state.numberOfStructures <= 0) ||
+              (terminalStructuresIsNameable && !state.name)
+            }
             innerText={t("ADD")}
             onClick={() => executeAddAdditionalStructures()}
           />

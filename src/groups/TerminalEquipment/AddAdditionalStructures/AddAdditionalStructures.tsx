@@ -9,6 +9,7 @@ interface AddAdditionalStructuresProps {
   terminalEquipmentId: string;
   isLineTermination: boolean;
   addedSuccessCallback?: () => void;
+  terminalStructuresIsNameable: boolean;
 }
 
 function AddAdditionalStructures({
@@ -16,6 +17,7 @@ function AddAdditionalStructures({
   terminalEquipmentId,
   isLineTermination,
   addedSuccessCallback,
+  terminalStructuresIsNameable,
 }: AddAdditionalStructuresProps) {
   const { t } = useTranslation();
   const [tabViewSelectedId, setTabViewSelectedId] = useState("0");
@@ -34,6 +36,7 @@ function AddAdditionalStructures({
                 id: "0",
                 view: (
                   <AddCard
+                    terminalStructuresIsNameable={terminalStructuresIsNameable}
                     routeNodeId={routeNodeId}
                     terminalEquipmentId={terminalEquipmentId}
                     addedSuccessCallback={addedSuccessCallback}
@@ -57,6 +60,7 @@ function AddAdditionalStructures({
                 id: "0",
                 view: (
                   <AddCard
+                    terminalStructuresIsNameable={terminalStructuresIsNameable}
                     routeNodeId={routeNodeId}
                     terminalEquipmentId={terminalEquipmentId}
                     addedSuccessCallback={addedSuccessCallback}
