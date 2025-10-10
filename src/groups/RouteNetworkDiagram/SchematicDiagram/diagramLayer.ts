@@ -349,8 +349,8 @@ export function getLayer(name: string): LayerSpecification {
           "text-field": ["get", "label"],
           "text-anchor": "left",
           "text-justify": "left",
-          "text-rotate": 0,
-          "text-offset": [0, -0.5],
+          "text-rotate": -90,
+          "text-offset": [0, 0],
           "text-max-width": 1000,
         },
       } as SymbolLayerSpecification;
