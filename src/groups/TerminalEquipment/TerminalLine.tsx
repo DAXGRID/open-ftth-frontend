@@ -30,14 +30,14 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
               onClick={() =>
                 dispatch({
                   type: "setShowConnectivityTraceViews",
-                  id: line.a?.terminal.id ?? line.z?.terminal.id ?? "",
+                  id: line.z?.terminal.id ?? line.a?.terminal.id ?? "",
                 })
               }
             >
               <FontAwesomeIcon
                 icon={
                   (state.connectivityTraceViews[
-                    line.a?.terminal.id ?? line.z?.terminal.id ?? ""
+                    line.z?.terminal.id ?? line.a?.terminal.id ?? ""
                   ]?.show ?? false)
                     ? faChevronDown
                     : faChevronRight
@@ -69,7 +69,7 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
       <TerminalEquipmentTraceView
         view={
           state.connectivityTraceViews[
-            line.a?.terminal.id ?? line.z?.terminal.id ?? ""
+            line.z?.terminal.id ?? line.a?.terminal.id ?? ""
           ]
         }
       />
