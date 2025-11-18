@@ -39,9 +39,9 @@ function addressDisplayText(
   }`.trim();
 
   if (unitAddressText.length > 0) {
-    return `${accessAddress.roadName} ${accessAddress.houseNumber}, ${unitAddressText}, ${accessAddress.postDistrict} ${accessAddress.postDistrictCode}`;
+    return `${accessAddress.roadName} ${accessAddress.houseNumber}, ${unitAddressText}, ${accessAddress.postDistrictCode} ${accessAddress.postDistrict}`;
   } else {
-    return `${accessAddress.roadName} ${accessAddress.houseNumber}, ${accessAddress.postDistrict} ${accessAddress.postDistrictCode}`;
+    return `${accessAddress.roadName} ${accessAddress.houseNumber}, ${accessAddress.postDistrictCode} ${accessAddress.postDistrict}`;
   }
 }
 
