@@ -115,13 +115,13 @@ function GeneralTerminalEquipmentView({
         <div className="general-view-header">
           <p>
             {terminalEquipment.name}
-            {" - "}
-            {addressDisplayText(
-              terminalEquipment.addressInfo?.accessAddress ?? null,
-              terminalEquipment.addressInfo?.unitAddress ?? null,
-            )}{" "}
+            {terminalEquipment.addressInfo !== null &&
+              ` - ${addressDisplayText(
+                terminalEquipment.addressInfo?.accessAddress ?? null,
+                terminalEquipment.addressInfo?.unitAddress ?? null,
+              )}`}
             {terminalEquipment.addressInfo?.remark
-              ? `(${terminalEquipment.addressInfo?.remark ?? ""})`
+              ? ` (${terminalEquipment.addressInfo?.remark ?? ""})`
               : ""}
           </p>
           {editable && (
