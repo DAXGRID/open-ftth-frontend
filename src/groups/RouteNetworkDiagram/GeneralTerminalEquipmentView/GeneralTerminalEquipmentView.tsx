@@ -123,6 +123,9 @@ function GeneralTerminalEquipmentView({
             {terminalEquipment.addressInfo?.remark
               ? ` (${terminalEquipment.addressInfo?.remark ?? ""})`
               : ""}
+            {terminalEquipment.installationInfo?.status
+              ? ` - ${t("STATUS")} ${terminalEquipment.installationInfo.status ?? ""}`
+              : ""}
           </p>
           {editable && (
             <div className="general-view-header-icons">
