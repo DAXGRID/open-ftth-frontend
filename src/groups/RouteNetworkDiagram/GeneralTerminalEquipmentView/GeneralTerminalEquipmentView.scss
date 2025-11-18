@@ -18,6 +18,7 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid colors.$border-color;
+  flex-wrap: wrap;
 
   p {
     flex: 1;
@@ -27,7 +28,7 @@
 }
 
 .general-view-header-icons {
-  flex: 1;
+  flex: 0.33;
   display: flex;
   justify-content: flex-end;
   font-size: 22px;

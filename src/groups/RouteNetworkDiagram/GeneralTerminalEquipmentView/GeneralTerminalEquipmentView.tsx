@@ -113,7 +113,17 @@ function GeneralTerminalEquipmentView({
     <div className="general-view">
       <div className="general-view-container">
         <div className="general-view-header">
-          <p>{terminalEquipment.name}</p>
+          <p>
+            {terminalEquipment.name}
+            {" - "}
+            {addressDisplayText(
+              terminalEquipment.addressInfo?.accessAddress ?? null,
+              terminalEquipment.addressInfo?.unitAddress ?? null,
+            )}{" "}
+            {terminalEquipment.addressInfo?.remark
+              ? `(${terminalEquipment.addressInfo?.remark ?? ""})`
+              : ""}
+          </p>
           {editable && (
             <div className="general-view-header-icons">
               <span
