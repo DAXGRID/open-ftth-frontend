@@ -52,6 +52,7 @@ type SchematicDiagramProps = {
   onSelectFeature: (feature: MapGeoJSONFeature) => void;
   editMode: boolean;
   routeElementId: string;
+  schematicHighlight: boolean;
 };
 
 interface SchematicPosition {
@@ -133,7 +134,11 @@ function mapFitBounds(
   );
 }
 
-function hoverPointer(featureNames: string[], map: Map) {
+function hoverPointer(
+  featureNames: string[],
+  map: Map,
+  enableHoverColor: boolean,
+) {
   let hoveredFeature: maplibregl.GeoJSONFeature | null = null;
 
   const mouseMoveFn = (e: maplibregl.MapMouseEvent) => {
@@ -154,20 +159,25 @@ function hoverPointer(featureNames: string[], map: Map) {
 
     if (!feature) return;
 
-    featureNames.forEach((source) => {
-      map
-        .querySourceFeatures(source, {
-          sourceLayer: source,
-        })
-        .forEach((x) => {
-          map.setFeatureState({ source: source, id: x.id }, { hovered: false });
-        });
-    });
+    if (enableHoverColor) {
+      featureNames.forEach((source) => {
+        map
+          .querySourceFeatures(source, {
+            sourceLayer: source,
+          })
+          .forEach((x) => {
+            map.setFeatureState(
+              { source: source, id: x.id },
+              { hovered: false },
+            );
+          });
+      });
 
-    map.setFeatureState(
-      { source: feature.source, id: feature.id },
-      { hovered: true },
-    );
+      map.setFeatureState(
+        { source: feature.source, id: feature.id },
+        { hovered: true },
+      );
+    }
 
     map.getCanvas().style.cursor = "pointer";
 
@@ -175,15 +185,20 @@ function hoverPointer(featureNames: string[], map: Map) {
   };
 
   const mouseLeaveFn = (e: maplibregl.MapMouseEvent) => {
-    featureNames.forEach((source) => {
-      map
-        .querySourceFeatures(source, {
-          sourceLayer: source,
-        })
-        .forEach((x) => {
-          map.setFeatureState({ source: source, id: x.id }, { hovered: false });
-        });
-    });
+    if (enableHoverColor) {
+      featureNames.forEach((source) => {
+        map
+          .querySourceFeatures(source, {
+            sourceLayer: source,
+          })
+          .forEach((x) => {
+            map.setFeatureState(
+              { source: source, id: x.id },
+              { hovered: false },
+            );
+          });
+      });
+    }
 
     map.getCanvas().style.cursor = "";
   };
@@ -265,6 +280,7 @@ function SchematicDiagram({
   onSelectFeature,
   editMode,
   routeElementId,
+  schematicHighlight,
 }: SchematicDiagramProps) {
   const { map, setMap, reRender } = useContext(DiagramContext);
   const position = useRef<SchematicPosition | null>(null);
@@ -393,8 +409,6 @@ function SchematicDiagram({
     );
     map.on("click", clickHighlightHandler);
 
-    const cleanupHoverPointerFn = hoverPointer(interactableObject, map);
-
     reRender();
     map.resize();
 
@@ -431,7 +445,6 @@ function SchematicDiagram({
       });
 
       map.off("click", clickHighlightHandler);
-      cleanupHoverPointerFn();
       map.getCanvas().style.cursor = "";
 
       map.off("dragend", savePosition);
@@ -448,6 +461,31 @@ function SchematicDiagram({
       mapFitBounds(envelope, map, null);
     }
   }, [map, envelope, diagramObjects]);
+
+  useLayoutEffect(() => {
+    if (!map) return;
+
+    const interactableObject: string[] = [
+      "InnerConduit",
+      "OuterConduit",
+      "NodeContainer",
+      "NodeContainerSide",
+      "Rack",
+      "TerminalEquipment",
+      "FiberCable",
+      "FreeRackSpace",
+    ];
+
+    const cleanupHoverPointerFn = hoverPointer(
+      interactableObject,
+      map,
+      schematicHighlight,
+    );
+
+    return () => {
+      cleanupHoverPointerFn();
+    };
+  }, [map, schematicHighlight, editMode]);
 
   return (
     <div

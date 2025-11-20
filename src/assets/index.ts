@@ -19,6 +19,7 @@ import OutageSvg from "./outage.svg";
 import FlagDenmarkSvg from "./flags/dk.svg";
 import FlagGreatBritainSvg from "./flags/gb.svg";
 import MoveEquipmentSvg from "./move-equipment.svg";
+import HighlightSvg from "./highlight.svg";
 
 export {
   Loading,
@@ -42,4 +43,5 @@ export {
   FlagDenmarkSvg,
   FlagGreatBritainSvg,
   MoveEquipmentSvg,
+  HighlightSvg,
 };

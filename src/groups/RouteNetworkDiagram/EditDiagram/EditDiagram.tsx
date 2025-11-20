@@ -81,6 +81,7 @@ import {
   ZoomMapSvg,
   OutageSvg,
   MoveEquipmentSvg,
+  HighlightSvg,
 } from "../../../assets";
 import {
   addContainerModal,
@@ -92,6 +93,8 @@ import {
   outageViewModal,
   arrangeRackEquipmentModal,
 } from "./Modals";
+
+const LOCAL_STORAGE_ENABLE_HOVER_HIGHLIGHT = "enabled_hover_highlight";
 
 type RouteNetworkDiagramProps = {
   diagramObjects: Diagram[];
@@ -276,6 +279,15 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
   const { t } = useTranslation();
   const { showElement } = useContext(OverlayContext);
   const { enabledTracePan, setEnabledTracePan } = useContext(DiagramContext);
+
+  const [enableHoverHighlight, setEnableHoverHighlight] = useState<boolean>(
+    () => {
+      return JSON.parse(
+        localStorage.getItem(LOCAL_STORAGE_ENABLE_HOVER_HIGHLIGHT) ?? "true",
+      );
+    },
+  );
+
   const [editMode, setEditMode] = useState(false);
   // Do not use this for getting the current selected features, instead use `currentlySelectedFeatures`.
   const [selectedFeatures, setSelectedFeatures] = useState<MapGeoJSONFeature[]>(
@@ -314,6 +326,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
     useMutation<DetachSpanEquipmentResponse>(
       DETACH_SPAN_EQUIPMENT_FROM_NODE_CONTAINER,
     );
+
+  useEffect(() => {
+    localStorage.setItem(
+      LOCAL_STORAGE_ENABLE_HOVER_HIGHLIGHT,
+      JSON.stringify(enableHoverHighlight),
+    );
+  }, [enableHoverHighlight]);
 
   useEffect(() => {
     setEditMode(false);
@@ -1273,6 +1292,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             icon={ZoomMapSvg}
             title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
           />
+          <ToggleButton
+            toggled={enableHoverHighlight}
+            id={"1"}
+            toggle={() => setEnableHoverHighlight(!enableHoverHighlight)}
+            icon={HighlightSvg}
+            title={t("TOGGLE_HOVER_HIGHLIGHT")}
+          />
         </DiagramMenu>
       )}
       {localIdentifiedFeature.type === "RouteSegment" && (
@@ -1296,6 +1322,13 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
             icon={ZoomMapSvg}
             title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
           />
+          <ToggleButton
+            toggled={enableHoverHighlight}
+            id={"0"}
+            toggle={() => setEnableHoverHighlight(!enableHoverHighlight)}
+            icon={HighlightSvg}
+            title={t("TOGGLE_HOVER_HIGHLIGHT")}
+          />
         </DiagramMenu>
       )}
       <SchematicDiagram
@@ -1304,6 +1337,7 @@ function EditDiagram({ diagramObjects, envelope }: RouteNetworkDiagramProps) {
         onSelectFeature={onSelectedFeature}
         editMode={editMode}
         routeElementId={localIdentifiedFeature.id}
+        schematicHighlight={enableHoverHighlight}
       />
       {!editMode && singleSelectedFeature?.source === "NodeContainer" && (
         <NodeContainerDetails
