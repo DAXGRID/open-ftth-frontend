@@ -7,7 +7,12 @@ import DiagramMenu from "../../../components/DiagramMenu";
 import ActionButton from "../../../components/ActionButton";
 import ToggleButton from "../../../components/ToggleButton";
 import { MapContext } from "../../../contexts/MapContext";
-import { EraserSvg, ZoomMapSvg, OutageSvg } from "../../../assets";
+import {
+  EraserSvg,
+  ZoomMapSvg,
+  OutageSvg,
+  HighlightSvg,
+} from "../../../assets";
 import { useTranslation } from "react-i18next";
 import FeatureInformation from "../FeatureInformation";
 import TerminalEquipment from "../../TerminalEquipment";
@@ -17,11 +22,14 @@ import TabView from "../../../components/TabView";
 import GeneralTerminalEquipmentView from "../GeneralTerminalEquipmentView";
 import GeneralSpanEquipmentView from "../GeneralSpanEquipmentView";
 import { OverlayContext } from "../../../contexts/OverlayContext";
+import { DiagramContext } from "../DiagramContext";
 import {
   SPAN_SEGMENT_TRACE,
   SpanSegmentTraceResponse,
 } from "./ReadOnlyDiagramGql";
 import { outageViewModal } from "./Modals";
+
+const LOCAL_STORAGE_ENABLE_HOVER_HIGHLIGHT = "enabled_hover_highlight";
 
 interface Envelope {
   minX: number;
@@ -64,12 +72,27 @@ function ReadOnlyDiagram({
   ] = useState("0");
   const { showElement } = useContext(OverlayContext);
   const [rackTabViewSelectedId, setRackTabViewSelectedId] = useState("0");
-  const [enabledTracePan, setEnabledTracePan] = useState<boolean>(true);
+  const { enabledTracePan, setEnabledTracePan } = useContext(DiagramContext);
   const [showOutageView, setShowOutageView] = useState(false);
+
+  const [enableHoverHighlight, setEnableHoverHighlight] = useState<boolean>(
+    () => {
+      return JSON.parse(
+        localStorage.getItem(LOCAL_STORAGE_ENABLE_HOVER_HIGHLIGHT) ?? "true",
+      );
+    },
+  );
 
   const clearHighlights = useCallback(() => {
     setTrace({ geometries: [], ids: [], etrs89: null, wgs84: null });
   }, [setTrace]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      LOCAL_STORAGE_ENABLE_HOVER_HIGHLIGHT,
+      JSON.stringify(enableHoverHighlight),
+    );
+  }, [enableHoverHighlight]);
 
   // Trace
   useEffect(() => {
@@ -172,7 +195,13 @@ function ReadOnlyDiagram({
           icon={ZoomMapSvg}
           title={t("TOGGLE_AUTOMATIC_ZOOM_MAP")}
         />
-
+        <ToggleButton
+          toggled={enableHoverHighlight}
+          id={"1"}
+          toggle={() => setEnableHoverHighlight(!enableHoverHighlight)}
+          icon={HighlightSvg}
+          title={t("TOGGLE_HOVER_HIGHLIGHT")}
+        />
         {identifiedFeature?.type === "RouteSegment" && (
           <ActionButton
             icon={OutageSvg}
@@ -187,6 +216,7 @@ function ReadOnlyDiagram({
         envelope={envelope}
         onSelectFeature={onSelectedFeature}
         routeElementId={identifiedFeature?.id ?? ""}
+        schematicHighlight={enableHoverHighlight}
       />
       {selectedFeature?.source === "NodeContainer" && (
         <NodeContainerDetails
