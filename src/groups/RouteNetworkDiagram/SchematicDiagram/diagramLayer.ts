@@ -127,6 +127,7 @@ export function getLayer(name: string): LayerSpecification {
     case "OuterConduitBlue":
     case "OuterConduitWhite":
     case "OuterConduitSilver":
+    case "OuterConduitGrey":
     case "OuterConduitTurquoise":
     case "OuterConduitBlack":
     case "OuterConduitBrown":
@@ -155,6 +156,8 @@ export function getLayer(name: string): LayerSpecification {
             colorMap.WHITE,
             "OuterConduitSilver",
             colorMap.LIGHT_GREY,
+            "OuterConduitGrey",
+            colorMap.LIGHT_GREY,
             "OuterConduitTurquoise",
             colorMap.LIGHT_TURQUOISE,
             "OuterConduitBlack",
@@ -178,6 +181,7 @@ export function getLayer(name: string): LayerSpecification {
     case "InnerConduitGreen":
     case "InnerConduitBrown":
     case "InnerConduitSilver":
+    case "InnerConduitGrey":
     case "InnerConduitWhite":
     case "InnerConduitRed":
     case "InnerConduitBlack":
@@ -204,6 +208,8 @@ export function getLayer(name: string): LayerSpecification {
             "InnerConduitBrown",
             colorMap.BROWN,
             "InnerConduitSilver",
+            colorMap.GREY,
+            "InnerConduitGrey",
             colorMap.GREY,
             "InnerConduitWhite",
             colorMap.WHITE,
