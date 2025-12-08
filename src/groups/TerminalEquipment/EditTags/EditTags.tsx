@@ -31,14 +31,12 @@ interface EditTagsProps {
   terminalOrSpanEquipmentId: string;
 }
 
-const availableTags = [
-  "Broken",
-  "Extremely broken",
-  "Could not be more broken than this",
-].map((x) => ({
-  text: x,
-  value: x,
-}));
+const availableTags = ["Defekt", "Reserveret", "Bemærkning", "Kredsløb Id"].map(
+  (x) => ({
+    text: x,
+    value: x,
+  }),
+);
 
 function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
   const { t } = useTranslation();
