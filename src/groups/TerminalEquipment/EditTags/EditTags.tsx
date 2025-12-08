@@ -4,7 +4,8 @@ import { useClient } from "urql";
 import MultiLineTextBox from "../../../components/MultiLineTextbox";
 import DefaultButton from "../../../components/DefaultButton";
 import TagMenu from "../../../components/TagMenu";
-import { getTagInfo } from "./EditTagsGql";
+import { getTagInfo, updateTags } from "./EditTagsGql";
+import { toast } from "react-toastify";
 
 interface TagInfo {
   terminalOrSpanId: string;
@@ -32,10 +33,8 @@ interface EditTagsProps {
 
 const availableTags = [
   "Broken",
-  "Super Broken",
   "Extremely broken",
   "Could not be more broken than this",
-  "Got rats",
 ].map((x) => ({
   text: x,
   value: x,
@@ -59,11 +58,10 @@ function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
           return acc;
         }, {});
 
-        console.log(tagInfoLookUp);
-
         setTags(tagInfoLookUp);
       })
       .catch((err) => {
+        toast.error(t("ERROR"));
         console.error(err);
       });
   }, [client, terminalOrSpanEquipmentId]);
@@ -101,15 +99,47 @@ function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
           tag.tags = [];
         }
 
-        tag.tags = checked
-          ? [...tag.tags, tagValue]
-          : [...tag.tags.filter((x) => x !== tagValue)];
+        if (checked) {
+          tag.tags = [...new Set([...tag.tags, tagValue])];
+        } else {
+          tag.tags = [...tag.tags.filter((x) => x !== tagValue)];
+        }
 
         return updatedTags;
       });
     },
     [setTags],
   );
+
+  const commitUpdateTags = () => {
+    const tagsToUpdate = Object.entries(tags)
+      .map((x) => x[1])
+      .map((x) => ({
+        terminalOrSpanId: x.terminalOrSpanId,
+        comment: x.comment,
+        tags: x.tags,
+      }))
+      .filter((x) => x.comment || (x.tags && x.tags.length > 0));
+
+    console.log(tagsToUpdate);
+
+    updateTags(client, {
+      terminalOrSpanEquipmentId: terminalOrSpanEquipmentId,
+      tags: tagsToUpdate,
+    })
+      .then((res) => {
+        const body = res.data?.terminalEquipment.updateTags;
+        if (body?.isSuccess) {
+          toast.success(t("UPDATED"));
+        } else {
+          toast.error(t(body?.errorCode ?? "ERROR"));
+        }
+      })
+      .catch((err) => {
+        toast.error(t("ERROR"));
+        console.error(err);
+      });
+  };
 
   if (tags === null) {
     return <></>;
@@ -161,7 +191,7 @@ function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
       </div>
       <div className="full-row center-items">
         <DefaultButton
-          onClick={() => {}}
+          onClick={commitUpdateTags}
           innerText={t("UPDATE")}
           maxWidth={"400px"}
         />

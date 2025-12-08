@@ -8,6 +8,12 @@ export function getTagInfo(client: Client, terminalOrSpanEquipmentId: string) {
     .toPromise();
 }
 
+export function updateTags(client: Client, updateTags: UpdateTagsParams) {
+  return client
+    .mutation<UpdateTagsResponse>(UPDATE_TAGS_MUTATION, updateTags)
+    .toPromise();
+}
+
 interface TagsResponse {
   utilityNetwork: {
     tags: {
@@ -27,6 +33,38 @@ query ($terminalOrSpanEquipmentId: ID!) {
       displayName
       tags
       comment
+    }
+  }
+}
+`;
+
+interface UpdateTagsParams {
+  terminalOrSpanEquipmentId: string;
+  tags: {
+    terminalOrSpanId: string;
+    displayName: string;
+    comment?: string;
+    tags?: string[];
+  }[];
+}
+
+interface UpdateTagsResponse {
+  terminalEquipment: {
+    updateTags: {
+      isSuccess: boolean;
+      errorCode: string;
+      errorMessage: string;
+    };
+  };
+}
+
+const UPDATE_TAGS_MUTATION = `
+mutation ($terminalOrSpanEquipmentId: ID! $tags: [EquipmentTag]!) {
+  terminalEquipment {
+    updateTags (terminalOrSpanEquipmentId: $terminalOrSpanEquipmentId, tags: $tags) {
+      isSuccess
+      errorCode
+      errorMessage
     }
   }
 }
