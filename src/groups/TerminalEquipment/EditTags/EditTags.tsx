@@ -1,68 +1,18 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useClient } from "urql";
 import MultiLineTextBox from "../../../components/MultiLineTextbox";
 import DefaultButton from "../../../components/DefaultButton";
 import TagMenu from "../../../components/TagMenu";
+import { getTagInfo, updateTags } from "./EditTagsGql";
+import { toast } from "react-toastify";
 
 interface TagInfo {
-  id: string;
-  name: string;
+  terminalOrSpanId: string;
+  displayName: string;
   comment?: string;
-  tags: string[];
+  tags?: string[];
 }
-
-const fiberRackTagData: TagInfo[] = [
-  {
-    id: "a1b2c3d4-e5f6-4789-90ab-cdef01234567",
-    name: "Data Center A - Rack 01",
-    comment: "Main fiber distribution rack in Data Center A.",
-    tags: ["DATA CENTER", "LOCATION A", "RACK 01", "FIBER DISTRIBUTION"],
-  },
-  {
-    id: "f8e7d6c5-b4a3-4210-8fed-cba987654321",
-    name: "Building B - Floor 2 West Side",
-    comment:
-      "Intermediate fiber patch panel rack on the west side of the second floor in Building B.",
-    tags: ["BUILDING B", "FLOOR 2", "WEST", "FIBER PATCH PANEL"],
-  },
-  {
-    id: "11223344-5566-4778-8990-aabbccddeeff",
-    name: "Main Distribution Frame (MDF)",
-    comment: "Central MDF for the entire network infrastructure.",
-    tags: ["MDF", "MAIN DISTRIBUTION", "CENTRAL", "CORE NETWORK"],
-  },
-  {
-    id: "fedcba98-7654-4321-0fed-cba987654320",
-    name: "Server Room 3 - Equipment Rack",
-    comment: "Rack containing fiber termination for servers in Server Room 3.",
-    tags: ["SERVER ROOM 3", "EQUIPMENT RACK", "FIBER TERMINATION", "SERVERS"],
-  },
-  {
-    id: "99887766-5544-4332-2110-aabbccdd00ff",
-    name: "Building C - South Wing Interconnect",
-    comment:
-      "Rack facilitating fiber connections between different parts of the south wing in Building C.",
-    tags: ["BUILDING C", "SOUTH WING", "INTERCONNECT", "FIBER BACKBONE"],
-  },
-  {
-    id: "00112233-4455-4667-8899-aabbccddeeff",
-    name: "Telecom Closet 1 - Zone A",
-    comment:
-      "Fiber termination point for users in Zone A connected to Telecom Closet 1.",
-    tags: ["TELECOM CLOSET", "ZONE A", "USER CONNECTIVITY", "FIBER ACCESS"],
-  },
-  {
-    id: "aabbccdd-eeff-4012-3456-7890abcdef0123",
-    name: "Outdoor Fiber Enclosure #5",
-    comment:
-      "Weatherproof enclosure containing fiber splices and connections in the outdoor network.",
-    tags: ["OUTDOOR", "ENCLOSURE", "FIBER SPLICE", "WEATHERPROOF"],
-  },
-];
-
-const availableTags = [...new Set(fiberRackTagData.flatMap((x) => x.tags))].map(
-  (x) => ({ text: x.toLowerCase(), value: x }),
-);
 
 function createTagOptions(
   selectedTags: Set<string>,
@@ -77,21 +27,42 @@ function createTagOptions(
   });
 }
 
-function EditTags() {
+interface EditTagsProps {
+  terminalOrSpanEquipmentId: string;
+}
+
+const availableTags = ["Defekt", "Reserveret", "Bemærkning", "Kredsløb Id"].map(
+  (x) => ({
+    text: x,
+    value: x,
+  }),
+);
+
+function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
   const { t } = useTranslation();
+  const client = useClient();
 
   const [tags, setTags] = useState<Record<string, TagInfo> | null>(null);
 
   useEffect(() => {
-    const tagInfoLookUp = fiberRackTagData.reduce<Record<string, TagInfo>>(
-      (acc, x) => {
-        acc[x.id] = x;
-        return acc;
-      },
-      {},
-    );
-    setTags(tagInfoLookUp);
-  }, []);
+    if (!terminalOrSpanEquipmentId || !client) return;
+
+    getTagInfo(client, terminalOrSpanEquipmentId)
+      .then((res) => {
+        const tagInfoLookUp = res.data?.utilityNetwork.tags.reduce<
+          Record<string, TagInfo>
+        >((acc, x) => {
+          acc[x.terminalOrSpanId] = x;
+          return acc;
+        }, {});
+
+        setTags(tagInfoLookUp);
+      })
+      .catch((err) => {
+        toast.error(t("ERROR"));
+        console.error(err);
+      });
+  }, [client, terminalOrSpanEquipmentId]);
 
   const updateTagComment = useCallback(
     (id: string, comment: string) => {
@@ -122,15 +93,51 @@ function EditTags() {
 
         const tag = updatedTags[id];
 
-        tag.tags = checked
-          ? [...tag.tags, tagValue]
-          : [...tag.tags.filter((x) => x !== tagValue)];
+        if (!tag.tags) {
+          tag.tags = [];
+        }
+
+        if (checked) {
+          tag.tags = [...new Set([...tag.tags, tagValue])];
+        } else {
+          tag.tags = [...tag.tags.filter((x) => x !== tagValue)];
+        }
 
         return updatedTags;
       });
     },
     [setTags],
   );
+
+  const commitUpdateTags = () => {
+    const tagsToUpdate = Object.entries(tags)
+      .map((x) => x[1])
+      .map((x) => ({
+        terminalOrSpanId: x.terminalOrSpanId,
+        comment: x.comment,
+        tags: x.tags,
+      }))
+      .filter((x) => x.comment || (x.tags && x.tags.length > 0));
+
+    console.log(tagsToUpdate);
+
+    updateTags(client, {
+      terminalOrSpanEquipmentId: terminalOrSpanEquipmentId,
+      tags: tagsToUpdate,
+    })
+      .then((res) => {
+        const body = res.data?.terminalEquipment.updateTags;
+        if (body?.isSuccess) {
+          toast.success(t("UPDATED"));
+        } else {
+          toast.error(t(body?.errorCode ?? "ERROR"));
+        }
+      })
+      .catch((err) => {
+        toast.error(t("ERROR"));
+        console.error(err);
+      });
+  };
 
   if (tags === null) {
     return <></>;
@@ -150,23 +157,26 @@ function EditTags() {
           <div className="edit-tags-container-body">
             <div className="edit-tags-editor-container-body-line"></div>
             {Object.values(tags).map((x) => (
-              <div className="edit-tags-container-body-line" key={x.id}>
+              <div
+                className="edit-tags-container-body-line"
+                key={x.terminalOrSpanId}
+              >
                 <div className="edit-tags-container-body-line-item">
-                  {x.name}
+                  {x.displayName}
                 </div>
                 <div className="edit-tags-container-body-line-item">
                   <MultiLineTextBox
                     rows={5}
                     value={x.comment ?? ""}
                     setValue={(updatedComment) =>
-                      updateTagComment(x.id, updatedComment)
+                      updateTagComment(x.terminalOrSpanId, updatedComment)
                     }
                   />
                 </div>
                 <div className="edit-tags-container-body-line-item">
                   <TagMenu
                     tagUpdated={(value, checked) =>
-                      tagUpdated(x.id, value, checked)
+                      tagUpdated(x.terminalOrSpanId, value, checked)
                     }
                     tags={createTagOptions(new Set(x.tags), availableTags)}
                     showMenu={true}
@@ -179,7 +189,7 @@ function EditTags() {
       </div>
       <div className="full-row center-items">
         <DefaultButton
-          onClick={() => {}}
+          onClick={commitUpdateTags}
           innerText={t("UPDATE")}
           maxWidth={"400px"}
         />

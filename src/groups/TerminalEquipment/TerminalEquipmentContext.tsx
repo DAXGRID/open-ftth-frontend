@@ -76,6 +76,7 @@ interface ShowEditInterfaceView {
 
 interface ShowEditTags {
   show: boolean;
+  terminalOrSpanEquipmentId: string;
 }
 
 interface TerminalEquipmentState {
