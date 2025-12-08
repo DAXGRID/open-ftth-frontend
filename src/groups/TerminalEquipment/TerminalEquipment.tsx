@@ -258,11 +258,14 @@ function TerminalEquipmentTable({
                       )}
                       <span
                         role="button"
-                        className="header-icons__icon hidden"
+                        className="header-icons__icon"
                         onClick={() =>
                           dispatch({
                             type: "setShowEditTags",
-                            showEditTags: { show: true },
+                            showEditTags: {
+                              show: true,
+                              terminalOrSpanEquipmentId: terminalEquipmentId,
+                            },
                           })
                         }
                       >
@@ -533,7 +536,11 @@ function TerminalEquipment() {
           title={t("EDIT_TAGS")}
           closeCallback={() => dispatch({ type: "resetShowEditTags" })}
         >
-          <EditTags />
+          <EditTags
+            terminalOrSpanEquipmentId={
+              state.showEditTags.terminalOrSpanEquipmentId
+            }
+          />
         </ModalContainer>,
       );
     } else {
