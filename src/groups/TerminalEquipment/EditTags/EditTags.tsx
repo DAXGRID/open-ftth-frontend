@@ -14,17 +14,31 @@ interface TagInfo {
   tags?: string[];
 }
 
+function getUniqueListBy(arr: any, key: any) {
+  return [...new Map(arr.map((item) => [item[key], item])).values()];
+}
+
 function createTagOptions(
   selectedTags: Set<string>,
   allTags: { text: string; value: string }[],
 ) {
-  return allTags.map((x) => {
+  const selectedItemOptions = Array.from(selectedTags.values()).map((x) => ({
+    text: x,
+    value: x,
+  }));
+
+  const combinedOtions = [...selectedItemOptions, ...allTags].map((x) => {
     return {
       text: x.text,
       value: x.value,
       checked: selectedTags.has(x.value),
     };
   });
+
+  // Make sure no duplicate options are present.
+  return [
+    ...new Map(combinedOtions.map((item) => [item.text, item])).values(),
+  ].sort((x, y) => (x.text < y.text ? -1 : 0));
 }
 
 interface EditTagsProps {
@@ -32,10 +46,10 @@ interface EditTagsProps {
 }
 
 const availableTags = ["Defekt", "Reserveret", "Bemærkning", "Kredsløb Id"].map(
-  (x) => ({
+  {
     text: x,
     value: x,
-  }),
+  },
 );
 
 function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
@@ -118,8 +132,6 @@ function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
         tags: x.tags,
       }))
       .filter((x) => x.comment || (x.tags && x.tags.length > 0));
-
-    console.log(tagsToUpdate);
 
     updateTags(client, {
       terminalOrSpanEquipmentId: terminalOrSpanEquipmentId,
