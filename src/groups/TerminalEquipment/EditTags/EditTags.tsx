@@ -46,10 +46,10 @@ interface EditTagsProps {
 }
 
 const availableTags = ["Defekt", "Reserveret", "Bemærkning", "Kredsløb Id"].map(
-  {
+  (x) => ({
     text: x,
     value: x,
-  },
+  }),
 );
 
 function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
