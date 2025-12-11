@@ -20,9 +20,13 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
   const { state, dispatch } = useContext(TerminalEquipmentContext);
   const { t } = useTranslation();
 
+  const hasTags = line.a?.terminal.hasTags || line.z?.terminal.hasTags;
+
   return (
     <>
-      <div className="terminal-equipment-table-row">
+      <div
+        className={`terminal-equipment-table-row ${hasTags ? "terminal-equipment-table-row--has-tags" : ""}`}
+      >
         <div className="terminal-equipment-data-row terminal-equipment-table-grid-equipped">
           <div className="terminal-equipment-table-item">
             <span
