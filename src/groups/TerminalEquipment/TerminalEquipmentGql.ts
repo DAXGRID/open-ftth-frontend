@@ -54,6 +54,7 @@ export interface Line {
     terminal: {
       id: string;
       name: string;
+      hasTags: boolean;
     };
     connectedTo: string | null;
     end: string | null;
@@ -64,6 +65,7 @@ export interface Line {
     terminal: {
       id: string;
       name: string;
+      hasTags: boolean;
     };
     connectedTo: string | null;
     end: string | null;
@@ -139,6 +141,7 @@ $terminalEquipmentOrRackId: ID!) {
               terminal {
                 id
                 name
+                hasTags
               }
               connectedTo
               end
@@ -149,6 +152,7 @@ $terminalEquipmentOrRackId: ID!) {
               terminal {
                 id
                 name
+                hasTags
               }
               connectedTo
               end
