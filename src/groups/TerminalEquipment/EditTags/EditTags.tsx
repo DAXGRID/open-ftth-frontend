@@ -6,6 +6,7 @@ import DefaultButton from "../../../components/DefaultButton";
 import TagMenu from "../../../components/TagMenu";
 import { getTagInfo, updateTags } from "./EditTagsGql";
 import { toast } from "react-toastify";
+import Config from "../../../config";
 
 interface TagInfo {
   terminalOrSpanId: string;
@@ -45,12 +46,10 @@ interface EditTagsProps {
   terminalOrSpanEquipmentId: string;
 }
 
-const availableTags = ["Defekt", "Reserveret", "Bemærkning", "Kredsløb Id"].map(
-  (x) => ({
-    text: x,
-    value: x,
-  }),
-);
+const availableTags = Config.TAGS.map((x) => ({
+  text: x,
+  value: x,
+}));
 
 function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
   const { t } = useTranslation();
