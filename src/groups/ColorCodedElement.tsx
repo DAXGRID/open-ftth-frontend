@@ -53,8 +53,6 @@ export default function ColorCodedElement(text: string, t: TFunction<string>) {
     );
   }
 
-  console.log(groups);
-
   return (
     <div className="color-coded">
       {groups.map((x, i) => {
