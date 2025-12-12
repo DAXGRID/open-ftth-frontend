@@ -15,14 +15,14 @@ import {
 import { toast } from "react-toastify";
 
 const createSelectOptions = (
-  specifications: SpanEquipmentSpecification[]
+  specifications: SpanEquipmentSpecification[],
 ): SelectOption[] => {
   return specifications
     .filter((x) => !x.isMultiLevel)
     .map<SelectOption>((x) => {
       return {
         text: x.description,
-        value: x.outerSpanStructureSpecificationId,
+        value: x.id,
         key: x.id,
       };
     });
@@ -37,7 +37,10 @@ function AddInnerSpanStructure({
 }: AddInnerSpanStructureProps) {
   const { t } = useTranslation();
   const [count, setCount] = useState(1);
-  const [selected, setSelected] = useState<string>();
+  const [
+    selectedSpanEquipmentSpecification,
+    setSelectedSpanEquipmentSpecification,
+  ] = useState<string>();
   const client = useClient();
   const [response] = useQuery<SpanEquipmentSpecificationsResponse>({
     query: SPAN_EQUIPMENT_SPEFICIATIONS_QUERY,
@@ -49,15 +52,28 @@ function AddInnerSpanStructure({
       return;
     }
 
+    const outerSpanStructureSpecificationId =
+      response.data?.utilityNetwork.spanEquipmentSpecifications.find(
+        (x) => x.id === selectedSpanEquipmentSpecification,
+      )?.outerSpanStructureSpecificationId;
+
+    if (!outerSpanStructureSpecificationId) {
+      throw Error(
+        `Could not find span equipment specification on id: '${selectedSpanEquipmentSpecification}'.`,
+      );
+    }
+
     const parameters: AddAdditionalInnerSpanStructuresParameter = {
       spanEquipmentOrSegmentId: selectedOuterConduit,
-      spanStructureSpecificationIds: Array(count).fill(selected),
+      spanStructureSpecificationIds: Array(count).fill(
+        outerSpanStructureSpecificationId,
+      ),
     };
 
     const result = await client
       .mutation<AddAdditionalInnerSpanStructuresResponse>(
         ADD_ADDITIONAL_INNER_SPAN_STRUCTURES,
-        parameters
+        parameters,
       )
       .toPromise();
 
@@ -67,18 +83,18 @@ function AddInnerSpanStructure({
       toast.error(
         t(
           result.data?.spanEquipment.addAdditionalInnerSpanStructures
-            .errorCode ?? ""
-        )
+            .errorCode ?? "",
+        ),
       );
     }
   };
 
   if (response.fetching) return <></>;
 
-  if (!selected) {
-    setSelected(
+  if (!selectedSpanEquipmentSpecification) {
+    setSelectedSpanEquipmentSpecification(
       response.data?.utilityNetwork.spanEquipmentSpecifications[0]
-        .outerSpanStructureSpecificationId
+        .outerSpanStructureSpecificationId,
     );
   }
 
@@ -86,10 +102,12 @@ function AddInnerSpanStructure({
     <div className="add-inner-span-structure">
       <div className="full-row gap-default">
         <SelectMenu
-          onSelected={(x) => setSelected(x?.toString() ?? "")}
-          selected={selected}
+          onSelected={(x) =>
+            setSelectedSpanEquipmentSpecification(x?.toString() ?? "")
+          }
+          selected={selectedSpanEquipmentSpecification}
           options={createSelectOptions(
-            response.data?.utilityNetwork.spanEquipmentSpecifications ?? []
+            response.data?.utilityNetwork.spanEquipmentSpecifications ?? [],
           )}
           enableSearch={true}
         />
