@@ -57,6 +57,11 @@ function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
 
   const [tags, setTags] = useState<Record<string, TagInfo> | null>(null);
 
+  // This is done to disable the tag system until tags has been provided.
+  if (!Config.TAGS || Config.TAGS.length === 0) {
+    return <></>;
+  }
+
   useEffect(() => {
     if (!terminalOrSpanEquipmentId || !client) return;
 
