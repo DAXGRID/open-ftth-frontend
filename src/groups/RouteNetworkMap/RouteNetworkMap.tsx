@@ -364,7 +364,7 @@ function RouteNetworkMap({
       }
 
       const m = map.current;
-      const sourceCache = m.style.sourceCaches[tilesetName];
+      const sourceCache = m.style.tileManagers[tilesetName];
 
       // Reload the whole cache
       sourceCache.reload(true);
