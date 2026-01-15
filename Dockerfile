@@ -1,6 +1,6 @@
-FROM node:22.19 as build
+FROM node:24.13.0 AS build
 WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH=/app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY package-lock.json ./
 COPY . ./
