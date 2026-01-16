@@ -6,9 +6,9 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.1.1",
     "@turf/turf": "^7.3.2",
     "@urql/exchange-auth": "^1.0.0",
     "graphql": "^16.12.0",
