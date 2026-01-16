@@ -58,7 +58,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/uuid": "^10.0.0",
     "@types/websocket": "^1.0.10",
-    "@vitejs/plugin-react": "^5.0.2",
+    "@vitejs/plugin-react": "^5.1.2",
     "vite": "^7.3.1"
   }
 }
