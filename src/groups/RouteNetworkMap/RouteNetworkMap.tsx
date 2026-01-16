@@ -374,7 +374,7 @@ function RouteNetworkMap({
         tilesetName,
         sourceCache
           .getIds()
-          .map((id) => sourceCache._tiles[id].tileID.canonical),
+          .map((id) => sourceCache.getTileByID(id)?.tileID.canonical),
       );
 
       // Will be left in there for now for debug purposes.
