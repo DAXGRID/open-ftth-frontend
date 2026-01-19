@@ -31,12 +31,14 @@ const getFilteredSpanEquipmentSpecifications = (
   specifications: SpanEquipmentSpecification[],
   selectedCategory: string | number | undefined,
 ) => {
-  const bodyItems = specifications.map<BodyItem>((x) => {
-    return {
-      rows: [{ id: 0, value: x.description }],
-      id: x.id,
-    };
-  });
+  const bodyItems = specifications
+    .filter((x) => !x.deprecated)
+    .map<BodyItem>((x) => {
+      return {
+        rows: [{ id: 0, value: x.description }],
+        id: x.id,
+      };
+    });
 
   return bodyItems.filter((x) => {
     return (
@@ -61,12 +63,14 @@ const getFilteredManufacturers = (
     return [];
   }
 
-  const bodyItems = manufacturers.map<BodyItem>((x) => {
-    return {
-      rows: [{ id: 0, value: x.name }],
-      id: x.id,
-    };
-  });
+  const bodyItems = manufacturers
+    .filter((x) => !x.deprecated)
+    .map<BodyItem>((x) => {
+      return {
+        rows: [{ id: 0, value: x.name }],
+        id: x.id,
+      };
+    });
 
   const spanEquipment = spanEquipmentSpecifications.find(
     (x) => x.id === selectedSpanEquipmentSpecification,
@@ -246,6 +250,7 @@ function PlaceSpanEquipmentPage() {
 
   const categorySelectOptions = () => {
     const categoryOptions = spanEquipmentSpecifications
+      .filter((x) => !x.deprecated)
       .map((x) => {
         return x.category;
       })
