@@ -19,7 +19,7 @@ function TextBox({
       className="text-box"
       type="text"
       disabled={disabled ?? false}
-      value={value}
+      value={value ?? ""}
       placeholder={placeHolder}
       onChange={(x) => setValue(x.target.value)}
     />
