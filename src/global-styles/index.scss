@@ -125,6 +125,10 @@ body {
   }
 }
 
+.full-row-align-right {
+  justify-content: end;
+}
+
 .full-row-group {
   border: 1px solid colors.$border-color;
   padding: 15px;
