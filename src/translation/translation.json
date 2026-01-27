@@ -386,7 +386,8 @@
       "ADD_PIPE_LOOP": "Tilføj rørsløjfe",
       "INSTALLATION_INFORMATION": "Installation information",
       "INSTALLATION_ID": "Installation id",
-      "STATUS": "Status"
+      "STATUS": "Status",
+      "SHOW_DEPRECATED": "Show deprecated specifications"
     }
   },
   "dk": {
@@ -776,7 +777,8 @@
       "ADD_PIPE_LOOP": "Tilføj rørsløjfe",
       "INSTALLATION_INFORMATION": "Installations information",
       "INSTALLATION_ID": "Installations id",
-      "STATUS": "Status"
+      "STATUS": "Status",
+      "SHOW_DEPRECATED": "Vis henlagte specifikationer"
     }
   }
 }

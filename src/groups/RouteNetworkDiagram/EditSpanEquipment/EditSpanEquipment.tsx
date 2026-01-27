@@ -20,6 +20,7 @@ import { TFunction } from "i18next";
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import TextBox from "../../../components/TextBox";
+import CheckBox from "../../../components/Checkbox";
 import { toast } from "react-toastify";
 import Config from "../../../config";
 
@@ -57,20 +58,25 @@ function unitAddressToOption(
 const getFilteredSpanEquipmentSpecifications = (
   specifications: SpanEquipmentSpecification[],
   selectedCategory: string | number | undefined,
+  showDeprecated: boolean,
 ) => {
-  const bodyItems = specifications.map<SelectOption>((x) => {
-    return {
-      text: x.description,
-      value: x.id.toString(),
-      key: x.id,
-    };
-  });
+  const bodyItems = specifications
+    .filter((x) => (showDeprecated ? true : !x.deprecated))
+    .map<SelectOption>((x) => {
+      return {
+        text: x.description,
+        value: x.id.toString(),
+        key: x.id,
+      };
+    });
 
   return bodyItems.filter((x) => {
     return (
-      specifications.find((y) => {
-        return y.id === x.value;
-      })?.category === selectedCategory
+      specifications
+        .filter((x) => (showDeprecated ? true : !x.deprecated))
+        .find((y) => {
+          return y.id === x.value;
+        })?.category === selectedCategory
     );
   });
 };
@@ -80,6 +86,7 @@ const getFilteredManufacturers = (
   selectedSpanEquipmentSpecification: string | number | undefined,
   spanEquipmentSpecifications: SpanEquipmentSpecification[],
   t: TFunction<"translation">,
+  showDeprecated: boolean,
 ) => {
   if (
     !manufacturers ||
@@ -89,17 +96,19 @@ const getFilteredManufacturers = (
     return [];
   }
 
-  const bodyItems = manufacturers.map<SelectOption>((x) => {
-    return {
-      text: x.name,
-      value: x.id,
-      key: x.id,
-    };
-  });
+  const bodyItems = manufacturers
+    .filter((x) => (showDeprecated ? true : !x.deprecated))
+    .map<SelectOption>((x) => {
+      return {
+        text: x.name,
+        value: x.id,
+        key: x.id,
+      };
+    });
 
-  const spanEquipment = spanEquipmentSpecifications.find(
-    (x) => x.id === selectedSpanEquipmentSpecification,
-  );
+  const spanEquipment = spanEquipmentSpecifications
+    .filter((x) => (showDeprecated ? true : !x.deprecated))
+    .find((x) => x.id === selectedSpanEquipmentSpecification);
 
   if (!spanEquipment) {
     throw new Error(
@@ -157,6 +166,8 @@ function EditSpanEquipment({
     setSelectedSpanEquipmentSpecification,
   ] = useState<string>();
 
+  const [showDeprecated, setShowDeprecated] = useState<boolean>(false);
+
   const [selectedCategory, setSelectedCategory] = useState<
     string | number | undefined
   >();
@@ -207,8 +218,9 @@ function EditSpanEquipment({
       getFilteredSpanEquipmentSpecifications(
         spanEquipmentSpecifications,
         selectedCategory,
+        setShowDeprecated,
       ),
-    [spanEquipmentSpecifications, selectedCategory],
+    [spanEquipmentSpecifications, selectedCategory, setShowDeprecated],
   );
 
   const filteredManufactuers = useMemo(
@@ -218,12 +230,14 @@ function EditSpanEquipment({
         selectedSpanEquipmentSpecification,
         spanEquipmentSpecifications,
         t,
+        showDeprecated,
       ),
     [
       manufacturers,
       selectedSpanEquipmentSpecification,
       spanEquipmentSpecifications,
       t,
+      showDeprecated,
     ],
   );
 
@@ -349,8 +363,9 @@ function EditSpanEquipment({
     setSelectedManufacturer("");
   };
 
-  const categorySelectOptions = () => {
+  const categorySelectOptions = useMemo(() => {
     const categoryOptions = spanEquipmentSpecifications
+      .filter((x) => (showDeprecated ? true : !x.deprecated))
       .map((x) => {
         return x.category;
       })
@@ -363,7 +378,7 @@ function EditSpanEquipment({
       });
 
     return categoryOptions;
-  };
+  }, [spanEquipmentSpecifications, showDeprecated]);
 
   const selectCategory = (categoryId: string | number | undefined) => {
     if (selectedCategory === categoryId || selectCategory === undefined) return;
@@ -423,9 +438,20 @@ function EditSpanEquipment({
     <div className="edit-span-equipment page-container">
       <div className="block">
         <p className="block-title">{t("SPAN_EQUIPMENT_INFORMATION")}</p>
+
+        <div className="full-row gap-default full-row-align-right">
+          <p>{t("SHOW_DEPRECATED")}</p>
+          <CheckBox
+            checked={showDeprecated}
+            onChange={() => {
+              setShowDeprecated(!showDeprecated);
+            }}
+          />
+        </div>
+
         <div className="full-row">
           <SelectMenu
-            options={categorySelectOptions()}
+            options={categorySelectOptions}
             removePlaceHolderOnSelect
             onSelected={selectCategory}
             selected={selectedCategory}
