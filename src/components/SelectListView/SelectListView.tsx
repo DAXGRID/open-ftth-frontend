@@ -27,6 +27,8 @@ function SelectListView({
   maxHeightBody,
   minWidth,
 }: SelectListViewProps) {
+  console.log("MaxHeightBody", maxHeightBody);
+
   return (
     <div className="select-list-view">
       {title && (
@@ -38,7 +40,9 @@ function SelectListView({
         className="select-list-view-content"
         style={{ minWidth: minWidth ?? "initial" }}
       >
-        <div className="select-list-view-header select-list-view-grid">
+        <div
+          className={`select-list-view-header select-list-view-grid ${maxHeightBody ? "select-list-view-header--max-height" : ""}`}
+        >
           {headerItems.map((name) => (
             <div key={name} className="select-list-view-header-item">
               <p>{name}</p>
