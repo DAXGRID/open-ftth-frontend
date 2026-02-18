@@ -8,6 +8,7 @@ import DefaultButton from "../../components/DefaultButton";
 import SelectListView, { BodyItem } from "../../components/SelectListView";
 import useBridgeConnector from "../../bridge/useBridgeConnector";
 import { toast } from "react-toastify";
+import Config from "../../config";
 
 import {
   getWorksTasks,
@@ -145,7 +146,7 @@ const initialState: State = {
   workTasks: [],
   projectNumberFilter: "ALL",
   workTaskTypeFilter: "ALL",
-  workTaskStatusFilter: "ALL",
+  workTaskStatusFilter: Config.DEFAULT_WORK_TASK_STATUS ?? "ALL",
   selectedWorkTask: null,
 };
 
