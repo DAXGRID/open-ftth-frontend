@@ -36,6 +36,7 @@ declare global {
     config_DEFAULT_USER_LANGUAGE: string;
     config_INITIAL_USER_PROMPT: IntitialUserPrompt | null;
     config_TAGS: string[];
+    config_DEFAULT_WORK_TASK_STATUS: string | null;
   }
 }
 
@@ -52,6 +53,7 @@ const settings = {
   // initial prompt to be displayed to the user when they first time visit the site.
   INITIAL_USER_PROMPT: window.config_INITIAL_USER_PROMPT,
   TAGS: window.config_TAGS ?? [],
+  DEFAULT_WORK_TASK_STATUS: window.config_DEFAULT_WORK_TASK_STATUS,
 };
 
 export default settings;
