@@ -357,7 +357,7 @@ function WorkTasks() {
             t("INSTALLATION_NUMBER"),
             t("MODIFIED_BY"),
           ]}
-          maxHeightBody={"500px"}
+          maxHeightBody={"Calc(100vh - 400px)"}
           bodyItems={selectBodyItems}
           selectItem={(x) => selectWorkTask(x.id as string)}
           selected={state.selectedWorkTask?.number}

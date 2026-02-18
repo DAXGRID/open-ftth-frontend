@@ -3,7 +3,6 @@
 .select-list-view {
   font-size: 14px;
   width: 100%;
-  overflow: auto;
 
   .select-list-view-title {
     margin-bottom: 15px;
@@ -30,6 +29,11 @@
       border-top-right-radius: 4px;
       border: 1px solid colors.$border-color;
 
+      &.select-list-view-header--max-height {
+        scrollbar-gutter: stable;
+        overflow-y: auto;
+      }
+
       .select-list-view-header-item {
         flex: 1;
         border-right: 1px solid colors.$border-color;
@@ -52,10 +56,11 @@
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px;
       border-top: none;
+      scrollbar-gutter: stable;
 
       &.select-list-view-body--max-height {
         overflow-y: auto;
-        overflow-y: overlay;
+        scrollbar-gutter: stable;
       }
 
       &:empty {
