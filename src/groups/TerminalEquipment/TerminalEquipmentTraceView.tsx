@@ -11,9 +11,11 @@ import ColorCodedElement from "../ColorCodedElement";
 
 interface TraceViewProps {
   view: { view: ConnectivityTraceView | null; show: boolean };
+  aId: string | null;
+  zId: string | null;
 }
 
-function TerminalEquipmentTraceView({ view }: TraceViewProps) {
+function TerminalEquipmentTraceView({ view, aId, zId }: TraceViewProps) {
   const { t } = useTranslation();
   const { state, dispatch } = useContext(TerminalEquipmentContext);
 

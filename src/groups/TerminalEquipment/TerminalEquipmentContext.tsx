@@ -460,6 +460,7 @@ const TerminalEquipmentProvider = ({
     );
 
     notLoaded.forEach((x) => {
+      console.log(x);
       connectivityTraceViewQuery(client, routeNodeId, x[0]).then((response) => {
         const view = response.data?.utilityNetwork.connectivityTraceView;
         if (view) {
