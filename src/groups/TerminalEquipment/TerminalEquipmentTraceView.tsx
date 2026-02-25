@@ -3,7 +3,10 @@ import { useTranslation } from "react-i18next";
 import { ConnectivityTraceView } from "./TerminalEquipmentGql";
 import { TerminalEquipmentContext } from "./TerminalEquipmentContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlassLocation } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlassLocation,
+  faTags,
+} from "@fortawesome/free-solid-svg-icons";
 import ColorCodedElement from "../ColorCodedElement";
 
 interface TraceViewProps {
@@ -34,6 +37,20 @@ function TerminalEquipmentTraceView({ view }: TraceViewProps) {
             }
           >
             <FontAwesomeIcon icon={faMagnifyingGlassLocation} />
+          </div>
+          <div
+            className="trace-view-actions-action"
+            onClick={() =>
+              dispatch({
+                type: "setShowEditTags",
+                showEditTags: {
+                  show: true,
+                  terminalOrSpanEquipmentId: "",
+                },
+              })
+            }
+          >
+            <FontAwesomeIcon icon={faTags} />
           </div>
         </div>
       </div>
