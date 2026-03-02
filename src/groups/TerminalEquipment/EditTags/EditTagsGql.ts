@@ -1,9 +1,12 @@
 import { Client } from "urql";
 
-export function getTagInfo(client: Client, terminalOrSpanEquipmentId: string) {
+export function getTagInfo(
+  client: Client,
+  terminalOrSpanEquipmentIds: string[],
+) {
   return client
     .query<TagsResponse>(TAGS_QUERY, {
-      terminalOrSpanEquipmentId: terminalOrSpanEquipmentId,
+      terminalOrSpanEquipmentIds: terminalOrSpanEquipmentIds,
     })
     .toPromise();
 }
@@ -26,9 +29,9 @@ interface TagsResponse {
 }
 
 const TAGS_QUERY = `
-query ($terminalOrSpanEquipmentId: ID!) {
+query ($terminalOrSpanEquipmentIds: [ID!]!) {
   utilityNetwork {
-    tags (terminalOrSpanEquipmentId: $terminalOrSpanEquipmentId) {
+    tags (terminalOrSpanEquipmentIds: $terminalOrSpanEquipmentIds) {
       terminalOrSpanId
       displayName
       tags

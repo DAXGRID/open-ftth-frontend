@@ -43,7 +43,7 @@ function createTagOptions(
 }
 
 interface EditTagsProps {
-  terminalOrSpanEquipmentId: string;
+  terminalOrSpanEquipmentIds: string[];
 }
 
 const availableTags = Config.TAGS.map((x) => ({
@@ -51,7 +51,7 @@ const availableTags = Config.TAGS.map((x) => ({
   value: x,
 }));
 
-function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
+function EditTags({ terminalOrSpanEquipmentIds }: EditTagsProps) {
   const { t } = useTranslation();
   const client = useClient();
 
@@ -63,9 +63,9 @@ function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
   }
 
   useEffect(() => {
-    if (!terminalOrSpanEquipmentId || !client) return;
+    if (!terminalOrSpanEquipmentIds || !client) return;
 
-    getTagInfo(client, terminalOrSpanEquipmentId)
+    getTagInfo(client, terminalOrSpanEquipmentIds)
       .then((res) => {
         const tagInfoLookUp = res.data?.utilityNetwork.tags.reduce<
           Record<string, TagInfo>
@@ -80,7 +80,7 @@ function EditTags({ terminalOrSpanEquipmentId }: EditTagsProps) {
         toast.error(t("ERROR"));
         console.error(err);
       });
-  }, [client, terminalOrSpanEquipmentId]);
+  }, [client, terminalOrSpanEquipmentIds]);
 
   const updateTagComment = useCallback(
     (id: string, comment: string) => {

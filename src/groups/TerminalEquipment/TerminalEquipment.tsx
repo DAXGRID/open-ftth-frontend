@@ -537,8 +537,8 @@ function TerminalEquipment() {
           closeCallback={() => dispatch({ type: "resetShowEditTags" })}
         >
           <EditTags
-            terminalOrSpanEquipmentId={
-              state.showEditTags.terminalOrSpanEquipmentId
+            terminalOrSpanEquipmentIds={
+              state.showEditTags.terminalOrSpanEquipmentIds
             }
           />
         </ModalContainer>,

@@ -47,7 +47,9 @@ function TerminalEquipmentTraceView({ view, aId, zId }: TraceViewProps) {
                 type: "setShowEditTags",
                 showEditTags: {
                   show: true,
-                  terminalOrSpanEquipmentId: "",
+                  terminalOrSpanEquipmentIds: [
+                    ...new Set([aId, zId].filter((x) => x !== null)),
+                  ],
                 },
               })
             }
