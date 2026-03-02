@@ -264,7 +264,7 @@ function TerminalEquipmentTable({
                             type: "setShowEditTags",
                             showEditTags: {
                               show: true,
-                              terminalOrSpanEquipmentId: terminalEquipmentId,
+                              terminalOrSpanEquipmentIds: [terminalEquipmentId],
                             },
                           })
                         }
