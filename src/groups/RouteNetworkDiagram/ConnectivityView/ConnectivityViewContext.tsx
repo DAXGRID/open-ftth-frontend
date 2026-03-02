@@ -149,7 +149,6 @@ function ConnectivityViewProvider({
   }, [client, dispatch, spanEquipmentId, routeNodeId]);
 
   useEffect(() => {
-    console.log("was here");
     const notLoaded = Object.entries(state.connectivityTraceViews).filter(
       (x) => x[1].show && !x[1].view,
     );
