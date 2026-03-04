@@ -76,6 +76,7 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
         <TerminalEquipmentTraceView
           zId={line.z?.terminal.id ?? null}
           aId={line.a?.terminal.id ?? null}
+          equipmentId={terminalEquipmentOrRackId}
           view={
             state.connectivityTraceViews[
               line.z?.terminal.id ?? line.a?.terminal.id ?? ""

@@ -10,12 +10,18 @@ import {
 import ColorCodedElement from "../ColorCodedElement";
 
 interface TraceViewProps {
+  equipmentId: string;
   view: { view: ConnectivityTraceView | null; show: boolean };
   aId: string | null;
   zId: string | null;
 }
 
-function TerminalEquipmentTraceView({ view, aId, zId }: TraceViewProps) {
+function TerminalEquipmentTraceView({
+  equipmentId,
+  view,
+  aId,
+  zId,
+}: TraceViewProps) {
   const { t } = useTranslation();
   const { state, dispatch } = useContext(TerminalEquipmentContext);
 
@@ -46,8 +52,9 @@ function TerminalEquipmentTraceView({ view, aId, zId }: TraceViewProps) {
               dispatch({
                 type: "setShowEditTags",
                 showEditTags: {
+                  equipmentId: equipmentId,
                   show: true,
-                  terminalOrSpanEquipmentIds: [
+                  terminalOrSpanSegmentIds: [
                     ...new Set([aId, zId].filter((x) => x !== null)),
                   ],
                 },

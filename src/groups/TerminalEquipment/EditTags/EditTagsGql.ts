@@ -2,11 +2,13 @@ import { Client } from "urql";
 
 export function getTagInfo(
   client: Client,
-  terminalOrSpanEquipmentIds: string[],
+  terminalOrSpanSegmentIds: string[],
+  equipmentId: string,
 ) {
   return client
     .query<TagsResponse>(TAGS_QUERY, {
-      terminalOrSpanEquipmentIds: terminalOrSpanEquipmentIds,
+      equipmentId: equipmentId,
+      terminalOrSpanSegmentIds: terminalOrSpanSegmentIds,
     })
     .toPromise();
 }
@@ -29,9 +31,9 @@ interface TagsResponse {
 }
 
 const TAGS_QUERY = `
-query ($terminalOrSpanEquipmentIds: [ID!]!) {
+query ($equipmentId: ID! $terminalOrSpanSegmentIds: [ID!]!) {
   utilityNetwork {
-    tags (terminalOrSpanEquipmentIds: $terminalOrSpanEquipmentIds) {
+    tags (equipmentId: $equipmentId, terminalOrSpanSegmentIds: $terminalOrSpanSegmentIds) {
       terminalOrSpanId
       displayName
       tags
@@ -42,7 +44,7 @@ query ($terminalOrSpanEquipmentIds: [ID!]!) {
 `;
 
 interface UpdateTagsParams {
-  terminalOrSpanEquipmentId: string;
+  terminalOrSpanSegmentIds: string;
   tags: {
     terminalOrSpanId: string;
     displayName: string;
@@ -62,9 +64,9 @@ interface UpdateTagsResponse {
 }
 
 const UPDATE_TAGS_MUTATION = `
-mutation ($terminalOrSpanEquipmentId: ID! $tags: [EquipmentTag]!) {
+mutation ($equipmentId: ID! $tags: [EquipmentTag]!) {
   terminalEquipment {
-    updateTags (terminalOrSpanEquipmentId: $terminalOrSpanEquipmentId, tags: $tags) {
+    updateTags (terminalOrSpanEquipmentIds: $terminalOrSpanEquipmentIds, tags: $tags) {
       isSuccess
       errorCode
       errorMessage
