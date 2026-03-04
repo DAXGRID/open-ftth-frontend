@@ -132,11 +132,10 @@ function EditTags({ terminalOrSpanSegmentIds, equipmentId }: EditTagsProps) {
     const tagsToUpdate = Object.entries(tags)
       .map((x) => x[1])
       .map((x) => ({
-        terminalOrSpanId: x.terminalOrSpanId,
-        comment: x.comment,
-        tags: x.tags,
-      }))
-      .filter((x) => x.comment || (x.tags && x.tags.length > 0));
+        terminalOrSpanId: x.terminalOrSpanId ?? null,
+        comment: x.comment ?? null,
+        tags: x.tags ?? null,
+      }));
 
     updateTags(client, {
       terminalOrSpanEquipmentId: equipmentId,
