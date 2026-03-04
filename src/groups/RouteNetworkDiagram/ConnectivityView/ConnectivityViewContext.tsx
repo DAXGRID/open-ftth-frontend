@@ -18,7 +18,12 @@ import { MapContext } from "../../../contexts/MapContext";
 
 interface ConnectivityViewState {
   connectivityTraceViews: {
-    [id: string]: { show: boolean; view: ConnectivityTraceView };
+    [id: string]: {
+      show: boolean;
+      view: ConnectivityTraceView;
+      aId: string;
+      zId: string;
+    };
   };
   selectedConnectivityTraceHops: Hop[] | null;
   selectedEnvelope: Envelope | null;
@@ -28,7 +33,12 @@ interface ConnectivityViewState {
 type ConnectivityViewAction =
   | {
       type: "setViewConnectivityTraceViews";
-      params: { id: string; view: ConnectivityTraceView };
+      params: {
+        id: string;
+        view: ConnectivityTraceView;
+        aId: string;
+        zId: string;
+      };
     }
   | {
       type: "selectConnectivityTraceHops";
@@ -46,7 +56,7 @@ type ConnectivityViewAction =
 
 function connectivityViewReducer(
   state: ConnectivityViewState,
-  action: ConnectivityViewAction
+  action: ConnectivityViewAction,
 ): ConnectivityViewState {
   switch (action.type) {
     case "setViewConnectivityTraceViews":
@@ -106,7 +116,7 @@ const ConnectivityViewContext = createContext<ConnectivityViewContextDefintion>(
     dispatch: () => {
       console.warn("No provider set for dispatch.");
     },
-  }
+  },
 );
 
 interface ConnectivityViewProviderProps {
@@ -140,7 +150,7 @@ function ConnectivityViewProvider({
 
   useEffect(() => {
     const notLoaded = Object.entries(state.connectivityTraceViews).filter(
-      (x) => x[1].show && !x[1].view
+      (x) => x[1].show && !x[1].view,
     );
 
     notLoaded.forEach((x) => {
@@ -162,10 +172,10 @@ function ConnectivityViewProvider({
     if (!state.selectedConnectivityTraceHops) return;
 
     const routeSegmentIds = state.selectedConnectivityTraceHops.flatMap(
-      (x) => x.routeSegmentIds
+      (x) => x.routeSegmentIds,
     );
     const routeSegmentGeometries = state.selectedConnectivityTraceHops.flatMap(
-      (x) => x.routeSegmentGeometries
+      (x) => x.routeSegmentGeometries,
     );
 
     setTrace({

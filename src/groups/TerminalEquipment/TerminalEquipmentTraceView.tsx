@@ -3,14 +3,25 @@ import { useTranslation } from "react-i18next";
 import { ConnectivityTraceView } from "./TerminalEquipmentGql";
 import { TerminalEquipmentContext } from "./TerminalEquipmentContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlassLocation } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlassLocation,
+  faTags,
+} from "@fortawesome/free-solid-svg-icons";
 import ColorCodedElement from "../ColorCodedElement";
 
 interface TraceViewProps {
+  equipmentId: string;
   view: { view: ConnectivityTraceView | null; show: boolean };
+  aId: string | null;
+  zId: string | null;
 }
 
-function TerminalEquipmentTraceView({ view }: TraceViewProps) {
+function TerminalEquipmentTraceView({
+  equipmentId,
+  view,
+  aId,
+  zId,
+}: TraceViewProps) {
   const { t } = useTranslation();
   const { state, dispatch } = useContext(TerminalEquipmentContext);
 
@@ -34,6 +45,23 @@ function TerminalEquipmentTraceView({ view }: TraceViewProps) {
             }
           >
             <FontAwesomeIcon icon={faMagnifyingGlassLocation} />
+          </div>
+          <div
+            className="trace-view-actions-action"
+            onClick={() =>
+              dispatch({
+                type: "setShowEditTags",
+                showEditTags: {
+                  equipmentId: equipmentId,
+                  show: true,
+                  terminalOrSpanSegmentIds: [
+                    ...new Set([aId, zId].filter((x) => x !== null)),
+                  ],
+                },
+              })
+            }
+          >
+            <FontAwesomeIcon icon={faTags} />
           </div>
         </div>
       </div>
