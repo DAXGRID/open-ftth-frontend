@@ -264,7 +264,15 @@ function TerminalEquipmentTable({
                             type: "setShowEditTags",
                             showEditTags: {
                               show: true,
-                              terminalOrSpanEquipmentIds: [terminalEquipmentId],
+                              terminalOrSpanSegmentIds: [
+                                ...new Set(
+                                  [
+                                    ...x.lines.map((x) => x.a?.terminal.id),
+                                    ...x.lines.map((x) => x.z?.terminal.id),
+                                  ].filter((x) => x),
+                                ),
+                              ],
+                              equipmentId: terminalEquipmentId,
                             },
                           })
                         }
@@ -539,6 +547,9 @@ function TerminalEquipment() {
           <EditTags
             terminalOrSpanSegmentIds={
               state.showEditTags.terminalOrSpanSegmentIds
+            }
+            terminalOrSpanEquipmentId={
+              state.showEditTags.terminalOrSpanEquipmentId
             }
             equipmentId={state.showEditTags.equipmentId}
           />

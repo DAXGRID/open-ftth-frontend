@@ -52,10 +52,7 @@ const availableTags = Config.TAGS.map((x) => ({
   value: x,
 }));
 
-function EditTags({
-  terminalOrSpanSegmentIds: terminalOrSpanSegmentIds,
-  equipmentId,
-}: EditTagsProps) {
+function EditTags({ terminalOrSpanSegmentIds, equipmentId }: EditTagsProps) {
   const { t } = useTranslation();
   const client = useClient();
 
@@ -68,8 +65,6 @@ function EditTags({
 
   useEffect(() => {
     if (!terminalOrSpanSegmentIds || !client) return;
-
-    console.log({ terminalOrSpanSegmentIds, equipmentId });
 
     getTagInfo(client, terminalOrSpanSegmentIds, equipmentId)
       .then((res) => {
@@ -144,7 +139,7 @@ function EditTags({
       .filter((x) => x.comment || (x.tags && x.tags.length > 0));
 
     updateTags(client, {
-      terminalOrSpanSegmentIds: terminalOrSpanSegmentIds,
+      terminalOrSpanEquipmentId: equipmentId,
       tags: tagsToUpdate,
     })
       .then((res) => {

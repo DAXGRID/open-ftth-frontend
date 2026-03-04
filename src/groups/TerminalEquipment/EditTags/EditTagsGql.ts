@@ -44,7 +44,7 @@ query ($equipmentId: ID! $terminalOrSpanSegmentIds: [ID!]!) {
 `;
 
 interface UpdateTagsParams {
-  terminalOrSpanSegmentIds: string;
+  terminalOrSpanEquipmentId: string;
   tags: {
     terminalOrSpanId: string;
     displayName: string;
@@ -64,9 +64,9 @@ interface UpdateTagsResponse {
 }
 
 const UPDATE_TAGS_MUTATION = `
-mutation ($equipmentId: ID! $tags: [EquipmentTag]!) {
+mutation ($terminalOrSpanEquipmentId: ID! $tags: [EquipmentTag]!) {
   terminalEquipment {
-    updateTags (terminalOrSpanEquipmentIds: $terminalOrSpanEquipmentIds, tags: $tags) {
+    updateTags (terminalOrSpanEquipmentId: $terminalOrSpanEquipmentId, tags: $tags) {
       isSuccess
       errorCode
       errorMessage
