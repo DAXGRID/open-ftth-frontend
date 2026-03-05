@@ -38,6 +38,15 @@ const GetMaplibreStyle = async (): Promise<StyleSpecification> => {
 };
 
 function enableResize(map: Map) {
+  // Multiple resize has been added since it works different on different browsers.
+  window.onresize = () => {
+    // Hack to handle resize of mapcanvas because
+    // the event gets called to early, so we have to queue it up
+    setTimeout(() => {
+      map.resize();
+    }, 1);
+  };
+
   window.addEventListener("resize", () => {
     // Hack to handle resize of mapcanvas because
     // the event gets called to early, so we have to queue it up
