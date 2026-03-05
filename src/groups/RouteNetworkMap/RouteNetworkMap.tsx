@@ -44,7 +44,6 @@ function enableResize(map: Map) {
     // the event gets called to early, so we have to queue it up
     setTimeout(() => {
       map.resize();
-      map.redraw();
     }, 1);
   });
 }
@@ -434,6 +433,7 @@ function RouteNetworkMap({
       container: mapContainer.current,
       // We want to ous eour own glyphs in production.
       style: { ...mapLibreStyle, glyphs: "/fonts/{fontstack}/{range}.pbf" },
+      trackResize: true,
       doubleClickZoom: false,
       canvasContextAttributes: {
         preserveDrawingBuffer: true,
