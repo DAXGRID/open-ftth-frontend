@@ -18,9 +18,15 @@ interface ConnectivityViewRowProps {
   line: Line;
   isCable: boolean;
   t: TFunction;
+  equipmentId: string;
 }
 
-function ConnectivityViewRow({ line, isCable, t }: ConnectivityViewRowProps) {
+function ConnectivityViewRow({
+  line,
+  isCable,
+  t,
+  equipmentId,
+}: ConnectivityViewRowProps) {
   const { dispatch, state } = useContext(ConnectivityViewContext);
 
   return (
@@ -66,6 +72,8 @@ function ConnectivityViewRow({ line, isCable, t }: ConnectivityViewRowProps) {
         </div>
       </div>
       <ConnectivityViewTraceView
+        segmentId={line.spanSegmentId}
+        equipmentId={equipmentId}
         view={state.connectivityTraceViews[line.spanSegmentId]}
       />
     </>
@@ -116,6 +124,7 @@ function ConnectivityView() {
           {state.connectivityView?.spanEquipments[0].lines.map((x) => {
             return (
               <ConnectivityViewRow
+                equipmentId={x.spanSegmentId}
                 isCable={spanEquipment.isCable}
                 line={x}
                 key={x.spanSegmentId}
