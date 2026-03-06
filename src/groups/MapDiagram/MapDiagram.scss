@@ -57,8 +57,18 @@
   }
 }
 
-// Tablet retina and beloq
+// Tablet retina and below
 @media only screen and (max-device-width: 1200px) and (-webkit-min-device-pixel-ratio: 2) {
+  .map-diagram--desktop {
+    display: none;
+  }
+
+  .map-diagram--mobile {
+  }
+}
+
+// Tablet retina and below
+@media only screen and (max-device-width: 1200px) and (-webkit-min-device-pixel-ratio: 3) {
   .map-diagram--desktop {
     display: none;
   }
