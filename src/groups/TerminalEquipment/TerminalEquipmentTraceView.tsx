@@ -8,6 +8,7 @@ import {
   faTags,
 } from "@fortawesome/free-solid-svg-icons";
 import ColorCodedElement from "../ColorCodedElement";
+import Config from "../../config";
 
 interface TraceViewProps {
   equipmentId: string;
@@ -46,23 +47,25 @@ function TerminalEquipmentTraceView({
           >
             <FontAwesomeIcon icon={faMagnifyingGlassLocation} />
           </div>
-          <div
-            className="trace-view-actions-action"
-            onClick={() =>
-              dispatch({
-                type: "setShowEditTags",
-                showEditTags: {
-                  equipmentId: equipmentId,
-                  show: true,
-                  terminalOrSpanSegmentIds: [
-                    ...new Set([aId, zId].filter((x) => x !== null)),
-                  ],
-                },
-              })
-            }
-          >
-            <FontAwesomeIcon icon={faTags} />
-          </div>
+          {Config.TAGS?.length > 0 && (
+            <div
+              className="trace-view-actions-action"
+              onClick={() =>
+                dispatch({
+                  type: "setShowEditTags",
+                  showEditTags: {
+                    equipmentId: equipmentId,
+                    show: true,
+                    terminalOrSpanSegmentIds: [
+                      ...new Set([aId, zId].filter((x) => x !== null)),
+                    ],
+                  },
+                })
+              }
+            >
+              <FontAwesomeIcon icon={faTags} />
+            </div>
+          )}
         </div>
       </div>
       <div className="trace-view-header trace-view-grid">
