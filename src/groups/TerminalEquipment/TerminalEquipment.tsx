@@ -31,6 +31,7 @@ import AddAdditionalStructures from "./AddAdditionalStructures";
 import OutageView from "../RouteNetworkDiagram/OutageView";
 import EditInterface from "./EditInterface";
 import EditTags from "./EditTags";
+import Config from "../../config";
 
 type RackContainerProps = {
   children?: ReactNode;
@@ -256,29 +257,31 @@ function TerminalEquipmentTable({
                           <FontAwesomeIcon icon={faEdit} />
                         </span>
                       )}
-                      <span
-                        role="button"
-                        className="header-icons__icon"
-                        onClick={() =>
-                          dispatch({
-                            type: "setShowEditTags",
-                            showEditTags: {
-                              show: true,
-                              terminalOrSpanSegmentIds: [
-                                ...new Set(
-                                  [
-                                    ...x.lines.map((x) => x.a?.terminal.id),
-                                    ...x.lines.map((x) => x.z?.terminal.id),
-                                  ].filter((x) => x),
-                                ),
-                              ],
-                              equipmentId: terminalEquipmentId,
-                            },
-                          })
-                        }
-                      >
-                        <FontAwesomeIcon icon={faTags} />
-                      </span>
+                      {Config.TAGS?.length > 0 && (
+                        <span
+                          role="button"
+                          className="header-icons__icon"
+                          onClick={() =>
+                            dispatch({
+                              type: "setShowEditTags",
+                              showEditTags: {
+                                show: true,
+                                terminalOrSpanSegmentIds: [
+                                  ...new Set(
+                                    [
+                                      ...x.lines.map((x) => x.a?.terminal.id),
+                                      ...x.lines.map((x) => x.z?.terminal.id),
+                                    ].filter((x) => x),
+                                  ),
+                                ],
+                                equipmentId: terminalEquipmentId,
+                              },
+                            })
+                          }
+                        >
+                          <FontAwesomeIcon icon={faTags} />
+                        </span>
+                      )}
                       <span
                         role="button"
                         className="header-icons__icon color-red"
