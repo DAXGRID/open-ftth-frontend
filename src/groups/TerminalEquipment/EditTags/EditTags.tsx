@@ -134,7 +134,7 @@ function EditTags({ terminalOrSpanSegmentIds, equipmentId }: EditTagsProps) {
       .map((x) => ({
         terminalOrSpanId: x.terminalOrSpanId ?? null,
         comment: x.comment ?? null,
-        tags: x.tags ?? null,
+        tags: x.tags && x.tags.length > 0 ? x.tags : null,
       }));
 
     updateTags(client, {
