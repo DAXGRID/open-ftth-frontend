@@ -15,6 +15,16 @@ import {
   Envelope,
 } from "./ConnectivityViewGql";
 import { MapContext } from "../../../contexts/MapContext";
+import { OverlayContext } from "../../../contexts/OverlayContext";
+import EditTags from "../../TerminalEquipment/EditTags";
+import ModalContainer from "../../../components/ModalContainer";
+import { useTranslation } from "react-i18next";
+
+interface ShowEditTags {
+  show: boolean;
+  terminalOrSpanSegmentIds: string[];
+  equipmentId: string;
+}
 
 interface ConnectivityViewState {
   connectivityTraceViews: {
@@ -28,6 +38,7 @@ interface ConnectivityViewState {
   selectedConnectivityTraceHops: Hop[] | null;
   selectedEnvelope: Envelope | null;
   connectivityView: SpanEquipmentConnectivityView | null;
+  showEditTags: ShowEditTags | null;
 }
 
 type ConnectivityViewAction =
@@ -52,6 +63,13 @@ type ConnectivityViewAction =
   | {
       type: "setSpanEquipmentConnectivityView";
       view: SpanEquipmentConnectivityView;
+    }
+  | {
+      type: "setShowEditTags";
+      view: ShowEditTags;
+    }
+  | {
+      type: "resetShowEditTags";
     };
 
 function connectivityViewReducer(
@@ -93,6 +111,16 @@ function connectivityViewReducer(
         ...state,
         connectivityView: action.view,
       };
+    case "setShowEditTags":
+      return {
+        ...state,
+        showEditTags: action.view,
+      };
+    case "resetShowEditTags":
+      return {
+        ...state,
+        showEditTags: null,
+      };
     default:
       throw new Error(`No action for ${action}`);
   }
@@ -108,6 +136,7 @@ const initialState: ConnectivityViewState = {
   selectedConnectivityTraceHops: null,
   selectedEnvelope: null,
   connectivityView: null,
+  showEditTags: null,
 };
 
 const ConnectivityViewContext = createContext<ConnectivityViewContextDefintion>(
@@ -130,9 +159,35 @@ function ConnectivityViewProvider({
   spanEquipmentId,
   children,
 }: ConnectivityViewProviderProps) {
+  const { t } = useTranslation();
   const [state, dispatch] = useReducer(connectivityViewReducer, initialState);
   const client = useClient();
   const { setTrace } = useContext(MapContext);
+  const { showElement } = useContext(OverlayContext);
+
+  useEffect(() => {
+    if (state.showEditTags?.show) {
+      showElement(
+        <ModalContainer
+          maxWidth="1200px"
+          title={t("EDIT_TAGS")}
+          closeCallback={() => dispatch({ type: "resetShowEditTags" })}
+        >
+          <EditTags
+            terminalOrSpanSegmentIds={
+              state.showEditTags.terminalOrSpanSegmentIds
+            }
+            terminalOrSpanEquipmentId={
+              state.showEditTags.terminalOrSpanEquipmentId
+            }
+            equipmentId={state.showEditTags.equipmentId}
+          />
+        </ModalContainer>,
+      );
+    } else {
+      showElement(null);
+    }
+  }, [state.showEditTags, showElement]);
 
   useEffect(() => {
     if (!spanEquipmentId || !routeNodeId) return;

@@ -27,8 +27,6 @@ function SelectListView({
   maxHeightBody,
   minWidth,
 }: SelectListViewProps) {
-  console.log("MaxHeightBody", maxHeightBody);
-
   return (
     <div className="select-list-view">
       {title && (
