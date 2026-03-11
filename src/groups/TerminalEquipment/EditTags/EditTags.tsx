@@ -182,6 +182,7 @@ function EditTags({ terminalOrSpanSegmentIds, equipmentId }: EditTagsProps) {
                 </div>
                 <div className="edit-tags-container-body-line-item">
                   <MultiLineTextBox
+                    resize="vertical"
                     rows={5}
                     value={x.comment ?? ""}
                     setValue={(updatedComment) =>
