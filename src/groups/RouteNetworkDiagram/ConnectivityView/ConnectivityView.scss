@@ -17,8 +17,9 @@
 
 .connectivity-view__title {
   font-weight: bold;
-  padding: 10px;
+  padding: 14px;
   padding-right: 50px;
+  font-size: 16px;
 }
 
 .connectivity-view-header {
@@ -26,6 +27,23 @@
   font-weight: bold;
   border-top: 1px solid colors.$border-color;
   border-bottom: 1px solid colors.$border-color;
+}
+
+.connectivity-view-tags {
+  align-self: center;
+  font-size: 20px;
+  display: flex;
+  flex: 1;
+  flex-direction: row-reverse;
+  padding-right: 14px;
+}
+
+.connectivity-view-tags__tag {
+  display: block;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .connectivity-view-body {

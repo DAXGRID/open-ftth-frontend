@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faChevronDown,
+  faTags,
 } from "@fortawesome/free-solid-svg-icons";
 import ColorCodedElement from "../../ColorCodedElement";
 import { TFunction } from "i18next";
@@ -82,7 +83,7 @@ function ConnectivityViewRow({
 
 function ConnectivityView() {
   const { t } = useTranslation();
-  const { state } = useContext(ConnectivityViewContext);
+  const { state, dispatch } = useContext(ConnectivityViewContext);
 
   if (
     !state.connectivityView ||
@@ -98,6 +99,25 @@ function ConnectivityView() {
         <p className="connectivity-view__title">{spanEquipment.name}</p>
         <p className="connectivity-view__title">{spanEquipment.specName}</p>
         <p className="connectivity-view__title">{spanEquipment.info}</p>
+        <div className="connectivity-view-tags">
+          <div
+            className="connectivity-view-tags__tag"
+            onClick={() =>
+              dispatch({
+                type: "setShowEditTags",
+                view: {
+                  equipmentId: spanEquipment.id,
+                  show: true,
+                  terminalOrSpanSegmentIds: [
+                    ...spanEquipment.lines.map((x) => x.spanSegmentId),
+                  ],
+                },
+              })
+            }
+          >
+            <FontAwesomeIcon icon={faTags} />
+          </div>
+        </div>
         <div className="connectivity-view-header">
           <div className="connectivity-view-row">
             <div className="connectivity-view-row-item">
