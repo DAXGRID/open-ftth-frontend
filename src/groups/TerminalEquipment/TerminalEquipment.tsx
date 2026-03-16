@@ -105,6 +105,19 @@ function TerminalEquipmentTableContainer({
 }: TerminalEquipmentTableContainerProps) {
   const { state, dispatch } = useContext(TerminalEquipmentContext);
 
+  const allTerminalLineIds = useMemo(() => {
+    return [
+      ...new Set([
+        ...terminalEquipment.terminalStructures.flatMap((x) =>
+          x.lines.map((y) => y.a?.terminal.id),
+        ),
+        ...terminalEquipment.terminalStructures.flatMap((x) =>
+          x.lines.map((y) => y.z?.terminal.id),
+        ),
+      ]),
+    ].filter((x) => x);
+  }, [terminalEquipment]);
+
   return (
     <div className="terminal-equipment-table-container">
       <div className="terminal-equipment-table-container-header">
@@ -127,6 +140,24 @@ function TerminalEquipmentTableContainer({
           </span>
           {state.editable && (
             <>
+              {Config.TAGS?.length > 0 && (
+                <span
+                  role="button"
+                  className="header-icons__icon"
+                  onClick={() =>
+                    dispatch({
+                      type: "setShowEditTags",
+                      showEditTags: {
+                        show: true,
+                        terminalOrSpanSegmentIds: allTerminalLineIds,
+                        equipmentId: terminalEquipment.id,
+                      },
+                    })
+                  }
+                >
+                  <FontAwesomeIcon icon={faTags} />
+                </span>
+              )}
               <span
                 role="button"
                 className="header-icons__icon"
