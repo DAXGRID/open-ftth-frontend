@@ -237,7 +237,7 @@ function WorkTasks() {
       // The filter is applied, to not include the items that will always be added.
       // Otherwise we will get duplicates.
       state.workTasks.filter(
-        (x) => !Config.ALWAYS_INCLUDED_WORK_TASK_TYPE.includes(x.type),
+        (x) => !Config.ALWAYS_INCLUDED_WORK_TASK_TYPES.includes(x.type),
       ),
       state.projectNumberFilter,
       state.workTaskTypeFilter,
@@ -245,8 +245,8 @@ function WorkTasks() {
     );
 
     // No reason to do the array spliting unless always included items exists.
-    if (Config.ALWAYS_INCLUDED_WORK_TASK_TYPE.length > 0) {
-      const alwaysAddedItems = Config.ALWAYS_INCLUDED_WORK_TASK_TYPE.flatMap(
+    if (Config.ALWAYS_INCLUDED_WORK_TASK_TYPES.length > 0) {
+      const alwaysAddedItems = Config.ALWAYS_INCLUDED_WORK_TASK_TYPES.flatMap(
         (alwaysIncludedWorkTaskType) =>
           filterWorkTasks(
             state.workTasks,
