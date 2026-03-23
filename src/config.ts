@@ -37,6 +37,7 @@ declare global {
     config_INITIAL_USER_PROMPT: IntitialUserPrompt | null;
     config_TAGS: string[];
     config_DEFAULT_WORK_TASK_STATUS: string | null;
+    config_ALWAYS_INCLUDED_WORK_TASK_TYPE: string[] | null;
   }
 }
 
@@ -54,6 +55,8 @@ const settings = {
   INITIAL_USER_PROMPT: window.config_INITIAL_USER_PROMPT,
   TAGS: window.config_TAGS ?? [],
   DEFAULT_WORK_TASK_STATUS: window.config_DEFAULT_WORK_TASK_STATUS,
+  ALWAYS_INCLUDED_WORK_TASK_TYPE:
+    window.config_ALWAYS_INCLUDED_WORK_TASK_TYPE ?? [],
 };
 
 export default settings;

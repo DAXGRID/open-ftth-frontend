@@ -233,16 +233,40 @@ function WorkTasks() {
   }, [state.workTasks, t]);
 
   const selectBodyItems = useMemo(() => {
-    return state.workTasks
-      ? mapWorkTasksBodyItems(
+    const items = filterWorkTasks(
+      // The filter is applied, to not include the items that will always be added.
+      // Otherwise we will get duplicates.
+      state.workTasks.filter(
+        (x) => !Config.ALWAYS_INCLUDED_WORK_TASK_TYPE.includes(x.type),
+      ),
+      state.projectNumberFilter,
+      state.workTaskTypeFilter,
+      state.workTaskStatusFilter,
+    );
+
+    // No reason to do the array spliting unless always included items exists.
+    if (Config.ALWAYS_INCLUDED_WORK_TASK_TYPE.length > 0) {
+      const alwaysAddedItems = Config.ALWAYS_INCLUDED_WORK_TASK_TYPE.flatMap(
+        (alwaysIncludedWorkTaskType) =>
           filterWorkTasks(
             state.workTasks,
-            state.projectNumberFilter,
-            state.workTaskTypeFilter,
-            state.workTaskStatusFilter,
+            "ALL",
+            alwaysIncludedWorkTaskType,
+            "ALL",
           ),
-        )
-      : [];
+      );
+
+      // mapWorkTasksBodyItems is called twice, because the work items are sorted based on date.
+      // It has to be done in the mapping part, because we don't have access to the value after.
+      // extraItems come first because it was requested by the customers since they use the 'alwaysAdded' a lot
+      // so they should be first in the list.
+      return [
+        ...mapWorkTasksBodyItems(alwaysAddedItems),
+        ...mapWorkTasksBodyItems(items),
+      ];
+    } else {
+      return mapWorkTasksBodyItems(items);
+    }
   }, [
     state.workTasks,
     state.projectNumberFilter,
