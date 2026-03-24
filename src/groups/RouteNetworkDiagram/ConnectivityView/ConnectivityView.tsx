@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ColorCodedElement from "../../ColorCodedElement";
 import { TFunction } from "i18next";
+import Config from "../../../config";
 
 interface ConnectivityViewRowProps {
   line: Line;
@@ -99,25 +100,27 @@ function ConnectivityView() {
         <p className="connectivity-view__title">{spanEquipment.name}</p>
         <p className="connectivity-view__title">{spanEquipment.specName}</p>
         <p className="connectivity-view__title">{spanEquipment.info}</p>
-        <div className="connectivity-view-tags">
-          <div
-            className="connectivity-view-tags__tag"
-            onClick={() =>
-              dispatch({
-                type: "setShowEditTags",
-                view: {
-                  equipmentId: spanEquipment.id,
-                  show: true,
-                  terminalOrSpanSegmentIds: [
-                    ...spanEquipment.lines.map((x) => x.spanSegmentId),
-                  ],
-                },
-              })
-            }
-          >
-            <FontAwesomeIcon icon={faTags} />
+        {Config.TAGS.length > 0 && (
+          <div className="connectivity-view-tags">
+            <div
+              className="connectivity-view-tags__tag"
+              onClick={() =>
+                dispatch({
+                  type: "setShowEditTags",
+                  view: {
+                    equipmentId: spanEquipment.id,
+                    show: true,
+                    terminalOrSpanSegmentIds: [
+                      ...spanEquipment.lines.map((x) => x.spanSegmentId),
+                    ],
+                  },
+                })
+              }
+            >
+              <FontAwesomeIcon icon={faTags} />
+            </div>
           </div>
-        </div>
+        )}
         <div className="connectivity-view-header">
           <div className="connectivity-view-row">
             <div className="connectivity-view-row-item">
