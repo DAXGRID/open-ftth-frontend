@@ -31,8 +31,17 @@ const getFilteredSpanEquipmentSpecifications = (
   specifications: SpanEquipmentSpecification[],
   selectedCategory: string | number | undefined,
 ) => {
+  const sortSpecificationComparer = (
+    a: SpanEquipmentSpecification,
+    b: SpanEquipmentSpecification,
+  ) =>
+    a.description
+      .trim()
+      .localeCompare(b.description.trim(), undefined, { numeric: true });
+
   const bodyItems = specifications
     .filter((x) => !x.deprecated)
+    .sort(sortSpecificationComparer)
     .map<BodyItem>((x) => {
       return {
         rows: [{ id: 0, value: x.description }],
@@ -248,7 +257,7 @@ function PlaceSpanEquipmentPage() {
     );
   }, [spanEquipmentResult]);
 
-  const categorySelectOptions = () => {
+  const categorySelectOptions = useMemo(() => {
     const categoryOptions = spanEquipmentSpecifications
       .filter((x) => !x.deprecated)
       .map((x) => {
@@ -268,7 +277,7 @@ function PlaceSpanEquipmentPage() {
     }
 
     return categoryOptions;
-  };
+  });
 
   const selectCategory = (categoryId: string | number | undefined) => {
     if (selectedCategory === categoryId || selectCategory === undefined) return;
@@ -292,7 +301,7 @@ function PlaceSpanEquipmentPage() {
         <p className="block-title">{t("SPAN_EQUIPMENT_INFORMATION")}</p>
         <div className="full-row">
           <SelectMenu
-            options={categorySelectOptions()}
+            options={categorySelectOptions}
             removePlaceHolderOnSelect
             onSelected={selectCategory}
             selected={selectedCategory}
