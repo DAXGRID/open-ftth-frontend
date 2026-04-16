@@ -20,7 +20,8 @@ function TerminalLine({ line, terminalEquipmentOrRackId }: TerminalLineProps) {
   const { state, dispatch } = useContext(TerminalEquipmentContext);
   const { t } = useTranslation();
 
-  const hasTags = line.a?.terminal.hasTags || line.z?.terminal.hasTags;
+  const hasTags =
+    line.a?.terminal.tags?.length > 0 || line.z?.terminal.tags?.length > 0;
 
   return (
     <>
