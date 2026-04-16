@@ -213,15 +213,16 @@ function EditSpanEquipment({
       pause: !spanEquipmentMrid,
     });
 
-  const filteredSpanEquipmentSpecifications = useMemo(
-    () =>
-      getFilteredSpanEquipmentSpecifications(
-        spanEquipmentSpecifications,
-        selectedCategory,
-        setShowDeprecated,
-      ),
-    [spanEquipmentSpecifications, selectedCategory, setShowDeprecated],
-  );
+  const filteredSpanEquipmentSpecifications = useMemo(() => {
+    const sortSpecificationComparer = (a: SelectOption, b: SelectOption) =>
+      a.trim().text.localeCompare(b.text.trim(), undefined, { numeric: true });
+
+    return getFilteredSpanEquipmentSpecifications(
+      spanEquipmentSpecifications,
+      selectedCategory,
+      setShowDeprecated,
+    ).sort(sortSpecificationComparer);
+  }, [spanEquipmentSpecifications, selectedCategory, setShowDeprecated]);
 
   const filteredManufactuers = useMemo(
     () =>
