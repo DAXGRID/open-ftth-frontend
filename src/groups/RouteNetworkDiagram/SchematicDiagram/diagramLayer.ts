@@ -632,7 +632,12 @@ export const fiberCableSymbolLayer: SymbolLayerSpecification = {
     "text-size": 14,
   },
   paint: {
-    "text-color": "rgba(0, 0, 0, 1)",
+    "text-color": [
+      "case",
+      ["has", "Tags"],
+      "rgba(196, 30, 58, 1)",
+      "rgba(0, 0, 0, 1)",
+    ],
     "text-halo-blur": 1,
     "text-halo-color": "rgba(255, 255, 255, 1)",
     "text-halo-width": 10,
