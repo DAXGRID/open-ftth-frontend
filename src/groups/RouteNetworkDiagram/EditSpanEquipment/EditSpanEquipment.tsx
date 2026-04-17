@@ -215,7 +215,7 @@ function EditSpanEquipment({
 
   const filteredSpanEquipmentSpecifications = useMemo(() => {
     const sortSpecificationComparer = (a: SelectOption, b: SelectOption) =>
-      a.trim().text.localeCompare(b.text.trim(), undefined, { numeric: true });
+      a.text.trim().localeCompare(b.text.trim(), undefined, { numeric: true });
 
     return getFilteredSpanEquipmentSpecifications(
       spanEquipmentSpecifications,
