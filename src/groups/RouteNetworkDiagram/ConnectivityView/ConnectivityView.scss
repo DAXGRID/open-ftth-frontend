@@ -66,7 +66,7 @@
   }
 
   &.connectivity-view-row--has-tags {
-    background-color: rgb(255 120 0 / 25%);
+    background-color: colors.$has-tags-color;
   }
 }
 
@@ -159,7 +159,7 @@
       }
 
       &.trace-view-body-row--has-tags {
-        background-color: rgb(255 120 0 / 25%);
+        background-color: colors.$has-tags-color;
       }
 
       &.trace-view-body-row--selected {
