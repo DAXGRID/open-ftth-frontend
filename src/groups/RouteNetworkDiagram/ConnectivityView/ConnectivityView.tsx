@@ -31,9 +31,13 @@ function ConnectivityViewRow({
 }: ConnectivityViewRowProps) {
   const { dispatch, state } = useContext(ConnectivityViewContext);
 
+  const hasTags = line.a?.tags?.length > 0 || line.z?.tags?.length > 0;
+
   return (
     <>
-      <div className="connectivity-view-row">
+      <div
+        className={`connectivity-view-row ${hasTags ? "connectivity-view-row--has-tags" : ""}`}
+      >
         <div className="connectivity-view-row-item">
           {isCable && (
             <span

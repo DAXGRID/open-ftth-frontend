@@ -64,6 +64,10 @@
   &:last-child {
     border-bottom: none;
   }
+
+  &.connectivity-view-row--has-tags {
+    background-color: rgb(255 120 0 / 25%);
+  }
 }
 
 .connectivity-view-row-item {

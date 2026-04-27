@@ -3,7 +3,7 @@ import { Client } from "urql";
 export const connectivityTraceViewQuery = (
   client: Client,
   routeNetworkElementId: string,
-  terminalOrSpanEquipmentId: string
+  terminalOrSpanEquipmentId: string,
 ) => {
   return client
     .query<ConnectivityTraceViewResponse>(CONNECTIVITY_TRACE_VIEW_QUERY, {
@@ -16,7 +16,7 @@ export const connectivityTraceViewQuery = (
 export const spanEquipmentConnectivityViewQuery = (
   client: Client,
   routeNetworkElementId: string,
-  spanEquipmentOrSegmentIds: string[]
+  spanEquipmentOrSegmentIds: string[],
 ) => {
   return client
     .query<SpanEquipmentConnectivityViewResponse>(
@@ -24,7 +24,7 @@ export const spanEquipmentConnectivityViewQuery = (
       {
         routeNetworkElementId: routeNetworkElementId,
         spanEquipmentOrSegmentIds: spanEquipmentOrSegmentIds,
-      } as SpanEquipmentConnectivityViewParams
+      } as SpanEquipmentConnectivityViewParams,
     )
     .toPromise();
 };
@@ -117,10 +117,12 @@ export interface Line {
   a: {
     connectedTo: string;
     end: string;
+    tags: string | null;
   };
   z: {
     connectedto: string;
     end: string;
+    tags: string | null;
   };
 }
 
@@ -173,10 +175,12 @@ $spanEquipmentOrSegmentIds: [ID!]!
           a {
             connectedTo
             end
+            tags
           }
           z {
             connectedTo
             end
+            tags
           }
         }
       }
