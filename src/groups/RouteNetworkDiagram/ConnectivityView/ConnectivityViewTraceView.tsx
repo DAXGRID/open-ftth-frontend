@@ -74,7 +74,7 @@ function ConnectivityViewTraceView({
           return (
             <div
               key={x.hopSeqNo}
-              className={`trace-view-body-row trace-view-grid ${
+              className={`trace-view-body-row trace-view-grid ${x.tags?.length > 0 ? "trace-view-body-row--has-tags" : ""} ${
                 state.selectedConnectivityTraceHops?.find((y) => y === x)
                   ? "trace-view-body-row--selected"
                   : ""

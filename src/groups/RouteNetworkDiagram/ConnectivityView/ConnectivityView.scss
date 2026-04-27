@@ -158,6 +158,10 @@
         border-bottom: none;
       }
 
+      &.trace-view-body-row--has-tags {
+        background-color: rgb(255 120 0 / 25%);
+      }
+
       &.trace-view-body-row--selected {
         background-color: colors.$select-color;
       }
