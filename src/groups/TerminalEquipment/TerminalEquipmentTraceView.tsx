@@ -81,7 +81,7 @@ function TerminalEquipmentTraceView({
           return (
             <div
               key={i}
-              className={`trace-view-body-row trace-view-grid ${x.tags?.length > 0 ? "trace-view-body-row--has-tags" : ""} ${
+              className={`trace-view-body-row ${x.tags?.length > 0 ? "trace-view-body-row--has-tags" : ""} trace-view-grid ${
                 state.selectedConnectivityTraceHops?.find((y) => y === x)
                   ? "trace-view-body-row--selected"
                   : ""
