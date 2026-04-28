@@ -243,6 +243,7 @@ export interface Hop {
   routeSegmentIds: string[];
   routeSegmentGeometries: string[];
   hopSeqNo: number;
+  tags: string | null;
 }
 
 export interface Envelope {
@@ -306,6 +307,7 @@ $terminalOrSpanEquipmentId: ID!) {
         routeSegmentIds
         routeSegmentGeometries
         hopSeqNo
+        tags
       }
     }
   }
