@@ -15,6 +15,7 @@ import TreeViewCheckbox, {
 import DefaultButton from "../../../components/DefaultButton";
 import SelectMenu, { SelectOption } from "../../../components/SelectMenu";
 import { toast } from "react-toastify";
+import Config from "../../../config";
 
 function pascalCaseToSnakeCase(text: string): string {
   return text
@@ -141,9 +142,12 @@ function OutageView({
   }, [client, routeElementId, equipmentId, t]);
 
   useEffect(() => {
-    getWorkTasks(client).then((response) => {
-      let troubleTickets =
-        response.data?.outage.latestTroubleTicketsOrderedByDate;
+    getWorkTasks(
+      client,
+      Config.OUTAGE_VIEW_WORK_TASK_TYPE,
+      Config.OUTAGE_VIEW_WORK_TASK_STATUS,
+    ).then((response) => {
+      let troubleTickets = response.data?.outage.latestTroubleTickets;
       if (troubleTickets) {
         setWorkTasks(troubleTickets);
       } else {

@@ -38,6 +38,8 @@ declare global {
     config_TAGS: string[];
     config_DEFAULT_WORK_TASK_STATUS: string | null;
     config_ALWAYS_INCLUDED_WORK_TASK_TYPES: string[] | null;
+    config_OUTAGE_VIEW_WORK_TASK_TYPE: string | null;
+    config_OUTAGE_VIEW_WORK_TASK_STATUS: string | null;
   }
 }
 
@@ -57,6 +59,10 @@ const settings = {
   DEFAULT_WORK_TASK_STATUS: window.config_DEFAULT_WORK_TASK_STATUS,
   ALWAYS_INCLUDED_WORK_TASK_TYPES:
     window.config_ALWAYS_INCLUDED_WORK_TASK_TYPES ?? [],
+  OUTAGE_VIEW_WORK_TASK_TYPE:
+    window.config_OUTAGE_VIEW_WORK_TASK_TYPE ?? "Trouble ticket",
+  OUTAGE_VIEW_WORK_TASK_STATUS:
+    window.config_OUTAGE_VIEW_WORK_TASK_STATUS ?? "InProgress",
 };
 
 export default settings;
