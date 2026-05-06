@@ -13,11 +13,15 @@ export function getInformation(
     .toPromise();
 }
 
-export function getWorkTasks(client: Client) {
+export function getWorkTasks(
+  client: Client,
+  workTaskType: string,
+  workTaskStatus: string,
+) {
   return client
     .query<LatestTenTroubleTicketsResponse>(
       LATEST_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY,
-      {},
+      { workTaskType, workTaskStatus },
     )
     .toPromise();
 }
@@ -114,7 +118,7 @@ query (
 
 export interface LatestTenTroubleTicketsResponse {
   outage: {
-    latestTroubleTicketsOrderedByDate: WorkTask[];
+    latestTroubleTickets: WorkTask[];
   };
 }
 
@@ -125,9 +129,9 @@ export interface WorkTask {
 }
 
 const LATEST_TROUBLE_TICKETS_ORDERED_BY_DATE_QUERY = `
-query {
+query($workTaskType: String!, $workTaskStatus: String!) {
   outage {
-    latestTroubleTicketsOrderedByDate(count: 50)
+    latestTroubleTickets(count: 50 workTaskType: $workTaskType workTaskStatus: $workTaskStatus)
     {
       workTaskId
       number
