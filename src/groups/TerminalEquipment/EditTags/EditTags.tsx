@@ -43,8 +43,10 @@ function createTagOptions(
 }
 
 interface EditTagsProps {
+  nodeId: string;
   terminalOrSpanSegmentIds: string[];
   equipmentId: string;
+  updatedTagsCallback?: () => void;
 }
 
 const availableTags = Config.TAGS.map((x) => ({
@@ -52,7 +54,12 @@ const availableTags = Config.TAGS.map((x) => ({
   value: x,
 }));
 
-function EditTags({ terminalOrSpanSegmentIds, equipmentId }: EditTagsProps) {
+function EditTags({
+  nodeId,
+  terminalOrSpanSegmentIds,
+  equipmentId,
+  updatedTagsCallback,
+}: EditTagsProps) {
   const { t } = useTranslation();
   const client = useClient();
 
@@ -138,6 +145,7 @@ function EditTags({ terminalOrSpanSegmentIds, equipmentId }: EditTagsProps) {
       }));
 
     updateTags(client, {
+      nodeId: nodeId,
       terminalOrSpanEquipmentId: equipmentId,
       tags: tagsToUpdate,
     })
@@ -145,6 +153,9 @@ function EditTags({ terminalOrSpanSegmentIds, equipmentId }: EditTagsProps) {
         const body = res.data?.terminalEquipment.updateTags;
         if (body?.isSuccess) {
           toast.success(t("UPDATED"));
+          if (updatedTagsCallback) {
+            updatedTagsCallback();
+          }
         } else {
           toast.error(t(body?.errorCode ?? "ERROR"));
         }

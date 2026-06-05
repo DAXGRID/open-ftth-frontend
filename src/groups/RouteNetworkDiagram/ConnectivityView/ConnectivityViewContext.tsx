@@ -174,6 +174,7 @@ function ConnectivityViewProvider({
           closeCallback={() => dispatch({ type: "resetShowEditTags" })}
         >
           <EditTags
+            nodeId={routeNodeId}
             terminalOrSpanSegmentIds={
               state.showEditTags.terminalOrSpanSegmentIds
             }
@@ -181,13 +182,14 @@ function ConnectivityViewProvider({
               state.showEditTags.terminalOrSpanEquipmentId
             }
             equipmentId={state.showEditTags.equipmentId}
+            updatedTagsCallback={() => dispatch({ type: "resetShowEditTags" })}
           />
         </ModalContainer>,
       );
     } else {
       showElement(null);
     }
-  }, [state.showEditTags, showElement]);
+  }, [state.showEditTags, showElement, routeNodeId]);
 
   useEffect(() => {
     if (!spanEquipmentId || !routeNodeId) return;

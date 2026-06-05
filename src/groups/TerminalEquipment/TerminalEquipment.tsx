@@ -579,6 +579,7 @@ function TerminalEquipment() {
           closeCallback={() => dispatch({ type: "resetShowEditTags" })}
         >
           <EditTags
+            nodeId={state.routeNodeId}
             terminalOrSpanSegmentIds={
               state.showEditTags.terminalOrSpanSegmentIds
             }
@@ -586,6 +587,7 @@ function TerminalEquipment() {
               state.showEditTags.terminalOrSpanEquipmentId
             }
             equipmentId={state.showEditTags.equipmentId}
+            updatedTagsCallback={() => dispatch({ type: "resetShowEditTags" })}
           />
         </ModalContainer>,
       );
