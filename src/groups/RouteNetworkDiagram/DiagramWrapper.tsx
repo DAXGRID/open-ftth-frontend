@@ -140,7 +140,11 @@ function DiagramWrapper({ editable }: DiagramWrapperProps) {
           setEnvelope(envelope);
         } else {
           // if none is found we reset the identified feature to avoid issues.
-          setIdentifiedFeature({ id: null, type: null, extraMapInformation: null })
+          setIdentifiedFeature({
+            id: null,
+            type: null,
+            extraMapInformation: null,
+          });
           // We replace the history to avoid the user getting confused and keep refreshing.
           history.replace("");
           toast.error(t("COULD_NOT_LOAD_DIAGRAM"));
