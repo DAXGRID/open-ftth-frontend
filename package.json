@@ -8,8 +8,8 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
-    "@fortawesome/react-fontawesome": "^3.2.0",
-    "@turf/turf": "^7.3.4",
+    "@fortawesome/react-fontawesome": "^3.3.1",
+    "@turf/turf": "^7.3.5",
     "@urql/exchange-auth": "^1.0.0",
     "graphql": "^16.14.1",
     "maplibre-gl": "5.24.0",
@@ -21,10 +21,10 @@
     "react-i18next": "^17.0.8",
     "react-oidc-context": "^3.3.1",
     "react-toastify": "^11.1.0",
-    "sass": "^1.97.3",
+    "sass": "^1.100.0",
     "subscriptions-transport-ws": "^0.11.0",
     "urql": "^3.0.4",
-    "uuid": "^13.0.0",
+    "uuid": "^14.0.0",
     "websocket": "^1.0.35"
   },
   "scripts": {
