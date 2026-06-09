@@ -13,16 +13,17 @@ function TerminalLineFree({
 }: TerminalLineFreeProps) {
   const { t } = useTranslation();
 
+  const hasTags =
+    line.a?.terminal.tags?.length > 0 || line.z?.terminal.tags?.length > 0;
+
   return (
-    <div className="terminal-equipment-table-row">
-      <div
-        className="terminal-equipment-data-row
-                terminal-equipment-table-grid-free"
-      >
+    <div
+      className={`terminal-equipment-table-row ${hasTags ? "terminal-equipment-table-row--has-tags" : ""}`}
+    >
+      <div className="terminal-equipment-data-row terminal-equipment-table-grid-free">
         {line.a ? (
           <div
-            className="terminal-equipment-table-item
-                  terminal-equipment-table-item--free"
+            className={`terminal-equipment-table-item ${hasTags ? "" : "terminal-equipment-table-item--free"}`}
           >
             {t("FREE")}
           </div>
@@ -37,8 +38,7 @@ function TerminalLineFree({
         </div>
         {line.z ? (
           <div
-            className="terminal-equipment-table-item
-                  terminal-equipment-table-item--free"
+            className={`terminal-equipment-table-item ${hasTags ? "" : "terminal-equipment-table-item--free"}`}
           >
             {t("FREE")}
           </div>
