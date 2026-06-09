@@ -38,7 +38,7 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
         });
       } else {
         throw Error(
-          "line.a.connectedToSpanSegmentId or line.a.connectedToSpanSegmentId is not set."
+          "line.a.connectedToSpanSegmentId or line.a.connectedToSpanSegmentId is not set.",
         );
       }
     }
@@ -60,7 +60,7 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
         });
       } else {
         throw Error(
-          "TerminalEquipmentOrRackId or line.z.faceKind was not set."
+          "TerminalEquipmentOrRackId or line.z.faceKind was not set.",
         );
       }
     } else {
@@ -76,7 +76,7 @@ function PinPort({ line, terminalEquipmentOrRackId }: PinPortProps) {
         });
       } else {
         throw Error(
-          "line.z.connectedToSpanSegmentId or line.z.terminal.id is not set."
+          "line.z.connectedToSpanSegmentId or line.z.terminal.id is not set.",
         );
       }
     }
