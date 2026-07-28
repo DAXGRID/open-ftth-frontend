@@ -326,7 +326,7 @@ export function getLayer(name: string): LayerSpecification {
         source: "SpanEquipmentLabel",
         type: "symbol",
         paint: {
-          "text-color": "#444",
+          "text-color": ["case", ["has", "Tags"], "#C41E3A", "#444444"],
         },
         layout: {
           "text-allow-overlap": true,
