@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import ModalContainer from "../../components/ModalContainer";
 import { MapContext } from "../../contexts/MapContext";
 import { OverlayContext } from "../../contexts/OverlayContext";
+import { UserContext } from "../../contexts/UserContext";
 import FiberConnectionEditor from "../FiberConnectionEditor";
 import {
   TerminalEquipmentContext,
@@ -389,6 +390,7 @@ function TerminalEquipment() {
   const { dispatch, state } = useContext(TerminalEquipmentContext);
   const { t } = useTranslation();
   const { identifiedFeature } = useContext(MapContext);
+  const { hasRoles } = useContext(UserContext);
 
   useEffect(() => {
     return () => {
@@ -588,6 +590,7 @@ function TerminalEquipment() {
             }
             equipmentId={state.showEditTags.equipmentId}
             updatedTagsCallback={() => dispatch({ type: "resetShowEditTags" })}
+            readOnly={!hasRoles("writer")}
           />
         </ModalContainer>,
       );

@@ -8,3 +8,7 @@
   border: 1px solid colors.$border-color;
   border-radius: 4px;
 }
+
+.multi-line-text-box:read-only {
+  background-color: colors.$ultra-light-grey;
+}

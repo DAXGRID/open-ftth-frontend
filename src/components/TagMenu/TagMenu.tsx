@@ -5,6 +5,7 @@ interface Tag {
   text: string;
   value: string;
   checked: boolean;
+  readOnly: boolean;
 }
 
 interface TagMenuProps {
@@ -13,7 +14,7 @@ interface TagMenuProps {
   tagUpdated: (value: string, checked: boolean) => void;
 }
 
-function TagMenu({ tags, showMenu, tagUpdated }: TagMenuProps) {
+function TagMenu({ tags, showMenu, tagUpdated, readOnly }: TagMenuProps) {
   const [tagSelectMenuOpen, setTagSelectMenuOpen] = useState(false);
 
   return (
@@ -25,20 +26,24 @@ function TagMenu({ tags, showMenu, tagUpdated }: TagMenuProps) {
             .map(({ text, value }) => (
               <div className="tag-menu-line" key={value}>
                 {text}{" "}
-                <span
-                  onClick={() => tagUpdated(value, false)}
-                  className="tag-menu-line-remove"
-                >
-                  x
-                </span>
+                {!readOnly && (
+                  <span
+                    onClick={() => tagUpdated(value, false)}
+                    className="tag-menu-line-remove"
+                  >
+                    x
+                  </span>
+                )}
               </div>
             ))}
-          <div
-            className="tag-menu-new-tag"
-            onClick={() => setTagSelectMenuOpen((prevValue) => !prevValue)}
-          >
-            <span className="tag-menu-new-tag-add">+</span>
-          </div>
+          {!readOnly && (
+            <div
+              className="tag-menu-new-tag"
+              onClick={() => setTagSelectMenuOpen((prevValue) => !prevValue)}
+            >
+              <span className="tag-menu-new-tag-add">+</span>
+            </div>
+          )}
         </>
       )}
       {tagSelectMenuOpen && (

@@ -47,6 +47,7 @@ interface EditTagsProps {
   terminalOrSpanSegmentIds: string[];
   equipmentId: string;
   updatedTagsCallback?: () => void;
+  readOnly: boolean;
 }
 
 const availableTags = Config.TAGS.map((x) => ({
@@ -59,6 +60,7 @@ function EditTags({
   terminalOrSpanSegmentIds,
   equipmentId,
   updatedTagsCallback,
+  readOnly,
 }: EditTagsProps) {
   const { t } = useTranslation();
   const client = useClient();
@@ -199,6 +201,7 @@ function EditTags({
                     setValue={(updatedComment) =>
                       updateTagComment(x.terminalOrSpanId, updatedComment)
                     }
+                    readOnly={readOnly}
                   />
                 </div>
                 <div className="edit-tags-container-body-line-item">
@@ -208,6 +211,7 @@ function EditTags({
                     }
                     tags={createTagOptions(new Set(x.tags), availableTags)}
                     showMenu={true}
+                    readOnly={readOnly}
                   />
                 </div>
               </div>
@@ -216,11 +220,13 @@ function EditTags({
         </div>
       </div>
       <div className="full-row center-items">
-        <DefaultButton
-          onClick={commitUpdateTags}
-          innerText={t("UPDATE")}
-          maxWidth={"400px"}
-        />
+        {!readOnly && (
+          <DefaultButton
+            onClick={commitUpdateTags}
+            innerText={t("UPDATE")}
+            maxWidth={"400px"}
+          />
+        )}
       </div>
     </div>
   );

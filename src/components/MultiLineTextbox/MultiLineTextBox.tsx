@@ -3,6 +3,7 @@ type MultiLineTextBoxProps = {
   setValue: (value: string) => void;
   rows?: number;
   resize: "auto" | "vertical" | "horizontal";
+  readOnly?: boolean;
 };
 
 function MultiLineTextBox({
@@ -10,9 +11,11 @@ function MultiLineTextBox({
   setValue,
   rows,
   resize,
+  readOnly,
 }: MultiLineTextBoxProps) {
   return (
     <textarea
+      readOnly={readOnly ?? false}
       style={{ resize: resize }}
       className="multi-line-text-box"
       value={value}

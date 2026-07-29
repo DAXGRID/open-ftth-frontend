@@ -15,6 +15,7 @@ import {
   Envelope,
 } from "./ConnectivityViewGql";
 import { MapContext } from "../../../contexts/MapContext";
+import { UserContext } from "../../../contexts/UserContext";
 import { OverlayContext } from "../../../contexts/OverlayContext";
 import EditTags from "../../TerminalEquipment/EditTags";
 import ModalContainer from "../../../components/ModalContainer";
@@ -164,6 +165,7 @@ function ConnectivityViewProvider({
   const client = useClient();
   const { setTrace } = useContext(MapContext);
   const { showElement } = useContext(OverlayContext);
+  const { hasRoles } = useContext(UserContext);
 
   useEffect(() => {
     if (state.showEditTags?.show) {
@@ -183,6 +185,7 @@ function ConnectivityViewProvider({
             }
             equipmentId={state.showEditTags.equipmentId}
             updatedTagsCallback={() => dispatch({ type: "resetShowEditTags" })}
+            readOnly={!hasRoles("writer")}
           />
         </ModalContainer>,
       );
