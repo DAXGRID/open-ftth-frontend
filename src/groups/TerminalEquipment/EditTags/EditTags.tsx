@@ -7,6 +7,7 @@ import TagMenu from "../../../components/TagMenu";
 import { getTagInfo, updateTags } from "./EditTagsGql";
 import { toast } from "react-toastify";
 import Config from "../../../config";
+import ColorCodedElement from "../../ColorCodedElement";
 
 interface TagInfo {
   terminalOrSpanId: string;
@@ -191,7 +192,7 @@ function EditTags({
                 key={x.terminalOrSpanId}
               >
                 <div className="edit-tags-container-body-line-item">
-                  {x.displayName}
+                  {ColorCodedElement(x.displayName, t)}
                 </div>
                 <div className="edit-tags-container-body-line-item">
                   <MultiLineTextBox
