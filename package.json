@@ -2,6 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "overrides": {
     "typescript": "^5.8.3"
   },
@@ -12,7 +13,7 @@
     "@turf/turf": "^7.3.5",
     "@urql/exchange-auth": "^1.0.0",
     "graphql": "^16.14.1",
-    "maplibre-gl": "5.24.0",
+    "maplibre-gl": "6.2.0",
     "oidc-client-ts": "^3.5.0",
     "pubsub-js": "^1.9.5",
     "react-router-dom": "^5.3.4",
@@ -58,7 +59,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/uuid": "^10.0.0",
     "@types/websocket": "^1.0.10",
-    "@vitejs/plugin-react": "^6.0.2",
-    "vite": "^8.0.16"
+    "@vitejs/plugin-react": "^6.0.5",
+    "vite": "^8.2.1"
   }
 }

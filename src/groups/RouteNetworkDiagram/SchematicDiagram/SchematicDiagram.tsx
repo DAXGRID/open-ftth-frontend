@@ -1,11 +1,13 @@
 import { Feature } from "geojson";
-import maplibregl, {
+import {
+  GeoJSONFeature,
   Map,
   MapGeoJSONFeature,
   PointLike,
   NavigationControl,
   MapDataEvent,
   MapMouseEvent,
+  setWorkerUrl,
 } from "maplibre-gl";
 import { DiagramContext } from "../DiagramContext";
 import { useContext, useEffect, useLayoutEffect, useRef } from "react";
@@ -23,6 +25,7 @@ import {
   fiberCableUnderLayer,
   freeRackSpaceSelect,
 } from "./diagramLayer";
+import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 
 interface Envelope {
   minX: number;
@@ -59,6 +62,8 @@ interface SchematicPosition {
   envelope: Envelope;
   zoom: number;
 }
+
+setWorkerUrl(workerUrl);
 
 const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
   const t: { [id: string]: Feature[] } = {};
@@ -111,11 +116,7 @@ const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
   });
 };
 
-function mapFitBounds(
-  envelope: Envelope,
-  map: maplibregl.Map,
-  zoom: number | null,
-) {
+function mapFitBounds(envelope: Envelope, map: Map, zoom: number | null) {
   var extraOptions = zoom
     ? {
         zoom: zoom,
@@ -139,9 +140,9 @@ function hoverPointer(
   map: Map,
   enableHoverColor: boolean,
 ) {
-  let hoveredFeature: maplibregl.GeoJSONFeature | null = null;
+  let hoveredFeature: GeoJSONFeature | null = null;
 
-  const mouseMoveFn = (e: maplibregl.MapMouseEvent) => {
+  const mouseMoveFn = (e: MapMouseEvent) => {
     const bbox: [PointLike, PointLike] = [
       [e.point.x, e.point.y],
       [e.point.x, e.point.y],
