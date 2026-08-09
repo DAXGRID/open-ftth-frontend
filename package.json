@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@types/geojson": "^7946.0.16",
-    "@types/node": "^25.9.2",
+    "@types/node": "^26.2.0",
     "@types/pubsub-js": "^1.8.6",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
