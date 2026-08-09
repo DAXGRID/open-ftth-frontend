@@ -12,7 +12,7 @@
     "@fortawesome/react-fontawesome": "^3.5.0",
     "@turf/turf": "^7.3.5",
     "@urql/exchange-auth": "^1.0.0",
-    "graphql": "^17.0.2",
+    "graphql": "^16.14.1",
     "maplibre-gl": "6.2.0",
     "oidc-client-ts": "^3.5.0",
     "pubsub-js": "^1.9.5",
