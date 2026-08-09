@@ -3,7 +3,7 @@ version: 2.1
 executors:
   npm:
     docker:
-    - image: node:25.9.0
+    - image: node:26.7.0
       auth:
         username: $DOCKER_LOGIN
         password: $DOCKER_ACCESSTOKEN
