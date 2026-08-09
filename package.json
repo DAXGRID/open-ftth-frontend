@@ -61,5 +61,11 @@
     "@types/websocket": "^1.0.10",
     "@vitejs/plugin-react": "^6.0.5",
     "vite": "^8.2.1"
+  },
+  "allowScripts": {
+    "es5-ext@0.10.64": true,
+    "bufferutil@4.1.0": true,
+    "utf-8-validate@5.0.10": true,
+    "@parcel/watcher@2.5.6": true
   }
 }
