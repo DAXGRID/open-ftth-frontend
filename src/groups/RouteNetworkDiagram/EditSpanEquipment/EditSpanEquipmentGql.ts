@@ -14,6 +14,7 @@ export interface SpanEquipmentSpecification {
   description: string;
   deprecated: boolean;
   manufacturerRefs: string[];
+  isCable: boolean;
 }
 
 export interface Manufacturer {
@@ -33,6 +34,7 @@ query {
       description
       deprecated
       manufacturerRefs
+      isCable
     },
     manufacturers {
       id
@@ -51,6 +53,7 @@ export interface SpanEquipmentDetailsResponse {
       specification: {
         category: string;
         id: string;
+        isCable: boolean;
       };
       markingInfo: {
         markingColor: string;
@@ -84,6 +87,7 @@ query ($spanEquipmentOrSegmentId: ID!){
       specification {
         category
         id
+        isCable
       }
       markingInfo {
         markingColor

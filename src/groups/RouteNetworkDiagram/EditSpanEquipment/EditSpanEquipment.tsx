@@ -366,7 +366,13 @@ function EditSpanEquipment({
 
   const categorySelectOptions = useMemo(() => {
     const categoryOptions = spanEquipmentSpecifications
-      .filter((x) => (showDeprecated ? true : !x.deprecated))
+      .filter(
+        (x) =>
+          (showDeprecated ? true : !x.deprecated) &&
+          x.isCable ===
+            spanEquipmentDetailsResponse.data?.utilityNetwork.spanEquipment
+              .specification.isCable,
+      )
       .map((x) => {
         return x.category;
       })
@@ -379,7 +385,12 @@ function EditSpanEquipment({
       });
 
     return categoryOptions;
-  }, [spanEquipmentSpecifications, showDeprecated]);
+  }, [
+    spanEquipmentSpecifications,
+    showDeprecated,
+    selectedCategory,
+    spanEquipmentDetailsResponse,
+  ]);
 
   const selectCategory = (categoryId: string | number | undefined) => {
     if (selectedCategory === categoryId || selectCategory === undefined) return;
