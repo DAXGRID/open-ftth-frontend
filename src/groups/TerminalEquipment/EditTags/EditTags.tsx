@@ -147,6 +147,9 @@ function EditTags({
         tags: x.tags && x.tags.length > 0 ? x.tags : null,
       }));
 
+    // This is ugly, it is up here to avoid a race condtion.
+    // Where the server sends out a notification to update so fast
+    // That the whole function cannot execute. (No easy fix right now.)
     if (updatedTagsCallback) {
       updatedTagsCallback();
     }

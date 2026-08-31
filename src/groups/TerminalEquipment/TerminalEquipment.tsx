@@ -578,7 +578,12 @@ function TerminalEquipment() {
         <ModalContainer
           maxWidth="1200px"
           title={t("EDIT_TAGS")}
-          closeCallback={() => dispatch({ type: "resetShowEditTags" })}
+          closeCallback={() =>
+            dispatch({
+              type: "resetShowEditTags",
+              showEditTags: { ...state.showEditTags, show: false },
+            })
+          }
         >
           <EditTags
             nodeId={state.routeNodeId}
@@ -589,7 +594,12 @@ function TerminalEquipment() {
               state.showEditTags.terminalOrSpanEquipmentId
             }
             equipmentId={state.showEditTags.equipmentId}
-            updatedTagsCallback={() => dispatch({ type: "resetShowEditTags" })}
+            updatedTagsCallback={() =>
+              dispatch({
+                type: "resetShowEditTags",
+                showEditTags: { ...state.showEditTags, show: false },
+              })
+            }
             readOnly={!hasRoles("writer")}
           />
         </ModalContainer>,
