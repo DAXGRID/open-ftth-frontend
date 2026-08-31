@@ -147,6 +147,10 @@ function EditTags({
         tags: x.tags && x.tags.length > 0 ? x.tags : null,
       }));
 
+    if (updatedTagsCallback) {
+      updatedTagsCallback();
+    }
+
     updateTags(client, {
       nodeId: nodeId,
       terminalOrSpanEquipmentId: equipmentId,
@@ -156,9 +160,6 @@ function EditTags({
         const body = res.data?.terminalEquipment.updateTags;
         if (body?.isSuccess) {
           toast.success(t("UPDATED"));
-          if (updatedTagsCallback) {
-            updatedTagsCallback();
-          }
         } else {
           toast.error(t(body?.errorCode ?? "ERROR"));
         }
