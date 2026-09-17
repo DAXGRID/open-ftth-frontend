@@ -7,6 +7,7 @@ import {
   NavigationControl,
   MapDataEvent,
   MapMouseEvent,
+  setWorkerUrl,
 } from "maplibre-gl";
 import { DiagramContext } from "../DiagramContext";
 import { useContext, useEffect, useLayoutEffect, useRef } from "react";
@@ -24,6 +25,7 @@ import {
   fiberCableUnderLayer,
   freeRackSpaceSelect,
 } from "./diagramLayer";
+import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 
 interface Envelope {
   minX: number;
@@ -60,6 +62,8 @@ interface SchematicPosition {
   envelope: Envelope;
   zoom: number;
 }
+
+setWorkerUrl(workerUrl);
 
 const loadDiagram = (map: Map, diagramObjects: Diagram[]) => {
   const t: { [id: string]: Feature[] } = {};
