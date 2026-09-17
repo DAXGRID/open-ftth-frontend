@@ -14,6 +14,7 @@ import {
   NavigationControl,
   GeolocateControl,
   LegacyFilterSpecification,
+  setWorkerUrl,
 } from "maplibre-gl";
 import { useContext, useEffect, useRef, useState } from "react";
 import Config from "../../config";
@@ -30,6 +31,9 @@ import { v4 as uuidv4 } from "uuid";
 import { OverlayContext } from "../../contexts/OverlayContext";
 import ModalContainer from "../../components/ModalContainer";
 import PlaceSpanEquipmentPage from "../../pages/PlaceSpanEquipmentPage";
+import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
+
+setWorkerUrl(workerUrl);
 
 const GetMaplibreStyle = async (): Promise<StyleSpecification> => {
   const maplibre = await fetch(`./maplibre.json?${uuidv4()}`);
