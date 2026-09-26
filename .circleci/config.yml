@@ -9,7 +9,7 @@ executors:
         password: $DOCKER_ACCESSTOKEN
   docker-publisher:
     environment:
-      IMAGE_NAME: openftth/frontend
+      IMAGE_NAME: daxgrid/frontend
     docker:
     - image: circleci/buildpack-deps:stretch
       auth:
