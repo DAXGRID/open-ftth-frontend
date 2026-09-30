@@ -470,7 +470,6 @@ function EditTerminalEquipment({
               onSelected={() => {}}
               options={categoryOptions}
               selected={state.categoryName}
-              disabled={true}
             />
           </LabelContainer>
         </div>
