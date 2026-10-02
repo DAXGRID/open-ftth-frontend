@@ -394,6 +394,17 @@ function EditTerminalEquipment({
     }
   }, [state.accessAddressId, unitAddressOptions]);
 
+  useEffect(() => {
+    if (!state.categoryName) {
+      return;
+    }
+
+    const specificationId =
+      specificationOptions.length > 0 ? specificationOptions[0].key : null;
+
+    dispatch({ type: "setSpecificationId", id: specificationId as string });
+  }, [specificationOptions]);
+
   const executeUpdateTerminalEquipment = () => {
     if (state.terminalEquipment?.id && state.specificationId) {
       if (
@@ -467,7 +478,9 @@ function EditTerminalEquipment({
         <div className="full-row">
           <LabelContainer text={`${t("CATEGORY")}:`}>
             <SelectMenu
-              onSelected={() => {}}
+              onSelected={(x) =>
+                dispatch({ type: "setCategoryName", name: x as string })
+              }
               options={categoryOptions}
               selected={state.categoryName}
             />
