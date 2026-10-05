@@ -54,11 +54,15 @@ function TerminalEquipmentTraceView({
                 dispatch({
                   type: "setShowEditTags",
                   showEditTags: {
-                    equipmentId: equipmentId,
-                    show: true,
-                    terminalOrSpanSegmentIds: [
-                      ...new Set([aId, zId].filter((x) => x !== null)),
+                    equipments: [
+                      {
+                        equipmentId: equipmentId,
+                        terminalOrSpanSegmentIds: [
+                          ...new Set([aId, zId].filter((x) => x !== null)),
+                        ],
+                      },
                     ],
+                    show: true,
                   },
                 })
               }
@@ -75,6 +79,7 @@ function TerminalEquipmentTraceView({
         <div className="trace-view-header-item">{t("TERMINAL")}</div>
         <div className="trace-view-header-item">{t("CONNECTION_INFO")}</div>
         <div className="trace-view-header-item">{t("LENGTH_UNITS")}</div>
+        <div className="trace-view-header-item"></div>
       </div>
       <div className="trace-view-body ">
         {view.view?.hops.map((x, i) => {
@@ -106,6 +111,32 @@ function TerminalEquipmentTraceView({
                 {ColorCodedElement(x.connectionInfo ?? "", t)}
               </div>
               <div className="trace-view-body-item">{x.totalLength ?? ""}</div>
+              <div className="trace-view-body-item">
+                {(x.terminalEquipmentId || x.spanEquipmentId) && (
+                  <FontAwesomeIcon
+                    icon={faTags}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      dispatch({
+                        type: "setShowEditTags",
+                        showEditTags: {
+                          show: true,
+                          equipments: [
+                            {
+                              equipmentId: x.terminalEquipmentId,
+                              terminalOrSpanSegmentIds: [x.terminalId],
+                            },
+                            {
+                              equipmentId: x.spanEquipmentId,
+                              terminalOrSpanSegmentIds: [x.spanId],
+                            },
+                          ].filter((x) => x.equipmentId),
+                        },
+                      });
+                    }}
+                  />
+                )}
+              </div>
             </div>
           );
         })}
