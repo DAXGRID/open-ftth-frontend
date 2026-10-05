@@ -287,10 +287,9 @@
 
   .trace-view-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.25fr) minmax(
-        0,
-        0.6fr
-      );
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr)) minmax(0, 1.25fr) minmax(0, 0.6fr)
+      minmax(0, 0.3fr);
     grid-auto-flow: column;
   }
 
@@ -307,7 +306,7 @@
         padding: 10px 20px 10px 10px;
       }
 
-      &:nth-of-type(6) {
+      &:nth-of-type(7) {
         border-right: none;
       }
     }
@@ -341,8 +340,17 @@
           padding: 10px 20px 10px 10px;
         }
 
-        &:nth-of-type(6) {
+        &:nth-of-type(7) {
           border-right: none;
+          font-size: 22px;
+          text-align: center;
+          justify-content: center;
+          display: flex;
+          padding: 0;
+
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
     }

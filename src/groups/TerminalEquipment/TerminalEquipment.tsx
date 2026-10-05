@@ -150,8 +150,12 @@ function TerminalEquipmentTableContainer({
                       type: "setShowEditTags",
                       showEditTags: {
                         show: true,
-                        terminalOrSpanSegmentIds: allTerminalLineIds,
-                        equipmentId: terminalEquipment.id,
+                        equipments: [
+                          {
+                            terminalOrSpanSegmentIds: allTerminalLineIds,
+                            equipmentId: terminalEquipment.id,
+                          },
+                        ],
                       },
                     })
                   }
@@ -297,16 +301,24 @@ function TerminalEquipmentTable({
                             dispatch({
                               type: "setShowEditTags",
                               showEditTags: {
-                                show: true,
-                                terminalOrSpanSegmentIds: [
-                                  ...new Set(
-                                    [
-                                      ...x.lines.map((x) => x.a?.terminal.id),
-                                      ...x.lines.map((x) => x.z?.terminal.id),
-                                    ].filter((x) => x),
-                                  ),
+                                equipments: [
+                                  {
+                                    terminalOrSpanSegmentIds: [
+                                      ...new Set(
+                                        [
+                                          ...x.lines.map(
+                                            (x) => x.a?.terminal.id,
+                                          ),
+                                          ...x.lines.map(
+                                            (x) => x.z?.terminal.id,
+                                          ),
+                                        ].filter((x) => x),
+                                      ),
+                                    ],
+                                    equipmentId: terminalEquipmentId,
+                                  },
                                 ],
-                                equipmentId: terminalEquipmentId,
+                                show: true,
                               },
                             })
                           }
@@ -586,13 +598,7 @@ function TerminalEquipment() {
           }
         >
           <EditTags
-            equipments={[
-              {
-                equipmentId: state.showEditTags.equipmentId,
-                terminalOrSpanSegmentIds:
-                  state.showEditTags.terminalOrSpanSegmentIds,
-              },
-            ]}
+            equipments={state.showEditTags.equipments}
             nodeId={state.routeNodeId}
             updatedTagsCallback={() =>
               dispatch({
