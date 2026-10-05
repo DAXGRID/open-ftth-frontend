@@ -10,6 +10,7 @@ import Config from "../../../config";
 import ColorCodedElement from "../../ColorCodedElement";
 
 interface TagInfo {
+  equipmentId: string;
   terminalOrSpanId: string;
   displayName: string;
   comment?: string;
@@ -45,8 +46,10 @@ function createTagOptions(
 
 interface EditTagsProps {
   nodeId: string;
-  terminalOrSpanSegmentIds: string[];
-  equipmentId: string;
+  equipments: {
+    terminalOrSpanSegmentIds: string[];
+    equipmentId: string;
+  }[];
   updatedTagsCallback?: () => void;
   readOnly: boolean;
 }
@@ -58,8 +61,7 @@ const availableTags = Config.TAGS.map((x) => ({
 
 function EditTags({
   nodeId,
-  terminalOrSpanSegmentIds,
-  equipmentId,
+  equipments,
   updatedTagsCallback,
   readOnly,
 }: EditTagsProps) {
@@ -74,24 +76,39 @@ function EditTags({
   }
 
   useEffect(() => {
-    if (!terminalOrSpanSegmentIds || !client) return;
+    if (!equipments || !client) return;
 
-    getTagInfo(client, terminalOrSpanSegmentIds, equipmentId)
-      .then((res) => {
-        const tagInfoLookUp = res.data?.utilityNetwork.tags.reduce<
-          Record<string, TagInfo>
-        >((acc, x) => {
-          acc[x.terminalOrSpanId] = x;
-          return acc;
-        }, {});
+    equipments.forEach((equipment) => {
+      getTagInfo(
+        client,
+        equipment.terminalOrSpanSegmentIds,
+        equipment.equipmentId,
+      )
+        .then((res) => {
+          const tagInfoLookUp = res.data?.utilityNetwork.tags.reduce<
+            Record<string, TagInfo>
+          >((acc, x) => {
+            acc[x.terminalOrSpanId] = {
+              ...x,
+              equipmentId: equipment.equipmentId,
+            };
+            return acc;
+          }, {});
 
-        setTags(tagInfoLookUp);
-      })
-      .catch((err) => {
-        toast.error(t("ERROR"));
-        console.error(err);
-      });
-  }, [client, terminalOrSpanSegmentIds, equipmentId]);
+          setTags((prev) => {
+            if (prev === null) {
+              return tagInfoLookUp;
+            }
+
+            return { ...prev, ...tagInfoLookUp };
+          });
+        })
+        .catch((err) => {
+          toast.error(t("ERROR"));
+          console.error(err);
+        });
+    });
+  }, [client, equipments]);
 
   const updateTagComment = useCallback(
     (id: string, comment: string) => {
@@ -145,32 +162,47 @@ function EditTags({
         terminalOrSpanId: x.terminalOrSpanId ?? null,
         comment: x.comment ?? null,
         tags: x.tags && x.tags.length > 0 ? x.tags : null,
+        equipmentId: x.equipmentId,
       }));
 
-    // This is ugly, it is up here to avoid a race condtion.
+    // This is ugly, it is up here to avoid a race condition.
     // Where the server sends out a notification to update so fast
     // That the whole function cannot execute. (No easy fix right now.)
     if (updatedTagsCallback) {
       updatedTagsCallback();
     }
 
-    updateTags(client, {
-      nodeId: nodeId,
-      terminalOrSpanEquipmentId: equipmentId,
-      tags: tagsToUpdate,
-    })
-      .then((res) => {
-        const body = res.data?.terminalEquipment.updateTags;
-        if (body?.isSuccess) {
-          toast.success(t("UPDATED"));
-        } else {
-          toast.error(t(body?.errorCode ?? "ERROR"));
-        }
+    const tagsToUpdateGroupedbyEquipmentId = Object.groupBy(
+      tagsToUpdate,
+      (x) => x.equipmentId,
+    );
+
+    for (const [key, value] of Object.entries(
+      tagsToUpdateGroupedbyEquipmentId,
+    )) {
+      updateTags(client, {
+        nodeId: nodeId,
+        terminalOrSpanEquipmentId: key,
+        tags: value?.flatMap((x) => ({
+          comment: x.comment,
+          tags: x.tags,
+          terminalOrSpanId: x.terminalOrSpanId,
+        })),
       })
-      .catch((err) => {
-        toast.error(t("ERROR"));
-        console.error(err);
-      });
+        .then((res) => {
+          const body = res.data?.terminalEquipment.updateTags;
+          if (body?.isSuccess) {
+            toast.success(t("UPDATED"));
+            // Do nothing, since it can be twice.
+          } else {
+            toast.error(t(body?.errorCode ?? "ERROR"));
+          }
+        })
+        .catch((err) => {
+          toast.error(t("ERROR"));
+          console.error(err);
+        });
+    }
   };
 
   if (tags === null) {
@@ -182,14 +214,14 @@ function EditTags({
       <div className="full-row">
         <div className="edit-tags-container">
           <div className="edit-tags-container-header">
-            <div className="edit-tags-container-header-item">{t("NAME")}</div>
+            <div className="edit-tags-container-header-item"> {t("NAME")} </div>
             <div className="edit-tags-container-header-item">
               {t("COMMENT")}
             </div>
-            <div className="edit-tags-container-header-item">{t("TAGS")}</div>
+            <div className="edit-tags-container-header-item"> {t("TAGS")} </div>
           </div>
           <div className="edit-tags-container-body">
-            <div className="edit-tags-editor-container-body-line"></div>
+            <div className="edit-tags-editor-container-body-line"> </div>
             {Object.values(tags).map((x) => (
               <div
                 className="edit-tags-container-body-line"

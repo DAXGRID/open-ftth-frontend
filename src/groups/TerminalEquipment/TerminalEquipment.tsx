@@ -586,14 +586,14 @@ function TerminalEquipment() {
           }
         >
           <EditTags
+            equipments={[
+              {
+                equipmentId: state.showEditTags.equipmentId,
+                terminalOrSpanSegmentIds:
+                  state.showEditTags.terminalOrSpanSegmentIds,
+              },
+            ]}
             nodeId={state.routeNodeId}
-            terminalOrSpanSegmentIds={
-              state.showEditTags.terminalOrSpanSegmentIds
-            }
-            terminalOrSpanEquipmentId={
-              state.showEditTags.terminalOrSpanEquipmentId
-            }
-            equipmentId={state.showEditTags.equipmentId}
             updatedTagsCallback={() =>
               dispatch({
                 type: "resetShowEditTags",

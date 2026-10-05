@@ -112,11 +112,15 @@ function ConnectivityView() {
                 dispatch({
                   type: "setShowEditTags",
                   view: {
-                    equipmentId: spanEquipment.id,
-                    show: true,
-                    terminalOrSpanSegmentIds: [
-                      ...spanEquipment.lines.map((x) => x.spanSegmentId),
+                    equipments: [
+                      {
+                        equipmentId: spanEquipment.id,
+                        terminalOrSpanSegmentIds: [
+                          ...spanEquipment.lines.map((x) => x.spanSegmentId),
+                        ],
+                      },
                     ],
+                    show: true,
                   },
                 })
               }
