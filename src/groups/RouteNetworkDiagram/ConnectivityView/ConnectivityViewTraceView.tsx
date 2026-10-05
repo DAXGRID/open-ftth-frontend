@@ -49,9 +49,13 @@ function ConnectivityViewTraceView({
                 dispatch({
                   type: "setShowEditTags",
                   view: {
-                    equipmentId: equipmentId,
+                    equipments: [
+                      {
+                        equipmentId: equipmentId,
+                        terminalOrSpanSegmentIds: [segmentId],
+                      },
+                    ],
                     show: true,
-                    terminalOrSpanSegmentIds: [segmentId],
                   },
                 })
               }
@@ -68,6 +72,7 @@ function ConnectivityViewTraceView({
         <div className="trace-view-header-item">{t("TERMINAL")}</div>
         <div className="trace-view-header-item">{t("CONNECTION_INFO")}</div>
         <div className="trace-view-header-item">{t("LENGTH_UNITS")}</div>
+        <div className="trace-view-header-item"></div>
       </div>
       <div className="trace-view-body ">
         {view.view?.hops.map((x) => {
@@ -97,6 +102,32 @@ function ConnectivityViewTraceView({
                 {ColorCodedElement(x.connectionInfo ?? "", t)}
               </div>
               <div className="trace-view-body-item">{x.totalLength}</div>
+              <div className="trace-view-body-item">
+                {(x.terminalEquipmentId || x.spanEquipmentId) && (
+                  <FontAwesomeIcon
+                    icon={faTags}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      dispatch({
+                        type: "setShowEditTags",
+                        view: {
+                          show: true,
+                          equipments: [
+                            {
+                              equipmentId: x.terminalEquipmentId,
+                              terminalOrSpanSegmentIds: [x.terminalId],
+                            },
+                            {
+                              equipmentId: x.spanEquipmentId,
+                              terminalOrSpanSegmentIds: [x.spanId],
+                            },
+                          ].filter((x) => x.equipmentId),
+                        },
+                      });
+                    }}
+                  />
+                )}
+              </div>
             </div>
           );
         })}

@@ -23,8 +23,10 @@ import { useTranslation } from "react-i18next";
 
 interface ShowEditTags {
   show: boolean;
-  terminalOrSpanSegmentIds: string[];
-  equipmentId: string;
+  equipments: {
+    terminalOrSpanSegmentIds: string[];
+    equipmentId: string;
+  }[];
 }
 
 interface ConnectivityViewState {
@@ -182,13 +184,7 @@ function ConnectivityViewProvider({
         >
           <EditTags
             nodeId={routeNodeId}
-            terminalOrSpanSegmentIds={
-              state.showEditTags.terminalOrSpanSegmentIds
-            }
-            terminalOrSpanEquipmentId={
-              state.showEditTags.terminalOrSpanEquipmentId
-            }
-            equipmentId={state.showEditTags.equipmentId}
+            equipments={state.showEditTags.equipments}
             updatedTagsCallback={() =>
               dispatch({
                 type: "resetShowEditTags",
